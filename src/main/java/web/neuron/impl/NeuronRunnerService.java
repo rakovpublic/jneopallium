@@ -1,6 +1,7 @@
 package web.neuron.impl;
 
 import synchronizer.Context;
+import synchronizer.IContext;
 import web.neuron.INeuron;
 
 import java.util.ArrayDeque;
@@ -14,12 +15,15 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class NeuronRunnerService {
 
-    private List<INeuron> neuronQueue;
+    private Queue<INeuron> neuronQueue;
     private static NeuronRunnerService service= new NeuronRunnerService();
+    private static String neuronPool="neuron.pool.size";
+    private IContext context;
 
     private NeuronRunnerService() {
 
-        neuronQueue=new LinkedList<>();
+        neuronQueue=new ConcurrentLinkedQueue<>();
+        context=Context.getContext();
 
 
     }
@@ -29,12 +33,16 @@ public class NeuronRunnerService {
         neuronQueue.add(neuron);
     }
     public void process(){
-        for(INeuron neuron:neuronQueue){
+        int poolSize=Integer.parseInt(context.getProperty(neuronPool));
+        for(int i=0;i<poolSize;i++){
             NeuronRunner ne=new NeuronRunner(this);
-            ne.setNeuron(neuron);
             Thread th= new Thread(ne);
             th.start();
         }
+    }
+
+    Queue<INeuron> getNeuronQueue() {
+        return neuronQueue;
     }
 
     public static NeuronRunnerService getService() {

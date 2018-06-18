@@ -17,12 +17,14 @@ import java.util.List;
  */
 public class Layer<N extends INeuron> implements ILayer<N> {
     private HashMap<String,N> map;
-    private HashMap<IAxon,ISignal> results;
     private HashMap<String,List<ISignal> > input;
+    private Boolean isProcessed;
+    private List<N> notProcessed;
 
     public Layer(String layerId) {
+        isProcessed=false;
+        notProcessed=new ArrayList<N>();
         this.layerId = layerId;
-        results=new HashMap<IAxon,ISignal>();
         map=new HashMap<String, N>();
         input=new HashMap<String,List<ISignal>>();
     }
@@ -34,11 +36,7 @@ public class Layer<N extends INeuron> implements ILayer<N> {
         map.put(neuron.getId(),neuron);
 
     }
-    @Override
-    public void storeResult(ISignal signal, IAxon axon) {
-        results.put(axon,signal);
 
-    }
 
     @Override
     public void addInput(ISignal signal, String neuronId) {
@@ -67,5 +65,35 @@ public class Layer<N extends INeuron> implements ILayer<N> {
     @Override
     public String getId() {
         return layerId;
+    }
+
+    @Override
+    public Boolean isProcessed() {
+
+        if(!isProcessed&&notProcessed.size()==0){
+            isProcessed=true;
+            for(N ner:map.values()){
+                if(!ner.hasResult()){
+                    notProcessed.add(ner);
+                    isProcessed=false;
+                }
+            }
+        }else {
+
+            for(N ner:notProcessed){
+                if(ner.hasResult()){
+                    notProcessed.remove(ner);
+                }
+            }
+            if(notProcessed.size()==0){
+                isProcessed=true;
+            }
+        }
+        return isProcessed;
+    }
+
+    @Override
+    public void dumpResult() {
+
     }
 }

@@ -9,7 +9,7 @@ import java.util.Queue;
  */
  class NeuronRunner implements Runnable{
     private NeuronRunnerService service;
-    private INeuron neuron;
+
 
 
     NeuronRunner(NeuronRunnerService service) {
@@ -17,16 +17,12 @@ import java.util.Queue;
 
     }
 
-    public void setNeuron(INeuron neuron) {
-        this.neuron = neuron;
-    }
-
     @Override
     public void run() {
-
-
-
-
-
+    Queue<INeuron> queue=service.getNeuronQueue();
+    INeuron neuron;
+    while((neuron=queue.poll())!=null){
+        neuron.processSignals();
+    }
     }
 }

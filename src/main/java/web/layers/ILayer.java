@@ -14,9 +14,10 @@ import web.signals.ISignal;
  * */
 public interface ILayer<N extends INeuron> {
     void register(N neuron);
-    void storeResult(ISignal signal, IAxon axon);
     void addInput(ISignal signal,String neuronId);
     void process();
     String getId();
+    Boolean isProcessed();
+    void dumpResult();
 
 }
