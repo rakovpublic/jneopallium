@@ -4,6 +4,7 @@ import exceptions.NeuronDeserializationException;
 import web.neuron.INeuron;
 import web.neuron.INeuronDeserializer;
 import web.neuron.INeuronFactory;
+import web.storages.INeuronSerializer;
 
 import java.util.HashMap;
 
@@ -12,21 +13,21 @@ import java.util.HashMap;
  */
 public class NeuronFactory implements INeuronFactory {
     private static NeuronFactory nf= new NeuronFactory();
-    private HashMap<Class<INeuron>,INeuronDeserializer> map;
+    private HashMap<Class<INeuron>,INeuronSerializer> map;
 
     private NeuronFactory() {
-        map=new HashMap<Class<INeuron>,INeuronDeserializer>();
+        map=new HashMap<Class<INeuron>,INeuronSerializer>();
     }
     public static NeuronFactory getNeuronFactory(){
         return nf;
     }
 
     @Override
-    public <K extends INeuron> K getNeuron(String json, Class<K> tClass) {
+    public <K extends INeuron,J> K getNeuron(J json, Class<K> tClass) {
         if(!map.containsKey(tClass)){
             throw new NeuronDeserializationException();
         }
-        INeuronDeserializer des=map.get(tClass);
-        return (K)des.toNeuron(json);
+        INeuronSerializer des=map.get(tClass);
+        return (K)des.deserialize(json);
     }
 }
