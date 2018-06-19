@@ -23,7 +23,7 @@ public class NeuronFactory implements INeuronFactory {
 
     @Override
     public <K extends INeuron,J> K getNeuron(J json, Class<K> tClass) {
-        if(!map.containsKey(tClass.getCanonicalName())){
+        if(!map.containsKey(tClass.getSimpleName())){
             throw new NeuronDeserializationException();
         }
         INeuronSerializer des=map.get(tClass.getSimpleName());
