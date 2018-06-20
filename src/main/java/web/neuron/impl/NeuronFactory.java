@@ -4,6 +4,7 @@ import exceptions.NeuronDeserializationException;
 import web.neuron.INeuron;
 import web.neuron.INeuronFactory;
 import web.storages.INeuronSerializer;
+import web.storages.IStorageMeta;
 
 import java.util.HashMap;
 
@@ -22,7 +23,7 @@ public class NeuronFactory implements INeuronFactory {
     }
 
     @Override
-    public <K extends INeuron,J> K getNeuron(J json, Class<K> tClass) {
+    public <K extends INeuron,J extends IStorageMeta> K getNeuron(J json, Class<K> tClass) {
         if(!map.containsKey(tClass.getSimpleName())){
             throw new NeuronDeserializationException();
         }
@@ -31,7 +32,7 @@ public class NeuronFactory implements INeuronFactory {
     }
 
     @Override
-    public <K extends INeuron, J> void registerNeuronClass(Class<K> tClass, INeuronSerializer<J, K> serializer) {
+    public <K extends INeuron, J extends IStorageMeta> void registerNeuronClass(Class<K> tClass, INeuronSerializer<J, K> serializer) {
         map.put(tClass.getSimpleName(),serializer);
 
     }

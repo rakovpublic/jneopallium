@@ -1,5 +1,9 @@
 package synchronizer;
 
+import web.layers.IResultLayer;
+import web.storages.IStorage;
+import web.storages.IStructMeta;
+
 /**
  * Created by Rakovskyi Dmytro on 08.06.2018.
  */
@@ -16,6 +20,16 @@ public class Context implements IContext {
 
     @Override
     public String getProperty(String propertyName) {
+        return null;
+    }
+
+    @Override
+    public void configure(IStorage storage, IStructMeta structMeta) {
+
+    }
+
+    @Override
+    public IResultLayer process() {
         return null;
     }
 }
