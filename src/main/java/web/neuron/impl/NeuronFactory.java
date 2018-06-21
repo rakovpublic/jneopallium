@@ -28,7 +28,7 @@ public class NeuronFactory implements INeuronFactory {
             throw new NeuronDeserializationException();
         }
         INeuronSerializer des=map.get(tClass.getSimpleName());
-        return (K)des.deserialize(json);
+        return null;
     }
 
     @Override

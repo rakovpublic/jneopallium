@@ -23,13 +23,5 @@ public class FileStorageMeta implements IStorageMeta {
         return f.isDirectory();
     }
 
-    @Override
-    public List<ILayerMeta> getLayers() {
-        return null;
-    }
 
-    @Override
-    public IInputMeta getInput() {
-        return null;
-    }
 }

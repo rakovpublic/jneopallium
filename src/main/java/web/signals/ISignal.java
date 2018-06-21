@@ -7,8 +7,10 @@ import java.io.Serializable;
  */
 public interface ISignal<T> extends Serializable {
     T getValue();
-    Class<? extends T> getParamClass();
+
     Class<? extends ISignal<T>> getCurrentClass();
+    Class<T> getParamClass();
+
     String toJSON();
 
 }
