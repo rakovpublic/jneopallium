@@ -1,4 +1,4 @@
-package web.storages.file;
+package web.storages.signalstorages.file;
 
 import exceptions.ClassFromJSONIsNotExists;
 import exceptions.SerializerForClassIsNotRegistered;
@@ -6,7 +6,6 @@ import synchronizer.utils.JSONHelper;
 import synchronizer.utils.JSONHelperResult;
 import web.signals.ISignal;
 import web.storages.IInputMeta;
-import web.storages.ILayerMeta;
 import web.storages.ISerializer;
 
 import java.io.*;
@@ -18,11 +17,10 @@ public class FileInputMeta implements IInputMeta<String> {
     private File file;
     private HashMap<Class<? extends ISignal>,ISerializer<? extends ISignal,String>> map;
 
-    FileInputMeta(File file) {
+    public FileInputMeta(File file, HashMap<Class<? extends ISignal>, ISerializer<? extends ISignal, String>> map) {
         this.file = file;
-        map=new HashMap<>();
+        this.map = map;
     }
-
 
     @Override
     public <S extends ISignal> void registerSerializer(ISerializer<S, String> serializer, Class<S> clazz) {
@@ -30,7 +28,7 @@ public class FileInputMeta implements IInputMeta<String> {
     }
 
     @Override
-    public HashMap<String, List<ISignal>> readInputs() {
+    public HashMap<String, List<ISignal>> readInputs(String layerId) {
         HashMap<String,  List<ISignal>> result = new HashMap<>();
         StringBuilder sb=new StringBuilder();
         BufferedReader br=null;
@@ -73,10 +71,10 @@ public class FileInputMeta implements IInputMeta<String> {
                 if(map.containsKey(cl)){
                 ISerializer ser=map.get(cl);
                 if(result.containsKey(neuronID)){
-                    result.get(neuronID).add((ISignal) ser.serialize(json));
+                    result.get(neuronID).add((ISignal) ser.deserialize(json));
                 }else {
                     List<ISignal> l= new ArrayList<>();
-                    l.add((ISignal) ser.serialize(json));
+                    l.add((ISignal) ser.deserialize(json));
                     result.put(neuronID,l);
                 }
                     res=JSONHelper.getNextJSONObject(json,startIndex);
@@ -90,5 +88,29 @@ public class FileInputMeta implements IInputMeta<String> {
         }
 
         return result;
+    }
+
+    @Override
+    public void saveResults( HashMap<String, List<ISignal>> signals,String layerId) {
+        StringBuilder  resultJson= new StringBuilder();
+        resultJson.append("{\"inputs\":[");
+        for(String nrId:signals.keySet()){
+            StringBuilder signal=new StringBuilder();
+            signal.append("{\"neuronId\":\"");
+            signal.append(nrId);
+            signal.append("\",\"signal\":");
+            for (ISignal s:signals.get(nrId)){
+                ISerializer serializer=map.get(s.getCurrentClass());
+                StringBuilder resSignal= new StringBuilder(signal);
+                resSignal.append(serializer.serialize(resSignal.toString()));
+                resSignal.append("},");
+                resultJson.append(resSignal.toString());
+            }
+
+        }
+        resultJson.deleteCharAt(resultJson.length()-1);
+        resultJson.append("]}");
+        //TODO: add saving to file
+
     }
 }

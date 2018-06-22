@@ -1,4 +1,7 @@
 package web.storages;
 
-public interface INeuronMeta extends IStorageMeta {
+import web.neuron.INeuron;
+
+public interface INeuronMeta<K extends INeuron> extends IStorageMeta {
+    K toNeuron();
 }
