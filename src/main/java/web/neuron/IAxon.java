@@ -9,6 +9,7 @@ import java.util.List;
  * Created by Rakovskyi Dmytro on 27.10.2017.
  */
 public interface IAxon {
-    HashMap<Class<ISignal>,HashMap<INConnection,IWeight>> getConnectedNeurons();
+    <S extends ISignal>void putConnection(Class<S> cl,INConnection connection,IWeight<S> weight);
+    HashMap<Class<? extends ISignal>,HashMap<INConnection,IWeight>> getConnectedNeurons();
     String toJSON();
 }

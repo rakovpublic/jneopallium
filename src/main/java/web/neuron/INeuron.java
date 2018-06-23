@@ -1,7 +1,9 @@
 package web.neuron;
 
-import web.signals.*;
-import web.signals.ISignalProcessor;
+
+
+
+import web.signals.ISignal;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,7 +16,8 @@ public interface INeuron {
     void processSignals();
     void reconfigure();
     void setAxon(IAxon axon);
-    <S extends ISignal> void addSignalProcessor(Class<S> clazz, ISignalProcessor processor);
+    <S extends ISignal> void addSignalProcessor(Class<S> clazz, ISignalProcessor<S> processor);
+    <S extends ISignal> void addSignalMerger(Class<S> clazz, ISignalMerger<S> merger);
     HashMap<ISignal,List<INConnection>> getResult();
     Boolean hasResult();
     String getId();

@@ -1,7 +1,7 @@
 package web.storages.signalstorages.file;
 
-import exceptions.ClassFromJSONIsNotExists;
-import exceptions.SerializerForClassIsNotRegistered;
+import exceptions.ClassFromJSONIsNotExistsException;
+import exceptions.SerializerForClassIsNotRegisteredException;
 import synchronizer.utils.JSONHelper;
 import synchronizer.utils.JSONHelperResult;
 import web.signals.ISignal;
@@ -28,7 +28,7 @@ public class FileInputMeta implements IInputMeta<String> {
     }
 
     @Override
-    public HashMap<String, List<ISignal>> readInputs(String layerId) {
+    public HashMap<String, List<ISignal>> readInputs(int layerId) {
         HashMap<String,  List<ISignal>> result = new HashMap<>();
         StringBuilder sb=new StringBuilder();
         BufferedReader br=null;
@@ -79,11 +79,11 @@ public class FileInputMeta implements IInputMeta<String> {
                 }
                     res=JSONHelper.getNextJSONObject(json,startIndex);
                 }else {
-                    throw new SerializerForClassIsNotRegistered("Serializer for class"+cl+"is not registered");
+                    throw new SerializerForClassIsNotRegisteredException("Serializer for class"+cl+"is not registered");
                 }
 
             } catch (ClassNotFoundException e) {
-              throw new ClassFromJSONIsNotExists("Class "+className+" from this json "+ jsonObject+" is not exists");
+              throw new ClassFromJSONIsNotExistsException("Class "+className+" from this json "+ jsonObject+" is not exists");
             }
         }
 
@@ -91,7 +91,7 @@ public class FileInputMeta implements IInputMeta<String> {
     }
 
     @Override
-    public void saveResults( HashMap<String, List<ISignal>> signals,String layerId) {
+    public void saveResults( HashMap<String, List<ISignal>> signals,int layerId) {
         StringBuilder  resultJson= new StringBuilder();
         resultJson.append("{\"inputs\":[");
         for(String nrId:signals.keySet()){
