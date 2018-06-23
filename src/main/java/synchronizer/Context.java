@@ -1,7 +1,6 @@
 package synchronizer;
 
 import web.layers.IResultLayer;
-import web.storages.IStorage;
 import web.storages.IStructMeta;
 
 /**
@@ -24,7 +23,7 @@ public class Context implements IContext {
     }
 
     @Override
-    public void configure(IStorage storage, IStructMeta structMeta) {
+    public void configure( IStructMeta structMeta) {
 
     }
 

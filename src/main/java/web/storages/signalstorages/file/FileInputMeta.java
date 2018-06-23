@@ -34,7 +34,7 @@ public class FileInputMeta implements IInputMeta<String> {
         BufferedReader br=null;
         FileReader fr=null;
         try {
-            fr=new FileReader(file);
+            fr=new FileReader(file.getAbsolutePath()+File.pathSeparator+layerId);
             br=new BufferedReader(fr);
             String content=null;
             while ((content=br.readLine())!=null) {
@@ -110,7 +110,44 @@ public class FileInputMeta implements IInputMeta<String> {
         }
         resultJson.deleteCharAt(resultJson.length()-1);
         resultJson.append("]}");
-        //TODO: add saving to file
+        File dir= new File(file.getAbsolutePath()+File.pathSeparator+layerId);
+        try {
+            dir.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        BufferedWriter bw = null;
+        FileWriter fw = null;
+
+        try {
+
+
+
+            fw = new FileWriter(dir);
+            bw = new BufferedWriter(fw);
+            bw.write(resultJson.toString());
+
+        } catch (IOException e) {
+
+            e.printStackTrace();
+
+        } finally {
+
+            try {
+
+                if (bw != null)
+                    bw.close();
+
+                if (fw != null)
+                    fw.close();
+
+            } catch (IOException ex) {
+
+                ex.printStackTrace();
+
+            }
+
+        }
 
     }
 }
