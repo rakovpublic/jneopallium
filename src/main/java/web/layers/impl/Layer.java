@@ -18,8 +18,8 @@ import java.util.List;
  * Created by Rakovskyi Dmytro on 08.06.2018.
  */
 public class Layer implements ILayer {
-    private HashMap<String,INeuron> map;
-    private HashMap<String,List<ISignal> > input;
+    private HashMap<Long,INeuron> map;
+    private HashMap<Long,List<ISignal> > input;
     private Boolean isProcessed;
     private List<INeuron> notProcessed;
 
@@ -27,12 +27,11 @@ public class Layer implements ILayer {
         isProcessed=false;
         notProcessed=new ArrayList<INeuron>();
         this.layerId = layerId;
-        map=new HashMap<String, INeuron>();
-        input=new HashMap<String,List<ISignal>>();
+        map=new HashMap<Long, INeuron>();
+        input=new HashMap<Long,List<ISignal>>();
     }
 
     private int layerId;
-    private IContext ctx= Context.getContext();
     @Override
     public void register(INeuron neuron) {
         map.put(neuron.getId(),neuron);
@@ -41,7 +40,7 @@ public class Layer implements ILayer {
 
 
     @Override
-    public void addInput(ISignal signal, String neuronId) {
+    public void addInput(ISignal signal, Long neuronId) {
         if(input.containsKey(neuronId)){
             input.get(neuronId).add(signal);
         }else{
@@ -55,7 +54,7 @@ public class Layer implements ILayer {
     public void process() {
         INeuron neur;
         NeuronRunnerService ns= NeuronRunnerService.getService();
-        for(String neuronId:map.keySet()){
+        for(Long neuronId:map.keySet()){
             if(input.containsKey(neuronId)){
                 neur=map.get(neuronId);
                 neur.addSignals(input.get(neuronId));
@@ -97,15 +96,15 @@ public class Layer implements ILayer {
 
     @Override
     public void dumpResult(IInputMeta meta) {
-        HashMap<Integer,HashMap<String,List<ISignal>>> result= new HashMap<>();
-        for(String neurId:map.keySet()){
+        HashMap<Integer,HashMap<Long,List<ISignal>>> result= new HashMap<>();
+        for(Long neurId:map.keySet()){
             INeuron neur=map.get(neurId);
             IAxon axon=neur.getAxon();
             HashMap<ISignal,List<INConnection>> tMap=axon.processSignal(neur.getResult());
             for(ISignal signal:tMap.keySet()){
                 for (INConnection connection:tMap.get(signal)){
                     int layerId=connection.getTargetLayerId();
-                    String targetNeurId= connection.getTargetNeuronId();
+                    Long targetNeurId= connection.getTargetNeuronId();
                     if(result.containsKey(layerId)){
                         if(result.get(layerId).containsKey(targetNeurId)){
                             result.get(layerId).get(targetNeurId).add(signal);
@@ -117,7 +116,7 @@ public class Layer implements ILayer {
                     }else {
                         List<ISignal> signals = new ArrayList<>();
                         signals.add(signal);
-                        HashMap<String,List<ISignal>> ttMap=new HashMap<>();
+                        HashMap<Long,List<ISignal>> ttMap=new HashMap<>();
                         ttMap.put(targetNeurId,signals);
                         result.put(layerId,ttMap);
 

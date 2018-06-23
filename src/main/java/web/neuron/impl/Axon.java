@@ -20,6 +20,11 @@ public class Axon implements IAxon {
     }
 
     @Override
+    public void rebuildConnections(HashMap<Class<? extends ISignal>, HashMap<INConnection, IWeight>> connections) {
+
+    }
+
+    @Override
     public HashMap<ISignal, List<INConnection>> processSignal(List<ISignal> signal) {
         return null;
     }

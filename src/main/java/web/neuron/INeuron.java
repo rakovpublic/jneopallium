@@ -20,7 +20,7 @@ public interface INeuron {
     <S extends ISignal> void addSignalMerger(Class<S> clazz, ISignalMerger<S> merger);
     List<ISignal> getResult();
     Boolean hasResult();
-    String getId();
+    Long getId();
     IAxon getAxon();
     String toJSON();
 

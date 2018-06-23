@@ -16,9 +16,17 @@ import java.util.List;
     private IAxon axon;
     private HashMap<Class<? extends ISignal>, ISignalProcessor> processorHashMap;
      private HashMap<Class<? extends ISignal>, ISignalMerger> mergerHashMap;
-     private String neuronId;
+     private Long neuronId;
      private List<ISignal> result;
 
+     public Neuron(Long neuronId) {
+         this.neuronId = neuronId;
+         isProcessed=false;
+         signals=new ArrayList<>();
+         result=new ArrayList<>();
+         processorHashMap=new HashMap<>();
+         mergerHashMap=new HashMap<>();
+     }
 
      @Override
     public void addSignals(List<ISignal> signals) {
@@ -85,7 +93,7 @@ import java.util.List;
     }
 
     @Override
-    public String getId() {
+    public Long getId() {
         return this.neuronId;
     }
 

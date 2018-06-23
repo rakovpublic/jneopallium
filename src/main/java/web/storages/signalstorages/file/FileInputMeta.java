@@ -28,7 +28,7 @@ public class FileInputMeta implements IInputMeta<String> {
     }
 
     @Override
-    public HashMap<String, List<ISignal>> readInputs(int layerId) {
+    public HashMap<Long, List<ISignal>> readInputs(int layerId) {
 
         File ff= new File(file.getAbsolutePath()+File.pathSeparator+layerId);
         if(!ff.exists()){
@@ -36,7 +36,7 @@ public class FileInputMeta implements IInputMeta<String> {
         }
         //TODO:add input lock
 
-        HashMap<String,  List<ISignal>> result = new HashMap<>();
+        HashMap<Long,  List<ISignal>> result = new HashMap<>();
         StringBuilder sb=new StringBuilder();
         BufferedReader br=null;
         FileReader fr=null;
@@ -71,7 +71,7 @@ public class FileInputMeta implements IInputMeta<String> {
         while (res!=null){
             String className= res.getClassName();
             String jsonObject=res.getObject();
-            String neuronID=JSONHelper.extractJsonField(jsonObject,"neuronId");
+            Long neuronID=Long.parseLong(JSONHelper.extractJsonField(jsonObject,"neuronId"));
             startIndex=res.getIndex();
             try {
                 Class cl=Class.forName(className);
@@ -98,14 +98,14 @@ public class FileInputMeta implements IInputMeta<String> {
     }
 
     @Override
-    public void saveResults( HashMap<String, List<ISignal>> signals,int layerId) {
+    public void saveResults( HashMap<Long, List<ISignal>> signals,int layerId) {
         File dir= new File(file.getAbsolutePath()+File.pathSeparator+layerId);
         if(dir.exists()){
             mergeResults(signals,layerId);
         }else{
         StringBuilder  resultJson= new StringBuilder();
         resultJson.append("{\"inputs\":[");
-        for(String nrId:signals.keySet()){
+        for(Long nrId:signals.keySet()){
             StringBuilder signal=new StringBuilder();
             signal.append("{\"neuronId\":\"");
             signal.append(nrId);
@@ -163,7 +163,7 @@ public class FileInputMeta implements IInputMeta<String> {
     }
 
     @Override
-    public void mergeResults(HashMap<String, List<ISignal>> signals, int layerId) {
+    public void mergeResults(HashMap<Long, List<ISignal>> signals, int layerId) {
         File dir= new File(file.getAbsolutePath()+File.pathSeparator+layerId);
         if(!dir.exists()){
             saveResults(signals,layerId);

@@ -15,7 +15,7 @@ import web.storages.IInputMeta;
  * */
 public interface ILayer {
     void register(INeuron neuron);
-    void addInput(ISignal signal,String neuronId);
+    void addInput(ISignal signal,Long neuronId);
     void process();
     int getId();
     Boolean isProcessed();
