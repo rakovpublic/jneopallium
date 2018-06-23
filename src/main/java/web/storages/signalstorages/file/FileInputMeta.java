@@ -29,12 +29,19 @@ public class FileInputMeta implements IInputMeta<String> {
 
     @Override
     public HashMap<String, List<ISignal>> readInputs(int layerId) {
+
+        File ff= new File(file.getAbsolutePath()+File.pathSeparator+layerId);
+        if(!ff.exists()){
+
+        }
+        //TODO:add input lock
+
         HashMap<String,  List<ISignal>> result = new HashMap<>();
         StringBuilder sb=new StringBuilder();
         BufferedReader br=null;
         FileReader fr=null;
         try {
-            fr=new FileReader(file.getAbsolutePath()+File.pathSeparator+layerId);
+            fr=new FileReader(ff);
             br=new BufferedReader(fr);
             String content=null;
             while ((content=br.readLine())!=null) {
@@ -86,12 +93,16 @@ public class FileInputMeta implements IInputMeta<String> {
               throw new ClassFromJSONIsNotExistsException("Class "+className+" from this json "+ jsonObject+" is not exists");
             }
         }
-
+        ff.delete();
         return result;
     }
 
     @Override
     public void saveResults( HashMap<String, List<ISignal>> signals,int layerId) {
+        File dir= new File(file.getAbsolutePath()+File.pathSeparator+layerId);
+        if(dir.exists()){
+            mergeResults(signals,layerId);
+        }else{
         StringBuilder  resultJson= new StringBuilder();
         resultJson.append("{\"inputs\":[");
         for(String nrId:signals.keySet()){
@@ -110,7 +121,6 @@ public class FileInputMeta implements IInputMeta<String> {
         }
         resultJson.deleteCharAt(resultJson.length()-1);
         resultJson.append("]}");
-        File dir= new File(file.getAbsolutePath()+File.pathSeparator+layerId);
         try {
             dir.createNewFile();
         } catch (IOException e) {
@@ -148,6 +158,17 @@ public class FileInputMeta implements IInputMeta<String> {
             }
 
         }
+        }
 
+    }
+
+    @Override
+    public void mergeResults(HashMap<String, List<ISignal>> signals, int layerId) {
+        File dir= new File(file.getAbsolutePath()+File.pathSeparator+layerId);
+        if(!dir.exists()){
+            saveResults(signals,layerId);
+        }else {
+            //TODO: add merging logic
+        }
     }
 }

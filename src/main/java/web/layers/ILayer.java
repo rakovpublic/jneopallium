@@ -7,17 +7,19 @@ package web.layers;
 import web.neuron.IAxon;
 import web.neuron.INeuron;
 import web.signals.ISignal;
+import web.storages.IInputMeta;
 
 /**
  *
  * listener for neurons
  * */
-public interface ILayer<N extends INeuron> {
-    void register(N neuron);
+public interface ILayer {
+    void register(INeuron neuron);
     void addInput(ISignal signal,String neuronId);
     void process();
-    String getId();
+    int getId();
     Boolean isProcessed();
-    void dumpResult();
+    void dumpResult(IInputMeta meta);
+    String toJSON();
 
 }

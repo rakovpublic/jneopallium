@@ -1,13 +1,14 @@
 package web.study;
 
-import web.neuron.INeuron;
+import web.neuron.INConnection;
+import web.neuron.IWeight;
+import web.signals.ISignal;
 
-import java.io.Serializable;
+import java.util.HashMap;
 
-/**
- * Created by Rakovskyi Dmytro on 27.10.2017.
- */
-public interface IStudyingRequest<N extends INeuron> extends Serializable {
-    Class<? extends N> getTargetClass();
+public interface IStudyingRequest {
+    int getLayerId();
+    String getNeuronId();
+    HashMap<Class<? extends ISignal>,HashMap<INConnection,IWeight>> getNewConnections();
     String toJSON();
 }

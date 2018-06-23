@@ -18,9 +18,10 @@ public interface INeuron {
     void setAxon(IAxon axon);
     <S extends ISignal> void addSignalProcessor(Class<S> clazz, ISignalProcessor<S> processor);
     <S extends ISignal> void addSignalMerger(Class<S> clazz, ISignalMerger<S> merger);
-    HashMap<ISignal,List<INConnection>> getResult();
+    List<ISignal> getResult();
     Boolean hasResult();
     String getId();
+    IAxon getAxon();
     String toJSON();
 
 }
