@@ -8,7 +8,10 @@ import java.util.HashMap;
 
 public interface IStudyingRequest {
     int getLayerId();
+
     String getNeuronId();
-    HashMap<Class<? extends ISignal>,HashMap<INConnection,IWeight>> getNewConnections();
+
+    HashMap<Class<? extends ISignal>, HashMap<INConnection, IWeight>> getNewConnections();
+
     String toJSON();
 }

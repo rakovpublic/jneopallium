@@ -9,6 +9,7 @@ public interface ISignal<T> extends Serializable {
     T getValue();
 
     Class<? extends ISignal<T>> getCurrentClass();
+
     Class<T> getParamClass();
 
     String toJSON();

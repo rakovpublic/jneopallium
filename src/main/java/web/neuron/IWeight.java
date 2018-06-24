@@ -7,5 +7,6 @@ import web.signals.ISignal;
  */
 public interface IWeight<S extends ISignal> {
     S process(S signal);
+
     Class<S> getSignalClass();
 }

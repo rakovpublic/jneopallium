@@ -7,6 +7,7 @@ public class StructBuilder {
     private IInputMeta initInputMeta;
     private IInputMeta hiddenInputMeta;
     private ILayersMeta layersMeta;
+
     public StructBuilder() {
 
     }
@@ -17,21 +18,24 @@ public class StructBuilder {
         this.layersMeta = layersMeta;
     }
 
-    public StructBuilder withHiddenInputMeta(IInputMeta hiddenInputMeta){
-        this.hiddenInputMeta=hiddenInputMeta;
+    public StructBuilder withHiddenInputMeta(IInputMeta hiddenInputMeta) {
+        this.hiddenInputMeta = hiddenInputMeta;
         return this;
     }
-    public StructBuilder withLayersMeta(ILayersMeta layersMeta){
-        this.layersMeta=layersMeta;
+
+    public StructBuilder withLayersMeta(ILayersMeta layersMeta) {
+        this.layersMeta = layersMeta;
         return this;
     }
-    public StructBuilder withInitInputMeta(IInputMeta initInputMeta){
-        this.initInputMeta=initInputMeta;
+
+    public StructBuilder withInitInputMeta(IInputMeta initInputMeta) {
+        this.initInputMeta = initInputMeta;
         return this;
     }
-    public StructMeta build(){
-        if(initInputMeta!=null&&hiddenInputMeta!=null&&layersMeta!=null){
-            return new StructMeta(initInputMeta,hiddenInputMeta,layersMeta);
+
+    public StructMeta build() {
+        if (initInputMeta != null && hiddenInputMeta != null && layersMeta != null) {
+            return new StructMeta(initInputMeta, hiddenInputMeta, layersMeta);
         }
         return null;
     }

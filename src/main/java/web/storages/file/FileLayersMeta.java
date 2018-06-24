@@ -19,24 +19,24 @@ public class FileLayersMeta implements ILayersMeta {
 
     @Override
     public List<ILayerMeta> getLayers() {
-        File layersDir= new File(file.getAbsolutePath()+File.pathSeparator+"layers");
-        List<ILayerMeta> res= new ArrayList<>();
-        List<File> temp= new ArrayList<>();
-        if (!layersDir.exists()||!layersDir.isDirectory()){
+        File layersDir = new File(file.getAbsolutePath() + File.pathSeparator + "layers");
+        List<ILayerMeta> res = new ArrayList<>();
+        List<File> temp = new ArrayList<>();
+        if (!layersDir.exists() || !layersDir.isDirectory()) {
             throw new LayersFolderIsEmptyOrNotExistsException();
         }
-        for(File l:layersDir.listFiles()){
-            if(!l.isDirectory()){
+        for (File l : layersDir.listFiles()) {
+            if (!l.isDirectory()) {
                 temp.add(l);
             }
         }
         Collections.sort(temp, new Comparator<File>() {
             @Override
             public int compare(File o1, File o2) {
-                return Integer.compare(Integer.parseInt(o1.getName()),Integer.parseInt(o2.getName()));
+                return Integer.compare(Integer.parseInt(o1.getName()), Integer.parseInt(o2.getName()));
             }
         });
-        for(File f:temp){
+        for (File f : temp) {
             res.add(new FileLayerMeta(f));
         }
         return res;

@@ -1,15 +1,13 @@
 package web.storages.structimpl;
 
-import exceptions.IncorrectFilePathForStorageException;
-import exceptions.LayersFolderIsEmptyOrNotExistsException;
 import web.signals.ISignal;
 import web.storages.IInputMeta;
 import web.storages.ILayerMeta;
 import web.storages.ILayersMeta;
 import web.storages.IStructMeta;
 
-import java.io.File;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
 
 public class StructMeta implements IStructMeta {
 
@@ -30,7 +28,7 @@ public class StructMeta implements IStructMeta {
 
     @Override
     public HashMap<String, List<ISignal>> getInputs(int layerId) {
-        if(layerId==0){
+        if (layerId == 0) {
             return initInputMeta.readInputs(layerId);
         }
         return hiddenInputMeta.readInputs(layerId);
@@ -38,7 +36,7 @@ public class StructMeta implements IStructMeta {
 
     @Override
     public void saveResults(int layerId, HashMap<String, List<ISignal>> meta) {
-        hiddenInputMeta.saveResults(meta,layerId);
+        hiddenInputMeta.saveResults(meta, layerId);
     }
 
 

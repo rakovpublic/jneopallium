@@ -8,9 +8,13 @@ import web.storages.IStructMeta;
  */
 public interface IContext {
 
-String getProperty(String propertyName);
-void configure(IStructMeta structMeta);
-IResultLayer process();
+    String getProperty(String propertyName);
+
+    void configure(IStructMeta structMeta);
+
+    IStructMeta getStructure();
+
+    IResultLayer process();
 
 
 }

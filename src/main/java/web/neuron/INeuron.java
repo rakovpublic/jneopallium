@@ -1,11 +1,8 @@
 package web.neuron;
 
 
-
-
 import web.signals.ISignal;
 
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -13,15 +10,27 @@ import java.util.List;
  */
 public interface INeuron {
     void addSignals(List<ISignal> signals);
+
     void processSignals();
+
     void reconfigure();
+
     void setAxon(IAxon axon);
+
     <S extends ISignal> void addSignalProcessor(Class<S> clazz, ISignalProcessor<S> processor);
+
     <S extends ISignal> void addSignalMerger(Class<S> clazz, ISignalMerger<S> merger);
+
     List<ISignal> getResult();
+
     Boolean hasResult();
+
     Long getId();
+
     IAxon getAxon();
+
     String toJSON();
+
+    void setProcessingChain(ISignalChain chain);
 
 }

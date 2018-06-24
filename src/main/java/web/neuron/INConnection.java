@@ -5,8 +5,12 @@ package web.neuron;
  */
 public interface INConnection {
     int getTargetLayerId();
+
     int getSourceLayerId();
+
     Long getTargetNeuronId();
+
     Long getSourceNeuronId();
+
     String toJSON();
 }

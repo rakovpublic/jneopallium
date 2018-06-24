@@ -7,7 +7,7 @@ import web.storages.IStructMeta;
  * Created by Rakovskyi Dmytro on 08.06.2018.
  */
 public class Context implements IContext {
-    private static Context ctx= new Context();
+    private static Context ctx = new Context();
 
     private Context() {
 
@@ -23,7 +23,7 @@ public class Context implements IContext {
     }
 
     @Override
-    public void configure( IStructMeta structMeta) {
+    public void configure(IStructMeta structMeta) {
 
     }
 
