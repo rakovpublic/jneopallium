@@ -5,6 +5,7 @@ import web.storages.IInputMeta;
 import web.storages.ILayerMeta;
 import web.storages.ILayersMeta;
 import web.storages.IStructMeta;
+import web.study.IStudyingRequest;
 
 import java.util.HashMap;
 import java.util.List;
@@ -37,6 +38,11 @@ public class StructMeta implements IStructMeta {
     @Override
     public void saveResults(int layerId, HashMap<String, List<ISignal>> meta) {
         hiddenInputMeta.saveResults(meta, layerId);
+    }
+
+    @Override
+    public void study(List<IStudyingRequest> requests) {
+
     }
 
 

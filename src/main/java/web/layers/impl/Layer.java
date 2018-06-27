@@ -131,6 +131,11 @@ public class Layer implements ILayer {
 
     }
 
+    @Override
+    public HashMap<Integer, HashMap<Long, List<ISignal>>> getResults() {
+        return null;
+    }
+
 
     @Override
     public String toJSON() {

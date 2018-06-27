@@ -8,6 +8,9 @@ import web.neuron.INeuron;
 import web.signals.ISignal;
 import web.storages.IInputMeta;
 
+import java.util.HashMap;
+import java.util.List;
+
 /**
  * listener for neurons
  */
@@ -23,6 +26,10 @@ public interface ILayer {
     Boolean isProcessed();
 
     void dumpResult(IInputMeta meta);
+
+    void dumpNeurons();
+
+    HashMap<Integer, HashMap<Long, List<ISignal>>> getResults();
 
     String toJSON();
 
