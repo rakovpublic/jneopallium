@@ -7,4 +7,5 @@ public interface IResultSignal<T, K> extends ISignal<T> {
     K getResultObject();
 
     Class<K> getResultObjectClass();
+
 }

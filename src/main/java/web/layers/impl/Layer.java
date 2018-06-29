@@ -96,6 +96,20 @@ public class Layer implements ILayer {
 
     @Override
     public void dumpResult(IInputMeta meta) {
+        HashMap<Integer, HashMap<Long, List<ISignal>>> result =getResults();
+        for (int layerId : result.keySet()) {
+            meta.mergeResults(result.get(layerId), layerId);
+        }
+
+    }
+
+    @Override
+    public void dumpNeurons() {
+
+    }
+
+    @Override
+    public HashMap<Integer, HashMap<Long, List<ISignal>>> getResults() {
         HashMap<Integer, HashMap<Long, List<ISignal>>> result = new HashMap<>();
         for (Long neurId : map.keySet()) {
             INeuron neur = map.get(neurId);
@@ -125,15 +139,7 @@ public class Layer implements ILayer {
                 }
             }
         }
-        for (int layerId : result.keySet()) {
-            meta.mergeResults(result.get(layerId), layerId);
-        }
-
-    }
-
-    @Override
-    public HashMap<Integer, HashMap<Long, List<ISignal>>> getResults() {
-        return null;
+        return  result;
     }
 
 

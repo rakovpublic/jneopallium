@@ -13,4 +13,6 @@ public interface INConnection {
     Long getSourceNeuronId();
 
     String toJSON();
+
+    String getDescription();
 }

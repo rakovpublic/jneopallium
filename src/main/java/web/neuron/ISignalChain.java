@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface ISignalChain {
     List<Class<? extends ISignal>> getProcessingChain();
+    String getDescription();
 }

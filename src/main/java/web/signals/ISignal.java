@@ -13,5 +13,6 @@ public interface ISignal<T> extends Serializable {
     Class<T> getParamClass();
 
     String toJSON();
+     String getDescription();
 
 }

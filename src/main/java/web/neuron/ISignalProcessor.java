@@ -7,5 +7,6 @@ import web.signals.ISignal;
  */
 public interface ISignalProcessor<S extends ISignal> {
     <I extends ISignal> I process(S input, INeuron neuron);
+    String getDescription();
 
 }
