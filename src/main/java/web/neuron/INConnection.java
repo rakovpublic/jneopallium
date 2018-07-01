@@ -1,9 +1,11 @@
 package web.neuron;
 
+import web.signals.ISignal;
+
 /**
  * Created by Rakovskyi Dmytro on 02.11.2017.
  */
-public interface INConnection {
+public interface INConnection<S extends ISignal> {
     int getTargetLayerId();
 
     int getSourceLayerId();
@@ -15,4 +17,6 @@ public interface INConnection {
     String toJSON();
 
     String getDescription();
+
+    IWeight<S> getWeight();
 }
