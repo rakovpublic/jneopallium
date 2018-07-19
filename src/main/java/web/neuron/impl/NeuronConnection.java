@@ -1,6 +1,7 @@
 package web.neuron.impl;
 
 import web.neuron.INConnection;
+import web.neuron.IWeight;
 
 public class NeuronConnection implements INConnection {
     @Override
@@ -30,6 +31,11 @@ public class NeuronConnection implements INConnection {
 
     @Override
     public String getDescription() {
+        return null;
+    }
+
+    @Override
+    public IWeight getWeight() {
         return null;
     }
 }

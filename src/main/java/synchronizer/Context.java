@@ -28,6 +28,11 @@ public class Context implements IContext {
     }
 
     @Override
+    public IStructMeta getStructure() {
+        return null;
+    }
+
+    @Override
     public IResultLayer process() {
         return null;
     }
