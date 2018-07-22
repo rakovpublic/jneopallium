@@ -1,25 +1,30 @@
 package web.storages.signalstorages.file;
 
 import exceptions.ClassFromJSONIsNotExistsException;
+import exceptions.InputNotExistsException;
 import exceptions.SerializerForClassIsNotRegisteredException;
 import synchronizer.utils.JSONHelper;
 import synchronizer.utils.JSONHelperResult;
 import web.signals.ISignal;
 import web.storages.IInputMeta;
 import web.storages.ISerializer;
+import web.storages.filesystem.IFileSystem;
+import web.storages.filesystem.IFileSystemItem;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class FileInputMeta implements IInputMeta<String> {
-    private File file;
+public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<String> {
+    private S file;
     private HashMap<Class<? extends ISignal>, ISerializer<? extends ISignal, String>> map;
+    private IFileSystem<S> fileSystem;
 
-    public FileInputMeta(File file, HashMap<Class<? extends ISignal>, ISerializer<? extends ISignal, String>> map) {
+    public FileInputMeta(S file, HashMap<Class<? extends ISignal>, ISerializer<? extends ISignal, String>> map,IFileSystem<S> fs) {
         this.file = file;
         this.map = map;
+        this.fileSystem=fs;
     }
 
     @Override
@@ -30,42 +35,15 @@ public class FileInputMeta implements IInputMeta<String> {
     @Override
     public HashMap<Long, List<ISignal>> readInputs(int layerId) {
 
-        File ff = new File(file.getAbsolutePath() + File.pathSeparator + layerId);
+        S ff = fileSystem.getItem(file.getPath()+fileSystem.getFolderSeparator()+layerId);
+        //new File(file.getAbsolutePath() + File.pathSeparator + layerId);
         if (!ff.exists()) {
-
+            throw new InputNotExistsException("File " +ff.getPath()+" with input data for layer id "+layerId+" is not exists");
         }
         //TODO:add input lock
 
         HashMap<Long, List<ISignal>> result = new HashMap<>();
-        StringBuilder sb = new StringBuilder();
-        BufferedReader br = null;
-        FileReader fr = null;
-        try {
-            fr = new FileReader(ff);
-            br = new BufferedReader(fr);
-            String content = null;
-            while ((content = br.readLine()) != null) {
-                sb.append(content);
-            }
-        } catch (IOException ex) {
-
-        } finally {
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (fr != null) {
-                try {
-                    fr.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        String json = sb.toString();
+        String json =fileSystem.read(ff);
         int startIndex = json.indexOf('[');
         JSONHelperResult res = JSONHelper.getNextJSONObject(json, startIndex);
         while (res != null) {
@@ -93,13 +71,14 @@ public class FileInputMeta implements IInputMeta<String> {
                 throw new ClassFromJSONIsNotExistsException("Class " + className + " from this json " + jsonObject + " is not exists");
             }
         }
-        ff.delete();
+        fileSystem.delete(ff);
         return result;
     }
 
     @Override
     public void saveResults(HashMap<Long, List<ISignal>> signals, int layerId) {
-        File dir = new File(file.getAbsolutePath() + File.pathSeparator + layerId);
+        //File dir = new File(file.getAbsolutePath() + File.pathSeparator + layerId);
+        S dir = fileSystem.getItem(file.getPath()+fileSystem.getFolderSeparator()+layerId);
         if (dir.exists()) {
             mergeResults(signals, layerId);
         } else {
@@ -121,49 +100,14 @@ public class FileInputMeta implements IInputMeta<String> {
             }
             resultJson.deleteCharAt(resultJson.length() - 1);
             resultJson.append("]}");
-            try {
-                dir.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            BufferedWriter bw = null;
-            FileWriter fw = null;
-
-            try {
-
-
-                fw = new FileWriter(dir);
-                bw = new BufferedWriter(fw);
-                bw.write(resultJson.toString());
-
-            } catch (IOException e) {
-
-                e.printStackTrace();
-
-            } finally {
-
-                try {
-
-                    if (bw != null)
-                        bw.close();
-
-                    if (fw != null)
-                        fw.close();
-
-                } catch (IOException ex) {
-
-                    ex.printStackTrace();
-
-                }
-
-            }
+            fileSystem.writeCreate(resultJson.toString(),dir);
         }
 
     }
 
     @Override
     public void mergeResults(HashMap<Long, List<ISignal>> signals, int layerId) {
-        File dir = new File(file.getAbsolutePath() + File.pathSeparator + layerId);
+        S dir = fileSystem.getItem(file.getPath()+fileSystem.getFolderSeparator()+layerId);
         if (!dir.exists()) {
             saveResults(signals, layerId);
         } else {
