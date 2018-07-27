@@ -7,37 +7,40 @@ public class NeuronConnection implements INConnection {
     private int targetLayerId;
     private int sourceLayerId;
     private Long targetNeuronId;
-    private Long sourceLongId;
+    private Long sourceNeuronId;
     private IWeight weight;
     private String description;
+    public static  NeuronConnection createConnection(int targetLayerId, int sourceLayerId, Long targetNeuronId, Long sourceNeuronId, IWeight weight, String description){
+        return new NeuronConnection( targetLayerId,  sourceLayerId,  targetNeuronId,  sourceNeuronId,  weight,  description);
+    }
 
-    public NeuronConnection(int targetLayerId, int sourceLayerId, Long targetNeuronId, Long sourceLongId, IWeight weight, String description) {
+    private NeuronConnection(int targetLayerId, int sourceLayerId, Long targetNeuronId, Long sourceNeuronId, IWeight weight, String description) {
         this.targetLayerId = targetLayerId;
         this.sourceLayerId = sourceLayerId;
         this.targetNeuronId = targetNeuronId;
-        this.sourceLongId = sourceLongId;
+        this.sourceNeuronId = sourceNeuronId;
         this.weight = weight;
         this.description = description;
     }
 
     @Override
     public int getTargetLayerId() {
-        return 0;
+        return targetLayerId;
     }
 
     @Override
     public int getSourceLayerId() {
-        return 0;
+        return sourceLayerId;
     }
 
     @Override
     public Long getTargetNeuronId() {
-        return null;
+        return targetNeuronId;
     }
 
     @Override
     public Long getSourceNeuronId() {
-        return null;
+        return sourceNeuronId;
     }
 
     @Override
@@ -47,12 +50,12 @@ public class NeuronConnection implements INConnection {
 
     @Override
     public String getDescription() {
-        return null;
+        return description;
     }
 
     @Override
     public IWeight getWeight() {
-        return null;
+        return weight;
     }
 
 
