@@ -25,6 +25,9 @@ public class JSONHelper {
         }
         return res;
     }
+    public static JSONObjectMeta getJSONObjectByFieldValue(String json, String field, String value){
+        return null;
+    }
 
     public static String extractJsonField(String json, String fieldName) {
 

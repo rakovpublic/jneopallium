@@ -34,7 +34,7 @@ public class FileLayersMeta<S extends IFileSystemItem> implements ILayersMeta {
 
         temp= fileSystem.listFiles(file);
         temp.removeIf(iFileSystemItem -> {
-            if(iFileSystemItem.isDirectory()){
+            if(!iFileSystemItem.isDirectory()){
                 return true;
             }
             return false;
