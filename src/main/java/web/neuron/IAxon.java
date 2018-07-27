@@ -18,4 +18,8 @@ public interface IAxon {
     String toJSON();
 
     void destroyConnection(int layerId, Long neuronId, Class<? extends ISignal> clazz);
+
+    void changeWeight(int layerId, Long neuronId, ISignal signal);
+    void changeWeight(int layerId, Long neuronId, Class<? extends ISignal> clazz,ISignal signal);
+    void changeWeight(ISignal signal);
 }

@@ -78,6 +78,8 @@ public class Axon implements IAxon {
         return result;
     }
 
+
+
     @Override
     public String toJSON() {
         return null;
@@ -85,6 +87,7 @@ public class Axon implements IAxon {
 
     @Override
     public void destroyConnection(int layerId, Long neuronId, Class<? extends ISignal> clazz) {
+        if(onDestroyMap.containsKey(layerId)&&onDestroyMap.get(layerId).containsKey(neuronId)){
         List<INConnection> conns=onDestroyMap.get(layerId).get(neuronId);
         for(INConnection c:conns){
             if(c.getWeight().getSignalClass().equals(clazz)){
@@ -93,6 +96,39 @@ public class Axon implements IAxon {
                 break;
             }
         }
+        }
+    }
+
+    @Override
+    public void changeWeight(int layerId, Long neuronId, ISignal signal) {
+        if(onDestroyMap.containsKey(layerId)&&onDestroyMap.get(layerId).containsKey(neuronId)){
+            List<INConnection> conns=onDestroyMap.get(layerId).get(neuronId);
+            for(INConnection c:conns){
+                c.getWeight().changeWeight(signal);
+            }
+        }
+    }
+
+    @Override
+    public void changeWeight(int layerId, Long neuronId, Class<? extends ISignal> clazz, ISignal signal) {
+        if(onDestroyMap.containsKey(layerId)&&onDestroyMap.get(layerId).containsKey(neuronId)){
+            List<INConnection> conns=onDestroyMap.get(layerId).get(neuronId);
+            for(INConnection c:conns){
+                if(c.getWeight().getSignalClass().equals(clazz)){
+                    c.getWeight().changeWeight(signal);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void changeWeight(ISignal signal) {
+        for(Class<? extends ISignal> cl:connectionMap.keySet()){
+            for(INConnection con: connectionMap.get(cl)){
+                con.getWeight().changeWeight(signal);
+            }
+        }
+
     }
 
 
