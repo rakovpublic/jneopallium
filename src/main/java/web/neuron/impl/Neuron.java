@@ -58,7 +58,7 @@ public class Neuron implements INeuron {
                     throw new CannotFindSignalProcessorException("Cannot find signal processor for signal class" + cl.getCanonicalName() + " in neuron id" + this.neuronId);
                 }
                 ISignal inS = signalMerger.mergeSignals(signalsMap.get(cl));
-                result.add(signalProcessor.process(inS, this));
+                result.addAll(signalProcessor.process(inS, this));
             }
         }
 
