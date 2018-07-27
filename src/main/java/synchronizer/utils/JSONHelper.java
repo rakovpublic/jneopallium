@@ -26,7 +26,13 @@ public class JSONHelper {
         return res;
     }
     public static JSONObjectMeta getJSONObjectByFieldValue(String json, String field, String value){
-        return null;
+        JSONObjectMeta res = null;
+        String result = null;
+        json.trim();
+        String search="\""+field+"\":"+"\""+value+"\"";
+        char [] chars=search.toCharArray();
+//TODO: finish this method
+        return res;
     }
 
     public static String extractJsonField(String json, String fieldName) {

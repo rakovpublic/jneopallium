@@ -19,4 +19,6 @@ public interface INConnection<S extends ISignal> {
     String getDescription();
 
     IWeight<S> getWeight();
+
+
 }

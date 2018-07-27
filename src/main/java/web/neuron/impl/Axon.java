@@ -11,9 +11,11 @@ import java.util.List;
 
 public class Axon implements IAxon {
     private HashMap<Class<? extends ISignal>, List<INConnection>> connectionMap;
+    private HashMap<Integer, HashMap<Long,List<INConnection>>> onDestroyMap;
 
     public Axon() {
         this.connectionMap = new HashMap<>();
+        this.onDestroyMap=new HashMap<>();
     }
 
     @Override
@@ -24,6 +26,22 @@ public class Axon implements IAxon {
             List<INConnection> tlist= new ArrayList<>();
             tlist.add(connection);
             connectionMap.put(cl,tlist);
+        }
+        if(onDestroyMap.containsKey(connection.getTargetLayerId())){
+            HashMap<Long,List<INConnection>> tMap= onDestroyMap.get(connection.getTargetLayerId());
+            if(tMap.containsKey(connection.getTargetNeuronId())){
+                tMap.get(connection.getTargetNeuronId()).add(connection);
+            }else{
+                List<INConnection> tlist= new ArrayList<>();
+                tlist.add(connection);
+                tMap.put(connection.getTargetNeuronId(),tlist);
+            }
+        }else{
+            HashMap<Long,List<INConnection>> tMap =new HashMap<>();
+            List<INConnection> tlist= new ArrayList<>();
+            tlist.add(connection);
+            tMap.put(connection.getTargetNeuronId(),tlist);
+            onDestroyMap.put(connection.getTargetLayerId(),tMap);
         }
     }
 
@@ -63,4 +81,18 @@ public class Axon implements IAxon {
     public String toJSON() {
         return null;
     }
+
+    @Override
+    public void destroyConnection(int layerId, Long neuronId, Class<? extends ISignal> clazz) {
+        List<INConnection> conns=onDestroyMap.get(layerId).get(neuronId);
+        for(INConnection c:conns){
+            if(c.getWeight().getSignalClass().equals(clazz)){
+                connectionMap.get(clazz).remove(c);
+                conns.remove(c);
+                break;
+            }
+        }
+    }
+
+
 }

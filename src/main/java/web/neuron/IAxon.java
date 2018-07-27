@@ -16,4 +16,6 @@ public interface IAxon {
     HashMap<ISignal, List<INConnection>> processSignal(List<ISignal> signal);
 
     String toJSON();
+
+    void destroyConnection(int layerId, Long neuronId, Class<? extends ISignal> clazz);
 }
