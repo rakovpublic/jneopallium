@@ -4,14 +4,13 @@ import exceptions.ClassFromJSONIsNotExistsException;
 import exceptions.InputNotExistsException;
 import exceptions.SerializerForClassIsNotRegisteredException;
 import synchronizer.utils.JSONHelper;
-import synchronizer.utils.JSONHelperResult;
+import synchronizer.utils.DeserializationHelperResult;
 import web.signals.ISignal;
 import web.storages.IInputMeta;
 import web.storages.ISerializer;
 import web.storages.filesystem.IFileSystem;
 import web.storages.filesystem.IFileSystemItem;
 
-import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -45,7 +44,7 @@ public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<Stri
         HashMap<Long, List<ISignal>> result = new HashMap<>();
         String json =fileSystem.read(ff);
         int startIndex = json.indexOf('[');
-        JSONHelperResult res = JSONHelper.getNextJSONObject(json, startIndex);
+        DeserializationHelperResult res = JSONHelper.getNextJSONObject(json, startIndex);
         while (res != null) {
             String className = res.getClassName();
             String jsonObject = res.getObject();

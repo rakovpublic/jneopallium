@@ -1,9 +1,9 @@
 package synchronizer.utils;
-
+//TODO: refactor this class to interface and implementations for different serialization formats
 public class JSONHelper {
-    public static JSONHelperResult getNextJSONObject(String json, Integer index) {
+    public static DeserializationHelperResult getNextJSONObject(String json, Integer index) {
 
-        JSONHelperResult res = null;
+        DeserializationHelperResult res = null;
         String result = null;
         index = json.indexOf(index, '{');
         if (index == -1 || index >= json.length()) {
@@ -20,7 +20,7 @@ public class JSONHelper {
             if (open == 0) {
 
                 result = json.substring(startIndex, i) + "}";
-                res = new JSONHelperResult(result, i, extractJsonField(result, "className"));
+                res = new DeserializationHelperResult(result, i, extractJsonField(result, "className"));
             }
         }
         return res;

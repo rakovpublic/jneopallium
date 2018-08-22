@@ -1,11 +1,11 @@
 package synchronizer.utils;
 
-public class JSONHelperResult {
+public class DeserializationHelperResult {
     private String object;
     private int index;
     private String className;
 
-    public JSONHelperResult(String object, int index, String className) {
+    public DeserializationHelperResult(String object, int index, String className) {
         this.object = object;
         this.index = index;
         this.className = className;
