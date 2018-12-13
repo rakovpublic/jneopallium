@@ -1,7 +1,10 @@
 package synchronizer;
 
 import web.layers.IResultLayer;
+import web.storages.IInputMeta;
+import web.storages.ILayersMeta;
 import web.storages.IStructMeta;
+import web.storages.structimpl.StructMeta;
 
 /**
  * Created by Rakovskyi Dmytro on 08.06.2018.
@@ -22,18 +25,6 @@ public class Context implements IContext {
         return null;
     }
 
-    @Override
-    public void configure(IStructMeta structMeta) {
+    
 
-    }
-
-    @Override
-    public IStructMeta getStructure() {
-        return null;
-    }
-
-    @Override
-    public IResultLayer process() {
-        return null;
-    }
 }

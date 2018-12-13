@@ -4,6 +4,7 @@ import web.layers.ILayer;
 import web.neuron.IAxon;
 import web.neuron.INConnection;
 import web.neuron.INeuron;
+import web.neuron.IRule;
 import web.neuron.impl.NeuronRunnerService;
 import web.signals.ISignal;
 import web.storages.IInputMeta;
@@ -11,6 +12,7 @@ import web.storages.IInputMeta;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created by Rakovskyi Dmytro on 08.06.2018.
@@ -19,9 +21,12 @@ public class Layer implements ILayer {
     private HashMap<Long, INeuron> map;
     private HashMap<Long, List<ISignal>> input;
     private Boolean isProcessed;
+
     private List<INeuron> notProcessed;
+    private List<IRule> rules;
 
     public Layer(int layerId) {
+        rules= new ArrayList<>();
         isProcessed = false;
         notProcessed = new ArrayList<INeuron>();
         this.layerId = layerId;
@@ -30,6 +35,38 @@ public class Layer implements ILayer {
     }
 
     private int layerId;
+
+    @Override
+    public long getLayerSize() {
+        return 0;
+    }
+
+    @Override
+    public Boolean validateGlobal() {
+        for(INeuron neuron:map.values()){
+            for(IRule r:rules){
+                if(r.validate(neuron)==false){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public Boolean validateLocal() {
+        for(INeuron neuron:map.values()){
+                if(neuron.validate()==false){
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public void addGlobalRule(IRule rule) {
+        rules.add(rule);
+    }
 
     @Override
     public void register(INeuron neuron) {
@@ -146,5 +183,24 @@ public class Layer implements ILayer {
     @Override
     public String toJSON() {
         return null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Layer layer = (Layer) o;
+        return layerId == layer.layerId &&
+                Objects.equals(map, layer.map) &&
+                Objects.equals(input, layer.input) &&
+                Objects.equals(isProcessed, layer.isProcessed) &&
+                Objects.equals(notProcessed, layer.notProcessed) &&
+                Objects.equals(rules, layer.rules);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(map, input, isProcessed, notProcessed, rules, layerId);
     }
 }

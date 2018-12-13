@@ -1,6 +1,8 @@
 package synchronizer;
 
 import web.layers.IResultLayer;
+import web.storages.IInputMeta;
+import web.storages.ILayersMeta;
 import web.storages.IStructMeta;
 
 /**
@@ -10,11 +12,7 @@ public interface IContext {
 
     String getProperty(String propertyName);
 
-    void configure(IStructMeta structMeta);
 
-    IStructMeta getStructure();
-
-    IResultLayer process();
 
 
 }

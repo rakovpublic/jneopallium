@@ -8,6 +8,7 @@ import web.signals.ISignal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+//TODO: refactor to facade
 
 public class Neuron implements INeuron {
     private List<ISignal> signals;
@@ -18,8 +19,10 @@ public class Neuron implements INeuron {
     private Long neuronId;
     private List<ISignal> result;
     private ISignalChain processingChain;
+    private List<IRule> rules;
 
     public Neuron(Long neuronId, ISignalChain processingChain) {
+        rules= new ArrayList<>();
         this.neuronId = neuronId;
         isProcessed = false;
         signals = new ArrayList<>();
@@ -27,6 +30,21 @@ public class Neuron implements INeuron {
         processorHashMap = new HashMap<>();
         mergerHashMap = new HashMap<>();
         this.processingChain = processingChain;
+    }
+
+    @Override
+    public Boolean validate() {
+        for(IRule r:rules){
+            if(r.validate(this)==false){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public void addRule(IRule rule) {
+        rules.add(rule);
     }
 
     @Override

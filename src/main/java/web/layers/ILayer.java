@@ -5,6 +5,7 @@ package web.layers;
  */
 
 import web.neuron.INeuron;
+import web.neuron.IRule;
 import web.signals.ISignal;
 import web.storages.IInputMeta;
 
@@ -15,6 +16,11 @@ import java.util.List;
  * listener for neurons
  */
 public interface ILayer {
+    long getLayerSize();
+    Boolean validateGlobal();
+    Boolean validateLocal();
+    void addGlobalRule(IRule rule);
+
     void register(INeuron neuron);
 
     void addInput(ISignal signal, Long neuronId);

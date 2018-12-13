@@ -7,4 +7,5 @@ public interface IFileSystemItem {
    boolean exists();
    String getName();
    String getPath();
+
 }

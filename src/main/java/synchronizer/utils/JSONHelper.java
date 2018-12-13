@@ -1,7 +1,7 @@
 package synchronizer.utils;
 //TODO: refactor this class to interface and implementations for different serialization formats
-public class JSONHelper {
-    public static DeserializationHelperResult getNextJSONObject(String json, Integer index) {
+public class JSONHelper implements IDeserializationHelper{
+    public  DeserializationHelperResult getNextObject(String json, Integer index) {
 
         DeserializationHelperResult res = null;
         String result = null;
@@ -20,22 +20,12 @@ public class JSONHelper {
             if (open == 0) {
 
                 result = json.substring(startIndex, i) + "}";
-                res = new DeserializationHelperResult(result, i, extractJsonField(result, "className"));
+                res = new DeserializationHelperResult(result, i, extractField(result, "className"));
             }
         }
         return res;
     }
-    public static JSONObjectMeta getJSONObjectByFieldValue(String json, String field, String value){
-        JSONObjectMeta res = null;
-        String result = null;
-        json.trim();
-        String search="\""+field+"\":"+"\""+value+"\"";
-        char [] chars=search.toCharArray();
-//TODO: finish this method
-        return res;
-    }
-
-    public static String extractJsonField(String json, String fieldName) {
+    public  String extractField(String json, String fieldName) {
 
         int index = json.indexOf(fieldName);
         index = json.indexOf(':', index);
@@ -46,4 +36,6 @@ public class JSONHelper {
         return "";
 
     }
+
+
 }

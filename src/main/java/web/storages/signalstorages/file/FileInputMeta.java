@@ -39,38 +39,46 @@ public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<Stri
         if (!ff.exists()) {
             throw new InputNotExistsException("File " +ff.getPath()+" with input data for layer id "+layerId+" is not exists");
         }
-        //TODO:add input lock
-
         HashMap<Long, List<ISignal>> result = new HashMap<>();
-        String json =fileSystem.read(ff);
-        int startIndex = json.indexOf('[');
-        DeserializationHelperResult res = JSONHelper.getNextJSONObject(json, startIndex);
-        while (res != null) {
-            String className = res.getClassName();
-            String jsonObject = res.getObject();
-            Long neuronID = Long.parseLong(JSONHelper.extractJsonField(jsonObject, "neuronId"));
-            startIndex = res.getIndex();
-            try {
-                Class cl = Class.forName(className);
-                if (map.containsKey(cl)) {
-                    ISerializer ser = map.get(cl);
-                    if (result.containsKey(neuronID)) {
-                        result.get(neuronID).add((ISignal) ser.deserialize(json));
-                    } else {
-                        List<ISignal> l = new ArrayList<>();
-                        l.add((ISignal) ser.deserialize(json));
-                        result.put(neuronID, l);
+        if(ff.isDirectory()){
+
+            for(IFileSystemItem fsiNeuron:fileSystem.listFiles(ff)){
+                for(IFileSystemItem fsiSignal:fileSystem.listFiles((S) fsiNeuron)){
+                JSONHelper jsonHelper= new JSONHelper();
+                String json =fileSystem.read((S) fsiSignal);
+                int startIndex = json.indexOf('[');
+                DeserializationHelperResult res = jsonHelper.getNextObject(json, startIndex);
+                while (res != null) {
+                    String className = res.getClassName();
+                    String jsonObject = res.getObject();
+                    Long neuronID = Long.parseLong(jsonHelper.extractField(jsonObject, "neuronId"));
+                    startIndex = res.getIndex();
+                    try {
+                        Class cl = Class.forName(className);
+                        if (map.containsKey(cl)) {
+                            ISerializer ser = map.get(cl);
+                            if (result.containsKey(neuronID)) {
+                                result.get(neuronID).add((ISignal) ser.deserialize(json));
+                            } else {
+                                List<ISignal> l = new ArrayList<>();
+                                l.add((ISignal) ser.deserialize(json));
+                                result.put(neuronID, l);
+                            }
+                            res = jsonHelper.getNextObject(json, startIndex);
+                        } else {
+                            throw new SerializerForClassIsNotRegisteredException("Serializer for class" + cl + "is not registered");
+                        }
+
+                    } catch (ClassNotFoundException e) {
+                        throw new ClassFromJSONIsNotExistsException("Class " + className + " from this json " + jsonObject + " is not exists");
                     }
-                    res = JSONHelper.getNextJSONObject(json, startIndex);
-                } else {
-                    throw new SerializerForClassIsNotRegisteredException("Serializer for class" + cl + "is not registered");
+                }
                 }
 
-            } catch (ClassNotFoundException e) {
-                throw new ClassFromJSONIsNotExistsException("Class " + className + " from this json " + jsonObject + " is not exists");
             }
         }
-        fileSystem.delete(ff);
+        //TODO:add input lock
+
         return result;
     }
 

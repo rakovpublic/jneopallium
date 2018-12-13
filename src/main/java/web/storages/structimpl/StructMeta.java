@@ -16,7 +16,7 @@ public class StructMeta implements IStructMeta {
     private IInputMeta hiddenInputMeta;
     private ILayersMeta layersMeta;
 
-    StructMeta(IInputMeta initInputMeta, IInputMeta hiddenInputMeta, ILayersMeta layersMeta) {
+    public StructMeta(IInputMeta initInputMeta, IInputMeta hiddenInputMeta, ILayersMeta layersMeta) {
         this.initInputMeta = initInputMeta;
         this.hiddenInputMeta = hiddenInputMeta;
         this.layersMeta = layersMeta;

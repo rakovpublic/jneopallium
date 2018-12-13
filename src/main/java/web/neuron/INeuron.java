@@ -9,6 +9,10 @@ import java.util.List;
  * Created by Rakovskyi Dmytro on 27.10.2017.
  */
 public interface INeuron {
+    Boolean validate();
+
+    void addRule(IRule rule);
+
     void addSignals(List<ISignal> signals);
 
     void processSignals();
