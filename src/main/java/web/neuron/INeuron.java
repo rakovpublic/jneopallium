@@ -25,6 +25,10 @@ public interface INeuron {
 
     <S extends ISignal> void addSignalMerger(Class<S> clazz, ISignalMerger<S> merger);
 
+    <S extends ISignal> void removeSignalProcessor(Class<S> clazz);
+
+    <S extends ISignal> void removeSignalMerger(Class<S> clazz);
+
     List<ISignal> getResult();
 
     Boolean hasResult();

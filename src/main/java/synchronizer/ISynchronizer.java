@@ -14,6 +14,9 @@ public interface ISynchronizer {
     void syncSignal(ISignal signal,int layerId, long neuronId);
     boolean isLayerProcessed(int layerId);
     void syncNeurons(List<? extends INeuron> neurons,int layerId);
+    void removeNeuron(int layerId, long neuronId);
+    void updateNeuron(INeuron neuron, int layerId);
+    void addNeuron(INeuron neuron,long layerId);
 
 
 }

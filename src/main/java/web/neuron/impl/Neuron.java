@@ -103,6 +103,18 @@ public class Neuron implements INeuron {
     }
 
     @Override
+    public <S extends ISignal> void removeSignalProcessor(Class<S> clazz) {
+        processorHashMap.remove(clazz);
+        this.removeSignalMerger(clazz);
+    }
+
+    @Override
+    public <S extends ISignal> void removeSignalMerger(Class<S> clazz) {
+        mergerHashMap.remove(clazz);
+    }
+
+
+    @Override
     public List<ISignal> getResult() {
         return this.result;
     }
