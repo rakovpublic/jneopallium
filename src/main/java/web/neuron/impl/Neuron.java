@@ -8,7 +8,7 @@ import web.signals.ISignal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-//TODO: refactor to facade
+
 
 public class Neuron implements INeuron {
     private List<ISignal> signals;
@@ -60,9 +60,19 @@ public class Neuron implements INeuron {
             if (signalsMap.containsKey(cl)) {
                 signalsMap.get(cl).add(s);
             } else {
-                List<ISignal> ll = new ArrayList<>();
-                ll.add(s);
-                signalsMap.put(cl, ll);
+                Class<? extends ISignal> clt = s.getCurrentClass();
+                boolean done=true;
+                while (getSupperClass(clt)!=ISignal.class&&getSupperClass(clt)!=Object.class){
+                    if (signalsMap.containsKey(clt)){
+                        signalsMap.get(clt).add(s);
+                        done=false;
+                    }
+                }
+                if(done) {
+                    List<ISignal> ll = new ArrayList<>();
+                    ll.add(s);
+                    signalsMap.put(cl, ll);
+                }
             }
         }
         for (Class<? extends ISignal> cl : processingChain.getProcessingChain()) {
@@ -143,5 +153,10 @@ public class Neuron implements INeuron {
     @Override
     public void setProcessingChain(ISignalChain chain) {
         this.processingChain = chain;
+    }
+
+
+    private Class<?> getSupperClass(Class<? extends ISignal> clazz){
+        return clazz.getSuperclass();
     }
 }
