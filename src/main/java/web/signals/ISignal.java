@@ -14,5 +14,6 @@ public interface ISignal<T> extends Serializable {
 
     String toJSON();
      String getDescription();
+     boolean canUseProcessorForParent();
 
 }

@@ -62,7 +62,7 @@ public class Neuron implements INeuron {
             } else {
                 Class<? extends ISignal> clt = s.getCurrentClass();
                 boolean done=true;
-                while (getSupperClass(clt)!=ISignal.class&&getSupperClass(clt)!=Object.class){
+                while (getSupperClass(clt)!=ISignal.class&&getSupperClass(clt)!=Object.class&&s.canUseProcessorForParent()){
                     if (signalsMap.containsKey(clt)){
                         signalsMap.get(clt).add(s);
                         done=false;
