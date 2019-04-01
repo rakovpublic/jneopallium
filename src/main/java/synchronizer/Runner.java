@@ -1,8 +1,8 @@
 package synchronizer;
 
-import web.storages.IInputMeta;
-import web.storages.ILayersMeta;
-import web.storages.structimpl.StructMeta;
+import net.storages.IInputMeta;
+import net.storages.ILayersMeta;
+import net.storages.structimpl.StructMeta;
 
 public class Runner implements IRunner {
     @Override

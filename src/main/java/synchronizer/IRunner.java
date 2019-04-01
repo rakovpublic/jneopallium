@@ -1,7 +1,7 @@
 package synchronizer;
 
-import web.storages.IInputMeta;
-import web.storages.ILayersMeta;
+import net.storages.IInputMeta;
+import net.storages.ILayersMeta;
 
 public interface IRunner {
     void process(IInputMeta initInputMeta, IInputMeta hiddenInputMeta, ILayersMeta layersMeta);

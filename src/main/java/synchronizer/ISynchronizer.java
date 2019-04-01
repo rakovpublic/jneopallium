@@ -1,7 +1,7 @@
 package synchronizer;
 
-import web.neuron.INeuron;
-import web.signals.ISignal;
+import net.neuron.INeuron;
+import net.signals.ISignal;
 
 import java.util.List;
 
@@ -17,6 +17,8 @@ public interface ISynchronizer {
     void removeNeuron(int layerId, long neuronId);
     void updateNeuron(INeuron neuron, int layerId);
     void addNeuron(INeuron neuron,long layerId);
+    void addLayer(int afterLayerId);
+    void putSignals();
 
 
 }
