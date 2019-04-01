@@ -17,7 +17,6 @@ public interface INeuron {
 
     void processSignals();
 
-    void reconfigure();
 
     void setAxon(IAxon axon);
 

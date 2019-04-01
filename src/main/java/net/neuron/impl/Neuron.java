@@ -35,7 +35,7 @@ public class Neuron implements INeuron {
     @Override
     public Boolean validate() {
         for(IRule r:rules){
-            if(r.validate(this)==false){
+            if(!r.validate(this)){
                 return false;
             }
         }
@@ -49,7 +49,7 @@ public class Neuron implements INeuron {
 
     @Override
     public void addSignals(List<ISignal> signals) {
-        signals.addAll(signals);
+        this.signals.addAll(signals);
     }
 
     @Override
@@ -89,11 +89,6 @@ public class Neuron implements INeuron {
                 result.addAll(signalProcessor.process(inS, this));
             }
         }
-
-    }
-
-    @Override
-    public void reconfigure() {
 
     }
 
