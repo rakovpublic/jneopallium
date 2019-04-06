@@ -2,6 +2,7 @@ package synchronizer;
 
 import net.neuron.INeuron;
 import net.signals.ISignal;
+import net.storages.ILayerMeta;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -65,10 +66,20 @@ public class RestSynchronizer implements ISynchronizer {
     }
 
     @Override
+    public int getNextLayerId() {
+        return 0;
+    }
+
+    @Override
+    public ILayerMeta getNextBatch() {
+        return null;
+    }
+
+    @Override
     public void syncNeurons(List<? extends INeuron> neurons, int layerId) {
 
     }
-
+//TODO:Move next 4 methods and studying to master
     @Override
     public void removeNeuron(int layerId, long neuronId) {
 

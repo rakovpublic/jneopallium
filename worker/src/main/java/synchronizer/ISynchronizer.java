@@ -2,6 +2,7 @@ package synchronizer;
 
 import net.neuron.INeuron;
 import net.signals.ISignal;
+import net.storages.ILayerMeta;
 
 import java.util.List;
 
@@ -13,6 +14,8 @@ public interface ISynchronizer {
     IContext getContext(int nodeId);
     void syncSignal(ISignal signal,int layerId, long neuronId);
     boolean isLayerProcessed(int layerId);
+    int getNextLayerId();
+    ILayerMeta getNextBatch();
     void syncNeurons(List<? extends INeuron> neurons,int layerId);
     void removeNeuron(int layerId, long neuronId);
     void updateNeuron(INeuron neuron, int layerId);
