@@ -13,7 +13,7 @@ public interface IAxon {
 
     void cleanConnections();
 
-    HashMap<ISignal, List<INConnection>> processSignal(List<ISignal> signal);
+    HashMap<ISignal, List<INConnection>> processSignals(List<ISignal> signals);
 
     String toJSON();
 

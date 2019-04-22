@@ -54,7 +54,7 @@ public class Axon implements IAxon {
     }
 
     @Override
-    public HashMap<ISignal, List<INConnection>> processSignal(List<ISignal> signal) {
+    public HashMap<ISignal, List<INConnection>> processSignals(List<ISignal> signal) {
         HashMap<ISignal,List<INConnection>> result=new HashMap<>();
         for(ISignal s:signal){
             Class<? extends ISignal>  cl= s.getCurrentClass();
