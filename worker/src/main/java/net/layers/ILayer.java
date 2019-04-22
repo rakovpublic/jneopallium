@@ -38,7 +38,7 @@ public interface ILayer {
 
     /**
     * Add validation rule on layer level
-    * @param validation rule
+    * @param rule validation rule
     * */
     void addGlobalRule(IRule rule);
 
@@ -51,7 +51,7 @@ public interface ILayer {
     /**
     * add input to layer
     * @param signal
-    * @param neuron id
+    * @param neuronId neuron id
     * */
     void addInput(ISignal signal, Long neuronId);
 
@@ -79,7 +79,7 @@ public interface ILayer {
 
     /**
     * Store neurons after processing, because the state of neuron could be changed.
-    * @param meta data for layer storage
+    * @param layerMeta meta data for layer storage
     * */
     void dumpNeurons(ILayerMeta layerMeta);
 
