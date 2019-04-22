@@ -10,7 +10,7 @@ public interface ISignal<T> extends Serializable {
      * @return value of signal
      * */
     T getValue();
-    
+
     /**
     * @return Signal class
      * */
