@@ -4,7 +4,7 @@ import net.neuron.INeuron;
 
 import java.util.Queue;
 
-/**
+/***
  * Created by Rakovskyi Dmytro on 14.06.2018.
  */
 class NeuronRunner implements Runnable {

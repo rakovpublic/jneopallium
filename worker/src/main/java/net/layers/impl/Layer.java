@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
-/**
+/***
  * Created by Rakovskyi Dmytro on 08.06.2018.
  */
 public class Layer implements ILayer {

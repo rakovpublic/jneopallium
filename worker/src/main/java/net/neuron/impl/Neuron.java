@@ -89,6 +89,7 @@ public class Neuron implements INeuron {
                 result.addAll(signalProcessor.process(inS, this));
             }
         }
+        this.isProcessed=true;
 
     }
 

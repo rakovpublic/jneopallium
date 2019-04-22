@@ -1,5 +1,5 @@
 package net.layers;
-/**
+/***
  * Created by Rakovskyi Dmytro .
  *
  * Represents neuron result layer and encapsulate result interpretation logic

@@ -7,7 +7,7 @@ import net.neuron.INeuron;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-/**
+/***
  * Created by Rakovskyi Dmytro on 14.06.2018.
  */
 public class NeuronRunnerService {

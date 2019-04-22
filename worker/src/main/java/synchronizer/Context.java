@@ -1,6 +1,6 @@
 package synchronizer;
 
-/**
+/***
  * Created by Rakovskyi Dmytro on 08.06.2018.
  */
 public class Context implements IContext {
