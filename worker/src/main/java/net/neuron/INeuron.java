@@ -11,6 +11,8 @@ import java.util.List;
  *
  */
 public interface INeuron {
+
+    void setId(Long id);
     /**
     * Validate neuron on local level
     * @return true if neuron is valid

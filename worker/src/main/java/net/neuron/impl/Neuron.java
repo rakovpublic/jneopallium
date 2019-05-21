@@ -22,6 +22,15 @@ public class Neuron implements INeuron {
     private ISignalChain processingChain;
     private List<IRule> rules;
 
+    public Neuron() {
+        rules= new ArrayList<>();
+        isProcessed = false;
+        signals = new ArrayList<>();
+        result = new ArrayList<>();
+        processorHashMap = new HashMap<>();
+        mergerHashMap = new HashMap<>();
+    }
+
     public Neuron(Long neuronId, ISignalChain processingChain) {
         rules= new ArrayList<>();
         this.neuronId = neuronId;
@@ -31,6 +40,11 @@ public class Neuron implements INeuron {
         processorHashMap = new HashMap<>();
         mergerHashMap = new HashMap<>();
         this.processingChain = processingChain;
+    }
+
+    @Override
+    public void setId(Long id) {
+        this.neuronId = id;
     }
 
     @Override
@@ -169,6 +183,8 @@ public class Neuron implements INeuron {
     public String toJSON() {
         return null;
     }
+
+
 
     @Override
     public void setProcessingChain(ISignalChain chain) {

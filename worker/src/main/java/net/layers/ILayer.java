@@ -14,6 +14,7 @@ import net.neuron.IRule;
 import net.signals.ISignal;
 import net.storages.IInputMeta;
 import net.storages.ILayerMeta;
+import net.storages.INeuronSerializer;
 
 import java.util.HashMap;
 import java.util.List;
@@ -94,5 +95,11 @@ public interface ILayer {
     * @return string json
     * **/
     String toJSON();
+
+    void addNeuronSerializer(INeuronSerializer serializer);
+
+    <N extends INeuron> INeuronSerializer<N> getNeuronSerializer(Class<N> neuronClass);
+
+
 
 }

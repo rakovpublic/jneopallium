@@ -5,4 +5,7 @@ public interface ISerializer<I, R> {
 
     I deserialize(R input);
 
+    Class<I> getDeserializedClass();
+    Class<R> getSerializedClass();
+
 }

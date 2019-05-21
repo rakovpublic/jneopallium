@@ -9,6 +9,7 @@ import net.neuron.impl.NeuronRunnerService;
 import net.signals.ISignal;
 import net.storages.IInputMeta;
 import net.storages.ILayerMeta;
+import net.storages.INeuronSerializer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,13 +22,15 @@ import java.util.Objects;
 public class Layer implements ILayer {
     private HashMap<Long, INeuron> map;
     private HashMap<Long, List<ISignal>> input;
+    private HashMap<Class<?extends INeuron>,INeuronSerializer> neuronSerializerHashMap;
     private Boolean isProcessed;
     private long size;
-
+    private int layerId;
     private List<INeuron> notProcessed;
     private List<IRule> rules;
 
     public Layer(int layerId) {
+        neuronSerializerHashMap= new HashMap<>();
         rules = new ArrayList<>();
         isProcessed = false;
         notProcessed = new ArrayList<INeuron>();
@@ -36,7 +39,7 @@ public class Layer implements ILayer {
         input = new HashMap<Long, List<ISignal>>();
     }
 
-    private int layerId;
+
 
     @Override
     public long getLayerSize() {
@@ -187,6 +190,17 @@ public class Layer implements ILayer {
     @Override
     public String toJSON() {
         return null;
+    }
+
+    @Override
+    public void addNeuronSerializer(INeuronSerializer serializer) {
+        neuronSerializerHashMap.put(serializer.getDeserializedClass(),serializer);
+
+    }
+
+    @Override
+    public <N extends INeuron> INeuronSerializer<N> getNeuronSerializer(Class<N> neuronClass) {
+        return neuronSerializerHashMap.get(neuronClass);
     }
 
     @Override
