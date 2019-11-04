@@ -7,6 +7,10 @@ package net.layers;
  *
  */
 public interface IResultLayer<K> extends ILayer {
+    /*
+    * Tra
+    *
+    * */
     K interpretResult();
 
 }

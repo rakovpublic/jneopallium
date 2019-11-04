@@ -191,6 +191,11 @@ public class Neuron implements INeuron {
         this.processingChain = chain;
     }
 
+    @Override
+    public void activate() {
+
+    }
+
 
     private Class<?> getSupperClass(Class<?> clazz){
 

@@ -101,4 +101,9 @@ public interface INeuron {
     * **/
     void setProcessingChain(ISignalChain chain);
 
+    /**
+     * Activation function
+     * */
+    void activate();
+
 }

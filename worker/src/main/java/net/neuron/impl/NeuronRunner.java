@@ -22,6 +22,7 @@ class NeuronRunner implements Runnable {
         INeuron neuron;
         while ((neuron = queue.poll()) != null) {
             neuron.processSignals();
+            neuron.activate();
         }
     }
 }
