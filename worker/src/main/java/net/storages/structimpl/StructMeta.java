@@ -1,5 +1,6 @@
 package net.storages.structimpl;
 
+import net.layers.ILayer;
 import net.signals.ISignal;
 import net.storages.IInputMeta;
 import net.storages.ILayerMeta;
@@ -27,12 +28,13 @@ public class StructMeta implements IStructMeta {
         return layersMeta.getLayers();
     }
 
+
     @Override
-    public HashMap<String, List<ISignal>> getInputs(int layerId) {
+    public IInputMeta getInputs(int layerId) {
         if (layerId == 0) {
-            return initInputMeta.readInputs(layerId);
+            return initInputMeta;
         }
-        return hiddenInputMeta.readInputs(layerId);
+        return hiddenInputMeta;
     }
 
     @Override

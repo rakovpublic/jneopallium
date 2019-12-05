@@ -41,7 +41,6 @@ public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<Stri
         }
         HashMap<Long, List<ISignal>> result = new HashMap<>();
         if(ff.isDirectory()){
-
             for(IFileSystemItem fsiNeuron:fileSystem.listFiles(ff)){
                 for(IFileSystemItem fsiSignal:fileSystem.listFiles((S) fsiNeuron)){
                 JSONHelper jsonHelper= new JSONHelper();
@@ -78,7 +77,6 @@ public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<Stri
             }
         }
         //TODO:add input lock
-
         return result;
     }
 

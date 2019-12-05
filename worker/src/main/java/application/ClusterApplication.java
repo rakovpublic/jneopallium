@@ -6,7 +6,10 @@ import synchronizer.IContext;
 public class ClusterApplication implements IApplication {
 
     @Override
-    public void startApplication(IContext context, IStructMeta meta) {
+    public void startApplication(IContext context) {
 
     }
+
+
+
 }

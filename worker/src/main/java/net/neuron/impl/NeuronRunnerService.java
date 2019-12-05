@@ -1,9 +1,11 @@
 package net.neuron.impl;
 
+import net.storages.INeuronMeta;
 import synchronizer.Context;
 import synchronizer.IContext;
 import net.neuron.INeuron;
 
+import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -29,6 +31,11 @@ public class NeuronRunnerService {
     public void addNeuron(INeuron neuron) {
         neuronQueue.add(neuron);
     }
+    public void addNeurons(List<INeuronMeta<? extends INeuron>> metas){
+        for(INeuronMeta m:metas){
+            addNeuron(m.toNeuron());
+        }
+    }
 
     public void process() {
         int poolSize = Integer.parseInt(context.getProperty(neuronPool));
@@ -37,11 +44,19 @@ public class NeuronRunnerService {
             Thread th = new Thread(ne);
             th.start();
         }
+        try {
+            neuronQueue.wait();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            //TODO:add logger
+        }
     }
 
     Queue<INeuron> getNeuronQueue() {
         return neuronQueue;
     }
+
+
 
     public static NeuronRunnerService getService() {
         return service;

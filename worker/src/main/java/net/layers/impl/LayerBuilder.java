@@ -1,20 +1,22 @@
 package net.layers.impl;
 
+import net.layers.ILayer;
 import net.storages.IInputMeta;
+import net.storages.ILayerMeta;
 import net.storages.ILayersMeta;
 
 //TODO:add implementation
 public class LayerBuilder {
-    private ILayersMeta layersMeta;
+    private ILayerMeta layerMeta;
     private IInputMeta meta;
     private int layerId;
 
-    public LayerBuilder(ILayersMeta layersMeta) {
-        this.layersMeta = layersMeta;
+    public LayerBuilder() {
+
     }
 
-    public LayerBuilder withLayerId(int layerId){
-        this.layerId=layerId;
+    public LayerBuilder withLayer(ILayerMeta layerMeta){
+        this.layerMeta=layerMeta;
         return this;
     }
     public LayerBuilder withInput(IInputMeta meta){
@@ -23,6 +25,11 @@ public class LayerBuilder {
     }
     public LayerBuilder withNeuronRange(int start, int end){
         return  this;
+    }
+
+    public ILayer build(){
+        //TODO: finish this method
+        return null;
     }
 
 }

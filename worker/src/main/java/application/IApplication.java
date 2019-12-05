@@ -4,5 +4,6 @@ import net.storages.IStructMeta;
 import synchronizer.IContext;
 
 public interface IApplication {
-    void startApplication(IContext context, IStructMeta meta);
+    void startApplication(IContext context);
+
 }
