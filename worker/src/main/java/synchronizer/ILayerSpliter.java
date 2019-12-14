@@ -1,4 +1,6 @@
 package synchronizer;
 
-public interface ILayerSpliter {
+import java.io.Serializable;
+
+public interface ILayerSpliter extends Serializable {
 }

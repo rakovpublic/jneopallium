@@ -1,6 +1,8 @@
 package net.storages;
 
-public interface ISerializer<I, R> {
+import java.io.Serializable;
+
+public interface ISerializer<I, R> extends Serializable {
     R serialize(I input);
 
     I deserialize(R input);

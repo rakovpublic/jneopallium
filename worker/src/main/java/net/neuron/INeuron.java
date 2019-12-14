@@ -3,6 +3,7 @@ package net.neuron;
 
 import net.signals.ISignal;
 
+import java.io.Serializable;
 import java.util.List;
 
 /***
@@ -10,7 +11,7 @@ import java.util.List;
  * This class contains methods for signal processing and represents neuron(perceptron)
  *
  */
-public interface INeuron {
+public interface INeuron extends Serializable {
 
     void setId(Long id);
     /**

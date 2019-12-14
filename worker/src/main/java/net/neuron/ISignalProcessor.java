@@ -2,13 +2,14 @@ package net.neuron;
 
 import net.signals.ISignal;
 
+import java.io.Serializable;
 import java.util.List;
 
 /***
  * Created by Rakovskyi Dmytro on 13.06.2018.
  * This class represents processor for signal
  */
-public interface ISignalProcessor<S extends ISignal> {
+public interface ISignalProcessor<S extends ISignal> extends Serializable {
     /***
     * @param input signal
     * @param neuron object

@@ -1,4 +1,6 @@
 package synchronizer;
 
-public interface IInputSpliter {
+import java.io.Serializable;
+
+public interface IInputSpliter extends Serializable {
 }

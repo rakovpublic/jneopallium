@@ -1,5 +1,7 @@
 package net.storages;
 
-public interface IRange {
+import java.io.Serializable;
+
+public interface IRange extends Serializable {
 
 }

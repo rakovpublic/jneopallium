@@ -1,5 +1,7 @@
 package net.storages;
 
-public interface IStorageMeta {
+import java.io.Serializable;
+
+public interface IStorageMeta  extends Serializable {
 
 }

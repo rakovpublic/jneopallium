@@ -16,10 +16,11 @@ import net.storages.IInputMeta;
 import net.storages.ILayerMeta;
 import net.storages.INeuronSerializer;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 
-public interface ILayer {
+public interface ILayer extends Serializable {
 
     /**
     * @return layer size

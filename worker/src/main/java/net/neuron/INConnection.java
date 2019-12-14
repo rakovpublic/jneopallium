@@ -2,11 +2,13 @@ package net.neuron;
 
 import net.signals.ISignal;
 
+import java.io.Serializable;
+
 /***
  * Created by Rakovskyi Dmytro on 02.11.2017.
  * This class represents connection between neurons
  */
-public interface INConnection<S extends ISignal> {
+public interface INConnection<S extends ISignal> extends Serializable {
 
     /**
     *@return target layer id

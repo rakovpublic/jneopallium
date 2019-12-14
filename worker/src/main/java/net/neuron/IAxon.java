@@ -2,13 +2,14 @@ package net.neuron;
 
 import net.signals.ISignal;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 
 /***
  * Created by Rakovskyi Dmytro on 27.10.2017.
  */
-public interface IAxon {
+public interface IAxon extends Serializable {
     /**
     * Add connection for signal to neuron.
     * @param cl signal class

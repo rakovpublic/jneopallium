@@ -2,6 +2,7 @@ package net.storages;
 
 import net.neuron.INeuron;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 

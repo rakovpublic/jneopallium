@@ -2,11 +2,13 @@ package net.neuron;
 
 import net.signals.ISignal;
 
+import java.io.Serializable;
+
 /***
  * Created by Rakovskyi Dmytro on 14.06.2018.
  * This class represents weight/value of connection between neurons.
  */
-public interface IWeight<S extends ISignal, C extends ISignal> {
+public interface IWeight<S extends ISignal, C extends ISignal> extends Serializable {
 
     /**
     * Process signal and change it due to the weight/value
