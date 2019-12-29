@@ -18,6 +18,11 @@ public class FileLayerMeta<S extends IFileSystemItem> implements ILayerMeta {
     }
 
     @Override
+    public int getID() {
+        return 0;
+    }
+
+    @Override
     public List<INeuronMeta<? extends INeuron>> getNeurons() {
         return null;
     }

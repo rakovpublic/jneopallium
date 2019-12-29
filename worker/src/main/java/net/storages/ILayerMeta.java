@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.List;
 
 public interface ILayerMeta extends IStorageMeta {
+    int getID();
     List<INeuronMeta<? extends INeuron>> getNeurons();
 
     void saveNeurons(Collection<? extends INeuron> neuronMetas);

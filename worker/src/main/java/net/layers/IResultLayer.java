@@ -8,7 +8,7 @@ package net.layers;
  */
 public interface IResultLayer<K> extends ILayer {
     /*
-    * Tra
+    * Transfer result layer to result
     *
     * */
     K interpretResult();

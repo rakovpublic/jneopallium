@@ -1,15 +1,20 @@
 package net.layers.impl;
 
 import net.layers.ILayer;
+import net.neuron.INeuron;
+import net.signals.ISignal;
 import net.storages.IInputMeta;
 import net.storages.ILayerMeta;
 import net.storages.ILayersMeta;
+import net.storages.INeuronMeta;
 
-//TODO:add implementation
+import java.util.HashMap;
+import java.util.List;
+
+
 public class LayerBuilder {
     private ILayerMeta layerMeta;
     private IInputMeta meta;
-    private int layerId;
 
     public LayerBuilder() {
 
@@ -24,12 +29,23 @@ public class LayerBuilder {
         return this;
     }
     public LayerBuilder withNeuronRange(int start, int end){
+
+        //TODO:add implementation
         return  this;
     }
 
     public ILayer build(){
-        //TODO: finish this method
-        return null;
+        ILayer layer= new Layer(layerMeta.getID());
+        for(INeuronMeta ner:layerMeta.getNeurons()){
+            layer.register(ner.toNeuron());
+        }
+        HashMap<Long, List<ISignal>> inputs= meta.readInputs(layerMeta.getID());
+        for(Long neuronID:inputs.keySet()){
+            for(ISignal signal: inputs.get(neuronID)){
+                layer.addInput(signal,neuronID);
+            }
+        }
+        return layer;
     }
 
 }

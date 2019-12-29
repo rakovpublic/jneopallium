@@ -79,6 +79,13 @@ public class Layer implements ILayer {
 
     }
 
+    @Override
+    public void registerAll(List<INeuron> neuron) {
+        for(INeuron ner:neuron){
+            map.put(ner.getId(), ner);
+        }
+    }
+
 
     @Override
     public void addInput(ISignal signal, Long neuronId) {
