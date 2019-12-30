@@ -2,10 +2,7 @@ package net.storages.structimpl;
 
 import net.layers.ILayer;
 import net.signals.ISignal;
-import net.storages.IInputMeta;
-import net.storages.ILayerMeta;
-import net.storages.ILayersMeta;
-import net.storages.IStructMeta;
+import net.storages.*;
 import net.study.IStudyingRequest;
 
 import java.util.HashMap;
@@ -44,7 +41,12 @@ public class StructMeta implements IStructMeta {
 
     @Override
     public void study(List<IStudyingRequest> requests) {
+        //TODO: Add implementation
+    }
 
+    @Override
+    public IResultLayerMeta getResultLayer() {
+        return layersMeta.getResultLayer();
     }
 
 

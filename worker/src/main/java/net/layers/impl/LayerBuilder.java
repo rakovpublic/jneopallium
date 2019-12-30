@@ -1,6 +1,7 @@
 package net.layers.impl;
 
 import net.layers.ILayer;
+import net.layers.IResultLayer;
 import net.neuron.INeuron;
 import net.signals.ISignal;
 import net.storages.IInputMeta;
@@ -36,8 +37,8 @@ public class LayerBuilder {
 
     public ILayer build(){
         ILayer layer= new Layer(layerMeta.getID());
-        for(INeuronMeta ner:layerMeta.getNeurons()){
-            layer.register(ner.toNeuron());
+        for(INeuron ner:layerMeta.getNeurons()){
+            layer.register(ner);
         }
         HashMap<Long, List<ISignal>> inputs= meta.readInputs(layerMeta.getID());
         for(Long neuronID:inputs.keySet()){
@@ -46,6 +47,10 @@ public class LayerBuilder {
             }
         }
         return layer;
+    }
+    public IResultLayer buildResultLayer(){
+        //TODO:add implementation
+        return null;
     }
 
 }

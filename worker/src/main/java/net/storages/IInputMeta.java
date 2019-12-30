@@ -14,4 +14,8 @@ public interface IInputMeta<K> extends IStorageMeta {
 
     void mergeResults(HashMap<Long, List<ISignal>> signals, int layerId);
 
+    Object getDesiredResult();
+
+
+
 }

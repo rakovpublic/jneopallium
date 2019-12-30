@@ -1,6 +1,7 @@
 package application;
 
 import net.layers.ILayer;
+import net.layers.IResultLayer;
 import net.layers.impl.LayerBuilder;
 import net.neuron.impl.NeuronRunnerService;
 import net.signals.ISignal;
@@ -10,6 +11,7 @@ import net.storages.filesystem.IFileSystem;
 import net.storages.signalstorages.file.FileInputMeta;
 import net.storages.structimpl.StructBuilder;
 import net.storages.structimpl.StructMeta;
+import net.study.IStudyingAlgorithm;
 import synchronizer.IContext;
 import synchronizer.utils.InstantiationUtils;
 
@@ -47,33 +49,63 @@ public class LocalApplication implements IApplication {
             structBuilder.withHiddenInputMeta(inputMeta);
             structBuilder.withLayersMeta(new FileLayersMeta<>(fs.getItem(layerPath), fs));
             StructMeta meta = structBuilder.build();
-            int i = 0;
-            for (ILayerMeta met : meta.getLayers()) {
-                LayerBuilder lb = new LayerBuilder();
-                lb.withLayer(met);
-                lb.withInput(meta.getInputs(i));
-                ILayer layer = lb.build();
-                if (layer.validateGlobal() && layer.validateLocal()) {
-                    //TODO: add logger invalid layer configuration and exception
-                }
-                layer.process();
-                while (!layer.isProcessed()) {
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+            boolean isTeacherStudying = Boolean.valueOf(context.getProperty("configuration.isteacherstudying"));
+            IStudyingAlgorithm algo= null;
+            Object desiredResult = inputMeta.getDesiredResult();
+            if(isTeacherStudying){
+                Object objst=getObject(context.getProperty("configuration.studyingalgo"));
+                if(objst!=null){
+                    algo=(IStudyingAlgorithm) objst;
+                    while (!process(meta,desiredResult)){
+                        meta.study(((IStudyingAlgorithm) objst).study(meta));
+                    }
+                }else{
+                    while (!process(meta,desiredResult)){
+
                     }
                 }
-                layer.dumpNeurons(met);
-                i++;
-                layer.dumpResult(meta.getInputs(i));
+
 
             }
+
 
 
         } else {
 
         }
+
+    }
+    private boolean process(StructMeta meta,Object desiredResult){
+        int i = 0;
+        for (ILayerMeta met : meta.getLayers()) {
+            LayerBuilder lb = new LayerBuilder();
+            lb.withLayer(met);
+            lb.withInput(meta.getInputs(met.getID()));
+            ILayer layer = lb.build();
+            if (layer.validateGlobal() && layer.validateLocal()) {
+                //TODO: add logger invalid layer configuration and exception
+            }
+            layer.process();
+            while (!layer.isProcessed()) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            layer.dumpNeurons(met);
+            i++;
+            layer.dumpResult(meta.getInputs(i));
+
+        }
+        IResultLayerMeta reMeta= meta.getResultLayer();
+        LayerBuilder lb = new LayerBuilder();
+        lb.withLayer(reMeta);
+        lb.withInput(meta.getInputs(reMeta.getID()));
+        IResultLayer layer =  lb.buildResultLayer();
+        layer.process();
+        return layer.interpretResult().equals(desiredResult);
+
 
     }
 
@@ -94,6 +126,23 @@ public class LocalApplication implements IApplication {
         return (Class<?>[]) reuslt.toArray();
 
     }
+    private Object getObject(String str) {
+        if(str==null){
+            return null;
+        }
+        Object obj=null;
+        try {
+            byte b[] = str.getBytes();
+            ByteArrayInputStream bi = new ByteArrayInputStream(b);
+            ObjectInputStream si = new ObjectInputStream(bi);
+            obj =  si.readObject();
+        }catch (Exception ex){
+            //TODO:Add logger
+        }
+        return obj;
+
+    }
+
 
     private Object[] getObjects(String str) {
         Object[] obj=null;
