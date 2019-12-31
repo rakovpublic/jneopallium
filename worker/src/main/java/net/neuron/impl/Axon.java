@@ -18,6 +18,11 @@ public class Axon implements IAxon {
     }
 
     @Override
+    public void resetConnection(HashMap<Class<? extends ISignal>, List<INConnection>> newConnection) {
+        connectionMap=newConnection;
+    }
+
+    @Override
     public <S extends ISignal> void putConnection(Class<S> cl, INConnection<S> connection) {
         if(connectionMap.containsKey(cl)){
             connectionMap.get(cl).add(connection);

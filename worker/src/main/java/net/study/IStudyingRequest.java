@@ -6,13 +6,14 @@ import net.signals.ISignal;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.List;
 
 public interface IStudyingRequest extends Serializable {
     int getLayerId();
 
-    String getNeuronId();
+    Long getNeuronId();
 
-    HashMap<Class<? extends ISignal>, HashMap<INConnection, IWeight>> getNewConnections();
+    HashMap<Class<? extends ISignal>, List<INConnection>> getNewConnections();
 
     String toJSON();
 }

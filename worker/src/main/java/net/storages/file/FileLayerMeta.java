@@ -18,6 +18,7 @@ import java.util.List;
 public class FileLayerMeta<S extends IFileSystemItem> implements ILayerMeta {
     protected S file;
     protected IFileSystem<S> fileSystem;
+    protected List<? extends INeuron> neurons;
     FileLayerMeta(S file, IFileSystem<S> fs) {
         this.file = file;
         this.fileSystem=fs;
@@ -38,7 +39,18 @@ public class FileLayerMeta<S extends IFileSystemItem> implements ILayerMeta {
         for(INeuron ner:getNeurons(helper.extractField(layer,"neurons"))){
             result.add(ner);
         }
+        neurons=result;
         return result;
+    }
+
+    @Override
+    public INeuron getNeuronByID(Long id) {
+        for(INeuron  ner:getNeurons()){
+            if(ner.getId()==id){
+                return ner;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -58,7 +70,10 @@ public class FileLayerMeta<S extends IFileSystemItem> implements ILayerMeta {
 
     @Override
     public void dumpLayer() {
-
+        if(neurons==null||neurons.size()==0){
+            getNeurons();
+        }
+        saveNeurons(neurons);
     }
 
     @Override

@@ -3,7 +3,6 @@ package application;
 import net.layers.ILayer;
 import net.layers.IResultLayer;
 import net.layers.impl.LayerBuilder;
-import net.neuron.impl.NeuronRunnerService;
 import net.signals.ISignal;
 import net.storages.*;
 import net.storages.file.FileLayersMeta;
@@ -17,7 +16,6 @@ import synchronizer.utils.InstantiationUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
-import java.sql.Struct;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -56,16 +54,17 @@ public class LocalApplication implements IApplication {
                 Object objst=getObject(context.getProperty("configuration.studyingalgo"));
                 if(objst!=null){
                     algo=(IStudyingAlgorithm) objst;
-                    while (!process(meta,desiredResult)){
+                    while (!process(meta).interpretResult().equals(desiredResult)){
                         meta.study(((IStudyingAlgorithm) objst).study(meta));
                     }
                 }else{
-                    while (!process(meta,desiredResult)){
+                    while (!process(meta).interpretResult().equals(desiredResult)){
 
                     }
                 }
-
-
+            }else {
+                //TODO:add normal output
+                System.out.println(process(meta).interpretResult().toString());
             }
 
 
@@ -75,7 +74,7 @@ public class LocalApplication implements IApplication {
         }
 
     }
-    private boolean process(StructMeta meta,Object desiredResult){
+    private IResultLayer process(StructMeta meta){
         int i = 0;
         for (ILayerMeta met : meta.getLayers()) {
             LayerBuilder lb = new LayerBuilder();
@@ -104,7 +103,8 @@ public class LocalApplication implements IApplication {
         lb.withInput(meta.getInputs(reMeta.getID()));
         IResultLayer layer =  lb.buildResultLayer();
         layer.process();
-        return layer.interpretResult().equals(desiredResult);
+
+        return layer;
 
 
     }

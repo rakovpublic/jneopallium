@@ -81,4 +81,14 @@ public class FileLayersMeta<S extends IFileSystemItem> implements ILayersMeta {
         });
         return new FileResultLayerMeta(temp.get(temp.size()-1),fileSystem);
     }
+
+    @Override
+    public ILayerMeta getLayerByID(int id) {
+        for(ILayerMeta lm:getLayers()){
+            if(lm.getID()==id){
+                return lm;
+            }
+        }
+        return null;
+    }
 }

@@ -1,6 +1,7 @@
 package net.storages.structimpl;
 
 import net.layers.ILayer;
+import net.neuron.INeuron;
 import net.signals.ISignal;
 import net.storages.*;
 import net.study.IStudyingRequest;
@@ -41,7 +42,16 @@ public class StructMeta implements IStructMeta {
 
     @Override
     public void study(List<IStudyingRequest> requests) {
-        //TODO: Add implementation
+        //TODO:write optimization now work for small local config
+        for(IStudyingRequest request:requests){
+            ILayerMeta lm=layersMeta.getLayerByID(request.getLayerId());
+            INeuron ner = lm.getNeuronByID(request.getNeuronId());
+            ner.getAxon().resetConnection(request.getNewConnections());
+        }
+        for(ILayerMeta meta:layersMeta.getLayers()){
+            meta.dumpLayer();
+        }
+        layersMeta.getResultLayer().dumpLayer();
     }
 
     @Override

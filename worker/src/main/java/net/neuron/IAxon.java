@@ -11,6 +11,12 @@ import java.util.List;
  */
 public interface IAxon extends Serializable {
     /**
+     * Change all connection on new connection map for all signals
+     * @param newConnection connection map
+     *
+     * **/
+     void resetConnection(  HashMap<Class<? extends ISignal>,List<INConnection>> newConnection);
+    /**
     * Add connection for signal to neuron.
     * @param cl signal class
     * @param connection
