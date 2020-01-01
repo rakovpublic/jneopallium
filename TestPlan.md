@@ -34,3 +34,5 @@ note: You must start layer from 0 and increment by 1 i.e input layer is 0
 11. Specify path to layer configuration in config.properties  
 path to neuron net configuration  
 configuration.input.layermeta=
+
+Fill free to contact me You will find errors/bugs or will need assist.
