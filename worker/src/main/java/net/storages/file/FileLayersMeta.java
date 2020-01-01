@@ -33,12 +33,6 @@ public class FileLayersMeta<S extends IFileSystemItem> implements ILayersMeta {
         }
 
         temp= fileSystem.listFiles(file);
-        temp.removeIf(iFileSystemItem -> {
-            if(!iFileSystemItem.isDirectory()){
-                return true;
-            }
-            return false;
-        });
         Collections.sort(temp, new Comparator<IFileSystemItem>() {
             @Override
             public int compare(IFileSystemItem o1, IFileSystemItem o2) {

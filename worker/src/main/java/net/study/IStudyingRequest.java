@@ -7,7 +7,9 @@ import net.signals.ISignal;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
-
+/**
+ * Request for rebuilding neuron connections
+ * */
 public interface IStudyingRequest extends Serializable {
     int getLayerId();
 

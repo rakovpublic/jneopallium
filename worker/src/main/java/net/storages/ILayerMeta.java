@@ -2,6 +2,7 @@ package net.storages;
 
 import net.neuron.INeuron;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
@@ -12,7 +13,7 @@ public interface ILayerMeta extends IStorageMeta {
 
     INeuron getNeuronByID(Long id);
 
-    void saveNeurons(Collection<? extends INeuron> neuronMetas);
+    void saveNeurons(Collection<? extends INeuron> neuronMetas) throws IOException;
 
     void dumpLayer();
 

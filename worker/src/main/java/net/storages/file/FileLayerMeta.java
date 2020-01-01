@@ -7,10 +7,7 @@ import net.storages.filesystem.IFileSystem;
 import net.storages.filesystem.IFileSystemItem;
 import synchronizer.utils.JSONHelper;
 
-import java.io.ByteArrayInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -54,16 +51,29 @@ public class FileLayerMeta<S extends IFileSystemItem> implements ILayerMeta {
     }
 
     @Override
-    public void saveNeurons(Collection<? extends INeuron> neuronMetas) {
+    public void saveNeurons(Collection<? extends INeuron> neuronMetas){
         StringBuilder sb= new StringBuilder();
         sb.append("{\"layerID\":\"");
         sb.append(getID()+"\",");
         sb.append("\"layerSize\":\"");
         sb.append(getSize()+"\",");
         sb.append("\"neurons\":\"");
-        fileSystem.rewrite(sb.toString(),file);
+        ByteArrayOutputStream bo = new ByteArrayOutputStream();
+        ObjectOutputStream so = null;
+        try {
+            so = new ObjectOutputStream(bo);
+            so.writeObject(neuronMetas.toArray());
+            so.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+            //TODO:add loggin
+        }
+        String serializedObject = bo.toString();
+        sb.append(serializedObject);
+        sb.append("\"}");
+       /* fileSystem.rewrite(sb.toString(),file);
         fileSystem.writeUpdateObjects(neuronMetas.toArray(),file);
-        fileSystem.writeUpdateToEnd("\"}",file);
+        fileSystem.writeUpdateToEnd("\"}",file);*/
 
     }
 

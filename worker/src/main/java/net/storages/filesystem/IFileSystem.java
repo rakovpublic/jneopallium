@@ -16,5 +16,6 @@ public interface IFileSystem<S extends IFileSystemItem> {
     boolean deleteContent(S path, int startFrom, int amount);
     List<S> listFiles( S file );
     String getFolderSeparator();
+    void deleteFilesFromDirectory(S path);
 
 }

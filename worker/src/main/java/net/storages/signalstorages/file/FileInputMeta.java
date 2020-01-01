@@ -11,6 +11,7 @@ import net.storages.ISerializer;
 import net.storages.filesystem.IFileSystem;
 import net.storages.filesystem.IFileSystemItem;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,9 +43,8 @@ public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<Stri
         HashMap<Long, List<ISignal>> result = new HashMap<>();
         if(ff.isDirectory()){
             for(IFileSystemItem fsiNeuron:fileSystem.listFiles(ff)){
-                for(IFileSystemItem fsiSignal:fileSystem.listFiles((S) fsiNeuron)){
                 JSONHelper jsonHelper= new JSONHelper();
-                String json =fileSystem.read((S) fsiSignal);
+                String json =fileSystem.read((S) fsiNeuron);
                 int startIndex = json.indexOf('[');
                 DeserializationHelperResult res = jsonHelper.getNextObject(json, startIndex);
                 while (res != null) {
@@ -72,7 +72,7 @@ public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<Stri
                         throw new ClassFromJSONIsNotExistsException("Class " + className + " from this json " + jsonObject + " is not exists");
                     }
                 }
-                }
+
 
             }
         }
@@ -81,42 +81,89 @@ public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<Stri
     }
 
     @Override
-    public void saveResults(HashMap<Long, List<ISignal>> signals, int layerId) {
-        //File dir = new File(file.getAbsolutePath() + File.pathSeparator + layerId);
-        S dir = fileSystem.getItem(file.getPath()+fileSystem.getFolderSeparator()+layerId);
-        if (dir.exists()) {
-            mergeResults(signals, layerId);
-        } else {
-            StringBuilder resultJson = new StringBuilder();
-            resultJson.append("{\"inputs\":[");
-            for (Long nrId : signals.keySet()) {
-                StringBuilder signal = new StringBuilder();
-                signal.append("{\"neuronId\":\"");
-                signal.append(nrId);
-                signal.append("\",\"signal\":");
-                for (ISignal s : signals.get(nrId)) {
-                    ISerializer serializer = map.get(s.getCurrentClass());
-                    StringBuilder resSignal = new StringBuilder(signal);
-                    resSignal.append(serializer.serialize(resSignal.toString()));
-                    resSignal.append("},");
-                    resultJson.append(resSignal.toString());
+    public void cleanInputs() {
+        S ff = fileSystem.getItem(file.getPath()+fileSystem.getFolderSeparator());
+        //new File(file.getAbsolutePath() + File.pathSeparator + layerId);
+        if (!ff.exists()) {
+            throw new InputNotExistsException("File " +ff.getPath()+" with input data for layer id  is not exists");
+        }
+
+        if(ff.isDirectory()){
+            for(IFileSystemItem fsiNeuron:fileSystem.listFiles(ff)){
+                if(!fsiNeuron.getPath().equals(fileSystem.getItem(file.getPath()+fileSystem.getFolderSeparator()+0))){
+                    fileSystem.deleteFilesFromDirectory(ff);
                 }
 
             }
-            resultJson.deleteCharAt(resultJson.length() - 1);
-            resultJson.append("]}");
-            fileSystem.writeCreate(resultJson.toString(),dir);
+
+            }
+
+    }
+
+    @Override
+    public void saveResults(HashMap<Long, List<ISignal>> signals, int layerId) {
+        //File dir = new File(file.getAbsolutePath() + File.pathSeparator + layerId);
+        S dir = fileSystem.getItem(file.getPath()+fileSystem.getFolderSeparator()+layerId+fileSystem.getFolderSeparator()+1);
+        if (dir.exists()) {
+            mergeResults(signals, dir.getPath());
+        } else {
+            save(signals,dir);
         }
 
     }
 
     @Override
-    public void mergeResults(HashMap<Long, List<ISignal>> signals, int layerId) {
-        S dir = fileSystem.getItem(file.getPath()+fileSystem.getFolderSeparator()+layerId);
+    public void mergeResults(HashMap<Long, List<ISignal>> signals, String path) {
+        S dir = fileSystem.getItem(path);
         if (!dir.exists()) {
-            saveResults(signals, layerId);
+            save(signals, dir);
         } else {
-            //TODO: add merging logic
+
+            mergeResults(signals,path+1);
         }
+    }
+
+    @Override
+    public Object getDesiredResult()  {
+        Object obj=null;
+        S ff = fileSystem.getItem(file.getPath()+fileSystem.getFolderSeparator()+"result");
+        if(ff.exists()){
+            String str=fileSystem.read(ff);
+            if(str==null){
+                return null;
+            }
+
+            try {
+                byte b[] = str.getBytes();
+                ByteArrayInputStream bi = new ByteArrayInputStream(b);
+                ObjectInputStream si = new ObjectInputStream(bi);
+                obj =  si.readObject();
+            }catch (Exception ex){
+                ex.printStackTrace();
+                //TODO:Add logger
+            }
+        }
+        return obj;
+    }
+    private void save(HashMap<Long, List<ISignal>> signals,S path){
+        StringBuilder resultJson = new StringBuilder();
+        resultJson.append("{\"inputs\":[");
+        for (Long nrId : signals.keySet()) {
+            StringBuilder signal = new StringBuilder();
+            signal.append("{\"neuronId\":\"");
+            signal.append(nrId);
+            signal.append("\",\"signal\":");
+            for (ISignal s : signals.get(nrId)) {
+                ISerializer serializer = map.get(s.getCurrentClass());
+                StringBuilder resSignal = new StringBuilder(signal);
+                resSignal.append(serializer.serialize(resSignal.toString()));
+                resSignal.append("},");
+                resultJson.append(resSignal.toString());
+            }
+
+        }
+        resultJson.deleteCharAt(resultJson.length() - 1);
+        resultJson.append("]}");
+        fileSystem.writeCreate(resultJson.toString(),path);
     }
 }
