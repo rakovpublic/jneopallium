@@ -28,14 +28,16 @@ public class Layer implements ILayer {
     private int layerId;
     private List<INeuron> notProcessed;
     private List<IRule> rules;
+    private IInputMeta inputMeta;
 
 
-    public Layer(int layerId) {
+    public Layer(int layerId,IInputMeta meta) {
         neuronSerializerHashMap= new HashMap<>();
         rules = new ArrayList<>();
         isProcessed = false;
         notProcessed = new ArrayList<INeuron>();
         this.layerId = layerId;
+        inputMeta=meta;
         map = new HashMap<Long, INeuron>();
         input = new HashMap<Long, List<ISignal>>();
     }
@@ -81,7 +83,7 @@ public class Layer implements ILayer {
     }
 
     @Override
-    public void registerAll(List<INeuron> neuron) {
+    public void registerAll(List<? extends INeuron> neuron) {
         for(INeuron ner:neuron){
             map.put(ner.getId(), ner);
         }
@@ -102,6 +104,17 @@ public class Layer implements ILayer {
 
     @Override
     public void process() {
+        //TODO:refactor to direct reading in layer impl or at least add flag for performance tuning
+        HashMap<Long, List<ISignal>> inputs= inputMeta.readInputs(layerId);
+        for(Long neuronID:inputs.keySet()){
+            for(ISignal signal: inputs.get(neuronID)){
+                ISignal nextStepSignal=signal.prepareSignalToNextStep();
+                if(nextStepSignal!=null){
+                    inputMeta.copySignalToNextStep(layerId,neuronID,nextStepSignal);
+                }
+                this.addInput(signal,neuronID);
+            }
+        }
         INeuron neur;
         NeuronRunnerService ns = NeuronRunnerService.getService();
         for (Long neuronId : map.keySet()) {

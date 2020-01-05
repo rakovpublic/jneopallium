@@ -53,7 +53,7 @@ public interface ILayer extends Serializable {
      * register neuron in the layer
      * @param neuron
      * */
-    void registerAll(List<INeuron> neuron);
+    void registerAll(List<? extends INeuron> neuron);
 
     /**
     * add input to layer
