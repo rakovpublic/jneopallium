@@ -1,7 +1,7 @@
 #Purpose:
 Maine purpose of this framework is allow AI developers to build object oriented model of brain.
 Additional purpose is create platform which will allow to implement neuron net with any known design  
-and run it in distributed way on cluster, cuda cluster or aws lambdas.
+and run it localy  or in distributed way on cluster, cuda cluster, aws lambdas.
 
 #Concepts:
 Main concepts which will allow to build object oriented model of brain:
