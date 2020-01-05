@@ -17,6 +17,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<String> {
+
+    //TODO: add step id to input path
     private S file;
     private HashMap<Class<? extends ISignal>, ISerializer<? extends ISignal, String>> map;
     private IFileSystem<S> fileSystem;
