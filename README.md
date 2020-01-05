@@ -10,8 +10,8 @@ Main concepts which will allow to build object oriented model of brain:
 Signals are different data objects which passed on input, emits on middle layers and gets as result.
 
 
-Signal processor is some function which process the one type( or subtypes) of signals and emit emit signals to axon.  
-Note: it gas access to neuron and axon. 
+Signal processor is some function which process the one type( or subtypes) of signals and emit signals to axon.  
+Note: it has access to neuron and axon. 
 
 
 Neuron is abstraction which store signals processor/processors for signal type/different signal types,  
@@ -34,7 +34,7 @@ Note: Result signal from one/many neuron nets can be used as input to other. Suc
 #Phases:
 1. Make core. It will implement just core concepts without distributed mode and neuron nets synchronization.
 2. Add simple java distributed part with neuron nets synchronization.
-3. Add containers(docker/kunernetes) and infrastructure scripts python/shell.
+3. Add containers(docker/kubernetes) and infrastructure scripts python/shell.
 4. Add neuron net graphic designer which will collect data about implemented classes and will pass to graphic plugin for eclipse and/or idea.
 5. Add cuda distributed mode.
 6. Add aws lambda distributed mode.
