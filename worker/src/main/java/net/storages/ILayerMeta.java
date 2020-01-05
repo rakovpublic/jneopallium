@@ -13,7 +13,7 @@ public interface ILayerMeta extends IStorageMeta {
 
     INeuron getNeuronByID(Long id);
 
-    void saveNeurons(Collection<? extends INeuron> neuronMetas) throws IOException;
+    void saveNeurons(Collection<? extends INeuron> neuronMetas);
 
     void dumpLayer();
 

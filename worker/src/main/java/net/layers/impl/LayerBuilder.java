@@ -40,14 +40,20 @@ public class LayerBuilder {
         for(INeuron ner:layerMeta.getNeurons()){
             layer.register(ner);
         }
+        //TODO:refactor to direct reading in layer impl or at least add flag for performance tuning
         HashMap<Long, List<ISignal>> inputs= meta.readInputs(layerMeta.getID());
         for(Long neuronID:inputs.keySet()){
             for(ISignal signal: inputs.get(neuronID)){
+                ISignal nextStepSignal=signal.prepareSignalToNextStep();
+                if(nextStepSignal!=null){
+                    meta.copySignalToNextStep(layerMeta.getID(),neuronID,nextStepSignal);
+                }
                 layer.addInput(signal,neuronID);
             }
         }
         return layer;
     }
+
     public IResultLayer buildResultLayer(){
         //TODO:add implementation
         return null;

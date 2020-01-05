@@ -32,4 +32,6 @@ public interface ISignal<T> extends Serializable {
       * */
      boolean canUseProcessorForParent();
 
+     ISignal<T> prepareSignalToNextStep();
+
 }

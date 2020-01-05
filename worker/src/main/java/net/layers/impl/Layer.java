@@ -29,6 +29,7 @@ public class Layer implements ILayer {
     private List<INeuron> notProcessed;
     private List<IRule> rules;
 
+
     public Layer(int layerId) {
         neuronSerializerHashMap= new HashMap<>();
         rules = new ArrayList<>();
@@ -89,6 +90,7 @@ public class Layer implements ILayer {
 
     @Override
     public void addInput(ISignal signal, Long neuronId) {
+
         if (input.containsKey(neuronId)) {
             input.get(neuronId).add(signal);
         } else {
@@ -147,7 +149,7 @@ public class Layer implements ILayer {
     public void dumpResult(IInputMeta meta) {
         HashMap<Integer, HashMap<Long, List<ISignal>>> result = getResults();
         for (int layerId : result.keySet()) {
-            meta.mergeResults(result.get(layerId), layerId);
+            meta.saveResults(result.get(layerId), layerId);
         }
 
     }

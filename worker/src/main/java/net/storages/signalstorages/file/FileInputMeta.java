@@ -147,6 +147,12 @@ public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<Stri
         }
         return obj;
     }
+
+    @Override
+    public void copySignalToNextStep(int layerId, Long neuronId, ISignal signal) {
+        //TODO: implement
+    }
+
     private void save(HashMap<Long, List<ISignal>> signals,S path){
         StringBuilder resultJson = new StringBuilder();
         resultJson.append("{\"inputs\":[");
