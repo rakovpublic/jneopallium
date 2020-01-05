@@ -5,15 +5,30 @@ and run it in distributed way on cluster, cuda cluster or aws lambdas.
 
 #Concepts:
 Main concepts which will allow to build object oriented model of brain:
+
+
 Signals are different data objects which passed on input, emits on middle layers and gets as result.
-Signal processor is some function which process the one type( or subtypes) of signals and emit emit signals tro axon.  
+
+
+Signal processor is some function which process the one type( or subtypes) of signals and emit emit signals to axon.  
 Note: it gas access to neuron and axon. 
+
+
 Neuron is abstraction which store signals processor/processors for signal type/different signal types,  
  oder of signal type processing and axon. Note: neuron can be stateful or stateless.
+ 
+ 
 Axon store connection to other neurons with weights for each type of signal.
+
+
 Layer store the list of neurons which situated and input.
+
+
 Result layer stores the final layer of neurons with associated result signals.
+
+
 Studying algorithm has access  to all input/middle input/result and store studying logic.
+
 Note: Result signal from one/many neuron nets can be used as input to other. Such approach will allow to "debug" AI and combine neuron nets.   
 
 #Phases:
