@@ -30,7 +30,6 @@ public class LayerBuilder {
         return this;
     }
     public LayerBuilder withNeuronRange(int start, int end){
-
         //TODO:add implementation
         return  this;
     }
