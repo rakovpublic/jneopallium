@@ -8,6 +8,7 @@ public interface ISerializer<I, R> extends Serializable {
     I deserialize(R input);
 
     Class<I> getDeserializedClass();
+
     Class<R> getSerializedClass();
 
 }

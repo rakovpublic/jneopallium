@@ -1,7 +1,8 @@
 package synchronizer.utils;
+
 //TODO: refactor this class to interface and implementations for different serialization formats
-public class JSONHelper implements IDeserializationHelper{
-    public  DeserializationHelperResult getNextObject(String json, Integer index) {
+public class JSONHelper implements IDeserializationHelper {
+    public DeserializationHelperResult getNextObject(String json, Integer index) {
 
         DeserializationHelperResult res = null;
         String result = null;
@@ -25,7 +26,8 @@ public class JSONHelper implements IDeserializationHelper{
         }
         return res;
     }
-    public  String extractField(String json, String fieldName) {
+
+    public String extractField(String json, String fieldName) {
 
         int index = json.indexOf(fieldName);
         index = json.indexOf(':', index);

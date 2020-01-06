@@ -1,9 +1,9 @@
 package net.neuron.impl;
 
+import net.neuron.INeuron;
 import net.storages.INeuronMeta;
 import synchronizer.Context;
 import synchronizer.IContext;
-import net.neuron.INeuron;
 
 import java.util.List;
 import java.util.Queue;
@@ -31,8 +31,9 @@ public class NeuronRunnerService {
     public void addNeuron(INeuron neuron) {
         neuronQueue.add(neuron);
     }
-    public void addNeurons(List<INeuronMeta<? extends INeuron>> metas){
-        for(INeuronMeta m:metas){
+
+    public void addNeurons(List<INeuronMeta<? extends INeuron>> metas) {
+        for (INeuronMeta m : metas) {
             addNeuron(m.toNeuron());
         }
     }
@@ -55,7 +56,6 @@ public class NeuronRunnerService {
     Queue<INeuron> getNeuronQueue() {
         return neuronQueue;
     }
-
 
 
     public static NeuronRunnerService getService() {

@@ -13,15 +13,25 @@ import java.util.List;
 public interface ISynchronizer extends Serializable {
 
     IContext getContext(int nodeId);
-    void syncSignal(ISignal signal,int layerId, long neuronId);
+
+    void syncSignal(ISignal signal, int layerId, long neuronId);
+
     boolean isLayerProcessed(int layerId);
+
     int getNextLayerId();
+
     ILayerMeta getNextBatch();
-    void syncNeurons(List<? extends INeuron> neurons,int layerId);
+
+    void syncNeurons(List<? extends INeuron> neurons, int layerId);
+
     void removeNeuron(int layerId, long neuronId);
+
     void updateNeuron(INeuron neuron, int layerId);
-    void addNeuron(INeuron neuron,long layerId);
+
+    void addNeuron(INeuron neuron, long layerId);
+
     void addLayer(int afterLayerId);
+
     void putSignals();
 
 
