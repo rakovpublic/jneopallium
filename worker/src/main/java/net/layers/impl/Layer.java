@@ -182,6 +182,8 @@ public class Layer implements ILayer {
             IAxon axon = neur.getAxon();
             HashMap<ISignal, List<INConnection>> tMap = axon.processSignals(neur.getResult());
             for (ISignal signal : tMap.keySet()) {
+                signal.setSourceNeuronId(neurId);
+                signal.setSourceLayerId(this.layerId);
                 for (INConnection connection : tMap.get(signal)) {
                     int layerId = connection.getTargetLayerId();
                     Long targetNeurId = connection.getTargetNeuronId();

@@ -34,4 +34,9 @@ public interface ISignal<T> extends Serializable {
 
      ISignal<T> prepareSignalToNextStep();
 
+     int getSourceLayerId();
+     void setSourceLayerId(int layerId);
+     Long getSourceNeuronId();
+    void setSourceNeuronId(Long neuronId);
+
 }
