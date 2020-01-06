@@ -11,7 +11,18 @@ public class DBLayerMeta implements ILayerMeta {
 
 
     @Override
-    public List<INeuronMeta<? extends INeuron>> getNeurons() {
+    public int getID() {
+        return 0;
+    }
+
+    @Override
+    public List<? extends INeuron> getNeurons() {
+        return null;
+    }
+
+
+    @Override
+    public INeuron getNeuronByID(Long id) {
         return null;
     }
 
@@ -24,5 +35,10 @@ public class DBLayerMeta implements ILayerMeta {
     @Override
     public void dumpLayer() {
 
+    }
+
+    @Override
+    public Long getSize() {
+        return null;
     }
 }
