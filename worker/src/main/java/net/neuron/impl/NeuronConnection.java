@@ -10,9 +10,8 @@ public class NeuronConnection implements INConnection {
     private Long sourceNeuronId;
     private IWeight weight;
     private String description;
-
-    public static NeuronConnection createConnection(int targetLayerId, int sourceLayerId, Long targetNeuronId, Long sourceNeuronId, IWeight weight, String description) {
-        return new NeuronConnection(targetLayerId, sourceLayerId, targetNeuronId, sourceNeuronId, weight, description);
+    public static  NeuronConnection createConnection(int targetLayerId, int sourceLayerId, Long targetNeuronId, Long sourceNeuronId, IWeight weight, String description){
+        return new NeuronConnection( targetLayerId,  sourceLayerId,  targetNeuronId,  sourceNeuronId,  weight,  description);
     }
 
     private NeuronConnection(int targetLayerId, int sourceLayerId, Long targetNeuronId, Long sourceNeuronId, IWeight weight, String description) {

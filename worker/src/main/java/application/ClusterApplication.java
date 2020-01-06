@@ -1,5 +1,6 @@
 package application;
 
+import net.storages.IStructMeta;
 import synchronizer.IContext;
 
 public class ClusterApplication implements IApplication {
@@ -8,6 +9,7 @@ public class ClusterApplication implements IApplication {
     public void startApplication(IContext context) {
 
     }
+
 
 
 }

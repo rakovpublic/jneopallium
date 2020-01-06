@@ -11,10 +11,10 @@ import java.util.List;
  */
 public interface ISignalProcessor<S extends ISignal> extends Serializable {
     /***
-     * @param input signal
-     * @param neuron object
-     * @return list of result signals
-     * */
+    * @param input signal
+    * @param neuron object
+    * @return list of result signals
+    * */
     <I extends ISignal> List<I> process(S input, INeuron neuron);
 
     /***
@@ -24,11 +24,10 @@ public interface ISignalProcessor<S extends ISignal> extends Serializable {
 
     /**
      * check if input signals should be merged before processing
-     *
      * @return true if signals should be merged before processing, false if not, null if it depends on existing merger
      * for this class of signals in neuron object(will be merged if merger registered in neuron with the help
      * addSignalMerger method)
-     */
+     * */
     Boolean hasMerger();
 
 }

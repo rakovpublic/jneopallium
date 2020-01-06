@@ -19,9 +19,31 @@ public class DbInputMeta implements IInputMeta {
     }
 
     @Override
-    public void mergeResults(HashMap signals, int layerId) {
+    public List<ISignal> readInputsForNeuron(int layerId, Long neuronId) {
+        return null;
+    }
+
+    @Override
+    public void cleanInputs() {
 
     }
+
+    @Override
+    public Object getDesiredResult() {
+        return null;
+    }
+
+    @Override
+    public void copySignalToNextStep(int layerId, Long neuronId, ISignal signal) {
+
+    }
+
+    @Override
+    public void mergeResults(HashMap signals, String path) {
+
+    }
+
+
 
     @Override
     public void saveResults(HashMap signals, int layerId) {

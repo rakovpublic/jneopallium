@@ -4,7 +4,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 public class InstantiationUtils {
-    public static <K> K getObject(Class<K> clazz, Object[] args, Class<?>[] params) {
+    public static <K> K getObject(Class<K> clazz,Object [] args,Class<?> [] params){
         Constructor<K> ctor = null;
         try {
             ctor = clazz.getDeclaredConstructor(params);

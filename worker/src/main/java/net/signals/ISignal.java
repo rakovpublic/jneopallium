@@ -8,39 +8,35 @@ import java.io.Serializable;
 public interface ISignal<T> extends Serializable {
     /**
      * @return value of signal
-     */
+     * */
     T getValue();
 
     /**
-     * @return Signal class
-     */
+    * @return Signal class
+     * */
     Class<? extends ISignal<T>> getCurrentClass();
 
     /**
      * @return value class
-     */
+     * */
     Class<T> getParamClass();
 
     String toJSON();
-
     /**
-     * @return description
-     */
-    String getDescription();
+     * @return  description
+     * */
+     String getDescription();
 
-    /**
-     * @return true if processor for parent signals can be used for processing this signal
-     */
-    boolean canUseProcessorForParent();
+     /**
+      * @return true if processor for parent signals can be used for processing this signal
+      * */
+     boolean canUseProcessorForParent();
 
-    ISignal<T> prepareSignalToNextStep();
+     ISignal<T> prepareSignalToNextStep();
 
-    int getSourceLayerId();
-
-    void setSourceLayerId(int layerId);
-
-    Long getSourceNeuronId();
-
+     int getSourceLayerId();
+     void setSourceLayerId(int layerId);
+     Long getSourceNeuronId();
     void setSourceNeuronId(Long neuronId);
 
 }

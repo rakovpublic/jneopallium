@@ -1,10 +1,10 @@
 package net.storages.file;
 
 import exceptions.LayersFolderIsEmptyOrNotExistsException;
-import net.storages.ILayerMeta;
-import net.storages.ILayersMeta;
 import net.storages.IResultLayerMeta;
 import net.storages.filesystem.IFileSystem;
+import net.storages.ILayerMeta;
+import net.storages.ILayersMeta;
 import net.storages.filesystem.IFileSystemItem;
 
 import java.util.ArrayList;
@@ -18,32 +18,32 @@ public class FileLayersMeta<S extends IFileSystemItem> implements ILayersMeta {
 
 
     public FileLayersMeta(S file, IFileSystem<S> fs) {
-        this.fileSystem = fs;
+        this.fileSystem=fs;
         this.file = file;
     }
 
     @Override
     public List<ILayerMeta> getLayers() {
-        // S layersDir = fileSystem.getItem(file+ fileSystem.getFolderSeparator()+"layers");
-        //new File(file.getAbsolutePath() + File.pathSeparator + "layers");
+       // S layersDir = fileSystem.getItem(file+ fileSystem.getFolderSeparator()+"layers");
+                //new File(file.getAbsolutePath() + File.pathSeparator + "layers");
         List<ILayerMeta> res = new ArrayList<>();
         List<S> temp = new ArrayList<>();
         if (!file.exists() || !file.isDirectory()) {
             throw new LayersFolderIsEmptyOrNotExistsException();
         }
 
-        temp = fileSystem.listFiles(file);
+        temp= fileSystem.listFiles(file);
         Collections.sort(temp, new Comparator<IFileSystemItem>() {
             @Override
             public int compare(IFileSystemItem o1, IFileSystemItem o2) {
                 return Integer.compare(Integer.parseInt(o1.getName()), Integer.parseInt(o2.getName()));
             }
         });
-        int i = 0;
+        int i=0;
         for (IFileSystemItem f : temp) {
-            res.add(new FileLayerMeta(f, fileSystem));
+            res.add(new FileLayerMeta(f,fileSystem));
             i++;
-            if (i == temp.size() - 1) {
+            if(i==temp.size()-1){
                 break;
             }
         }
@@ -60,9 +60,9 @@ public class FileLayersMeta<S extends IFileSystemItem> implements ILayersMeta {
             throw new LayersFolderIsEmptyOrNotExistsException();
         }
 
-        temp = fileSystem.listFiles(file);
+        temp= fileSystem.listFiles(file);
         temp.removeIf(iFileSystemItem -> {
-            if (!iFileSystemItem.isDirectory()) {
+            if(!iFileSystemItem.isDirectory()){
                 return true;
             }
             return false;
@@ -73,13 +73,13 @@ public class FileLayersMeta<S extends IFileSystemItem> implements ILayersMeta {
                 return Integer.compare(Integer.parseInt(o1.getName()), Integer.parseInt(o2.getName()));
             }
         });
-        return new FileResultLayerMeta(temp.get(temp.size() - 1), fileSystem);
+        return new FileResultLayerMeta(temp.get(temp.size()-1),fileSystem);
     }
 
     @Override
     public ILayerMeta getLayerByID(int id) {
-        for (ILayerMeta lm : getLayers()) {
-            if (lm.getID() == id) {
+        for(ILayerMeta lm:getLayers()){
+            if(lm.getID()==id){
                 return lm;
             }
         }

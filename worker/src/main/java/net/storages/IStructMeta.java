@@ -15,6 +15,6 @@ public interface IStructMeta extends IStorageMeta {
 
     void study(List<IStudyingRequest> requests);
 
-    IResultLayerMeta getResultLayer();
+     IResultLayerMeta getResultLayer();
 
 }

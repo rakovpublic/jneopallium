@@ -1,5 +1,4 @@
 package net.layers;
-
 /***
  * Created by Rakovskyi Dmytro .
  *
@@ -9,9 +8,9 @@ package net.layers;
  */
 public interface IResultLayer<K> extends ILayer {
     /*
-     * Transfer result layer to result
-     *
-     * */
+    * Transfer result layer to result
+    *
+    * */
     K interpretResult();
 
 }

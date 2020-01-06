@@ -7,6 +7,7 @@ import net.signals.ISignal;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -22,7 +23,7 @@ public class Neuron implements INeuron {
     private List<IRule> rules;
 
     public Neuron() {
-        rules = new ArrayList<>();
+        rules= new ArrayList<>();
         isProcessed = false;
         signals = new ArrayList<>();
         result = new ArrayList<>();
@@ -31,7 +32,7 @@ public class Neuron implements INeuron {
     }
 
     public Neuron(Long neuronId, ISignalChain processingChain) {
-        rules = new ArrayList<>();
+        rules= new ArrayList<>();
         this.neuronId = neuronId;
         isProcessed = false;
         signals = new ArrayList<>();
@@ -48,8 +49,8 @@ public class Neuron implements INeuron {
 
     @Override
     public Boolean validate() {
-        for (IRule r : rules) {
-            if (!r.validate(this)) {
+        for(IRule r:rules){
+            if(!r.validate(this)){
                 return false;
             }
         }
@@ -74,58 +75,58 @@ public class Neuron implements INeuron {
             if (signalsMap.containsKey(cl)) {
                 signalsMap.get(cl).add(s);
             } else {
-                List<ISignal> ll = new ArrayList<>();
-                ll.add(s);
-                signalsMap.put(cl, ll);
+                    List<ISignal> ll = new ArrayList<>();
+                    ll.add(s);
+                    signalsMap.put(cl, ll);
             }
         }
         for (Class<? extends ISignal> cl : processingChain.getProcessingChain()) {
-            for (Class<? extends ISignal> cls : signalsMap.keySet()) {
-                if (cl.equals(cls)) {
+            for(Class<? extends ISignal> cls:signalsMap.keySet()){
+                if(cl.equals(cls)){
                     ISignalMerger signalMerger = mergerHashMap.get(cl);
                     ISignalProcessor signalProcessor = processorHashMap.get(cl);
                     if (signalProcessor == null) {
                         throw new CannotFindSignalProcessorException("Cannot find signal processor for signal class" + cl.getCanonicalName() + " in neuron id" + this.neuronId);
                     }
-                    if (signalMerger != null && (signalProcessor.hasMerger() != null ? signalProcessor.hasMerger() : true)) {
+                    if(signalMerger!=null&&(signalProcessor.hasMerger()!=null?signalProcessor.hasMerger():true)){
                         ISignal inS = signalMerger.mergeSignals(signalsMap.get(cl));
                         result.addAll(signalProcessor.process(inS, this));
-                    } else if (signalProcessor.hasMerger() == null || !signalProcessor.hasMerger()) {
-                        for (ISignal s : signalsMap.get(cl)) {
-                            result.addAll(signalProcessor.process(s, this));
+                    }else if(signalProcessor.hasMerger()==null||!signalProcessor.hasMerger()){
+                        for(ISignal s:signalsMap.get(cl)){
+                            result.addAll(signalProcessor.process(s,this));
                         }
-                    } else {
+                    }else{
                         throw new CannotFindSignalMergerException("Cannot find signal merger for signal class" + cl.getCanonicalName() + " in neuron id" + this.neuronId);
                     }
-                } else if (!processingChain.getProcessingChain().contains(cls)) {
-                    ISignal s = signalsMap.get(cls).get(0);
-                    Class<?> clst = cls;
-                    boolean done = true;
-                    while (getSupperClass(clst) != ISignal.class && getSupperClass(clst) != Object.class && s.canUseProcessorForParent() && done) {
-                        if (cl.equals(clst)) {
+                }else if(!processingChain.getProcessingChain().contains(cls)){
+                    ISignal s=signalsMap.get(cls).get(0);
+                    Class<?> clst=cls;
+                    boolean done=true;
+                    while (getSupperClass(clst)!=ISignal.class&&getSupperClass(clst)!=Object.class&&s.canUseProcessorForParent()&&done){
+                        if(cl.equals(clst)){
                             ISignalMerger signalMerger = mergerHashMap.get(cl);
                             ISignalProcessor signalProcessor = processorHashMap.get(cl);
                             if (signalProcessor == null) {
                                 throw new CannotFindSignalProcessorException("Cannot find signal processor for signal class" + cl.getCanonicalName() + " in neuron id" + this.neuronId);
                             }
-                            if (signalMerger != null && (signalProcessor.hasMerger() != null ? signalProcessor.hasMerger() : true)) {
+                            if(signalMerger!=null&&(signalProcessor.hasMerger()!=null?signalProcessor.hasMerger():true)){
                                 ISignal inS = signalMerger.mergeSignals(signalsMap.get(cl));
                                 result.addAll(signalProcessor.process(inS, this));
-                            } else if (signalProcessor.hasMerger() == null || !signalProcessor.hasMerger()) {
-                                for (ISignal st : signalsMap.get(cl)) {
-                                    result.addAll(signalProcessor.process(st, this));
+                            }else if(signalProcessor.hasMerger()==null||!signalProcessor.hasMerger()){
+                                for(ISignal st:signalsMap.get(cl)){
+                                    result.addAll(signalProcessor.process(st,this));
                                 }
-                            } else {
+                            }else{
                                 throw new CannotFindSignalMergerException("Cannot find signal merger for signal class" + cl.getCanonicalName() + " in neuron id" + this.neuronId);
                             }
-                            done = false;
+                            done=false;
                         }
-                        clst = getSupperClass(clst);
+                        clst=getSupperClass(clst);
                     }
                 }
             }
         }
-        this.isProcessed = true;
+        this.isProcessed=true;
 
     }
 
@@ -184,6 +185,7 @@ public class Neuron implements INeuron {
     }
 
 
+
     @Override
     public void setProcessingChain(ISignalChain chain) {
         this.processingChain = chain;
@@ -195,7 +197,7 @@ public class Neuron implements INeuron {
     }
 
 
-    private Class<?> getSupperClass(Class<?> clazz) {
+    private Class<?> getSupperClass(Class<?> clazz){
 
         return clazz.getSuperclass();
     }

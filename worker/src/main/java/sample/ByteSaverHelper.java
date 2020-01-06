@@ -1,12 +1,9 @@
 package sample;
 
-import java.io.BufferedWriter;
-import java.io.ByteArrayOutputStream;
-import java.io.FileWriter;
-import java.io.ObjectOutputStream;
+import java.io.*;
 
 public class ByteSaverHelper {
-    public static void saveObjectToFile(String path, Object obj) {
+    public static void saveObjectToFile(String path,Object obj){
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(path));
             String serializedObject;
@@ -17,12 +14,11 @@ public class ByteSaverHelper {
             serializedObject = bo.toString();
             writer.write(serializedObject);
 
-        } catch (Exception e) {
+        } catch (Exception e){
             e.printStackTrace();
         }
     }
-
-    public static void saveArrayObjectToFile(String path, Object[] obj) {
+    public static void saveArrayObjectToFile(String path,Object [] obj){
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(path));
             String serializedObject;
@@ -32,7 +28,7 @@ public class ByteSaverHelper {
             so.flush();
             serializedObject = bo.toString();
             writer.write(serializedObject);
-        } catch (Exception e) {
+        } catch (Exception e){
             e.printStackTrace();
         }
     }

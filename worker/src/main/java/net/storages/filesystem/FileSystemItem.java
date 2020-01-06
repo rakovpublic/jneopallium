@@ -13,11 +13,11 @@ public class FileSystemItem implements IFileSystemItem {
         this.path = path;
     }
 
-    static FileSystemItem getFileSystemItem(Boolean isDirectory, Boolean exists, String name, String path) {
-        return new FileSystemItem(isDirectory, exists, name, path);
+    static FileSystemItem getFileSystemItem(Boolean isDirectory, Boolean exists, String name, String path){
+        return new FileSystemItem( isDirectory,  exists,  name,  path);
     }
 
-    void setExists(Boolean exists) {
+     void setExists(Boolean exists) {
         this.exists = exists;
     }
 

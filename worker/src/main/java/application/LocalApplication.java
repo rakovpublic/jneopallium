@@ -4,10 +4,7 @@ import net.layers.ILayer;
 import net.layers.IResultLayer;
 import net.layers.impl.LayerBuilder;
 import net.signals.ISignal;
-import net.storages.IInputMeta;
-import net.storages.ILayerMeta;
-import net.storages.IResultLayerMeta;
-import net.storages.ISerializer;
+import net.storages.*;
 import net.storages.file.FileLayersMeta;
 import net.storages.filesystem.IFileSystem;
 import net.storages.signalstorages.file.FileInputMeta;
@@ -51,25 +48,26 @@ public class LocalApplication implements IApplication {
             structBuilder.withLayersMeta(new FileLayersMeta<>(fs.getItem(layerPath), fs));
             StructMeta meta = structBuilder.build();
             boolean isTeacherStudying = Boolean.valueOf(context.getProperty("configuration.isteacherstudying"));
-            IStudyingAlgorithm algo = null;
+            IStudyingAlgorithm algo= null;
             Object desiredResult = inputMeta.getDesiredResult();
-            if (isTeacherStudying) {
-                Object objst = getObject(context.getProperty("configuration.studyingalgo"));
-                if (objst != null) {
-                    algo = (IStudyingAlgorithm) objst;
-                    while (!process(meta).interpretResult().equals(desiredResult)) {
+            if(isTeacherStudying){
+                Object objst=getObject(context.getProperty("configuration.studyingalgo"));
+                if(objst!=null){
+                    algo=(IStudyingAlgorithm) objst;
+                    while (!process(meta).interpretResult().equals(desiredResult)){
                         meta.study(((IStudyingAlgorithm) objst).study(meta));
                         meta.getInputs(0).cleanInputs();
                     }
-                } else {
-                    while (!process(meta).interpretResult().equals(desiredResult)) {
+                }else{
+                    while (!process(meta).interpretResult().equals(desiredResult)){
 
                     }
                 }
-            } else {
+            }else {
                 //TODO:add normal output
                 System.out.println(process(meta).interpretResult().toString());
             }
+
 
 
         } else {
@@ -77,8 +75,7 @@ public class LocalApplication implements IApplication {
         }
 
     }
-
-    private IResultLayer process(StructMeta meta) {
+    private IResultLayer process(StructMeta meta){
         int i = 0;
         for (ILayerMeta met : meta.getLayers()) {
             LayerBuilder lb = new LayerBuilder();
@@ -101,11 +98,11 @@ public class LocalApplication implements IApplication {
             layer.dumpResult(meta.getInputs(i));
 
         }
-        IResultLayerMeta reMeta = meta.getResultLayer();
+        IResultLayerMeta reMeta= meta.getResultLayer();
         LayerBuilder lb = new LayerBuilder();
         lb.withLayer(reMeta);
         lb.withInput(meta.getInputs(reMeta.getID()));
-        IResultLayer layer = lb.buildResultLayer();
+        IResultLayer layer =  lb.buildResultLayer();
         layer.process();
 
         return layer;
@@ -130,18 +127,17 @@ public class LocalApplication implements IApplication {
         return (Class<?>[]) reuslt.toArray();
 
     }
-
     private Object getObject(String str) {
-        if (str == null) {
+        if(str==null){
             return null;
         }
-        Object obj = null;
+        Object obj=null;
         try {
             byte b[] = str.getBytes();
             ByteArrayInputStream bi = new ByteArrayInputStream(b);
             ObjectInputStream si = new ObjectInputStream(bi);
-            obj = si.readObject();
-        } catch (Exception ex) {
+            obj =  si.readObject();
+        }catch (Exception ex){
             //TODO:Add logger
         }
         return obj;
@@ -150,13 +146,13 @@ public class LocalApplication implements IApplication {
 
 
     private Object[] getObjects(String str) {
-        Object[] obj = null;
+        Object[] obj=null;
         try {
             byte b[] = str.getBytes();
             ByteArrayInputStream bi = new ByteArrayInputStream(b);
             ObjectInputStream si = new ObjectInputStream(bi);
-            obj = (Object[]) si.readObject();
-        } catch (Exception ex) {
+           obj = (Object[]) si.readObject();
+        }catch (Exception ex){
             //TODO:Add logger
         }
         return obj;
@@ -164,13 +160,13 @@ public class LocalApplication implements IApplication {
     }
 
     private HashMap<Class<? extends ISignal>, ISerializer<? extends ISignal, String>> getSerializers(String str) {
-        HashMap<Class<? extends ISignal>, ISerializer<? extends ISignal, String>> obj = null;
+        HashMap<Class<? extends ISignal>, ISerializer<? extends ISignal, String>> obj=null;
         try {
             byte b[] = str.getBytes();
             ByteArrayInputStream bi = new ByteArrayInputStream(b);
             ObjectInputStream si = new ObjectInputStream(bi);
             obj = (HashMap<Class<? extends ISignal>, ISerializer<? extends ISignal, String>>) si.readObject();
-        } catch (Exception ex) {
+        }catch (Exception ex){
             //TODO:Add logger
         }
         return obj;

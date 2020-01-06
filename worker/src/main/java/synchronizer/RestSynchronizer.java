@@ -14,7 +14,6 @@ public class RestSynchronizer implements ISynchronizer {
     private IContext context;
     private final String USER_AGENT = "Mozilla/5.0";
     private final String isProcessedEndPointName = "rest.isprocessed";
-
     //private final String USER_AGENT = "Mozilla/5.0";
     //private final String USER_AGENT = "Mozilla/5.0";
     @Override
@@ -32,34 +31,34 @@ public class RestSynchronizer implements ISynchronizer {
 
     @Override
     public boolean isLayerProcessed(int layerId) {
-        String requestResult = "false";
-        try {
-            URL obj = new URL(context.getProperty(isProcessedEndPointName) + "?layer=" + layerId);
-            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+        String requestResult="false";
+        try{
+        URL obj = new URL(context.getProperty(isProcessedEndPointName)+"?layer="+layerId);
+        HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
-            // optional default is GET
-            con.setRequestMethod("GET");
+        // optional default is GET
+        con.setRequestMethod("GET");
 
-            //add request header
-            con.setRequestProperty("User-Agent", USER_AGENT);
+        //add request header
+        con.setRequestProperty("User-Agent", USER_AGENT);
 
-            int responseCode = con.getResponseCode();
+        int responseCode = con.getResponseCode();
 
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(con.getInputStream()));
-            String inputLine;
-            StringBuffer response = new StringBuffer();
+        BufferedReader in = new BufferedReader(
+                new InputStreamReader(con.getInputStream()));
+        String inputLine;
+        StringBuffer response = new StringBuffer();
 
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-            }
-            in.close();
-            if (responseCode == 200) {
-                requestResult = response.toString();
-            } else {
-                //TODO: add logging
-            }
-        } catch (Exception e) {
+        while ((inputLine = in.readLine()) != null) {
+            response.append(inputLine);
+        }
+        in.close();
+        if(responseCode==200){
+        requestResult=response.toString();
+        }else {
+            //TODO: add logging
+        }
+    }catch (Exception e){
 
         }
 
@@ -80,8 +79,7 @@ public class RestSynchronizer implements ISynchronizer {
     public void syncNeurons(List<? extends INeuron> neurons, int layerId) {
 
     }
-
-    //TODO:Move next 4 methods and studying to master
+//TODO:Move next 4 methods and studying to master
     @Override
     public void removeNeuron(int layerId, long neuronId) {
 
