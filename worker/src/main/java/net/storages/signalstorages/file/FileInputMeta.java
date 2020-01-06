@@ -3,15 +3,16 @@ package net.storages.signalstorages.file;
 import exceptions.ClassFromJSONIsNotExistsException;
 import exceptions.InputNotExistsException;
 import exceptions.SerializerForClassIsNotRegisteredException;
-import synchronizer.utils.JSONHelper;
-import synchronizer.utils.DeserializationHelperResult;
 import net.signals.ISignal;
 import net.storages.IInputMeta;
 import net.storages.ISerializer;
 import net.storages.filesystem.IFileSystem;
 import net.storages.filesystem.IFileSystemItem;
+import synchronizer.utils.DeserializationHelperResult;
+import synchronizer.utils.JSONHelper;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,10 +24,10 @@ public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<Stri
     private HashMap<Class<? extends ISignal>, ISerializer<? extends ISignal, String>> map;
     private IFileSystem<S> fileSystem;
 
-    public FileInputMeta(S file, HashMap<Class<? extends ISignal>, ISerializer<? extends ISignal, String>> map,IFileSystem<S> fs) {
+    public FileInputMeta(S file, HashMap<Class<? extends ISignal>, ISerializer<? extends ISignal, String>> map, IFileSystem<S> fs) {
         this.file = file;
         this.map = map;
-        this.fileSystem=fs;
+        this.fileSystem = fs;
     }
 
     @Override
@@ -37,16 +38,16 @@ public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<Stri
     @Override
     public HashMap<Long, List<ISignal>> readInputs(int layerId) {
 
-        S ff = fileSystem.getItem(file.getPath()+fileSystem.getFolderSeparator()+layerId);
+        S ff = fileSystem.getItem(file.getPath() + fileSystem.getFolderSeparator() + layerId);
         //new File(file.getAbsolutePath() + File.pathSeparator + layerId);
         if (!ff.exists()) {
-            throw new InputNotExistsException("File " +ff.getPath()+" with input data for layer id "+layerId+" is not exists");
+            throw new InputNotExistsException("File " + ff.getPath() + " with input data for layer id " + layerId + " is not exists");
         }
         HashMap<Long, List<ISignal>> result = new HashMap<>();
-        if(ff.isDirectory()){
-            for(IFileSystemItem fsiNeuron:fileSystem.listFiles(ff)){
-                JSONHelper jsonHelper= new JSONHelper();
-                String json =fileSystem.read((S) fsiNeuron);
+        if (ff.isDirectory()) {
+            for (IFileSystemItem fsiNeuron : fileSystem.listFiles(ff)) {
+                JSONHelper jsonHelper = new JSONHelper();
+                String json = fileSystem.read((S) fsiNeuron);
                 int startIndex = json.indexOf('[');
                 DeserializationHelperResult res = jsonHelper.getNextObject(json, startIndex);
                 while (res != null) {
@@ -89,32 +90,32 @@ public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<Stri
 
     @Override
     public void cleanInputs() {
-        S ff = fileSystem.getItem(file.getPath()+fileSystem.getFolderSeparator());
+        S ff = fileSystem.getItem(file.getPath() + fileSystem.getFolderSeparator());
         //new File(file.getAbsolutePath() + File.pathSeparator + layerId);
         if (!ff.exists()) {
-            throw new InputNotExistsException("File " +ff.getPath()+" with input data for layer id  is not exists");
+            throw new InputNotExistsException("File " + ff.getPath() + " with input data for layer id  is not exists");
         }
 
-        if(ff.isDirectory()){
-            for(IFileSystemItem fsiNeuron:fileSystem.listFiles(ff)){
-                if(!fsiNeuron.getPath().equals(fileSystem.getItem(file.getPath()+fileSystem.getFolderSeparator()+0))){
+        if (ff.isDirectory()) {
+            for (IFileSystemItem fsiNeuron : fileSystem.listFiles(ff)) {
+                if (!fsiNeuron.getPath().equals(fileSystem.getItem(file.getPath() + fileSystem.getFolderSeparator() + 0))) {
                     fileSystem.deleteFilesFromDirectory(ff);
                 }
 
             }
 
-            }
+        }
 
     }
 
     @Override
     public void saveResults(HashMap<Long, List<ISignal>> signals, int layerId) {
         //File dir = new File(file.getAbsolutePath() + File.pathSeparator + layerId);
-        S dir = fileSystem.getItem(file.getPath()+fileSystem.getFolderSeparator()+layerId+fileSystem.getFolderSeparator()+1);
+        S dir = fileSystem.getItem(file.getPath() + fileSystem.getFolderSeparator() + layerId + fileSystem.getFolderSeparator() + 1);
         if (dir.exists()) {
             mergeResults(signals, dir.getPath());
         } else {
-            save(signals,dir);
+            save(signals, dir);
         }
 
     }
@@ -126,17 +127,17 @@ public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<Stri
             save(signals, dir);
         } else {
 
-            mergeResults(signals,path+1);
+            mergeResults(signals, path + 1);
         }
     }
 
     @Override
-    public Object getDesiredResult()  {
-        Object obj=null;
-        S ff = fileSystem.getItem(file.getPath()+fileSystem.getFolderSeparator()+"result");
-        if(ff.exists()){
-            String str=fileSystem.read(ff);
-            if(str==null){
+    public Object getDesiredResult() {
+        Object obj = null;
+        S ff = fileSystem.getItem(file.getPath() + fileSystem.getFolderSeparator() + "result");
+        if (ff.exists()) {
+            String str = fileSystem.read(ff);
+            if (str == null) {
                 return null;
             }
 
@@ -144,8 +145,8 @@ public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<Stri
                 byte b[] = str.getBytes();
                 ByteArrayInputStream bi = new ByteArrayInputStream(b);
                 ObjectInputStream si = new ObjectInputStream(bi);
-                obj =  si.readObject();
-            }catch (Exception ex){
+                obj = si.readObject();
+            } catch (Exception ex) {
                 ex.printStackTrace();
                 //TODO:Add logger
             }
@@ -158,7 +159,7 @@ public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<Stri
         //TODO: implement
     }
 
-    private void save(HashMap<Long, List<ISignal>> signals,S path){
+    private void save(HashMap<Long, List<ISignal>> signals, S path) {
         StringBuilder resultJson = new StringBuilder();
         resultJson.append("{\"inputs\":[");
         for (Long nrId : signals.keySet()) {
@@ -177,6 +178,6 @@ public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<Stri
         }
         resultJson.deleteCharAt(resultJson.length() - 1);
         resultJson.append("]}");
-        fileSystem.writeCreate(resultJson.toString(),path);
+        fileSystem.writeCreate(resultJson.toString(), path);
     }
 }

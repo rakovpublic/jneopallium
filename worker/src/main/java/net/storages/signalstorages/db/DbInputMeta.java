@@ -44,7 +44,6 @@ public class DbInputMeta implements IInputMeta {
     }
 
 
-
     @Override
     public void saveResults(HashMap signals, int layerId) {
 

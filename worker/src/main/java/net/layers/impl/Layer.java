@@ -22,7 +22,7 @@ import java.util.Objects;
 public class Layer implements ILayer {
     private HashMap<Long, INeuron> map;
     private HashMap<Long, List<ISignal>> input;
-    private HashMap<Class<?extends INeuron>,INeuronSerializer> neuronSerializerHashMap;
+    private HashMap<Class<? extends INeuron>, INeuronSerializer> neuronSerializerHashMap;
     private Boolean isProcessed;
     private long size;
     private int layerId;
@@ -31,17 +31,16 @@ public class Layer implements ILayer {
     private IInputMeta inputMeta;
 
 
-    public Layer(int layerId,IInputMeta meta) {
-        neuronSerializerHashMap= new HashMap<>();
+    public Layer(int layerId, IInputMeta meta) {
+        neuronSerializerHashMap = new HashMap<>();
         rules = new ArrayList<>();
         isProcessed = false;
         notProcessed = new ArrayList<INeuron>();
         this.layerId = layerId;
-        inputMeta=meta;
+        inputMeta = meta;
         map = new HashMap<Long, INeuron>();
         input = new HashMap<Long, List<ISignal>>();
     }
-
 
 
     @Override
@@ -84,7 +83,7 @@ public class Layer implements ILayer {
 
     @Override
     public void registerAll(List<? extends INeuron> neuron) {
-        for(INeuron ner:neuron){
+        for (INeuron ner : neuron) {
             map.put(ner.getId(), ner);
         }
     }
@@ -105,14 +104,14 @@ public class Layer implements ILayer {
     @Override
     public void process() {
         //TODO:refactor to direct reading in layer impl or at least add flag for performance tuning
-        HashMap<Long, List<ISignal>> inputs= inputMeta.readInputs(layerId);
-        for(Long neuronID:inputs.keySet()){
-            for(ISignal signal: inputs.get(neuronID)){
-                ISignal nextStepSignal=signal.prepareSignalToNextStep();
-                if(nextStepSignal!=null){
-                    inputMeta.copySignalToNextStep(layerId,neuronID,nextStepSignal);
+        HashMap<Long, List<ISignal>> inputs = inputMeta.readInputs(layerId);
+        for (Long neuronID : inputs.keySet()) {
+            for (ISignal signal : inputs.get(neuronID)) {
+                ISignal nextStepSignal = signal.prepareSignalToNextStep();
+                if (nextStepSignal != null) {
+                    inputMeta.copySignalToNextStep(layerId, neuronID, nextStepSignal);
                 }
-                this.addInput(signal,neuronID);
+                this.addInput(signal, neuronID);
             }
         }
         INeuron neur;
@@ -216,7 +215,7 @@ public class Layer implements ILayer {
 
     @Override
     public void addNeuronSerializer(INeuronSerializer serializer) {
-        neuronSerializerHashMap.put(serializer.getDeserializedClass(),serializer);
+        neuronSerializerHashMap.put(serializer.getDeserializedClass(), serializer);
 
     }
 

@@ -1,6 +1,5 @@
 package application;
 
-import net.storages.IStructMeta;
 import synchronizer.IContext;
 
 import java.io.Serializable;

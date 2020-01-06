@@ -11,20 +11,22 @@ import java.io.Serializable;
 public interface IWeight<S extends ISignal, C extends ISignal> extends Serializable {
 
     /**
-    * Process signal and change it due to the weight/value
-    * @param signal
-    * @return signal
-    * **/
+     * Process signal and change it due to the weight/value
+     *
+     * @param signal
+     * @return signal
+     **/
     S process(S signal);
 
     /**
-    * Change the weight due to the change signal.
-    * @param signal change signal
-    * **/
+     * Change the weight due to the change signal.
+     *
+     * @param signal change signal
+     **/
     void changeWeight(C signal);
 
     /**
-    * @return signal class
-    * **/
+     * @return signal class
+     **/
     Class<S> getSignalClass();
 }

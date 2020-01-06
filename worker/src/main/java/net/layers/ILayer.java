@@ -23,89 +23,101 @@ import java.util.List;
 public interface ILayer extends Serializable {
 
     /**
-    * @return layer size
-    * **/
+     * @return layer size
+     **/
     long getLayerSize();
+
     /**
-    * Validate neurons using validation rules set up on layers level.
-    * @return true if all neurons is valid
-    * */
+     * Validate neurons using validation rules set up on layers level.
+     *
+     * @return true if all neurons is valid
+     */
     Boolean validateGlobal();
 
     /**
-    * Validate neurons using validation rules from neuron object.
-    * @return true if all neurons is valid
-    * */
+     * Validate neurons using validation rules from neuron object.
+     *
+     * @return true if all neurons is valid
+     */
     Boolean validateLocal();
 
     /**
-    * Add validation rule on layer level
-    * @param rule validation rule
-    * */
+     * Add validation rule on layer level
+     *
+     * @param rule validation rule
+     */
     void addGlobalRule(IRule rule);
 
     /**
-    * register neuron in the layer
-    * @param neuron
-    * */
+     * register neuron in the layer
+     *
+     * @param neuron
+     */
     void register(INeuron neuron);
+
     /**
      * register neuron in the layer
+     *
      * @param neuron
-     * */
+     */
     void registerAll(List<? extends INeuron> neuron);
 
     /**
-    * add input to layer
-    * @param signal
-    * @param neuronId neuron id
-    * */
+     * add input to layer
+     *
+     * @param signal
+     * @param neuronId neuron id
+     */
     void addInput(ISignal signal, Long neuronId);
 
     /**
-    * this method launch the layer processing
-    * */
+     * this method launch the layer processing
+     */
     void process();
 
     /**
-    * @return layer id
-    * **/
+     * @return layer id
+     **/
     int getId();
 
     /**
-    * Check if all neurons processed
-    * @return true if all neurons processed
-    * **/
+     * Check if all neurons processed
+     *
+     * @return true if all neurons processed
+     **/
     Boolean isProcessed();
 
     /**
-    * Store signal which obtained after neuron processing.
-    * @param meta data to for input storage
-    * **/
+     * Store signal which obtained after neuron processing.
+     *
+     * @param meta data to for input storage
+     **/
     void dumpResult(IInputMeta meta);
 
     /**
-    * Store neurons after processing, because the state of neuron could be changed.
-    * @param layerMeta meta data for layer storage
-    * */
+     * Store neurons after processing, because the state of neuron could be changed.
+     *
+     * @param layerMeta meta data for layer storage
+     */
     void dumpNeurons(ILayerMeta layerMeta);
 
     /**
-    * Obtain result data structure which consists layer id, neuron id and list of signals.
-    * @return hash map with integer key - layer id , value - hash map with long key - neuron id, list value  - signals
-    * */
+     * Obtain result data structure which consists layer id, neuron id and list of signals.
+     *
+     * @return hash map with integer key - layer id , value - hash map with long key - neuron id, list value  - signals
+     */
     HashMap<Integer, HashMap<Long, List<ISignal>>> getResults();
 
     /**
-    * serialize layer to json
-    * @return string json
-    * **/
+     * serialize layer to json
+     *
+     * @return string json
+     **/
     String toJSON();
 
     void addNeuronSerializer(INeuronSerializer serializer);
 
     <N extends INeuron> INeuronSerializer<N> getNeuronSerializer(Class<N> neuronClass);
-
 
 
 }
