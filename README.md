@@ -35,6 +35,7 @@ Note: Result signal from one/many neuron nets can be used as input to other. Suc
 1. Make core. It will implement just core concepts without distributed mode and neuron nets synchronization.
 2. Add simple java distributed part with neuron nets synchronization.
 3. Add containers(docker/kubernetes) and infrastructure scripts python/shell.
-4. Add neuron net graphic designer which will collect data about implemented classes and will pass to graphic plugin for eclipse and/or idea.
-5. Add cuda distributed mode.
-6. Add aws lambda distributed mode.
+4. Design and implement open stack cluster.
+5. Add neuron net graphic designer which will collect data about implemented classes and will pass to graphic plugin for eclipse and/or idea.
+6. Add cuda distributed mode.
+7. Add aws lambda distributed mode.
