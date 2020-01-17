@@ -42,3 +42,4 @@ Note: Result signal from one/many neuron nets can be used as input to other. Suc
 8. Design and implement amazon cluster integration.
 
 p.s. Fill free to contatct me. I am looking for contributors for this project.
+p.p.s. Great thanks to kafedra of Informatics in Kharkiv National University of Radio and Electronics, Eugen Putiatin, Helen Matat, Tatiana Sinelnikova.
