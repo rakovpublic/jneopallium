@@ -40,3 +40,5 @@ Note: Result signal from one/many neuron nets can be used as input to other. Suc
 6. Add cuda distributed mode.
 7. Add aws lambda distributed mode.
 8. Design and implement amazon cluster integration.
+
+p.s. Fill free to contatct me. I am looking for contributors for this project.
