@@ -59,10 +59,12 @@ public class LocalApplication implements IApplication {
                     algo = (IStudyingAlgorithm) objst;
                     while (!process(meta).interpretResult().equals(desiredResult)) {
                         meta.study(((IStudyingAlgorithm) objst).study(meta));
+                        meta.getInputs(0).copyInputsToNextStep();
                         meta.getInputs(0).nextStep();
                     }
                 } else {
                     while (!process(meta).interpretResult().equals(desiredResult)) {
+                        meta.getInputs(0).copyInputsToNextStep();
                         meta.getInputs(0).nextStep();
                     }
                 }

@@ -166,6 +166,11 @@ public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<Stri
         stepID+=1;
     }
 
+    @Override
+    public void copyInputsToNextStep() {
+        //TODO: add implementation
+    }
+
     private void save(HashMap<Long, List<ISignal>> signals, S path) {
         StringBuilder resultJson = new StringBuilder();
         resultJson.append("{\"inputs\":[");

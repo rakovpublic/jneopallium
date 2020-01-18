@@ -24,5 +24,7 @@ public interface IInputMeta<K> extends IStorageMeta {
 
     void nextStep();
 
+    void copyInputsToNextStep();
+
 
 }
