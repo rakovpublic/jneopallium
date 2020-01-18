@@ -23,11 +23,13 @@ public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<Stri
     private S file;
     private HashMap<Class<? extends ISignal>, ISerializer<? extends ISignal, String>> map;
     private IFileSystem<S> fileSystem;
+    private Long stepID;
 
     public FileInputMeta(S file, HashMap<Class<? extends ISignal>, ISerializer<? extends ISignal, String>> map, IFileSystem<S> fs) {
         this.file = file;
         this.map = map;
         this.fileSystem = fs;
+        this.stepID=0l;
     }
 
     @Override
@@ -38,7 +40,7 @@ public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<Stri
     @Override
     public HashMap<Long, List<ISignal>> readInputs(int layerId) {
 
-        S ff = fileSystem.getItem(file.getPath() + fileSystem.getFolderSeparator() + layerId);
+        S ff = fileSystem.getItem(file.getPath() + fileSystem.getFolderSeparator() + layerId+fileSystem.getFolderSeparator()+stepID);
         //new File(file.getAbsolutePath() + File.pathSeparator + layerId);
         if (!ff.exists()) {
             throw new InputNotExistsException("File " + ff.getPath() + " with input data for layer id " + layerId + " is not exists");
@@ -111,7 +113,7 @@ public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<Stri
     @Override
     public void saveResults(HashMap<Long, List<ISignal>> signals, int layerId) {
         //File dir = new File(file.getAbsolutePath() + File.pathSeparator + layerId);
-        S dir = fileSystem.getItem(file.getPath() + fileSystem.getFolderSeparator() + layerId + fileSystem.getFolderSeparator() + 1);
+        S dir = fileSystem.getItem(file.getPath() + fileSystem.getFolderSeparator() + layerId+ fileSystem.getFolderSeparator()+stepID+ fileSystem.getFolderSeparator() +  1);
         if (dir.exists()) {
             mergeResults(signals, dir.getPath());
         } else {
@@ -157,6 +159,11 @@ public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<Stri
     @Override
     public void copySignalToNextStep(int layerId, Long neuronId, ISignal signal) {
         //TODO: implement
+    }
+
+    @Override
+    public void nextStep() {
+        stepID+=1;
     }
 
     private void save(HashMap<Long, List<ISignal>> signals, S path) {

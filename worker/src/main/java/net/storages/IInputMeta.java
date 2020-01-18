@@ -22,5 +22,7 @@ public interface IInputMeta<K> extends IStorageMeta {
 
     void copySignalToNextStep(int layerId, Long neuronId, ISignal signal);
 
+    void nextStep();
+
 
 }
