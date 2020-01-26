@@ -15,6 +15,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<String> {
@@ -113,6 +114,12 @@ public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<Stri
     @Override
     public void saveResults(HashMap<Long, List<ISignal>> signals, int layerId) {
         //File dir = new File(file.getAbsolutePath() + File.pathSeparator + layerId);
+        saveResultToStep( signals, layerId, stepID);
+
+
+    }
+
+    private void saveResultToStep(HashMap<Long, List<ISignal>> signals, int layerId, Long stepID){
         S dir = fileSystem.getItem(file.getPath() + fileSystem.getFolderSeparator() + layerId+ fileSystem.getFolderSeparator()+stepID+ fileSystem.getFolderSeparator() +  1);
         if (dir.exists()) {
             mergeResults(signals, dir.getPath());
@@ -158,7 +165,11 @@ public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<Stri
 
     @Override
     public void copySignalToNextStep(int layerId, Long neuronId, ISignal signal) {
-        //TODO: implement
+        HashMap<Long, List<ISignal>> struct= new HashMap<>();
+        List<ISignal> signals= new LinkedList<>();
+        signals.add(signal);
+        struct.put(neuronId,signals);
+        saveResultToStep(struct,layerId,stepID+1);
     }
 
     @Override
@@ -168,7 +179,8 @@ public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<Stri
 
     @Override
     public void copyInputsToNextStep() {
-        //TODO: add implementation
+        fileSystem.copy(fileSystem.getItem(file.getPath() + fileSystem.getFolderSeparator() + 0+fileSystem.getFolderSeparator()+stepID),
+                fileSystem.getItem(file.getPath() + fileSystem.getFolderSeparator() + 0+fileSystem.getFolderSeparator()+stepID+1));
     }
 
     private void save(HashMap<Long, List<ISignal>> signals, S path) {
