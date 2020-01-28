@@ -4,18 +4,21 @@ import application.LocalApplication;
 import synchronizer.IContext;
 
 public abstract class Runner implements IRunner{
-    protected static IContext context;
+    private  IContext context;
     public Runner(){
         context=getContext();
     }
-    public static void main(String[] args) {
+    public void runNet(String mode) {
         IApplication application;
-        if (args[0].equals( "local")) {
+        if (mode.equals( "local")) {
             application = new LocalApplication();
         } else {
             application = new ClusterApplication();
         }
         application.startApplication(context);
     }
+
+
+
 
 }
