@@ -14,6 +14,7 @@ public class LocalFile implements IFileSystemItem {
     @Override
     public boolean isDirectory() {
         return file.exists()&&file.isDirectory();
+
     }
 
     @Override

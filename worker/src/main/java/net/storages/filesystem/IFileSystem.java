@@ -13,9 +13,11 @@ public interface IFileSystem<S extends IFileSystemItem> {
 
     boolean writeUpdate(String content, S path, int startFrom);
 
-    boolean writeUpdateObject(Object content, S path);
+    boolean writeUpdateObject(String content, S path, String idFieldName);
 
-    boolean writeUpdateObjects(Object[] content, S path);
+    boolean writeUpdateObjects(String[] content, S path, String idFieldName);
+
+    boolean deleteObject(String[] content, S path, String idFieldName);
 
     boolean writeUpdateToEnd(String content, S path);
 
