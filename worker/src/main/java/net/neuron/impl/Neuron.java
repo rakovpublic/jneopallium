@@ -17,7 +17,7 @@ public class Neuron implements INeuron {
     private HashMap<Class<? extends ISignal>, ISignalProcessor> processorHashMap;
     private HashMap<Class<? extends ISignal>, ISignalMerger> mergerHashMap;
     private Long neuronId;
-    private List<ISignal> result;
+    protected List<ISignal> result;
     private ISignalChain processingChain;
     private List<IRule> rules;
 
