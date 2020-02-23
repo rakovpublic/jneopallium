@@ -1,5 +1,6 @@
 package sample;
 
+import net.neuron.INeuron;
 import net.neuron.ISignalChain;
 import net.neuron.impl.Neuron;
 
@@ -28,7 +29,28 @@ public class SimpleNeuron extends Neuron {
         }
     }
 
+    public double getBias() {
+        return bias;
+    }
+
+    public void setBias(double bias) {
+        this.bias = bias;
+    }
+
+    public double getBiasWeight() {
+        return biasWeight;
+    }
+
+    public void setBiasWeight(double biasWeight) {
+        this.biasWeight = biasWeight;
+    }
+
     private boolean activationFunction(){
         return true;
+    }
+
+    @Override
+    public Class<? extends INeuron> getCurrentClass() {
+        return SimpleNeuron.class;
     }
 }

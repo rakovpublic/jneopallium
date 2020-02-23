@@ -194,6 +194,11 @@ public class Neuron implements INeuron {
 
     }
 
+    @Override
+    public Class<? extends INeuron> getCurrentClass() {
+        return Neuron.class;
+    }
+
 
     private Class<?> getSupperClass(Class<?> clazz) {
 

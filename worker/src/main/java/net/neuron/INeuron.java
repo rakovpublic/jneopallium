@@ -121,4 +121,6 @@ public interface INeuron extends Serializable {
      */
     void activate();
 
+    Class<? extends INeuron> getCurrentClass();
+
 }
