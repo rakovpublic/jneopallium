@@ -11,6 +11,7 @@ public class SimpleNeuron extends Neuron {
     public SimpleNeuron() {
         bias=1;
         biasWeight=1;
+        signal=0;
     }
 
     public SimpleNeuron(Long neuronId, ISignalChain processingChain) {
@@ -27,6 +28,7 @@ public class SimpleNeuron extends Neuron {
         if(activationFunction()){
             result.add(new SimpleSignal(signal,1));
         }
+        signal=0;
     }
 
     public double getBias() {
