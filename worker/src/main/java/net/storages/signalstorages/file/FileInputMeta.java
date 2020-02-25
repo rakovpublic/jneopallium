@@ -190,15 +190,19 @@ public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<Stri
             StringBuilder signal = new StringBuilder();
             signal.append("{\"neuronId\":\"");
             signal.append(nrId);
-            signal.append("\",\"signal\":");
+            signal.append("\",\"signal\":[");
             for (ISignal s : signals.get(nrId)) {
                 ISerializer serializer = map.get(s.getCurrentClass());
-                StringBuilder resSignal = new StringBuilder(signal);
-                resSignal.append(serializer.serialize(resSignal.toString()));
-                resSignal.append("},");
-                resultJson.append(resSignal.toString());
+                String serializedSignal=(String) serializer.serialize(s);
+                if(serializedSignal!=null){
+                    signal.append(serializedSignal);
+                    signal.append(",");
+                }
             }
-
+            if(signals.get(nrId).size()>0){
+                signal.deleteCharAt(signal.length() - 1);
+            }
+            signal.append("]}");
         }
         resultJson.deleteCharAt(resultJson.length() - 1);
         resultJson.append("]}");
