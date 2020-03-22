@@ -59,7 +59,7 @@ public class LocalApplication implements IApplication {
                     algo = (IStudyingAlgorithm) objst;
                     IResultLayer iResultLayer;
                     while ((iResultLayer = process(meta))!=null && !iResultLayer.interpretResult().getResult().equals(desiredResult)) {
-                        meta.study(((IStudyingAlgorithm) objst).study(meta));
+                        meta.study(((IStudyingAlgorithm) objst).study(meta, iResultLayer.interpretResult().getNeuronId()));
                         meta.getInputs(0).copyInputsToNextStep();
                         meta.getInputs(0).nextStep();
                     }

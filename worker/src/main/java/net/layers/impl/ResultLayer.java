@@ -1,5 +1,6 @@
 package net.layers.impl;
 
+import net.layers.IResult;
 import net.layers.IResultLayer;
 import net.neuron.INeuron;
 import net.storages.IInputMeta;
@@ -15,9 +16,9 @@ public class ResultLayer<K> extends Layer implements IResultLayer<K> {
     }
 
     @Override
-    public K interpretResult() {
+    public IResult<K> interpretResult() {
         if (this.isProcessed()) {
-            return resultMap.get(resultMap.lastKey());
+            return new SimpleResultWrapper<K>(resultMap.get(resultMap.lastKey()), resultMap.lastKey().getId());
         }
         return null;
     }
