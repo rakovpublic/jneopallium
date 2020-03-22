@@ -116,7 +116,11 @@ public class LocalApplication implements IApplication {
     }
 
     private Class<?>[] getTypes(String str) {
+
         List<Class<?>> reuslt = new ArrayList<>();
+        if(str.equals("empty")){
+            return   (Class<?>[]) reuslt.toArray() ;
+        }
         try {
             if (str.contains(":")) {
                 String[] parts = str.split(":");
@@ -152,6 +156,9 @@ public class LocalApplication implements IApplication {
 
 
     private Object[] getObjects(String str) {
+        if(str.equals("empty")){
+            return new Object[0];
+        }
         Object[] obj = null;
         try {
             byte b[] = str.getBytes();
