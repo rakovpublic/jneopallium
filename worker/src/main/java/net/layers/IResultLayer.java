@@ -12,6 +12,7 @@ public interface IResultLayer<K> extends ILayer {
      * Transfer result layer to result
      *
      * */
-    K interpretResult();
+    IResult<K> interpretResult();
+
 
 }

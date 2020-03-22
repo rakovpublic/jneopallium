@@ -57,20 +57,22 @@ public class LocalApplication implements IApplication {
                 Object objst = getObject(context.getProperty("configuration.studyingalgo"));
                 if (objst != null) {
                     algo = (IStudyingAlgorithm) objst;
-                    while (!process(meta).interpretResult().equals(desiredResult)) {
+                    IResultLayer iResultLayer;
+                    while ((iResultLayer = process(meta))!=null && !iResultLayer.interpretResult().getResult().equals(desiredResult)) {
                         meta.study(((IStudyingAlgorithm) objst).study(meta));
                         meta.getInputs(0).copyInputsToNextStep();
                         meta.getInputs(0).nextStep();
                     }
                 } else {
-                    while (!process(meta).interpretResult().equals(desiredResult)) {
+
+                    while (!process(meta).interpretResult().getResult().equals(desiredResult)) {
                         meta.getInputs(0).copyInputsToNextStep();
                         meta.getInputs(0).nextStep();
                     }
                 }
             } else {
                 //TODO:add normal output
-                System.out.println(process(meta).interpretResult().toString());
+                System.out.println(process(meta).interpretResult().getResult().toString());
             }
 
 
