@@ -77,4 +77,9 @@ public class SimpleSignal implements ISignal<Double> {
     public void setSourceNeuronId(Long neuronId) {
         this.neuronId=neuronId;
     }
+
+    @Override
+    public int getTimeAlive() {
+        return timeAlive;
+    }
 }

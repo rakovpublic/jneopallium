@@ -43,4 +43,6 @@ public interface ISignal<T> extends Serializable {
 
     void setSourceNeuronId(Long neuronId);
 
+    int getTimeAlive();
+
 }

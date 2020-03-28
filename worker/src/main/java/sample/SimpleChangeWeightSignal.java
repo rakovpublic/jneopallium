@@ -69,4 +69,9 @@ public class SimpleChangeWeightSignal implements ISignal<Double> {
     public void setSourceNeuronId(Long neuronId) {
         sourceNeuronId = neuronId;
     }
+
+    @Override
+    public int getTimeAlive() {
+        return 0;
+    }
 }
