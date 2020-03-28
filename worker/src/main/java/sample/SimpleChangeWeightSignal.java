@@ -3,19 +3,31 @@ package sample;
 import net.signals.ISignal;
 
 public class SimpleChangeWeightSignal implements ISignal<Double> {
+    private final Double value;
+    private int sourceLayerId;
+    private Long sourceNeuronId;
+    private final static String DESCRIPTION = "Simple change weight signal";
+
+
+    public SimpleChangeWeightSignal(Double value, int sourceLayerId, Long sourceNeuronId) {
+        this.value = value;
+        this.sourceLayerId = sourceLayerId;
+        this.sourceNeuronId = sourceNeuronId;
+    }
+
     @Override
     public Double getValue() {
-        return null;
+        return value;
     }
 
     @Override
     public Class<? extends ISignal<Double>> getCurrentClass() {
-        return null;
+        return SimpleChangeWeightSignal.class;
     }
 
     @Override
     public Class<Double> getParamClass() {
-        return null;
+        return Double.class;
     }
 
     @Override
@@ -25,7 +37,7 @@ public class SimpleChangeWeightSignal implements ISignal<Double> {
 
     @Override
     public String getDescription() {
-        return null;
+        return DESCRIPTION;
     }
 
     @Override
@@ -35,26 +47,26 @@ public class SimpleChangeWeightSignal implements ISignal<Double> {
 
     @Override
     public ISignal<Double> prepareSignalToNextStep() {
-        return null;
+        return  new SimpleChangeWeightSignal( value/2,  sourceLayerId, sourceNeuronId) ;
     }
 
     @Override
     public int getSourceLayerId() {
-        return 0;
+        return sourceLayerId;
     }
 
     @Override
     public void setSourceLayerId(int layerId) {
-
+        sourceLayerId = layerId;
     }
 
     @Override
     public Long getSourceNeuronId() {
-        return null;
+        return sourceNeuronId;
     }
 
     @Override
     public void setSourceNeuronId(Long neuronId) {
-
+        sourceNeuronId = neuronId;
     }
 }

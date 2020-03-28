@@ -138,5 +138,10 @@ public class Axon implements IAxon {
 
     }
 
+    @Override
+    public HashMap<Class<? extends ISignal>, List<INConnection>> getConnectionMap() {
+        return connectionMap;
+    }
+
 
 }

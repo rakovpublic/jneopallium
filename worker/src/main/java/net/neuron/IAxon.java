@@ -82,4 +82,6 @@ public interface IAxon extends Serializable {
      * @param signal change signal
      **/
     void changeAllWeights(ISignal signal);
+
+    HashMap<Class<? extends ISignal>, List<INConnection>> getConnectionMap();
 }
