@@ -1,13 +1,17 @@
+package application;
+
 import application.ClusterApplication;
 import application.IApplication;
 import application.LocalApplication;
 import synchronizer.IContext;
 
-public abstract class Runner implements IRunner{
+public abstract class Runner implements IRunner {
     private  IContext context;
     public Runner(){
         context=getContext();
     }
+
+    @Override
     public void runNet(String mode) {
         IApplication application;
         if (mode.equals( "local")) {
@@ -17,8 +21,4 @@ public abstract class Runner implements IRunner{
         }
         application.startApplication(context);
     }
-
-
-
-
 }
