@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class Neuron implements INeuron {
+public  class Neuron implements INeuron {
     private List<ISignal> signals;
     private Boolean isProcessed;
     private IAxon axon;
@@ -20,6 +20,7 @@ public class Neuron implements INeuron {
     protected List<ISignal> result;
     private ISignalChain processingChain;
     private List<IRule> rules;
+    private Class<?extends INeuron> currentNeuronClass;
 
     public Neuron() {
         rules = new ArrayList<>();
@@ -28,6 +29,7 @@ public class Neuron implements INeuron {
         result = new ArrayList<>();
         processorHashMap = new HashMap<>();
         mergerHashMap = new HashMap<>();
+        currentNeuronClass=Neuron.class;
     }
 
     public Neuron(Long neuronId, ISignalChain processingChain) {
@@ -195,13 +197,18 @@ public class Neuron implements INeuron {
     }
 
     @Override
-    public Class<? extends INeuron> getCurrentClass() {
-        return Neuron.class;
+    public Class<? extends INeuron> getCurrentNeuronClass() {
+        return currentNeuronClass;
     }
 
 
     private Class<?> getSupperClass(Class<?> clazz) {
 
         return clazz.getSuperclass();
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        return 0;
     }
 }

@@ -17,6 +17,8 @@ public class Axon implements IAxon {
         this.onDestroyMap = new HashMap<>();
     }
 
+
+
     @Override
     public void resetConnection(HashMap<Class<? extends ISignal>, List<INConnection>> newConnection) {
         connectionMap = newConnection;

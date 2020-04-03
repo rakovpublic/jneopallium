@@ -4,6 +4,11 @@ import net.neuron.IWeight;
 import net.signals.ISignal;
 
 public class SimpleDoubleWeight implements IWeight<SimpleSignal,SimpleChangeWeightSignal> {
+    private Class<SimpleSignal> signalClass= SimpleSignal.class;
+
+    public SimpleDoubleWeight() {
+    }
+
     private double weight;
 
     public SimpleDoubleWeight(double weight) {
@@ -23,6 +28,6 @@ public class SimpleDoubleWeight implements IWeight<SimpleSignal,SimpleChangeWeig
 
     @Override
     public Class getSignalClass() {
-        return SimpleSignal.class;
+        return signalClass;
     }
 }

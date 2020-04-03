@@ -26,9 +26,10 @@ public class SimpleSignal implements ISignal<Double> {
     }
 
     @Override
-    public Class<? extends ISignal> getCurrentClass() {
+    public Class<? extends ISignal<Double>> getCurrentClass() {
         return SimpleSignal.class;
     }
+
 
     @Override
     public Class getParamClass() {

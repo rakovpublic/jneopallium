@@ -1,6 +1,7 @@
 package net.neuron;
 
 
+import net.neuron.impl.Axon;
 import net.signals.ISignal;
 
 import java.io.Serializable;
@@ -11,7 +12,7 @@ import java.util.List;
  * This class contains methods for signal processing and represents neuron(perceptron)
  *
  */
-public interface INeuron extends Serializable {
+public interface INeuron extends Serializable, Comparable {
 
     void setId(Long id);
 
@@ -47,6 +48,8 @@ public interface INeuron extends Serializable {
      * @param axon axon object
      **/
     void setAxon(IAxon axon);
+
+   // void setAxon(Axon axon);
 
     /**
      * Add signal processor to neuron. Define which classes of signals can be processed by neuron.
@@ -121,6 +124,6 @@ public interface INeuron extends Serializable {
      */
     void activate();
 
-    Class<? extends INeuron> getCurrentClass();
+    Class<? extends INeuron> getCurrentNeuronClass();
 
 }

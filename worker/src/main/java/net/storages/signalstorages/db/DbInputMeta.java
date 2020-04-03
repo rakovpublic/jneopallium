@@ -39,6 +39,16 @@ public class DbInputMeta implements IInputMeta {
     }
 
     @Override
+    public void nextStep() {
+
+    }
+
+    @Override
+    public void copyInputsToNextStep() {
+
+    }
+
+    @Override
     public void mergeResults(HashMap signals, String path) {
 
     }

@@ -8,16 +8,19 @@ public class SimpleNeuron extends Neuron {
     private double bias;
     private double signal;
     private double biasWeight;
+    private Class<?extends INeuron> currentNeuronClass;
     public SimpleNeuron() {
         bias=1;
         biasWeight=1;
         signal=0;
+        currentNeuronClass=SimpleNeuron.class;
     }
 
     public SimpleNeuron(Long neuronId, ISignalChain processingChain) {
         super(neuronId, processingChain);
         bias=1;
         biasWeight=1;
+        currentNeuronClass=SimpleNeuron.class;
     }
 
     @Override
@@ -52,7 +55,12 @@ public class SimpleNeuron extends Neuron {
     }
 
     @Override
-    public Class<? extends INeuron> getCurrentClass() {
-        return SimpleNeuron.class;
+    public Class<? extends INeuron> getCurrentNeuronClass() {
+        return currentNeuronClass;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        return 0;
     }
 }

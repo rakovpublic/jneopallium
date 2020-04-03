@@ -1,5 +1,7 @@
 package net.neuron;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import net.neuron.impl.Axon;
 import net.signals.ISignal;
 
 import java.io.Serializable;
@@ -9,6 +11,7 @@ import java.util.List;
 /***
  * Created by Rakovskyi Dmytro on 27.10.2017.
  */
+@JsonDeserialize(as= Axon.class)
 public interface IAxon extends Serializable {
     /**
      * Change all connection on new connection map for all signals

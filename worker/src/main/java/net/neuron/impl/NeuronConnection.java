@@ -2,8 +2,9 @@ package net.neuron.impl;
 
 import net.neuron.INConnection;
 import net.neuron.IWeight;
+import net.signals.ISignal;
 
-public class NeuronConnection implements INConnection {
+public class NeuronConnection<K extends ISignal> implements INConnection<K> {
     private int targetLayerId;
     private int sourceLayerId;
     private Long targetNeuronId;
@@ -11,11 +12,14 @@ public class NeuronConnection implements INConnection {
     private IWeight weight;
     private String description;
 
+    public NeuronConnection() {
+    }
+
     public static NeuronConnection createConnection(int targetLayerId, int sourceLayerId, Long targetNeuronId, Long sourceNeuronId, IWeight weight, String description) {
         return new NeuronConnection(targetLayerId, sourceLayerId, targetNeuronId, sourceNeuronId, weight, description);
     }
 
-    private NeuronConnection(int targetLayerId, int sourceLayerId, Long targetNeuronId, Long sourceNeuronId, IWeight weight, String description) {
+    public NeuronConnection(int targetLayerId, int sourceLayerId, Long targetNeuronId, Long sourceNeuronId, IWeight weight, String description) {
         this.targetLayerId = targetLayerId;
         this.sourceLayerId = sourceLayerId;
         this.targetNeuronId = targetNeuronId;

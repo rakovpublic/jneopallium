@@ -1,14 +1,25 @@
 package net.storages.file;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import net.neuron.INeuron;
+import net.neuron.IResultNeuron;
+import net.neuron.impl.Neuron;
 import net.storages.ILayerMeta;
 import net.storages.filesystem.IFileSystem;
 import net.storages.filesystem.IFileSystemItem;
+import sample.SimpleNeuron;
 import synchronizer.utils.JSONHelper;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 public class FileLayerMeta<S extends IFileSystemItem> implements ILayerMeta {
@@ -31,12 +42,21 @@ public class FileLayerMeta<S extends IFileSystemItem> implements ILayerMeta {
     @Override
     public List<? extends INeuron> getNeurons() {
         String layer = fileSystem.read(file);
-        JSONHelper helper = new JSONHelper();
         List<INeuron> result = new ArrayList<>();
-        for (INeuron ner : getNeurons(helper.extractField(layer, "neurons"))) {
-            result.add(ner);
+        JsonElement jelement = new JsonParser().parse(layer);
+        JsonObject jobject = jelement.getAsJsonObject();
+        JsonArray jarray = jobject.getAsJsonArray("neurons");
+        ObjectMapper mapper= new ObjectMapper();
+        for(JsonElement jel:jarray){
+            String cl=jel.getAsJsonObject().get("currentNeuronClass").getAsString();
+            try {
+                INeuron neuron= (INeuron) mapper.readValue(jel.getAsString(),Class.forName(cl));
+                result.add(neuron);
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+                //TODO:Add logger
+            }
         }
-        neurons = result;
         return result;
     }
 
@@ -57,24 +77,17 @@ public class FileLayerMeta<S extends IFileSystemItem> implements ILayerMeta {
         sb.append(getID() + "\",");
         sb.append("\"layerSize\":\"");
         sb.append(getSize() + "\",");
-        sb.append("\"neurons\":\"");
-        ByteArrayOutputStream bo = new ByteArrayOutputStream();
-        ObjectOutputStream so = null;
+        sb.append("\"neurons\":");
+        ObjectMapper mapper= new ObjectMapper();
+        String serializedObject = null;
         try {
-            so = new ObjectOutputStream(bo);
-            so.writeObject(neuronMetas.toArray());
-            so.flush();
-        } catch (IOException e) {
+            serializedObject = mapper.writeValueAsString(neuronMetas);
+        } catch (JsonProcessingException e) {
             e.printStackTrace();
-            //TODO:add loggin
+            //TODO:Add logger
         }
-        String serializedObject = bo.toString();
         sb.append(serializedObject);
-        sb.append("\"}");
-       /* fileSystem.rewrite(sb.toString(),file);
-        fileSystem.writeUpdateObjects(neuronMetas.toArray(),file);
-        fileSystem.writeUpdateToEnd("\"}",file);*/
-
+        sb.append("}");
     }
 
 
@@ -92,19 +105,4 @@ public class FileLayerMeta<S extends IFileSystemItem> implements ILayerMeta {
         JSONHelper helper = new JSONHelper();
         return Long.parseLong(helper.extractField(layer, "layerSize"));
     }
-
-    private INeuron[] getNeurons(String str) {
-        INeuron[] obj = null;
-        try {
-            byte b[] = str.getBytes();
-            ByteArrayInputStream bi = new ByteArrayInputStream(b);
-            ObjectInputStream si = new ObjectInputStream(bi);
-            obj = (INeuron[]) si.readObject();
-        } catch (Exception ex) {
-            //TODO:Add logger
-        }
-        return obj;
-
-    }
-
 }
