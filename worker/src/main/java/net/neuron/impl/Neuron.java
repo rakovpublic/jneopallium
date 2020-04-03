@@ -72,7 +72,7 @@ public  class Neuron implements INeuron {
     public void processSignals() {
         HashMap<Class<? extends ISignal>, List<ISignal>> signalsMap = new HashMap<>();
         for (ISignal s : signals) {
-            Class<? extends ISignal> cl = s.getCurrentClass();
+            Class<? extends ISignal> cl = s.getCurrentSignalClass();
             if (signalsMap.containsKey(cl)) {
                 signalsMap.get(cl).add(s);
             } else {

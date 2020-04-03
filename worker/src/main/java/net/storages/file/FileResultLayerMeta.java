@@ -1,5 +1,11 @@
 package net.storages.file;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import net.neuron.INeuron;
 import net.neuron.IResultNeuron;
 import net.storages.IResultLayerMeta;
 import net.storages.filesystem.IFileSystem;
@@ -7,6 +13,7 @@ import net.storages.filesystem.IFileSystemItem;
 import synchronizer.utils.JSONHelper;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,25 +26,21 @@ public class FileResultLayerMeta extends FileLayerMeta implements IResultLayerMe
     @Override
     public List<? extends IResultNeuron> getNeurons() {
         String layer = fileSystem.read(file);
-        JSONHelper helper = new JSONHelper();
         List<IResultNeuron> result = new ArrayList<>();
-        for (IResultNeuron ner : getNeurons(helper.extractField(layer, "neurons"))) {
-            result.add(ner);
+        JsonElement jelement = new JsonParser().parse(layer);
+        JsonObject jobject = jelement.getAsJsonObject();
+        JsonArray jarray = jobject.getAsJsonArray("neurons");
+        ObjectMapper mapper= new ObjectMapper();
+        for(JsonElement jel:jarray){
+            String cl=jel.getAsJsonObject().get("currentNeuronClass").getAsString();
+            try {
+                IResultNeuron neuron= (IResultNeuron) mapper.readValue(jel.getAsString(),Class.forName(cl));
+                result.add(neuron);
+            } catch (IOException | ClassNotFoundException e) {
+                e.printStackTrace();
+                //TODO:Add logger
+            }
         }
         return result;
-    }
-
-    private IResultNeuron[] getNeurons(String str) {
-        IResultNeuron[] obj = null;
-        try {
-            byte b[] = str.getBytes();
-            ByteArrayInputStream bi = new ByteArrayInputStream(b);
-            ObjectInputStream si = new ObjectInputStream(bi);
-            obj = (IResultNeuron[]) si.readObject();
-        } catch (Exception ex) {
-            //TODO:Add logger
-        }
-        return obj;
-
     }
 }

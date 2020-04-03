@@ -63,7 +63,7 @@ public class Axon implements IAxon {
     public HashMap<ISignal, List<INConnection>> processSignals(List<ISignal> signal) {
         HashMap<ISignal, List<INConnection>> result = new HashMap<>();
         for (ISignal s : signal) {
-            Class<? extends ISignal> cl = s.getCurrentClass();
+            Class<? extends ISignal> cl = s.getCurrentSignalClass();
             if (connectionMap.containsKey(cl)) {
                 for (INConnection con : connectionMap.get(cl)) {
                     ISignal resSignal = con.getWeight().process(s);

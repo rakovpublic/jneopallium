@@ -122,14 +122,14 @@ public class NeuronLayerCreator {
     }
     public static String getResultLayerLayer(){
         SimpleDoubleWeight fWeight= new SimpleDoubleWeight(1d);
-        SimpleNeuron first= new SimpleNeuron();
+        SimpleResultNeuron first= new SimpleResultNeuron();
         first.setId(0l);
         Axon firstAxon= new Axon();
         first.setBias(1d);
         first.setBiasWeight(1d);
         first.setAxon(firstAxon);
 
-        SimpleNeuron second= new SimpleNeuron();
+        SimpleResultNeuron second= new SimpleResultNeuron();
         Axon secondAxon= new Axon();
         second.setId(1l);
         second.setBias(1d);
@@ -137,7 +137,7 @@ public class NeuronLayerCreator {
         second.setAxon(secondAxon);
 
 
-        SimpleNeuron third= new SimpleNeuron();
+        SimpleResultNeuron third= new SimpleResultNeuron();
         Axon thirdAxon= new Axon();
         third.setId(2l);
         third.setBias(1d);

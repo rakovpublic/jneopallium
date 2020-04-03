@@ -3,22 +3,25 @@ package net.layers.impl;
 import net.layers.IResult;
 import net.layers.IResultLayer;
 import net.neuron.INeuron;
+import net.neuron.IResultNeuron;
+import net.signals.IResultSignal;
 import net.storages.IInputMeta;
 
-import java.util.TreeMap;
+import java.util.TreeSet;
 
 public class ResultLayer<K> extends Layer implements IResultLayer<K> {
-    private TreeMap<INeuron, K> resultMap;
 
-    public ResultLayer(int layerId, TreeMap<INeuron, K> resultMap, IInputMeta meta) {
+    public ResultLayer(int layerId, IInputMeta meta) {
         super(layerId,meta);
-        this.resultMap = resultMap;
+
     }
 
     @Override
     public IResult<K> interpretResult() {
+        TreeSet<INeuron> resultNeurons= new TreeSet<>();
         if (this.isProcessed()) {
-            return new SimpleResultWrapper<K>(resultMap.get(resultMap.lastKey()), resultMap.lastKey().getId());
+            resultNeurons.addAll(this.map.values());
+            return new SimpleResultWrapper<K>(((IResultNeuron)resultNeurons.last()).getFinalResult(),resultNeurons.last().getId());
         }
         return null;
     }

@@ -14,7 +14,7 @@ public interface ISignal<T> extends Serializable {
     /**
      * @return Signal class
      */
-    Class<? extends ISignal<T>> getCurrentClass();
+    Class<? extends ISignal<T>> getCurrentSignalClass();
 
     /**
      * @return value class

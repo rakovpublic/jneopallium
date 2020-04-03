@@ -1,5 +1,8 @@
 package net.layers;
 
+import net.layers.impl.SimpleResultWrapper;
+import net.signals.IResultSignal;
+
 /***
  * Created by Rakovskyi Dmytro .
  *

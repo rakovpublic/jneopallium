@@ -3,6 +3,7 @@ package application;
 import net.layers.ILayer;
 import net.layers.IResultLayer;
 import net.layers.impl.LayerBuilder;
+import net.signals.IResultSignal;
 import net.signals.ISignal;
 import net.storages.IInputMeta;
 import net.storages.ILayerMeta;
@@ -44,15 +45,14 @@ public class LocalApplication implements IApplication {
             String fileSystemConstructorArgs = context.getProperty("configuration.filesystem.constructor.args");
             String fileSystemConstructorArgsType = context.getProperty("configuration.filesystem.constructor.args.types");
             IFileSystem fs = InstantiationUtils.<IFileSystem>getObject(clazz, getObjects(fileSystemConstructorArgs), getTypes(fileSystemConstructorArgsType));
-            String serializers = context.getProperty("configuration.serializers");
-            IInputMeta inputMeta = new FileInputMeta(fs.getItem(inputPath), getSerializers(serializers), fs);
+            IInputMeta inputMeta = new FileInputMeta(fs.getItem(inputPath), fs);
             structBuilder.withInitInputMeta(inputMeta);
             structBuilder.withHiddenInputMeta(inputMeta);
             structBuilder.withLayersMeta(new FileLayersMeta<>(fs.getItem(layerPath), fs));
             StructMeta meta = structBuilder.build();
             boolean isTeacherStudying = Boolean.valueOf(context.getProperty("configuration.isteacherstudying"));
             IStudyingAlgorithm algo = null;
-            Object desiredResult = inputMeta.getDesiredResult();
+            IResultSignal desiredResult = inputMeta.getDesiredResult();
             if (isTeacherStudying) {
                 Object objst = getObject(context.getProperty("configuration.studyingalgo"));
                 if (objst != null) {
@@ -174,18 +174,6 @@ public class LocalApplication implements IApplication {
 
     }
 
-    private HashMap<Class<? extends ISignal>, ISerializer<? extends ISignal, String>> getSerializers(String str) {
-        HashMap<Class<? extends ISignal>, ISerializer<? extends ISignal, String>> obj = null;
-        try {
-            byte b[] = str.getBytes();
-            ByteArrayInputStream bi = new ByteArrayInputStream(b);
-            ObjectInputStream si = new ObjectInputStream(bi);
-            obj = (HashMap<Class<? extends ISignal>, ISerializer<? extends ISignal, String>>) si.readObject();
-        } catch (Exception ex) {
-            //TODO:Add logger
-        }
-        return obj;
-    }
 
 
 }

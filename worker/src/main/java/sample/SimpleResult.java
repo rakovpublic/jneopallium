@@ -1,28 +1,28 @@
 package sample;
 
+import net.signals.IResultSignal;
 import net.signals.ISignal;
 
-public class SimpleChangeWeightSignal implements ISignal<Double> {
-    private final Double value;
-    private int sourceLayerId;
-    private Long sourceNeuronId;
-    private final static String DESCRIPTION = "Simple change weight signal";
+public class SimpleResult implements IResultSignal<Double> {
+    private Class<?extends ISignal>currentSignalClass=SimpleResult.class;
+    @Override
+    public Double getResultObject() {
+        return 1d;
+    }
 
-
-    public SimpleChangeWeightSignal(Double value, int sourceLayerId, Long sourceNeuronId) {
-        this.value = value;
-        this.sourceLayerId = sourceLayerId;
-        this.sourceNeuronId = sourceNeuronId;
+    @Override
+    public Class<Double> getResultObjectClass() {
+        return null;
     }
 
     @Override
     public Double getValue() {
-        return value;
+        return 1d;
     }
 
     @Override
-    public Class<? extends ISignal<Double>> getCurrentSignalClass() {
-        return SimpleChangeWeightSignal.class;
+    public Class<? extends ISignal> getCurrentSignalClass() {
+        return currentSignalClass;
     }
 
     @Override
@@ -37,7 +37,7 @@ public class SimpleChangeWeightSignal implements ISignal<Double> {
 
     @Override
     public String getDescription() {
-        return DESCRIPTION;
+        return null;
     }
 
     @Override
@@ -47,27 +47,27 @@ public class SimpleChangeWeightSignal implements ISignal<Double> {
 
     @Override
     public ISignal<Double> prepareSignalToNextStep() {
-        return  new SimpleChangeWeightSignal( value/2,  sourceLayerId, sourceNeuronId) ;
+        return null;
     }
 
     @Override
     public int getSourceLayerId() {
-        return sourceLayerId;
+        return 0;
     }
 
     @Override
     public void setSourceLayerId(int layerId) {
-        sourceLayerId = layerId;
+
     }
 
     @Override
     public Long getSourceNeuronId() {
-        return sourceNeuronId;
+        return null;
     }
 
     @Override
     public void setSourceNeuronId(Long neuronId) {
-        sourceNeuronId = neuronId;
+
     }
 
     @Override

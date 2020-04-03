@@ -20,7 +20,7 @@ import java.util.Objects;
  * Created by Rakovskyi Dmytro on 08.06.2018.
  */
 public class Layer implements ILayer {
-    private HashMap<Long, INeuron> map;
+    protected HashMap<Long, INeuron> map;
     private HashMap<Long, List<ISignal>> input;
     private HashMap<Class<? extends INeuron>, INeuronSerializer> neuronSerializerHashMap;
     private Boolean isProcessed;

@@ -1,5 +1,6 @@
 package net.storages.signalstorages.db;
 
+import net.signals.IResultSignal;
 import net.signals.ISignal;
 import net.storages.IInputMeta;
 import net.storages.ISerializer;
@@ -29,9 +30,10 @@ public class DbInputMeta implements IInputMeta {
     }
 
     @Override
-    public Object getDesiredResult() {
+    public IResultSignal getDesiredResult() {
         return null;
     }
+
 
     @Override
     public void copySignalToNextStep(int layerId, Long neuronId, ISignal signal) {

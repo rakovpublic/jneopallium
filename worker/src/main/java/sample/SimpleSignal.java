@@ -7,6 +7,7 @@ public class SimpleSignal implements ISignal<Double> {
     private int timeAlive;
     private int layerId;
     private Long neuronId;
+    private Class<?extends ISignal>currentSignalClass=SimpleSignal.class;
 
     public SimpleSignal(Double value, int timeAlive, int layerId, Long neuronId) {
         this.value = value;
@@ -26,8 +27,8 @@ public class SimpleSignal implements ISignal<Double> {
     }
 
     @Override
-    public Class<? extends ISignal<Double>> getCurrentClass() {
-        return SimpleSignal.class;
+    public Class<? extends ISignal> getCurrentSignalClass() {
+        return currentSignalClass;
     }
 
 

@@ -1,8 +1,16 @@
 package net.storages.signalstorages.file;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import exceptions.ClassFromJSONIsNotExistsException;
 import exceptions.InputNotExistsException;
 import exceptions.SerializerForClassIsNotRegisteredException;
+import net.neuron.INeuron;
+import net.signals.IResultSignal;
 import net.signals.ISignal;
 import net.storages.IInputMeta;
 import net.storages.ISerializer;
@@ -12,6 +20,7 @@ import synchronizer.utils.DeserializationHelperResult;
 import synchronizer.utils.JSONHelper;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,21 +31,16 @@ public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<Stri
 
     //TODO: add step id to input path
     private S file;
-    private HashMap<Class<? extends ISignal>, ISerializer<? extends ISignal, String>> map;
     private IFileSystem<S> fileSystem;
     private Long stepID;
 
-    public FileInputMeta(S file, HashMap<Class<? extends ISignal>, ISerializer<? extends ISignal, String>> map, IFileSystem<S> fs) {
+    public FileInputMeta(S file, IFileSystem<S> fs) {
         this.file = file;
-        this.map = map;
         this.fileSystem = fs;
         this.stepID=0l;
     }
 
-    @Override
-    public <S extends ISignal> void registerSerializer(ISerializer<S, String> serializer, Class<S> clazz) {
-        map.put(clazz, serializer);
-    }
+
 
     @Override
     public HashMap<Long, List<ISignal>> readInputs(int layerId) {
@@ -51,35 +55,30 @@ public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<Stri
             for (IFileSystemItem fsiNeuron : fileSystem.listFiles(ff)) {
                 JSONHelper jsonHelper = new JSONHelper();
                 String json = fileSystem.read((S) fsiNeuron);
-                int startIndex = json.indexOf('[');
-                DeserializationHelperResult res = jsonHelper.getNextObject(json, startIndex);
-                while (res != null) {
-                    String className = res.getClassName();
-                    String jsonObject = res.getObject();
-                    Long neuronID = Long.parseLong(jsonHelper.extractField(jsonObject, "neuronId"));
-                    startIndex = res.getIndex();
+                JsonElement jelement = new JsonParser().parse(json);
+                JsonObject jobject = jelement.getAsJsonObject();
+                JsonArray jarray = jobject.getAsJsonArray("inputs");
+                ObjectMapper mapper= new ObjectMapper();
+                for(JsonElement jel:jarray){
+                    Long neuronID= Long.parseLong(jel.getAsJsonObject().get("neuronId").getAsString());
+                    JsonArray jsig = jel.getAsJsonObject().getAsJsonArray("signal");
+                    for(JsonElement jek:jsig){
+                    String cl=jek.getAsJsonObject().get("currentSignalClass").getAsString();
                     try {
-                        Class cl = Class.forName(className);
-                        if (map.containsKey(cl)) {
-                            ISerializer ser = map.get(cl);
-                            if (result.containsKey(neuronID)) {
-                                result.get(neuronID).add((ISignal) ser.deserialize(json));
-                            } else {
-                                List<ISignal> l = new ArrayList<>();
-                                l.add((ISignal) ser.deserialize(json));
-                                result.put(neuronID, l);
-                            }
-                            res = jsonHelper.getNextObject(json, startIndex);
+                        ISignal signal= (ISignal) mapper.readValue(jek.getAsString(),Class.forName(cl));
+                        if (result.containsKey(neuronID)) {
+                            result.get(neuronID).add(signal);
                         } else {
-                            throw new SerializerForClassIsNotRegisteredException("Serializer for class" + cl + "is not registered");
+                            List<ISignal> l = new ArrayList<>();
+                            l.add(signal);
+                            result.put(neuronID, l);
                         }
-
-                    } catch (ClassNotFoundException e) {
-                        throw new ClassFromJSONIsNotExistsException("Class " + className + " from this json " + jsonObject + " is not exists");
+                    } catch (IOException | ClassNotFoundException e) {
+                        e.printStackTrace();
+                        //TODO:Add logger
+                    }
                     }
                 }
-
-
             }
         }
         //TODO:add input lock
@@ -141,20 +140,20 @@ public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<Stri
     }
 
     @Override
-    public Object getDesiredResult() {
-        Object obj = null;
+    public IResultSignal getDesiredResult() {
+        IResultSignal obj = null;
         S ff = fileSystem.getItem(file.getPath() + fileSystem.getFolderSeparator() + "result");
         if (ff.exists()) {
             String str = fileSystem.read(ff);
             if (str == null) {
                 return null;
             }
-
+            ObjectMapper mapper= new ObjectMapper();
             try {
-                byte b[] = str.getBytes();
-                ByteArrayInputStream bi = new ByteArrayInputStream(b);
-                ObjectInputStream si = new ObjectInputStream(bi);
-                obj = si.readObject();
+                JsonElement jelement = new JsonParser().parse(str);
+                JsonObject jobject = jelement.getAsJsonObject();
+                String cl =jobject.getAsJsonPrimitive("currentSignalClass").getAsString();
+                obj = (IResultSignal) mapper.readValue(jelement.getAsString(),Class.forName(cl));;
             } catch (Exception ex) {
                 ex.printStackTrace();
                 //TODO:Add logger
@@ -185,6 +184,7 @@ public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<Stri
 
     private void save(HashMap<Long, List<ISignal>> signals, S path) {
         StringBuilder resultJson = new StringBuilder();
+        ObjectMapper mapper= new ObjectMapper();
         resultJson.append("{\"inputs\":[");
         for (Long nrId : signals.keySet()) {
             StringBuilder signal = new StringBuilder();
@@ -192,17 +192,23 @@ public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<Stri
             signal.append(nrId);
             signal.append("\",\"signal\":[");
             for (ISignal s : signals.get(nrId)) {
-                ISerializer serializer = map.get(s.getCurrentClass());
-                String serializedSignal=(String) serializer.serialize(s);
-                if(serializedSignal!=null){
-                    signal.append(serializedSignal);
-                    signal.append(",");
+                String serializedSignal= null;
+                try {
+                    serializedSignal = mapper.writeValueAsString(s);
+                    if(serializedSignal!=null){
+                        signal.append(serializedSignal);
+                        signal.append(",");
+                    }
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                    //TODO: add logging
                 }
+
             }
             if(signals.get(nrId).size()>0){
                 signal.deleteCharAt(signal.length() - 1);
             }
-            signal.append("]}");
+            signal.append("]},");
         }
         resultJson.deleteCharAt(resultJson.length() - 1);
         resultJson.append("]}");
