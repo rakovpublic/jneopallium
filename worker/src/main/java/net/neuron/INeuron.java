@@ -6,6 +6,7 @@ import net.signals.ISignal;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 /***
  * Created by Rakovskyi Dmytro on 27.10.2017.
@@ -13,6 +14,11 @@ import java.util.List;
  *
  */
 public interface INeuron extends Serializable, Comparable {
+
+    ISignalChain getSignalChain();
+
+    Map<Class<? extends ISignal>, ISignalProcessor> getProcessorMap();
+    Map<Class<? extends ISignal>, ISignalMerger> getMergerMap();
 
     void setId(Long id);
 

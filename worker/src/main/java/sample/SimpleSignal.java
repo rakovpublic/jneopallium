@@ -8,6 +8,11 @@ public class SimpleSignal implements ISignal<Double> {
     private int layerId;
     private Long neuronId;
     private Class<?extends ISignal<Double>>currentSignalClass=SimpleSignal.class;
+    private String description ="Simple signal";
+    private Class paramClass=Double.class;
+
+    public SimpleSignal() {
+    }
 
     public SimpleSignal(Double value, int timeAlive, int layerId, Long neuronId) {
         this.value = value;
@@ -34,7 +39,7 @@ public class SimpleSignal implements ISignal<Double> {
 
     @Override
     public Class getParamClass() {
-        return Double.class;
+        return paramClass;
     }
 
     @Override
@@ -44,7 +49,7 @@ public class SimpleSignal implements ISignal<Double> {
 
     @Override
     public String getDescription() {
-        return "Simple signal";
+        return description;
     }
 
     @Override

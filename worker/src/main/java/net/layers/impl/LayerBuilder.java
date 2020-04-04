@@ -36,8 +36,10 @@ public class LayerBuilder {
     }
 
     public IResultLayer buildResultLayer() {
+        IResultLayer layer = new ResultLayer(layerMeta.getID(), meta);
+        layer.registerAll(layerMeta.getNeurons());
         //TODO:add implementation
-        return null;
+        return layer;
     }
 
 }

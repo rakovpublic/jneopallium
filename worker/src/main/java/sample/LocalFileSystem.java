@@ -22,13 +22,13 @@ public class LocalFileSystem  implements IFileSystem<LocalFile> {
         if (path.exists()&&!path.isDirectory()){
             BufferedReader reader = null;
             String currentLine=null;
+            StringBuilder builder = new StringBuilder();
             try {
                 reader = new BufferedReader(new FileReader(path.getPath()));
-            StringBuilder builder = new StringBuilder();
+
             currentLine = reader.readLine();
             while (currentLine != null) {
                 builder.append(currentLine);
-                builder.append("n");
                 currentLine = reader.readLine();
             }
 
@@ -45,7 +45,7 @@ public class LocalFileSystem  implements IFileSystem<LocalFile> {
                     e.printStackTrace();
                 }
             }
-            return currentLine;
+            return builder.toString();
 
 
         }
@@ -53,11 +53,25 @@ public class LocalFileSystem  implements IFileSystem<LocalFile> {
     }
 
     @Override
+    public boolean createFolder(LocalFile path) {
+        File f=new File(path.getPath());
+        if(!f.exists()){
+           return f.mkdir();
+        }
+        return true;
+    }
+
+    @Override
     public boolean writeCreate(String content, LocalFile path) {
         List<String> strings= new ArrayList<>();
         strings.add(content);
         try {
-            Files.write(new File(path.getPath()).toPath(), Collections.singleton(content));
+            File f=new File(path.getPath());
+            if(!f.exists()){
+                f.createNewFile();
+            }
+
+            Files.write(f.toPath(), Collections.singleton(content));
         } catch (IOException e) {
             e.printStackTrace();
             return false;

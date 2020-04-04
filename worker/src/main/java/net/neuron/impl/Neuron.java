@@ -1,5 +1,7 @@
 package net.neuron.impl;
 
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 import exceptions.CannotFindSignalMergerException;
 import exceptions.CannotFindSignalProcessorException;
 import net.neuron.*;
@@ -8,17 +10,20 @@ import net.signals.ISignal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public  class Neuron implements INeuron {
     private List<ISignal> signals;
     private Boolean isProcessed;
     private IAxon axon;
-    private HashMap<Class<? extends ISignal>, ISignalProcessor> processorHashMap;
-    private HashMap<Class<? extends ISignal>, ISignalMerger> mergerHashMap;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private HashMap<Class<? extends ISignal>, ISignalProcessor> processorMap;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private HashMap<Class<? extends ISignal>, ISignalMerger> mergerMap;
     private Long neuronId;
     protected List<ISignal> result;
-    private ISignalChain processingChain;
+    protected  ISignalChain signalChain;
     private List<IRule> rules;
     private Class<?extends INeuron> currentNeuronClass;
 
@@ -27,8 +32,8 @@ public  class Neuron implements INeuron {
         isProcessed = false;
         signals = new ArrayList<>();
         result = new ArrayList<>();
-        processorHashMap = new HashMap<>();
-        mergerHashMap = new HashMap<>();
+        processorMap = new HashMap<>();
+        mergerMap = new HashMap<>();
         currentNeuronClass=Neuron.class;
     }
 
@@ -38,9 +43,24 @@ public  class Neuron implements INeuron {
         isProcessed = false;
         signals = new ArrayList<>();
         result = new ArrayList<>();
-        processorHashMap = new HashMap<>();
-        mergerHashMap = new HashMap<>();
-        this.processingChain = processingChain;
+        processorMap = new HashMap<>();
+        mergerMap = new HashMap<>();
+        this.signalChain = processingChain;
+    }
+
+    @Override
+    public ISignalChain getSignalChain() {
+        return signalChain;
+    }
+
+    @Override
+    public Map<Class<? extends ISignal>, ISignalProcessor> getProcessorMap() {
+        return processorMap;
+    }
+
+    @Override
+    public Map<Class<? extends ISignal>, ISignalMerger> getMergerMap() {
+        return mergerMap;
     }
 
     @Override
@@ -81,11 +101,11 @@ public  class Neuron implements INeuron {
                 signalsMap.put(cl, ll);
             }
         }
-        for (Class<? extends ISignal> cl : processingChain.getProcessingChain()) {
+        for (Class<? extends ISignal> cl : this.getSignalChain().getProcessingChain()) {
             for (Class<? extends ISignal> cls : signalsMap.keySet()) {
                 if (cl.equals(cls)) {
-                    ISignalMerger signalMerger = mergerHashMap.get(cl);
-                    ISignalProcessor signalProcessor = processorHashMap.get(cl);
+                    ISignalMerger signalMerger = this.getMergerMap().get(cl);
+                    ISignalProcessor signalProcessor = this.getProcessorMap().get(cl);
                     if (signalProcessor == null) {
                         throw new CannotFindSignalProcessorException("Cannot find signal processor for signal class" + cl.getCanonicalName() + " in neuron id" + this.neuronId);
                     }
@@ -99,14 +119,14 @@ public  class Neuron implements INeuron {
                     } else {
                         throw new CannotFindSignalMergerException("Cannot find signal merger for signal class" + cl.getCanonicalName() + " in neuron id" + this.neuronId);
                     }
-                } else if (!processingChain.getProcessingChain().contains(cls)) {
+                } else if (!this.getSignalChain().getProcessingChain().contains(cls)) {
                     ISignal s = signalsMap.get(cls).get(0);
                     Class<?> clst = cls;
                     boolean done = true;
                     while (getSupperClass(clst) != ISignal.class && getSupperClass(clst) != Object.class && s.canUseProcessorForParent() && done) {
                         if (cl.equals(clst)) {
-                            ISignalMerger signalMerger = mergerHashMap.get(cl);
-                            ISignalProcessor signalProcessor = processorHashMap.get(cl);
+                            ISignalMerger signalMerger = this.getMergerMap().get(cl);
+                            ISignalProcessor signalProcessor = this.getProcessorMap().get(cl);
                             if (signalProcessor == null) {
                                 throw new CannotFindSignalProcessorException("Cannot find signal processor for signal class" + cl.getCanonicalName() + " in neuron id" + this.neuronId);
                             }
@@ -139,23 +159,23 @@ public  class Neuron implements INeuron {
     @Override
     public <S extends ISignal> void addSignalProcessor(Class<S> clazz, ISignalProcessor<S> processor) {
 
-        processorHashMap.put(clazz, processor);
+        processorMap.put(clazz, processor);
     }
 
     @Override
     public <S extends ISignal> void addSignalMerger(Class<S> clazz, ISignalMerger<S> merger) {
-        mergerHashMap.put(clazz, merger);
+        mergerMap.put(clazz, merger);
     }
 
     @Override
     public <S extends ISignal> void removeSignalProcessor(Class<S> clazz) {
-        processorHashMap.remove(clazz);
+        processorMap.remove(clazz);
         this.removeSignalMerger(clazz);
     }
 
     @Override
     public <S extends ISignal> void removeSignalMerger(Class<S> clazz) {
-        mergerHashMap.remove(clazz);
+        mergerMap.remove(clazz);
     }
 
 
@@ -188,7 +208,7 @@ public  class Neuron implements INeuron {
 
     @Override
     public void setProcessingChain(ISignalChain chain) {
-        this.processingChain = chain;
+        this.signalChain = chain;
     }
 
     @Override

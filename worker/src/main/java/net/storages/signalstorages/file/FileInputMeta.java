@@ -45,7 +45,7 @@ public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<Stri
     @Override
     public HashMap<Long, List<ISignal>> readInputs(int layerId) {
 
-        S ff = fileSystem.getItem(file.getPath() + fileSystem.getFolderSeparator() + layerId+fileSystem.getFolderSeparator()+stepID);
+        S ff = fileSystem.getItem(file.getPath() + fileSystem.getFolderSeparator() + stepID+fileSystem.getFolderSeparator()+layerId);
         //new File(file.getAbsolutePath() + File.pathSeparator + layerId);
         if (!ff.exists()) {
             throw new InputNotExistsException("File " + ff.getPath() + " with input data for layer id " + layerId + " is not exists");
@@ -65,7 +65,7 @@ public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<Stri
                     for(JsonElement jek:jsig){
                     String cl=jek.getAsJsonObject().get("currentSignalClass").getAsString();
                     try {
-                        ISignal signal= (ISignal) mapper.readValue(jek.getAsString(),Class.forName(cl));
+                        ISignal signal= (ISignal) mapper.readValue(jek.getAsJsonObject().toString(),Class.forName(cl));
                         if (result.containsKey(neuronID)) {
                             result.get(neuronID).add(signal);
                         } else {
@@ -119,7 +119,11 @@ public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<Stri
     }
 
     private void saveResultToStep(HashMap<Long, List<ISignal>> signals, int layerId, Long stepID){
-        S dir = fileSystem.getItem(file.getPath() + fileSystem.getFolderSeparator() + layerId+ fileSystem.getFolderSeparator()+stepID+ fileSystem.getFolderSeparator() +  1);
+        S dir = fileSystem.getItem(file.getPath() + fileSystem.getFolderSeparator() + stepID+ fileSystem.getFolderSeparator()+layerId+ fileSystem.getFolderSeparator() +  1);
+        S layerDir=fileSystem.getItem(file.getPath() + fileSystem.getFolderSeparator() + stepID+ fileSystem.getFolderSeparator()+layerId);
+        if(!layerDir.exists()){
+            fileSystem.createFolder(layerDir);
+        }
         if (dir.exists()) {
             mergeResults(signals, dir.getPath());
         } else {
@@ -173,13 +177,16 @@ public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<Stri
 
     @Override
     public void nextStep() {
+
         stepID+=1;
+        S ff = fileSystem.getItem(file.getPath() + fileSystem.getFolderSeparator() + stepID);
+        fileSystem.createFolder(ff);
     }
 
     @Override
     public void copyInputsToNextStep() {
-        fileSystem.copy(fileSystem.getItem(file.getPath() + fileSystem.getFolderSeparator() + 0+fileSystem.getFolderSeparator()+stepID),
-                fileSystem.getItem(file.getPath() + fileSystem.getFolderSeparator() + 0+fileSystem.getFolderSeparator()+stepID+1));
+        fileSystem.copy(fileSystem.getItem(file.getPath() + fileSystem.getFolderSeparator() + stepID+fileSystem.getFolderSeparator()+0),
+                fileSystem.getItem(file.getPath() + fileSystem.getFolderSeparator() +stepID+1+ fileSystem.getFolderSeparator()+0));
     }
 
     private void save(HashMap<Long, List<ISignal>> signals, S path) {

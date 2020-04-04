@@ -9,7 +9,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.neuron.INeuron;
 import net.neuron.IResultNeuron;
+import net.neuron.ISignalMerger;
+import net.neuron.ISignalProcessor;
 import net.neuron.impl.Neuron;
+import net.signals.ISignal;
 import net.storages.ILayerMeta;
 import net.storages.filesystem.IFileSystem;
 import net.storages.filesystem.IFileSystemItem;
@@ -17,10 +20,7 @@ import sample.SimpleNeuron;
 import synchronizer.utils.JSONHelper;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class FileLayerMeta<S extends IFileSystemItem> implements ILayerMeta {
     protected S file;
@@ -36,7 +36,7 @@ public class FileLayerMeta<S extends IFileSystemItem> implements ILayerMeta {
     public int getID() {
         String layer = fileSystem.read(file);
         JSONHelper helper = new JSONHelper();
-        return Integer.parseInt(helper.extractField(layer, "layerID"));
+        return Integer.parseInt(helper.extractField(layer, "layerId"));
     }
 
     @Override
@@ -48,9 +48,18 @@ public class FileLayerMeta<S extends IFileSystemItem> implements ILayerMeta {
         JsonArray jarray = jobject.getAsJsonArray("neurons");
         ObjectMapper mapper= new ObjectMapper();
         for(JsonElement jel:jarray){
-            String cl=jel.getAsJsonObject().get("currentNeuronClass").getAsString();
+            String cl=jel.getAsJsonObject().getAsJsonPrimitive("currentNeuronClass").getAsString();
             try {
-                INeuron neuron= (INeuron) mapper.readValue(jel.getAsString(),Class.forName(cl));
+                INeuron neuron= (INeuron) mapper.readValue(jel.getAsJsonObject().toString(),Class.forName(cl));
+                HashMap<Class<?>, ISignalProcessor> p= new HashMap<>();
+                for(Map.Entry<String,JsonElement> e: jel.getAsJsonObject().getAsJsonObject("processorMap").entrySet()){
+                    String cc= e.getValue().getAsJsonObject().getAsJsonPrimitive("signalProcessorClass").getAsString();
+                    neuron.addSignalProcessor((Class<? extends ISignal>) Class.forName(e.getKey()),(ISignalProcessor) mapper.readValue(e.getValue().getAsJsonObject().toString(),Class.forName(cc)));
+                }
+                for(Map.Entry<String,JsonElement> e: jel.getAsJsonObject().getAsJsonObject("mergerMap").entrySet()){
+                    String cc= e.getValue().getAsJsonObject().getAsJsonPrimitive("signalMergerClass").getAsString();
+                    neuron.addSignalMerger((Class<? extends ISignal>) Class.forName(e.getKey()),(ISignalMerger) mapper.readValue(e.getValue().getAsJsonObject().toString(),Class.forName(cc)));
+                }
                 result.add(neuron);
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();

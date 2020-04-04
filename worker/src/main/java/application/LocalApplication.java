@@ -73,7 +73,8 @@ public class LocalApplication implements IApplication {
                 }
             } else {
                 //TODO:add normal output
-                System.out.println(process(meta).interpretResult().getResult().toString());
+                IResultLayer lr=process(meta);
+                System.out.println(lr.interpretResult().getResult().toString());
             }
 
 
@@ -118,11 +119,11 @@ public class LocalApplication implements IApplication {
 
     }
 
-    private Class<?>[] getTypes(String str) {
+    private List<Class<?>> getTypes(String str) {
 
         List<Class<?>> reuslt = new ArrayList<>();
         if(str.equals("empty")){
-            return   (Class<?>[]) reuslt.toArray() ;
+            return    reuslt ;
         }
         try {
             if (str.contains(":")) {
@@ -136,7 +137,7 @@ public class LocalApplication implements IApplication {
         } catch (ClassNotFoundException e) {
             //TODO:Add logger
         }
-        return (Class<?>[]) reuslt.toArray();
+        return  reuslt;
 
     }
 

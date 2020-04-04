@@ -1,6 +1,9 @@
 package net.neuron;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import net.neuron.impl.JSONMergerConverter;
 import net.signals.ISignal;
+import sample.SimpleSignalChain;
 
 import java.io.Serializable;
 import java.util.List;
@@ -20,4 +23,6 @@ public interface ISignalMerger<S extends ISignal> extends Serializable {
      * @return description
      */
     String getDescription();
+
+    Class<? extends ISignalMerger> getSignalMergerClass();
 }

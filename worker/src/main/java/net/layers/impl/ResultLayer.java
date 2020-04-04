@@ -19,9 +19,16 @@ public class ResultLayer<K> extends Layer implements IResultLayer<K> {
     @Override
     public IResult<K> interpretResult() {
         TreeSet<INeuron> resultNeurons= new TreeSet<>();
+        while (!this.isProcessed()){
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         if (this.isProcessed()) {
             resultNeurons.addAll(this.map.values());
-            return new SimpleResultWrapper<K>(((IResultNeuron)resultNeurons.last()).getFinalResult(),resultNeurons.last().getId());
+            return new SimpleResultWrapper(((IResultNeuron)resultNeurons.last()).getFinalResult(),resultNeurons.last().getId());
         }
         return null;
     }

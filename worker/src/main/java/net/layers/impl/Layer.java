@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /***
  * Created by Rakovskyi Dmytro on 08.06.2018.
@@ -26,7 +27,7 @@ public class Layer implements ILayer {
     private Boolean isProcessed;
     private long size;
     private int layerId;
-    private List<INeuron> notProcessed;
+    private LinkedBlockingQueue<INeuron> notProcessed;
     private List<IRule> rules;
     private IInputMeta inputMeta;
 
@@ -35,7 +36,7 @@ public class Layer implements ILayer {
         neuronSerializerHashMap = new HashMap<>();
         rules = new ArrayList<>();
         isProcessed = false;
-        notProcessed = new ArrayList<INeuron>();
+        notProcessed = new LinkedBlockingQueue<INeuron>();
         this.layerId = layerId;
         inputMeta = meta;
         map = new HashMap<Long, INeuron>();

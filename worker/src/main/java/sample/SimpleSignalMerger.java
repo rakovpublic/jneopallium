@@ -5,6 +5,12 @@ import net.neuron.ISignalMerger;
 import java.util.List;
 
 public class SimpleSignalMerger implements ISignalMerger<SimpleSignal> {
+    private Class<? extends SimpleSignalMerger> signalMergerClass = SimpleSignalMerger.class;
+    private String description="test";
+
+    public SimpleSignalMerger() {
+    }
+
     @Override
     public SimpleSignal mergeSignals(List<SimpleSignal> signals) {
         double resultSignal=0;
@@ -16,6 +22,11 @@ public class SimpleSignalMerger implements ISignalMerger<SimpleSignal> {
 
     @Override
     public String getDescription() {
-        return null;
+        return description;
+    }
+
+    @Override
+    public Class<? extends ISignalMerger> getSignalMergerClass() {
+        return signalMergerClass;
     }
 }

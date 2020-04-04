@@ -45,12 +45,6 @@ public class NeuronRunnerService {
             Thread th = new Thread(ne);
             th.start();
         }
-        try {
-            neuronQueue.wait();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            //TODO:add logger
-        }
     }
 
     Queue<INeuron> getNeuronQueue() {

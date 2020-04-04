@@ -1,8 +1,9 @@
 package net.layers.impl;
 
 import net.layers.IResult;
+import net.signals.IResultSignal;
 
-public class SimpleResultWrapper<K> implements IResult<K> {
+public class SimpleResultWrapper<K extends IResultSignal> implements IResult<K> {
     private K result;
     private Long neuronId;
 

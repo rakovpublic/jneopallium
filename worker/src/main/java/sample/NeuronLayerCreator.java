@@ -60,6 +60,15 @@ public class NeuronLayerCreator {
         second.addSignalMerger(SimpleSignal.class, new SimpleSignalMerger());
         third.addSignalMerger(SimpleSignal.class, new SimpleSignalMerger());
 
+        first.addSignalProcessor(SimpleSignal.class, new SimpleSignalProcessor());
+        second.addSignalProcessor(SimpleSignal.class, new SimpleSignalProcessor());
+        third.addSignalProcessor(SimpleSignal.class, new SimpleSignalProcessor());
+
+
+        first.setProcessingChain(new SimpleSignalChain());
+        second.setProcessingChain(new SimpleSignalChain());
+        third.setProcessingChain(new SimpleSignalChain());
+
         SimpleNeuron[] result={first,second,third};
         try {
             return mapper.writeValueAsString(Arrays.asList(result));
@@ -114,6 +123,14 @@ public class NeuronLayerCreator {
         first.addSignalMerger(SimpleSignal.class, new SimpleSignalMerger());
         second.addSignalMerger(SimpleSignal.class, new SimpleSignalMerger());
         third.addSignalMerger(SimpleSignal.class, new SimpleSignalMerger());
+        first.addSignalProcessor(SimpleSignal.class, new SimpleSignalProcessor());
+
+        second.addSignalProcessor(SimpleSignal.class, new SimpleSignalProcessor());
+        third.addSignalProcessor(SimpleSignal.class, new SimpleSignalProcessor());
+
+        first.setProcessingChain(new SimpleSignalChain());
+        second.setProcessingChain(new SimpleSignalChain());
+        third.setProcessingChain(new SimpleSignalChain());
 
         SimpleNeuron[] result={first,second,third};
         try {
@@ -151,6 +168,14 @@ public class NeuronLayerCreator {
         first.addSignalMerger(SimpleSignal.class, new SimpleSignalMerger());
         second.addSignalMerger(SimpleSignal.class, new SimpleSignalMerger());
         third.addSignalMerger(SimpleSignal.class, new SimpleSignalMerger());
+
+        first.addSignalProcessor(SimpleSignal.class, new SimpleSignalProcessor());
+        second.addSignalProcessor(SimpleSignal.class, new SimpleSignalProcessor());
+        third.addSignalProcessor(SimpleSignal.class, new SimpleSignalProcessor());
+
+        first.setProcessingChain(new SimpleSignalChain());
+        second.setProcessingChain(new SimpleSignalChain());
+        third.setProcessingChain(new SimpleSignalChain());
 
         SimpleNeuron[] result={first,second,third};
         try {

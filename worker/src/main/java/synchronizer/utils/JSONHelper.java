@@ -1,5 +1,10 @@
 package synchronizer.utils;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 //TODO: refactor this class to interface and implementations for different serialization formats
 public class JSONHelper implements IDeserializationHelper {
     public DeserializationHelperResult getNextObject(String json, Integer index) {
@@ -29,13 +34,16 @@ public class JSONHelper implements IDeserializationHelper {
 
     public String extractField(String json, String fieldName) {
 
-        int index = json.indexOf(fieldName);
+        /*int index = json.indexOf(fieldName);
         index = json.indexOf(':', index);
         int endIndex = json.indexOf('"', json.indexOf('"', index) + 1);
         if (index + 2 < endIndex - 1) {
             return json.substring(index + 2, endIndex);
         }
-        return "";
+        return "";*/
+        JsonElement jelement = new JsonParser().parse(json);
+        JsonObject jobject = jelement.getAsJsonObject();
+        return jobject.getAsJsonPrimitive(fieldName).getAsString();
 
     }
 
