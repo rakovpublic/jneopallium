@@ -41,7 +41,7 @@ public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<Stri
     }
 
 
-
+//TODO: test cleaning
     @Override
     public HashMap<Long, List<ISignal>> readInputs(int layerId) {
 
