@@ -1,13 +1,17 @@
 Phase #1  
 Design-100%  
-Implementation - 95%  
-Test- 30%  
+Implementation - 99%  
+Test- 80%  
 Documentation -60%  
+DONE  
+
 Phase #2  
 Design-40%  
 Implementation - 5%  
 Test- 0%  
 Documentation -10%  
+IN PROGRESS  
+
 Phase #3  
 Design-0%  
 Implementation - 0%  
