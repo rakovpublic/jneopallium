@@ -9,10 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class DbInputMeta implements IInputMeta {
-    @Override
-    public void registerSerializer(ISerializer serializer, Class clazz) {
 
-    }
 
     @Override
     public HashMap<Long, List<ISignal>> readInputs(int layerId) {

@@ -4,6 +4,10 @@ import net.signals.IResultSignal;
 import net.signals.ISignal;
 
 public class SimpleResult implements IResultSignal<Double> {
+    public SimpleResult() {
+
+    }
+
     private Class<?extends ISignal>currentSignalClass=SimpleResult.class;
     @Override
     public Double getResultObject() {

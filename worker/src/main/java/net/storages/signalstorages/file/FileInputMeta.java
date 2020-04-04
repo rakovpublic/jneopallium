@@ -209,6 +209,7 @@ public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<Stri
                 signal.deleteCharAt(signal.length() - 1);
             }
             signal.append("]},");
+            resultJson.append(signal.toString());
         }
         resultJson.deleteCharAt(resultJson.length() - 1);
         resultJson.append("]}");

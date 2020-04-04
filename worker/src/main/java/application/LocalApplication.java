@@ -52,8 +52,9 @@ public class LocalApplication implements IApplication {
             StructMeta meta = structBuilder.build();
             boolean isTeacherStudying = Boolean.valueOf(context.getProperty("configuration.isteacherstudying"));
             IStudyingAlgorithm algo = null;
-            IResultSignal desiredResult = inputMeta.getDesiredResult();
+
             if (isTeacherStudying) {
+                IResultSignal desiredResult = inputMeta.getDesiredResult();
                 Object objst = getObject(context.getProperty("configuration.studyingalgo"));
                 if (objst != null) {
                     algo = (IStudyingAlgorithm) objst;

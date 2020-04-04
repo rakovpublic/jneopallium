@@ -4,9 +4,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.neuron.impl.Axon;
 import net.neuron.impl.NeuronConnection;
+import net.signals.ISignal;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 public class NeuronLayerCreator {
     private static ObjectMapper mapper= new ObjectMapper();
@@ -155,6 +159,63 @@ public class NeuronLayerCreator {
             e.printStackTrace();
         }
         return "";
+    }
+
+    public static String createInput(){
+        HashMap<Long, List<ISignal>> signals= new HashMap<>();
+        List<ISignal> sListF= new LinkedList<>();
+        sListF.add(new SimpleSignal(1d,1,0,0L));
+        sListF.add(new SimpleSignal(1d,1,0,0L));
+        List<ISignal> sListS= new LinkedList<>();
+        sListS.add(new SimpleSignal(1d,1,0,1L));
+        sListS.add(new SimpleSignal(1d,1,0,1L));
+        List<ISignal> sListT= new LinkedList<>();
+        sListT.add(new SimpleSignal(1d,1,0,2L));
+        sListT.add(new SimpleSignal(1d,1,0,2L));
+        signals.put(0l,sListF);
+        signals.put(1l,sListS);
+        signals.put(2l,sListT);
+        StringBuilder resultJson = new StringBuilder();
+        ObjectMapper mapper= new ObjectMapper();
+        resultJson.append("{\"inputs\":[");
+        for (Long nrId : signals.keySet()) {
+            StringBuilder signal = new StringBuilder();
+            signal.append("{\"neuronId\":\"");
+            signal.append(nrId);
+            signal.append("\",\"signal\":[");
+            for (ISignal s : signals.get(nrId)) {
+                String serializedSignal= null;
+                try {
+                    serializedSignal = mapper.writeValueAsString(s);
+                    if(serializedSignal!=null){
+                        signal.append(serializedSignal);
+                        signal.append(",");
+                    }
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                    //TODO: add logging
+                }
+
+            }
+            if(signals.get(nrId).size()>0){
+                signal.deleteCharAt(signal.length() - 1);
+            }
+            signal.append("]},");
+            resultJson.append(signal.toString());
+        }
+        resultJson.deleteCharAt(resultJson.length() - 1);
+        resultJson.append("]}");
+        return resultJson.toString();
+    }
+
+    public static String getDesiredResult(){
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.writeValueAsString(new SimpleResult());
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }
