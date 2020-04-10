@@ -6,7 +6,7 @@ import net.storages.ISerializer;
 
 import java.io.IOException;
 
-public class SimpleSignalSerializer implements ISerializer<SimpleSignal,String> {
+public class SimpleSignalSerializer implements ISerializer<SimpleSignal, String> {
     @Override
     public String serialize(SimpleSignal input) {
         ObjectMapper mapper = new ObjectMapper();

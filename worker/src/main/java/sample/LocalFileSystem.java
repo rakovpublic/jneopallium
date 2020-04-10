@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-public class LocalFileSystem  implements IFileSystem<LocalFile> {
+public class LocalFileSystem implements IFileSystem<LocalFile> {
 
     @Override
     public LocalFile getItem(String path) {
@@ -19,18 +19,18 @@ public class LocalFileSystem  implements IFileSystem<LocalFile> {
 
     @Override
     public String read(LocalFile path) {
-        if (path.exists()&&!path.isDirectory()){
+        if (path.exists() && !path.isDirectory()) {
             BufferedReader reader = null;
-            String currentLine=null;
+            String currentLine = null;
             StringBuilder builder = new StringBuilder();
             try {
                 reader = new BufferedReader(new FileReader(path.getPath()));
 
-            currentLine = reader.readLine();
-            while (currentLine != null) {
-                builder.append(currentLine);
                 currentLine = reader.readLine();
-            }
+                while (currentLine != null) {
+                    builder.append(currentLine);
+                    currentLine = reader.readLine();
+                }
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -54,20 +54,20 @@ public class LocalFileSystem  implements IFileSystem<LocalFile> {
 
     @Override
     public boolean createFolder(LocalFile path) {
-        File f=new File(path.getPath());
-        if(!f.exists()){
-           return f.mkdir();
+        File f = new File(path.getPath());
+        if (!f.exists()) {
+            return f.mkdir();
         }
         return true;
     }
 
     @Override
     public boolean writeCreate(String content, LocalFile path) {
-        List<String> strings= new ArrayList<>();
+        List<String> strings = new ArrayList<>();
         strings.add(content);
         try {
-            File f=new File(path.getPath());
-            if(!f.exists()){
+            File f = new File(path.getPath());
+            if (!f.exists()) {
                 f.createNewFile();
             }
 
@@ -81,7 +81,7 @@ public class LocalFileSystem  implements IFileSystem<LocalFile> {
 
     @Override
     public boolean rewrite(String content, LocalFile path) {
-        return writeCreate(content,path);
+        return writeCreate(content, path);
     }
 
     @Override
@@ -110,7 +110,7 @@ public class LocalFileSystem  implements IFileSystem<LocalFile> {
         try {
             Files.write(new File(path.getPath()).toPath(), content.getBytes(), new StandardOpenOption[]{StandardOpenOption.APPEND});
             return true;
-        }catch (IOException e) {
+        } catch (IOException e) {
             //TODO: add logging;
             return false;
         }
@@ -133,22 +133,22 @@ public class LocalFileSystem  implements IFileSystem<LocalFile> {
 
     @Override
     public void copy(LocalFile source, LocalFile destination) {
-        File in= new File(source.getPath());
-        File out= new File(destination.getPath());
-        if(destination.isDirectory()){
-            if(in.isDirectory()){
+        File in = new File(source.getPath());
+        File out = new File(destination.getPath());
+        if (destination.isDirectory()) {
+            if (in.isDirectory()) {
                 File[] fList = in.listFiles();
-                for(File ff:fList){
+                for (File ff : fList) {
                     try {
-                        Files.copy(ff.toPath(),out.toPath());
+                        Files.copy(ff.toPath(), out.toPath());
                     } catch (IOException e) {
                         //TODO:add logging
                         e.printStackTrace();
                     }
                 }
-            }else {
+            } else {
                 try {
-                    Files.copy(in.toPath(),out.toPath());
+                    Files.copy(in.toPath(), out.toPath());
                 } catch (IOException e) {
                     //TODO:add logging
                     e.printStackTrace();
@@ -161,9 +161,9 @@ public class LocalFileSystem  implements IFileSystem<LocalFile> {
 
     @Override
     public List<LocalFile> listFiles(LocalFile file) {
-        File in= new File(file.getPath());
-        List<LocalFile> result= new LinkedList<>();
-        for(File ff:in.listFiles()){
+        File in = new File(file.getPath());
+        List<LocalFile> result = new LinkedList<>();
+        for (File ff : in.listFiles()) {
             result.add(getItem(ff.getAbsolutePath()));
         }
         return result;
@@ -176,9 +176,9 @@ public class LocalFileSystem  implements IFileSystem<LocalFile> {
 
     @Override
     public void deleteFilesFromDirectory(LocalFile path) {
-        File in= new File(path.getPath());
+        File in = new File(path.getPath());
         File[] fList = in.listFiles();
-        for(File ff:fList){
+        for (File ff : fList) {
             ff.delete();
         }
     }

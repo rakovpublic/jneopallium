@@ -1,8 +1,6 @@
 package sample;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import net.neuron.ISignalChain;
-import net.neuron.impl.Axon;
 import net.signals.ISignal;
 
 import java.util.LinkedList;
@@ -15,7 +13,7 @@ public class SimpleSignalChain implements ISignalChain {
     public SimpleSignalChain() {
         this.chaine = new LinkedList<>();
         chaine.add(SimpleSignal.class);
-        description="Simple test";
+        description = "Simple test";
     }
 
     @Override

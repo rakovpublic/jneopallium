@@ -18,7 +18,6 @@ public class Axon implements IAxon {
     }
 
 
-
     @Override
     public void resetConnection(HashMap<Class<? extends ISignal>, List<INConnection>> newConnection) {
         connectionMap = newConnection;

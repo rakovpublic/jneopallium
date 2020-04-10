@@ -19,10 +19,10 @@ public class JSONProcCovertor implements Converter<String, ISignalProcessor> {
     public ISignalProcessor convert(String s) {
         JsonElement jelement = new com.google.gson.JsonParser().parse(s);
         JsonObject jobject = jelement.getAsJsonObject();
-        String cl=jobject.getAsJsonPrimitive("signalProcessorClass").getAsString();
-        ObjectMapper mapper= new ObjectMapper();
+        String cl = jobject.getAsJsonPrimitive("signalProcessorClass").getAsString();
+        ObjectMapper mapper = new ObjectMapper();
         try {
-            return (ISignalProcessor) mapper.readValue(s,Class.forName(cl));
+            return (ISignalProcessor) mapper.readValue(s, Class.forName(cl));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {

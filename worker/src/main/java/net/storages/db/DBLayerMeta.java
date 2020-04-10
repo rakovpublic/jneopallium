@@ -2,7 +2,6 @@ package net.storages.db;
 
 import net.neuron.INeuron;
 import net.storages.ILayerMeta;
-import net.storages.INeuronMeta;
 
 import java.util.Collection;
 import java.util.List;

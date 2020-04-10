@@ -7,7 +7,7 @@ import java.io.File;
 public class LocalFile implements IFileSystemItem {
     private File file;
 
-     LocalFile(File file) {
+    LocalFile(File file) {
         this.file = file;
     }
 

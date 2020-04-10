@@ -6,22 +6,15 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import exceptions.ClassFromJSONIsNotExistsException;
 import exceptions.InputNotExistsException;
-import exceptions.SerializerForClassIsNotRegisteredException;
-import net.neuron.INeuron;
 import net.signals.IResultSignal;
 import net.signals.ISignal;
 import net.storages.IInputMeta;
-import net.storages.ISerializer;
 import net.storages.filesystem.IFileSystem;
 import net.storages.filesystem.IFileSystemItem;
-import synchronizer.utils.DeserializationHelperResult;
 import synchronizer.utils.JSONHelper;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -37,15 +30,15 @@ public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<Stri
     public FileInputMeta(S file, IFileSystem<S> fs) {
         this.file = file;
         this.fileSystem = fs;
-        this.stepID=0l;
+        this.stepID = 0l;
     }
 
 
-//TODO: test cleaning
+    //TODO: test cleaning
     @Override
     public HashMap<Long, List<ISignal>> readInputs(int layerId) {
 
-        S ff = fileSystem.getItem(file.getPath() + fileSystem.getFolderSeparator() + stepID+fileSystem.getFolderSeparator()+layerId);
+        S ff = fileSystem.getItem(file.getPath() + fileSystem.getFolderSeparator() + stepID + fileSystem.getFolderSeparator() + layerId);
         //new File(file.getAbsolutePath() + File.pathSeparator + layerId);
         if (!ff.exists()) {
             throw new InputNotExistsException("File " + ff.getPath() + " with input data for layer id " + layerId + " is not exists");
@@ -58,25 +51,25 @@ public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<Stri
                 JsonElement jelement = new JsonParser().parse(json);
                 JsonObject jobject = jelement.getAsJsonObject();
                 JsonArray jarray = jobject.getAsJsonArray("inputs");
-                ObjectMapper mapper= new ObjectMapper();
-                for(JsonElement jel:jarray){
-                    Long neuronID= Long.parseLong(jel.getAsJsonObject().get("neuronId").getAsString());
+                ObjectMapper mapper = new ObjectMapper();
+                for (JsonElement jel : jarray) {
+                    Long neuronID = Long.parseLong(jel.getAsJsonObject().get("neuronId").getAsString());
                     JsonArray jsig = jel.getAsJsonObject().getAsJsonArray("signal");
-                    for(JsonElement jek:jsig){
-                    String cl=jek.getAsJsonObject().get("currentSignalClass").getAsString();
-                    try {
-                        ISignal signal= (ISignal) mapper.readValue(jek.getAsJsonObject().toString(),Class.forName(cl));
-                        if (result.containsKey(neuronID)) {
-                            result.get(neuronID).add(signal);
-                        } else {
-                            List<ISignal> l = new ArrayList<>();
-                            l.add(signal);
-                            result.put(neuronID, l);
+                    for (JsonElement jek : jsig) {
+                        String cl = jek.getAsJsonObject().get("currentSignalClass").getAsString();
+                        try {
+                            ISignal signal = (ISignal) mapper.readValue(jek.getAsJsonObject().toString(), Class.forName(cl));
+                            if (result.containsKey(neuronID)) {
+                                result.get(neuronID).add(signal);
+                            } else {
+                                List<ISignal> l = new ArrayList<>();
+                                l.add(signal);
+                                result.put(neuronID, l);
+                            }
+                        } catch (IOException | ClassNotFoundException e) {
+                            e.printStackTrace();
+                            //TODO:Add logger
                         }
-                    } catch (IOException | ClassNotFoundException e) {
-                        e.printStackTrace();
-                        //TODO:Add logger
-                    }
                     }
                 }
             }
@@ -113,15 +106,15 @@ public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<Stri
     @Override
     public void saveResults(HashMap<Long, List<ISignal>> signals, int layerId) {
         //File dir = new File(file.getAbsolutePath() + File.pathSeparator + layerId);
-        saveResultToStep( signals, layerId, stepID);
+        saveResultToStep(signals, layerId, stepID);
 
 
     }
 
-    private void saveResultToStep(HashMap<Long, List<ISignal>> signals, int layerId, Long stepID){
-        S dir = fileSystem.getItem(file.getPath() + fileSystem.getFolderSeparator() + stepID+ fileSystem.getFolderSeparator()+layerId+ fileSystem.getFolderSeparator() +  1);
-        S layerDir=fileSystem.getItem(file.getPath() + fileSystem.getFolderSeparator() + stepID+ fileSystem.getFolderSeparator()+layerId);
-        if(!layerDir.exists()){
+    private void saveResultToStep(HashMap<Long, List<ISignal>> signals, int layerId, Long stepID) {
+        S dir = fileSystem.getItem(file.getPath() + fileSystem.getFolderSeparator() + stepID + fileSystem.getFolderSeparator() + layerId + fileSystem.getFolderSeparator() + 1);
+        S layerDir = fileSystem.getItem(file.getPath() + fileSystem.getFolderSeparator() + stepID + fileSystem.getFolderSeparator() + layerId);
+        if (!layerDir.exists()) {
             fileSystem.createFolder(layerDir);
         }
         if (dir.exists()) {
@@ -152,12 +145,13 @@ public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<Stri
             if (str == null) {
                 return null;
             }
-            ObjectMapper mapper= new ObjectMapper();
+            ObjectMapper mapper = new ObjectMapper();
             try {
                 JsonElement jelement = new JsonParser().parse(str);
                 JsonObject jobject = jelement.getAsJsonObject();
-                String cl =jobject.getAsJsonPrimitive("currentSignalClass").getAsString();
-                obj = (IResultSignal) mapper.readValue(jelement.getAsString(),Class.forName(cl));;
+                String cl = jobject.getAsJsonPrimitive("currentSignalClass").getAsString();
+                obj = (IResultSignal) mapper.readValue(jelement.getAsString(), Class.forName(cl));
+                ;
             } catch (Exception ex) {
                 ex.printStackTrace();
                 //TODO:Add logger
@@ -168,30 +162,30 @@ public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<Stri
 
     @Override
     public void copySignalToNextStep(int layerId, Long neuronId, ISignal signal) {
-        HashMap<Long, List<ISignal>> struct= new HashMap<>();
-        List<ISignal> signals= new LinkedList<>();
+        HashMap<Long, List<ISignal>> struct = new HashMap<>();
+        List<ISignal> signals = new LinkedList<>();
         signals.add(signal);
-        struct.put(neuronId,signals);
-        saveResultToStep(struct,layerId,stepID+1);
+        struct.put(neuronId, signals);
+        saveResultToStep(struct, layerId, stepID + 1);
     }
 
     @Override
     public void nextStep() {
 
-        stepID+=1;
+        stepID += 1;
         S ff = fileSystem.getItem(file.getPath() + fileSystem.getFolderSeparator() + stepID);
         fileSystem.createFolder(ff);
     }
 
     @Override
     public void copyInputsToNextStep() {
-        fileSystem.copy(fileSystem.getItem(file.getPath() + fileSystem.getFolderSeparator() + stepID+fileSystem.getFolderSeparator()+0),
-                fileSystem.getItem(file.getPath() + fileSystem.getFolderSeparator() +stepID+1+ fileSystem.getFolderSeparator()+0));
+        fileSystem.copy(fileSystem.getItem(file.getPath() + fileSystem.getFolderSeparator() + stepID + fileSystem.getFolderSeparator() + 0),
+                fileSystem.getItem(file.getPath() + fileSystem.getFolderSeparator() + stepID + 1 + fileSystem.getFolderSeparator() + 0));
     }
 
     private void save(HashMap<Long, List<ISignal>> signals, S path) {
         StringBuilder resultJson = new StringBuilder();
-        ObjectMapper mapper= new ObjectMapper();
+        ObjectMapper mapper = new ObjectMapper();
         resultJson.append("{\"inputs\":[");
         for (Long nrId : signals.keySet()) {
             StringBuilder signal = new StringBuilder();
@@ -199,10 +193,10 @@ public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<Stri
             signal.append(nrId);
             signal.append("\",\"signal\":[");
             for (ISignal s : signals.get(nrId)) {
-                String serializedSignal= null;
+                String serializedSignal = null;
                 try {
                     serializedSignal = mapper.writeValueAsString(s);
-                    if(serializedSignal!=null){
+                    if (serializedSignal != null) {
                         signal.append(serializedSignal);
                         signal.append(",");
                     }
@@ -212,7 +206,7 @@ public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<Stri
                 }
 
             }
-            if(signals.get(nrId).size()>0){
+            if (signals.get(nrId).size() > 0) {
                 signal.deleteCharAt(signal.length() - 1);
             }
             signal.append("]},");

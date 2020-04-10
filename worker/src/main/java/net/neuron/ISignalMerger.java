@@ -1,9 +1,6 @@
 package net.neuron;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import net.neuron.impl.JSONMergerConverter;
 import net.signals.ISignal;
-import sample.SimpleSignalChain;
 
 import java.io.Serializable;
 import java.util.List;

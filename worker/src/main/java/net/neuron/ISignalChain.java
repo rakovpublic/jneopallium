@@ -1,7 +1,6 @@
 package net.neuron;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import net.neuron.impl.Axon;
 import net.signals.ISignal;
 import sample.SimpleSignalChain;
 
@@ -13,7 +12,7 @@ import java.util.List;
  */
 
 //TODO: refactor with StdConverter
-@JsonDeserialize(as= SimpleSignalChain.class)
+@JsonDeserialize(as = SimpleSignalChain.class)
 public interface ISignalChain extends Serializable {
 
     /**

@@ -1,7 +1,6 @@
 package net.neuron;
 
 
-import net.neuron.impl.Axon;
 import net.signals.ISignal;
 
 import java.io.Serializable;
@@ -18,6 +17,7 @@ public interface INeuron extends Serializable, Comparable {
     ISignalChain getSignalChain();
 
     Map<Class<? extends ISignal>, ISignalProcessor> getProcessorMap();
+
     Map<Class<? extends ISignal>, ISignalMerger> getMergerMap();
 
     void setId(Long id);
@@ -55,7 +55,7 @@ public interface INeuron extends Serializable, Comparable {
      **/
     void setAxon(IAxon axon);
 
-   // void setAxon(Axon axon);
+    // void setAxon(Axon axon);
 
     /**
      * Add signal processor to neuron. Define which classes of signals can be processed by neuron.

@@ -6,6 +6,7 @@ public interface IFileSystem<S extends IFileSystemItem> {
     S getItem(String path);
 
     String read(S path);
+
     boolean createFolder(S path);
 
     boolean writeCreate(String content, S path);

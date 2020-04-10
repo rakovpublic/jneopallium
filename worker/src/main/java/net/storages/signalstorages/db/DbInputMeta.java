@@ -3,7 +3,6 @@ package net.storages.signalstorages.db;
 import net.signals.IResultSignal;
 import net.signals.ISignal;
 import net.storages.IInputMeta;
-import net.storages.ISerializer;
 
 import java.util.HashMap;
 import java.util.List;

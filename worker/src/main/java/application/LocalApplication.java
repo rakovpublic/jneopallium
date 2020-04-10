@@ -4,11 +4,9 @@ import net.layers.ILayer;
 import net.layers.IResultLayer;
 import net.layers.impl.LayerBuilder;
 import net.signals.IResultSignal;
-import net.signals.ISignal;
 import net.storages.IInputMeta;
 import net.storages.ILayerMeta;
 import net.storages.IResultLayerMeta;
-import net.storages.ISerializer;
 import net.storages.file.FileLayersMeta;
 import net.storages.filesystem.IFileSystem;
 import net.storages.signalstorages.file.FileInputMeta;
@@ -21,7 +19,6 @@ import synchronizer.utils.InstantiationUtils;
 import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class LocalApplication implements IApplication {
@@ -59,7 +56,7 @@ public class LocalApplication implements IApplication {
                 if (objst != null) {
                     algo = (IStudyingAlgorithm) objst;
                     IResultLayer iResultLayer;
-                    while ((iResultLayer = process(meta))!=null && !iResultLayer.interpretResult().getResult().equals(desiredResult)) {
+                    while ((iResultLayer = process(meta)) != null && !iResultLayer.interpretResult().getResult().equals(desiredResult)) {
                         meta.study(((IStudyingAlgorithm) objst).study(meta, iResultLayer.interpretResult().getNeuronId()));
                         meta.getInputs(0).copyInputsToNextStep();
                         meta.getInputs(0).nextStep();
@@ -73,7 +70,7 @@ public class LocalApplication implements IApplication {
                 }
             } else {
                 //TODO:add normal output
-                IResultLayer lr=process(meta);
+                IResultLayer lr = process(meta);
                 System.out.println(lr.interpretResult().getResult().toString());
             }
 
@@ -122,8 +119,8 @@ public class LocalApplication implements IApplication {
     private List<Class<?>> getTypes(String str) {
 
         List<Class<?>> reuslt = new ArrayList<>();
-        if(str.equals("empty")){
-            return    reuslt ;
+        if (str.equals("empty")) {
+            return reuslt;
         }
         try {
             if (str.contains(":")) {
@@ -137,7 +134,7 @@ public class LocalApplication implements IApplication {
         } catch (ClassNotFoundException e) {
             //TODO:Add logger
         }
-        return  reuslt;
+        return reuslt;
 
     }
 
@@ -160,7 +157,7 @@ public class LocalApplication implements IApplication {
 
 
     private Object[] getObjects(String str) {
-        if(str.equals("empty")){
+        if (str.equals("empty")) {
             return new Object[0];
         }
         Object[] obj = null;
@@ -175,7 +172,6 @@ public class LocalApplication implements IApplication {
         return obj;
 
     }
-
 
 
 }

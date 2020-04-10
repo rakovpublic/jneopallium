@@ -7,9 +7,9 @@ public class SimpleSignal implements ISignal<Double> {
     private int timeAlive;
     private int layerId;
     private Long neuronId;
-    private Class<?extends ISignal<Double>>currentSignalClass=SimpleSignal.class;
-    private String description ="Simple signal";
-    private Class paramClass=Double.class;
+    private Class<? extends ISignal<Double>> currentSignalClass = SimpleSignal.class;
+    private String description = "Simple signal";
+    private Class paramClass = Double.class;
 
     public SimpleSignal() {
     }
@@ -59,8 +59,8 @@ public class SimpleSignal implements ISignal<Double> {
 
     @Override
     public ISignal prepareSignalToNextStep() {
-        if(timeAlive-1>0){
-            return new SimpleSignal(value,timeAlive-1,layerId,neuronId);
+        if (timeAlive - 1 > 0) {
+            return new SimpleSignal(value, timeAlive - 1, layerId, neuronId);
         }
         return null;
     }
@@ -72,7 +72,7 @@ public class SimpleSignal implements ISignal<Double> {
 
     @Override
     public void setSourceLayerId(int layerId) {
-        this.layerId=layerId;
+        this.layerId = layerId;
     }
 
     @Override
@@ -82,7 +82,7 @@ public class SimpleSignal implements ISignal<Double> {
 
     @Override
     public void setSourceNeuronId(Long neuronId) {
-        this.neuronId=neuronId;
+        this.neuronId = neuronId;
     }
 
     @Override

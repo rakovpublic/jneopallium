@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public  class Neuron implements INeuron {
+public class Neuron implements INeuron {
     private List<ISignal> signals;
     private Boolean isProcessed;
     private IAxon axon;
@@ -23,9 +23,9 @@ public  class Neuron implements INeuron {
     private HashMap<Class<? extends ISignal>, ISignalMerger> mergerMap;
     private Long neuronId;
     protected List<ISignal> result;
-    protected  ISignalChain signalChain;
+    protected ISignalChain signalChain;
     private List<IRule> rules;
-    private Class<?extends INeuron> currentNeuronClass;
+    private Class<? extends INeuron> currentNeuronClass;
 
     public Neuron() {
         rules = new ArrayList<>();
@@ -34,7 +34,7 @@ public  class Neuron implements INeuron {
         result = new ArrayList<>();
         processorMap = new HashMap<>();
         mergerMap = new HashMap<>();
-        currentNeuronClass=Neuron.class;
+        currentNeuronClass = Neuron.class;
     }
 
     public Neuron(Long neuronId, ISignalChain processingChain) {
