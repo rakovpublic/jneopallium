@@ -26,6 +26,11 @@ public  class Neuron implements INeuron {
     protected  ISignalChain signalChain;
     private List<IRule> rules;
     private Class<?extends INeuron> currentNeuronClass;
+    private Boolean changed;
+    private List<CreateNeuronRequest> createNeuronRequests = new ArrayList<>();
+    private Boolean onDelete;
+
+
 
     public Neuron() {
         rules = new ArrayList<>();
@@ -219,6 +224,37 @@ public  class Neuron implements INeuron {
     @Override
     public Class<? extends INeuron> getCurrentNeuronClass() {
         return currentNeuronClass;
+    }
+
+    @Override
+    public Boolean isChanged() {
+        return changed;
+    }
+
+    @Override
+    public void setChanged(Boolean changed) {
+        this.changed=changed;
+
+    }
+
+    @Override
+    public Boolean isOnDelete() {
+        return onDelete;
+    }
+
+    @Override
+    public void setOnDelete(Boolean onDelete) {
+        this.onDelete=onDelete;
+    }
+
+    @Override
+    public List<CreateNeuronRequest> getCreateRequests() {
+        return createNeuronRequests;
+    }
+
+    @Override
+    public void addCreateRequest(CreateNeuronRequest createNeuronRequest) {
+        createNeuronRequests.add(createNeuronRequest);
     }
 
 

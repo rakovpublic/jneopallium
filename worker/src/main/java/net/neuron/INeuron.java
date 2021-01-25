@@ -132,4 +132,16 @@ public interface INeuron extends Serializable, Comparable {
 
     Class<? extends INeuron> getCurrentNeuronClass();
 
+    Boolean isChanged();
+
+    void setChanged(Boolean changed);
+
+    Boolean isOnDelete();
+
+    void setOnDelete(Boolean onDelete);
+
+    List<CreateNeuronRequest> getCreateRequests();
+
+    void addCreateRequest(CreateNeuronRequest createNeuronRequest);
+
 }
