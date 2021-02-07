@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import exceptions.CannotFindSignalMergerException;
 import exceptions.CannotFindSignalProcessorException;
 import net.neuron.*;
+import net.signals.IChangingSignal;
 import net.signals.ISignal;
 
 import java.util.ArrayList;
@@ -97,7 +98,8 @@ public  class Neuron implements INeuron {
     public void processSignals() {
         HashMap<Class<? extends ISignal>, List<ISignal>> signalsMap = new HashMap<>();
         for (ISignal s : signals) {
-            Class<? extends ISignal> cl = s.getCurrentSignalClass();
+
+            Class<? extends ISignal> cl = s.getClass();
             if (signalsMap.containsKey(cl)) {
                 signalsMap.get(cl).add(s);
             } else {
@@ -108,6 +110,14 @@ public  class Neuron implements INeuron {
         }
         for (Class<? extends ISignal> cl : this.getSignalChain().getProcessingChain()) {
             for (Class<? extends ISignal> cls : signalsMap.keySet()) {
+                for(ISignal signal : signalsMap.get(cls)){
+                    if(signal instanceof IChangingSignal){
+                        IChangingSignal cs= (IChangingSignal) signal;
+                        if(cs.canProcess(this.getClass())){
+                            cs.changeNeuron(this);
+                        }
+                    }
+                }
                 if (cl.equals(cls)) {
                     ISignalMerger signalMerger = this.getMergerMap().get(cl);
                     ISignalProcessor signalProcessor = this.getProcessorMap().get(cl);
