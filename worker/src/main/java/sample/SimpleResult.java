@@ -1,7 +1,7 @@
 package sample;
 
-import net.signals.IResultSignal;
-import net.signals.ISignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 public class SimpleResult implements IResultSignal<Double> {
     public SimpleResult() {

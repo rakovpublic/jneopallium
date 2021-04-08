@@ -1,6 +1,6 @@
 package sample;
 
-import net.neuron.ISignalMerger;
+import com.rakovpublic.jneuropallium.worker.neuron.ISignalMerger;
 
 import java.util.List;
 

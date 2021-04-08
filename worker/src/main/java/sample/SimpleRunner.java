@@ -1,8 +1,8 @@
 package sample;
 
-import application.Runner;
-import synchronizer.Context;
-import synchronizer.IContext;
+import com.rakovpublic.jneuropallium.worker.application.Runner;
+import com.rakovpublic.jneuropallium.worker.synchronizer.Context;
+import com.rakovpublic.jneuropallium.worker.synchronizer.IContext;
 
 public class SimpleRunner extends Runner {
     @Override

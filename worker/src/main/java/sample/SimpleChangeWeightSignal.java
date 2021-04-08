@@ -1,6 +1,6 @@
 package sample;
 
-import net.signals.ISignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 public class SimpleChangeWeightSignal implements ISignal<Double> {
     private final Double value;

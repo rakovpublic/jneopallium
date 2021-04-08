@@ -1,7 +1,6 @@
 package sample;
 
-import net.neuron.IWeight;
-import net.signals.ISignal;
+import com.rakovpublic.jneuropallium.worker.neuron.IWeight;
 
 public class SimpleDoubleWeight implements IWeight<SimpleSignal,SimpleChangeWeightSignal> {
     private Class<SimpleSignal> signalClass= SimpleSignal.class;

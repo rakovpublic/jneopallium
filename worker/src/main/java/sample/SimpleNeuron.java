@@ -1,10 +1,8 @@
 package sample;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import net.neuron.INeuron;
-import net.neuron.ISignalChain;
-import net.neuron.impl.Neuron;
+import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
+import com.rakovpublic.jneuropallium.worker.neuron.ISignalChain;
+import com.rakovpublic.jneuropallium.worker.neuron.impl.Neuron;
 
 public class SimpleNeuron extends Neuron {
     private double bias;

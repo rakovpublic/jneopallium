@@ -1,8 +1,7 @@
 package sample;
 
-import net.neuron.INeuron;
-import net.neuron.IResultNeuron;
-import net.signals.IResultSignal;
+import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
+import com.rakovpublic.jneuropallium.worker.neuron.IResultNeuron;
 
 public class SimpleResultNeuron extends SimpleNeuron implements IResultNeuron<SimpleResult> {
     private Class<? extends INeuron> currentNeuronClass=SimpleResultNeuron.class;

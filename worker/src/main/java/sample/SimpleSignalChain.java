@@ -1,9 +1,7 @@
 package sample;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import net.neuron.ISignalChain;
-import net.neuron.impl.Axon;
-import net.signals.ISignal;
+import com.rakovpublic.jneuropallium.worker.neuron.ISignalChain;
+import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 import java.util.LinkedList;
 import java.util.List;

@@ -2,11 +2,10 @@ package sample;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.neuron.impl.Axon;
-import net.neuron.impl.NeuronConnection;
-import net.signals.ISignal;
+import com.rakovpublic.jneuropallium.worker.neuron.impl.Axon;
+import com.rakovpublic.jneuropallium.worker.neuron.impl.NeuronConnection;
+import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;

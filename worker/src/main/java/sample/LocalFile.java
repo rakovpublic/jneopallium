@@ -1,6 +1,6 @@
 package sample;
 
-import net.storages.filesystem.IFileSystemItem;
+import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IFileSystemItem;
 
 import java.io.File;
 

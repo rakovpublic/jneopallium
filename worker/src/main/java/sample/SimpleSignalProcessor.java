@@ -1,8 +1,8 @@
 package sample;
 
-import net.neuron.INeuron;
-import net.neuron.ISignalProcessor;
-import net.signals.ISignal;
+import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
+import com.rakovpublic.jneuropallium.worker.neuron.ISignalProcessor;
+import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 import java.util.LinkedList;
 import java.util.List;

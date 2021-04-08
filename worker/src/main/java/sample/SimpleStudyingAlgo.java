@@ -1,13 +1,11 @@
 package sample;
 
-import net.layers.ILayer;
-import net.neuron.INeuron;
-import net.neuron.IResultNeuron;
-import net.signals.ISignal;
-import net.storages.ILayerMeta;
-import net.storages.IStructMeta;
-import net.study.IStudyingAlgorithm;
-import net.study.IStudyingRequest;
+import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
+import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
+import com.rakovpublic.jneuropallium.worker.net.storages.ILayerMeta;
+import com.rakovpublic.jneuropallium.worker.net.storages.IStructMeta;
+import com.rakovpublic.jneuropallium.worker.net.study.IStudyingAlgorithm;
+import com.rakovpublic.jneuropallium.worker.net.study.IStudyingRequest;
 
 import java.util.LinkedList;
 import java.util.List;

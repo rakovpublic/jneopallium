@@ -1,8 +1,8 @@
 package sample;
 
-import net.neuron.INConnection;
-import net.signals.ISignal;
-import net.study.IStudyingRequest;
+import com.rakovpublic.jneuropallium.worker.neuron.INConnection;
+import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
+import com.rakovpublic.jneuropallium.worker.net.study.IStudyingRequest;
 
 import java.util.HashMap;
 import java.util.List;

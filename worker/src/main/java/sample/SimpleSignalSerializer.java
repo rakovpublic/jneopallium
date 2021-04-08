@@ -2,7 +2,7 @@ package sample;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.storages.ISerializer;
+import com.rakovpublic.jneuropallium.worker.net.storages.ISerializer;
 
 import java.io.IOException;
 

@@ -1,6 +1,6 @@
 package sample;
 
-import synchronizer.IContext;
+import com.rakovpublic.jneuropallium.worker.synchronizer.IContext;
 
 import java.io.IOException;
 import java.io.InputStream;
