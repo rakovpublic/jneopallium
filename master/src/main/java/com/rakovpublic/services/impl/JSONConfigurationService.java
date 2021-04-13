@@ -1,8 +1,8 @@
 package com.rakovpublic.services.impl;
 
-import com.rakovpublic.services.IConfigurationService;
-import com.rakovpublic.utils.JarClassLoaderService;
-import com.rakovpublic.utils.exceptions.NoSuchClassInJarException;
+import com.rakovpublic.jneuropallium.worker.util.IConfigurationService;
+import com.rakovpublic.jneuropallium.worker.util.JarClassLoaderService;
+import com.rakovpublic.jneuropallium.worker.util.NoSuchClassInJarException;
 
 import java.net.MalformedURLException;
 import java.net.URL;

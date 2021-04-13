@@ -1,4 +1,4 @@
-package com.rakovpublic.utils.exceptions;
+package com.rakovpublic.jneuropallium.worker.util;
 
 public class NoSuchClassInJarException extends NullPointerException {
     public NoSuchClassInJarException(String s) {

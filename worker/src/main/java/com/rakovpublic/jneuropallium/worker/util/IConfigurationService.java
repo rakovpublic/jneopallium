@@ -1,4 +1,4 @@
-package com.rakovpublic.services;
+package com.rakovpublic.jneuropallium.worker.util;
 
 import java.util.List;
 

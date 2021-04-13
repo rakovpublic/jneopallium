@@ -1,5 +1,6 @@
 package com.rakovpublic.jneuropallium.worker.util;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 
@@ -19,5 +20,6 @@ public class JarClassLoaderService extends URLClassLoader {
             //TODO: add logger
             return false;
         }
+
     }
 }
