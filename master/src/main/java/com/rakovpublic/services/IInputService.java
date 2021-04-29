@@ -5,7 +5,7 @@ import com.rakovpublic.model.IInputSource;
 import java.util.List;
 
 public interface IInputService {
-    void register(String name, IInputSource iInputSource);
+    void register(String name, IInputSource iInputSource, boolean isMandatory);
     void inputUpdated(String name);
     IInputSource getNext(String name);
     IInputSource getLatest(String name);
