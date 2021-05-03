@@ -10,8 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 
 public interface IInputService {
+    void inputSourceUpdated(String name);
     void register(String name, IInputMeta iInputSource, boolean isMandatory, InputInitStrategy initStrategy);
-    void inputUpdated(String name, Integer nextLayerId, HashMap<Long,List<ISignal>> signals);
+    void uploadWorkerResult(String name,  HashMap<Long,List<ISignal>> signals);
     ISplitInput getNext(String name);
     boolean hasNextComplete();
 }
