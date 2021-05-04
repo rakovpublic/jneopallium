@@ -2,6 +2,7 @@ package com.rakovpublic.jneuropallium.master.services;
 
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.IInitInput;
+import com.rakovpublic.jneuropallium.worker.net.storages.IInputMeta;
 import com.rakovpublic.jneuropallium.worker.net.storages.ISplitInput;
 import com.rakovpublic.jneuropallium.worker.net.storages.InputInitStrategy;
 
@@ -18,6 +19,8 @@ public interface IInputService {
     ISplitInput getNext(String name);
 
     boolean hasNextComplete();
+
+    boolean hasPrepared();
 
     void prepareInputs();
 }
