@@ -1,4 +1,4 @@
-package com.rakovpublic.services.impl;
+package com.rakovpublic.jneuropallium.master.services.impl;
 
 import com.rakovpublic.jneuropallium.worker.util.IConfigurationService;
 import com.rakovpublic.jneuropallium.worker.util.JarClassLoaderService;
@@ -16,10 +16,10 @@ public class JSONConfigurationService implements IConfigurationService {
 
     @Override
     public Boolean loadClassesFromJar(List<String> path, List<String> classNames) {
-        URL [] urls = new URL[path.size()];
-        int i=0;
+        URL[] urls = new URL[path.size()];
+        int i = 0;
         StringBuilder pathNames = new StringBuilder();
-        for(String p:path){
+        for (String p : path) {
             try {
                 urls[i] = new URL(p);
                 i++;
@@ -31,10 +31,10 @@ public class JSONConfigurationService implements IConfigurationService {
             }
         }
         JarClassLoaderService classLoaderService = new JarClassLoaderService(urls);
-        for(String name : classNames){
-            if(!classLoaderService.containsClass(name)){
+        for (String name : classNames) {
+            if (!classLoaderService.containsClass(name)) {
                 //TODO: add logger
-                throw new NoSuchClassInJarException("class name :"+name +" jar(s): "+pathNames);
+                throw new NoSuchClassInJarException("class name :" + name + " jar(s): " + pathNames);
             }
         }
         return true;

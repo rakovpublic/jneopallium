@@ -1,4 +1,4 @@
-package com.rakovpublic.services.impl;
+package com.rakovpublic.jneuropallium.master.services.impl;
 
 public enum NodeStatus {
     RUNNING,

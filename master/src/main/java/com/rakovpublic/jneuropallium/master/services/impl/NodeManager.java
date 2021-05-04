@@ -1,6 +1,6 @@
-package com.rakovpublic.services.impl;
+package com.rakovpublic.jneuropallium.master.services.impl;
 
-import com.rakovpublic.services.INodeManager;
+import com.rakovpublic.jneuropallium.master.services.INodeManager;
 
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -10,7 +10,7 @@ public class NodeManager implements INodeManager {
     private static NodeManager nodeManager = new NodeManager();
     private ConcurrentHashMap<String, NodeStatus> nodes;
 
-    private NodeManager(){
+    private NodeManager() {
         nodes = new ConcurrentHashMap<>();
     }
 
@@ -34,7 +34,7 @@ public class NodeManager implements INodeManager {
         nodes.put(name, NodeStatus.STARTING);
     }
 
-    public static NodeManager getNodeManager(){
+    public static NodeManager getNodeManager() {
         return nodeManager;
     }
 }

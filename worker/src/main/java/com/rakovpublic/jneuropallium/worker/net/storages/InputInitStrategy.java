@@ -6,5 +6,5 @@ import java.util.HashMap;
 import java.util.List;
 
 public interface InputInitStrategy {
-    List<HashMap<Long, List<ISignal>>> getInputs(ILayersMeta layersMeta,List<ISignal> signals);
+    HashMap<Integer,HashMap<Long, List<ISignal>>> getInputs(ILayersMeta layersMeta,List<ISignal> signals);
 }
