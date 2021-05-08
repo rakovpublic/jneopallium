@@ -30,7 +30,7 @@ Layer store the list of neurons which situated and input.
 Result layer stores the final layer of neurons with associated result signals.
 
 
-Studying algorithm has access  to all input/middle input/result and store studying logic. Also studying can be implemented with the help of signals immiting to below levels and cyclic processing before next input.
+Studying algorithm has access  to all input/middle input/result and store studying logic. Also studying can be implemented with the help of signals immiting to below layers and cyclic processing before next input.
 
 Note: Result signal from one/many neuron nets can be used as input to other. Such approach will allow to "debug" AI and combine neuron nets.   
 
