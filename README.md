@@ -11,12 +11,14 @@ Signals are different data objects which passed on input, emits on middle layers
 
 
 Signal processor is some function which process the one type( or subtypes) of signals and emit signals to axon.  
+
 Note: it has access to neuron and axon. 
+Signals can be continuous (moved to next run fixed amount of times, with changes or without)
+
 
 
 Neuron is abstraction which store signals processor/processors for signal type/different signal types,  
  oder of signal type processing and axon. Note: neuron can be stateful or stateless.
-Signals can be continuous (moved to next run, with changes or without)
  
  
 Axon store connection to other neurons with weights for each type of signal.
