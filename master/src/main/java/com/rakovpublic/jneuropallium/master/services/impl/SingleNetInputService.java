@@ -2,7 +2,7 @@ package com.rakovpublic.jneuropallium.master.services.impl;
 
 import com.rakovpublic.jneuropallium.master.exceptions.InputServiceInitException;
 import com.rakovpublic.jneuropallium.master.services.IInputService;
-import com.rakovpublic.jneuropallium.master.services.IRunningStrategy;
+import com.rakovpublic.jneuropallium.master.services.IInputLoadingStrategy;
 import com.rakovpublic.jneuropallium.master.services.ISignalsPersistStorage;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.*;
@@ -12,23 +12,25 @@ import java.util.HashMap;
 import java.util.List;
 
 public class SingleNetInputService implements IInputService {
-    private HashMap<String, InputStatusMeta> inputStatuses;
+    private HashMap<IInitInput, InputStatusMeta> inputStatuses;
     private HashMap<String, NodeMeta> nodeMetas;
+    private HashMap<IInitInput,InputInitStrategy> inputs;
     private ISignalsPersistStorage signalsPersist;
     private ILayersMeta layersMeta;
     private static SingleNetInputService singleNetInputService = new SingleNetInputService();
     private List<ISplitInput> preparedInputs;
     private ISplitInput splitInput;
     private Integer partitions;
-    private IRunningStrategy runningStrategy;
+    private IInputLoadingStrategy runningStrategy;
 
     private SingleNetInputService() {
         inputStatuses = new HashMap<>();
+        inputs= new HashMap<>();
         nodeMetas = new HashMap<>();
         preparedInputs = new ArrayList<>();
     }
 
-    public static SingleNetInputService getInputService(ILayersMeta meta, ISignalsPersistStorage storage, ISplitInput splitInputSample, Integer partitions, IRunningStrategy runningStrategy) throws InputServiceInitException {
+    public static SingleNetInputService getInputService(ILayersMeta meta, ISignalsPersistStorage storage, ISplitInput splitInputSample, Integer partitions, IInputLoadingStrategy runningStrategy) throws InputServiceInitException {
         if (singleNetInputService.layersMeta == null || meta != null)
             singleNetInputService.layersMeta = meta;
         if (singleNetInputService.signalsPersist == null || storage != null)
@@ -55,9 +57,10 @@ public class SingleNetInputService implements IInputService {
     }
 
     @Override
-    public void register(String name, IInitInput iInputSource, boolean isMandatory, InputInitStrategy initStrategy) {
-        signalsPersist.putSignals(initStrategy.getInputs(layersMeta, iInputSource.readSignals()));
-        inputStatuses.put(name, new InputStatusMeta(true, isMandatory, iInputSource));
+    public void register( IInitInput iInputSource, boolean isMandatory, InputInitStrategy initStrategy) {
+        //signalsPersist.putSignals(initStrategy.getInputs(layersMeta, iInputSource.readSignals()));
+        inputStatuses.put(iInputSource, new InputStatusMeta(true, isMandatory));
+        inputs.put(iInputSource,initStrategy);
     }
 
     @Override
@@ -72,11 +75,13 @@ public class SingleNetInputService implements IInputService {
         if (preparedInputs.size() > 0) {
             res = preparedInputs.get(0);
             res.setNodeIdentifier(name);
+            nodeMetas.get(name).setStatus(false);
         } else {
             prepareInputs();
             if (preparedInputs.size() > 0) {
                 res = preparedInputs.get(0);
                 res.setNodeIdentifier(name);
+                nodeMetas.get(name).setStatus(false);
             } else {
                 res = null;
             }

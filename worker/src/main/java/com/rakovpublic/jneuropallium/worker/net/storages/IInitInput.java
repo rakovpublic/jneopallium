@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface IInitInput {
     List<ISignal> readSignals();
+    String getName();
 }
