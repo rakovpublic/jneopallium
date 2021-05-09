@@ -2,6 +2,7 @@ package com.rakovpublic.jneuropallium.master.services.impl;
 
 import com.rakovpublic.jneuropallium.master.exceptions.InputServiceInitException;
 import com.rakovpublic.jneuropallium.master.services.IInputService;
+import com.rakovpublic.jneuropallium.master.services.IRunningStrategy;
 import com.rakovpublic.jneuropallium.master.services.ISignalsPersistStorage;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.*;
@@ -19,6 +20,7 @@ public class InputService implements IInputService {
     private List<ISplitInput> preparedInputs;
     private ISplitInput splitInput;
     private Integer partitions;
+    private IRunningStrategy runningStrategy;
 
     private InputService() {
         inputStatuses = new HashMap<>();
@@ -26,14 +28,16 @@ public class InputService implements IInputService {
         preparedInputs = new ArrayList<>();
     }
 
-    public static InputService getInputService(ILayersMeta meta, ISignalsPersistStorage storage, ISplitInput splitInputSample, Integer partitions) throws InputServiceInitException {
+    public static InputService getInputService(ILayersMeta meta, ISignalsPersistStorage storage, ISplitInput splitInputSample, Integer partitions, IRunningStrategy runningStrategy) throws InputServiceInitException {
         if (inputService.layersMeta == null || meta != null)
             inputService.layersMeta = meta;
         if (inputService.signalsPersist == null || storage != null)
             inputService.signalsPersist = storage;
         if (inputService.splitInput == null || splitInputSample != null)
             inputService.splitInput = splitInputSample;
-        if (inputService.signalsPersist == null || inputService.layersMeta == null || inputService.splitInput == null) {
+        if(runningStrategy!=null || inputService.runningStrategy==null)
+            inputService.runningStrategy=runningStrategy;
+        if (inputService.signalsPersist == null || inputService.layersMeta == null || inputService.splitInput == null || inputService.runningStrategy == null) {
             //TODO:add logger
             throw new InputServiceInitException();
         }
