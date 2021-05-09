@@ -11,42 +11,42 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class InputService implements IInputService {
+public class SingleNetInputService implements IInputService {
     private HashMap<String, InputStatusMeta> inputStatuses;
     private HashMap<String, NodeMeta> nodeMetas;
     private ISignalsPersistStorage signalsPersist;
     private ILayersMeta layersMeta;
-    private static InputService inputService = new InputService();
+    private static SingleNetInputService singleNetInputService = new SingleNetInputService();
     private List<ISplitInput> preparedInputs;
     private ISplitInput splitInput;
     private Integer partitions;
     private IRunningStrategy runningStrategy;
 
-    private InputService() {
+    private SingleNetInputService() {
         inputStatuses = new HashMap<>();
         nodeMetas = new HashMap<>();
         preparedInputs = new ArrayList<>();
     }
 
-    public static InputService getInputService(ILayersMeta meta, ISignalsPersistStorage storage, ISplitInput splitInputSample, Integer partitions, IRunningStrategy runningStrategy) throws InputServiceInitException {
-        if (inputService.layersMeta == null || meta != null)
-            inputService.layersMeta = meta;
-        if (inputService.signalsPersist == null || storage != null)
-            inputService.signalsPersist = storage;
-        if (inputService.splitInput == null || splitInputSample != null)
-            inputService.splitInput = splitInputSample;
-        if(runningStrategy!=null || inputService.runningStrategy==null)
-            inputService.runningStrategy=runningStrategy;
-        if (inputService.signalsPersist == null || inputService.layersMeta == null || inputService.splitInput == null || inputService.runningStrategy == null) {
+    public static SingleNetInputService getInputService(ILayersMeta meta, ISignalsPersistStorage storage, ISplitInput splitInputSample, Integer partitions, IRunningStrategy runningStrategy) throws InputServiceInitException {
+        if (singleNetInputService.layersMeta == null || meta != null)
+            singleNetInputService.layersMeta = meta;
+        if (singleNetInputService.signalsPersist == null || storage != null)
+            singleNetInputService.signalsPersist = storage;
+        if (singleNetInputService.splitInput == null || splitInputSample != null)
+            singleNetInputService.splitInput = splitInputSample;
+        if(runningStrategy!=null || singleNetInputService.runningStrategy==null)
+            singleNetInputService.runningStrategy=runningStrategy;
+        if (singleNetInputService.signalsPersist == null || singleNetInputService.layersMeta == null || singleNetInputService.splitInput == null || singleNetInputService.runningStrategy == null) {
             //TODO:add logger
             throw new InputServiceInitException();
         }
         if (partitions == null) {
-            inputService.partitions = 7;
+            singleNetInputService.partitions = 7;
         } else {
-            inputService.partitions = partitions;
+            singleNetInputService.partitions = partitions;
         }
-        return inputService;
+        return singleNetInputService;
     }
 
     @Override
