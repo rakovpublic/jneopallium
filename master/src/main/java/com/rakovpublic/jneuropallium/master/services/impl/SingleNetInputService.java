@@ -57,9 +57,9 @@ public class SingleNetInputService implements IInputService {
     }
 
     @Override
-    public void register( IInitInput iInputSource, boolean isMandatory, InputInitStrategy initStrategy) {
+    public void register( IInitInput iInputSource, boolean isMandatory, InputInitStrategy initStrategy, Integer amountOfRuns) {
         //signalsPersist.putSignals(initStrategy.getInputs(layersMeta, iInputSource.readSignals()));
-        inputStatuses.put(iInputSource, new InputStatusMeta(true, isMandatory));
+        inputStatuses.put(iInputSource, new InputStatusMeta(true, isMandatory,amountOfRuns));
         inputs.put(iInputSource,initStrategy);
     }
 

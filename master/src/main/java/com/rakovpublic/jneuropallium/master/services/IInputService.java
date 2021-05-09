@@ -12,7 +12,7 @@ import java.util.List;
 public interface IInputService {
     void inputSourceUpdated(String name);
 
-    void register( IInitInput iInputSource, boolean isMandatory, InputInitStrategy initStrategy);
+    void register( IInitInput iInputSource, boolean isMandatory, InputInitStrategy initStrategy,Integer amountOfRunsToUpdate);
 
     void uploadWorkerResult(String name, HashMap<Integer, HashMap<Long, List<ISignal>>> signals);
 
