@@ -6,8 +6,8 @@ Documentation -60%
 DONE  
 
 Phase #2  
-Design-40%  
-Implementation - 5%  
+Design-75%  
+Implementation - 20%  
 Test- 0%  
 Documentation -10%  
 IN PROGRESS  
