@@ -151,4 +151,9 @@ public class SingleNetInputService implements IInputService {
         }
 
     }
+
+    @Override
+    public Boolean runCompleted() {
+        return null;
+    }
 }
