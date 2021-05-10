@@ -23,4 +23,6 @@ public interface IInputService {
     boolean hasPrepared();
 
     void prepareInputs();
+
+    Boolean runCompleted();
 }
