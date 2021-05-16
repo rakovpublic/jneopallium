@@ -71,19 +71,26 @@ public class SingleNetInputService implements IInputService {
 
     @Override
     public synchronized ISplitInput getNext(String name) {
-        ISplitInput res;
+        ISplitInput res=null;
         if (preparedInputs.size() > 0) {
             res = preparedInputs.get(0);
             res.setNodeIdentifier(name);
             nodeMetas.get(name).setStatus(false);
         } else {
+            boolean canPrepare = true;
+            for(String nodeName:nodeMetas.keySet()){
+                if(!nodeMetas.get(nodeName).getStatus()){
+                    canPrepare=false;
+                    break;
+                }
+            }
+            if(canPrepare){
             prepareInputs();
             if (preparedInputs.size() > 0) {
                 res = preparedInputs.get(0);
                 res.setNodeIdentifier(name);
                 nodeMetas.get(name).setStatus(false);
-            } else {
-                res = null;
+            }
             }
         }
         return res;
