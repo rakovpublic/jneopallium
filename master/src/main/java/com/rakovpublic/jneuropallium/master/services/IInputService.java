@@ -25,4 +25,8 @@ public interface IInputService {
     void prepareInputs();
 
     Boolean runCompleted();
+
+    void prepareResults();
+
+    void nextRun();
 }

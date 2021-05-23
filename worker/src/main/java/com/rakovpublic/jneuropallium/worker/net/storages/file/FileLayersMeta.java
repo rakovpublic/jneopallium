@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
+@Deprecated
 public class FileLayersMeta<S extends IFileSystemItem> implements ILayersMeta {
     private S file;
     private IFileSystem fileSystem;
@@ -84,5 +84,10 @@ public class FileLayersMeta<S extends IFileSystemItem> implements ILayersMeta {
             }
         }
         return null;
+    }
+
+    @Override
+    public void addLayerMeta(ILayerMeta layerMeta) {
+
     }
 }

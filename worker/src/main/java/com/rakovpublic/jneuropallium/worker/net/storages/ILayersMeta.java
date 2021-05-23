@@ -9,4 +9,6 @@ public interface ILayersMeta extends Serializable {
     IResultLayerMeta getResultLayer();
 
     ILayerMeta getLayerByID(int id);
+
+    void addLayerMeta(ILayerMeta layerMeta);
 }

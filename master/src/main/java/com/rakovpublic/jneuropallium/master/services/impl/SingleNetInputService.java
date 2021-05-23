@@ -161,6 +161,24 @@ public class SingleNetInputService implements IInputService {
 
     @Override
     public Boolean runCompleted() {
-        return null;
+        if(layersMeta.getLayers().size()==nodeMetas.values().iterator().next().getCurrentLayer()){
+            for(NodeMeta meta:nodeMetas.values()){
+                if(!meta.getStatus()){
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void prepareResults() {
+
+    }
+
+    @Override
+    public void nextRun() {
+
     }
 }

@@ -10,6 +10,5 @@ import java.util.List;
 
 //interface for cycle running before next run with next input
 public interface IInputLoadingStrategy {
-    Boolean populateInput(ISignalsPersistStorage signalsPersistStorage, ILayersMeta layersMeta,
-                          HashMap<IInitInput, InputStatusMeta> inputStatuses, HashMap<IInitInput, InputInitStrategy> inputs);
+    Boolean populateInput(ISignalsPersistStorage signalsPersistStorage, HashMap<IInitInput, InputStatusMeta> inputStatuses);
 }
