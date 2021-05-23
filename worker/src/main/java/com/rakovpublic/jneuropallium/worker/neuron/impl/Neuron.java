@@ -8,6 +8,7 @@ import com.rakovpublic.jneuropallium.worker.neuron.*;
 import com.rakovpublic.jneuropallium.worker.net.signals.IChangingSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
+import java.net.Inet4Address;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -172,8 +173,7 @@ public  class Neuron implements INeuron {
     }
 
     @Override
-    public <S extends ISignal> void addSignalProcessor(Class<S> clazz, ISignalProcessor<S> processor) {
-
+    public <S extends ISignal,N extends INeuron> void addSignalProcessor(Class<S> clazz, ISignalProcessor<S,N> processor) {
         processorMap.put(clazz, processor);
     }
 

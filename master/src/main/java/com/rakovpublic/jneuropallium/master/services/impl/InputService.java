@@ -140,4 +140,14 @@ public class InputService implements IInputService {
     public Boolean runCompleted() {
         return null;
     }
+
+    @Override
+    public void prepareResults() {
+
+    }
+
+    @Override
+    public void nextRun() {
+
+    }
 }

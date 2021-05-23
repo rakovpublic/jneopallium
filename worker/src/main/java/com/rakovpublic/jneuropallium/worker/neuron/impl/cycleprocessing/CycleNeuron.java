@@ -14,4 +14,8 @@ public class CycleNeuron extends Neuron {
     public int getLoopCount() {
         return loopCount;
     }
+
+    public void setLoopCount(int loopCount) {
+        this.loopCount = loopCount;
+    }
 }

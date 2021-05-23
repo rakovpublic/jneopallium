@@ -93,6 +93,7 @@ public class FileLayerMeta<S extends IFileSystemItem> implements ILayerMeta {
         }
         sb.append(serializedObject);
         sb.append("}");
+        fileSystem.rewrite(sb.toString(),file);
     }
 
 

@@ -7,7 +7,7 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import java.util.LinkedList;
 import java.util.List;
 
-public class SimpleSignalProcessor implements ISignalProcessor<SimpleSignal> {
+public class SimpleSignalProcessor implements ISignalProcessor<SimpleSignal,INeuron> {
     private String description="test";
     private  Class<? extends ISignalProcessor>  signalProcessorClass=SimpleSignalProcessor.class;
 
@@ -34,5 +34,10 @@ public class SimpleSignalProcessor implements ISignalProcessor<SimpleSignal> {
     @Override
     public Class<? extends ISignalProcessor> getSignalProcessorClass() {
         return signalProcessorClass;
+    }
+
+    @Override
+    public Class<INeuron> getNeuronClass() {
+        return INeuron.class;
     }
 }

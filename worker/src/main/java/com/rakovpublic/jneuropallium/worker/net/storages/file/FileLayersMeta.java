@@ -7,25 +7,27 @@ import com.rakovpublic.jneuropallium.worker.net.storages.IResultLayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IFileSystem;
 import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IFileSystemItem;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-@Deprecated
+import java.util.*;
+import java.util.stream.Collectors;
+
+
 public class FileLayersMeta<S extends IFileSystemItem> implements ILayersMeta {
     private S file;
     private IFileSystem fileSystem;
+    private HashMap<Integer,ILayerMeta> layers;
 
 
     public FileLayersMeta(S file, IFileSystem<S> fs) {
         this.fileSystem = fs;
         this.file = file;
+        layers = new HashMap<>();
     }
 
     @Override
     public List<ILayerMeta> getLayers() {
         // S layersDir = fileSystem.getItem(file+ fileSystem.getFolderSeparator()+"layers");
         //new File(file.getAbsolutePath() + File.pathSeparator + "layers");
+        if(layers.isEmpty()){
         List<ILayerMeta> res = new ArrayList<>();
         List<S> temp = new ArrayList<>();
         if (!file.exists() || !file.isDirectory()) {
@@ -41,13 +43,19 @@ public class FileLayersMeta<S extends IFileSystemItem> implements ILayersMeta {
         });
         int i = 0;
         for (IFileSystemItem f : temp) {
-            res.add(new FileLayerMeta(f, fileSystem));
+            ILayerMeta layerMeta = new FileLayerMeta(f, fileSystem);
+            layers.put(layerMeta.getID(),layerMeta);
+            res.add(layerMeta);
             i++;
             if (i == temp.size() - 1) {
                 break;
             }
         }
-        return res;
+            return res;
+        }else {
+            return layers.values().stream().collect(Collectors.toList());
+        }
+
     }
 
     @Override
@@ -78,16 +86,13 @@ public class FileLayersMeta<S extends IFileSystemItem> implements ILayersMeta {
 
     @Override
     public ILayerMeta getLayerByID(int id) {
-        for (ILayerMeta lm : getLayers()) {
-            if (lm.getID() == id) {
-                return lm;
-            }
-        }
-        return null;
+
+        return layers.get(id);
     }
 
     @Override
     public void addLayerMeta(ILayerMeta layerMeta) {
+        layers.put(layerMeta.getID(),layerMeta);
 
     }
 }

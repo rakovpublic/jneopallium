@@ -62,7 +62,7 @@ public interface INeuron extends Serializable, Comparable {
      * @param clazz     signal class which will be processing by this signal processor
      * @param processor signal processor
      **/
-    <S extends ISignal> void addSignalProcessor(Class<S> clazz, ISignalProcessor<S> processor);
+    <S extends ISignal,N extends INeuron> void addSignalProcessor(Class<S> clazz, ISignalProcessor<S,N> processor);
 
     /**
      * Add signal merger. If signal merger exists for the all the signals of the same will be merged in one before
