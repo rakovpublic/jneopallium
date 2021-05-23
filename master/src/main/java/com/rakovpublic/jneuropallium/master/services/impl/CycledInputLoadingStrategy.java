@@ -40,6 +40,7 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
 
     @Override
     public Boolean populateInput(ISignalsPersistStorage signalsPersistStorage, HashMap<IInitInput, InputStatusMeta> inputStatuses) {
+        signalsPersistStorage.cleanOutdatedSignals();
         if(counter>=((CycleNeuron)layersMeta.getLayerByID(Integer.MIN_VALUE).getNeuronByID(0l)).getLoopCount()){
             for(IInitInput iii:inputStatuses.keySet()){
                 if(inputStatuses.get(iii).getCurrentRuns()>=inputStatuses.get(iii).getUpdateOnceInNRuns()){

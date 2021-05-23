@@ -9,4 +9,6 @@ public interface ISignalsPersistStorage {
     void putSignals(HashMap<Integer, HashMap<Long, List<ISignal>>> signals);
 
     HashMap<Long, List<ISignal>> getLayerSignals(Integer layerId);
+
+    void cleanOutdatedSignals();
 }
