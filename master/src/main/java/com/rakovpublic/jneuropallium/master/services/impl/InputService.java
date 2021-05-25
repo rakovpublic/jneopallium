@@ -6,10 +6,12 @@ import com.rakovpublic.jneuropallium.master.services.IInputService;
 import com.rakovpublic.jneuropallium.master.services.ISignalsPersistStorage;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.*;
+import com.rakovpublic.jneuropallium.worker.neuron.IResultNeuron;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.SortedSet;
 
 public class InputService implements IInputService {
     private HashMap<IInitInput, InputStatusMeta> inputStatuses;
@@ -142,12 +144,17 @@ public class InputService implements IInputService {
     }
 
     @Override
-    public void prepareResults() {
-
+    public SortedSet<? extends IResultNeuron> prepareResults() {
+        return null;
     }
 
     @Override
     public void nextRun() {
+
+    }
+
+    @Override
+    public void setLayersMeta(ILayersMeta layersMeta) {
 
     }
 }

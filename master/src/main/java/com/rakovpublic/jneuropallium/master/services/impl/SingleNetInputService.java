@@ -3,13 +3,16 @@ package com.rakovpublic.jneuropallium.master.services.impl;
 import com.rakovpublic.jneuropallium.master.exceptions.InputServiceInitException;
 import com.rakovpublic.jneuropallium.master.services.IInputService;
 import com.rakovpublic.jneuropallium.master.services.IInputLoadingStrategy;
+import com.rakovpublic.jneuropallium.master.services.IResultLayerRunner;
 import com.rakovpublic.jneuropallium.master.services.ISignalsPersistStorage;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.*;
+import com.rakovpublic.jneuropallium.worker.neuron.IResultNeuron;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.SortedSet;
 
 public class SingleNetInputService implements IInputService {
     private HashMap<IInitInput, InputStatusMeta> inputStatuses;
@@ -22,15 +25,18 @@ public class SingleNetInputService implements IInputService {
     private ISplitInput splitInput;
     private Integer partitions;
     private IInputLoadingStrategy runningStrategy;
+    private IResultLayerRunner resultLayerRunner;
+    private boolean runFlag;
 
     private SingleNetInputService() {
+        runFlag =false;
         inputStatuses = new HashMap<>();
         inputs= new HashMap<>();
         nodeMetas = new HashMap<>();
         preparedInputs = new ArrayList<>();
     }
 
-    public static SingleNetInputService getInputService(ILayersMeta meta, ISignalsPersistStorage storage, ISplitInput splitInputSample, Integer partitions, IInputLoadingStrategy runningStrategy) throws InputServiceInitException {
+    public static SingleNetInputService getInputService(ILayersMeta meta, ISignalsPersistStorage storage, ISplitInput splitInputSample, Integer partitions, IInputLoadingStrategy runningStrategy, IResultLayerRunner resultLayerRunner) throws InputServiceInitException {
         if (singleNetInputService.layersMeta == null || meta != null)
             singleNetInputService.layersMeta = meta;
         if (singleNetInputService.signalsPersist == null || storage != null)
@@ -39,6 +45,9 @@ public class SingleNetInputService implements IInputService {
             singleNetInputService.splitInput = splitInputSample;
         if(runningStrategy!=null || singleNetInputService.runningStrategy==null)
             singleNetInputService.runningStrategy=runningStrategy;
+        if(resultLayerRunner != null || singleNetInputService.resultLayerRunner == null){
+            singleNetInputService.resultLayerRunner=resultLayerRunner;
+        }
         if (singleNetInputService.signalsPersist == null || singleNetInputService.layersMeta == null || singleNetInputService.splitInput == null || singleNetInputService.runningStrategy == null) {
             //TODO:add logger
             throw new InputServiceInitException();
@@ -173,12 +182,24 @@ public class SingleNetInputService implements IInputService {
     }
 
     @Override
-    public void prepareResults() {
-
+    public SortedSet<? extends IResultNeuron> prepareResults() {
+        if(this.runCompleted()){
+            runFlag = true;
+            return this.resultLayerRunner.getResults(layersMeta.getResultLayer(),signalsPersist.getLayerSignals(layersMeta.getResultLayer().getID()));
+        }
+        return null;
     }
 
     @Override
     public void nextRun() {
+        if(runFlag){
+            runFlag =false;
+            runningStrategy.populateInput(signalsPersist,inputStatuses);
+        }
+    }
 
+    @Override
+    public void setLayersMeta(ILayersMeta layersMeta) {
+        this.layersMeta =layersMeta;
     }
 }

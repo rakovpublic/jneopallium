@@ -56,4 +56,9 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
         }
         return true;
     }
+
+    @Override
+    public void setLayersMeta(ILayersMeta  layersMeta) {
+        this.layersMeta=layersMeta;
+    }
 }
