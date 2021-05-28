@@ -1,5 +1,6 @@
-package com.rakovpublic.jneuropallium.master.services;
+package com.rakovpublic.jneuropallium.worker.net.storages;
 
+import com.rakovpublic.jneuropallium.worker.net.storages.ISignalsPersistStorage;
 import com.rakovpublic.jneuropallium.worker.net.storages.InputStatusMeta;
 import com.rakovpublic.jneuropallium.worker.net.storages.IInitInput;
 import com.rakovpublic.jneuropallium.worker.net.storages.ILayersMeta;

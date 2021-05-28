@@ -2,9 +2,9 @@ package com.rakovpublic.jneuropallium.master.services.impl;
 
 import com.rakovpublic.jneuropallium.master.exceptions.InputServiceInitException;
 import com.rakovpublic.jneuropallium.master.services.IInputService;
-import com.rakovpublic.jneuropallium.master.services.IInputLoadingStrategy;
+import com.rakovpublic.jneuropallium.worker.net.storages.IInputLoadingStrategy;
 import com.rakovpublic.jneuropallium.master.services.IResultLayerRunner;
-import com.rakovpublic.jneuropallium.master.services.ISignalsPersistStorage;
+import com.rakovpublic.jneuropallium.worker.net.storages.ISignalsPersistStorage;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.*;
 import com.rakovpublic.jneuropallium.worker.neuron.IResultNeuron;

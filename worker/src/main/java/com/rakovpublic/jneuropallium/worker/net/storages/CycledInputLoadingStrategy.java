@@ -1,7 +1,7 @@
-package com.rakovpublic.jneuropallium.master.services.impl;
+package com.rakovpublic.jneuropallium.worker.net.storages;
 
-import com.rakovpublic.jneuropallium.master.services.IInputLoadingStrategy;
-import com.rakovpublic.jneuropallium.master.services.ISignalsPersistStorage;
+import com.rakovpublic.jneuropallium.worker.net.storages.IInputLoadingStrategy;
+import com.rakovpublic.jneuropallium.worker.net.storages.ISignalsPersistStorage;
 import com.rakovpublic.jneuropallium.worker.net.storages.*;
 import com.rakovpublic.jneuropallium.worker.net.storages.inmemory.InMemoryLayerMeta;
 import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
