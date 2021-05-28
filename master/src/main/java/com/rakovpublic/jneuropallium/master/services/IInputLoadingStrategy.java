@@ -10,4 +10,5 @@ import java.util.HashMap;
 public interface IInputLoadingStrategy {
     Boolean populateInput(ISignalsPersistStorage signalsPersistStorage, HashMap<IInitInput, InputStatusMeta> inputStatuses);
     void setLayersMeta(ILayersMeta layersMeta);
+    HashMap<String,Long> getNeuronInputMapping();
 }

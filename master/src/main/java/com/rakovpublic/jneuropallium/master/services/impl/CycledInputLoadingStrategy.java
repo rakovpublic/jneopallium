@@ -18,6 +18,7 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
     private HashMap<IInitInput,InputInitStrategy> externalInputs;
     int counter;
     private HashMap<IInitInput, InputStatusMeta> inputStatuses;
+    private HashMap<String,Long> neuronInputMapping;
 
     public CycledInputLoadingStrategy(ILayersMeta layersMeta, HashMap<IInitInput, InputInitStrategy> externalInputs, int defaultLoopsCount, HashMap<IInitInput, InputStatusMeta> inputStatuses) {
         counter=0;
@@ -25,6 +26,7 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
         this.externalInputs = externalInputs;
         this.inputStatuses = inputStatuses;
         init(defaultLoopsCount);
+        neuronInputMapping = new HashMap<>();
 
     }
 
@@ -38,6 +40,7 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
         long neuronId= 1l;
         for(InputStatusMeta meta :inputStatuses.values()){
             neurons.add(new CycleNeuron(defaultLoopsCount,signalChain,meta,neuronId));
+            neuronInputMapping.put(meta.getName(),neuronId);
             neuronId+=1;
         }
 
@@ -66,5 +69,10 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
     @Override
     public void setLayersMeta(ILayersMeta  layersMeta) {
         this.layersMeta=layersMeta;
+    }
+
+    @Override
+    public HashMap<String, Long> getNeuronInputMapping() {
+        return neuronInputMapping;
     }
 }
