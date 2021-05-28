@@ -4,6 +4,7 @@ package com.rakovpublic.jneuropallium.worker.neuron;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -142,5 +143,10 @@ public interface INeuron extends Serializable, Comparable {
     List<CreateNeuronRequest> getCreateRequests();
 
     void addCreateRequest(CreateNeuronRequest createNeuronRequest);
+
+
+    public HashMap<String, Long> getCyclingNeuronInputMapping();
+
+    public void setCyclingNeuronInputMapping(HashMap<String, Long> cyclingNeuronInputMapping);
 
 }

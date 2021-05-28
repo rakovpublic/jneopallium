@@ -26,5 +26,7 @@ public interface IInputMeta<K> extends IStorageMeta {
 
     void copyInputsToNextStep();
 
+    void getCycleInputsMap(HashMap<String,Long> neuronInputNameMapping);
+
 
 }

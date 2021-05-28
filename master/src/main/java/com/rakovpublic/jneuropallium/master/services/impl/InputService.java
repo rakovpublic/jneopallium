@@ -1,6 +1,5 @@
 package com.rakovpublic.jneuropallium.master.services.impl;
 
-import com.rakovpublic.jneuropallium.master.exceptions.InputServiceInitException;
 import com.rakovpublic.jneuropallium.master.services.IInputLoadingStrategy;
 import com.rakovpublic.jneuropallium.master.services.IInputService;
 import com.rakovpublic.jneuropallium.master.services.ISignalsPersistStorage;
@@ -45,7 +44,7 @@ public class InputService implements IInputService {
     @Override
     public void register( IInitInput iInputSource, boolean isMandatory, InputInitStrategy initStrategy, Integer amountOfRuns) {
         //signalsPersist.putSignals(initStrategy.getInputs(layersMeta, iInputSource.readSignals()));
-        inputStatuses.put(iInputSource, new InputStatusMeta(true, isMandatory,amountOfRuns));
+        inputStatuses.put(iInputSource, new InputStatusMeta(true, isMandatory,amountOfRuns,iInputSource.getName()));
         inputs.put(iInputSource,initStrategy);
     }
 
