@@ -28,5 +28,7 @@ public interface IInputMeta<K> extends IStorageMeta {
 
     void getCycleInputsMap(HashMap<String,Long> neuronInputNameMapping);
 
+    Integer getCurrentLoopCount();
+
 
 }

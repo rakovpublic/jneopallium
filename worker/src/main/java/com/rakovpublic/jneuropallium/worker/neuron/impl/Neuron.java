@@ -31,18 +31,26 @@ public  class Neuron implements INeuron {
     private Boolean changed;
     private List<CreateNeuronRequest> createNeuronRequests = new ArrayList<>();
     private Boolean onDelete;
-@Override
+    @Override
     public HashMap<String, Long> getCyclingNeuronInputMapping() {
         return cyclingNeuronInputMapping;
     }
-@Override
+    @Override
     public void setCyclingNeuronInputMapping(HashMap<String, Long> cyclingNeuronInputMapping) {
         this.cyclingNeuronInputMapping = cyclingNeuronInputMapping;
     }
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     protected HashMap<String,Long> cyclingNeuronInputMapping;
 
-
+    private Integer currentLoopAmount;
+    @Override
+    public Integer getCurrentLoopAmount() {
+        return currentLoopAmount;
+    }
+    @Override
+    public void setCurrentLoopAmount(Integer currentLoopAmount) {
+        this.currentLoopAmount = currentLoopAmount;
+    }
 
     public Neuron() {
         rules = new ArrayList<>();

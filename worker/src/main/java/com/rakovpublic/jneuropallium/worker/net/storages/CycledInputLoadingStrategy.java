@@ -75,4 +75,9 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
     public HashMap<String, Long> getNeuronInputMapping() {
         return neuronInputMapping;
     }
+
+    @Override
+    public Integer getCurrentLoopCount() {
+        return ((CycleNeuron)layersMeta.getLayerByID(Integer.MIN_VALUE).getNeuronByID(0l)).getLoopCount();
+    }
 }
