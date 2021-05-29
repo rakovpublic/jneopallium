@@ -4,8 +4,6 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 import java.util.List;
 
-public interface IInitInput {
-    List<ISignal> readSignals();
-    String getName();
-    INeuronNetInput getNeuronNetInput();
+public interface INeuronNetInput {
+    void sendCallBack(List<ISignal> signals);
 }
