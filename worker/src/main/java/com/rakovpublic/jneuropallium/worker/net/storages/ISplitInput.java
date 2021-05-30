@@ -15,4 +15,5 @@ public interface ISplitInput extends IStorageMeta {
     void setCycleInputsMap(HashMap<String,Long> neuronInputNameMapping);
     HashMap<String, Long>  getCycleInputsMap();
     Integer getCurrentLoopCount();
+    String getNodeIdentifier();
 }

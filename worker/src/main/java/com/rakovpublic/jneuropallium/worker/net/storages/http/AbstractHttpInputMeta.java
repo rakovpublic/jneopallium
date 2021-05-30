@@ -36,7 +36,7 @@ public abstract class AbstractHttpInputMeta implements ISplitInput {
     @Override
     public HashMap<Long, List<ISignal>> readInputs() {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(readNeuronsEndpoint))
+                .uri(URI.create(readInputsEndpoint))
                 .timeout(Duration.ofMinutes(2))
                 .header("Content-Type", "application/json")
                 .GET()
@@ -65,7 +65,7 @@ public abstract class AbstractHttpInputMeta implements ISplitInput {
     @Override
     public void saveResults(HashMap<Long, List<ISignal>> signals) {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(readNeuronsEndpoint))
+                .uri(URI.create(sendResultEndpoint))
                 .timeout(Duration.ofMinutes(2))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(resultToJSON(signals)))
@@ -93,6 +93,10 @@ public abstract class AbstractHttpInputMeta implements ISplitInput {
         nodeId=name;
     }
 
+    @Override
+    public String getNodeIdentifier() {
+        return nodeId;
+    }
 
     @Override
     public List<? extends INeuron> getNeurons() {
