@@ -2,6 +2,7 @@ package com.rakovpublic.jneuropallium.worker.net.storages.http;
 
 
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
+import com.rakovpublic.jneuropallium.worker.net.storages.ISignalStorage;
 import com.rakovpublic.jneuropallium.worker.net.storages.ISplitInput;
 import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 
@@ -34,7 +35,7 @@ public abstract class AbstractHttpInputMeta implements ISplitInput {
     }
 
     @Override
-    public HashMap<Long, List<ISignal>> readInputs() {
+    public ISignalStorage readInputs() {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(readInputsEndpoint))
                 .timeout(Duration.ofMinutes(2))
@@ -142,7 +143,7 @@ public abstract class AbstractHttpInputMeta implements ISplitInput {
     }
 
 
-    protected abstract HashMap<Long, List<ISignal>> parseSignalsForNeurons(HttpResponse<String> response);
+    protected abstract ISignalStorage parseSignalsForNeurons(HttpResponse<String> response);
 
     protected abstract List<? extends INeuron> parseNeurons(HttpResponse<String> response);
 

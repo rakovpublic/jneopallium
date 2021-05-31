@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public interface ISplitInput extends IStorageMeta {
-    HashMap<Long, List<ISignal>> readInputs();
+    ISignalStorage readInputs();
     void saveResults(HashMap<Long, List<ISignal>> signals);
     void setNodeIdentifier(String name);
     ISplitInput getNewInstance();
