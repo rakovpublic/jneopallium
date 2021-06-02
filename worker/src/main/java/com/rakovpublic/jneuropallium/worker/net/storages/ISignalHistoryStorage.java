@@ -6,5 +6,5 @@ import java.util.HashMap;
 import java.util.List;
 
 public interface ISignalHistoryStorage {
-    HashMap<Long, List<ISignal>> getSourceSignalsForRun(Long nRun);
+    HashMap<NeuronAddress, List<ISignal>> getSourceSignalsForRun(Long nRun, NeuronAddress forTarget);
 }
