@@ -2,6 +2,7 @@ package com.rakovpublic.jneuropallium.worker.neuron;
 
 
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
+import com.rakovpublic.jneuropallium.worker.net.storages.ISignalHistoryStorage;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -19,6 +20,12 @@ public interface INeuron extends Serializable, Comparable {
 
     Map<Class<? extends ISignal>, ISignalProcessor> getProcessorMap();
     Map<Class<? extends ISignal>, ISignalMerger> getMergerMap();
+
+    Long getRun();
+    void setRun(Long run);
+
+    ISignalHistoryStorage getSignalHistory();
+    void setSignalHistory(ISignalHistoryStorage signalHistory);
 
     void setId(Long id);
 

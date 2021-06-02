@@ -4,6 +4,7 @@ package com.rakovpublic.jneuropallium.worker.neuron.impl;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.rakovpublic.jneuropallium.worker.exceptions.CannotFindSignalMergerException;
 import com.rakovpublic.jneuropallium.worker.exceptions.CannotFindSignalProcessorException;
+import com.rakovpublic.jneuropallium.worker.net.storages.ISignalHistoryStorage;
 import com.rakovpublic.jneuropallium.worker.neuron.*;
 import com.rakovpublic.jneuropallium.worker.net.signals.IChangingSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
@@ -86,6 +87,26 @@ public  class Neuron implements INeuron {
     @Override
     public Map<Class<? extends ISignal>, ISignalMerger> getMergerMap() {
         return mergerMap;
+    }
+
+    @Override
+    public Long getRun() {
+        return null;
+    }
+
+    @Override
+    public void setRun(Long run) {
+
+    }
+
+    @Override
+    public ISignalHistoryStorage getSignalHistory() {
+        return null;
+    }
+
+    @Override
+    public void setSignalHistory(ISignalHistoryStorage signalHistory) {
+
     }
 
     @Override
