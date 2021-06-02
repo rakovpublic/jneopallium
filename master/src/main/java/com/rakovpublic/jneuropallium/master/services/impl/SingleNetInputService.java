@@ -27,6 +27,7 @@ public class SingleNetInputService implements IInputService {
     private IInputLoadingStrategy runningStrategy;
     private IResultLayerRunner resultLayerRunner;
     private boolean runFlag;
+    private Long run;
 
     private SingleNetInputService() {
         runFlag =false;
@@ -195,11 +196,17 @@ public class SingleNetInputService implements IInputService {
         if(runFlag){
             runFlag =false;
             runningStrategy.populateInput(signalsPersist,inputStatuses);
+            run++;
         }
     }
 
     @Override
     public void setLayersMeta(ILayersMeta layersMeta) {
         this.layersMeta =layersMeta;
+    }
+
+    @Override
+    public void setRun(Long run) {
+        this.run=run;
     }
 }

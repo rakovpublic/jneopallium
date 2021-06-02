@@ -16,4 +16,7 @@ public interface ISplitInput extends IStorageMeta {
     HashMap<String, Long>  getCycleInputsMap();
     Integer getCurrentLoopCount();
     String getNodeIdentifier();
+    void setRun(Long run);
+    Long getRun();
+
 }

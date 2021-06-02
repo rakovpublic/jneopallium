@@ -32,6 +32,8 @@ public  class Neuron implements INeuron {
     private Boolean changed;
     private List<CreateNeuronRequest> createNeuronRequests = new ArrayList<>();
     private Boolean onDelete;
+    protected Long run;
+    protected ISignalHistoryStorage signalHistoryStorage;
     @Override
     public HashMap<String, Long> getCyclingNeuronInputMapping() {
         return cyclingNeuronInputMapping;
@@ -63,7 +65,7 @@ public  class Neuron implements INeuron {
         currentNeuronClass=Neuron.class;
     }
 
-    public Neuron(Long neuronId, ISignalChain processingChain) {
+    public Neuron(Long neuronId, ISignalChain processingChain,Long run) {
         rules = new ArrayList<>();
         this.neuronId = neuronId;
         isProcessed = false;
@@ -72,6 +74,8 @@ public  class Neuron implements INeuron {
         processorMap = new HashMap<>();
         mergerMap = new HashMap<>();
         this.signalChain = processingChain;
+        this.run = run;
+
     }
 
     @Override
@@ -91,22 +95,22 @@ public  class Neuron implements INeuron {
 
     @Override
     public Long getRun() {
-        return null;
+        return run;
     }
 
     @Override
     public void setRun(Long run) {
-
+        this.run=run;
     }
 
     @Override
     public ISignalHistoryStorage getSignalHistory() {
-        return null;
+        return signalHistoryStorage;
     }
 
     @Override
     public void setSignalHistory(ISignalHistoryStorage signalHistory) {
-
+        this.signalHistoryStorage=signalHistory;
     }
 
     @Override

@@ -30,4 +30,6 @@ public interface IInputService {
     void nextRun();
 
     void setLayersMeta(ILayersMeta layersMeta);
+
+    void setRun(Long run);
 }
