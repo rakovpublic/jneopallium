@@ -28,7 +28,7 @@ public  class Neuron implements INeuron {
     protected List<ISignal> result;
     protected  ISignalChain signalChain;
     private List<IRule> rules;
-    private Class<?extends INeuron> currentNeuronClass;
+    protected Class<?extends INeuron> currentNeuronClass;
     private Boolean changed;
     private List<CreateNeuronRequest> createNeuronRequests = new ArrayList<>();
     private Boolean onDelete;

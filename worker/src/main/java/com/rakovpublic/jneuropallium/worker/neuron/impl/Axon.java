@@ -147,7 +147,7 @@ public class Axon implements IAxon {
 
     @Override
     public void wrapConnections() {
-        //TODO: add wrapping logic for json 
+        //TODO: add wrapping logic for json
 
     }
 
