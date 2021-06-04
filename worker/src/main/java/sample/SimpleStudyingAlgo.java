@@ -31,7 +31,7 @@ public class SimpleStudyingAlgo implements IStudyingAlgorithm {
             System.out.println("cannot get layer meta");
             //TODO: add logger
         }
-        layer.ifPresent(l->{l.getNeuronByID(neuronId).getAxon().changeAllWeights(layerId+1,sourceNeuron, new SimpleChangeWeightSignal(0.5d,layerId,neuronId));
+        layer.ifPresent(l->{l.getNeuronByID(neuronId).getAxon().changeAllWeightsForNeuron(layerId+1,sourceNeuron, new SimpleChangeWeightSignal(0.5d,layerId,neuronId));
             result.add(new SimpleStudyingRequest(layerId,neuronId,l.getNeuronByID(neuronId).getAxon().getConnectionMap()));});
         for(ISignal s:resultSignals){
             rebuildConnection(s.getSourceNeuronId(),s.getSourceLayerId(),structMeta,neuronId,result);

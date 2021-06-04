@@ -67,7 +67,7 @@ public interface IAxon extends Serializable {
      * @param neuronId neuron id
      * @param signal   change signal
      **/
-    void changeAllWeights(int layerId, Long neuronId, ISignal signal);
+    void changeAllWeightsForNeuron(int layerId, Long neuronId, ISignal signal);
 
     /**
      * Change weight for signal class
@@ -77,7 +77,7 @@ public interface IAxon extends Serializable {
      * @param clazz    signal class for which should be changed weight
      * @param signal   change signal
      **/
-    void changeAllWeights(int layerId, Long neuronId, Class<? extends ISignal> clazz, ISignal signal);
+    void changeAllWeightsForNeuronAndSignal(int layerId, Long neuronId, Class<? extends ISignal> clazz, ISignal signal);
 
     /**
      * Change all weights
@@ -87,4 +87,6 @@ public interface IAxon extends Serializable {
     void changeAllWeights(ISignal signal);
 
     HashMap<Class<? extends ISignal>, List<INConnection>> getConnectionMap();
+
+    void wrapConnections();
 }

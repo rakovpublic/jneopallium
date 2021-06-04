@@ -14,6 +14,14 @@ public class NeuronConnection<K extends ISignal> implements INConnection<K> {
 
     public NeuronConnection() {
     }
+    public NeuronConnection(NeuronConnection connection, IWeight weight) {
+        this.targetLayerId = connection.targetLayerId;
+        this.sourceLayerId = connection.sourceLayerId;
+        this.targetNeuronId = connection.targetNeuronId;
+        this.sourceNeuronId = connection.sourceNeuronId;
+        this.weight = new WeightWrapper(connection.weight);
+        this.description = connection.description;
+    }
 
     public static NeuronConnection createConnection(int targetLayerId, int sourceLayerId, Long targetNeuronId, Long sourceNeuronId, IWeight weight, String description) {
         return new NeuronConnection(targetLayerId, sourceLayerId, targetNeuronId, sourceNeuronId, weight, description);

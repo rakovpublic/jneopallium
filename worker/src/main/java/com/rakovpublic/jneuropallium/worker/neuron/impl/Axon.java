@@ -10,11 +10,11 @@ import java.util.List;
 
 public class Axon implements IAxon {
     private HashMap<Class<? extends ISignal>, List<INConnection>> connectionMap;
-    private HashMap<Integer, HashMap<Long, List<INConnection>>> onDestroyMap;
+    private HashMap<Integer, HashMap<Long, List<INConnection>>> addressMap;
 
     public Axon() {
         this.connectionMap = new HashMap<>();
-        this.onDestroyMap = new HashMap<>();
+        this.addressMap = new HashMap<>();
     }
 
 
@@ -33,8 +33,8 @@ public class Axon implements IAxon {
             tlist.add(connection);
             connectionMap.put(cl, tlist);
         }
-        if (onDestroyMap.containsKey(connection.getTargetLayerId())) {
-            HashMap<Long, List<INConnection>> tMap = onDestroyMap.get(connection.getTargetLayerId());
+        if (addressMap.containsKey(connection.getTargetLayerId())) {
+            HashMap<Long, List<INConnection>> tMap = addressMap.get(connection.getTargetLayerId());
             if (tMap.containsKey(connection.getTargetNeuronId())) {
                 tMap.get(connection.getTargetNeuronId()).add(connection);
             } else {
@@ -47,7 +47,7 @@ public class Axon implements IAxon {
             List<INConnection> tlist = new ArrayList<>();
             tlist.add(connection);
             tMap.put(connection.getTargetNeuronId(), tlist);
-            onDestroyMap.put(connection.getTargetLayerId(), tMap);
+            addressMap.put(connection.getTargetLayerId(), tMap);
         }
     }
 
@@ -96,8 +96,8 @@ public class Axon implements IAxon {
 
     @Override
     public void destroyConnection(int layerId, Long neuronId, Class<? extends ISignal> clazz) {
-        if (onDestroyMap.containsKey(layerId) && onDestroyMap.get(layerId).containsKey(neuronId)) {
-            List<INConnection> conns = onDestroyMap.get(layerId).get(neuronId);
+        if (addressMap.containsKey(layerId) && addressMap.get(layerId).containsKey(neuronId)) {
+            List<INConnection> conns = addressMap.get(layerId).get(neuronId);
             for (INConnection c : conns) {
                 if (c.getWeight().getSignalClass().equals(clazz)) {
                     connectionMap.get(clazz).remove(c);
@@ -109,9 +109,9 @@ public class Axon implements IAxon {
     }
 
     @Override
-    public void changeAllWeights(int layerId, Long neuronId, ISignal signal) {
-        if (onDestroyMap.containsKey(layerId) && onDestroyMap.get(layerId).containsKey(neuronId)) {
-            List<INConnection> conns = onDestroyMap.get(layerId).get(neuronId);
+    public void changeAllWeightsForNeuron(int layerId, Long neuronId, ISignal signal) {
+        if (addressMap.containsKey(layerId) && addressMap.get(layerId).containsKey(neuronId)) {
+            List<INConnection> conns = addressMap.get(layerId).get(neuronId);
             for (INConnection c : conns) {
                 c.getWeight().changeWeight(signal);
             }
@@ -119,9 +119,9 @@ public class Axon implements IAxon {
     }
 
     @Override
-    public void changeAllWeights(int layerId, Long neuronId, Class<? extends ISignal> clazz, ISignal signal) {
-        if (onDestroyMap.containsKey(layerId) && onDestroyMap.get(layerId).containsKey(neuronId)) {
-            List<INConnection> conns = onDestroyMap.get(layerId).get(neuronId);
+    public void changeAllWeightsForNeuronAndSignal(int layerId, Long neuronId, Class<? extends ISignal> clazz, ISignal signal) {
+        if (addressMap.containsKey(layerId) && addressMap.get(layerId).containsKey(neuronId)) {
+            List<INConnection> conns = addressMap.get(layerId).get(neuronId);
             for (INConnection c : conns) {
                 if (c.getWeight().getSignalClass().equals(clazz)) {
                     c.getWeight().changeWeight(signal);
@@ -143,6 +143,12 @@ public class Axon implements IAxon {
     @Override
     public HashMap<Class<? extends ISignal>, List<INConnection>> getConnectionMap() {
         return connectionMap;
+    }
+
+    @Override
+    public void wrapConnections() {
+        //TODO: add wrapping logic for json 
+
     }
 
 
