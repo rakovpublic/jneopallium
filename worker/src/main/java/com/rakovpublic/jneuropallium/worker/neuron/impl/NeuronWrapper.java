@@ -2,7 +2,8 @@ package com.rakovpublic.jneuropallium.worker.neuron.impl;
 
 import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 //TODO: add wrappers for weights and other interfaces and rewrite parsing logic to use it
-public class NeuronWrapper<N extends INeuron> {
+//wrapper example
+public class NeuronWrapper<N extends INeuron> extends Neuron implements INeuron {
     private String neuronClass;
     private N neuron;
     public NeuronWrapper(N neuron){
