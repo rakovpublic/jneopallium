@@ -5,7 +5,7 @@ import com.rakovpublic.jneuropallium.worker.neuron.IWeight;
 
 
 //Add wrapper usage for weights
-public class WeightWrapper<N extends IWeight,S extends ISignal,K extends ISignal> implements IWeight<S,K> {
+class WeightWrapper<N extends IWeight,S extends ISignal,K extends ISignal> implements IWeight<S,K> {
     private N weight;
     private String weightClass;
 
