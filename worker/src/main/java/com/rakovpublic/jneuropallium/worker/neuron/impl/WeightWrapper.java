@@ -2,8 +2,9 @@ package com.rakovpublic.jneuropallium.worker.neuron.impl;
 
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.neuron.IWeight;
-import sample.SimpleDoubleWeight;
 
+
+//Add wrapper usage for weights
 public class WeightWrapper<N extends IWeight,S extends ISignal,K extends ISignal> implements IWeight<S,K> {
     private N weight;
     private String weightClass;
