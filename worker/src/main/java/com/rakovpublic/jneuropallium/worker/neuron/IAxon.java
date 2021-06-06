@@ -89,4 +89,8 @@ public interface IAxon extends Serializable {
     HashMap<Class<? extends ISignal>, List<INConnection>> getConnectionMap();
 
     void wrapConnections();
+
+    void unwrapConnections();
+
+    Boolean isConnectionsWrapped();
 }

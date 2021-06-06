@@ -11,12 +11,18 @@ import java.util.List;
 public class Axon implements IAxon {
     private HashMap<Class<? extends ISignal>, List<INConnection>> connectionMap;
     private HashMap<Integer, HashMap<Long, List<INConnection>>> addressMap;
+    private Boolean connectionsWrapped;
+
 
     public Axon() {
         this.connectionMap = new HashMap<>();
         this.addressMap = new HashMap<>();
+        connectionsWrapped=false;
     }
 
+    public Boolean isConnectionsWrapped() {
+        return connectionsWrapped;
+    }
 
 
     @Override
@@ -149,7 +155,12 @@ public class Axon implements IAxon {
     public void wrapConnections() {
         //TODO: add wrapping logic for json
 
+        connectionsWrapped = true;
     }
 
+    @Override
+    public void unwrapConnections() {
 
+        connectionsWrapped = false;
+    }
 }
