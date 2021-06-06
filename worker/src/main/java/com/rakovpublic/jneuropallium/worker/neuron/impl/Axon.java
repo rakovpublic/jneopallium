@@ -3,6 +3,7 @@ package com.rakovpublic.jneuropallium.worker.neuron.impl;
 import com.rakovpublic.jneuropallium.worker.neuron.IAxon;
 import com.rakovpublic.jneuropallium.worker.neuron.INConnection;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
+import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -154,13 +155,35 @@ public class Axon implements IAxon {
     @Override
     public void wrapConnections() {
         //TODO: add wrapping logic for json
-
+        for(List<INConnection> connections:connectionMap.values()){
+            for(INConnection connection:connections){
+                connection.setWeight(new WeightWrapper(connection.getWeight()));
+            }
+        }
+        for(HashMap<Long, List<INConnection>> map:addressMap.values()){
+            for (List<INConnection> connections:map.values()){
+                for(INConnection connection:connections){
+                    connection.setWeight(new WeightWrapper(connection.getWeight()));
+                }
+            }
+        }
         connectionsWrapped = true;
     }
 
     @Override
     public void unwrapConnections() {
-
+        for(List<INConnection> connections:connectionMap.values()){
+            for(INConnection connection:connections){
+                connection.setWeight((( WeightWrapper)connection.getWeight()).getWeight());
+            }
+        }
+        for(HashMap<Long, List<INConnection>> map:addressMap.values()){
+            for (List<INConnection> connections:map.values()){
+                for(INConnection connection:connections){
+                    connection.setWeight((( WeightWrapper)connection.getWeight()).getWeight());
+                }
+            }
+        }
         connectionsWrapped = false;
     }
 }

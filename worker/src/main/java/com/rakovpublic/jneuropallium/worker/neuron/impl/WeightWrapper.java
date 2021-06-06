@@ -28,4 +28,8 @@ public class WeightWrapper<N extends IWeight,S extends ISignal,K extends ISignal
     public Class<S> getSignalClass() {
         return null;
     }
+
+    public N getWeight() {
+        return weight;
+    }
 }

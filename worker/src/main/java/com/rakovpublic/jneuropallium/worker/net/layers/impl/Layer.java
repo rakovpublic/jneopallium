@@ -11,10 +11,7 @@ import com.rakovpublic.jneuropallium.worker.net.storages.IInputMeta;
 import com.rakovpublic.jneuropallium.worker.net.storages.ILayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.storages.INeuronSerializer;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /***
@@ -169,7 +166,14 @@ public class Layer implements ILayer {
 
     @Override
     public void dumpNeurons(ILayerMeta layerMeta) {
-        layerMeta.saveNeurons(map.values());
+        List<INeuron> neurons = new LinkedList<>();
+        for(INeuron n:map.values()){
+            if(!n.getAxon().isConnectionsWrapped()){
+                n.getAxon().wrapConnections();
+            }
+            neurons.add(n);
+        }
+        layerMeta.saveNeurons(neurons);
         layerMeta.dumpLayer();
 
     }
@@ -180,6 +184,9 @@ public class Layer implements ILayer {
         for (Long neurId : map.keySet()) {
             INeuron neur = map.get(neurId);
             IAxon axon = neur.getAxon();
+            if(axon.isConnectionsWrapped()){
+                axon.unwrapConnections();
+            }
             HashMap<ISignal, List<INConnection>> tMap = axon.processSignals(neur.getResult());
             for (ISignal signal : tMap.keySet()) {
                 signal.setSourceLayerId(this.layerId);

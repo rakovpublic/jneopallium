@@ -71,5 +71,10 @@ public class NeuronConnection<K extends ISignal> implements INConnection<K> {
         return weight;
     }
 
+    @Override
+    public void setWeight(IWeight<K, ? extends ISignal> weight) {
+        this.weight=weight;
+    }
+
 
 }

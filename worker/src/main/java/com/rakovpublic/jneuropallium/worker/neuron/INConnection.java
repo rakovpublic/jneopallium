@@ -47,6 +47,7 @@ public interface INConnection<S extends ISignal> extends Serializable {
      * @return weight object
      **/
     IWeight<S, ? extends ISignal> getWeight();
+    void setWeight(IWeight<S, ? extends ISignal> weight );
 
 
 }
