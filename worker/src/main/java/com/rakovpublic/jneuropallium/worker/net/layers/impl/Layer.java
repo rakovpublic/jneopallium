@@ -26,6 +26,7 @@ public class Layer implements ILayer {
     private int layerId;
     private LinkedBlockingQueue<INeuron> notProcessed;
     private List<IRule> rules;
+    //TODO: refactor to signal persistance storage
     private IInputMeta inputMeta;
 
 

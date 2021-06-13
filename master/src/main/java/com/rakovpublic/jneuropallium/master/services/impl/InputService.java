@@ -156,4 +156,9 @@ public class InputService implements IInputService {
     public void setLayersMeta(ILayersMeta layersMeta) {
 
     }
+
+    @Override
+    public void setRun(Long run) {
+
+    }
 }

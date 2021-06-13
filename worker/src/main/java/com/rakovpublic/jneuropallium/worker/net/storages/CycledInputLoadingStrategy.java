@@ -16,12 +16,12 @@ import java.util.List;
 public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
     private ILayersMeta layersMeta;
     private HashMap<IInitInput,InputInitStrategy> externalInputs;
-    int counter;
+    private Long counter;
     private HashMap<IInitInput, InputStatusMeta> inputStatuses;
     private HashMap<String,Long> neuronInputMapping;
 
     public CycledInputLoadingStrategy(ILayersMeta layersMeta, HashMap<IInitInput, InputInitStrategy> externalInputs, int defaultLoopsCount, HashMap<IInitInput, InputStatusMeta> inputStatuses) {
-        counter=0;
+        counter=0l;
         this.layersMeta = layersMeta;
         this.externalInputs = externalInputs;
         this.inputStatuses = inputStatuses;
@@ -32,14 +32,14 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
 
     private void init(int defaultLoopsCount){
         ISignalChain signalChain= new CycleSignalsProcessingChanin();
-        CycleNeuron cycleNeuron = new CycleNeuron(defaultLoopsCount,signalChain,null,0l);
+        CycleNeuron cycleNeuron = new CycleNeuron(defaultLoopsCount,signalChain,null,0l,counter);
         List<INeuron> neurons = new LinkedList<>();
         neurons.add(cycleNeuron);
         ILayerMeta layerMeta= new InMemoryLayerMeta(Integer.MIN_VALUE,neurons);
         layersMeta.addLayerMeta(layerMeta);
         long neuronId= 1l;
         for(InputStatusMeta meta :inputStatuses.values()){
-            neurons.add(new CycleNeuron(defaultLoopsCount,signalChain,meta,neuronId));
+            neurons.add(new CycleNeuron(defaultLoopsCount,signalChain,meta,neuronId,counter));
             neuronInputMapping.put(meta.getName(),neuronId);
             neuronId+=1;
         }
@@ -59,7 +59,7 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
                     inputStatuses.get(iii).setCurrentRuns(inputStatuses.get(iii).getCurrentRuns()+1);
                 }
             }
-            counter=0;
+            counter=0l;
         }else {
             counter+=1;
         }

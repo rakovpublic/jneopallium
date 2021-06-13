@@ -154,7 +154,6 @@ public class Axon implements IAxon {
 
     @Override
     public void wrapConnections() {
-        //TODO: add wrapping logic for json
         for(List<INConnection> connections:connectionMap.values()){
             for(INConnection connection:connections){
                 connection.setWeight(new WeightWrapper(connection.getWeight()));
