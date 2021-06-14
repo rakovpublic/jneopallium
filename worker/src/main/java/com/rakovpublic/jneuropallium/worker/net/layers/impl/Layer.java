@@ -1,15 +1,14 @@
 package com.rakovpublic.jneuropallium.worker.net.layers.impl;
 
+import com.rakovpublic.jneuropallium.worker.net.layers.IInputResolver;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayer;
+import com.rakovpublic.jneuropallium.worker.net.storages.*;
 import com.rakovpublic.jneuropallium.worker.neuron.IAxon;
 import com.rakovpublic.jneuropallium.worker.neuron.INConnection;
 import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.neuron.IRule;
 import com.rakovpublic.jneuropallium.worker.neuron.impl.NeuronRunnerService;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
-import com.rakovpublic.jneuropallium.worker.net.storages.IInputMeta;
-import com.rakovpublic.jneuropallium.worker.net.storages.ILayerMeta;
-import com.rakovpublic.jneuropallium.worker.net.storages.INeuronSerializer;
 
 import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -28,6 +27,7 @@ public class Layer implements ILayer {
     private List<IRule> rules;
     //TODO: refactor to signal persistance storage
     private IInputMeta inputMeta;
+    private IInputResolver inputResolver;
 
 
     public Layer(int layerId, IInputMeta meta) {
@@ -103,7 +103,7 @@ public class Layer implements ILayer {
     @Override
     public void process() {
         //TODO:refactor to direct reading in layer impl or at least add flag for performance tuning
-        HashMap<Long, List<ISignal>> inputs = inputMeta.readInputs(layerId);
+        HashMap<Long, List<ISignal>> inputs = inputResolver.getSignalPersistStorage().getLayerSignals(this.layerId);
         for (Long neuronID : inputs.keySet()) {
             for (ISignal signal : inputs.get(neuronID)) {
                 ISignal nextStepSignal = signal.prepareSignalToNextStep();
@@ -118,6 +118,9 @@ public class Layer implements ILayer {
         for (Long neuronId : map.keySet()) {
             if (input.containsKey(neuronId)) {
                 neur = map.get(neuronId);
+                neur.setCurrentLoopAmount(inputResolver.getCurrentLoop());
+                neur.setCyclingNeuronInputMapping(inputResolver.getCycleNeuronAddressMapping());
+                neur.setSignalHistory(inputResolver.getSignalsHistoryStorage());
                 neur.addSignals(input.get(neuronId));
                 ns.addNeuron(neur);
             }
@@ -215,6 +218,7 @@ public class Layer implements ILayer {
                 }
             }
         }
+
         return result;
     }
 
