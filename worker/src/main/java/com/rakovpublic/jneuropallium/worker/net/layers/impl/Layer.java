@@ -25,18 +25,16 @@ public class Layer implements ILayer {
     private int layerId;
     private LinkedBlockingQueue<INeuron> notProcessed;
     private List<IRule> rules;
-    //TODO: refactor to signal persistance storage
-    private IInputMeta inputMeta;
     private IInputResolver inputResolver;
 
 
-    public Layer(int layerId, IInputMeta meta) {
+    public Layer(int layerId, IInputResolver meta) {
         neuronSerializerHashMap = new HashMap<>();
         rules = new ArrayList<>();
         isProcessed = false;
         notProcessed = new LinkedBlockingQueue<INeuron>();
         this.layerId = layerId;
-        inputMeta = meta;
+        inputResolver = meta;
         map = new HashMap<Long, INeuron>();
         input = new HashMap<Long, List<ISignal>>();
     }
@@ -102,15 +100,13 @@ public class Layer implements ILayer {
 
     @Override
     public void process() {
-        //TODO:refactor to direct reading in layer impl or at least add flag for performance tuning
         HashMap<Long, List<ISignal>> inputs = inputResolver.getSignalPersistStorage().getLayerSignals(this.layerId);
         for (Long neuronID : inputs.keySet()) {
             for (ISignal signal : inputs.get(neuronID)) {
                 ISignal nextStepSignal = signal.prepareSignalToNextStep();
                 if (nextStepSignal != null) {
-                    inputMeta.copySignalToNextStep(layerId, neuronID, nextStepSignal);
+                    this.addInput(signal, neuronID);
                 }
-                this.addInput(signal, neuronID);
             }
         }
         INeuron neur;
@@ -160,12 +156,9 @@ public class Layer implements ILayer {
     }
 
     @Override
-    public void dumpResult(IInputMeta meta) {
+    public void dumpResult() {
         HashMap<Integer, HashMap<Long, List<ISignal>>> result = getResults();
-        for (int layerId : result.keySet()) {
-            meta.saveResults(result.get(layerId), layerId);
-        }
-
+        inputResolver.getSignalPersistStorage().putSignals(result);
     }
 
     @Override
@@ -254,7 +247,6 @@ public class Layer implements ILayer {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(map, input, isProcessed, notProcessed, rules, layerId);
     }
 }

@@ -1,5 +1,6 @@
 package com.rakovpublic.jneuropallium.worker.net.storages.structimpl;
 
+import com.rakovpublic.jneuropallium.worker.net.layers.IInputResolver;
 import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.*;
@@ -13,15 +14,17 @@ import java.util.List;
 **/
 public class StructMeta implements IStructMeta {
 
-    private IInputMeta initInputMeta;
-    private IInputMeta hiddenInputMeta;
+
+    private IInputResolver inputResolver;
     private ILayersMeta layersMeta;
 
-    public StructMeta(IInputMeta initInputMeta, IInputMeta hiddenInputMeta, ILayersMeta layersMeta) {
-        this.initInputMeta = initInputMeta;
-        this.hiddenInputMeta = hiddenInputMeta;
+    public StructMeta(IInputResolver hiddenInputMeta, ILayersMeta layersMeta) {
+
+        this.inputResolver = hiddenInputMeta;
         this.layersMeta = layersMeta;
     }
+
+    void init(){}
 
     @Override
     public List<ILayerMeta> getLayers() {
@@ -30,17 +33,11 @@ public class StructMeta implements IStructMeta {
 
 
     @Override
-    public IInputMeta getInputs(int layerId) {
-        if (layerId == 0) {
-            return initInputMeta;
-        }
-        return hiddenInputMeta;
+    public IInputResolver getInputResolver() {
+
+        return inputResolver;
     }
 
-    @Override
-    public void saveResults(int layerId, HashMap<String, List<ISignal>> meta) {
-        hiddenInputMeta.saveResults(meta, layerId);
-    }
 
     @Override
     public void study(List<IStudyingRequest> requests) {

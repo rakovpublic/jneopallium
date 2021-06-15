@@ -1,24 +1,23 @@
 package com.rakovpublic.jneuropallium.worker.net.storages.structimpl;
 
+import com.rakovpublic.jneuropallium.worker.net.layers.IInputResolver;
 import com.rakovpublic.jneuropallium.worker.net.storages.IInputMeta;
 import com.rakovpublic.jneuropallium.worker.net.storages.ILayersMeta;
 
 public class StructBuilder {
-    private IInputMeta initInputMeta;
-    private IInputMeta hiddenInputMeta;
+    private IInputResolver hiddenInputMeta;
     private ILayersMeta layersMeta;
 
     public StructBuilder() {
 
     }
 
-    public StructBuilder(IInputMeta initInputMeta, IInputMeta hiddenInputMeta, ILayersMeta layersMeta) {
-        this.initInputMeta = initInputMeta;
+    public StructBuilder( IInputResolver hiddenInputMeta, ILayersMeta layersMeta) {
         this.hiddenInputMeta = hiddenInputMeta;
         this.layersMeta = layersMeta;
     }
 
-    public StructBuilder withHiddenInputMeta(IInputMeta hiddenInputMeta) {
+    public StructBuilder withHiddenInputMeta(IInputResolver hiddenInputMeta) {
         this.hiddenInputMeta = hiddenInputMeta;
         return this;
     }
@@ -28,14 +27,10 @@ public class StructBuilder {
         return this;
     }
 
-    public StructBuilder withInitInputMeta(IInputMeta initInputMeta) {
-        this.initInputMeta = initInputMeta;
-        return this;
-    }
 
     public StructMeta build() {
-        if (initInputMeta != null && hiddenInputMeta != null && layersMeta != null) {
-            return new StructMeta(initInputMeta, hiddenInputMeta, layersMeta);
+        if (hiddenInputMeta != null && layersMeta != null) {
+            return new StructMeta( hiddenInputMeta, layersMeta);
         }
         return null;
     }

@@ -1,5 +1,6 @@
 package com.rakovpublic.jneuropallium.worker.net.layers.impl;
 
+import com.rakovpublic.jneuropallium.worker.net.layers.IInputResolver;
 import com.rakovpublic.jneuropallium.worker.net.layers.IResult;
 import com.rakovpublic.jneuropallium.worker.net.layers.IResultLayer;
 import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
@@ -10,7 +11,7 @@ import java.util.TreeSet;
 
 public class ResultLayer<K> extends Layer implements IResultLayer<K> {
 
-    public ResultLayer(int layerId, IInputMeta meta) {
+    public ResultLayer(int layerId, IInputResolver meta) {
         super(layerId,meta);
 
     }

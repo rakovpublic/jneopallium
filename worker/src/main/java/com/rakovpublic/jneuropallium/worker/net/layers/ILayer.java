@@ -89,10 +89,8 @@ public interface ILayer extends Serializable {
 
     /**
      * Store signal which obtained after neuron processing.
-     *
-     * @param meta data to for input storage
-     **/
-    void dumpResult(IInputMeta meta);
+     ***/
+    void dumpResult();
 
     /**
      * Store neurons after processing, because the state of neuron could be changed.

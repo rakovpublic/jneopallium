@@ -1,5 +1,6 @@
 package com.rakovpublic.jneuropallium.worker.application;
 
+import com.rakovpublic.jneuropallium.worker.net.layers.IInputResolver;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayer;
 import com.rakovpublic.jneuropallium.worker.net.layers.IResultLayer;
 import com.rakovpublic.jneuropallium.worker.net.layers.impl.LayerBuilder;
@@ -42,38 +43,42 @@ public class LocalApplication implements IApplication {
             String fileSystemConstructorArgs = context.getProperty("configuration.filesystem.constructor.args");
             String fileSystemConstructorArgsType = context.getProperty("configuration.filesystem.constructor.args.types");
             IFileSystem fs = InstantiationUtils.<IFileSystem>getObject(clazz, getObjects(fileSystemConstructorArgs), getTypes(fileSystemConstructorArgsType));
-            IInputMeta inputMeta = new FileInputMeta(fs.getItem(inputPath), fs);
-            structBuilder.withInitInputMeta(inputMeta);
-            structBuilder.withHiddenInputMeta(inputMeta);
+           //TODO: implement IInputResolver
+            IInputResolver inputResolver = null;
+            structBuilder.withHiddenInputMeta(inputResolver);
             structBuilder.withLayersMeta(new FileLayersMeta<>(fs.getItem(layerPath), fs));
             StructMeta meta = structBuilder.build();
             boolean isTeacherStudying = Boolean.valueOf(context.getProperty("configuration.isteacherstudying"));
             IStudyingAlgorithm algo = null;
+            Long currentRun=0l;
+            Long maxRun = Long.valueOf(context.getProperty("configuration.isteacherstudying"));
+            Boolean isInfinite = Boolean.valueOf(context.getProperty("configuration.infiniteRun"));
 
-            if (isTeacherStudying) {
-                IResultSignal desiredResult = inputMeta.getDesiredResult();
-                Object objst = getObject(context.getProperty("configuration.studyingalgo"));
-                if (objst != null) {
-                    algo = (IStudyingAlgorithm) objst;
-                    IResultLayer iResultLayer;
-                    while ((iResultLayer = process(meta))!=null && !iResultLayer.interpretResult().getResult().equals(desiredResult)) {
-                        meta.study(((IStudyingAlgorithm) objst).study(meta, iResultLayer.interpretResult().getNeuronId()));
-                        meta.getInputs(0).copyInputsToNextStep();
-                        meta.getInputs(0).nextStep();
+            for(;currentRun<maxRun||isInfinite;currentRun++) {
+                if (isTeacherStudying) {
+                    IResultSignal desiredResult = inputResolver.getDesiredResult();
+                    Object objst = getObject(context.getProperty("configuration.studyingalgo"));
+                    if (objst != null) {
+                        algo = (IStudyingAlgorithm) objst;
+                        IResultLayer iResultLayer;
+                        while ((iResultLayer = process(meta)) != null && !iResultLayer.interpretResult().getResult().equals(desiredResult)) {
+                            meta.study(((IStudyingAlgorithm) objst).study(meta, iResultLayer.interpretResult().getNeuronId()));
+                            meta.getInputResolver().addForHistory(meta.getInputResolver().getSignalPersistStorage().getAllSignals());
+                            meta.getInputResolver().getSignalPersistStorage().cleanOutdatedSignals();
+                        }
+                    } else {
+
+                        while (!process(meta).interpretResult().getResult().equals(desiredResult)) {
+                            meta.getInputResolver().addForHistory(meta.getInputResolver().getSignalPersistStorage().getAllSignals());
+                            meta.getInputResolver().getSignalPersistStorage().cleanOutdatedSignals();
+                        }
                     }
                 } else {
-
-                    while (!process(meta).interpretResult().getResult().equals(desiredResult)) {
-                        meta.getInputs(0).copyInputsToNextStep();
-                        meta.getInputs(0).nextStep();
-                    }
+                    //TODO:add normal output
+                    IResultLayer lr = process(meta);
+                    System.out.println(lr.interpretResult().getResult().toString());
                 }
-            } else {
-                //TODO:add normal output
-                IResultLayer lr=process(meta);
-                System.out.println(lr.interpretResult().getResult().toString());
             }
-
 
         } else {
 
@@ -86,7 +91,7 @@ public class LocalApplication implements IApplication {
         for (ILayerMeta met : meta.getLayers()) {
             LayerBuilder lb = new LayerBuilder();
             lb.withLayer(met);
-            lb.withInput(meta.getInputs(met.getID()));
+            lb.withInput(meta.getInputResolver());
             ILayer layer = lb.build();
             if (layer.validateGlobal() && layer.validateLocal()) {
                 //TODO: add logger invalid layer configuration and exception
@@ -100,14 +105,11 @@ public class LocalApplication implements IApplication {
                 }
             }
             layer.dumpNeurons(met);
-            i++;
-            layer.dumpResult(meta.getInputs(i));
-
         }
         IResultLayerMeta reMeta = meta.getResultLayer();
         LayerBuilder lb = new LayerBuilder();
         lb.withLayer(reMeta);
-        lb.withInput(meta.getInputs(reMeta.getID()));
+        lb.withInput(meta.getInputResolver());
         IResultLayer layer = lb.buildResultLayer();
         layer.process();
 

@@ -1,5 +1,6 @@
 package com.rakovpublic.jneuropallium.worker.net.layers.impl;
 
+import com.rakovpublic.jneuropallium.worker.net.layers.IInputResolver;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayer;
 import com.rakovpublic.jneuropallium.worker.net.layers.IResultLayer;
 import com.rakovpublic.jneuropallium.worker.net.storages.IInputMeta;
@@ -8,7 +9,7 @@ import com.rakovpublic.jneuropallium.worker.net.storages.ILayerMeta;
 
 public class LayerBuilder {
     private ILayerMeta layerMeta;
-    private IInputMeta meta;
+    private IInputResolver meta;
 
     public LayerBuilder() {
 
@@ -19,7 +20,7 @@ public class LayerBuilder {
         return this;
     }
 
-    public LayerBuilder withInput(IInputMeta meta) {
+    public LayerBuilder withInput(IInputResolver meta) {
         this.meta = meta;
         return this;
     }
