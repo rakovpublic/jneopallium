@@ -55,8 +55,9 @@ public class LocalApplication implements IApplication {
             Boolean isInfinite = Boolean.valueOf(context.getProperty("configuration.infiniteRun"));
 
             for(;currentRun<maxRun||isInfinite;currentRun++) {
-                if (isTeacherStudying) {
-                    IResultSignal desiredResult = inputResolver.getDesiredResult();
+                IResultSignal desiredResult = inputResolver.getDesiredResult();
+
+                if (isTeacherStudying&& desiredResult!=null) {
                     Object objst = getObject(context.getProperty("configuration.studyingalgo"));
                     if (objst != null) {
                         algo = (IStudyingAlgorithm) objst;
@@ -65,12 +66,20 @@ public class LocalApplication implements IApplication {
                             meta.study(((IStudyingAlgorithm) objst).study(meta, iResultLayer.interpretResult().getNeuronId()));
                             meta.getInputResolver().addForHistory(meta.getInputResolver().getSignalPersistStorage().getAllSignals());
                             meta.getInputResolver().getSignalPersistStorage().cleanOutdatedSignals();
+                            meta.getInputResolver().populateInput();
                         }
-                    } else {
+                    } else if( desiredResult!=null) {
 
                         while (!process(meta).interpretResult().getResult().equals(desiredResult)) {
                             meta.getInputResolver().addForHistory(meta.getInputResolver().getSignalPersistStorage().getAllSignals());
                             meta.getInputResolver().getSignalPersistStorage().cleanOutdatedSignals();
+                            meta.getInputResolver().populateInput();
+                        }
+                    }else{
+                        for(;currentRun<maxRun||isInfinite;currentRun++){
+                            meta.getInputResolver().addForHistory(meta.getInputResolver().getSignalPersistStorage().getAllSignals());
+                            meta.getInputResolver().getSignalPersistStorage().cleanOutdatedSignals();
+                            meta.getInputResolver().populateInput();
                         }
                     }
                 } else {
