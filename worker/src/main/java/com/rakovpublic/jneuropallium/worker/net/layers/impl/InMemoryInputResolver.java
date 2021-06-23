@@ -11,10 +11,21 @@ import java.util.List;
 public class InMemoryInputResolver implements IInputResolver {
     private HashMap<IInitInput, InputStatusMeta> inputStatuses;
     private HashMap<IInitInput, InputInitStrategy> inputs;
-    private HashMap<Long,HashMap<Integer, HashMap<Long, List<ISignal>>>> signalsHistory;
+    private ISignalsPersistStorage signalsPersistStorage;
+    private ISignalHistoryStorage signalHistoryStorage;
+    private Long currentLoop;
+    private IInputLoadingStrategy inputLoadingStrategy;
+
+    public InMemoryInputResolver(ISignalsPersistStorage signalsPersistStorage, ISignalHistoryStorage signalHistoryStorage, IInputLoadingStrategy inputLoadingStrategy) {
+        this.signalsPersistStorage = signalsPersistStorage;
+        this.signalHistoryStorage = signalHistoryStorage;
+        this.inputLoadingStrategy = inputLoadingStrategy;
+    }
+
     @Override
     public void registerInput(IInitInput iInputSource, boolean isMandatory, InputInitStrategy initStrategy, Integer amountOfRuns) {
-
+        inputStatuses.put(iInputSource, new InputStatusMeta(true, isMandatory,amountOfRuns, iInputSource.getName()));
+        inputs.put(iInputSource,initStrategy);
     }
 
     @Override
@@ -38,7 +49,8 @@ public class InMemoryInputResolver implements IInputResolver {
     }
 
     @Override
-    public void addForHistory(HashMap<Integer, HashMap<Long, List<ISignal>>> history) {
+    public void saveHistory() {
+
 
     }
 

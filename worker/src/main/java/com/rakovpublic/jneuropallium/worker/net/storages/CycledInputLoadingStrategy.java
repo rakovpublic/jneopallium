@@ -35,15 +35,14 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
         CycleNeuron cycleNeuron = new CycleNeuron(defaultLoopsCount,signalChain,null,0l,counter);
         List<INeuron> neurons = new LinkedList<>();
         neurons.add(cycleNeuron);
-        ILayerMeta layerMeta= new InMemoryLayerMeta(Integer.MIN_VALUE,neurons);
-        layersMeta.addLayerMeta(layerMeta);
         long neuronId= 1l;
         for(InputStatusMeta meta :inputStatuses.values()){
             neurons.add(new CycleNeuron(defaultLoopsCount,signalChain,meta,neuronId,counter));
             neuronInputMapping.put(meta.getName(),neuronId);
             neuronId+=1;
         }
-
+        ILayerMeta layerMeta= new InMemoryLayerMeta(Integer.MIN_VALUE,neurons);
+        layersMeta.addLayerMeta(layerMeta);
 
     }
 
@@ -52,7 +51,8 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
         signalsPersistStorage.cleanOutdatedSignals();
         if(counter>=((CycleNeuron)layersMeta.getLayerByID(Integer.MIN_VALUE).getNeuronByID(0l)).getLoopCount()){
             for(IInitInput iii:inputStatuses.keySet()){
-                if(inputStatuses.get(iii).getCurrentRuns()>=inputStatuses.get(iii).getUpdateOnceInNRuns()){
+                if(inputStatuses.get(iii).getCurrentRuns()>=
+                        ((CycleNeuron)layersMeta.getLayerByID(Integer.MIN_VALUE).getNeuronByID(neuronInputMapping.get(inputStatuses.get(iii).getName()))).getLoopCount()){
                     signalsPersistStorage.putSignals(externalInputs.get(iii).getInputs(layersMeta,iii.readSignals()));
                     inputStatuses.get(iii).setCurrentRuns(0);
                 }else {

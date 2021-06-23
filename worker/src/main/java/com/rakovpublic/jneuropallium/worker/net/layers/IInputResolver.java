@@ -16,7 +16,7 @@ public interface IInputResolver {
     ISignalHistoryStorage getSignalsHistoryStorage();
     HashMap<String,Long> getCycleNeuronAddressMapping();
     Long getCurrentLoop();
-    void addForHistory(HashMap<Integer, HashMap<Long, List<ISignal>>> history);
+    void saveHistory();
     void populateInput();
     IResultSignal getDesiredResult();
 }

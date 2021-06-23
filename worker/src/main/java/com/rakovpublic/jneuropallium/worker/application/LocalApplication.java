@@ -64,20 +64,20 @@ public class LocalApplication implements IApplication {
                         IResultLayer iResultLayer;
                         while ((iResultLayer = process(meta)) != null && !iResultLayer.interpretResult().getResult().equals(desiredResult)) {
                             meta.study(((IStudyingAlgorithm) objst).study(meta, iResultLayer.interpretResult().getNeuronId()));
-                            meta.getInputResolver().addForHistory(meta.getInputResolver().getSignalPersistStorage().getAllSignals());
+                            meta.getInputResolver().saveHistory();
                             meta.getInputResolver().getSignalPersistStorage().cleanOutdatedSignals();
                             meta.getInputResolver().populateInput();
                         }
                     } else if( desiredResult!=null) {
 
                         while (!process(meta).interpretResult().getResult().equals(desiredResult)) {
-                            meta.getInputResolver().addForHistory(meta.getInputResolver().getSignalPersistStorage().getAllSignals());
+                            meta.getInputResolver().saveHistory();
                             meta.getInputResolver().getSignalPersistStorage().cleanOutdatedSignals();
                             meta.getInputResolver().populateInput();
                         }
                     }else{
                         for(;currentRun<maxRun||isInfinite;currentRun++){
-                            meta.getInputResolver().addForHistory(meta.getInputResolver().getSignalPersistStorage().getAllSignals());
+                            meta.getInputResolver().saveHistory();
                             meta.getInputResolver().getSignalPersistStorage().cleanOutdatedSignals();
                             meta.getInputResolver().populateInput();
                         }
