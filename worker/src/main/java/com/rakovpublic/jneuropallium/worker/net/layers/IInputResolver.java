@@ -18,5 +18,5 @@ public interface IInputResolver {
     Long getCurrentLoop();
     void saveHistory();
     void populateInput();
-    IResultSignal getDesiredResult();
+    HashMap<String,List<IResultSignal>> getDesiredResult();
 }

@@ -2,24 +2,28 @@ package com.rakovpublic.jneuropallium.worker.application;
 
 import com.rakovpublic.jneuropallium.worker.net.layers.IInputResolver;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayer;
+import com.rakovpublic.jneuropallium.worker.net.layers.IResult;
 import com.rakovpublic.jneuropallium.worker.net.layers.IResultLayer;
 import com.rakovpublic.jneuropallium.worker.net.layers.impl.LayerBuilder;
 import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
-import com.rakovpublic.jneuropallium.worker.net.storages.IInputMeta;
 import com.rakovpublic.jneuropallium.worker.net.storages.ILayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.storages.IResultLayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.storages.file.FileLayersMeta;
 import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IFileSystem;
-import com.rakovpublic.jneuropallium.worker.net.storages.signalstorages.file.FileInputMeta;
 import com.rakovpublic.jneuropallium.worker.net.storages.structimpl.StructBuilder;
 import com.rakovpublic.jneuropallium.worker.net.storages.structimpl.StructMeta;
-import com.rakovpublic.jneuropallium.worker.net.study.IStudyingAlgorithm;
+import com.rakovpublic.jneuropallium.worker.net.study.IDirectStudyingAlgorithm;
+import com.rakovpublic.jneuropallium.worker.net.study.IObjectStudyingAlgo;
+import com.rakovpublic.jneuropallium.worker.net.study.IResultComparingStrategy;
+import com.rakovpublic.jneuropallium.worker.net.study.StudyingAlgoFactory;
 import com.rakovpublic.jneuropallium.worker.synchronizer.IContext;
 import com.rakovpublic.jneuropallium.worker.synchronizer.utils.InstantiationUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 public class LocalApplication implements IApplication {
@@ -43,40 +47,53 @@ public class LocalApplication implements IApplication {
             String fileSystemConstructorArgs = context.getProperty("configuration.filesystem.constructor.args");
             String fileSystemConstructorArgsType = context.getProperty("configuration.filesystem.constructor.args.types");
             IFileSystem fs = InstantiationUtils.<IFileSystem>getObject(clazz, getObjects(fileSystemConstructorArgs), getTypes(fileSystemConstructorArgsType));
-           //TODO: implement IInputResolver
+            //TODO: implement IInputResolver
             IInputResolver inputResolver = null;
             structBuilder.withHiddenInputMeta(inputResolver);
             structBuilder.withLayersMeta(new FileLayersMeta<>(fs.getItem(layerPath), fs));
             StructMeta meta = structBuilder.build();
             boolean isTeacherStudying = Boolean.valueOf(context.getProperty("configuration.isteacherstudying"));
-            IStudyingAlgorithm algo = null;
-            Long currentRun=0l;
-            Long maxRun = Long.valueOf(context.getProperty("configuration.isteacherstudying"));
+
+            Long currentRun = 0l;
+            Long maxRun = Long.valueOf(context.getProperty("configuration.maxRun"));
             Boolean isInfinite = Boolean.valueOf(context.getProperty("configuration.infiniteRun"));
 
-            for(;currentRun<maxRun||isInfinite;currentRun++) {
-                IResultSignal desiredResult = inputResolver.getDesiredResult();
+            for (; currentRun < maxRun || isInfinite; currentRun++) {
 
-                if (isTeacherStudying&& desiredResult!=null) {
-                    Object objst = getObject(context.getProperty("configuration.studyingalgo"));
-                    if (objst != null) {
-                        algo = (IStudyingAlgorithm) objst;
-                        IResultLayer iResultLayer;
-                        while ((iResultLayer = process(meta)) != null && !iResultLayer.interpretResult().getResult().equals(desiredResult)) {
-                            meta.study(((IStudyingAlgorithm) objst).study(meta, iResultLayer.interpretResult().getNeuronId()));
-                            meta.getInputResolver().saveHistory();
-                            meta.getInputResolver().getSignalPersistStorage().cleanOutdatedSignals();
-                            meta.getInputResolver().populateInput();
-                        }
-                    } else if( desiredResult!=null) {
+                HashMap<String, List<IResultSignal>> desiredResult = inputResolver.getDesiredResult();
+                if (isTeacherStudying && desiredResult != null) {
+                    IResultComparingStrategy resultComparingStrategy=null;
+                    String jsonResultComparingStrategy =context.getProperty("configuration.jsonResultComparingStrategy");
+                    //add json parsing with wrapper
+                    String algoType = context.getProperty("configuration.studyingalgotype");
+                    IResultLayer iResultLayer;
+                    if (algoType != null) {
 
-                        while (!process(meta).interpretResult().getResult().equals(desiredResult)) {
-                            meta.getInputResolver().saveHistory();
-                            meta.getInputResolver().getSignalPersistStorage().cleanOutdatedSignals();
-                            meta.getInputResolver().populateInput();
+                        List<IResult> idsToFix;
+                        if (algoType.equals("direct")) {
+                            IDirectStudyingAlgorithm directStudyingAlgorithm = StudyingAlgoFactory.getDirectStudyingAlgo();
+
+                            while ((idsToFix=resultComparingStrategy.getIdsStudy(process(meta).interpretResult(),desiredResult)).size()>0) {
+                                for (IResult res : idsToFix) {
+                                    meta.study(directStudyingAlgorithm.study(meta, res.getNeuronId()));
+                                }
+                                meta.getInputResolver().saveHistory();
+                                meta.getInputResolver().getSignalPersistStorage().cleanOutdatedSignals();
+                                meta.getInputResolver().populateInput();
+                            }
+                        } else if (algoType.equals("object")) {
+                            IObjectStudyingAlgo iObjectStudyingAlgo = StudyingAlgoFactory.getObjectStudyingAlgo();
+                            while ((idsToFix=resultComparingStrategy.getIdsStudy(process(meta).interpretResult(),desiredResult)).size()>0) {
+                                meta.getInputResolver().saveHistory();
+                                meta.getInputResolver().getSignalPersistStorage().cleanOutdatedSignals();
+                                meta.getInputResolver().populateInput();
+                                for (IResult res : idsToFix) {
+                                    inputResolver.getSignalPersistStorage().putSignals(iObjectStudyingAlgo.study(res.getNeuronId()));
+                                }
+                            }
                         }
-                    }else{
-                        for(;currentRun<maxRun||isInfinite;currentRun++){
+                    } else {
+                        for (; currentRun < maxRun || isInfinite; currentRun++) {
                             meta.getInputResolver().saveHistory();
                             meta.getInputResolver().getSignalPersistStorage().cleanOutdatedSignals();
                             meta.getInputResolver().populateInput();
@@ -85,7 +102,7 @@ public class LocalApplication implements IApplication {
                 } else {
                     //TODO:add normal output
                     IResultLayer lr = process(meta);
-                    System.out.println(lr.interpretResult().getResult().toString());
+                    System.out.println(lr.interpretResult());
                 }
             }
 
@@ -94,6 +111,7 @@ public class LocalApplication implements IApplication {
         }
 
     }
+
 
     private IResultLayer process(StructMeta meta) {
         int i = 0;

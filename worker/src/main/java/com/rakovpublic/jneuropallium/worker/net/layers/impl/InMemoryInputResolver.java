@@ -60,7 +60,8 @@ public class InMemoryInputResolver implements IInputResolver {
     }
 
     @Override
-    public IResultSignal getDesiredResult() {
+    public HashMap<String, List<IResultSignal>> getDesiredResult() {
         return null;
     }
+
 }

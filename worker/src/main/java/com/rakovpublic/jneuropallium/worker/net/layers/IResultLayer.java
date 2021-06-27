@@ -1,5 +1,7 @@
 package com.rakovpublic.jneuropallium.worker.net.layers;
 
+import java.util.List;
+
 /***
  * Created by Rakovskyi Dmytro .
  *
@@ -7,12 +9,14 @@ package com.rakovpublic.jneuropallium.worker.net.layers;
  *
  *
  */
-public interface IResultLayer<K> extends ILayer {
+public interface IResultLayer extends ILayer {
     /*
      * Transfer result layer to result
      *
      * */
-    IResult<K> interpretResult();
+    List<IResult> interpretResult();
+
+
 
 
 }

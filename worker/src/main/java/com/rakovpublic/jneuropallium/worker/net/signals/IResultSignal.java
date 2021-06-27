@@ -8,4 +8,8 @@ public interface IResultSignal<K> extends ISignal {
 
     Class<K> getResultObjectClass();
 
+    boolean isCheck();
+
+    void check();
+
 }

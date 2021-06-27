@@ -22,6 +22,8 @@ import java.util.List;
 
 public interface ILayer extends Serializable {
 
+    //TODO: add layer increasing via neuron logic
+
     /**
      * @return layer size
      **/

@@ -3,13 +3,16 @@ package com.rakovpublic.jneuropallium.worker.net.layers.impl;
 import com.rakovpublic.jneuropallium.worker.net.layers.IInputResolver;
 import com.rakovpublic.jneuropallium.worker.net.layers.IResult;
 import com.rakovpublic.jneuropallium.worker.net.layers.IResultLayer;
+import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
 import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.neuron.IResultNeuron;
 import com.rakovpublic.jneuropallium.worker.net.storages.IInputMeta;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.TreeSet;
 
-public class ResultLayer<K> extends Layer implements IResultLayer<K> {
+public class ResultLayer<K extends IResultSignal> extends Layer implements IResultLayer {
 
     public ResultLayer(int layerId, IInputResolver meta) {
         super(layerId,meta);
@@ -17,8 +20,9 @@ public class ResultLayer<K> extends Layer implements IResultLayer<K> {
     }
 
     @Override
-    public IResult<K> interpretResult() {
+    public List<IResult> interpretResult() {
         TreeSet<INeuron> resultNeurons= new TreeSet<>();
+        List<IResult> res = new ArrayList<>();
         while (!this.isProcessed()){
             try {
                 Thread.sleep(500);
@@ -28,7 +32,8 @@ public class ResultLayer<K> extends Layer implements IResultLayer<K> {
         }
         if (this.isProcessed()) {
             resultNeurons.addAll(this.map.values());
-            return new SimpleResultWrapper(((IResultNeuron)resultNeurons.last()).getFinalResult(),resultNeurons.last().getId());
+            res.add(new SimpleResultWrapper(((IResultNeuron)resultNeurons.last()).getFinalResult(),resultNeurons.last().getId()));
+            return res;
         }
         return null;
     }
