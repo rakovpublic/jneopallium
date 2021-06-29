@@ -3,7 +3,7 @@ package com.rakovpublic.jneuropallium.worker.neuron.impl.cycleprocessing;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 public abstract class AbstractSignal<T> implements ISignal<T> {
-    private T value;
+    protected T value;
     private Integer sourceLayer;
     private Long sourceNeuron;
     private Integer timeAlive;
