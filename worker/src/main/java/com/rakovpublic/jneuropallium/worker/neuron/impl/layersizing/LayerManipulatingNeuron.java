@@ -4,7 +4,6 @@ import com.rakovpublic.jneuropallium.worker.net.layers.ILayer;
 import com.rakovpublic.jneuropallium.worker.neuron.ISignalChain;
 import com.rakovpublic.jneuropallium.worker.neuron.impl.Neuron;
 
-import java.util.List;
 
 public class LayerManipulatingNeuron extends Neuron {
     protected ILayer layer;

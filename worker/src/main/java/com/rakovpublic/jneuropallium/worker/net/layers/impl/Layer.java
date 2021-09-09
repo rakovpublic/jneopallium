@@ -9,6 +9,7 @@ import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.neuron.IRule;
 import com.rakovpublic.jneuropallium.worker.neuron.impl.NeuronRunnerService;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
+import com.rakovpublic.jneuropallium.worker.neuron.impl.layersizing.CreateNeuronSignal;
 
 import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -17,7 +18,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  * Created by Rakovskyi Dmytro on 08.06.2018.
  */
 public class Layer implements ILayer {
-    protected HashMap<Long, INeuron> map;
+    protected TreeMap<Long, INeuron> map;
     private HashMap<Long, List<ISignal>> input;
     private HashMap<Class<? extends INeuron>, INeuronSerializer> neuronSerializerHashMap;
     private Boolean isProcessed;
@@ -35,10 +36,31 @@ public class Layer implements ILayer {
         notProcessed = new LinkedBlockingQueue<INeuron>();
         this.layerId = layerId;
         inputResolver = meta;
-        map = new HashMap<Long, INeuron>();
+        map = new TreeMap<Long, INeuron>();
         input = new HashMap<Long, List<ISignal>>();
     }
 
+
+    @Override
+    public <K extends CreateNeuronSignal> void createNeuron(K signal) {
+        INeuron newNeuron= signal.getValue().getNeuron();
+        if(!map.containsKey(newNeuron.getId())&&newNeuron.getId()!=null){
+            map.put(newNeuron.getId(),newNeuron);
+        }else {
+            Long newId=map.lastKey()+1;
+            newNeuron.setId(newId);
+            for(Object signals: signal.getValue().getCreateRelationsSignals().values()){
+                HashMap<Long, List<ISignal>> sMap = (HashMap<Long, List<ISignal>>)signals;
+                for(List<ISignal> val:sMap.values()){
+                    for(ISignal sig:val){
+                        sig.setSourceNeuronId(newId);
+                    }
+                }
+            }
+
+        }
+        inputResolver.getSignalPersistStorage().putSignals(signal.getValue().getCreateRelationsSignals());
+    }
 
     @Override
     public long getLayerSize() {
