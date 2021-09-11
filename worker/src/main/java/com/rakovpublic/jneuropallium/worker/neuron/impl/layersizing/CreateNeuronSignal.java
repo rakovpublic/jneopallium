@@ -1,7 +1,6 @@
 package com.rakovpublic.jneuropallium.worker.neuron.impl.layersizing;
 
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
-import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.neuron.impl.cycleprocessing.AbstractSignal;
 
 public class CreateNeuronSignal extends AbstractSignal<NewNeuronIntegration> implements ISignal<NewNeuronIntegration> {
