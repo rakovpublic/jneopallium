@@ -42,7 +42,7 @@ public class Layer implements ILayer {
 
 
     @Override
-    public <K extends CreateNeuronSignal> void createNeuron(K signal) {
+    public synchronized <K extends CreateNeuronSignal> void createNeuron(K signal) {
         INeuron newNeuron= signal.getValue().getNeuron();
         if(!map.containsKey(newNeuron.getId())&&newNeuron.getId()!=null){
             map.put(newNeuron.getId(),newNeuron);
