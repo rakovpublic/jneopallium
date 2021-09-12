@@ -64,11 +64,10 @@ public class LocalApplication implements IApplication {
                 if (isTeacherStudying && desiredResult != null) {
                     IResultComparingStrategy resultComparingStrategy=null;
                     String jsonResultComparingStrategy =context.getProperty("configuration.jsonResultComparingStrategy");
-                    //add json parsing with wrapper
+                    //TODO:add json parsing with wrapper
                     String algoType = context.getProperty("configuration.studyingalgotype");
                     IResultLayer iResultLayer;
                     if (algoType != null) {
-
                         List<IResult> idsToFix;
                         if (algoType.equals("direct")) {
                             IDirectStudyingAlgorithm directStudyingAlgorithm = StudyingAlgoFactory.getDirectStudyingAlgo();
@@ -107,6 +106,7 @@ public class LocalApplication implements IApplication {
             }
 
         } else {
+            // TODO: refactor architecture for different input types
 
         }
 
