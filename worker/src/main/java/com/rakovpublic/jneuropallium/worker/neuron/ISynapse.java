@@ -1,7 +1,7 @@
 package com.rakovpublic.jneuropallium.worker.neuron;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.rakovpublic.jneuropallium.worker.neuron.impl.NeuronConnection;
+import com.rakovpublic.jneuropallium.worker.neuron.impl.NeuronSynapse;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 import java.io.Serializable;
@@ -10,7 +10,7 @@ import java.io.Serializable;
  * Created by Rakovskyi Dmytro on 02.11.2017.
  * This class represents connection between neurons
  */
-@JsonDeserialize(as= NeuronConnection.class)
+@JsonDeserialize(as= NeuronSynapse.class)
 public interface ISynapse<S extends ISignal> extends Serializable {
 
     /**

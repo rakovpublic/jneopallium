@@ -2,7 +2,7 @@ package com.rakovpublic.jneuropallium.worker.neuron.impl;
 
 import com.rakovpublic.jneuropallium.worker.neuron.ISynapse;
 
-public class SynapseWrapper<N extends ISynapse> extends NeuronConnection implements ISynapse {
+public class SynapseWrapper<N extends ISynapse> extends NeuronSynapse implements ISynapse {
     private  N connection;
     private String className;
 
