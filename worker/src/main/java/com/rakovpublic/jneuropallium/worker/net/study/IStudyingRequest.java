@@ -1,6 +1,6 @@
 package com.rakovpublic.jneuropallium.worker.net.study;
 
-import com.rakovpublic.jneuropallium.worker.neuron.INConnection;
+import com.rakovpublic.jneuropallium.worker.neuron.ISynapse;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 import java.io.Serializable;
@@ -15,7 +15,7 @@ public interface IStudyingRequest extends Serializable {
 
     Long getNeuronId();
 
-    HashMap<Class<? extends ISignal>, List<INConnection>> getNewConnections();
+    HashMap<Class<? extends ISignal>, List<ISynapse>> getNewConnections();
 
     String toJSON();
 }

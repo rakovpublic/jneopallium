@@ -4,7 +4,7 @@ import com.rakovpublic.jneuropallium.worker.net.layers.IInputResolver;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayer;
 import com.rakovpublic.jneuropallium.worker.net.storages.*;
 import com.rakovpublic.jneuropallium.worker.neuron.IAxon;
-import com.rakovpublic.jneuropallium.worker.neuron.INConnection;
+import com.rakovpublic.jneuropallium.worker.neuron.ISynapse;
 import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.neuron.IRule;
 import com.rakovpublic.jneuropallium.worker.neuron.impl.NeuronRunnerService;
@@ -206,11 +206,11 @@ public class Layer implements ILayer {
             if(axon.isConnectionsWrapped()){
                 axon.unwrapConnections();
             }
-            HashMap<ISignal, List<INConnection>> tMap = axon.processSignals(neur.getResult());
+            HashMap<ISignal, List<ISynapse>> tMap = axon.processSignals(neur.getResult());
             for (ISignal signal : tMap.keySet()) {
                 signal.setSourceLayerId(this.layerId);
                 signal.setSourceNeuronId(neurId);
-                for (INConnection connection : tMap.get(signal)) {
+                for (ISynapse connection : tMap.get(signal)) {
                     int layerId = connection.getTargetLayerId();
                     Long targetNeurId = connection.getTargetNeuronId();
                     if (result.containsKey(layerId)) {

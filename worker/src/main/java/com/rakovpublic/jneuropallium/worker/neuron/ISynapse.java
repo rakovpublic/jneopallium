@@ -11,7 +11,7 @@ import java.io.Serializable;
  * This class represents connection between neurons
  */
 @JsonDeserialize(as= NeuronConnection.class)
-public interface INConnection<S extends ISignal> extends Serializable {
+public interface ISynapse<S extends ISignal> extends Serializable {
 
     /**
      * @return target layer id

@@ -1,12 +1,12 @@
 package com.rakovpublic.jneuropallium.worker.neuron.impl;
 
-import com.rakovpublic.jneuropallium.worker.neuron.INConnection;
+import com.rakovpublic.jneuropallium.worker.neuron.ISynapse;
 
-public class ConnectionWrapper<N extends INConnection> extends NeuronConnection implements INConnection {
+public class SynapseWrapper<N extends ISynapse> extends NeuronConnection implements ISynapse {
     private  N connection;
     private String className;
 
-    public ConnectionWrapper(N connection) {
+    public SynapseWrapper(N connection) {
         this.connection = connection;
         this.className = connection.getClass().getCanonicalName();
     }

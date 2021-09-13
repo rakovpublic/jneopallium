@@ -1,17 +1,16 @@
 package com.rakovpublic.jneuropallium.worker.neuron.impl;
 
 import com.rakovpublic.jneuropallium.worker.neuron.IAxon;
-import com.rakovpublic.jneuropallium.worker.neuron.INConnection;
+import com.rakovpublic.jneuropallium.worker.neuron.ISynapse;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
-import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class Axon implements IAxon {
-    private HashMap<Class<? extends ISignal>, List<INConnection>> connectionMap;
-    private HashMap<Integer, HashMap<Long, List<INConnection>>> addressMap;
+    private HashMap<Class<? extends ISignal>, List<ISynapse>> connectionMap;
+    private HashMap<Integer, HashMap<Long, List<ISynapse>>> addressMap;
     private Boolean connectionsWrapped;
 
 
@@ -27,31 +26,31 @@ public class Axon implements IAxon {
 
 
     @Override
-    public void resetConnection(HashMap<Class<? extends ISignal>, List<INConnection>> newConnection) {
+    public void resetConnection(HashMap<Class<? extends ISignal>, List<ISynapse>> newConnection) {
         connectionMap = newConnection;
     }
 
     @Override
-    public <S extends ISignal> void putConnection(Class<S> cl, INConnection<S> connection) {
+    public <S extends ISignal> void putConnection(Class<S> cl, ISynapse<S> connection) {
         if (connectionMap.containsKey(cl)) {
             connectionMap.get(cl).add(connection);
         } else {
-            List<INConnection> tlist = new ArrayList<>();
+            List<ISynapse> tlist = new ArrayList<>();
             tlist.add(connection);
             connectionMap.put(cl, tlist);
         }
         if (addressMap.containsKey(connection.getTargetLayerId())) {
-            HashMap<Long, List<INConnection>> tMap = addressMap.get(connection.getTargetLayerId());
+            HashMap<Long, List<ISynapse>> tMap = addressMap.get(connection.getTargetLayerId());
             if (tMap.containsKey(connection.getTargetNeuronId())) {
                 tMap.get(connection.getTargetNeuronId()).add(connection);
             } else {
-                List<INConnection> tlist = new ArrayList<>();
+                List<ISynapse> tlist = new ArrayList<>();
                 tlist.add(connection);
                 tMap.put(connection.getTargetNeuronId(), tlist);
             }
         } else {
-            HashMap<Long, List<INConnection>> tMap = new HashMap<>();
-            List<INConnection> tlist = new ArrayList<>();
+            HashMap<Long, List<ISynapse>> tMap = new HashMap<>();
+            List<ISynapse> tlist = new ArrayList<>();
             tlist.add(connection);
             tMap.put(connection.getTargetNeuronId(), tlist);
             addressMap.put(connection.getTargetLayerId(), tMap);
@@ -67,17 +66,17 @@ public class Axon implements IAxon {
     }
 
     @Override
-    public HashMap<ISignal, List<INConnection>> processSignals(List<ISignal> signal) {
-        HashMap<ISignal, List<INConnection>> result = new HashMap<>();
+    public HashMap<ISignal, List<ISynapse>> processSignals(List<ISignal> signal) {
+        HashMap<ISignal, List<ISynapse>> result = new HashMap<>();
         for (ISignal s : signal) {
             Class<? extends ISignal> cl = s.getCurrentSignalClass();
             if (connectionMap.containsKey(cl)) {
-                for (INConnection con : connectionMap.get(cl)) {
+                for (ISynapse con : connectionMap.get(cl)) {
                     ISignal resSignal = con.getWeight().process(s);
                     if (result.containsKey(resSignal)) {
                         result.get(resSignal).add(con);
                     } else {
-                        List<INConnection> cons = new ArrayList<>();
+                        List<ISynapse> cons = new ArrayList<>();
                         cons.add(con);
                         result.put(resSignal, cons);
                     }
@@ -97,15 +96,15 @@ public class Axon implements IAxon {
     }
 
     @Override
-    public HashMap<Integer, HashMap<Long, List<ISignal>>> getSignalResultStructure(HashMap<ISignal, List<INConnection>> signalConnectionMap) {
+    public HashMap<Integer, HashMap<Long, List<ISignal>>> getSignalResultStructure(HashMap<ISignal, List<ISynapse>> signalConnectionMap) {
         return null;
     }
 
     @Override
     public void destroyConnection(int layerId, Long neuronId, Class<? extends ISignal> clazz) {
         if (addressMap.containsKey(layerId) && addressMap.get(layerId).containsKey(neuronId)) {
-            List<INConnection> conns = addressMap.get(layerId).get(neuronId);
-            for (INConnection c : conns) {
+            List<ISynapse> conns = addressMap.get(layerId).get(neuronId);
+            for (ISynapse c : conns) {
                 if (c.getWeight().getSignalClass().equals(clazz)) {
                     connectionMap.get(clazz).remove(c);
                     conns.remove(c);
@@ -118,8 +117,8 @@ public class Axon implements IAxon {
     @Override
     public void changeAllWeightsForNeuron(int layerId, Long neuronId, ISignal signal) {
         if (addressMap.containsKey(layerId) && addressMap.get(layerId).containsKey(neuronId)) {
-            List<INConnection> conns = addressMap.get(layerId).get(neuronId);
-            for (INConnection c : conns) {
+            List<ISynapse> conns = addressMap.get(layerId).get(neuronId);
+            for (ISynapse c : conns) {
                 c.getWeight().changeWeight(signal);
             }
         }
@@ -128,8 +127,8 @@ public class Axon implements IAxon {
     @Override
     public void changeAllWeightsForNeuronAndSignal(int layerId, Long neuronId, Class<? extends ISignal> clazz, ISignal signal) {
         if (addressMap.containsKey(layerId) && addressMap.get(layerId).containsKey(neuronId)) {
-            List<INConnection> conns = addressMap.get(layerId).get(neuronId);
-            for (INConnection c : conns) {
+            List<ISynapse> conns = addressMap.get(layerId).get(neuronId);
+            for (ISynapse c : conns) {
                 if (c.getWeight().getSignalClass().equals(clazz)) {
                     c.getWeight().changeWeight(signal);
                 }
@@ -140,7 +139,7 @@ public class Axon implements IAxon {
     @Override
     public void changeAllWeights(ISignal signal) {
         for (Class<? extends ISignal> cl : connectionMap.keySet()) {
-            for (INConnection con : connectionMap.get(cl)) {
+            for (ISynapse con : connectionMap.get(cl)) {
                 con.getWeight().changeWeight(signal);
             }
         }
@@ -148,20 +147,20 @@ public class Axon implements IAxon {
     }
 
     @Override
-    public HashMap<Class<? extends ISignal>, List<INConnection>> getConnectionMap() {
+    public HashMap<Class<? extends ISignal>, List<ISynapse>> getConnectionMap() {
         return connectionMap;
     }
 
     @Override
     public void wrapConnections() {
-        for(List<INConnection> connections:connectionMap.values()){
-            for(INConnection connection:connections){
+        for(List<ISynapse> connections:connectionMap.values()){
+            for(ISynapse connection:connections){
                 connection.setWeight(new WeightWrapper(connection.getWeight()));
             }
         }
-        for(HashMap<Long, List<INConnection>> map:addressMap.values()){
-            for (List<INConnection> connections:map.values()){
-                for(INConnection connection:connections){
+        for(HashMap<Long, List<ISynapse>> map:addressMap.values()){
+            for (List<ISynapse> connections:map.values()){
+                for(ISynapse connection:connections){
                     connection.setWeight(new WeightWrapper(connection.getWeight()));
                 }
             }
@@ -171,14 +170,14 @@ public class Axon implements IAxon {
 
     @Override
     public void unwrapConnections() {
-        for(List<INConnection> connections:connectionMap.values()){
-            for(INConnection connection:connections){
+        for(List<ISynapse> connections:connectionMap.values()){
+            for(ISynapse connection:connections){
                 connection.setWeight((( WeightWrapper)connection.getWeight()).getWeight());
             }
         }
-        for(HashMap<Long, List<INConnection>> map:addressMap.values()){
-            for (List<INConnection> connections:map.values()){
-                for(INConnection connection:connections){
+        for(HashMap<Long, List<ISynapse>> map:addressMap.values()){
+            for (List<ISynapse> connections:map.values()){
+                for(ISynapse connection:connections){
                     connection.setWeight((( WeightWrapper)connection.getWeight()).getWeight());
                 }
             }

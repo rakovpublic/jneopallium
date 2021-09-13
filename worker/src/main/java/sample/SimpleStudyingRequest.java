@@ -1,6 +1,6 @@
 package sample;
 
-import com.rakovpublic.jneuropallium.worker.neuron.INConnection;
+import com.rakovpublic.jneuropallium.worker.neuron.ISynapse;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.study.IStudyingRequest;
 
@@ -10,9 +10,9 @@ import java.util.List;
 public class SimpleStudyingRequest implements IStudyingRequest {
     private final int layerId;
     private final long neuronId;
-    private final HashMap<Class<? extends ISignal>, List<INConnection>> results;
+    private final HashMap<Class<? extends ISignal>, List<ISynapse>> results;
 
-    public SimpleStudyingRequest(int layerId, long neuronId, HashMap<Class<? extends ISignal>, List<INConnection>> results) {
+    public SimpleStudyingRequest(int layerId, long neuronId, HashMap<Class<? extends ISignal>, List<ISynapse>> results) {
         this.layerId = layerId;
         this.neuronId = neuronId;
         this.results = results;
@@ -29,7 +29,7 @@ public class SimpleStudyingRequest implements IStudyingRequest {
     }
 
     @Override
-    public HashMap<Class<? extends ISignal>, List<INConnection>> getNewConnections() {
+    public HashMap<Class<? extends ISignal>, List<ISynapse>> getNewConnections() {
         return results;
     }
 

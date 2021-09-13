@@ -18,7 +18,7 @@ public interface IAxon extends Serializable {
      *
      * @param newConnection connection map
      **/
-    void resetConnection(HashMap<Class<? extends ISignal>, List<INConnection>> newConnection);
+    void resetConnection(HashMap<Class<? extends ISignal>, List<ISynapse>> newConnection);
 
     /**
      * Add connection for signal to neuron.
@@ -26,7 +26,7 @@ public interface IAxon extends Serializable {
      * @param cl         signal class
      * @param connection
      **/
-    <S extends ISignal> void putConnection(Class<S> cl, INConnection<S> connection);
+    <S extends ISignal> void putConnection(Class<S> cl, ISynapse<S> connection);
 
     /**
      * Clean all connections from axon
@@ -39,7 +39,7 @@ public interface IAxon extends Serializable {
      * @param signals list
      * @return structure which contains signal object as key and connection list
      **/
-    HashMap<ISignal, List<INConnection>> processSignals(List<ISignal> signals);
+    HashMap<ISignal, List<ISynapse>> processSignals(List<ISignal> signals);
 
     String toJSON();
 
@@ -49,7 +49,7 @@ public interface IAxon extends Serializable {
      * @param signalConnectionMap HashMap where key is signal and value is list of connection object
      * @return structure key layer id  value  - HashMap key neuron id value list of signals
      **/
-    HashMap<Integer, HashMap<Long, List<ISignal>>> getSignalResultStructure(HashMap<ISignal, List<INConnection>> signalConnectionMap);
+    HashMap<Integer, HashMap<Long, List<ISignal>>> getSignalResultStructure(HashMap<ISignal, List<ISynapse>> signalConnectionMap);
 
     /**
      * Destroy connection
@@ -86,7 +86,7 @@ public interface IAxon extends Serializable {
      **/
     void changeAllWeights(ISignal signal);
 
-    HashMap<Class<? extends ISignal>, List<INConnection>> getConnectionMap();
+    HashMap<Class<? extends ISignal>, List<ISynapse>> getConnectionMap();
 
     void wrapConnections();
 

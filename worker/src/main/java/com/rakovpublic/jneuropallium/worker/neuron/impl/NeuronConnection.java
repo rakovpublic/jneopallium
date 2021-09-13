@@ -1,10 +1,10 @@
 package com.rakovpublic.jneuropallium.worker.neuron.impl;
 
-import com.rakovpublic.jneuropallium.worker.neuron.INConnection;
+import com.rakovpublic.jneuropallium.worker.neuron.ISynapse;
 import com.rakovpublic.jneuropallium.worker.neuron.IWeight;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
-public class NeuronConnection<K extends ISignal> implements INConnection<K> {
+public class NeuronSynapse<K extends ISignal> implements ISynapse<K> {
     private int targetLayerId;
     private int sourceLayerId;
     private Long targetNeuronId;
@@ -12,9 +12,9 @@ public class NeuronConnection<K extends ISignal> implements INConnection<K> {
     private IWeight weight;
     private String description;
 
-    public NeuronConnection() {
+    public NeuronSynapse() {
     }
-    public NeuronConnection(NeuronConnection connection, IWeight weight) {
+    public NeuronSynapse(NeuronSynapse connection, IWeight weight) {
         this.targetLayerId = connection.targetLayerId;
         this.sourceLayerId = connection.sourceLayerId;
         this.targetNeuronId = connection.targetNeuronId;
@@ -23,11 +23,11 @@ public class NeuronConnection<K extends ISignal> implements INConnection<K> {
         this.description = connection.description;
     }
 
-    public static NeuronConnection createConnection(int targetLayerId, int sourceLayerId, Long targetNeuronId, Long sourceNeuronId, IWeight weight, String description) {
-        return new NeuronConnection(targetLayerId, sourceLayerId, targetNeuronId, sourceNeuronId, weight, description);
+    public static NeuronSynapse createConnection(int targetLayerId, int sourceLayerId, Long targetNeuronId, Long sourceNeuronId, IWeight weight, String description) {
+        return new NeuronSynapse(targetLayerId, sourceLayerId, targetNeuronId, sourceNeuronId, weight, description);
     }
 
-    public NeuronConnection(int targetLayerId, int sourceLayerId, Long targetNeuronId, Long sourceNeuronId, IWeight weight, String description) {
+    public NeuronSynapse(int targetLayerId, int sourceLayerId, Long targetNeuronId, Long sourceNeuronId, IWeight weight, String description) {
         this.targetLayerId = targetLayerId;
         this.sourceLayerId = sourceLayerId;
         this.targetNeuronId = targetNeuronId;
