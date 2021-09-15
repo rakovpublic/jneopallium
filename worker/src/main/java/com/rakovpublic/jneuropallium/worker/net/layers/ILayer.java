@@ -16,6 +16,8 @@ import com.rakovpublic.jneuropallium.worker.net.storages.IInputMeta;
 import com.rakovpublic.jneuropallium.worker.net.storages.ILayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.storages.INeuronSerializer;
 import com.rakovpublic.jneuropallium.worker.neuron.impl.layersizing.CreateNeuronSignal;
+import com.rakovpublic.jneuropallium.worker.neuron.impl.layersizing.DeleteNeuronIntegration;
+import com.rakovpublic.jneuropallium.worker.neuron.impl.layersizing.DeleteNeuronSignal;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -26,6 +28,8 @@ public interface ILayer extends Serializable {
     //TODO: add layer increasing via neuron logic
 
     <K extends CreateNeuronSignal>void createNeuron(K signal);
+
+    void deleteNeuron(DeleteNeuronSignal deleteNeuronIntegration);
 
     /**
      * @return layer size

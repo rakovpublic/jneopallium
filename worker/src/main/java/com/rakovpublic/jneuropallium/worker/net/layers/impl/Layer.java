@@ -10,6 +10,8 @@ import com.rakovpublic.jneuropallium.worker.neuron.IRule;
 import com.rakovpublic.jneuropallium.worker.neuron.impl.NeuronRunnerService;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.neuron.impl.layersizing.CreateNeuronSignal;
+import com.rakovpublic.jneuropallium.worker.neuron.impl.layersizing.DeleteNeuronIntegration;
+import com.rakovpublic.jneuropallium.worker.neuron.impl.layersizing.DeleteNeuronSignal;
 
 import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -60,6 +62,12 @@ public class Layer implements ILayer {
 
         }
         inputResolver.getSignalPersistStorage().putSignals(signal.getValue().getCreateRelationsSignals());
+    }
+
+    @Override
+    public void deleteNeuron(DeleteNeuronSignal deleteNeuronIntegration) {
+        map.remove(deleteNeuronIntegration.getValue().getNeuronId());
+        inputResolver.getSignalPersistStorage().putSignals(deleteNeuronIntegration.getValue().getCreateRelationsSignals());
     }
 
     @Override
