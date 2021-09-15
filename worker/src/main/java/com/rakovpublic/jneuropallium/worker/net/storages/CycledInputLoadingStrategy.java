@@ -1,13 +1,10 @@
 package com.rakovpublic.jneuropallium.worker.net.storages;
 
-import com.rakovpublic.jneuropallium.worker.net.storages.IInputLoadingStrategy;
-import com.rakovpublic.jneuropallium.worker.net.storages.ISignalsPersistStorage;
-import com.rakovpublic.jneuropallium.worker.net.storages.*;
 import com.rakovpublic.jneuropallium.worker.net.storages.inmemory.InMemoryLayerMeta;
 import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.neuron.ISignalChain;
 import com.rakovpublic.jneuropallium.worker.neuron.impl.cycleprocessing.CycleNeuron;
-import com.rakovpublic.jneuropallium.worker.neuron.impl.cycleprocessing.CycleSignalsProcessingChanin;
+import com.rakovpublic.jneuropallium.worker.neuron.impl.cycleprocessing.CycleSignalsProcessingChain;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -31,7 +28,7 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
     }
 
     private void init(int defaultLoopsCount){
-        ISignalChain signalChain= new CycleSignalsProcessingChanin();
+        ISignalChain signalChain= new CycleSignalsProcessingChain();
         CycleNeuron cycleNeuron = new CycleNeuron(defaultLoopsCount,signalChain,null,0l,counter);
         List<INeuron> neurons = new LinkedList<>();
         neurons.add(cycleNeuron);
