@@ -16,17 +16,18 @@ class WeightWrapper<N extends IWeight,S extends ISignal,K extends ISignal> imple
 
     @Override
     public S process(S signal) {
-        return null;
+        return (S)weight.process(signal);
     }
 
     @Override
     public void changeWeight(K signal) {
+        weight.changeWeight(signal);
 
     }
 
     @Override
     public Class<S> getSignalClass() {
-        return null;
+        return weight.getSignalClass();
     }
 
     public N getWeight() {
