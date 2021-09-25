@@ -51,13 +51,12 @@ public class InMemoryInputResolver implements IInputResolver {
 
     @Override
     public void saveHistory() {
-
-
+        signalHistoryStorage.save(signalsPersistStorage.getAllSignals(),currentLoop);
     }
 
     @Override
     public void populateInput() {
-
+        inputLoadingStrategy.populateInput(signalsPersistStorage,inputStatuses,inputs);
     }
 
     @Override

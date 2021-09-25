@@ -156,7 +156,7 @@ public interface INeuron extends Serializable, Comparable {
 
      void setCyclingNeuronInputMapping(HashMap<String, Long> cyclingNeuronInputMapping);
 
-     Long getCurrentLoopAmount();
+     Integer getCurrentLoopAmount();
 
-     void setCurrentLoopAmount(Long currentLoopCount) ;
+     void setCurrentLoopAmount(Integer currentLoopCount) ;
 }

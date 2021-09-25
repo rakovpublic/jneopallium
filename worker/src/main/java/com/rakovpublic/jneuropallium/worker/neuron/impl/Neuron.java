@@ -44,13 +44,13 @@ public  class Neuron implements INeuron {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     protected HashMap<String,Long> cyclingNeuronInputMapping;
 
-    private Long currentLoopAmount;
+    private Integer currentLoopAmount;
     @Override
-    public Long getCurrentLoopAmount() {
+    public Integer getCurrentLoopAmount() {
         return currentLoopAmount;
     }
     @Override
-    public void setCurrentLoopAmount(Long currentLoopAmount) {
+    public void setCurrentLoopAmount(Integer currentLoopAmount) {
         this.currentLoopAmount = currentLoopAmount;
     }
 

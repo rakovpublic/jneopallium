@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 //interface for cycle running before next run with next input
 public interface IInputLoadingStrategy {
-    Boolean populateInput(ISignalsPersistStorage signalsPersistStorage, HashMap<IInitInput, InputStatusMeta> inputStatuses);
+    Boolean populateInput(ISignalsPersistStorage signalsPersistStorage, HashMap<IInitInput, InputStatusMeta> inputStatuses,HashMap<IInitInput, InputInitStrategy> inputs);
     void setLayersMeta(ILayersMeta layersMeta);
     HashMap<String,Long> getNeuronInputMapping();
     Integer getCurrentLoopCount();

@@ -195,7 +195,7 @@ public class SingleNetInputService implements IInputService {
     public void nextRun() {
         if(runFlag){
             runFlag =false;
-            runningStrategy.populateInput(signalsPersist,inputStatuses);
+            runningStrategy.populateInput(signalsPersist,inputStatuses,inputs);
             run++;
         }
     }
