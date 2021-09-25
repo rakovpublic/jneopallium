@@ -20,6 +20,7 @@ public class InMemoryInputResolver implements IInputResolver {
         this.signalsPersistStorage = signalsPersistStorage;
         this.signalHistoryStorage = signalHistoryStorage;
         this.inputLoadingStrategy = inputLoadingStrategy;
+        currentLoop=0l;
     }
 
     @Override
@@ -30,22 +31,22 @@ public class InMemoryInputResolver implements IInputResolver {
 
     @Override
     public ISignalsPersistStorage getSignalPersistStorage() {
-        return null;
+        return signalsPersistStorage;
     }
 
     @Override
     public ISignalHistoryStorage getSignalsHistoryStorage() {
-        return null;
+        return signalHistoryStorage;
     }
 
     @Override
     public HashMap<String, Long> getCycleNeuronAddressMapping() {
-        return null;
+        return inputLoadingStrategy.getNeuronInputMapping();
     }
 
     @Override
-    public Long getCurrentLoop() {
-        return null;
+    public Integer getCurrentLoop() {
+        return inputLoadingStrategy.getCurrentLoopCount();
     }
 
     @Override
@@ -61,7 +62,19 @@ public class InMemoryInputResolver implements IInputResolver {
 
     @Override
     public HashMap<String, List<IResultSignal>> getDesiredResult() {
-        return null;
+        HashMap<String, List<IResultSignal>> result = new HashMap<>();
+        for(IInitInput initInput:inputStatuses.keySet()){
+            if(inputStatuses.get(initInput).isBeenUsed()){
+                for(String name: initInput.getDesiredResults().keySet()){
+                    if(result.get(name)!=null){
+                        result.get(name).addAll(initInput.getDesiredResults().get(name));
+                    }else{
+                        result.put(name,initInput.getDesiredResults().get(name));
+                    }
+                }
+            }
+        }
+        return result;
     }
 
 }

@@ -8,6 +8,7 @@ public class InputStatusMeta {
     private Integer updateOnceInNRuns;
     private Integer currentRuns;
     private String name;
+    private Boolean beenUsed;
 
     public InputStatusMeta(Boolean status, Boolean mandatoryUpdated, Integer updateOnceInNRuns, String name) {
         this.status = status;
@@ -15,6 +16,16 @@ public class InputStatusMeta {
         this.updateOnceInNRuns = updateOnceInNRuns;
         currentRuns=0;
         this.name = name;
+        beenUsed=false;
+    }
+
+
+    public Boolean isBeenUsed() {
+        return beenUsed;
+    }
+
+    public void setBeenUsed(Boolean beenUsed) {
+        this.beenUsed = beenUsed;
     }
 
     public Boolean getStatus() {

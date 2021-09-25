@@ -4,6 +4,7 @@ import com.rakovpublic.jneuropallium.worker.net.storages.ISignalsPersistStorage;
 import com.rakovpublic.jneuropallium.worker.net.storages.InputStatusMeta;
 import com.rakovpublic.jneuropallium.worker.net.storages.IInitInput;
 import com.rakovpublic.jneuropallium.worker.net.storages.ILayersMeta;
+import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 
 import java.util.HashMap;
 
