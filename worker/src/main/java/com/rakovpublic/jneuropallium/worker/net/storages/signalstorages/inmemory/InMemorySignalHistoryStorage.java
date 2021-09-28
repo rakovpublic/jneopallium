@@ -1,4 +1,4 @@
-package com.rakovpublic.jneuropallium.worker.net.storages.inmemory;
+package com.rakovpublic.jneuropallium.worker.net.storages.signalstorages.inmemory;
 
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.ISignalHistoryStorage;
@@ -8,13 +8,19 @@ import java.util.HashMap;
 import java.util.List;
 
 public class InMemorySignalHistoryStorage implements ISignalHistoryStorage {
+    private HashMap<Long,HashMap<Integer, HashMap<Long, List<ISignal>>>> history;
+
+    public InMemorySignalHistoryStorage() {
+        this.history = new HashMap<>();
+    }
+
     @Override
-    public HashMap<NeuronAddress, List<ISignal>> getSourceSignalsForRun(Long nRun, NeuronAddress forTarget) {
-        return null;
+    public  List<ISignal> getSourceSignalsForRun(Long nRun, NeuronAddress forTarget) {
+        return history.get(nRun).get(forTarget.getLayerId()).get(forTarget.getNeuronId());
     }
 
     @Override
     public void save(HashMap<Integer, HashMap<Long, List<ISignal>>> history, Long run) {
-
+        this.history.put(run,history);
     }
 }
