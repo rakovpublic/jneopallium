@@ -30,7 +30,6 @@ public class DBLayerMeta implements ILayerMeta {
 
     }
 
-
     @Override
     public void dumpLayer() {
 

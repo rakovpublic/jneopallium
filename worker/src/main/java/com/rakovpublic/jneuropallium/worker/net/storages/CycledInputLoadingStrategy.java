@@ -9,6 +9,7 @@ import com.rakovpublic.jneuropallium.worker.neuron.impl.cycleprocessing.CycleSig
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.TreeSet;
 
 public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
     private ILayersMeta layersMeta;
@@ -16,12 +17,14 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
     private Long counter;
     private HashMap<IInitInput, InputStatusMeta> inputStatuses;
     private HashMap<String,Long> neuronInputMapping;
+    int defaultLoopsCount;
 
     public CycledInputLoadingStrategy(ILayersMeta layersMeta, HashMap<IInitInput, InputInitStrategy> externalInputs, int defaultLoopsCount, HashMap<IInitInput, InputStatusMeta> inputStatuses) {
         counter=0l;
         this.layersMeta = layersMeta;
         this.externalInputs = externalInputs;
         this.inputStatuses = inputStatuses;
+        this.defaultLoopsCount= defaultLoopsCount;
         init(defaultLoopsCount);
         neuronInputMapping = new HashMap<>();
 
@@ -63,6 +66,8 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
         return true;
     }
 
+
+
     @Override
     public void setLayersMeta(ILayersMeta  layersMeta) {
         this.layersMeta=layersMeta;
@@ -76,5 +81,23 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
     @Override
     public Integer getCurrentLoopCount() {
         return ((CycleNeuron)layersMeta.getLayerByID(Integer.MIN_VALUE).getNeuronByID(0l)).getLoopCount();
+    }
+
+    @Override
+    public void updateInputs(HashMap<IInitInput, InputStatusMeta> inputStatuses, HashMap<IInitInput, InputInitStrategy> inputs) {
+        ISignalChain signalChain= new CycleSignalsProcessingChain();
+        TreeSet<Long> ids= new TreeSet<>();
+        ids.addAll(neuronInputMapping.values());
+        long neuronId=ids.last()+1;
+        ILayerMeta layerMeta= layersMeta.getLayerByID(Integer.MIN_VALUE);
+        List< INeuron> neurons= new LinkedList<>();
+        neurons.addAll(layerMeta.getNeurons());
+        for(InputStatusMeta meta :inputStatuses.values()){
+            if(!neuronInputMapping.containsKey(meta.getName())){
+                neurons.add(new CycleNeuron(defaultLoopsCount,signalChain,meta,neuronId,counter));
+                neuronInputMapping.put(meta.getName(),neuronId);
+                neuronId+=1;
+            }
+        }
     }
 }
