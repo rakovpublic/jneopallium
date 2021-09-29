@@ -149,7 +149,7 @@ public  class Neuron implements INeuron {
     public void addSignals(List<ISignal> signals) {
         this.signals.addAll(signals);
     }
-
+    //TODO:refactor this method
     @Override
     public void processSignals() {
         HashMap<Class<? extends ISignal>, List<ISignal>> signalsMap = new HashMap<>();
@@ -165,6 +165,7 @@ public  class Neuron implements INeuron {
             }
         }
         for (Class<? extends ISignal> cl : this.getSignalChain().getProcessingChain()) {
+
             for (Class<? extends ISignal> cls : signalsMap.keySet()) {
                 for(ISignal signal : signalsMap.get(cls)){
                     if(signal instanceof IChangingSignal){

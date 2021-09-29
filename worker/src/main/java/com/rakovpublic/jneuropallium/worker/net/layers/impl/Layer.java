@@ -38,8 +38,8 @@ public class Layer implements ILayer {
         inputResolver = meta;
         map = new TreeMap<Long, INeuron>();
         input = new HashMap<Long, List<ISignal>>();
-        INeuron sizingNeuron= new LayerManipulatingNeuron(-1l,new LayerManipulatingProcessingChain(),0l,this);
-        map.put(-1l,sizingNeuron);
+        INeuron sizingNeuron= new LayerManipulatingNeuron(Long.MIN_VALUE,new LayerManipulatingProcessingChain(),0l,this);
+        map.put(Long.MIN_VALUE,sizingNeuron);
     }
 
 
