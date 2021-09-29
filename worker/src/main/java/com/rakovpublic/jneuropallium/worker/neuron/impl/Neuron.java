@@ -9,10 +9,7 @@ import com.rakovpublic.jneuropallium.worker.neuron.*;
 import com.rakovpublic.jneuropallium.worker.net.signals.IChangingSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 public  class Neuron implements INeuron {
@@ -29,7 +26,6 @@ public  class Neuron implements INeuron {
     private List<IRule> rules;
     protected Class<?extends INeuron> currentNeuronClass;
     private Boolean changed;
-    private List<CreateNeuronRequest> createNeuronRequests = new ArrayList<>();
     private Boolean onDelete;
     protected Long run;
     protected ISignalHistoryStorage signalHistoryStorage;
@@ -52,6 +48,23 @@ public  class Neuron implements INeuron {
     @Override
     public void setCurrentLoopAmount(Integer currentLoopAmount) {
         this.currentLoopAmount = currentLoopAmount;
+    }
+
+    @Override
+    public boolean canProcess(ISignal signal) {
+        Set<Class<?extends ISignal>> canProcess = processorMap.keySet();
+        if(canProcess.contains(signal.getClass())){
+            return true;
+        }else if(signal.canUseProcessorForParent()){
+            Class<?> currentClass= signal.getClass().getSuperclass();
+            while (currentClass != ISignal.class && currentClass != Object.class){
+                if(canProcess.contains(currentClass)){
+                    return true;
+                }
+                currentClass = currentClass.getSuperclass();
+            }
+        }
+        return false;
     }
 
     public Neuron() {
@@ -181,7 +194,7 @@ public  class Neuron implements INeuron {
                     ISignal s = signalsMap.get(cls).get(0);
                     Class<?> clst = cls;
                     boolean done = true;
-                    while (getSupperClass(clst) != ISignal.class && getSupperClass(clst) != Object.class && s.canUseProcessorForParent() && done) {
+                    while (clst.getSuperclass() != ISignal.class && clst.getSuperclass() != Object.class && s.canUseProcessorForParent() && done) {
                         if (cl.equals(clst)) {
                             ISignalMerger signalMerger = this.getMergerMap().get(cl);
                             ISignalProcessor signalProcessor = this.getProcessorMap().get(cl);
@@ -200,7 +213,7 @@ public  class Neuron implements INeuron {
                             }
                             done = false;
                         }
-                        clst = getSupperClass(clst);
+                        clst = clst.getSuperclass();
                     }
                 }
             }
@@ -299,21 +312,6 @@ public  class Neuron implements INeuron {
         this.onDelete=onDelete;
     }
 
-    @Override
-    public List<CreateNeuronRequest> getCreateRequests() {
-        return createNeuronRequests;
-    }
-
-    @Override
-    public void addCreateRequest(CreateNeuronRequest createNeuronRequest) {
-        createNeuronRequests.add(createNeuronRequest);
-    }
-
-
-    private Class<?> getSupperClass(Class<?> clazz) {
-
-        return clazz.getSuperclass();
-    }
 
     @Override
     public int compareTo(Object o) {

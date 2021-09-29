@@ -182,6 +182,16 @@ public class FileInputMeta<S extends IFileSystemItem> implements IInputMeta<Stri
                 fileSystem.getItem(file.getPath() + fileSystem.getFolderSeparator() +stepID+1+ fileSystem.getFolderSeparator()+0));
     }
 
+    @Override
+    public void getCycleInputsMap(HashMap<String, Long> neuronInputNameMapping) {
+
+    }
+
+    @Override
+    public Integer getCurrentLoopCount() {
+        return null;
+    }
+
     private void save(HashMap<Long, List<ISignal>> signals, S path) {
         StringBuilder resultJson = new StringBuilder();
         ObjectMapper mapper= new ObjectMapper();

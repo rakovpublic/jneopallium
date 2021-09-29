@@ -147,11 +147,6 @@ public interface INeuron extends Serializable, Comparable {
 
     void setOnDelete(Boolean onDelete);
 
-    List<CreateNeuronRequest> getCreateRequests();
-
-    void addCreateRequest(CreateNeuronRequest createNeuronRequest);
-
-
      HashMap<String, Long> getCyclingNeuronInputMapping();
 
      void setCyclingNeuronInputMapping(HashMap<String, Long> cyclingNeuronInputMapping);
@@ -159,4 +154,6 @@ public interface INeuron extends Serializable, Comparable {
      Integer getCurrentLoopAmount();
 
      void setCurrentLoopAmount(Integer currentLoopCount) ;
+
+     boolean canProcess( ISignal clazz);
 }
