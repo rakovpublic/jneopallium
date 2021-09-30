@@ -2,6 +2,7 @@ package com.rakovpublic.jneuropallium.worker.net.layers.impl;
 
 import java.util.List;
 
+//TODO: add json annotation
 public class InputArray {
     private List<InputData> inputData;
 

@@ -9,6 +9,7 @@ import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 import java.util.HashMap;
 
 //interface for cycle running before next run with next input
+//TODO: add json annotation and mapper
 public interface IInputLoadingStrategy {
     Boolean populateInput(ISignalsPersistStorage signalsPersistStorage, HashMap<IInitInput, InputStatusMeta> inputStatuses);
     void setLayersMeta(ILayersMeta layersMeta);
