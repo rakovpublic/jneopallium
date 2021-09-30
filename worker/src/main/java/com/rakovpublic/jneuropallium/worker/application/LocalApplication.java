@@ -4,12 +4,17 @@ import com.rakovpublic.jneuropallium.worker.net.layers.IInputResolver;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayer;
 import com.rakovpublic.jneuropallium.worker.net.layers.IResult;
 import com.rakovpublic.jneuropallium.worker.net.layers.IResultLayer;
+import com.rakovpublic.jneuropallium.worker.net.layers.impl.InMemoryInputResolver;
+import com.rakovpublic.jneuropallium.worker.net.layers.impl.InputData;
 import com.rakovpublic.jneuropallium.worker.net.layers.impl.LayerBuilder;
 import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
+import com.rakovpublic.jneuropallium.worker.net.storages.IInputLoadingStrategy;
 import com.rakovpublic.jneuropallium.worker.net.storages.ILayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.storages.IResultLayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.storages.file.FileLayersMeta;
 import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IFileSystem;
+import com.rakovpublic.jneuropallium.worker.net.storages.signalstorages.inmemory.InMemorySignalHistoryStorage;
+import com.rakovpublic.jneuropallium.worker.net.storages.signalstorages.inmemory.InMemorySignalPersistStorage;
 import com.rakovpublic.jneuropallium.worker.net.storages.structimpl.StructBuilder;
 import com.rakovpublic.jneuropallium.worker.net.storages.structimpl.StructMeta;
 import com.rakovpublic.jneuropallium.worker.net.study.IDirectStudyingAlgorithm;
@@ -47,8 +52,12 @@ public class LocalApplication implements IApplication {
             String fileSystemConstructorArgs = context.getProperty("configuration.filesystem.constructor.args");
             String fileSystemConstructorArgsType = context.getProperty("configuration.filesystem.constructor.args.types");
             IFileSystem fs = InstantiationUtils.<IFileSystem>getObject(clazz, getObjects(fileSystemConstructorArgs), getTypes(fileSystemConstructorArgsType));
-            //TODO: implement IInputResolver
-            IInputResolver inputResolver = null;
+            String inputLoadingStrategy=context.getProperty("configuration.input.loadingstrategy");
+            IInputResolver inputResolver = new InMemoryInputResolver(new InMemorySignalPersistStorage(), new InMemorySignalHistoryStorage(),this.getLoadingStrategy(inputLoadingStrategy));
+            String inputs=context.getProperty("configuration.input.inputs");
+            for(InputData inputData: this.getInputs(inputs)){
+                inputResolver.registerInput(inputData.getiInputSource(),inputData.isMandatory(),inputData.getInitStrategy(),inputData.getAmountOfRuns());
+            }
             structBuilder.withHiddenInputMeta(inputResolver);
             structBuilder.withLayersMeta(new FileLayersMeta<>(fs.getItem(layerPath), fs));
             StructMeta meta = structBuilder.build();
@@ -200,6 +209,15 @@ public class LocalApplication implements IApplication {
         }
         return obj;
 
+    }
+
+    private IInputLoadingStrategy getLoadingStrategy(String json){
+        //TODO: add parsing implementation
+        return null;
+    }
+    private List<InputData> getInputs(String json){
+        //TODO: add parsing implementation
+        return null;
     }
 
 
