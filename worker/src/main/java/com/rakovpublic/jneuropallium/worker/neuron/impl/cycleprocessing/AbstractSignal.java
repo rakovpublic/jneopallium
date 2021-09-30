@@ -9,6 +9,16 @@ public abstract class AbstractSignal<T> implements ISignal<T> {
     private Integer timeAlive;
     private String description;
     private boolean fromExternalNet;
+    private String inputName;
+
+    @Override
+    public String getInputName() {
+        return inputName;
+    }
+    @Override
+    public void setInputName(String inputName) {
+        this.inputName = inputName;
+    }
 
     @Override
     public boolean isFromExternalNet() {
@@ -20,13 +30,14 @@ public abstract class AbstractSignal<T> implements ISignal<T> {
         this.fromExternalNet=fromExternalNet;
     }
 
-    public AbstractSignal(T value, Integer sourceLayer, Long sourceNeuron, Integer timeAlive, String description,boolean fromExternalNet) {
+    public AbstractSignal(T value, Integer sourceLayer, Long sourceNeuron, Integer timeAlive, String description,boolean fromExternalNet, String inputName) {
         this.value = value;
         this.sourceLayer = sourceLayer;
         this.sourceNeuron = sourceNeuron;
         this.timeAlive = timeAlive;
         this.description = description;
         this.fromExternalNet=fromExternalNet;
+        this.inputName= inputName;
     }
 
     @Override

@@ -3,8 +3,8 @@ package com.rakovpublic.jneuropallium.worker.neuron.impl.cycleprocessing;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 public class MultiplyCycleSignal extends AbstractSignal<Float> implements ISignal<Float> {
-    public MultiplyCycleSignal(Float value, Integer sourceLayer, Long sourceNeuron, Integer timeAlive, String description,boolean fromExternalNet) {
-        super(value, sourceLayer, sourceNeuron, timeAlive, description,fromExternalNet);
+    public MultiplyCycleSignal(Float value, Integer sourceLayer, Long sourceNeuron, Integer timeAlive, String description,boolean fromExternalNet, String inputName) {
+        super(value, sourceLayer, sourceNeuron, timeAlive, description,fromExternalNet,inputName);
     }
 
     @Override

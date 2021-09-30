@@ -99,4 +99,14 @@ public class SimpleSignal implements ISignal<Double> {
     public void setFromExternalNet(boolean fromExternalNet) {
 
     }
+
+    @Override
+    public String getInputName() {
+        return null;
+    }
+
+    @Override
+    public void setInputName(String inputName) {
+
+    }
 }

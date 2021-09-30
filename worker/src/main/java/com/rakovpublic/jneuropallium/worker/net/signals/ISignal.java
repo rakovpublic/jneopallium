@@ -49,4 +49,8 @@ public interface ISignal<T> extends Serializable {
 
     void setFromExternalNet(boolean fromExternalNet);
 
+    String getInputName();
+
+    void setInputName(String inputName);
+
 }
