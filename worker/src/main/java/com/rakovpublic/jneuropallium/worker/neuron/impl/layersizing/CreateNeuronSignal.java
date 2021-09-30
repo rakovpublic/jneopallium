@@ -4,8 +4,8 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.neuron.impl.cycleprocessing.AbstractSignal;
 
 public class CreateNeuronSignal extends AbstractSignal<NewNeuronIntegration> implements ISignal<NewNeuronIntegration> {
-    public CreateNeuronSignal(NewNeuronIntegration value, Integer sourceLayer, Long sourceNeuron, Integer timeAlive, String description) {
-        super(value, sourceLayer, sourceNeuron, timeAlive, description);
+    public CreateNeuronSignal(NewNeuronIntegration value, Integer sourceLayer, Long sourceNeuron, Integer timeAlive, String description, boolean fromExternalNet) {
+        super(value, sourceLayer, sourceNeuron, timeAlive, description, fromExternalNet);
 
     }
 

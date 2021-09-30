@@ -45,4 +45,8 @@ public interface ISignal<T> extends Serializable {
 
     int getTimeAlive();
 
+    boolean isFromExternalNet();
+
+    void setFromExternalNet(boolean fromExternalNet);
+
 }

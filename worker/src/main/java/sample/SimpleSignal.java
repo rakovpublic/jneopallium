@@ -89,4 +89,14 @@ public class SimpleSignal implements ISignal<Double> {
     public int getTimeAlive() {
         return timeAlive;
     }
+
+    @Override
+    public boolean isFromExternalNet() {
+        return false;
+    }
+
+    @Override
+    public void setFromExternalNet(boolean fromExternalNet) {
+
+    }
 }

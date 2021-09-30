@@ -9,6 +9,15 @@ import java.util.HashMap;
 import java.util.List;
 
 public class FileInitInput implements IInitInput {
+    private String  path;
+
+    public FileInitInput(String path) {
+        this.path = path;
+    }
+
+    public FileInitInput() {
+    }
+
     @Override
     public List<ISignal> readSignals() {
         return null;

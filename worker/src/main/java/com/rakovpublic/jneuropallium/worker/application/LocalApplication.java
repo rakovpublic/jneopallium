@@ -1,10 +1,15 @@
 package com.rakovpublic.jneuropallium.worker.application;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.rakovpublic.jneuropallium.worker.net.layers.IInputResolver;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayer;
 import com.rakovpublic.jneuropallium.worker.net.layers.IResult;
 import com.rakovpublic.jneuropallium.worker.net.layers.IResultLayer;
 import com.rakovpublic.jneuropallium.worker.net.layers.impl.InMemoryInputResolver;
+import com.rakovpublic.jneuropallium.worker.net.layers.impl.InputArray;
 import com.rakovpublic.jneuropallium.worker.net.layers.impl.InputData;
 import com.rakovpublic.jneuropallium.worker.net.layers.impl.LayerBuilder;
 import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
@@ -212,12 +217,26 @@ public class LocalApplication implements IApplication {
     }
 
     private IInputLoadingStrategy getLoadingStrategy(String json){
-        //TODO: add parsing implementation
-        return null;
+        ObjectMapper mapper= new ObjectMapper();
+        IInputLoadingStrategy result= null;
+        try {
+            result=mapper.readValue(json,IInputLoadingStrategy.class);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            //TODO:add logger
+        }
+        return result;
     }
     private List<InputData> getInputs(String json){
-        //TODO: add parsing implementation
-        return null;
+        ObjectMapper mapper= new ObjectMapper();
+        List<InputData> result= null;
+        try {
+            result=mapper.readValue(json, InputArray.class).getInputData();
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            //TODO:add logger
+        }
+        return result;
     }
 
 

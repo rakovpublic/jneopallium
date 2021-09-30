@@ -8,13 +8,25 @@ public abstract class AbstractSignal<T> implements ISignal<T> {
     private Long sourceNeuron;
     private Integer timeAlive;
     private String description;
+    private boolean fromExternalNet;
 
-    public AbstractSignal(T value, Integer sourceLayer, Long sourceNeuron, Integer timeAlive, String description) {
+    @Override
+    public boolean isFromExternalNet() {
+        return this.fromExternalNet;
+    }
+
+    @Override
+    public void setFromExternalNet(boolean fromExternalNet) {
+        this.fromExternalNet=fromExternalNet;
+    }
+
+    public AbstractSignal(T value, Integer sourceLayer, Long sourceNeuron, Integer timeAlive, String description,boolean fromExternalNet) {
         this.value = value;
         this.sourceLayer = sourceLayer;
         this.sourceNeuron = sourceNeuron;
         this.timeAlive = timeAlive;
         this.description = description;
+        this.fromExternalNet=fromExternalNet;
     }
 
     @Override
