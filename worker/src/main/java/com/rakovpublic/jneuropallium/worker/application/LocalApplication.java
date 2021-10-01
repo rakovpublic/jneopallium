@@ -13,6 +13,7 @@ import com.rakovpublic.jneuropallium.worker.net.layers.impl.InputArray;
 import com.rakovpublic.jneuropallium.worker.net.layers.impl.InputData;
 import com.rakovpublic.jneuropallium.worker.net.layers.impl.LayerBuilder;
 import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.IInputLoadingStrategy;
 import com.rakovpublic.jneuropallium.worker.net.storages.ILayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.storages.IResultLayerMeta;
@@ -100,9 +101,14 @@ public class LocalApplication implements IApplication {
                                 meta.getInputResolver().saveHistory();
                                 meta.getInputResolver().getSignalPersistStorage().cleanOutdatedSignals();
                                 meta.getInputResolver().populateInput();
+                                Integer layerId = meta.getResultLayer().getID();
+                                HashMap<Long,List<ISignal>> studyMap=new HashMap<>();
                                 for (IResult res : idsToFix) {
-                                    inputResolver.getSignalPersistStorage().putSignals(iObjectStudyingAlgo.study(res.getNeuronId()));
+                                    studyMap.put(res.getNeuronId(),iObjectStudyingAlgo.getStudyingSignals());
                                 }
+                                HashMap<Integer, HashMap<Long,List<ISignal>>> studyingRequest= new HashMap<>();
+                                studyingRequest.put(layerId,studyMap);
+                                inputResolver.getSignalPersistStorage().putSignals(studyingRequest);
                             }
                         }
                     } else {

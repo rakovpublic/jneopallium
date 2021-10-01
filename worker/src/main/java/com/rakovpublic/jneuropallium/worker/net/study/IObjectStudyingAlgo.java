@@ -7,5 +7,6 @@ import java.util.HashMap;
 import java.util.List;
 
 public interface IObjectStudyingAlgo extends IStudyingAlgo, Serializable {
-    HashMap<Integer, HashMap<Long, List<ISignal>>> study(Long neuronId);
+/** this method return signals for study */
+    List<ISignal> getStudyingSignals();
 }
