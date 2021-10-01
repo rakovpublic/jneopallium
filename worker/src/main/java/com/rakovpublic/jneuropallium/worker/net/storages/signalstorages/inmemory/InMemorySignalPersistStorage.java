@@ -54,4 +54,5 @@ public class InMemorySignalPersistStorage implements ISignalsPersistStorage {
     public HashMap<Integer, HashMap<Long, List<ISignal>>> getAllSignals() {
         return signals;
     }
+
 }

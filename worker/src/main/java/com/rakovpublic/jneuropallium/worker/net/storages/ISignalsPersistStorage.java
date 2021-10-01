@@ -14,5 +14,4 @@ public interface ISignalsPersistStorage {
 
     HashMap<Integer,HashMap<Long, List<ISignal>>> getAllSignals( );
 
-
 }

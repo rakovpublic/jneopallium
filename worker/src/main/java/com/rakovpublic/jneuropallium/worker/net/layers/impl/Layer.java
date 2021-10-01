@@ -263,6 +263,11 @@ public class Layer implements ILayer {
     }
 
     @Override
+    public void sendCallBack(String name, List<ISignal> signals) {
+        inputResolver.sendCallBack(name,signals);
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

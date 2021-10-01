@@ -19,4 +19,5 @@ public interface IInputResolver {
     void saveHistory();
     void populateInput();
     HashMap<String,List<IResultSignal>> getDesiredResult();
+    void sendCallBack(String name, List<ISignal> signals);
 }

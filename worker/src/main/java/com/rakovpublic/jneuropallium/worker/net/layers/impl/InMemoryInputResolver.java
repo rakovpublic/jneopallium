@@ -15,6 +15,7 @@ public class InMemoryInputResolver implements IInputResolver {
     private ISignalHistoryStorage signalHistoryStorage;
     private Long currentLoop;
     private IInputLoadingStrategy inputLoadingStrategy;
+    private HashMap<String,IInitInput> initInput;
 
     public InMemoryInputResolver(ISignalsPersistStorage signalsPersistStorage, ISignalHistoryStorage signalHistoryStorage, IInputLoadingStrategy inputLoadingStrategy) {
         this.signalsPersistStorage = signalsPersistStorage;
@@ -23,6 +24,7 @@ public class InMemoryInputResolver implements IInputResolver {
         currentLoop=0l;
         inputStatuses= new HashMap<>();
         inputs= new HashMap<>();
+        initInput =  new HashMap<>();
     }
 
     @Override
@@ -77,6 +79,14 @@ public class InMemoryInputResolver implements IInputResolver {
             }
         }
         return result;
+    }
+
+    @Override
+    public void sendCallBack(String name, List<ISignal> signals) {
+        IInitInput input = initInput.get(name);
+        if(input instanceof INeuronNetInput){
+            ((INeuronNetInput)input).sendCallBack(signals);
+        }
     }
 
 }
