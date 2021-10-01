@@ -39,6 +39,7 @@ public class Layer implements ILayer {
         map = new TreeMap<Long, INeuron>();
         input = new HashMap<Long, List<ISignal>>();
         INeuron sizingNeuron= new LayerManipulatingNeuron(Long.MIN_VALUE,new LayerManipulatingProcessingChain(),0l,this);
+        sizingNeuron.setLayer(this);
         map.put(Long.MIN_VALUE,sizingNeuron);
     }
 
@@ -46,6 +47,7 @@ public class Layer implements ILayer {
     @Override
     public synchronized <K extends CreateNeuronSignal> void createNeuron(K signal) {
         INeuron newNeuron= signal.getValue().getNeuron();
+        newNeuron.setLayer(this);
         if(!map.containsKey(newNeuron.getId())&&newNeuron.getId()!=null){
             map.put(newNeuron.getId(),newNeuron);
         }else {
@@ -104,6 +106,7 @@ public class Layer implements ILayer {
 
     @Override
     public void register(INeuron neuron) {
+        neuron.setLayer(this);
         map.put(neuron.getId(), neuron);
 
     }
@@ -111,6 +114,7 @@ public class Layer implements ILayer {
     @Override
     public void registerAll(List<? extends INeuron> neuron) {
         for (INeuron ner : neuron) {
+            ner.setLayer(this);
             map.put(ner.getId(), ner);
         }
     }

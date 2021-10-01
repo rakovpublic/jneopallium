@@ -1,9 +1,11 @@
 package com.rakovpublic.jneuropallium.worker.neuron.impl;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.rakovpublic.jneuropallium.worker.exceptions.CannotFindSignalMergerException;
 import com.rakovpublic.jneuropallium.worker.exceptions.CannotFindSignalProcessorException;
+import com.rakovpublic.jneuropallium.worker.net.layers.ILayer;
 import com.rakovpublic.jneuropallium.worker.net.storages.ISignalHistoryStorage;
 import com.rakovpublic.jneuropallium.worker.neuron.*;
 import com.rakovpublic.jneuropallium.worker.net.signals.IChangingSignal;
@@ -20,6 +22,8 @@ public  class Neuron implements INeuron {
     private HashMap<Class<? extends ISignal>, ISignalProcessor> processorMap;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private HashMap<Class<? extends ISignal>, ISignalMerger> mergerMap;
+    @JsonIgnore
+    private ILayer layer;
     private Long neuronId;
     protected List<ISignal> result;
     protected  ISignalChain signalChain;
@@ -65,6 +69,16 @@ public  class Neuron implements INeuron {
             }
         }
         return false;
+    }
+
+    @Override
+    public void setLayer(ILayer layer) {
+        this.layer=layer;
+    }
+
+    @Override
+    public ILayer getLayer() {
+        return layer;
     }
 
     public Neuron() {
@@ -313,9 +327,4 @@ public  class Neuron implements INeuron {
         this.onDelete=onDelete;
     }
 
-
-    @Override
-    public int compareTo(Object o) {
-        return 0;
-    }
 }

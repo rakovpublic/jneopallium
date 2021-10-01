@@ -1,6 +1,7 @@
 package com.rakovpublic.jneuropallium.worker.neuron;
 
 
+import com.rakovpublic.jneuropallium.worker.net.layers.ILayer;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.ISignalHistoryStorage;
 
@@ -14,7 +15,7 @@ import java.util.Map;
  * This class contains methods for signal processing and represents neuron(perceptron)
  *
  */
-public interface INeuron extends Serializable, Comparable {
+public interface INeuron extends Serializable {
 
     ISignalChain getSignalChain();
 
@@ -156,4 +157,9 @@ public interface INeuron extends Serializable, Comparable {
      void setCurrentLoopAmount(Integer currentLoopCount) ;
 
      boolean canProcess( ISignal clazz);
+
+
+     void setLayer(ILayer layer);
+
+     ILayer getLayer();
 }
