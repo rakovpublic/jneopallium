@@ -12,6 +12,6 @@ public interface ISignalsPersistStorage {
 
     void cleanOutdatedSignals();
 
-    HashMap<Integer,HashMap<Long, List<ISignal>>> getAllSignals( );
+    HashMap<Integer, HashMap<Long, List<ISignal>>> getAllSignals();
 
 }

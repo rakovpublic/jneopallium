@@ -6,15 +6,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.rakovpublic.jneuropallium.worker.exceptions.CannotFindSignalMergerException;
 import com.rakovpublic.jneuropallium.worker.exceptions.CannotFindSignalProcessorException;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayer;
-import com.rakovpublic.jneuropallium.worker.net.storages.ISignalHistoryStorage;
-import com.rakovpublic.jneuropallium.worker.neuron.*;
 import com.rakovpublic.jneuropallium.worker.net.signals.IChangingSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
+import com.rakovpublic.jneuropallium.worker.net.storages.ISignalHistoryStorage;
+import com.rakovpublic.jneuropallium.worker.neuron.*;
 
 import java.util.*;
 
 
-public  class Neuron implements INeuron {
+public class Neuron implements INeuron {
     private List<ISignal> signals;
     private Boolean isProcessed;
     private IAxon axon;
@@ -26,29 +26,34 @@ public  class Neuron implements INeuron {
     private ILayer layer;
     private Long neuronId;
     protected List<ISignal> result;
-    protected  ISignalChain signalChain;
+    protected ISignalChain signalChain;
     private List<IRule> rules;
-    protected Class<?extends INeuron> currentNeuronClass;
+    protected Class<? extends INeuron> currentNeuronClass;
     private Boolean changed;
     private Boolean onDelete;
     protected Long run;
     protected ISignalHistoryStorage signalHistoryStorage;
+
     @Override
     public HashMap<String, Long> getCyclingNeuronInputMapping() {
         return cyclingNeuronInputMapping;
     }
+
     @Override
     public void setCyclingNeuronInputMapping(HashMap<String, Long> cyclingNeuronInputMapping) {
         this.cyclingNeuronInputMapping = cyclingNeuronInputMapping;
     }
+
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    protected HashMap<String,Long> cyclingNeuronInputMapping;
+    protected HashMap<String, Long> cyclingNeuronInputMapping;
 
     private Integer currentLoopAmount;
+
     @Override
     public Integer getCurrentLoopAmount() {
         return currentLoopAmount;
     }
+
     @Override
     public void setCurrentLoopAmount(Integer currentLoopAmount) {
         this.currentLoopAmount = currentLoopAmount;
@@ -56,13 +61,13 @@ public  class Neuron implements INeuron {
 
     @Override
     public boolean canProcess(ISignal signal) {
-        Set<Class<?extends ISignal>> canProcess = processorMap.keySet();
-        if(canProcess.contains(signal.getClass())){
+        Set<Class<? extends ISignal>> canProcess = processorMap.keySet();
+        if (canProcess.contains(signal.getClass())) {
             return true;
-        }else if(signal.canUseProcessorForParent()){
-            Class<?> currentClass= signal.getClass().getSuperclass();
-            while (currentClass != ISignal.class && currentClass != Object.class){
-                if(canProcess.contains(currentClass)){
+        } else if (signal.canUseProcessorForParent()) {
+            Class<?> currentClass = signal.getClass().getSuperclass();
+            while (currentClass != ISignal.class && currentClass != Object.class) {
+                if (canProcess.contains(currentClass)) {
                     return true;
                 }
                 currentClass = currentClass.getSuperclass();
@@ -73,7 +78,7 @@ public  class Neuron implements INeuron {
 
     @Override
     public void setLayer(ILayer layer) {
-        this.layer=layer;
+        this.layer = layer;
     }
 
     @Override
@@ -88,10 +93,10 @@ public  class Neuron implements INeuron {
         result = new ArrayList<>();
         processorMap = new HashMap<>();
         mergerMap = new HashMap<>();
-        currentNeuronClass=Neuron.class;
+        currentNeuronClass = Neuron.class;
     }
 
-    public Neuron(Long neuronId, ISignalChain processingChain,Long run) {
+    public Neuron(Long neuronId, ISignalChain processingChain, Long run) {
         rules = new ArrayList<>();
         this.neuronId = neuronId;
         isProcessed = false;
@@ -126,7 +131,7 @@ public  class Neuron implements INeuron {
 
     @Override
     public void setRun(Long run) {
-        this.run=run;
+        this.run = run;
     }
 
     @Override
@@ -136,7 +141,7 @@ public  class Neuron implements INeuron {
 
     @Override
     public void setSignalHistory(ISignalHistoryStorage signalHistory) {
-        this.signalHistoryStorage=signalHistory;
+        this.signalHistoryStorage = signalHistory;
     }
 
     @Override
@@ -163,6 +168,7 @@ public  class Neuron implements INeuron {
     public void addSignals(List<ISignal> signals) {
         this.signals.addAll(signals);
     }
+
     //TODO:refactor this method
     @Override
     public void processSignals() {
@@ -181,10 +187,10 @@ public  class Neuron implements INeuron {
         for (Class<? extends ISignal> cl : this.getSignalChain().getProcessingChain()) {
 
             for (Class<? extends ISignal> cls : signalsMap.keySet()) {
-                for(ISignal signal : signalsMap.get(cls)){
-                    if(signal instanceof IChangingSignal){
-                        IChangingSignal cs= (IChangingSignal) signal;
-                        if(cs.canProcess(this.getClass())){
+                for (ISignal signal : signalsMap.get(cls)) {
+                    if (signal instanceof IChangingSignal) {
+                        IChangingSignal cs = (IChangingSignal) signal;
+                        if (cs.canProcess(this.getClass())) {
                             cs.changeNeuron(this);
                         }
                     }
@@ -243,7 +249,7 @@ public  class Neuron implements INeuron {
     }
 
     @Override
-    public <S extends ISignal,N extends INeuron> void addSignalProcessor(Class<S> clazz, ISignalProcessor<S,N> processor) {
+    public <S extends ISignal, N extends INeuron> void addSignalProcessor(Class<S> clazz, ISignalProcessor<S, N> processor) {
         processorMap.put(clazz, processor);
     }
 
@@ -313,7 +319,7 @@ public  class Neuron implements INeuron {
 
     @Override
     public void setChanged(Boolean changed) {
-        this.changed=changed;
+        this.changed = changed;
 
     }
 
@@ -324,7 +330,7 @@ public  class Neuron implements INeuron {
 
     @Override
     public void setOnDelete(Boolean onDelete) {
-        this.onDelete=onDelete;
+        this.onDelete = onDelete;
     }
 
 }

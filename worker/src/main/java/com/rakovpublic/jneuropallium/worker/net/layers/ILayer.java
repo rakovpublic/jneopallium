@@ -9,14 +9,12 @@ package com.rakovpublic.jneuropallium.worker.net.layers;
  *
  */
 
-import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
-import com.rakovpublic.jneuropallium.worker.neuron.IRule;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
-import com.rakovpublic.jneuropallium.worker.net.storages.IInputMeta;
 import com.rakovpublic.jneuropallium.worker.net.storages.ILayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.storages.INeuronSerializer;
+import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
+import com.rakovpublic.jneuropallium.worker.neuron.IRule;
 import com.rakovpublic.jneuropallium.worker.neuron.impl.layersizing.CreateNeuronSignal;
-import com.rakovpublic.jneuropallium.worker.neuron.impl.layersizing.DeleteNeuronIntegration;
 import com.rakovpublic.jneuropallium.worker.neuron.impl.layersizing.DeleteNeuronSignal;
 
 import java.io.Serializable;
@@ -27,7 +25,7 @@ public interface ILayer extends Serializable {
 
     //TODO: add layer increasing via neuron logic
 
-    <K extends CreateNeuronSignal>void createNeuron(K signal);
+    <K extends CreateNeuronSignal> void createNeuron(K signal);
 
     void deleteNeuron(DeleteNeuronSignal deleteNeuronIntegration);
 
@@ -126,7 +124,7 @@ public interface ILayer extends Serializable {
 
     <N extends INeuron> INeuronSerializer<N> getNeuronSerializer(Class<N> neuronClass);
 
-    void sendCallBack(String name,List<ISignal> signals);
+    void sendCallBack(String name, List<ISignal> signals);
 
 
 }

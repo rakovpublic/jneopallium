@@ -9,7 +9,7 @@ import java.util.List;
  * Created by Rakovskyi Dmytro on 13.06.2018.
  * This class represents processor for signal
  */
-public interface ISignalProcessor<S extends ISignal,K extends  INeuron> extends Serializable {
+public interface ISignalProcessor<S extends ISignal, K extends INeuron> extends Serializable {
     /***
      * @param input signal
      * @param neuron object

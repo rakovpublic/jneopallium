@@ -25,7 +25,8 @@ public class JSONProcessorConverter extends StdDeserializer<ISignalProcessor> {
     public JSONProcessorConverter(StdDeserializer<?> src) {
         super(src);
     }
-    public JSONProcessorConverter(){
+
+    public JSONProcessorConverter() {
         super(ISignalProcessor.class);
 
 
@@ -36,10 +37,10 @@ public class JSONProcessorConverter extends StdDeserializer<ISignalProcessor> {
         String s = jsonParser.getText();
         JsonElement jelement = new com.google.gson.JsonParser().parse(s);
         JsonObject jobject = jelement.getAsJsonObject();
-        String cl=jobject.getAsJsonPrimitive("signalProcessorClass").getAsString();
-        ObjectMapper mapper= new ObjectMapper();
+        String cl = jobject.getAsJsonPrimitive("signalProcessorClass").getAsString();
+        ObjectMapper mapper = new ObjectMapper();
         try {
-            return (ISignalProcessor) mapper.readValue(s,Class.forName(cl));
+            return (ISignalProcessor) mapper.readValue(s, Class.forName(cl));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {

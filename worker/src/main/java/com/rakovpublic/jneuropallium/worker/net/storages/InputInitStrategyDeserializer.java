@@ -15,17 +15,17 @@ public class InputInitStrategyDeserializer extends StdDeserializer<InputInitStra
         super(vc);
     }
 
-    public InputInitStrategyDeserializer(){
+    public InputInitStrategyDeserializer() {
         this(null);
     }
 
     @Override
     public InputInitStrategy deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
-        ObjectMapper mapper= new ObjectMapper();
+        ObjectMapper mapper = new ObjectMapper();
         JsonElement jelement = new com.google.gson.JsonParser().parse(jsonParser.readValueAsTree().toString());
         JsonObject jobject = jelement.getAsJsonObject();
         try {
-            return (InputInitStrategy) mapper.readValue(jobject.getAsJsonObject("iNeuronNetInput").toString(),Class.forName(jobject.getAsJsonPrimitive("clazz").getAsString()));
+            return (InputInitStrategy) mapper.readValue(jobject.getAsJsonObject("iNeuronNetInput").toString(), Class.forName(jobject.getAsJsonPrimitive("clazz").getAsString()));
         } catch (ClassNotFoundException e) {
             //TODO: add logger
             e.printStackTrace();

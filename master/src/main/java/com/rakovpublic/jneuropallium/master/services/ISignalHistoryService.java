@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface ISignalHistoryService {
     void saveSignals(Integer run, Integer layerId, HashMap<Long, List<ISignal>> signals);
-    List<ISignal> loadSignals(Integer run, Integer layerId,Long neuronId);
+
+    List<ISignal> loadSignals(Integer run, Integer layerId, Long neuronId);
 }

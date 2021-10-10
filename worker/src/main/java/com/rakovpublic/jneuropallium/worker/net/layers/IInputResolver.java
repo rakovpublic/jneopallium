@@ -12,12 +12,20 @@ import java.util.List;
 
 public interface IInputResolver {
     void registerInput(IInitInput iInputSource, boolean isMandatory, InputInitStrategy initStrategy, Integer amountOfRuns);
+
     ISignalsPersistStorage getSignalPersistStorage();
+
     ISignalHistoryStorage getSignalsHistoryStorage();
-    HashMap<String,Long> getCycleNeuronAddressMapping();
+
+    HashMap<String, Long> getCycleNeuronAddressMapping();
+
     Integer getCurrentLoop();
+
     void saveHistory();
+
     void populateInput();
-    HashMap<String,List<IResultSignal>> getDesiredResult();
+
+    HashMap<String, List<IResultSignal>> getDesiredResult();
+
     void sendCallBack(String name, List<ISignal> signals);
 }

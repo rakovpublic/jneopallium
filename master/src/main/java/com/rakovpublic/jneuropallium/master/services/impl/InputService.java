@@ -1,8 +1,6 @@
 package com.rakovpublic.jneuropallium.master.services.impl;
 
-import com.rakovpublic.jneuropallium.worker.net.storages.IInputLoadingStrategy;
 import com.rakovpublic.jneuropallium.master.services.IInputService;
-import com.rakovpublic.jneuropallium.worker.net.storages.ISignalsPersistStorage;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.*;
 import com.rakovpublic.jneuropallium.worker.neuron.IResultNeuron;
@@ -42,10 +40,10 @@ public class InputService implements IInputService {
     }
 
     @Override
-    public void register( IInitInput iInputSource, boolean isMandatory, InputInitStrategy initStrategy, Integer amountOfRuns) {
+    public void register(IInitInput iInputSource, boolean isMandatory, InputInitStrategy initStrategy, Integer amountOfRuns) {
         //signalsPersist.putSignals(initStrategy.getInputs(layersMeta, iInputSource.readSignals()));
-        inputStatuses.put(iInputSource, new InputStatusMeta(true, isMandatory,amountOfRuns,iInputSource.getName()));
-        inputs.put(iInputSource,initStrategy);
+        inputStatuses.put(iInputSource, new InputStatusMeta(true, isMandatory, amountOfRuns, iInputSource.getName()));
+        inputs.put(iInputSource, initStrategy);
     }
 
     @Override

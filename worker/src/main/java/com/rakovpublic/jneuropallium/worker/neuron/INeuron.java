@@ -20,12 +20,15 @@ public interface INeuron extends Serializable {
     ISignalChain getSignalChain();
 
     Map<Class<? extends ISignal>, ISignalProcessor> getProcessorMap();
+
     Map<Class<? extends ISignal>, ISignalMerger> getMergerMap();
 
     Long getRun();
+
     void setRun(Long run);
 
     ISignalHistoryStorage getSignalHistory();
+
     void setSignalHistory(ISignalHistoryStorage signalHistory);
 
     void setId(Long id);
@@ -63,7 +66,7 @@ public interface INeuron extends Serializable {
      **/
     void setAxon(IAxon axon);
 
-   // void setAxon(Axon axon);
+    // void setAxon(Axon axon);
 
     /**
      * Add signal processor to neuron. Define which classes of signals can be processed by neuron.
@@ -71,7 +74,7 @@ public interface INeuron extends Serializable {
      * @param clazz     signal class which will be processing by this signal processor
      * @param processor signal processor
      **/
-    <S extends ISignal,N extends INeuron> void addSignalProcessor(Class<S> clazz, ISignalProcessor<S,N> processor);
+    <S extends ISignal, N extends INeuron> void addSignalProcessor(Class<S> clazz, ISignalProcessor<S, N> processor);
 
     /**
      * Add signal merger. If signal merger exists for the all the signals of the same will be merged in one before
@@ -148,18 +151,18 @@ public interface INeuron extends Serializable {
 
     void setOnDelete(Boolean onDelete);
 
-     HashMap<String, Long> getCyclingNeuronInputMapping();
+    HashMap<String, Long> getCyclingNeuronInputMapping();
 
-     void setCyclingNeuronInputMapping(HashMap<String, Long> cyclingNeuronInputMapping);
+    void setCyclingNeuronInputMapping(HashMap<String, Long> cyclingNeuronInputMapping);
 
-     Integer getCurrentLoopAmount();
+    Integer getCurrentLoopAmount();
 
-     void setCurrentLoopAmount(Integer currentLoopCount) ;
+    void setCurrentLoopAmount(Integer currentLoopCount);
 
-     boolean canProcess( ISignal clazz);
+    boolean canProcess(ISignal clazz);
 
 
-     void setLayer(ILayer layer);
+    void setLayer(ILayer layer);
 
-     ILayer getLayer();
+    ILayer getLayer();
 }

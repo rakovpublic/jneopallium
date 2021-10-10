@@ -9,16 +9,16 @@ public class InstantiationUtils {
         Constructor<K> ctor = null;
         try {
             K object;
-            if(args.length>0){
-                Class<?>[] array= new Class<?>[params.size()];
-                int i=0;
-                for(Class<?> cl:params){
-                    array[i]=cl;
+            if (args.length > 0) {
+                Class<?>[] array = new Class<?>[params.size()];
+                int i = 0;
+                for (Class<?> cl : params) {
+                    array[i] = cl;
                     i++;
                 }
                 ctor = clazz.getDeclaredConstructor(array);
                 object = ctor.newInstance(args);
-            }else {
+            } else {
                 ctor = clazz.getDeclaredConstructor();
                 object = ctor.newInstance();
             }

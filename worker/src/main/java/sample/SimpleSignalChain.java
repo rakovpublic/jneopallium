@@ -1,7 +1,7 @@
 package sample;
 
-import com.rakovpublic.jneuropallium.worker.neuron.ISignalChain;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
+import com.rakovpublic.jneuropallium.worker.neuron.ISignalChain;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -13,7 +13,7 @@ public class SimpleSignalChain implements ISignalChain {
     public SimpleSignalChain() {
         this.chaine = new LinkedList<>();
         chaine.add(SimpleSignal.class);
-        description="Simple test";
+        description = "Simple test";
     }
 
     @Override

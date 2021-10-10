@@ -8,19 +8,19 @@ import java.util.HashMap;
 import java.util.List;
 
 public class InMemorySignalHistoryStorage implements ISignalHistoryStorage {
-    private HashMap<Long,HashMap<Integer, HashMap<Long, List<ISignal>>>> history;
+    private HashMap<Long, HashMap<Integer, HashMap<Long, List<ISignal>>>> history;
 
     public InMemorySignalHistoryStorage() {
         this.history = new HashMap<>();
     }
 
     @Override
-    public  List<ISignal> getSourceSignalsForRun(Long nRun, NeuronAddress forTarget) {
+    public List<ISignal> getSourceSignalsForRun(Long nRun, NeuronAddress forTarget) {
         return history.get(nRun).get(forTarget.getLayerId()).get(forTarget.getNeuronId());
     }
 
     @Override
     public void save(HashMap<Integer, HashMap<Long, List<ISignal>>> history, Long run) {
-        this.history.put(run,history);
+        this.history.put(run, history);
     }
 }

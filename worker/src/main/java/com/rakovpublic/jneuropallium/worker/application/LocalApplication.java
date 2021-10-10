@@ -2,8 +2,6 @@ package com.rakovpublic.jneuropallium.worker.application;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import com.rakovpublic.jneuropallium.worker.net.layers.IInputResolver;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayer;
 import com.rakovpublic.jneuropallium.worker.net.layers.IResult;
@@ -34,7 +32,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 public class LocalApplication implements IApplication {
@@ -58,11 +55,11 @@ public class LocalApplication implements IApplication {
             String fileSystemConstructorArgs = context.getProperty("configuration.filesystem.constructor.args");
             String fileSystemConstructorArgsType = context.getProperty("configuration.filesystem.constructor.args.types");
             IFileSystem fs = InstantiationUtils.<IFileSystem>getObject(clazz, getObjects(fileSystemConstructorArgs), getTypes(fileSystemConstructorArgsType));
-            String inputLoadingStrategy=context.getProperty("configuration.input.loadingstrategy");
-            IInputResolver inputResolver = new InMemoryInputResolver(new InMemorySignalPersistStorage(), new InMemorySignalHistoryStorage(),this.getLoadingStrategy(inputLoadingStrategy));
-            String inputs=context.getProperty("configuration.input.inputs");
-            for(InputData inputData: this.getInputs(inputs)){
-                inputResolver.registerInput(inputData.getiInputSource(),inputData.isMandatory(),inputData.getInitStrategy(),inputData.getAmountOfRuns());
+            String inputLoadingStrategy = context.getProperty("configuration.input.loadingstrategy");
+            IInputResolver inputResolver = new InMemoryInputResolver(new InMemorySignalPersistStorage(), new InMemorySignalHistoryStorage(), this.getLoadingStrategy(inputLoadingStrategy));
+            String inputs = context.getProperty("configuration.input.inputs");
+            for (InputData inputData : this.getInputs(inputs)) {
+                inputResolver.registerInput(inputData.getiInputSource(), inputData.isMandatory(), inputData.getInitStrategy(), inputData.getAmountOfRuns());
             }
             structBuilder.withHiddenInputMeta(inputResolver);
             structBuilder.withLayersMeta(new FileLayersMeta<>(fs.getItem(layerPath), fs));
@@ -77,8 +74,8 @@ public class LocalApplication implements IApplication {
 
                 HashMap<String, List<IResultSignal>> desiredResult = inputResolver.getDesiredResult();
                 if (isTeacherStudying && desiredResult != null) {
-                    IResultComparingStrategy resultComparingStrategy=null;
-                    String jsonResultComparingStrategy =context.getProperty("configuration.jsonResultComparingStrategy");
+                    IResultComparingStrategy resultComparingStrategy = null;
+                    String jsonResultComparingStrategy = context.getProperty("configuration.jsonResultComparingStrategy");
                     //TODO:add json parsing with wrapper
                     String algoType = context.getProperty("configuration.studyingalgotype");
                     IResultLayer iResultLayer;
@@ -87,7 +84,7 @@ public class LocalApplication implements IApplication {
                         if (algoType.equals("direct")) {
                             IDirectStudyingAlgorithm directStudyingAlgorithm = StudyingAlgoFactory.getDirectStudyingAlgo();
 
-                            while ((idsToFix=resultComparingStrategy.getIdsStudy(process(meta).interpretResult(),desiredResult)).size()>0) {
+                            while ((idsToFix = resultComparingStrategy.getIdsStudy(process(meta).interpretResult(), desiredResult)).size() > 0) {
                                 for (IResult res : idsToFix) {
                                     meta.study(directStudyingAlgorithm.study(meta, res.getNeuronId()));
                                 }
@@ -97,17 +94,17 @@ public class LocalApplication implements IApplication {
                             }
                         } else if (algoType.equals("object")) {
                             IObjectStudyingAlgo iObjectStudyingAlgo = StudyingAlgoFactory.getObjectStudyingAlgo();
-                            while ((idsToFix=resultComparingStrategy.getIdsStudy(process(meta).interpretResult(),desiredResult)).size()>0) {
+                            while ((idsToFix = resultComparingStrategy.getIdsStudy(process(meta).interpretResult(), desiredResult)).size() > 0) {
                                 meta.getInputResolver().saveHistory();
                                 meta.getInputResolver().getSignalPersistStorage().cleanOutdatedSignals();
                                 meta.getInputResolver().populateInput();
                                 Integer layerId = meta.getResultLayer().getID();
-                                HashMap<Long,List<ISignal>> studyMap=new HashMap<>();
+                                HashMap<Long, List<ISignal>> studyMap = new HashMap<>();
                                 for (IResult res : idsToFix) {
-                                    studyMap.put(res.getNeuronId(),iObjectStudyingAlgo.getStudyingSignals());
+                                    studyMap.put(res.getNeuronId(), iObjectStudyingAlgo.getStudyingSignals());
                                 }
-                                HashMap<Integer, HashMap<Long,List<ISignal>>> studyingRequest= new HashMap<>();
-                                studyingRequest.put(layerId,studyMap);
+                                HashMap<Integer, HashMap<Long, List<ISignal>>> studyingRequest = new HashMap<>();
+                                studyingRequest.put(layerId, studyMap);
                                 inputResolver.getSignalPersistStorage().putSignals(studyingRequest);
                             }
                         }
@@ -168,8 +165,8 @@ public class LocalApplication implements IApplication {
     private List<Class<?>> getTypes(String str) {
 
         List<Class<?>> reuslt = new ArrayList<>();
-        if(str.equals("empty")){
-            return    reuslt ;
+        if (str.equals("empty")) {
+            return reuslt;
         }
         try {
             if (str.contains(":")) {
@@ -183,7 +180,7 @@ public class LocalApplication implements IApplication {
         } catch (ClassNotFoundException e) {
             //TODO:Add logger
         }
-        return  reuslt;
+        return reuslt;
 
     }
 
@@ -206,7 +203,7 @@ public class LocalApplication implements IApplication {
 
 
     private Object[] getObjects(String str) {
-        if(str.equals("empty")){
+        if (str.equals("empty")) {
             return new Object[0];
         }
         Object[] obj = null;
@@ -222,22 +219,11 @@ public class LocalApplication implements IApplication {
 
     }
 
-    private IInputLoadingStrategy getLoadingStrategy(String json){
-        ObjectMapper mapper= new ObjectMapper();
-        IInputLoadingStrategy result= null;
+    private IInputLoadingStrategy getLoadingStrategy(String json) {
+        ObjectMapper mapper = new ObjectMapper();
+        IInputLoadingStrategy result = null;
         try {
-            result=mapper.readValue(json,IInputLoadingStrategy.class);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            //TODO:add logger
-        }
-        return result;
-    }
-    private List<InputData> getInputs(String json){
-        ObjectMapper mapper= new ObjectMapper();
-        List<InputData> result= null;
-        try {
-            result=mapper.readValue(json, InputArray.class).getInputData();
+            result = mapper.readValue(json, IInputLoadingStrategy.class);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             //TODO:add logger
@@ -245,6 +231,17 @@ public class LocalApplication implements IApplication {
         return result;
     }
 
+    private List<InputData> getInputs(String json) {
+        ObjectMapper mapper = new ObjectMapper();
+        List<InputData> result = null;
+        try {
+            result = mapper.readValue(json, InputArray.class).getInputData();
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            //TODO:add logger
+        }
+        return result;
+    }
 
 
 }

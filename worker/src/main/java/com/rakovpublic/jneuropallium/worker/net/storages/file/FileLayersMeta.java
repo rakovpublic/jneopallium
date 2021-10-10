@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public class FileLayersMeta<S extends IFileSystemItem> implements ILayersMeta {
     private S file;
     private IFileSystem fileSystem;
-    private HashMap<Integer,ILayerMeta> layers;
+    private HashMap<Integer, ILayerMeta> layers;
 
 
     public FileLayersMeta(S file, IFileSystem<S> fs) {
@@ -27,32 +27,32 @@ public class FileLayersMeta<S extends IFileSystemItem> implements ILayersMeta {
     public List<ILayerMeta> getLayers() {
         // S layersDir = fileSystem.getItem(file+ fileSystem.getFolderSeparator()+"layers");
         //new File(file.getAbsolutePath() + File.pathSeparator + "layers");
-        if(layers.isEmpty()){
-        List<ILayerMeta> res = new ArrayList<>();
-        List<S> temp = new ArrayList<>();
-        if (!file.exists() || !file.isDirectory()) {
-            throw new LayersFolderIsEmptyOrNotExistsException();
-        }
+        if (layers.isEmpty()) {
+            List<ILayerMeta> res = new ArrayList<>();
+            List<S> temp = new ArrayList<>();
+            if (!file.exists() || !file.isDirectory()) {
+                throw new LayersFolderIsEmptyOrNotExistsException();
+            }
 
-        temp = fileSystem.listFiles(file);
-        Collections.sort(temp, new Comparator<IFileSystemItem>() {
-            @Override
-            public int compare(IFileSystemItem o1, IFileSystemItem o2) {
-                return Integer.compare(Integer.parseInt(o1.getName()), Integer.parseInt(o2.getName()));
+            temp = fileSystem.listFiles(file);
+            Collections.sort(temp, new Comparator<IFileSystemItem>() {
+                @Override
+                public int compare(IFileSystemItem o1, IFileSystemItem o2) {
+                    return Integer.compare(Integer.parseInt(o1.getName()), Integer.parseInt(o2.getName()));
+                }
+            });
+            int i = 0;
+            for (IFileSystemItem f : temp) {
+                ILayerMeta layerMeta = new FileLayerMeta(f, fileSystem);
+                layers.put(layerMeta.getID(), layerMeta);
+                res.add(layerMeta);
+                i++;
+                if (i == temp.size() - 1) {
+                    break;
+                }
             }
-        });
-        int i = 0;
-        for (IFileSystemItem f : temp) {
-            ILayerMeta layerMeta = new FileLayerMeta(f, fileSystem);
-            layers.put(layerMeta.getID(),layerMeta);
-            res.add(layerMeta);
-            i++;
-            if (i == temp.size() - 1) {
-                break;
-            }
-        }
             return res;
-        }else {
+        } else {
             return layers.values().stream().collect(Collectors.toList());
         }
 
@@ -92,7 +92,7 @@ public class FileLayersMeta<S extends IFileSystemItem> implements ILayersMeta {
 
     @Override
     public void addLayerMeta(ILayerMeta layerMeta) {
-        layers.put(layerMeta.getID(),layerMeta);
+        layers.put(layerMeta.getID(), layerMeta);
 
     }
 }

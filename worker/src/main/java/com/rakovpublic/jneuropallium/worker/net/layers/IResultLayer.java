@@ -17,6 +17,4 @@ public interface IResultLayer extends ILayer {
     List<IResult> interpretResult();
 
 
-
-
 }

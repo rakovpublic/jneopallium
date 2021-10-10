@@ -15,6 +15,7 @@ public abstract class AbstractSignal<T> implements ISignal<T> {
     public String getInputName() {
         return inputName;
     }
+
     @Override
     public void setInputName(String inputName) {
         this.inputName = inputName;
@@ -27,17 +28,17 @@ public abstract class AbstractSignal<T> implements ISignal<T> {
 
     @Override
     public void setFromExternalNet(boolean fromExternalNet) {
-        this.fromExternalNet=fromExternalNet;
+        this.fromExternalNet = fromExternalNet;
     }
 
-    public AbstractSignal(T value, Integer sourceLayer, Long sourceNeuron, Integer timeAlive, String description,boolean fromExternalNet, String inputName) {
+    public AbstractSignal(T value, Integer sourceLayer, Long sourceNeuron, Integer timeAlive, String description, boolean fromExternalNet, String inputName) {
         this.value = value;
         this.sourceLayer = sourceLayer;
         this.sourceNeuron = sourceNeuron;
         this.timeAlive = timeAlive;
         this.description = description;
-        this.fromExternalNet=fromExternalNet;
-        this.inputName= inputName;
+        this.fromExternalNet = fromExternalNet;
+        this.inputName = inputName;
     }
 
     @Override
@@ -63,8 +64,8 @@ public abstract class AbstractSignal<T> implements ISignal<T> {
 
     @Override
     public ISignal<T> prepareSignalToNextStep() {
-        if(timeAlive>0){
-            this.timeAlive-=1;
+        if (timeAlive > 0) {
+            this.timeAlive -= 1;
         }
         return this;
     }
@@ -76,7 +77,7 @@ public abstract class AbstractSignal<T> implements ISignal<T> {
 
     @Override
     public void setSourceLayerId(int layerId) {
-        sourceLayer=layerId;
+        sourceLayer = layerId;
     }
 
     @Override
@@ -86,7 +87,7 @@ public abstract class AbstractSignal<T> implements ISignal<T> {
 
     @Override
     public void setSourceNeuronId(Long neuronId) {
-        sourceNeuron=neuronId;
+        sourceNeuron = neuronId;
     }
 
     @Override

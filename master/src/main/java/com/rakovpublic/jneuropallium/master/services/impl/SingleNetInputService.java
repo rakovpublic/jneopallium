@@ -2,9 +2,7 @@ package com.rakovpublic.jneuropallium.master.services.impl;
 
 import com.rakovpublic.jneuropallium.master.exceptions.InputServiceInitException;
 import com.rakovpublic.jneuropallium.master.services.IInputService;
-import com.rakovpublic.jneuropallium.worker.net.storages.IInputLoadingStrategy;
 import com.rakovpublic.jneuropallium.master.services.IResultLayerRunner;
-import com.rakovpublic.jneuropallium.worker.net.storages.ISignalsPersistStorage;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.*;
 import com.rakovpublic.jneuropallium.worker.neuron.IResultNeuron;
@@ -17,7 +15,7 @@ import java.util.SortedSet;
 public class SingleNetInputService implements IInputService {
     private HashMap<IInitInput, InputStatusMeta> inputStatuses;
     private HashMap<String, NodeMeta> nodeMetas;
-    private HashMap<IInitInput,InputInitStrategy> inputs;
+    private HashMap<IInitInput, InputInitStrategy> inputs;
     private ISignalsPersistStorage signalsPersist;
     private ILayersMeta layersMeta;
     private static SingleNetInputService singleNetInputService = new SingleNetInputService();
@@ -30,9 +28,9 @@ public class SingleNetInputService implements IInputService {
     private Long run;
 
     private SingleNetInputService() {
-        runFlag =false;
+        runFlag = false;
         inputStatuses = new HashMap<>();
-        inputs= new HashMap<>();
+        inputs = new HashMap<>();
         nodeMetas = new HashMap<>();
         preparedInputs = new ArrayList<>();
     }
@@ -44,10 +42,10 @@ public class SingleNetInputService implements IInputService {
             singleNetInputService.signalsPersist = storage;
         if (singleNetInputService.splitInput == null || splitInputSample != null)
             singleNetInputService.splitInput = splitInputSample;
-        if(runningStrategy!=null || singleNetInputService.runningStrategy==null)
-            singleNetInputService.runningStrategy=runningStrategy;
-        if(resultLayerRunner != null || singleNetInputService.resultLayerRunner == null){
-            singleNetInputService.resultLayerRunner=resultLayerRunner;
+        if (runningStrategy != null || singleNetInputService.runningStrategy == null)
+            singleNetInputService.runningStrategy = runningStrategy;
+        if (resultLayerRunner != null || singleNetInputService.resultLayerRunner == null) {
+            singleNetInputService.resultLayerRunner = resultLayerRunner;
         }
         if (singleNetInputService.signalsPersist == null || singleNetInputService.layersMeta == null || singleNetInputService.splitInput == null || singleNetInputService.runningStrategy == null) {
             //TODO:add logger
@@ -67,10 +65,10 @@ public class SingleNetInputService implements IInputService {
     }
 
     @Override
-    public void register( IInitInput iInputSource, boolean isMandatory, InputInitStrategy initStrategy, Integer amountOfRuns) {
+    public void register(IInitInput iInputSource, boolean isMandatory, InputInitStrategy initStrategy, Integer amountOfRuns) {
         //signalsPersist.putSignals(initStrategy.getInputs(layersMeta, iInputSource.readSignals()));
-        inputStatuses.put(iInputSource, new InputStatusMeta(true, isMandatory,amountOfRuns, iInputSource.getName()));
-        inputs.put(iInputSource,initStrategy);
+        inputStatuses.put(iInputSource, new InputStatusMeta(true, isMandatory, amountOfRuns, iInputSource.getName()));
+        inputs.put(iInputSource, initStrategy);
     }
 
     @Override
@@ -81,26 +79,26 @@ public class SingleNetInputService implements IInputService {
 
     @Override
     public synchronized ISplitInput getNext(String name) {
-        ISplitInput res=null;
+        ISplitInput res = null;
         if (preparedInputs.size() > 0) {
             res = preparedInputs.get(0);
             res.setNodeIdentifier(name);
             nodeMetas.get(name).setStatus(false);
         } else {
             boolean canPrepare = true;
-            for(String nodeName:nodeMetas.keySet()){
-                if(!nodeMetas.get(nodeName).getStatus()){
-                    canPrepare=false;
+            for (String nodeName : nodeMetas.keySet()) {
+                if (!nodeMetas.get(nodeName).getStatus()) {
+                    canPrepare = false;
                     break;
                 }
             }
-            if(canPrepare){
-            prepareInputs();
-            if (preparedInputs.size() > 0) {
-                res = preparedInputs.get(0);
-                res.setNodeIdentifier(name);
-                nodeMetas.get(name).setStatus(false);
-            }
+            if (canPrepare) {
+                prepareInputs();
+                if (preparedInputs.size() > 0) {
+                    res = preparedInputs.get(0);
+                    res.setNodeIdentifier(name);
+                    nodeMetas.get(name).setStatus(false);
+                }
             }
         }
         return res;
@@ -171,9 +169,9 @@ public class SingleNetInputService implements IInputService {
 
     @Override
     public Boolean runCompleted() {
-        if(layersMeta.getLayers().size()==nodeMetas.values().iterator().next().getCurrentLayer()){
-            for(NodeMeta meta:nodeMetas.values()){
-                if(!meta.getStatus()){
+        if (layersMeta.getLayers().size() == nodeMetas.values().iterator().next().getCurrentLayer()) {
+            for (NodeMeta meta : nodeMetas.values()) {
+                if (!meta.getStatus()) {
                     return false;
                 }
             }
@@ -184,29 +182,29 @@ public class SingleNetInputService implements IInputService {
 
     @Override
     public SortedSet<? extends IResultNeuron> prepareResults() {
-        if(this.runCompleted()){
+        if (this.runCompleted()) {
             runFlag = true;
-            return this.resultLayerRunner.getResults(layersMeta.getResultLayer(),signalsPersist.getLayerSignals(layersMeta.getResultLayer().getID()));
+            return this.resultLayerRunner.getResults(layersMeta.getResultLayer(), signalsPersist.getLayerSignals(layersMeta.getResultLayer().getID()));
         }
         return null;
     }
 
     @Override
     public void nextRun() {
-        if(runFlag){
-            runFlag =false;
-            runningStrategy.populateInput(signalsPersist,inputStatuses,inputs);
+        if (runFlag) {
+            runFlag = false;
+            runningStrategy.populateInput(signalsPersist, inputStatuses, inputs);
             run++;
         }
     }
 
     @Override
     public void setLayersMeta(ILayersMeta layersMeta) {
-        this.layersMeta =layersMeta;
+        this.layersMeta = layersMeta;
     }
 
     @Override
     public void setRun(Long run) {
-        this.run=run;
+        this.run = run;
     }
 }

@@ -1,17 +1,19 @@
 package com.rakovpublic.jneuropallium.worker.net.storages.structimpl;
 
 import com.rakovpublic.jneuropallium.worker.net.layers.IInputResolver;
-import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
-import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
-import com.rakovpublic.jneuropallium.worker.net.storages.*;
+import com.rakovpublic.jneuropallium.worker.net.storages.ILayerMeta;
+import com.rakovpublic.jneuropallium.worker.net.storages.ILayersMeta;
+import com.rakovpublic.jneuropallium.worker.net.storages.IResultLayerMeta;
+import com.rakovpublic.jneuropallium.worker.net.storages.IStructMeta;
 import com.rakovpublic.jneuropallium.worker.net.study.IStudyingRequest;
+import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 
-import java.util.HashMap;
 import java.util.List;
+
 /*
 
-* TODO: refactor for usage  Input strategy
-**/
+ * TODO: refactor for usage  Input strategy
+ **/
 public class StructMeta implements IStructMeta {
 
 
@@ -24,7 +26,8 @@ public class StructMeta implements IStructMeta {
         this.layersMeta = layersMeta;
     }
 
-    void init(){}
+    void init() {
+    }
 
     @Override
     public List<ILayerMeta> getLayers() {

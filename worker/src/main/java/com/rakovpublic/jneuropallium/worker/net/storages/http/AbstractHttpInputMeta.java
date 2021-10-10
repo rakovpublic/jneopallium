@@ -26,7 +26,7 @@ public abstract class AbstractHttpInputMeta implements ISplitInput {
     private Integer currentInnerLoopCount;
     private Long run;
 
-    public AbstractHttpInputMeta(Long run,String nodeId, String readInputsEndpoint, String readNeuronsEndpoint, String sendResultEndpoint, HashMap<String, Long> neuronInputNameMapping, Integer currentInnerLoopCount) {
+    public AbstractHttpInputMeta(Long run, String nodeId, String readInputsEndpoint, String readNeuronsEndpoint, String sendResultEndpoint, HashMap<String, Long> neuronInputNameMapping, Integer currentInnerLoopCount) {
         this.run = run;
         this.nodeId = nodeId;
         this.readInputsEndpoint = readInputsEndpoint;
@@ -93,7 +93,7 @@ public abstract class AbstractHttpInputMeta implements ISplitInput {
 
     @Override
     public void setNodeIdentifier(String name) {
-        nodeId=name;
+        nodeId = name;
     }
 
     @Override
@@ -131,7 +131,7 @@ public abstract class AbstractHttpInputMeta implements ISplitInput {
 
     @Override
     public void setCycleInputsMap(HashMap<String, Long> neuronInputNameMapping) {
-        this.neuronInputNameMapping=neuronInputNameMapping;
+        this.neuronInputNameMapping = neuronInputNameMapping;
     }
 
     @Override
@@ -146,7 +146,7 @@ public abstract class AbstractHttpInputMeta implements ISplitInput {
 
     @Override
     public void setRun(Long run) {
-        this.run=run;
+        this.run = run;
     }
 
     @Override

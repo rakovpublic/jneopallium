@@ -21,11 +21,11 @@ public class Context implements IContext {
 
     @Override
     public String getProperty(String propertyName) {
-        return prop.getProperty(propertyName,null);
+        return prop.getProperty(propertyName, null);
     }
 
-    private void init(){
-        try  {
+    private void init() {
+        try {
             InputStream input = getClass()
                     .getClassLoader().getResourceAsStream("config.properties");
             prop = new Properties();

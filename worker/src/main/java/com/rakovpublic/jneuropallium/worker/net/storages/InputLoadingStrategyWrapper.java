@@ -2,7 +2,7 @@ package com.rakovpublic.jneuropallium.worker.net.storages;
 
 import java.util.HashMap;
 
-public class InputLoadingStrategyWrapper  implements IInputLoadingStrategy{
+public class InputLoadingStrategyWrapper implements IInputLoadingStrategy {
     private IInputLoadingStrategy iInputLoadingStrategy;
     private Class<? extends IInputLoadingStrategy> clazz;
 
@@ -13,7 +13,7 @@ public class InputLoadingStrategyWrapper  implements IInputLoadingStrategy{
 
     @Override
     public Boolean populateInput(ISignalsPersistStorage signalsPersistStorage, HashMap<IInitInput, InputStatusMeta> inputStatuses) {
-        return iInputLoadingStrategy.populateInput(signalsPersistStorage,inputStatuses);
+        return iInputLoadingStrategy.populateInput(signalsPersistStorage, inputStatuses);
     }
 
     @Override
@@ -33,7 +33,7 @@ public class InputLoadingStrategyWrapper  implements IInputLoadingStrategy{
 
     @Override
     public void updateInputs(HashMap<IInitInput, InputStatusMeta> inputStatuses, HashMap<IInitInput, InputInitStrategy> inputs) {
-        iInputLoadingStrategy.updateInputs(inputStatuses,inputs);
+        iInputLoadingStrategy.updateInputs(inputStatuses, inputs);
     }
 
 }

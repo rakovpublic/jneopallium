@@ -3,7 +3,6 @@ package com.rakovpublic.jneuropallium.worker.net.layers.impl;
 import com.rakovpublic.jneuropallium.worker.net.layers.IInputResolver;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayer;
 import com.rakovpublic.jneuropallium.worker.net.layers.IResultLayer;
-import com.rakovpublic.jneuropallium.worker.net.storages.IInputMeta;
 import com.rakovpublic.jneuropallium.worker.net.storages.ILayerMeta;
 
 

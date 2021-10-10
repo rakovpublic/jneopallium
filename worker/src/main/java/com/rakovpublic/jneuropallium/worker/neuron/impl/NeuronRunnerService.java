@@ -1,7 +1,7 @@
 package com.rakovpublic.jneuropallium.worker.neuron.impl;
 
-import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.net.storages.INeuronMeta;
+import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.synchronizer.Context;
 import com.rakovpublic.jneuropallium.worker.synchronizer.IContext;
 

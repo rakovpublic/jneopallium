@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class FileInitInput implements IInitInput {
-    private String  path;
+    private String path;
 
     public FileInitInput(String path) {
         this.path = path;

@@ -1,8 +1,8 @@
 package com.rakovpublic.jneuropallium.worker.neuron;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.rakovpublic.jneuropallium.worker.neuron.impl.Axon;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
+import com.rakovpublic.jneuropallium.worker.neuron.impl.Axon;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -11,7 +11,7 @@ import java.util.List;
 /***
  * Created by Rakovskyi Dmytro on 27.10.2017.
  */
-@JsonDeserialize(as= Axon.class)
+@JsonDeserialize(as = Axon.class)
 public interface IAxon extends Serializable {
     /**
      * Change all connection on new connection map for all signals

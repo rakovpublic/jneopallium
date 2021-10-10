@@ -3,7 +3,6 @@ package com.rakovpublic.jneuropallium.worker.neuron;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.neuron.impl.WeightDeserializer;
-import sample.SimpleDoubleWeight;
 
 import java.io.Serializable;
 

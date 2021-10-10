@@ -2,14 +2,18 @@ package com.rakovpublic.jneuropallium.worker.net.layers.impl;
 
 import com.rakovpublic.jneuropallium.worker.net.layers.IInputResolver;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayer;
-import com.rakovpublic.jneuropallium.worker.net.storages.*;
+import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
+import com.rakovpublic.jneuropallium.worker.net.storages.ILayerMeta;
+import com.rakovpublic.jneuropallium.worker.net.storages.INeuronSerializer;
 import com.rakovpublic.jneuropallium.worker.neuron.IAxon;
-import com.rakovpublic.jneuropallium.worker.neuron.ISynapse;
 import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.neuron.IRule;
+import com.rakovpublic.jneuropallium.worker.neuron.ISynapse;
 import com.rakovpublic.jneuropallium.worker.neuron.impl.NeuronRunnerService;
-import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
-import com.rakovpublic.jneuropallium.worker.neuron.impl.layersizing.*;
+import com.rakovpublic.jneuropallium.worker.neuron.impl.layersizing.CreateNeuronSignal;
+import com.rakovpublic.jneuropallium.worker.neuron.impl.layersizing.DeleteNeuronSignal;
+import com.rakovpublic.jneuropallium.worker.neuron.impl.layersizing.LayerManipulatingNeuron;
+import com.rakovpublic.jneuropallium.worker.neuron.impl.layersizing.LayerManipulatingProcessingChain;
 
 import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -38,25 +42,25 @@ public class Layer implements ILayer {
         inputResolver = meta;
         map = new TreeMap<Long, INeuron>();
         input = new HashMap<Long, List<ISignal>>();
-        INeuron sizingNeuron= new LayerManipulatingNeuron(Long.MIN_VALUE,new LayerManipulatingProcessingChain(),0l,this);
+        INeuron sizingNeuron = new LayerManipulatingNeuron(Long.MIN_VALUE, new LayerManipulatingProcessingChain(), 0l, this);
         sizingNeuron.setLayer(this);
-        map.put(Long.MIN_VALUE,sizingNeuron);
+        map.put(Long.MIN_VALUE, sizingNeuron);
     }
 
 
     @Override
     public synchronized <K extends CreateNeuronSignal> void createNeuron(K signal) {
-        INeuron newNeuron= signal.getValue().getNeuron();
+        INeuron newNeuron = signal.getValue().getNeuron();
         newNeuron.setLayer(this);
-        if(!map.containsKey(newNeuron.getId())&&newNeuron.getId()!=null){
-            map.put(newNeuron.getId(),newNeuron);
-        }else {
-            Long newId=map.lastKey()+1;
+        if (!map.containsKey(newNeuron.getId()) && newNeuron.getId() != null) {
+            map.put(newNeuron.getId(), newNeuron);
+        } else {
+            Long newId = map.lastKey() + 1;
             newNeuron.setId(newId);
-            for(Object signals: signal.getValue().getCreateRelationsSignals().values()){
-                HashMap<Long, List<ISignal>> sMap = (HashMap<Long, List<ISignal>>)signals;
-                for(List<ISignal> val:sMap.values()){
-                    for(ISignal sig:val){
+            for (Object signals : signal.getValue().getCreateRelationsSignals().values()) {
+                HashMap<Long, List<ISignal>> sMap = (HashMap<Long, List<ISignal>>) signals;
+                for (List<ISignal> val : sMap.values()) {
+                    for (ISignal sig : val) {
                         sig.setSourceNeuronId(newId);
                     }
                 }
@@ -198,8 +202,8 @@ public class Layer implements ILayer {
     @Override
     public void dumpNeurons(ILayerMeta layerMeta) {
         List<INeuron> neurons = new LinkedList<>();
-        for(INeuron n:map.values()){
-            if(!n.getAxon().isConnectionsWrapped()){
+        for (INeuron n : map.values()) {
+            if (!n.getAxon().isConnectionsWrapped()) {
                 n.getAxon().wrapConnections();
             }
             neurons.add(n);
@@ -215,7 +219,7 @@ public class Layer implements ILayer {
         for (Long neurId : map.keySet()) {
             INeuron neur = map.get(neurId);
             IAxon axon = neur.getAxon();
-            if(axon.isConnectionsWrapped()){
+            if (axon.isConnectionsWrapped()) {
                 axon.unwrapConnections();
             }
             HashMap<ISignal, List<ISynapse>> tMap = axon.processSignals(neur.getResult());
@@ -268,7 +272,7 @@ public class Layer implements ILayer {
 
     @Override
     public void sendCallBack(String name, List<ISignal> signals) {
-        inputResolver.sendCallBack(name,signals);
+        inputResolver.sendCallBack(name, signals);
     }
 
     @Override

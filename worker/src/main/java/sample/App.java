@@ -3,8 +3,8 @@ package sample;
 import com.rakovpublic.jneuropallium.worker.application.IRunner;
 
 public class App {
-    public static void main(String [] args){
-       IRunner runner= new SimpleRunner();
+    public static void main(String[] args) {
+        IRunner runner = new SimpleRunner();
         runner.runNet("local");
        /* System.out.println("\""+NeuronLayerCreator.getFirstLayer()+"\"");
         System.out.println("\""+NeuronLayerCreator.getSecondLayerLayer()+"\"");

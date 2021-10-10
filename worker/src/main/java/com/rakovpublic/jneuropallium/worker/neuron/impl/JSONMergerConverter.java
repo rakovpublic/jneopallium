@@ -12,7 +12,7 @@ import com.rakovpublic.jneuropallium.worker.neuron.ISignalMerger;
 
 import java.io.IOException;
 
-public class JSONMergerConverter extends StdDeserializer< ISignalMerger> {
+public class JSONMergerConverter extends StdDeserializer<ISignalMerger> {
 
     protected JSONMergerConverter(Class<?> vc) {
         super(vc);
@@ -26,7 +26,7 @@ public class JSONMergerConverter extends StdDeserializer< ISignalMerger> {
         super(src);
     }
 
-    public JSONMergerConverter(){
+    public JSONMergerConverter() {
         super(ISignalMerger.class);
 
     }
@@ -36,10 +36,10 @@ public class JSONMergerConverter extends StdDeserializer< ISignalMerger> {
         String s = jsonParser.getText();
         JsonElement jelement = new JsonParser().parse(s);
         JsonObject jobject = jelement.getAsJsonObject();
-        String cl=jobject.getAsJsonPrimitive("signalMergerClass").getAsString();
-        ObjectMapper mapper= new ObjectMapper();
+        String cl = jobject.getAsJsonPrimitive("signalMergerClass").getAsString();
+        ObjectMapper mapper = new ObjectMapper();
         try {
-            return (ISignalMerger) mapper.readValue(s,Class.forName(cl));
+            return (ISignalMerger) mapper.readValue(s, Class.forName(cl));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {

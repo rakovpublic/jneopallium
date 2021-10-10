@@ -1,6 +1,5 @@
 package com.rakovpublic.jneuropallium.worker.net.storages.inmemory;
 
-import com.rakovpublic.jneuropallium.worker.net.layers.ILayer;
 import com.rakovpublic.jneuropallium.worker.net.storages.ILayerMeta;
 import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 
@@ -28,8 +27,8 @@ public class InMemoryLayerMeta implements ILayerMeta {
 
     @Override
     public INeuron getNeuronByID(Long id) {
-        for(INeuron n:neurons){
-            if(id.equals(n.getId())){
+        for (INeuron n : neurons) {
+            if (id.equals(n.getId())) {
                 return n;
             }
         }
@@ -49,6 +48,6 @@ public class InMemoryLayerMeta implements ILayerMeta {
 
     @Override
     public Long getSize() {
-        return Long.parseLong(neurons.size()+"");
+        return Long.parseLong(neurons.size() + "");
     }
 }

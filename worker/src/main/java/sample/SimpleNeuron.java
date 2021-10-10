@@ -8,30 +8,31 @@ public class SimpleNeuron extends Neuron {
     private double bias;
     private double signal;
     private double biasWeight;
-    private Class<?extends INeuron> currentNeuronClass;
+    private Class<? extends INeuron> currentNeuronClass;
+
     public SimpleNeuron() {
-        bias=1;
-        biasWeight=1;
-        signal=0;
-        currentNeuronClass=SimpleNeuron.class;
+        bias = 1;
+        biasWeight = 1;
+        signal = 0;
+        currentNeuronClass = SimpleNeuron.class;
     }
 
     public SimpleNeuron(Long neuronId, ISignalChain processingChain) {
         super(neuronId, processingChain);
-        bias=1;
-        biasWeight=1;
-        currentNeuronClass=SimpleNeuron.class;
+        bias = 1;
+        biasWeight = 1;
+        currentNeuronClass = SimpleNeuron.class;
     }
 
     @Override
     public void activate() {
         super.activate();
-        signal+=bias*biasWeight;
+        signal += bias * biasWeight;
         result.clear();
-        if(activationFunction()){
-            result.add(new SimpleSignal(signal,1));
+        if (activationFunction()) {
+            result.add(new SimpleSignal(signal, 1));
         }
-        signal=0;
+        signal = 0;
     }
 
     public double getBias() {
@@ -50,7 +51,7 @@ public class SimpleNeuron extends Neuron {
         this.biasWeight = biasWeight;
     }
 
-    private boolean activationFunction(){
+    private boolean activationFunction() {
         return true;
     }
 

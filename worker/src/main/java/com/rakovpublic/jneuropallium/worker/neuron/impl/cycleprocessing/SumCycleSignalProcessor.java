@@ -6,14 +6,14 @@ import com.rakovpublic.jneuropallium.worker.neuron.ISignalProcessor;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SumCycleSignalProcessor implements ISignalProcessor<SumCycleSignal,CycleNeuron> {
+public class SumCycleSignalProcessor implements ISignalProcessor<SumCycleSignal, CycleNeuron> {
     @Override
     public <I extends ISignal> List<I> process(SumCycleSignal input, CycleNeuron neuron) {
-        neuron.setLoopCount((neuron.getLoopCount()+input.getValue()));
-        if(neuron.getInputStatusMeta()!=null){
+        neuron.setLoopCount((neuron.getLoopCount() + input.getValue()));
+        if (neuron.getInputStatusMeta() != null) {
             neuron.getInputStatusMeta().setUpdateOnceInNRuns(neuron.getLoopCount());
         }
-        return  new ArrayList<I>();
+        return new ArrayList<I>();
     }
 
     @Override

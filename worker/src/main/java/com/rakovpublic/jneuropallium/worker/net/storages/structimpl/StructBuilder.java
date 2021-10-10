@@ -1,7 +1,6 @@
 package com.rakovpublic.jneuropallium.worker.net.storages.structimpl;
 
 import com.rakovpublic.jneuropallium.worker.net.layers.IInputResolver;
-import com.rakovpublic.jneuropallium.worker.net.storages.IInputMeta;
 import com.rakovpublic.jneuropallium.worker.net.storages.ILayersMeta;
 
 public class StructBuilder {
@@ -12,7 +11,7 @@ public class StructBuilder {
 
     }
 
-    public StructBuilder( IInputResolver hiddenInputMeta, ILayersMeta layersMeta) {
+    public StructBuilder(IInputResolver hiddenInputMeta, ILayersMeta layersMeta) {
         this.hiddenInputMeta = hiddenInputMeta;
         this.layersMeta = layersMeta;
     }
@@ -30,7 +29,7 @@ public class StructBuilder {
 
     public StructMeta build() {
         if (hiddenInputMeta != null && layersMeta != null) {
-            return new StructMeta( hiddenInputMeta, layersMeta);
+            return new StructMeta(hiddenInputMeta, layersMeta);
         }
         return null;
     }

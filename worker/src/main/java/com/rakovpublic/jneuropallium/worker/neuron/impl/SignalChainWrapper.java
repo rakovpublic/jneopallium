@@ -5,7 +5,7 @@ import com.rakovpublic.jneuropallium.worker.neuron.ISignalChain;
 
 import java.util.List;
 
-public class SignalChainWrapper<K extends ISignalChain> implements ISignalChain{
+public class SignalChainWrapper<K extends ISignalChain> implements ISignalChain {
     private K signalChain;
     private Class<K> signalChainClass;
 

@@ -5,7 +5,7 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import java.util.HashMap;
 import java.util.List;
 
-public class InputInitStrategyWrapper implements InputInitStrategy{
+public class InputInitStrategyWrapper implements InputInitStrategy {
     private InputInitStrategy iNeuronNetInput;
     private Class<? extends InputInitStrategy> clazz;
 
@@ -16,6 +16,6 @@ public class InputInitStrategyWrapper implements InputInitStrategy{
 
     @Override
     public HashMap<Integer, HashMap<Long, List<ISignal>>> getInputs(ILayersMeta layersMeta, List<ISignal> signals) {
-        return iNeuronNetInput.getInputs(layersMeta,signals);
+        return iNeuronNetInput.getInputs(layersMeta, signals);
     }
 }

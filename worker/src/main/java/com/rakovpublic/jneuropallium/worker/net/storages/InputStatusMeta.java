@@ -1,7 +1,5 @@
 package com.rakovpublic.jneuropallium.worker.net.storages;
 
-import com.rakovpublic.jneuropallium.worker.net.storages.IInitInput;
-
 public class InputStatusMeta {
     private Boolean status;
     private Boolean mandatoryUpdated;
@@ -14,9 +12,9 @@ public class InputStatusMeta {
         this.status = status;
         this.mandatoryUpdated = mandatoryUpdated;
         this.updateOnceInNRuns = updateOnceInNRuns;
-        currentRuns=0;
+        currentRuns = 0;
         this.name = name;
-        beenUsed=false;
+        beenUsed = false;
     }
 
 

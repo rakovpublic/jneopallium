@@ -14,17 +14,18 @@ public class InitInputDeserializer extends StdDeserializer<IInitInput> {
     public InitInputDeserializer(Class<?> vc) {
         super(vc);
     }
-    public InitInputDeserializer(){
+
+    public InitInputDeserializer() {
         this(null);
     }
 
     @Override
     public IInitInput deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
-        ObjectMapper mapper= new ObjectMapper();
+        ObjectMapper mapper = new ObjectMapper();
         JsonElement jelement = new com.google.gson.JsonParser().parse(jsonParser.readValueAsTree().toString());
         JsonObject jobject = jelement.getAsJsonObject();
         try {
-            return (IInitInput) mapper.readValue(jobject.getAsJsonObject("initInput").toString(),Class.forName(jobject.getAsJsonPrimitive("clazz").getAsString()));
+            return (IInitInput) mapper.readValue(jobject.getAsJsonObject("initInput").toString(), Class.forName(jobject.getAsJsonPrimitive("clazz").getAsString()));
         } catch (ClassNotFoundException e) {
             //TODO: add logger
             e.printStackTrace();

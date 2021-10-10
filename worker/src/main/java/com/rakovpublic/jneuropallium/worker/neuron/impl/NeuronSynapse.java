@@ -1,8 +1,8 @@
 package com.rakovpublic.jneuropallium.worker.neuron.impl;
 
+import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.neuron.ISynapse;
 import com.rakovpublic.jneuropallium.worker.neuron.IWeight;
-import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 public class NeuronSynapse<K extends ISignal> implements ISynapse<K> {
     private int targetLayerId;
@@ -14,6 +14,7 @@ public class NeuronSynapse<K extends ISignal> implements ISynapse<K> {
 
     public NeuronSynapse() {
     }
+
     public NeuronSynapse(NeuronSynapse connection, IWeight weight) {
         this.targetLayerId = connection.targetLayerId;
         this.sourceLayerId = connection.sourceLayerId;
@@ -73,7 +74,7 @@ public class NeuronSynapse<K extends ISignal> implements ISynapse<K> {
 
     @Override
     public void setWeight(IWeight<K, ? extends ISignal> weight) {
-        this.weight=weight;
+        this.weight = weight;
     }
 
 

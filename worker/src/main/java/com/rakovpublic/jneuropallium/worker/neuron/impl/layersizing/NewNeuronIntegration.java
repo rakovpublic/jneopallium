@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class NewNeuronIntegration<K extends INeuron> {
-   private HashMap<Integer, HashMap<Long, List<ISignal>>> createRelationsSignals;
-   private K neuron;
+    private HashMap<Integer, HashMap<Long, List<ISignal>>> createRelationsSignals;
+    private K neuron;
 
     public HashMap<Integer, HashMap<Long, List<ISignal>>> getCreateRelationsSignals() {
         return createRelationsSignals;

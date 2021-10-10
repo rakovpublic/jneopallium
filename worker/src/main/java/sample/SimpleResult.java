@@ -8,7 +8,8 @@ public class SimpleResult implements IResultSignal<Double> {
 
     }
 
-    private Class<?extends ISignal>currentSignalClass=SimpleResult.class;
+    private Class<? extends ISignal> currentSignalClass = SimpleResult.class;
+
     @Override
     public Double getResultObject() {
         return 1d;

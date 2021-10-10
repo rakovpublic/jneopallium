@@ -15,17 +15,17 @@ public class InMemorySignalPersistStorage implements ISignalsPersistStorage {
 
     @Override
     public void putSignals(HashMap<Integer, HashMap<Long, List<ISignal>>> signalsInput) {
-        for(Integer layerId:signalsInput.keySet()){
-            if(signals.containsKey(layerId)){
-                for(Long neuronId:signalsInput.get(layerId).keySet()){
-                    if(signals.get(layerId).containsKey(neuronId)){
+        for (Integer layerId : signalsInput.keySet()) {
+            if (signals.containsKey(layerId)) {
+                for (Long neuronId : signalsInput.get(layerId).keySet()) {
+                    if (signals.get(layerId).containsKey(neuronId)) {
                         signals.get(layerId).get(neuronId).addAll(signalsInput.get(layerId).get(neuronId));
-                    }else{
-                        signals.get(layerId).put(neuronId,signalsInput.get(layerId).get(neuronId));
+                    } else {
+                        signals.get(layerId).put(neuronId, signalsInput.get(layerId).get(neuronId));
                     }
                 }
-            }else {
-                signals.put(layerId,signalsInput.get(layerId));
+            } else {
+                signals.put(layerId, signalsInput.get(layerId));
             }
         }
 
@@ -38,10 +38,10 @@ public class InMemorySignalPersistStorage implements ISignalsPersistStorage {
 
     @Override
     public void cleanOutdatedSignals() {
-        for(Integer layerId:signals.keySet()){
-            for(Long neuron:signals.get(layerId).keySet()){
-                List<ISignal> neuronSignal=signals.get(layerId).get(neuron);
-                for(ISignal signal:neuronSignal){
+        for (Integer layerId : signals.keySet()) {
+            for (Long neuron : signals.get(layerId).keySet()) {
+                List<ISignal> neuronSignal = signals.get(layerId).get(neuron);
+                for (ISignal signal : neuronSignal) {
                     neuronSignal.remove(signal);
                     neuronSignal.add(signal.prepareSignalToNextStep());
                 }

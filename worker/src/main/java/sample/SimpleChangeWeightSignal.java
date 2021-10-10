@@ -47,7 +47,7 @@ public class SimpleChangeWeightSignal implements ISignal<Double> {
 
     @Override
     public ISignal<Double> prepareSignalToNextStep() {
-        return  new SimpleChangeWeightSignal( value/2,  sourceLayerId, sourceNeuronId) ;
+        return new SimpleChangeWeightSignal(value / 2, sourceLayerId, sourceNeuronId);
     }
 
     @Override

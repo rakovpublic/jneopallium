@@ -8,15 +8,25 @@ import java.util.List;
 
 public interface ISplitInput extends IStorageMeta {
     ISignalStorage readInputs();
+
     void saveResults(HashMap<Long, List<ISignal>> signals);
+
     void setNodeIdentifier(String name);
+
     ISplitInput getNewInstance();
+
     List<? extends INeuron> getNeurons();
-    void setCycleInputsMap(HashMap<String,Long> neuronInputNameMapping);
-    HashMap<String, Long>  getCycleInputsMap();
+
+    void setCycleInputsMap(HashMap<String, Long> neuronInputNameMapping);
+
+    HashMap<String, Long> getCycleInputsMap();
+
     Integer getCurrentLoopCount();
+
     String getNodeIdentifier();
+
     void setRun(Long run);
+
     Long getRun();
 
 }

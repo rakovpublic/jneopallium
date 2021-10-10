@@ -7,10 +7,11 @@ import com.rakovpublic.jneuropallium.worker.neuron.impl.Neuron;
 public class CycleNeuron extends Neuron {
     private int loopCount;
     private InputStatusMeta inputStatusMeta;
-    public CycleNeuron(int loopCount, ISignalChain signalChain, InputStatusMeta inputMeta, Long id,Long run) {
-        super(id,signalChain,run );
+
+    public CycleNeuron(int loopCount, ISignalChain signalChain, InputStatusMeta inputMeta, Long id, Long run) {
+        super(id, signalChain, run);
         this.loopCount = loopCount;
-        this.inputStatusMeta= inputMeta;
+        this.inputStatusMeta = inputMeta;
     }
 
     public int getLoopCount() {

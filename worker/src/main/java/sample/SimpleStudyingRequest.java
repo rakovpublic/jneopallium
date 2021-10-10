@@ -1,8 +1,8 @@
 package sample;
 
-import com.rakovpublic.jneuropallium.worker.neuron.ISynapse;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.study.IStudyingRequest;
+import com.rakovpublic.jneuropallium.worker.neuron.ISynapse;
 
 import java.util.HashMap;
 import java.util.List;

@@ -1,8 +1,8 @@
 package com.rakovpublic.jneuropallium.worker.neuron.impl;
 
+import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.neuron.IAxon;
 import com.rakovpublic.jneuropallium.worker.neuron.ISynapse;
-import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +17,7 @@ public class Axon implements IAxon {
     public Axon() {
         this.connectionMap = new HashMap<>();
         this.addressMap = new HashMap<>();
-        connectionsWrapped=false;
+        connectionsWrapped = false;
     }
 
     public Boolean isConnectionsWrapped() {
@@ -153,14 +153,14 @@ public class Axon implements IAxon {
 
     @Override
     public void wrapConnections() {
-        for(List<ISynapse> connections:connectionMap.values()){
-            for(ISynapse connection:connections){
+        for (List<ISynapse> connections : connectionMap.values()) {
+            for (ISynapse connection : connections) {
                 connection.setWeight(new WeightWrapper(connection.getWeight()));
             }
         }
-        for(HashMap<Long, List<ISynapse>> map:addressMap.values()){
-            for (List<ISynapse> connections:map.values()){
-                for(ISynapse connection:connections){
+        for (HashMap<Long, List<ISynapse>> map : addressMap.values()) {
+            for (List<ISynapse> connections : map.values()) {
+                for (ISynapse connection : connections) {
                     connection.setWeight(new WeightWrapper(connection.getWeight()));
                 }
             }
@@ -170,15 +170,15 @@ public class Axon implements IAxon {
 
     @Override
     public void unwrapConnections() {
-        for(List<ISynapse> connections:connectionMap.values()){
-            for(ISynapse connection:connections){
-                connection.setWeight((( WeightWrapper)connection.getWeight()).getWeight());
+        for (List<ISynapse> connections : connectionMap.values()) {
+            for (ISynapse connection : connections) {
+                connection.setWeight(((WeightWrapper) connection.getWeight()).getWeight());
             }
         }
-        for(HashMap<Long, List<ISynapse>> map:addressMap.values()){
-            for (List<ISynapse> connections:map.values()){
-                for(ISynapse connection:connections){
-                    connection.setWeight((( WeightWrapper)connection.getWeight()).getWeight());
+        for (HashMap<Long, List<ISynapse>> map : addressMap.values()) {
+            for (List<ISynapse> connections : map.values()) {
+                for (ISynapse connection : connections) {
+                    connection.setWeight(((WeightWrapper) connection.getWeight()).getWeight());
                 }
             }
         }

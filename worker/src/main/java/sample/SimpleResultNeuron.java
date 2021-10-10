@@ -4,7 +4,8 @@ import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.neuron.IResultNeuron;
 
 public class SimpleResultNeuron extends SimpleNeuron implements IResultNeuron<SimpleResult> {
-    private Class<? extends INeuron> currentNeuronClass=SimpleResultNeuron.class;
+    private Class<? extends INeuron> currentNeuronClass = SimpleResultNeuron.class;
+
     @Override
     public Class<? extends INeuron> getCurrentNeuronClass() {
         return currentNeuronClass;

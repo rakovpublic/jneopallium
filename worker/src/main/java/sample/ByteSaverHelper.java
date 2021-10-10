@@ -36,8 +36,9 @@ public class ByteSaverHelper {
             e.printStackTrace();
         }
     }
-    public static String saveArrayObjectToString( Object[] obj) {
-        String serializedObject=null;
+
+    public static String saveArrayObjectToString(Object[] obj) {
+        String serializedObject = null;
         try {
             ByteArrayOutputStream bo = new ByteArrayOutputStream();
             ObjectOutputStream so = new ObjectOutputStream(bo);

@@ -1,8 +1,8 @@
 package com.rakovpublic.jneuropallium.worker.synchronizer;
 
-import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.ILayerMeta;
+import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 
 import java.io.Serializable;
 import java.util.List;

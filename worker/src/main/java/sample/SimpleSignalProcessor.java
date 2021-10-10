@@ -1,22 +1,22 @@
 package sample;
 
+import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.neuron.ISignalProcessor;
-import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 import java.util.LinkedList;
 import java.util.List;
 
-public class SimpleSignalProcessor implements ISignalProcessor<SimpleSignal,INeuron> {
-    private String description="test";
-    private  Class<? extends ISignalProcessor>  signalProcessorClass=SimpleSignalProcessor.class;
+public class SimpleSignalProcessor implements ISignalProcessor<SimpleSignal, INeuron> {
+    private String description = "test";
+    private Class<? extends ISignalProcessor> signalProcessorClass = SimpleSignalProcessor.class;
 
     public SimpleSignalProcessor() {
     }
 
     @Override
     public <I extends ISignal> List<I> process(SimpleSignal input, INeuron neuron) {
-        List<ISignal> result= new LinkedList<>();
+        List<ISignal> result = new LinkedList<>();
         result.add(input);
         return (List<I>) result;
     }

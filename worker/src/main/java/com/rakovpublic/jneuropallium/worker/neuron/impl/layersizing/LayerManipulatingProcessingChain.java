@@ -6,11 +6,12 @@ import com.rakovpublic.jneuropallium.worker.neuron.ISignalChain;
 import java.util.LinkedList;
 import java.util.List;
 
-public class LayerManipulatingProcessingChain  implements ISignalChain {
+public class LayerManipulatingProcessingChain implements ISignalChain {
     private List<Class<? extends ISignal>> order;
-    private static final String description="order for layer sizing signals processing";
+    private static final String description = "order for layer sizing signals processing";
+
     public LayerManipulatingProcessingChain() {
-        order= new LinkedList<>();
+        order = new LinkedList<>();
         order.add(DeleteNeuronSignal.class);
         order.add(CreateNeuronSignal.class);
     }

@@ -3,7 +3,6 @@ package com.rakovpublic.jneuropallium.worker.neuron;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.neuron.impl.SignalChainDeserializer;
-import sample.SimpleSignalChain;
 
 import java.io.Serializable;
 import java.util.List;
@@ -12,8 +11,7 @@ import java.util.List;
  * This class represents order of signal processing
  */
 
-//TODO: refactor with StdConverter
-@JsonDeserialize(using= SignalChainDeserializer.class)
+@JsonDeserialize(using = SignalChainDeserializer.class)
 public interface ISignalChain extends Serializable {
 
     /**
