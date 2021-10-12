@@ -16,21 +16,55 @@ import java.util.Map;
  *
  */
 public interface INeuron extends Serializable {
-
+    /**
+     * Provides access to signal processing chain which describes in which order signals should be processed
+     *
+     * @return ISignalChain object which provides access to signal processing chain
+     **/
     ISignalChain getSignalChain();
 
+    /**
+     * Provides access to processor mapping
+     *
+     * @return map which describe what processor should by invoked for appropriate signal class
+     **/
     Map<Class<? extends ISignal>, ISignalProcessor> getProcessorMap();
 
+    /**
+     * Provides access to merger mapping. Mergers merge multiple signals into one
+     *
+     * @return map which describe what merger  should by invoked for appropriate signal class
+     **/
     Map<Class<? extends ISignal>, ISignalMerger> getMergerMap();
 
+    /**
+     *  @return the number of runs(invokes of this neuron)
+     **/
     Long getRun();
 
+    /**
+     * set the amount of runs
+     * @param run amount of runs
+     **/
     void setRun(Long run);
 
+    /**
+     * Provides access to signal history
+     *
+     * @return ISignalHistoryStorage object which provides access to signal history
+     **/
     ISignalHistoryStorage getSignalHistory();
 
+    /**
+     * set the signal history storage
+     * @param signalHistory signal history storage
+     **/
     void setSignalHistory(ISignalHistoryStorage signalHistory);
 
+    /**
+     * set the neuron id
+     * @param id neuron id
+     **/
     void setId(Long id);
 
     /**
@@ -143,26 +177,66 @@ public interface INeuron extends Serializable {
 
     Class<? extends INeuron> getCurrentNeuronClass();
 
+    /**
+     *
+     * @return true if neuron has been changed
+     * */
     Boolean isChanged();
 
+    /**
+     *
+     * @param  changed true if neuron has been changed
+     * */
     void setChanged(Boolean changed);
 
+    /**
+     *
+     * @return true if neuron should been deleted
+     * */
     Boolean isOnDelete();
 
+    /**
+     *
+     * @param  onDelete true if neuron should been changed
+     * */
     void setOnDelete(Boolean onDelete);
 
+
+    /**
+     *
+     * @return map amount of runs should be passed before the IInitInput with this name will be populated next time
+     * */
     HashMap<String, Long> getCyclingNeuronInputMapping();
 
+    /**
+     *
+     * @param cyclingNeuronInputMapping mapping for cycle InitInputs populating
+     * */
     void setCyclingNeuronInputMapping(HashMap<String, Long> cyclingNeuronInputMapping);
 
+    /**
+     *
+     * @return the amount of loops the have been passed after previous Input populating
+     * */
     Integer getCurrentLoopAmount();
 
     void setCurrentLoopAmount(Integer currentLoopCount);
 
-    boolean canProcess(ISignal clazz);
+    /**
+     * Checks if neuron can process this signal
+     * @param signal ISignal signal
+     * @return  true if neuron can process this signal
+     * */
+    boolean canProcess( ISignal signal);
 
-
+    /**
+     * Set the layer of this neuron
+     * @param layer
+     * */
     void setLayer(ILayer layer);
 
+    /**
+     * @return  the layer of this neuron
+     * */
     ILayer getLayer();
 }
