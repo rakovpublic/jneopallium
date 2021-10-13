@@ -6,7 +6,10 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 import java.util.HashMap;
 import java.util.List;
-
+/**
+ * This interface represents part of the input for neuron net
+ *
+ * */
 @JsonDeserialize(using = InitInputDeserializer.class)
 public interface IInitInput {
 
