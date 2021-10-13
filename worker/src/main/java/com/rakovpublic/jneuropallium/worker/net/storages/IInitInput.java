@@ -9,11 +9,24 @@ import java.util.List;
 
 @JsonDeserialize(using = InitInputDeserializer.class)
 public interface IInitInput {
+
+    /**
+     * @return the signals for this input
+     * */
     List<ISignal> readSignals();
 
+    /**
+     * @return the name of this input
+     * */
     String getName();
 
+    /**
+     * @return the call back input if input comes from other neuron net and it supports callback studying, null if not
+     * */
     INeuronNetInput getNeuronNetInput();
 
+    /**
+     * @return desired result for this input
+     * */
     HashMap<String, List<IResultSignal>> getDesiredResults();
 }
