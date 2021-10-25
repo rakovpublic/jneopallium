@@ -24,7 +24,7 @@ public interface IInputLoadingStrategy {
 
     /**
      *
-     * @return service neuron mapping on Long.Min layerId for example for CycledInputLoadingStrategy it has mapping between initinput name and neuron id
+     * @return service neuron mapping on Long.Min layerId for example for additional control neurons it has mapping between initinput name and neuron id
      * */
     HashMap<String, Long> getNeuronInputMapping();
     /**

@@ -11,6 +11,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeSet;
 
+
+/**
+ * Input loading strategy designed to have different input loading delay for each init input
+ *
+ * */
 public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
     private ILayersMeta layersMeta;
     private HashMap<IInitInput, InputInitStrategy> externalInputs;
