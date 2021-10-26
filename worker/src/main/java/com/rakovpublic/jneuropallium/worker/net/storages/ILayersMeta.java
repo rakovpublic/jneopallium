@@ -2,7 +2,9 @@ package com.rakovpublic.jneuropallium.worker.net.storages;
 
 import java.io.Serializable;
 import java.util.List;
-
+/**
+ * This interface represents layers storage
+ * */
 public interface ILayersMeta extends Serializable {
 
     /**

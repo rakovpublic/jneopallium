@@ -4,7 +4,9 @@ import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 
 import java.util.Collection;
 import java.util.List;
-
+/**
+ * This interface represents layer storage
+ * */
 public interface ILayerMeta extends IStorageMeta {
     /**
      *
