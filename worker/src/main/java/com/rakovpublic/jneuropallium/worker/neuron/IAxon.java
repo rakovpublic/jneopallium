@@ -86,11 +86,23 @@ public interface IAxon extends Serializable {
      **/
     void changeAllWeights(ISignal signal);
 
+    /**
+     * @return the connection list for each signal class
+     * */
     HashMap<Class<? extends ISignal>, List<ISynapse>> getConnectionMap();
 
+    /**
+     * wraps connections with wrappers for serialization
+     * */
     void wrapConnections();
 
+    /**
+     * unwraps connections for usage
+     * */
     void unwrapConnections();
 
+    /**
+     * @return true if connection wrapped
+     * */
     Boolean isConnectionsWrapped();
 }
