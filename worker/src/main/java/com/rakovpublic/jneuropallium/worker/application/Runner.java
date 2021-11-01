@@ -15,7 +15,7 @@ public abstract class Runner implements IRunner {
         if (mode.equals("local")) {
             application = new LocalApplication();
         } else {
-            application = new ClusterApplication();
+            application = new HttpClusterApplication();
         }
         application.startApplication(context);
     }
