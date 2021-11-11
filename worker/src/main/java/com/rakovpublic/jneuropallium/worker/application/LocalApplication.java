@@ -69,7 +69,7 @@ public class LocalApplication implements IApplication {
             Long currentRun = 0l;
             Long maxRun = Long.valueOf(context.getProperty("configuration.maxRun"));
             Boolean isInfinite = Boolean.valueOf(context.getProperty("configuration.infiniteRun"));
-
+            IOutputAggregator outputAggregator = null;
             for (; currentRun < maxRun || isInfinite; currentRun++) {
 
                 HashMap<String, List<IResultSignal>> desiredResult = inputResolver.getDesiredResult();
@@ -78,7 +78,6 @@ public class LocalApplication implements IApplication {
                     String jsonResultComparingStrategy = context.getProperty("configuration.jsonResultComparingStrategy");
                     //TODO:add json parsing with wrapper
                     String algoType = context.getProperty("configuration.studyingalgotype");
-                    IResultLayer iResultLayer;
                     if (algoType != null) {
                         List<IResult> idsToFix;
                         if (algoType.equals("direct")) {
@@ -117,8 +116,14 @@ public class LocalApplication implements IApplication {
                     }
                 } else {
                     //TODO:add normal output
-                    IResultLayer lr = process(meta);
-                    System.out.println(lr.interpretResult());
+                    while (true){
+                        IResultLayer lr = process(meta);
+                        outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(),meta.getInputResolver().getCurrentRun());
+                        meta.getInputResolver().saveHistory();
+                        meta.getInputResolver().getSignalPersistStorage().cleanOutdatedSignals();
+                        meta.getInputResolver().populateInput();
+                    }
+
                 }
             }
 
@@ -156,7 +161,7 @@ public class LocalApplication implements IApplication {
         lb.withInput(meta.getInputResolver());
         IResultLayer layer = lb.buildResultLayer();
         layer.process();
-
+        layer.dumpNeurons(reMeta);
         return layer;
 
 

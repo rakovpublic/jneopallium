@@ -32,6 +32,12 @@ public interface IInputLoadingStrategy {
      * */
     Integer getCurrentLoopCount();
 
+
+    /**
+     * @return current amount of run after start excluding loops
+     * */
+    Long getCurrentRunCount();
+
     /**
      * This method updates inputs and mapping
      * @param inputs mapping between initinputs and input init strategies

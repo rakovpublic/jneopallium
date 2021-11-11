@@ -1,6 +1,7 @@
 package com.rakovpublic.jneuropallium.worker.net.storages;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.rakovpublic.jneuropallium.worker.net.signals.IInputSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
@@ -16,7 +17,7 @@ public interface IInitInput {
     /**
      * @return the signals for this input
      * */
-    List<ISignal> readSignals();
+    List<IInputSignal> readSignals();
 
     /**
      * @return the name of this input
