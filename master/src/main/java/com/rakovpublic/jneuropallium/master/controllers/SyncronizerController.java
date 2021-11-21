@@ -1,11 +1,13 @@
 package com.rakovpublic.jneuropallium.master.controllers;
 
+import com.rakovpublic.jneuropallium.master.services.MasterContext;
+
 public class SyncronizerController {
-    public void getCurrentLoopNumber(){}
-    public void getCurrentRunNumber(){}
-    public void getServiceNeuronMapping(){}
-    public void getCurrentLayerStatus(){}
-    public void nodeComplete(){}
-    public void getNextRun(){}
+    public void nodeComplete(){
+        //MasterContext.getMasterContext().getInputService().uploadWorkerResult();
+    }
+    public void getNextRun(){
+       // MasterContext.getMasterContext().getInputService().getNext();
+    }
 
 }
