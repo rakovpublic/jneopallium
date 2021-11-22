@@ -20,9 +20,11 @@ public class InputService implements IInputService {
     private ISplitInput splitInput;
     private Integer partitions;
     private IInputLoadingStrategy runningStrategy;
+    private ISignalHistoryStorage signalHistoryStorage;
+    private Long run;
+    private Boolean isComplete;
 
-
-    public InputService(ISignalsPersistStorage signalsPersist, ILayersMeta layersMeta, ISplitInput splitInput, Integer partitions, IInputLoadingStrategy runningStrategy) {
+    public InputService(ISignalsPersistStorage signalsPersist, ILayersMeta layersMeta, ISplitInput splitInput, Integer partitions, IInputLoadingStrategy runningStrategy, ISignalHistoryStorage signalHistoryStorage) {
         this.signalsPersist = signalsPersist;
         this.layersMeta = layersMeta;
         this.preparedInputs = new ArrayList<>();
@@ -32,6 +34,8 @@ public class InputService implements IInputService {
         this.nodeMetas = new HashMap<>();
         this.inputs = new HashMap<>();
         this.inputStatuses = new HashMap<>();
+        this.signalHistoryStorage = signalHistoryStorage;
+        isComplete=false;
     }
 
     @Override
@@ -104,6 +108,7 @@ public class InputService implements IInputService {
                 }
             }
             if (nodeMetas.get(nodeNames.get(0)).getCurrentLayer() + 1 >= layersMeta.getLayers().size()) {
+                isComplete=false;
                 ILayerMeta layerMeta = layersMeta.getLayerByID(nodeMetas.get(nodeNames.get(0)).getCurrentLayer() + 1);
                 Long size = layerMeta.getSize() / nodeNames.size() <= partitions ? new Long(partitions) : nodeNames.size();
                 List<ISplitInput> resList = new ArrayList<>();
@@ -130,6 +135,11 @@ public class InputService implements IInputService {
                 for (String nodeName : nodeNames) {
                     nodeMetas.get(nodeName).setCurrentLayer(layerMeta.getID());
                 }
+            }else{
+                signalHistoryStorage.save(signalsPersist.getAllSignals(),run);
+                signalsPersist.cleanOutdatedSignals();
+                runningStrategy.populateInput(signalsPersist,inputStatuses);
+                isComplete=true;
             }
         }
 
@@ -137,26 +147,29 @@ public class InputService implements IInputService {
 
     @Override
     public Boolean runCompleted() {
-        return null;
+        return isComplete;
     }
 
     @Override
-    public SortedSet<? extends IResultNeuron> prepareResults() {
-        return null;
+    public List<? extends IResultNeuron> prepareResults() {
+        return layersMeta.getResultLayer().getNeurons();
     }
 
     @Override
     public void nextRun() {
-
+        for(NodeMeta nm :nodeMetas.values()){
+            nm.setCurrentLayer(0);
+        }
+        prepareInputs();
     }
 
     @Override
     public void setLayersMeta(ILayersMeta layersMeta) {
-
+        this.layersMeta = layersMeta;
     }
 
     @Override
     public void setRun(Long run) {
-
+        this.run = run;
     }
 }

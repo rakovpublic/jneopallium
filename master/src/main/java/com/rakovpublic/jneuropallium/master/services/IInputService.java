@@ -28,7 +28,7 @@ public interface IInputService {
 
     Boolean runCompleted();
 
-    SortedSet<? extends IResultNeuron> prepareResults();
+    List<? extends IResultNeuron> prepareResults();
 
     void nextRun();
 
