@@ -1,5 +1,7 @@
 package com.rakovpublic.jneuropallium.worker.net.storages;
 
+import com.rakovpublic.jneuropallium.worker.net.signals.IInputSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.inmemory.InMemoryLayerMeta;
 import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.neuron.ISignalChain;
@@ -60,7 +62,11 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
             for (IInitInput iii : inputStatuses.keySet()) {
                 if (inputStatuses.get(iii).getCurrentRuns() >=
                         ((CycleNeuron) layersMeta.getLayerByID(Integer.MIN_VALUE).getNeuronByID(neuronInputMapping.get(inputStatuses.get(iii).getName()))).getLoopCount()) {
-                    signalsPersistStorage.putSignals(externalInputs.get(iii).getInputs(layersMeta, iii.readSignals()));
+                    List<ISignal> signals = new LinkedList<>();
+                    for (IInputSignal signal : iii.readSignals()){
+                        signals.add(signal);
+                    }
+                    signalsPersistStorage.putSignals(externalInputs.get(iii).getInputs(layersMeta,signals));
                     inputStatuses.get(iii).setCurrentRuns(0);
                 } else {
                     inputStatuses.get(iii).setCurrentRuns(inputStatuses.get(iii).getCurrentRuns() + 1);

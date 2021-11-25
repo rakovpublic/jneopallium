@@ -1,5 +1,7 @@
 package com.rakovpublic.jneuropallium.worker.net.layers;
 
+import com.rakovpublic.jneuropallium.worker.neuron.IResultNeuron;
+
 import java.util.List;
 
 /***
@@ -9,7 +11,7 @@ import java.util.List;
  *
  *
  */
-public interface IResultLayer extends ILayer {
+public interface IResultLayer<N extends IResultNeuron> extends ILayer<N> {
     /*
      * Transfer result layer to result
      *

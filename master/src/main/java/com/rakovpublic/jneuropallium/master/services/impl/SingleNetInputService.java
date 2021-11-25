@@ -181,7 +181,7 @@ public class SingleNetInputService implements IInputService {
     }
 
     @Override
-    public SortedSet<? extends IResultNeuron> prepareResults() {
+    public List<? extends IResultNeuron> prepareResults() {
         if (this.runCompleted()) {
             runFlag = true;
             return this.resultLayerRunner.getResults(layersMeta.getResultLayer(), signalsPersist.getLayerSignals(layersMeta.getResultLayer().getID()));

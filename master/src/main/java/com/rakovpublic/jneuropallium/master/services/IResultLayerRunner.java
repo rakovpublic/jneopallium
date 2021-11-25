@@ -9,6 +9,6 @@ import java.util.List;
 import java.util.SortedSet;
 
 public interface IResultLayerRunner {
-    SortedSet<? extends IResultNeuron> getResults(IResultLayerMeta resultLayer, HashMap<Long, List<ISignal>> signals);
+    List<? extends IResultNeuron> getResults(IResultLayerMeta resultLayer, HashMap<Long, List<ISignal>> signals);
 
 }

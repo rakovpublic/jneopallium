@@ -21,7 +21,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 
-public interface ILayer extends Serializable {
+public interface ILayer<N extends INeuron> extends Serializable {
 
     //TODO: add layer increasing via neuron logic
 
@@ -60,14 +60,14 @@ public interface ILayer extends Serializable {
      *
      * @param neuron
      */
-    void register(INeuron neuron);
+    void register(N neuron);
 
     /**
      * register neuron in the layer
      *
      * @param neuron
      */
-    void registerAll(List<? extends INeuron> neuron);
+    void registerAll(List<? extends N> neuron);
 
     /**
      * add input to layer
