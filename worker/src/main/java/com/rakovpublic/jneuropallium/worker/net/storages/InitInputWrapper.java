@@ -1,5 +1,6 @@
 package com.rakovpublic.jneuropallium.worker.net.storages;
 
+import com.rakovpublic.jneuropallium.worker.net.signals.IInputSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
@@ -16,7 +17,7 @@ public class InitInputWrapper implements IInitInput {
     }
 
     @Override
-    public List<ISignal> readSignals() {
+    public List<IInputSignal> readSignals() {
         return initInput.readSignals();
     }
 

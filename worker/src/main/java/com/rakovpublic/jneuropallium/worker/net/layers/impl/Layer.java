@@ -21,7 +21,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 /***
  * Created by Rakovskyi Dmytro on 08.06.2018.
  */
-public class Layer implements ILayer {
+public class Layer<N extends INeuron> implements ILayer<N> {
     protected TreeMap<Long, INeuron> map;
     private HashMap<Long, List<ISignal>> input;
     private HashMap<Class<? extends INeuron>, INeuronSerializer> neuronSerializerHashMap;
@@ -116,7 +116,7 @@ public class Layer implements ILayer {
     }
 
     @Override
-    public void registerAll(List<? extends INeuron> neuron) {
+    public void registerAll(List<? extends N> neuron) {
         for (INeuron ner : neuron) {
             ner.setLayer(this);
             map.put(ner.getId(), ner);

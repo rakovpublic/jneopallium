@@ -74,4 +74,24 @@ public class SimpleChangeWeightSignal implements ISignal<Double> {
     public int getTimeAlive() {
         return 0;
     }
+
+    @Override
+    public boolean isFromExternalNet() {
+        return false;
+    }
+
+    @Override
+    public void setFromExternalNet(boolean fromExternalNet) {
+
+    }
+
+    @Override
+    public String getInputName() {
+        return null;
+    }
+
+    @Override
+    public void setInputName(String inputName) {
+
+    }
 }

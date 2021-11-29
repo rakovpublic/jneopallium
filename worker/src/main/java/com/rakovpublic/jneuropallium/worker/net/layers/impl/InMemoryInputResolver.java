@@ -55,6 +55,11 @@ public class InMemoryInputResolver implements IInputResolver {
     }
 
     @Override
+    public Long getCurrentRun() {
+        return null;
+    }
+
+    @Override
     public void saveHistory() {
         signalHistoryStorage.save(signalsPersistStorage.getAllSignals(), currentLoop);
     }

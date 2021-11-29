@@ -32,6 +32,11 @@ public class InputLoadingStrategyWrapper implements IInputLoadingStrategy {
     }
 
     @Override
+    public Long getCurrentRunCount() {
+        return iInputLoadingStrategy.getCurrentRunCount();
+    }
+
+    @Override
     public void updateInputs(HashMap<IInitInput, InputStatusMeta> inputStatuses, HashMap<IInitInput, InputInitStrategy> inputs) {
         iInputLoadingStrategy.updateInputs(inputStatuses, inputs);
     }

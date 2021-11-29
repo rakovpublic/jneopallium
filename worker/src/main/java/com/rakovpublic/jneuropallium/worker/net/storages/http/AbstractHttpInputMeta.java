@@ -130,12 +130,12 @@ public abstract class AbstractHttpInputMeta implements ISplitInput {
     }
 
     @Override
-    public void setCycleInputsMap(HashMap<String, Long> neuronInputNameMapping) {
+    public void setServiceInputsMap(HashMap<String, Long> neuronInputNameMapping) {
         this.neuronInputNameMapping = neuronInputNameMapping;
     }
 
     @Override
-    public HashMap<String, Long> getCycleInputsMap() {
+    public HashMap<String, Long> getServiceInputsMap() {
         return neuronInputNameMapping;
     }
 
