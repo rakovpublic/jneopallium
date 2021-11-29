@@ -27,6 +27,8 @@ import com.rakovpublic.jneuropallium.worker.net.study.IResultComparingStrategy;
 import com.rakovpublic.jneuropallium.worker.net.study.StudyingAlgoFactory;
 import com.rakovpublic.jneuropallium.worker.synchronizer.IContext;
 import com.rakovpublic.jneuropallium.worker.synchronizer.utils.InstantiationUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
@@ -35,6 +37,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class LocalApplication implements IApplication {
+    private static final Logger logger = LogManager.getLogger(LocalApplication.class);
     @Override
     public void startApplication(IContext context) {
         String inputType = context.getProperty("configuration.input.type");
@@ -49,7 +52,7 @@ public class LocalApplication implements IApplication {
                 clazz = (Class<IFileSystem>) Class.forName(fileSystemClass);
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
-                //TODO:add logger
+                logger.error("Cannot find file system class" + fileSystemClass,e);
                 return;
             }
             String fileSystemConstructorArgs = context.getProperty("configuration.filesystem.constructor.args");
@@ -143,7 +146,7 @@ public class LocalApplication implements IApplication {
             lb.withInput(meta.getInputResolver());
             ILayer layer = lb.build();
             if (layer.validateGlobal() && layer.validateLocal()) {
-                //TODO: add logger invalid layer configuration and exception
+                logger.error("Layer validation rules violation");
             }
             layer.process();
             while (!layer.isProcessed()) {
@@ -183,7 +186,7 @@ public class LocalApplication implements IApplication {
                 reuslt.add(Class.forName(str));
             }
         } catch (ClassNotFoundException e) {
-            //TODO:Add logger
+            logger.error("Cannot find class for name: " +str, e);
         }
         return reuslt;
 
@@ -206,7 +209,7 @@ public class LocalApplication implements IApplication {
 
     }
 
-
+//TODO: refactore it
     private Object[] getObjects(String str) {
         if (str.equals("empty")) {
             return new Object[0];
@@ -231,7 +234,7 @@ public class LocalApplication implements IApplication {
             result = mapper.readValue(json, IInputLoadingStrategy.class);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
-            //TODO:add logger
+            logger.error("Cannot parse loading strategy  " + json,e);
         }
         return result;
     }
@@ -243,7 +246,7 @@ public class LocalApplication implements IApplication {
             result = mapper.readValue(json, InputArray.class).getInputData();
         } catch (JsonProcessingException e) {
             e.printStackTrace();
-            //TODO:add logger
+            logger.error("Cannot parse json " + json,e);
         }
         return result;
     }

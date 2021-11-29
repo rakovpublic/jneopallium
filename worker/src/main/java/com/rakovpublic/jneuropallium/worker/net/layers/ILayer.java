@@ -23,7 +23,6 @@ import java.util.List;
 
 public interface ILayer<N extends INeuron> extends Serializable {
 
-    //TODO: add layer increasing via neuron logic
 
     <K extends CreateNeuronSignal> void createNeuron(K signal);
 
