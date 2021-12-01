@@ -4,7 +4,7 @@ import com.rakovpublic.jneuropallium.master.services.MasterContext;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class SyncronizerController {
+public class SynchronizerController {
     public void nodeComplete(){
         //MasterContext.getMasterContext().getInputService().uploadWorkerResult();
     }
