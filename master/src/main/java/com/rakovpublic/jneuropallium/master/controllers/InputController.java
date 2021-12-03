@@ -4,14 +4,12 @@ import com.rakovpublic.jneuropallium.master.model.InputRegistrationRequest;
 import com.rakovpublic.jneuropallium.master.model.UploadSignalsRequest;
 import com.rakovpublic.jneuropallium.master.services.MasterContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 //TODO: add status code sending
 
 @RestController
+@RequestMapping("/input")
 public class InputController {
     @Autowired
     private MasterContext context;
@@ -20,7 +18,7 @@ public class InputController {
         context.getInputService().uploadWorkerResult(request.getName(),request.getSignals());
 
     }
-    @PostMapping("/registerInput")
+    @PostMapping("/register")
     public void registerInput(@RequestBody InputRegistrationRequest request){
         context.registerInput(request);
 

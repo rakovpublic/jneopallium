@@ -7,6 +7,7 @@ import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 import org.springframework.stereotype.Component;
 
 @Component
+//TODO: refactore to services
 public class MasterContext {
     //private static MasterContext masterContext = new MasterContext();
     private IInputService inputService;

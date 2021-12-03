@@ -1,16 +1,17 @@
 package com.rakovpublic.jneuropallium.master.services.impl;
 
 import com.rakovpublic.jneuropallium.master.services.INodeManager;
+import org.springframework.stereotype.Component;
 
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-
+@Component
 public class NodeManager implements INodeManager {
 
-    private static NodeManager nodeManager = new NodeManager();
+    //private static NodeManager nodeManager = new NodeManager();
     private ConcurrentHashMap<String, NodeStatus> nodes;
 
-    private NodeManager() {
+    public NodeManager() {
         nodes = new ConcurrentHashMap<>();
     }
 
@@ -34,7 +35,7 @@ public class NodeManager implements INodeManager {
         nodes.put(name, NodeStatus.STARTING);
     }
 
-    public static NodeManager getNodeManager() {
+    /*public static NodeManager getNodeManager() {
         return nodeManager;
-    }
+    }*/
 }
