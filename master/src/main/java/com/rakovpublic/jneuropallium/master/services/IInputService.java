@@ -1,5 +1,6 @@
 package com.rakovpublic.jneuropallium.master.services;
 
+import com.rakovpublic.jneuropallium.master.model.InputRegistrationRequest;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.IInitInput;
 import com.rakovpublic.jneuropallium.worker.net.storages.ILayersMeta;
@@ -15,6 +16,8 @@ public interface IInputService {
     void inputSourceUpdated(String name);
 
     void register(IInitInput iInputSource, boolean isMandatory, InputInitStrategy initStrategy, Integer amountOfRunsToUpdate);
+
+    void register(InputRegistrationRequest request);
 
     void uploadWorkerResult(String name, HashMap<Integer, HashMap<Long, List<ISignal>>> signals);
 

@@ -8,4 +8,5 @@ public class NetConfig {
     private String inputLoadingStrategyClass;
     private Integer partitions;
     private Integer defaultLoopsCount;
+    private String resultRunnerClass;
 }

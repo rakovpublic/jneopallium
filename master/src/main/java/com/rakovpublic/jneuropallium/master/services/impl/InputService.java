@@ -1,15 +1,18 @@
 package com.rakovpublic.jneuropallium.master.services.impl;
 
+import com.rakovpublic.jneuropallium.master.model.InputRegistrationRequest;
 import com.rakovpublic.jneuropallium.master.services.IInputService;
+import com.rakovpublic.jneuropallium.master.services.IResultLayerRunner;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.*;
 import com.rakovpublic.jneuropallium.worker.neuron.IResultNeuron;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.SortedSet;
-
+@Component
 public class InputService implements IInputService {
     private HashMap<IInitInput, InputStatusMeta> inputStatuses;
     private HashMap<String, NodeMeta> nodeMetas;
@@ -22,9 +25,10 @@ public class InputService implements IInputService {
     private IInputLoadingStrategy runningStrategy;
     private ISignalHistoryStorage signalHistoryStorage;
     private Long run;
-    private Boolean isComplete;
+    private Boolean runFlag;
+    private IResultLayerRunner resultLayerRunner;
 
-    public InputService(ISignalsPersistStorage signalsPersist, ILayersMeta layersMeta, ISplitInput splitInput, Integer partitions, IInputLoadingStrategy runningStrategy, ISignalHistoryStorage signalHistoryStorage) {
+    public InputService(ISignalsPersistStorage signalsPersist, ILayersMeta layersMeta, ISplitInput splitInput, Integer partitions, IInputLoadingStrategy runningStrategy, ISignalHistoryStorage signalHistoryStorage,  IResultLayerRunner resultLayerRunner) {
         this.signalsPersist = signalsPersist;
         this.layersMeta = layersMeta;
         this.preparedInputs = new ArrayList<>();
@@ -35,7 +39,8 @@ public class InputService implements IInputService {
         this.inputs = new HashMap<>();
         this.inputStatuses = new HashMap<>();
         this.signalHistoryStorage = signalHistoryStorage;
-        isComplete=false;
+        runFlag = false;
+        this.resultLayerRunner = resultLayerRunner;
     }
 
     @Override
@@ -48,6 +53,11 @@ public class InputService implements IInputService {
         //signalsPersist.putSignals(initStrategy.getInputs(layersMeta, iInputSource.readSignals()));
         inputStatuses.put(iInputSource, new InputStatusMeta(true, isMandatory, amountOfRuns, iInputSource.getName()));
         inputs.put(iInputSource, initStrategy);
+    }
+
+    @Override
+    public void register(InputRegistrationRequest request) {
+
     }
 
     @Override
@@ -108,7 +118,7 @@ public class InputService implements IInputService {
                 }
             }
             if (nodeMetas.get(nodeNames.get(0)).getCurrentLayer() + 1 >= layersMeta.getLayers().size()) {
-                isComplete=false;
+                runFlag=false;
                 ILayerMeta layerMeta = layersMeta.getLayerByID(nodeMetas.get(nodeNames.get(0)).getCurrentLayer() + 1);
                 Long size = layerMeta.getSize() / nodeNames.size() <= partitions ? new Long(partitions) : nodeNames.size();
                 List<ISplitInput> resList = new ArrayList<>();
@@ -139,7 +149,7 @@ public class InputService implements IInputService {
                 signalHistoryStorage.save(signalsPersist.getAllSignals(),run);
                 signalsPersist.cleanOutdatedSignals();
                 runningStrategy.populateInput(signalsPersist,inputStatuses);
-                isComplete=true;
+                runFlag=true;
             }
         }
 
@@ -147,20 +157,34 @@ public class InputService implements IInputService {
 
     @Override
     public Boolean runCompleted() {
-        return isComplete;
+        if (layersMeta.getLayers().size() == nodeMetas.values().iterator().next().getCurrentLayer()) {
+            for (NodeMeta meta : nodeMetas.values()) {
+                if (!meta.getStatus()) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
     }
 
     @Override
     public List<? extends IResultNeuron> prepareResults() {
-        return layersMeta.getResultLayer().getNeurons();
+        if (this.runCompleted()) {
+            runFlag = true;
+            return this.resultLayerRunner.getResults(layersMeta.getResultLayer(), signalsPersist.getLayerSignals(layersMeta.getResultLayer().getID()));
+        }
+        return null;
+
     }
 
     @Override
     public void nextRun() {
-        for(NodeMeta nm :nodeMetas.values()){
-            nm.setCurrentLayer(0);
+        if (runFlag) {
+            runFlag = false;
+            runningStrategy.populateInput(signalsPersist, inputStatuses);
+            run++;
         }
-        prepareInputs();
     }
 
     @Override
