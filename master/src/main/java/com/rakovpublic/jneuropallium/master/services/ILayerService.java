@@ -6,7 +6,7 @@ import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 
 import java.util.List;
 
-public interface ILayerService {
+public interface ILayerService extends Service{
     void deleteNeuron(Integer layerId, Long neuronId);
 
     <N extends INeuron> void  addNeuron(N neuronJson, Integer layerId);

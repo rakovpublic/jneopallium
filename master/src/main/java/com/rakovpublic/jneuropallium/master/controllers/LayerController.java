@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rakovpublic.jneuropallium.master.model.CreateNeuronRequest;
 import com.rakovpublic.jneuropallium.master.model.DeleteNeuronRequest;
 import com.rakovpublic.jneuropallium.master.services.ILayerService;
-import com.rakovpublic.jneuropallium.master.services.MasterContext;
 import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

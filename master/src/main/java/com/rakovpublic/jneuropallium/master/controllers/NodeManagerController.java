@@ -3,7 +3,6 @@ package com.rakovpublic.jneuropallium.master.controllers;
 import com.rakovpublic.jneuropallium.master.model.NodeCompleteRequest;
 import com.rakovpublic.jneuropallium.master.model.SplitInputResponse;
 import com.rakovpublic.jneuropallium.master.services.IInputService;
-import com.rakovpublic.jneuropallium.master.services.MasterContext;
 import com.rakovpublic.jneuropallium.master.services.impl.NodeManager;
 import com.rakovpublic.jneuropallium.master.services.impl.NodeStatus;
 import com.rakovpublic.jneuropallium.worker.net.storages.ISplitInput;

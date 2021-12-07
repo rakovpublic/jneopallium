@@ -10,9 +10,9 @@ import com.rakovpublic.jneuropallium.worker.neuron.IResultNeuron;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.SortedSet;
 
-public interface IInputService {
+
+public interface IInputService extends Service{
     void inputSourceUpdated(String name);
 
     void register(IInitInput iInputSource, boolean isMandatory, InputInitStrategy initStrategy, Integer amountOfRunsToUpdate);

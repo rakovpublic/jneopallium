@@ -196,4 +196,9 @@ public class InputService implements IInputService {
     public void setRun(Long run) {
         this.run = run;
     }
+
+    @Override
+    public void updateConfiguration() {
+
+    }
 }

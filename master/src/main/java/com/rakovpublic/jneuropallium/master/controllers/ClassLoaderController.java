@@ -1,6 +1,5 @@
 package com.rakovpublic.jneuropallium.master.controllers;
 
-import com.rakovpublic.jneuropallium.master.services.MasterContext;
 import com.rakovpublic.jneuropallium.master.services.StorageService;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
