@@ -17,6 +17,7 @@ import java.util.*;
 public class Neuron implements INeuron {
     private List<ISignal> signals;
     private Boolean isProcessed;
+    private IDendrites dendrites;
     private IAxon axon;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private HashMap<Class<? extends ISignal>, ISignalProcessor> processorMap;
@@ -173,6 +174,7 @@ public class Neuron implements INeuron {
     @Override
     public void processSignals() {
         HashMap<Class<? extends ISignal>, List<ISignal>> signalsMap = new HashMap<>();
+        List<ISignal> signalsForProcessing = dendrites.processSignalsWithDendrites(signals);
         for (ISignal s : signals) {
 
             Class<? extends ISignal> cl = s.getClass();
@@ -321,6 +323,14 @@ public class Neuron implements INeuron {
     public void setChanged(Boolean changed) {
         this.changed = changed;
 
+    }
+
+    public IDendrites getDendrites() {
+        return dendrites;
+    }
+
+    public void setDendrites(IDendrites dendrites) {
+        this.dendrites = dendrites;
     }
 
     @Override
