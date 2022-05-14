@@ -68,18 +68,7 @@ public class HttpClusterApplication implements IApplication {
                 neuron.activate();
                 IAxon axon =  neuron.getAxon();
                 HashMap<Integer,HashMap<Long,List<ISignal>>> result = axon.getSignalResultStructure(axon.processSignals(neuron.getResult()));
-                UploadSignalsRequest uploadSignalsRequest = new UploadSignalsRequest();
-                uploadSignalsRequest.setSignals(result);
-                uploadSignalsRequest.setName(UUID);
-                try {
-                    communicationClient.sendRequest(HttpRequestResolver.createPost(sendResultLink,uploadSignalsRequest));
-                } catch (IOException e) {
-                    //TODO: add logger
-                    return;
-                } catch (InterruptedException e) {
-                    //TODO: add logger
-                    return;
-                }
+                splitInput.saveResults(result);
                 ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
                 String json;
                 try {

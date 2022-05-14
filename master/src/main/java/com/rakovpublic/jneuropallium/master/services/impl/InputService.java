@@ -105,7 +105,7 @@ public class InputService implements IInputService {
 
     @Override
     public synchronized void prepareInputs() {
-        //TODO: fix it and refactor
+
         if (preparedInputs.size() == 0) {
             List<String> nodeNames = new ArrayList<>();
             nodeNames.addAll(nodeMetas.keySet());
@@ -120,30 +120,22 @@ public class InputService implements IInputService {
                     }
                 }
             }
-            if (nodeMetas.get(nodeNames.get(0)).getCurrentLayer() + 1 >= layersMeta.getLayers().size()) {
+            if (nodeMetas.get(nodeNames.get(0)).getCurrentLayer() + 1 < layersMeta.getLayers().size()) {
                 runFlag=false;
                 ILayerMeta layerMeta = layersMeta.getLayerByID(nodeMetas.get(nodeNames.get(0)).getCurrentLayer() + 1);
                 Long size = layerMeta.getSize() / nodeNames.size() <= partitions ? Long.parseLong(partitions+"") : nodeNames.size();
                 List<ISplitInput> resList = new ArrayList<>();
                 ISplitInput input = splitInput.getNewInstance();
-                input.setNodeIdentifier(nodeNames.get(0));
-                HashMap<Long, List<ISignal>> layerInput = signalsPersist.getLayerSignals(layerMeta.getID());
-                HashMap<Long, List<ISignal>> res = new HashMap<>();
-                for (Long l = 0l; l <= size; l++) {
-                    if (layerInput.containsKey(l)) {
-                        res.put(l, layerInput.get(l));
-                        layerInput.remove(l);
-                    }
-                    if (l == size) {
-                        input.saveResults(res);
-                        resList.add(input);
-                        if (layerInput.keySet().size() > 0) {
-                            res = new HashMap<>();
-                            input = splitInput.getNewInstance();
-                            size += size;
-                        }
+                Long atomic = layerMeta.getSize() / size>1? layerMeta.getSize() / size:1;
+                for(int i = 0;i<size; i++){
+                    input.setStart(i*atomic);
+                    input.setEnd((i+1)*atomic);
+                    input.setNodeIdentifier(nodeNames.get(0));
+                    input.setLayer(layerMeta.getID());
+                    input.setCurrentLoopCount(runningStrategy.getCurrentLoopCount());
+                    input.setRun(runningStrategy.getCurrentRunCount());
+                    resList.add(input);
 
-                    }
                 }
                 for (String nodeName : nodeNames) {
                     nodeMetas.get(nodeName).setCurrentLayer(layerMeta.getID());

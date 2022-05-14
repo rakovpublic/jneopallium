@@ -20,7 +20,7 @@ public interface ISplitInput extends IStorageMeta {
      * This method save the the input for the processing
      * @param signals neuronId signals list map
      **/
-    void saveResults(HashMap<Long, List<ISignal>> signals);
+    void saveResults(HashMap<Integer,HashMap<Long, List<ISignal>>> signals);
 
     /**
      * This method set the name of worker where it will be processed
@@ -55,6 +55,8 @@ public interface ISplitInput extends IStorageMeta {
      * */
     Integer getCurrentLoopCount();
 
+    void setCurrentLoopCount(Integer currentLoopCount);
+
     /**
      * @return the node name
      * */
@@ -71,5 +73,19 @@ public interface ISplitInput extends IStorageMeta {
      * @return the amount of input population -1 passed after neuron net started
      * */
     Long getRun();
+
+
+    Long getStart();
+
+    Long getEnd();
+
+    void setStart(Long start);
+
+    void setEnd(Long end);
+
+    Integer getLayerId();
+
+    void setLayer(Integer layerId);
+
 
 }
