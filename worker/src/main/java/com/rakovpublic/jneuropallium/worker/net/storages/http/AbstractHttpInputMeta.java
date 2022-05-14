@@ -23,6 +23,7 @@ public abstract class AbstractHttpInputMeta implements ISplitInput {
     private String sendResultEndpoint;
 
     private HashMap<String, Long> neuronInputNameMapping;
+    private HashMap<Long, List<ISignal>> inputSignals;
     private Integer currentInnerLoopCount;
     private Long run;
 

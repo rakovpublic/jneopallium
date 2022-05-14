@@ -71,12 +71,14 @@ public class InputService implements IInputService {
         ISplitInput res;
         if (preparedInputs.size() > 0) {
             res = preparedInputs.get(0);
+            preparedInputs.remove(0);
             res.setNodeIdentifier(name);
             nodeMetas.get(name).setStatus(false);
         } else {
             prepareInputs();
             if (preparedInputs.size() > 0) {
                 res = preparedInputs.get(0);
+                preparedInputs.remove(0);
                 res.setNodeIdentifier(name);
                 nodeMetas.get(name).setStatus(false);
             } else {
@@ -103,6 +105,7 @@ public class InputService implements IInputService {
 
     @Override
     public synchronized void prepareInputs() {
+        //TODO: fix it and refactor
         if (preparedInputs.size() == 0) {
             List<String> nodeNames = new ArrayList<>();
             nodeNames.addAll(nodeMetas.keySet());
@@ -120,7 +123,7 @@ public class InputService implements IInputService {
             if (nodeMetas.get(nodeNames.get(0)).getCurrentLayer() + 1 >= layersMeta.getLayers().size()) {
                 runFlag=false;
                 ILayerMeta layerMeta = layersMeta.getLayerByID(nodeMetas.get(nodeNames.get(0)).getCurrentLayer() + 1);
-                Long size = layerMeta.getSize() / nodeNames.size() <= partitions ? new Long(partitions) : nodeNames.size();
+                Long size = layerMeta.getSize() / nodeNames.size() <= partitions ? Long.parseLong(partitions+"") : nodeNames.size();
                 List<ISplitInput> resList = new ArrayList<>();
                 ISplitInput input = splitInput.getNewInstance();
                 input.setNodeIdentifier(nodeNames.get(0));

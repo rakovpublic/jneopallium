@@ -1,5 +1,9 @@
 package com.rakovpublic.jneuropallium.worker.application;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.rakovpublic.jneuropallium.master.model.CreateNeuronRequest;
 import com.rakovpublic.jneuropallium.master.model.NodeCompleteRequest;
 import com.rakovpublic.jneuropallium.master.model.UploadSignalsRequest;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
@@ -28,6 +32,7 @@ public class HttpClusterApplication implements IApplication {
         String registerLink = context.getProperty("master.address") + "/nodeManager/register";
         String getSplitInputLink = context.getProperty("master.address") + "/nodeManager/nextRun";
         String sendResultLink = context.getProperty("master.address") + "/input/callback";
+        String updateNeuronLink = context.getProperty("master.address") + "/layer/updateNeuron";
         NodeCompleteRequest nodeCompleteRequest = new NodeCompleteRequest();
         nodeCompleteRequest.setNodeName(UUID);
         HttpCommunicationClient communicationClient = new HttpCommunicationClient();
@@ -75,11 +80,36 @@ public class HttpClusterApplication implements IApplication {
                     //TODO: add logger
                     return;
                 }
+                ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+                String json;
+                try {
+                    json = ow.writeValueAsString( neuron);
+                } catch (JsonProcessingException e) {
+
+                    //TODO: add logger return
+                    return;
+                }
+                CreateNeuronRequest createNeuronRequest = new CreateNeuronRequest();
+                createNeuronRequest.setLayerId(neuron.getLayer().getId());
+                createNeuronRequest.setNeuronJson(json);
+                createNeuronRequest.setNeuronClass(neuron.getCurrentNeuronClass().getCanonicalName());
+                try {
+                    communicationClient.sendRequest(HttpRequestResolver.createPost(updateNeuronLink,createNeuronRequest));
+                } catch (IOException e) {
+                    //TODO: add logger return
+                    return;
+                } catch (InterruptedException e) {
+                    //TODO: add logger return
+                    return;
+                }
             }
         }
     }
 
     private ISplitInput parseSplitInput(String json){
+
+        //TODO: implement
+
         return null;
     }
 
