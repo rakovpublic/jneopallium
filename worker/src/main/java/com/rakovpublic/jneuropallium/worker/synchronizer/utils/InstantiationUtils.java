@@ -6,9 +6,10 @@ import java.util.List;
 
 public class InstantiationUtils {
     public static <K> K getObject(Class<K> clazz, Object[] args, List<Class<?>> params) {
-        Constructor<K> ctor = null;
+
+        K object = null;
         try {
-            K object;
+            Constructor<K> ctor = null;
             if (args.length > 0) {
                 Class<?>[] array = new Class<?>[params.size()];
                 int i = 0;
@@ -33,7 +34,7 @@ public class InstantiationUtils {
             e.printStackTrace();
             //TODO: add normal logger
         }
-        return null;
+        return object;
 
     }
 }

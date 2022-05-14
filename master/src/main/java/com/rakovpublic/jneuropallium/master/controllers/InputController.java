@@ -28,6 +28,7 @@ public class InputController {
     public ResponseEntity<?> registerInput(@RequestBody InputRegistrationRequest request){
         try {
             inputService.register(request);
+
         }catch (Exception e){
             return ResponseEntity.internalServerError().body(e);
         }

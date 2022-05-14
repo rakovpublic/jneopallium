@@ -57,7 +57,7 @@ public class InputService implements IInputService {
 
     @Override
     public void register(InputRegistrationRequest request) {
-
+//TODO: implement
     }
 
     @Override
@@ -198,7 +198,12 @@ public class InputService implements IInputService {
     }
 
     @Override
-    public void updateConfiguration() {
+    public void processCallBackFromUpstream( HashMap<Integer, HashMap<Long, List<ISignal>>> signals) {
+        signalsPersist.putSignals(signals);
+    }
 
+    @Override
+    public void updateConfiguration() {
+        //TODO: implement
     }
 }

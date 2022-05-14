@@ -175,7 +175,7 @@ public class Neuron implements INeuron {
     public void processSignals() {
         HashMap<Class<? extends ISignal>, List<ISignal>> signalsMap = new HashMap<>();
         List<ISignal> signalsForProcessing = dendrites.processSignalsWithDendrites(signals);
-        for (ISignal s : signals) {
+        for (ISignal s : signalsForProcessing) {
 
             Class<? extends ISignal> cl = s.getClass();
             if (signalsMap.containsKey(cl)) {

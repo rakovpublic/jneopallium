@@ -38,4 +38,6 @@ public interface IInputService extends Service{
     void setLayersMeta(ILayersMeta layersMeta);
 
     void setRun(Long run);
+
+    void processCallBackFromUpstream( HashMap<Integer, HashMap<Long, List<ISignal>>> signals);
 }
