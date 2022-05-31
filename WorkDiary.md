@@ -6,10 +6,11 @@ Documentation -60%
 DONE  
 
 Phase #2  
-Design-75%  
-Implementation - 20%  
+Design-85%  
+Implementation - 70%  
 Test- 0%  
-Documentation -10%  
+Documentation -40%  
+# TODO: add info about cycles to neurons
 IN PROGRESS  
 
 Phase #3  
