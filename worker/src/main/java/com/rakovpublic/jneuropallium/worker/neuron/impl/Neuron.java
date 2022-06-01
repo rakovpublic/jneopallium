@@ -12,6 +12,7 @@ import com.rakovpublic.jneuropallium.worker.net.storages.ISignalHistoryStorage;
 import com.rakovpublic.jneuropallium.worker.neuron.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class Neuron implements INeuron {
@@ -167,7 +168,11 @@ public class Neuron implements INeuron {
 
     @Override
     public void addSignals(List<ISignal> signals) {
-        this.signals.addAll(signals);
+
+        this.signals.addAll(signals.stream().map(s->{
+            s.setCurrentInnerLoop(currentLoopAmount);
+            return s;
+        }).collect(Collectors.toList()));
     }
 
     //TODO:refactor this method

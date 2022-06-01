@@ -64,6 +64,7 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
                         ((CycleNeuron) layersMeta.getLayerByID(Integer.MIN_VALUE).getNeuronByID(neuronInputMapping.get(inputStatuses.get(iii).getName()))).getLoopCount()) {
                     List<ISignal> signals = new LinkedList<>();
                     for (IInputSignal signal : iii.readSignals()){
+                        signal.setInnerLoop(defaultLoopsCount);
                         signals.add(signal);
                     }
                     signalsPersistStorage.putSignals(externalInputs.get(iii).getInputs(layersMeta,signals));

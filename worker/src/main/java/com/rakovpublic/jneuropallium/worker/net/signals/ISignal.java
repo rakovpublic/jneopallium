@@ -53,4 +53,10 @@ public interface ISignal<T> extends Serializable {
 
     void setInputName(String inputName);
 
+    void setCurrentInnerLoop(Integer loop);
+    Integer getCurrentInnerLoop();
+
+    void setInnerLoop(Integer loop);
+
+    Integer getInnerLoop();
 }

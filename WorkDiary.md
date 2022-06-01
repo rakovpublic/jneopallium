@@ -10,7 +10,6 @@ Design-85%
 Implementation - 70%  
 Test- 0%  
 Documentation -40%  
-# TODO: add info about cycles to neurons
 IN PROGRESS  
 
 Phase #3  
