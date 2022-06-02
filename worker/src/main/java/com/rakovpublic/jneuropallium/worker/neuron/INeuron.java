@@ -239,4 +239,9 @@ public interface INeuron extends Serializable {
      * @return  the layer of this neuron
      * */
     ILayer getLayer();
+
+    <I extends ISignal> void addActivationFunction(Class<I> clazz, IActivationFunction<I> activationFunction);
+
+    void setActivationFunctions(HashMap<Class<?extends ISignal>, IActivationFunction> functions);
+
 }

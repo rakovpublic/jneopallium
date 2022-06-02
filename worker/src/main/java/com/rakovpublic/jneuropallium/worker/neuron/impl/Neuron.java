@@ -20,6 +20,8 @@ public class Neuron implements INeuron {
     private Boolean isProcessed;
     private IDendrites dendrites;
     private IAxon axon;
+
+    private HashMap<Class<? extends ISignal>, IActivationFunction> activationFunctions;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private HashMap<Class<? extends ISignal>, ISignalProcessor> processorMap;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
@@ -311,7 +313,18 @@ public class Neuron implements INeuron {
 
     @Override
     public void activate() {
-
+        List<ISignal> newResult = new LinkedList<>();
+        for(ISignal s : result){
+            if(activationFunctions.containsKey(s.getCurrentSignalClass())){
+                Optional<ISignal> sig = activationFunctions.get(s.getCurrentSignalClass()).activate(s);
+                if(sig.isPresent()){
+                    newResult.add(s);
+                }
+            }else {
+                newResult.add(s);
+            }
+        }
+        result = newResult;
     }
 
     @Override
@@ -348,4 +361,13 @@ public class Neuron implements INeuron {
         this.onDelete = onDelete;
     }
 
+    @Override
+    public <I extends ISignal> void addActivationFunction(Class<I> clazz, IActivationFunction<I> activationFunction) {
+        activationFunctions.put(clazz,activationFunction);
+    }
+
+    @Override
+    public void setActivationFunctions(HashMap<Class<? extends ISignal>, IActivationFunction> functions) {
+        this.activationFunctions = functions;
+    }
 }
