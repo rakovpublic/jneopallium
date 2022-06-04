@@ -32,6 +32,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -78,10 +79,20 @@ public class LocalApplication implements IApplication {
                 HashMap<String, List<IResultSignal>> desiredResult = inputResolver.getDesiredResult();
                 if (isTeacherStudying && desiredResult != null) {
                     IResultComparingStrategy resultComparingStrategy = null;
-                    String jsonResultComparingStrategy = context.getProperty("configuration.jsonResultComparingStrategy");
-                    //TODO:add json parsing with wrapper
+                    String resultComparingStrategyClass = context.getProperty("configuration.resultComparingStrategyClass");
+                    try {
+                        resultComparingStrategy = (IResultComparingStrategy) Class.forName(resultComparingStrategyClass).getDeclaredConstructor().newInstance();
+                    } catch (ClassNotFoundException | NoSuchMethodException e) {
+                        //TODO:Add logger
+                    } catch (InvocationTargetException e) {
+                        //TODO:Add logger
+                    } catch (InstantiationException e) {
+                        //TODO:Add logger
+                    } catch (IllegalAccessException e) {
+                        //TODO:Add logger
+                    }
                     String algoType = context.getProperty("configuration.studyingalgotype");
-                    if (algoType != null) {
+                    if (algoType != null && resultComparingStrategy != null) {
                         List<IResult> idsToFix;
                         if (algoType.equals("direct")) {
                             IDirectStudyingAlgorithm directStudyingAlgorithm = StudyingAlgoFactory.getDirectStudyingAlgo();

@@ -21,6 +21,7 @@ public class Neuron implements INeuron {
     private IDendrites dendrites;
     private IAxon axon;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private HashMap<Class<? extends ISignal>, IActivationFunction> activationFunctions;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private HashMap<Class<? extends ISignal>, ISignalProcessor> processorMap;
@@ -98,6 +99,7 @@ public class Neuron implements INeuron {
         processorMap = new HashMap<>();
         mergerMap = new HashMap<>();
         currentNeuronClass = Neuron.class;
+        activationFunctions = new HashMap<>();
     }
 
     public Neuron(Long neuronId, ISignalChain processingChain, Long run) {
@@ -108,6 +110,7 @@ public class Neuron implements INeuron {
         result = new ArrayList<>();
         processorMap = new HashMap<>();
         mergerMap = new HashMap<>();
+        activationFunctions = new HashMap<>();
         this.signalChain = processingChain;
         this.run = run;
 

@@ -9,6 +9,7 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.IResultLayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IFileSystem;
 import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IFileSystemItem;
+import com.rakovpublic.jneuropallium.worker.neuron.IActivationFunction;
 import com.rakovpublic.jneuropallium.worker.neuron.IResultNeuron;
 import com.rakovpublic.jneuropallium.worker.neuron.ISignalMerger;
 import com.rakovpublic.jneuropallium.worker.neuron.ISignalProcessor;
@@ -37,10 +38,15 @@ public class FileResultLayerMeta extends FileLayerMeta implements IResultLayerMe
             try {
                 IResultNeuron neuron = (IResultNeuron) mapper.readValue(jel.getAsJsonObject().toString(), Class.forName(cl));
                 HashMap<Class<?>, ISignalProcessor> p = new HashMap<>();
+                for (Map.Entry<String, JsonElement> e : jel.getAsJsonObject().getAsJsonObject("activationFunctions").entrySet()) {
+                    String cc = e.getValue().getAsJsonObject().getAsJsonPrimitive("activationFunctionClass").getAsString();
+                    neuron.addActivationFunction((Class<? extends ISignal>) Class.forName(e.getKey()), (IActivationFunction) mapper.readValue(e.getValue().getAsJsonObject().toString(), Class.forName(cc)));
+                }
                 for (Map.Entry<String, JsonElement> e : jel.getAsJsonObject().getAsJsonObject("processorMap").entrySet()) {
                     String cc = e.getValue().getAsJsonObject().getAsJsonPrimitive("signalProcessorClass").getAsString();
                     neuron.addSignalProcessor((Class<? extends ISignal>) Class.forName(e.getKey()), (ISignalProcessor) mapper.readValue(e.getValue().getAsJsonObject().toString(), Class.forName(cc)));
                 }
+
                 for (Map.Entry<String, JsonElement> e : jel.getAsJsonObject().getAsJsonObject("mergerMap").entrySet()) {
                     String cc = e.getValue().getAsJsonObject().getAsJsonPrimitive("signalMergerClass").getAsString();
                     neuron.addSignalMerger((Class<? extends ISignal>) Class.forName(e.getKey()), (ISignalMerger) mapper.readValue(e.getValue().getAsJsonObject().toString(), Class.forName(cc)));
