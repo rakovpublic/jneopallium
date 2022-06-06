@@ -117,7 +117,7 @@ public class LocalApplication implements IApplication {
                                 meta.getInputResolver().getSignalPersistStorage().cleanOutdatedSignals();
                                 meta.getInputResolver().populateInput();
                             }
-                            outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(),meta.getInputResolver().getCurrentRun());
+                            outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(),meta.getInputResolver().getCurrentRun(),context);
                         } else if (algoType.equals("object")) {
                             IObjectStudyingAlgo iObjectStudyingAlgo = StudyingAlgoFactory.getObjectStudyingAlgo();
                             IResultLayer lr = process(meta);
@@ -134,12 +134,12 @@ public class LocalApplication implements IApplication {
                                 studyingRequest.put(layerId, studyMap);
                                 inputResolver.getSignalPersistStorage().putSignals(studyingRequest);
                             }
-                            outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(),meta.getInputResolver().getCurrentRun());
+                            outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(),meta.getInputResolver().getCurrentRun(),context);
                         }
                     } else {
                         for (; currentRun < maxRun || isInfinite; currentRun++) {
                             IResultLayer lr = process(meta);
-                            outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(),meta.getInputResolver().getCurrentRun());
+                            outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(),meta.getInputResolver().getCurrentRun(),context);
                             meta.getInputResolver().saveHistory();
                             meta.getInputResolver().getSignalPersistStorage().cleanOutdatedSignals();
                             meta.getInputResolver().populateInput();
@@ -149,7 +149,7 @@ public class LocalApplication implements IApplication {
                     //TODO:add normal output
                     while (true){
                         IResultLayer lr = process(meta);
-                        outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(),meta.getInputResolver().getCurrentRun());
+                        outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(),meta.getInputResolver().getCurrentRun(),context);
                         meta.getInputResolver().saveHistory();
                         meta.getInputResolver().getSignalPersistStorage().cleanOutdatedSignals();
                         meta.getInputResolver().populateInput();
