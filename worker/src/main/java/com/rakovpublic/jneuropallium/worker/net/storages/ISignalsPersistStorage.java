@@ -29,6 +29,8 @@ public interface ISignalsPersistStorage {
      * */
     void cleanOutdatedSignals();
 
+    void cleanMiddleLayerSignals();
+
     /**
      * This method return signals structure
      * @return layerId neuronId signals structure

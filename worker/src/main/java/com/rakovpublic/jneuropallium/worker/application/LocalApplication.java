@@ -110,21 +110,22 @@ public class LocalApplication implements IApplication {
                             IDirectStudyingAlgorithm directStudyingAlgorithm = StudyingAlgoFactory.getDirectStudyingAlgo();
                             IResultLayer lr = process(meta);
                             while ((idsToFix = resultComparingStrategy.getIdsStudy(process(meta).interpretResult(), desiredResult)).size() > 0) {
+                                meta.getInputResolver().saveHistory();
+                                meta.getInputResolver().getSignalPersistStorage().cleanMiddleLayerSignals();
                                 for (IResult res : idsToFix) {
                                     meta.study(directStudyingAlgorithm.study(meta, res.getNeuronId()));
                                 }
-                                meta.getInputResolver().saveHistory();
-                                meta.getInputResolver().getSignalPersistStorage().cleanOutdatedSignals();
-                                meta.getInputResolver().populateInput();
                             }
+                            meta.getInputResolver().saveHistory();
+                            meta.getInputResolver().getSignalPersistStorage().cleanOutdatedSignals();
+                            meta.getInputResolver().populateInput();
                             outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(),meta.getInputResolver().getCurrentRun(),context);
                         } else if (algoType.equals("object")) {
                             IObjectStudyingAlgo iObjectStudyingAlgo = StudyingAlgoFactory.getObjectStudyingAlgo();
                             IResultLayer lr = process(meta);
                             while ((idsToFix = resultComparingStrategy.getIdsStudy(lr.interpretResult(), desiredResult)).size() > 0) {
                                 meta.getInputResolver().saveHistory();
-                                meta.getInputResolver().getSignalPersistStorage().cleanOutdatedSignals();
-                                meta.getInputResolver().populateInput();
+                                meta.getInputResolver().getSignalPersistStorage().cleanMiddleLayerSignals();
                                 Integer layerId = meta.getResultLayer().getID();
                                 HashMap<Long, List<ISignal>> studyMap = new HashMap<>();
                                 for (IResult res : idsToFix) {
@@ -134,6 +135,8 @@ public class LocalApplication implements IApplication {
                                 studyingRequest.put(layerId, studyMap);
                                 inputResolver.getSignalPersistStorage().putSignals(studyingRequest);
                             }
+                            meta.getInputResolver().populateInput();
+                            meta.getInputResolver().getSignalPersistStorage().cleanOutdatedSignals();
                             outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(),meta.getInputResolver().getCurrentRun(),context);
                         }
                     } else {

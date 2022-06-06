@@ -51,6 +51,11 @@ public class InMemorySignalPersistStorage implements ISignalsPersistStorage {
     }
 
     @Override
+    public void cleanMiddleLayerSignals() {
+        //TODO: add implementation
+    }
+
+    @Override
     public HashMap<Integer, HashMap<Long, List<ISignal>>> getAllSignals() {
         return signals;
     }
