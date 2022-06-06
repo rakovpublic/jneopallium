@@ -74,6 +74,18 @@ public class LocalApplication implements IApplication {
             Long maxRun = Long.valueOf(context.getProperty("configuration.maxRun"));
             Boolean isInfinite = Boolean.valueOf(context.getProperty("configuration.infiniteRun"));
             IOutputAggregator outputAggregator = null;
+            String outputAggregatorClass = context.getProperty("configuration.outputAggregator");
+            try {
+                outputAggregator = (IOutputAggregator) Class.forName(outputAggregatorClass).getDeclaredConstructor().newInstance();
+            } catch (ClassNotFoundException | NoSuchMethodException e) {
+                //TODO:Add logger
+            } catch (InvocationTargetException e) {
+                //TODO:Add logger
+            } catch (InstantiationException e) {
+                //TODO:Add logger
+            } catch (IllegalAccessException e) {
+                //TODO:Add logger
+            }
             for (; currentRun < maxRun || isInfinite; currentRun++) {
 
                 HashMap<String, List<IResultSignal>> desiredResult = inputResolver.getDesiredResult();
@@ -96,7 +108,7 @@ public class LocalApplication implements IApplication {
                         List<IResult> idsToFix;
                         if (algoType.equals("direct")) {
                             IDirectStudyingAlgorithm directStudyingAlgorithm = StudyingAlgoFactory.getDirectStudyingAlgo();
-
+                            IResultLayer lr = process(meta);
                             while ((idsToFix = resultComparingStrategy.getIdsStudy(process(meta).interpretResult(), desiredResult)).size() > 0) {
                                 for (IResult res : idsToFix) {
                                     meta.study(directStudyingAlgorithm.study(meta, res.getNeuronId()));
@@ -105,9 +117,11 @@ public class LocalApplication implements IApplication {
                                 meta.getInputResolver().getSignalPersistStorage().cleanOutdatedSignals();
                                 meta.getInputResolver().populateInput();
                             }
+                            outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(),meta.getInputResolver().getCurrentRun());
                         } else if (algoType.equals("object")) {
                             IObjectStudyingAlgo iObjectStudyingAlgo = StudyingAlgoFactory.getObjectStudyingAlgo();
-                            while ((idsToFix = resultComparingStrategy.getIdsStudy(process(meta).interpretResult(), desiredResult)).size() > 0) {
+                            IResultLayer lr = process(meta);
+                            while ((idsToFix = resultComparingStrategy.getIdsStudy(lr.interpretResult(), desiredResult)).size() > 0) {
                                 meta.getInputResolver().saveHistory();
                                 meta.getInputResolver().getSignalPersistStorage().cleanOutdatedSignals();
                                 meta.getInputResolver().populateInput();
@@ -120,9 +134,12 @@ public class LocalApplication implements IApplication {
                                 studyingRequest.put(layerId, studyMap);
                                 inputResolver.getSignalPersistStorage().putSignals(studyingRequest);
                             }
+                            outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(),meta.getInputResolver().getCurrentRun());
                         }
                     } else {
                         for (; currentRun < maxRun || isInfinite; currentRun++) {
+                            IResultLayer lr = process(meta);
+                            outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(),meta.getInputResolver().getCurrentRun());
                             meta.getInputResolver().saveHistory();
                             meta.getInputResolver().getSignalPersistStorage().cleanOutdatedSignals();
                             meta.getInputResolver().populateInput();
