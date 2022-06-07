@@ -39,6 +39,7 @@ import java.util.List;
 
 public class LocalApplication implements IApplication {
     private static final Logger logger = LogManager.getLogger(LocalApplication.class);
+
     @Override
     public void startApplication(IContext context) {
         String inputType = context.getProperty("configuration.input.type");
@@ -53,7 +54,7 @@ public class LocalApplication implements IApplication {
                 clazz = (Class<IFileSystem>) Class.forName(fileSystemClass);
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
-                logger.error("Cannot find file system class" + fileSystemClass,e);
+                logger.error("Cannot find file system class" + fileSystemClass, e);
                 return;
             }
             String fileSystemConstructorArgs = context.getProperty("configuration.filesystem.constructor.args");
@@ -104,57 +105,53 @@ public class LocalApplication implements IApplication {
                         //TODO:Add logger
                     }
                     String algoType = context.getProperty("configuration.studyingalgotype");
-                    if (algoType != null && resultComparingStrategy != null) {
-                        List<IResult> idsToFix;
-                        if (algoType.equals("direct")) {
-                            IDirectStudyingAlgorithm directStudyingAlgorithm = StudyingAlgoFactory.getDirectStudyingAlgo();
-                            IResultLayer lr = process(meta);
-                            while ((idsToFix = resultComparingStrategy.getIdsStudy(process(meta).interpretResult(), desiredResult)).size() > 0) {
-                                meta.getInputResolver().saveHistory();
-                                meta.getInputResolver().getSignalPersistStorage().cleanMiddleLayerSignals();
-                                for (IResult res : idsToFix) {
-                                    meta.study(directStudyingAlgorithm.study(meta, res.getNeuronId()));
+                    for (; currentRun < maxRun || isInfinite; currentRun++) {
+                        if (algoType != null && resultComparingStrategy != null) {
+                            List<IResult> idsToFix;
+                            if (algoType.equals("direct")) {
+                                IDirectStudyingAlgorithm directStudyingAlgorithm = StudyingAlgoFactory.getDirectStudyingAlgo();
+                                IResultLayer lr = process(meta);
+                                while ((idsToFix = resultComparingStrategy.getIdsStudy(process(meta).interpretResult(), desiredResult)).size() > 0) {
+                                    meta.getInputResolver().saveHistory();
+                                    meta.getInputResolver().getSignalPersistStorage().cleanMiddleLayerSignals();
+                                    for (IResult res : idsToFix) {
+                                        meta.study(directStudyingAlgorithm.study(meta, res.getNeuronId()));
+                                    }
                                 }
-                            }
-                            meta.getInputResolver().saveHistory();
-                            meta.getInputResolver().getSignalPersistStorage().cleanOutdatedSignals();
-                            meta.getInputResolver().populateInput();
-                            outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(),meta.getInputResolver().getCurrentRun(),context);
-                        } else if (algoType.equals("object")) {
-                            IObjectStudyingAlgo iObjectStudyingAlgo = StudyingAlgoFactory.getObjectStudyingAlgo();
-                            IResultLayer lr = process(meta);
-                            while ((idsToFix = resultComparingStrategy.getIdsStudy(lr.interpretResult(), desiredResult)).size() > 0) {
                                 meta.getInputResolver().saveHistory();
-                                meta.getInputResolver().getSignalPersistStorage().cleanMiddleLayerSignals();
-                                Integer layerId = meta.getResultLayer().getID();
-                                HashMap<Long, List<ISignal>> studyMap = new HashMap<>();
-                                for (IResult res : idsToFix) {
-                                    studyMap.put(res.getNeuronId(), iObjectStudyingAlgo.getStudyingSignals());
+                                meta.getInputResolver().populateInput();
+                                outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getCurrentRun(), context);
+                            } else if (algoType.equals("object")) {
+                                IObjectStudyingAlgo iObjectStudyingAlgo = StudyingAlgoFactory.getObjectStudyingAlgo();
+                                IResultLayer lr = process(meta);
+                                while ((idsToFix = resultComparingStrategy.getIdsStudy(lr.interpretResult(), desiredResult)).size() > 0) {
+                                    meta.getInputResolver().saveHistory();
+                                    meta.getInputResolver().getSignalPersistStorage().cleanMiddleLayerSignals();
+                                    Integer layerId = meta.getResultLayer().getID();
+                                    HashMap<Long, List<ISignal>> studyMap = new HashMap<>();
+                                    for (IResult res : idsToFix) {
+                                        studyMap.put(res.getNeuronId(), iObjectStudyingAlgo.getStudyingSignals());
+                                    }
+                                    HashMap<Integer, HashMap<Long, List<ISignal>>> studyingRequest = new HashMap<>();
+                                    studyingRequest.put(layerId, studyMap);
+                                    inputResolver.getSignalPersistStorage().putSignals(studyingRequest);
                                 }
-                                HashMap<Integer, HashMap<Long, List<ISignal>>> studyingRequest = new HashMap<>();
-                                studyingRequest.put(layerId, studyMap);
-                                inputResolver.getSignalPersistStorage().putSignals(studyingRequest);
+                                meta.getInputResolver().populateInput();
+                                outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getCurrentRun(), context);
                             }
-                            meta.getInputResolver().populateInput();
-                            meta.getInputResolver().getSignalPersistStorage().cleanOutdatedSignals();
-                            outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(),meta.getInputResolver().getCurrentRun(),context);
-                        }
-                    } else {
-                        for (; currentRun < maxRun || isInfinite; currentRun++) {
+                        } else {
                             IResultLayer lr = process(meta);
-                            outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(),meta.getInputResolver().getCurrentRun(),context);
+                            outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getCurrentRun(), context);
                             meta.getInputResolver().saveHistory();
-                            meta.getInputResolver().getSignalPersistStorage().cleanOutdatedSignals();
                             meta.getInputResolver().populateInput();
                         }
                     }
                 } else {
                     //TODO:add normal output
-                    while (true){
+                    while (true) {
                         IResultLayer lr = process(meta);
-                        outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(),meta.getInputResolver().getCurrentRun(),context);
+                        outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getCurrentRun(), context);
                         meta.getInputResolver().saveHistory();
-                        meta.getInputResolver().getSignalPersistStorage().cleanOutdatedSignals();
                         meta.getInputResolver().populateInput();
                     }
 
@@ -217,7 +214,7 @@ public class LocalApplication implements IApplication {
                 reuslt.add(Class.forName(str));
             }
         } catch (ClassNotFoundException e) {
-            logger.error("Cannot find class for name: " +str, e);
+            logger.error("Cannot find class for name: " + str, e);
         }
         return reuslt;
 
@@ -240,7 +237,7 @@ public class LocalApplication implements IApplication {
 
     }
 
-//TODO: refactore it
+    //TODO: refactore it
     private Object[] getObjects(String str) {
         if (str.equals("empty")) {
             return new Object[0];
@@ -265,7 +262,7 @@ public class LocalApplication implements IApplication {
             result = mapper.readValue(json, IInputLoadingStrategy.class);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
-            logger.error("Cannot parse loading strategy  " + json,e);
+            logger.error("Cannot parse loading strategy  " + json, e);
         }
         return result;
     }
@@ -277,7 +274,7 @@ public class LocalApplication implements IApplication {
             result = mapper.readValue(json, InputArray.class).getInputData();
         } catch (JsonProcessingException e) {
             e.printStackTrace();
-            logger.error("Cannot parse json " + json,e);
+            logger.error("Cannot parse json " + json, e);
         }
         return result;
     }
