@@ -111,16 +111,18 @@ public class LocalApplication implements IApplication {
                             if (algoType.equals("direct")) {
                                 IDirectStudyingAlgorithm directStudyingAlgorithm = StudyingAlgoFactory.getDirectStudyingAlgo();
                                 IResultLayer lr = process(meta);
-                                while ((idsToFix = resultComparingStrategy.getIdsStudy(process(meta).interpretResult(), desiredResult)).size() > 0) {
+                                while ((idsToFix = resultComparingStrategy.getIdsStudy(lr.interpretResult(), desiredResult)).size() > 0) {
                                     meta.getInputResolver().saveHistory();
                                     meta.getInputResolver().getSignalPersistStorage().cleanMiddleLayerSignals();
                                     for (IResult res : idsToFix) {
                                         meta.study(directStudyingAlgorithm.study(meta, res.getNeuronId()));
                                     }
+                                    lr = process(meta);
                                 }
+
+                                outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getCurrentRun(), context);
                                 meta.getInputResolver().saveHistory();
                                 meta.getInputResolver().populateInput();
-                                outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getCurrentRun(), context);
                             } else if (algoType.equals("object")) {
                                 IObjectStudyingAlgo iObjectStudyingAlgo = StudyingAlgoFactory.getObjectStudyingAlgo();
                                 IResultLayer lr = process(meta);
@@ -135,9 +137,11 @@ public class LocalApplication implements IApplication {
                                     HashMap<Integer, HashMap<Long, List<ISignal>>> studyingRequest = new HashMap<>();
                                     studyingRequest.put(layerId, studyMap);
                                     inputResolver.getSignalPersistStorage().putSignals(studyingRequest);
+                                    lr = process(meta);
                                 }
-                                meta.getInputResolver().populateInput();
                                 outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getCurrentRun(), context);
+                                meta.getInputResolver().saveHistory();
+                                meta.getInputResolver().populateInput();
                             }
                         } else {
                             IResultLayer lr = process(meta);
