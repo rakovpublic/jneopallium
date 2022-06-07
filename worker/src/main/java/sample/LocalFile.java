@@ -1,10 +1,10 @@
 package sample;
 
-import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IFileSystemItem;
+import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IStorageItem;
 
 import java.io.File;
 
-public class LocalFile implements IFileSystemItem {
+public class LocalFile implements IStorageItem {
     private File file;
 
     LocalFile(File file) {

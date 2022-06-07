@@ -1,6 +1,6 @@
 package com.rakovpublic.jneuropallium.worker.net.storages.filesystem;
 
-public interface IFileSystemItem {
+public interface IStorageItem {
     boolean isDirectory();
 
     boolean exists();

@@ -4,20 +4,20 @@ import com.rakovpublic.jneuropallium.worker.exceptions.LayersFolderIsEmptyOrNotE
 import com.rakovpublic.jneuropallium.worker.net.storages.ILayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.storages.ILayersMeta;
 import com.rakovpublic.jneuropallium.worker.net.storages.IResultLayerMeta;
-import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IFileSystem;
-import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IFileSystemItem;
+import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IStorage;
+import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IStorageItem;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 
-public class FileLayersMeta<S extends IFileSystemItem> implements ILayersMeta {
+public class FileLayersMeta<S extends IStorageItem> implements ILayersMeta {
     private S file;
-    private IFileSystem fileSystem;
+    private IStorage fileSystem;
     private HashMap<Integer, ILayerMeta> layers;
 
 
-    public FileLayersMeta(S file, IFileSystem<S> fs) {
+    public FileLayersMeta(S file, IStorage<S> fs) {
         this.fileSystem = fs;
         this.file = file;
         layers = new HashMap<>();
@@ -35,14 +35,14 @@ public class FileLayersMeta<S extends IFileSystemItem> implements ILayersMeta {
             }
 
             temp = fileSystem.listFiles(file);
-            Collections.sort(temp, new Comparator<IFileSystemItem>() {
+            Collections.sort(temp, new Comparator<IStorageItem>() {
                 @Override
-                public int compare(IFileSystemItem o1, IFileSystemItem o2) {
+                public int compare(IStorageItem o1, IStorageItem o2) {
                     return Integer.compare(Integer.parseInt(o1.getName()), Integer.parseInt(o2.getName()));
                 }
             });
             int i = 0;
-            for (IFileSystemItem f : temp) {
+            for (IStorageItem f : temp) {
                 ILayerMeta layerMeta = new FileLayerMeta(f, fileSystem);
                 layers.put(layerMeta.getID(), layerMeta);
                 res.add(layerMeta);
@@ -75,9 +75,9 @@ public class FileLayersMeta<S extends IFileSystemItem> implements ILayersMeta {
             }
             return false;
         });
-        Collections.sort(temp, new Comparator<IFileSystemItem>() {
+        Collections.sort(temp, new Comparator<IStorageItem>() {
             @Override
-            public int compare(IFileSystemItem o1, IFileSystemItem o2) {
+            public int compare(IStorageItem o1, IStorageItem o2) {
                 return Integer.compare(Integer.parseInt(o1.getName()), Integer.parseInt(o2.getName()));
             }
         });

@@ -7,8 +7,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.IResultLayerMeta;
-import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IFileSystem;
-import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IFileSystemItem;
+import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IStorage;
+import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IStorageItem;
 import com.rakovpublic.jneuropallium.worker.neuron.IActivationFunction;
 import com.rakovpublic.jneuropallium.worker.neuron.IResultNeuron;
 import com.rakovpublic.jneuropallium.worker.neuron.ISignalMerger;
@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 public class FileResultLayerMeta extends FileLayerMeta implements IResultLayerMeta {
-    FileResultLayerMeta(IFileSystemItem file, IFileSystem fs) {
+    FileResultLayerMeta(IStorageItem file, IStorage fs) {
         super(file, fs);
     }
 

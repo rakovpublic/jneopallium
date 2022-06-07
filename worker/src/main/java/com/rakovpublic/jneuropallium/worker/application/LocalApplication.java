@@ -16,7 +16,7 @@ import com.rakovpublic.jneuropallium.worker.net.storages.IInputLoadingStrategy;
 import com.rakovpublic.jneuropallium.worker.net.storages.ILayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.storages.IResultLayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.storages.file.FileLayersMeta;
-import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IFileSystem;
+import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IStorage;
 import com.rakovpublic.jneuropallium.worker.net.storages.signalstorages.inmemory.InMemorySignalHistoryStorage;
 import com.rakovpublic.jneuropallium.worker.net.storages.signalstorages.inmemory.InMemorySignalPersistStorage;
 import com.rakovpublic.jneuropallium.worker.net.storages.structimpl.StructBuilder;
@@ -47,125 +47,121 @@ public class LocalApplication implements IApplication {
         StructBuilder structBuilder = new StructBuilder();
         String layerPath = context.getProperty("configuration.input.layermeta");
 
-        if (inputType.equals("fileSystem")) {
-            String fileSystemClass = context.getProperty("configuration.filesystem.class");
-            Class<IFileSystem> clazz = null;
-            try {
-                clazz = (Class<IFileSystem>) Class.forName(fileSystemClass);
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-                logger.error("Cannot find file system class" + fileSystemClass, e);
-                return;
-            }
-            String fileSystemConstructorArgs = context.getProperty("configuration.filesystem.constructor.args");
-            String fileSystemConstructorArgsType = context.getProperty("configuration.filesystem.constructor.args.types");
-            IFileSystem fs = InstantiationUtils.<IFileSystem>getObject(clazz, getObjects(fileSystemConstructorArgs), getTypes(fileSystemConstructorArgsType));
-            String inputLoadingStrategy = context.getProperty("configuration.input.loadingstrategy");
-            IInputResolver inputResolver = new InMemoryInputResolver(new InMemorySignalPersistStorage(), new InMemorySignalHistoryStorage(), this.getLoadingStrategy(inputLoadingStrategy));
-            String inputs = context.getProperty("configuration.input.inputs");
-            for (InputData inputData : this.getInputs(inputs)) {
-                inputResolver.registerInput(inputData.getiInputSource(), inputData.isMandatory(), inputData.getInitStrategy(), inputData.getAmountOfRuns());
-            }
-            structBuilder.withHiddenInputMeta(inputResolver);
-            structBuilder.withLayersMeta(new FileLayersMeta<>(fs.getItem(layerPath), fs));
-            StructMeta meta = structBuilder.build();
-            boolean isTeacherStudying = Boolean.valueOf(context.getProperty("configuration.isteacherstudying"));
 
-            Long currentRun = 0l;
-            Long maxRun = Long.valueOf(context.getProperty("configuration.maxRun"));
-            Boolean isInfinite = Boolean.valueOf(context.getProperty("configuration.infiniteRun"));
-            IOutputAggregator outputAggregator = null;
-            String outputAggregatorClass = context.getProperty("configuration.outputAggregator");
-            try {
-                outputAggregator = (IOutputAggregator) Class.forName(outputAggregatorClass).getDeclaredConstructor().newInstance();
-            } catch (ClassNotFoundException | NoSuchMethodException e) {
-                //TODO:Add logger
-            } catch (InvocationTargetException e) {
-                //TODO:Add logger
-            } catch (InstantiationException e) {
-                //TODO:Add logger
-            } catch (IllegalAccessException e) {
-                //TODO:Add logger
-            }
-            for (; currentRun < maxRun || isInfinite; currentRun++) {
+        String fileSystemClass = context.getProperty("configuration.storage.class");
+        Class<IStorage> clazz = null;
+        try {
+            clazz = (Class<IStorage>) Class.forName(fileSystemClass);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            logger.error("Cannot find file system class" + fileSystemClass, e);
+            return;
+        }
+        String fileSystemConstructorArgs = context.getProperty("configuration.storage.constructor.args");
+        String fileSystemConstructorArgsType = context.getProperty("configuration.storage.constructor.args.types");
+        IStorage fs = InstantiationUtils.<IStorage>getObject(clazz, getObjects(fileSystemConstructorArgs), getTypes(fileSystemConstructorArgsType));
+        String inputLoadingStrategy = context.getProperty("configuration.input.loadingstrategy");
+        IInputResolver inputResolver = new InMemoryInputResolver(new InMemorySignalPersistStorage(), new InMemorySignalHistoryStorage(), this.getLoadingStrategy(inputLoadingStrategy));
+        String inputs = context.getProperty("configuration.input.inputs");
+        for (InputData inputData : this.getInputs(inputs)) {
+            inputResolver.registerInput(inputData.getiInputSource(), inputData.isMandatory(), inputData.getInitStrategy(), inputData.getAmountOfRuns());
+        }
+        structBuilder.withHiddenInputMeta(inputResolver);
+        structBuilder.withLayersMeta(new FileLayersMeta<>(fs.getItem(layerPath), fs));
+        StructMeta meta = structBuilder.build();
+        boolean isTeacherStudying = Boolean.valueOf(context.getProperty("configuration.isteacherstudying"));
 
-                HashMap<String, List<IResultSignal>> desiredResult = inputResolver.getDesiredResult();
-                if (isTeacherStudying && desiredResult != null) {
-                    IResultComparingStrategy resultComparingStrategy = null;
-                    String resultComparingStrategyClass = context.getProperty("configuration.resultComparingStrategyClass");
-                    try {
-                        resultComparingStrategy = (IResultComparingStrategy) Class.forName(resultComparingStrategyClass).getDeclaredConstructor().newInstance();
-                    } catch (ClassNotFoundException | NoSuchMethodException e) {
-                        //TODO:Add logger
-                    } catch (InvocationTargetException e) {
-                        //TODO:Add logger
-                    } catch (InstantiationException e) {
-                        //TODO:Add logger
-                    } catch (IllegalAccessException e) {
-                        //TODO:Add logger
-                    }
-                    String algoType = context.getProperty("configuration.studyingalgotype");
-                    for (; currentRun < maxRun || isInfinite; currentRun++) {
-                        if (algoType != null && resultComparingStrategy != null) {
-                            List<IResult> idsToFix;
-                            if (algoType.equals("direct")) {
-                                IDirectStudyingAlgorithm directStudyingAlgorithm = StudyingAlgoFactory.getDirectStudyingAlgo();
-                                IResultLayer lr = process(meta);
-                                while ((idsToFix = resultComparingStrategy.getIdsStudy(lr.interpretResult(), desiredResult)).size() > 0) {
-                                    meta.getInputResolver().saveHistory();
-                                    meta.getInputResolver().getSignalPersistStorage().cleanMiddleLayerSignals();
-                                    for (IResult res : idsToFix) {
-                                        meta.study(directStudyingAlgorithm.study(meta, res.getNeuronId()));
-                                    }
-                                    lr = process(meta);
-                                }
+        Long currentRun = 0l;
+        Long maxRun = Long.valueOf(context.getProperty("configuration.maxRun"));
+        Boolean isInfinite = Boolean.valueOf(context.getProperty("configuration.infiniteRun"));
+        IOutputAggregator outputAggregator = null;
+        String outputAggregatorClass = context.getProperty("configuration.outputAggregator");
+        try {
+            outputAggregator = (IOutputAggregator) Class.forName(outputAggregatorClass).getDeclaredConstructor().newInstance();
+        } catch (ClassNotFoundException | NoSuchMethodException e) {
+            //TODO:Add logger
+        } catch (InvocationTargetException e) {
+            //TODO:Add logger
+        } catch (InstantiationException e) {
+            //TODO:Add logger
+        } catch (IllegalAccessException e) {
+            //TODO:Add logger
+        }
+        for (; currentRun < maxRun || isInfinite; currentRun++) {
 
-                                outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getCurrentRun(), context);
-                                meta.getInputResolver().saveHistory();
-                                meta.getInputResolver().populateInput();
-                            } else if (algoType.equals("object")) {
-                                IObjectStudyingAlgo iObjectStudyingAlgo = StudyingAlgoFactory.getObjectStudyingAlgo();
-                                IResultLayer lr = process(meta);
-                                while ((idsToFix = resultComparingStrategy.getIdsStudy(lr.interpretResult(), desiredResult)).size() > 0) {
-                                    meta.getInputResolver().saveHistory();
-                                    meta.getInputResolver().getSignalPersistStorage().cleanMiddleLayerSignals();
-                                    Integer layerId = meta.getResultLayer().getID();
-                                    HashMap<Long, List<ISignal>> studyMap = new HashMap<>();
-                                    for (IResult res : idsToFix) {
-                                        studyMap.put(res.getNeuronId(), iObjectStudyingAlgo.getStudyingSignals());
-                                    }
-                                    HashMap<Integer, HashMap<Long, List<ISignal>>> studyingRequest = new HashMap<>();
-                                    studyingRequest.put(layerId, studyMap);
-                                    inputResolver.getSignalPersistStorage().putSignals(studyingRequest);
-                                    lr = process(meta);
-                                }
-                                outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getCurrentRun(), context);
-                                meta.getInputResolver().saveHistory();
-                                meta.getInputResolver().populateInput();
-                            }
-                        } else {
+            HashMap<String, List<IResultSignal>> desiredResult = inputResolver.getDesiredResult();
+            if (isTeacherStudying && desiredResult != null) {
+                IResultComparingStrategy resultComparingStrategy = null;
+                String resultComparingStrategyClass = context.getProperty("configuration.resultComparingStrategyClass");
+                try {
+                    resultComparingStrategy = (IResultComparingStrategy) Class.forName(resultComparingStrategyClass).getDeclaredConstructor().newInstance();
+                } catch (ClassNotFoundException | NoSuchMethodException e) {
+                    //TODO:Add logger
+                } catch (InvocationTargetException e) {
+                    //TODO:Add logger
+                } catch (InstantiationException e) {
+                    //TODO:Add logger
+                } catch (IllegalAccessException e) {
+                    //TODO:Add logger
+                }
+                String algoType = context.getProperty("configuration.studyingalgotype");
+                for (; currentRun < maxRun || isInfinite; currentRun++) {
+                    if (algoType != null && resultComparingStrategy != null) {
+                        List<IResult> idsToFix;
+                        if (algoType.equals("direct")) {
+                            IDirectStudyingAlgorithm directStudyingAlgorithm = StudyingAlgoFactory.getDirectStudyingAlgo();
                             IResultLayer lr = process(meta);
+                            while ((idsToFix = resultComparingStrategy.getIdsStudy(lr.interpretResult(), desiredResult)).size() > 0) {
+                                meta.getInputResolver().saveHistory();
+                                meta.getInputResolver().getSignalPersistStorage().cleanMiddleLayerSignals();
+                                for (IResult res : idsToFix) {
+                                    meta.study(directStudyingAlgorithm.study(meta, res.getNeuronId()));
+                                }
+                                lr = process(meta);
+                            }
+
+                            outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getCurrentRun(), context);
+                            meta.getInputResolver().saveHistory();
+                            meta.getInputResolver().populateInput();
+                        } else if (algoType.equals("object")) {
+                            IObjectStudyingAlgo iObjectStudyingAlgo = StudyingAlgoFactory.getObjectStudyingAlgo();
+                            IResultLayer lr = process(meta);
+                            while ((idsToFix = resultComparingStrategy.getIdsStudy(lr.interpretResult(), desiredResult)).size() > 0) {
+                                meta.getInputResolver().saveHistory();
+                                meta.getInputResolver().getSignalPersistStorage().cleanMiddleLayerSignals();
+                                Integer layerId = meta.getResultLayer().getID();
+                                HashMap<Long, List<ISignal>> studyMap = new HashMap<>();
+                                for (IResult res : idsToFix) {
+                                    studyMap.put(res.getNeuronId(), iObjectStudyingAlgo.getStudyingSignals());
+                                }
+                                HashMap<Integer, HashMap<Long, List<ISignal>>> studyingRequest = new HashMap<>();
+                                studyingRequest.put(layerId, studyMap);
+                                inputResolver.getSignalPersistStorage().putSignals(studyingRequest);
+                                lr = process(meta);
+                            }
                             outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getCurrentRun(), context);
                             meta.getInputResolver().saveHistory();
                             meta.getInputResolver().populateInput();
                         }
-                    }
-                } else {
-                    //TODO:add normal output
-                    while (true) {
+                    } else {
                         IResultLayer lr = process(meta);
                         outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getCurrentRun(), context);
                         meta.getInputResolver().saveHistory();
                         meta.getInputResolver().populateInput();
                     }
-
                 }
+            } else {
+                //TODO:add normal output
+                while (true) {
+                    IResultLayer lr = process(meta);
+                    outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getCurrentRun(), context);
+                    meta.getInputResolver().saveHistory();
+                    meta.getInputResolver().populateInput();
+                }
+
             }
-
-        } else {
-            // TODO: refactor architecture for different input types
-
         }
+
 
     }
 

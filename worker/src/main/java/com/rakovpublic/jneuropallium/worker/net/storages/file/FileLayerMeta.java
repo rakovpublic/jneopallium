@@ -8,8 +8,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.ILayerMeta;
-import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IFileSystem;
-import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IFileSystemItem;
+import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IStorage;
+import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IStorageItem;
 import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.neuron.ISignalMerger;
 import com.rakovpublic.jneuropallium.worker.neuron.ISignalProcessor;
@@ -18,12 +18,12 @@ import com.rakovpublic.jneuropallium.worker.synchronizer.utils.JSONHelper;
 import java.io.IOException;
 import java.util.*;
 
-public class FileLayerMeta<S extends IFileSystemItem> implements ILayerMeta {
+public class FileLayerMeta<S extends IStorageItem> implements ILayerMeta {
     protected S file;
-    protected IFileSystem<S> fileSystem;
+    protected IStorage<S> fileSystem;
     protected List<? extends INeuron> neurons;
 
-    FileLayerMeta(S file, IFileSystem<S> fs) {
+    FileLayerMeta(S file, IStorage<S> fs) {
         this.file = file;
         this.fileSystem = fs;
     }

@@ -2,7 +2,7 @@ package com.rakovpublic.jneuropallium.worker.net.storages.filesystem;
 
 import java.util.List;
 
-public interface IFileSystem<S extends IFileSystemItem> {
+public interface IStorage<S extends IStorageItem> {
     S getItem(String path);
 
     String read(S path);

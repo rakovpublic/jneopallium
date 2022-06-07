@@ -1,6 +1,6 @@
 package sample;
 
-import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IFileSystem;
+import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IStorage;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-public class LocalFileSystem implements IFileSystem<LocalFile> {
+public class LocalFileSystem implements IStorage<LocalFile> {
 
     @Override
     public LocalFile getItem(String path) {
