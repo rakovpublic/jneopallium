@@ -106,6 +106,7 @@ public class LocalApplication implements IApplication {
                 }
                 String algoType = context.getProperty("configuration.studyingalgotype");
                 for (; currentRun < maxRun || isInfinite; currentRun++) {
+                    //Supervised learning
                     if (algoType != null && resultComparingStrategy != null) {
                         List<IResult> idsToFix;
                         if (algoType.equals("direct")) {
@@ -143,6 +144,7 @@ public class LocalApplication implements IApplication {
                             meta.getInputResolver().saveHistory();
                             meta.getInputResolver().populateInput();
                         }
+                        //Unsupervised or reinforced learning
                     } else {
                         IResultLayer lr = process(meta);
                         outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getCurrentRun(), context);
@@ -151,7 +153,7 @@ public class LocalApplication implements IApplication {
                     }
                 }
             } else {
-                //TODO:add normal output
+                //Unsupervised or reinforced learning
                 while (true) {
                     IResultLayer lr = process(meta);
                     outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getCurrentRun(), context);
