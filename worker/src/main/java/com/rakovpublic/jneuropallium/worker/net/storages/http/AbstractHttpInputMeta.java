@@ -145,7 +145,7 @@ public abstract class AbstractHttpInputMeta implements ISplitInput {
     }
 
     @Override
-    public Integer getCurrentLoopCount() {
+    public Integer getEpoch() {
         return currentInnerLoopCount;
     }
 

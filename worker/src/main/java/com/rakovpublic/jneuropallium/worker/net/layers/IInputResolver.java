@@ -44,7 +44,7 @@ public interface IInputResolver {
     /**
      * @return current loop inside run
      * */
-    Integer getCurrentLoop();
+    Integer getEpoch();
 
     /**
      * @return amount of runs from the beginning of the processing

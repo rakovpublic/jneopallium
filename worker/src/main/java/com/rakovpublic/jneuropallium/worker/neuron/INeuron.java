@@ -218,9 +218,9 @@ public interface INeuron extends Serializable {
      *
      * @return the amount of loops the have been passed after previous Input populating
      * */
-    Integer getCurrentLoopAmount();
+    Integer getEpoch();
 
-    void setCurrentLoopAmount(Integer currentLoopCount);
+    void setEpoch(Integer epoch);
 
     /**
      * Checks if neuron can process this signal

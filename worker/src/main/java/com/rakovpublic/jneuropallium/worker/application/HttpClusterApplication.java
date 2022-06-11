@@ -5,25 +5,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.rakovpublic.jneuropallium.master.model.CreateNeuronRequest;
 import com.rakovpublic.jneuropallium.master.model.NodeCompleteRequest;
-import com.rakovpublic.jneuropallium.master.model.UploadSignalsRequest;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.ISignalStorage;
 import com.rakovpublic.jneuropallium.worker.net.storages.ISplitInput;
 import com.rakovpublic.jneuropallium.worker.neuron.IAxon;
 import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
-import com.rakovpublic.jneuropallium.worker.neuron.impl.Neuron;
 import com.rakovpublic.jneuropallium.worker.synchronizer.IContext;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpHeaders;
-import java.net.http.HttpRequest;
-import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 public class HttpClusterApplication implements IApplication {
     private  final static String UUID = java.util.UUID.randomUUID().toString();
@@ -60,7 +51,7 @@ public class HttpClusterApplication implements IApplication {
             ISplitInput splitInput = parseSplitInput(jsonSplitInput);
             ISignalStorage signalStorage = splitInput.readInputs();
             for(INeuron neuron: splitInput.getNeurons()){
-                neuron.setCurrentLoopAmount(splitInput.getCurrentLoopCount());
+                neuron.setEpoch(splitInput.getEpoch());
                 neuron.setRun(splitInput.getRun());
                 neuron.addSignals(signalStorage.getSignalsForNeuron(neuron.getId()));
                 neuron.setCyclingNeuronInputMapping(splitInput.getServiceInputsMap());

@@ -53,7 +53,7 @@ public interface ISplitInput extends IStorageMeta {
     /**
      * @return amount of runs which passed after last input population
      * */
-    Integer getCurrentLoopCount();
+    Integer getEpoch();
 
     void setCurrentLoopCount(Integer currentLoopCount);
 

@@ -50,7 +50,7 @@ public class InMemoryInputResolver implements IInputResolver {
     }
 
     @Override
-    public Integer getCurrentLoop() {
+    public Integer getEpoch() {
         return inputLoadingStrategy.getCurrentLoopCount();
     }
 
