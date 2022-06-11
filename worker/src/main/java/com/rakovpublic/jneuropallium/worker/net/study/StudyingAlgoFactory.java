@@ -3,11 +3,11 @@ package com.rakovpublic.jneuropallium.worker.net.study;
 public class StudyingAlgoFactory {
     //TODO: add implementations
 
-    public static IDirectStudyingAlgorithm getDirectStudyingAlgo() {
+    public static IDirectLearningAlgorithm getDirectStudyingAlgo() {
         return null;
     }
 
-    public static IObjectStudyingAlgo getObjectStudyingAlgo() {
+    public static IObjectLearningAlgo getObjectStudyingAlgo() {
         return null;
     }
 

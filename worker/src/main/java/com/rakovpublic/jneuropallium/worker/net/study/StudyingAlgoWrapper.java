@@ -2,9 +2,9 @@ package com.rakovpublic.jneuropallium.worker.net.study;
 
 public class StudyingAlgoWrapper {
     private String className;
-    private IStudyingAlgo studyingAlgo;
+    private ILearningAlgo studyingAlgo;
 
-    public StudyingAlgoWrapper(String className, IStudyingAlgo studyingAlgo) {
+    public StudyingAlgoWrapper(String className, ILearningAlgo studyingAlgo) {
         this.className = className;
         this.studyingAlgo = studyingAlgo;
     }
@@ -17,11 +17,11 @@ public class StudyingAlgoWrapper {
         this.className = className;
     }
 
-    public IStudyingAlgo getStudyingAlgo() {
+    public ILearningAlgo getStudyingAlgo() {
         return studyingAlgo;
     }
 
-    public void setStudyingAlgo(IStudyingAlgo studyingAlgo) {
+    public void setStudyingAlgo(ILearningAlgo studyingAlgo) {
         this.studyingAlgo = studyingAlgo;
     }
 }

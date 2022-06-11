@@ -8,8 +8,8 @@ import java.util.List;
 /**
  * Studying algorithm for classical approaches note: signal based studying can be implemented without studying algorithm
  */
-public interface IDirectStudyingAlgorithm extends Serializable, IStudyingAlgo {
-    List<IStudyingRequest> study(IStructMeta structMeta, Long neuronId);
+public interface IDirectLearningAlgorithm extends Serializable, ILearningAlgo {
+    List<ILearningRequest> learn(IStructMeta structMeta, Long neuronId);
 
 
 }

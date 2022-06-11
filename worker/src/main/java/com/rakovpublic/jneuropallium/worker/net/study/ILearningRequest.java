@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Request for rebuilding neuron connections
  */
-public interface IStudyingRequest extends Serializable {
+public interface ILearningRequest extends Serializable {
     int getLayerId();
 
     Long getNeuronId();

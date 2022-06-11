@@ -21,8 +21,8 @@ import com.rakovpublic.jneuropallium.worker.net.storages.signalstorages.inmemory
 import com.rakovpublic.jneuropallium.worker.net.storages.signalstorages.inmemory.InMemorySignalPersistStorage;
 import com.rakovpublic.jneuropallium.worker.net.storages.structimpl.StructBuilder;
 import com.rakovpublic.jneuropallium.worker.net.storages.structimpl.StructMeta;
-import com.rakovpublic.jneuropallium.worker.net.study.IDirectStudyingAlgorithm;
-import com.rakovpublic.jneuropallium.worker.net.study.IObjectStudyingAlgo;
+import com.rakovpublic.jneuropallium.worker.net.study.IDirectLearningAlgorithm;
+import com.rakovpublic.jneuropallium.worker.net.study.IObjectLearningAlgo;
 import com.rakovpublic.jneuropallium.worker.net.study.IResultComparingStrategy;
 import com.rakovpublic.jneuropallium.worker.net.study.StudyingAlgoFactory;
 import com.rakovpublic.jneuropallium.worker.synchronizer.IContext;
@@ -110,13 +110,13 @@ public class LocalApplication implements IApplication {
                     if (algoType != null && resultComparingStrategy != null) {
                         List<IResult> idsToFix;
                         if (algoType.equals("direct")) {
-                            IDirectStudyingAlgorithm directStudyingAlgorithm = StudyingAlgoFactory.getDirectStudyingAlgo();
+                            IDirectLearningAlgorithm directLearningAlgorithm = StudyingAlgoFactory.getDirectStudyingAlgo();
                             IResultLayer lr = process(meta);
                             while ((idsToFix = resultComparingStrategy.getIdsStudy(lr.interpretResult(), desiredResult)).size() > 0) {
                                 meta.getInputResolver().saveHistory();
                                 meta.getInputResolver().getSignalPersistStorage().cleanMiddleLayerSignals();
                                 for (IResult res : idsToFix) {
-                                    meta.study(directStudyingAlgorithm.study(meta, res.getNeuronId()));
+                                    meta.study(directLearningAlgorithm.learn(meta, res.getNeuronId()));
                                 }
                                 lr = process(meta);
                             }
@@ -125,7 +125,7 @@ public class LocalApplication implements IApplication {
                             meta.getInputResolver().saveHistory();
                             meta.getInputResolver().populateInput();
                         } else if (algoType.equals("object")) {
-                            IObjectStudyingAlgo iObjectStudyingAlgo = StudyingAlgoFactory.getObjectStudyingAlgo();
+                            IObjectLearningAlgo iObjectStudyingAlgo = StudyingAlgoFactory.getObjectStudyingAlgo();
                             IResultLayer lr = process(meta);
                             while ((idsToFix = resultComparingStrategy.getIdsStudy(lr.interpretResult(), desiredResult)).size() > 0) {
                                 meta.getInputResolver().saveHistory();
@@ -133,7 +133,7 @@ public class LocalApplication implements IApplication {
                                 Integer layerId = meta.getResultLayer().getID();
                                 HashMap<Long, List<ISignal>> studyMap = new HashMap<>();
                                 for (IResult res : idsToFix) {
-                                    studyMap.put(res.getNeuronId(), iObjectStudyingAlgo.getStudyingSignals());
+                                    studyMap.put(res.getNeuronId(), iObjectStudyingAlgo.getLearningSignals());
                                 }
                                 HashMap<Integer, HashMap<Long, List<ISignal>>> studyingRequest = new HashMap<>();
                                 studyingRequest.put(layerId, studyMap);

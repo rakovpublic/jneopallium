@@ -5,7 +5,7 @@ import com.rakovpublic.jneuropallium.worker.net.storages.ILayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.storages.ILayersMeta;
 import com.rakovpublic.jneuropallium.worker.net.storages.IResultLayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.storages.IStructMeta;
-import com.rakovpublic.jneuropallium.worker.net.study.IStudyingRequest;
+import com.rakovpublic.jneuropallium.worker.net.study.ILearningRequest;
 import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 
 import java.util.List;
@@ -43,9 +43,9 @@ public class StructMeta implements IStructMeta {
 
 
     @Override
-    public void study(List<IStudyingRequest> requests) {
+    public void study(List<ILearningRequest> requests) {
         //TODO:write optimization now work for small local config
-        for (IStudyingRequest request : requests) {
+        for (ILearningRequest request : requests) {
             ILayerMeta lm = layersMeta.getLayerByID(request.getLayerId());
             INeuron ner = lm.getNeuronByID(request.getNeuronId());
             ner.getAxon().resetConnection(request.getNewConnections());

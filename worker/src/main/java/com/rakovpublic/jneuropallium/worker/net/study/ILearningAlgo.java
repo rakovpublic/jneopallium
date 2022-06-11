@@ -1,4 +1,4 @@
 package com.rakovpublic.jneuropallium.worker.net.study;
 
-public interface IStudyingAlgo {
+public interface ILearningAlgo {
 }

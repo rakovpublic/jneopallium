@@ -1,13 +1,13 @@
 package sample;
 
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
-import com.rakovpublic.jneuropallium.worker.net.study.IStudyingRequest;
+import com.rakovpublic.jneuropallium.worker.net.study.ILearningRequest;
 import com.rakovpublic.jneuropallium.worker.neuron.ISynapse;
 
 import java.util.HashMap;
 import java.util.List;
 
-public class SimpleStudyingRequest implements IStudyingRequest {
+public class SimpleStudyingRequest implements ILearningRequest {
     private final int layerId;
     private final long neuronId;
     private final HashMap<Class<? extends ISignal>, List<ISynapse>> results;
