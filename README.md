@@ -23,13 +23,13 @@ In my framework, neurons have:
    #Input
    Input is compound and can have different input sources. Each source has a value that shows how often input from an input source should be populated into the neuron net. It also has a callback in case the input source is another neuron net and it can get a study signal from upstream.
    The input strategy class defines how the input should be populated with neurons.
-   #Learning
-   #Learning with teacher
+#Learning 
+#Supervised learning
    In order to implement this type of learning client should define comparing strategy which will compare actual result with desired and return neuron ids to change and learning algorythm which will change the weight.
    Then add it to configuration.
 
 #Unsupervised or reinforced learning
-This  is the easerst part and does not required any additionla code except signals and processors definition.
+This  is the easiest part and does not required any additional code except signals and processors definition.
 
 #Phases:
 1. Make core. It will implement just core concepts without distributed mode and neuron nets synchronization.

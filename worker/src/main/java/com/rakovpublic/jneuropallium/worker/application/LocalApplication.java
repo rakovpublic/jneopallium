@@ -116,7 +116,7 @@ public class LocalApplication implements IApplication {
                                 meta.getInputResolver().saveHistory();
                                 meta.getInputResolver().getSignalPersistStorage().cleanMiddleLayerSignals();
                                 for (IResult res : idsToFix) {
-                                    meta.study(directLearningAlgorithm.learn(meta, res.getNeuronId()));
+                                    meta.study(directLearningAlgorithm.learn(meta, res.getNeuronId(), desiredResult));
                                 }
                                 lr = process(meta);
                             }
@@ -133,7 +133,7 @@ public class LocalApplication implements IApplication {
                                 Integer layerId = meta.getResultLayer().getID();
                                 HashMap<Long, List<ISignal>> studyMap = new HashMap<>();
                                 for (IResult res : idsToFix) {
-                                    studyMap.put(res.getNeuronId(), iObjectStudyingAlgo.getLearningSignals());
+                                    studyMap.put(res.getNeuronId(), iObjectStudyingAlgo.getLearningSignals(desiredResult,meta));
                                 }
                                 HashMap<Integer, HashMap<Long, List<ISignal>>> studyingRequest = new HashMap<>();
                                 studyingRequest.put(layerId, studyMap);
