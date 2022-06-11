@@ -42,8 +42,6 @@ public class LocalApplication implements IApplication {
 
     @Override
     public void startApplication(IContext context) {
-        String inputType = context.getProperty("configuration.input.type");
-        String inputPath = context.getProperty("configuration.input.path");
         StructBuilder structBuilder = new StructBuilder();
         String layerPath = context.getProperty("configuration.input.layermeta");
 
@@ -69,7 +67,7 @@ public class LocalApplication implements IApplication {
         structBuilder.withHiddenInputMeta(inputResolver);
         structBuilder.withLayersMeta(new FileLayersMeta<>(fs.getItem(layerPath), fs));
         StructMeta meta = structBuilder.build();
-        boolean isTeacherStudying = Boolean.valueOf(context.getProperty("configuration.isteacherstudying"));
+        boolean isTeacherStudying = Boolean.parseBoolean(context.getProperty("configuration.isteacherstudying"));
 
         Long currentRun = 0l;
         Long maxRun = Long.valueOf(context.getProperty("configuration.maxRun"));
@@ -78,14 +76,9 @@ public class LocalApplication implements IApplication {
         String outputAggregatorClass = context.getProperty("configuration.outputAggregator");
         try {
             outputAggregator = (IOutputAggregator) Class.forName(outputAggregatorClass).getDeclaredConstructor().newInstance();
-        } catch (ClassNotFoundException | NoSuchMethodException e) {
-            //TODO:Add logger
-        } catch (InvocationTargetException e) {
-            //TODO:Add logger
-        } catch (InstantiationException e) {
-            //TODO:Add logger
-        } catch (IllegalAccessException e) {
-            //TODO:Add logger
+        } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException | InstantiationException |
+                 IllegalAccessException e) {
+            logger.error("cannot create output aggregator object", e);
         }
         for (; currentRun < maxRun || isInfinite; currentRun++) {
 
@@ -95,14 +88,9 @@ public class LocalApplication implements IApplication {
                 String resultComparingStrategyClass = context.getProperty("configuration.resultComparingStrategyClass");
                 try {
                     resultComparingStrategy = (IResultComparingStrategy) Class.forName(resultComparingStrategyClass).getDeclaredConstructor().newInstance();
-                } catch (ClassNotFoundException | NoSuchMethodException e) {
-                    //TODO:Add logger
-                } catch (InvocationTargetException e) {
-                    //TODO:Add logger
-                } catch (InstantiationException e) {
-                    //TODO:Add logger
-                } catch (IllegalAccessException e) {
-                    //TODO:Add logger
+                } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException |
+                         InstantiationException | IllegalAccessException e) {
+                    logger.error("cannot create result comparing strategy object", e);
                 }
                 String algoType = context.getProperty("configuration.studyingalgotype");
                 for (; currentRun < maxRun || isInfinite; currentRun++) {
@@ -222,22 +210,6 @@ public class LocalApplication implements IApplication {
 
     }
 
-    private Object getObject(String str) {
-        if (str == null) {
-            return null;
-        }
-        Object obj = null;
-        try {
-            byte b[] = str.getBytes();
-            ByteArrayInputStream bi = new ByteArrayInputStream(b);
-            ObjectInputStream si = new ObjectInputStream(bi);
-            obj = si.readObject();
-        } catch (Exception ex) {
-            //TODO:Add logger
-        }
-        return obj;
-
-    }
 
     //TODO: refactore it
     private Object[] getObjects(String str) {
@@ -251,7 +223,7 @@ public class LocalApplication implements IApplication {
             ObjectInputStream si = new ObjectInputStream(bi);
             obj = (Object[]) si.readObject();
         } catch (Exception ex) {
-            //TODO:Add logger
+            logger.error("Cannot deserialize string to object array ", ex);
         }
         return obj;
 
