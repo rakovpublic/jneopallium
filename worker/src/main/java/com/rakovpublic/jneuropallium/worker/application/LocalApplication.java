@@ -103,9 +103,7 @@ public class LocalApplication implements IApplication {
                             while ((idsToFix = resultComparingStrategy.getIdsStudy(lr.interpretResult(), desiredResult)).size() > 0) {
                                 meta.getInputResolver().saveHistory();
                                 meta.getInputResolver().getSignalPersistStorage().cleanMiddleLayerSignals();
-                                for (IResult res : idsToFix) {
-                                    meta.study(directLearningAlgorithm.learn(meta, res.getNeuronId(), desiredResult));
-                                }
+                                meta.study(directLearningAlgorithm.learn(meta, desiredResult));
                                 lr = process(meta);
                             }
 
@@ -125,6 +123,7 @@ public class LocalApplication implements IApplication {
                                 }
                                 HashMap<Integer, HashMap<Long, List<ISignal>>> studyingRequest = new HashMap<>();
                                 studyingRequest.put(layerId, studyMap);
+                                meta.getInputResolver().getSignalPersistStorage().cleanMiddleLayerSignals();
                                 inputResolver.getSignalPersistStorage().putSignals(studyingRequest);
                                 lr = process(meta);
                             }
