@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.SortedSet;
+
 @Component
 public class InputService implements IInputService {
     private HashMap<IInitInput, InputStatusMeta> inputStatuses;
@@ -133,7 +133,7 @@ public class InputService implements IInputService {
                     input.setNodeIdentifier(nodeNames.get(0));
                     input.setLayer(layerMeta.getID());
                     input.setCurrentLoopCount(runningStrategy.getCurrentLoopCount());
-                    input.setRun(runningStrategy.getCurrentRunCount());
+                    input.setRun(runningStrategy.getEpoch());
                     resList.add(input);
 
                 }

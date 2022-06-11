@@ -55,12 +55,12 @@ public class Neuron implements INeuron {
     private Integer currentLoopAmount;
 
     @Override
-    public Integer getEpoch() {
+    public Integer getCurrentLoop() {
         return currentLoopAmount;
     }
 
     @Override
-    public void setEpoch(Integer currentLoopAmount) {
+    public void setCurrentLoop(Integer currentLoopAmount) {
         this.currentLoopAmount = currentLoopAmount;
     }
 
@@ -132,12 +132,12 @@ public class Neuron implements INeuron {
     }
 
     @Override
-    public Long getRun() {
+    public Long getEpoch() {
         return run;
     }
 
     @Override
-    public void setRun(Long run) {
+    public void setEpoch(Long run) {
         this.run = run;
     }
 

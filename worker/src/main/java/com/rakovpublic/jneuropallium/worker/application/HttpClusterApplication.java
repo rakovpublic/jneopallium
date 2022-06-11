@@ -51,8 +51,8 @@ public class HttpClusterApplication implements IApplication {
             ISplitInput splitInput = parseSplitInput(jsonSplitInput);
             ISignalStorage signalStorage = splitInput.readInputs();
             for(INeuron neuron: splitInput.getNeurons()){
-                neuron.setEpoch(splitInput.getEpoch());
-                neuron.setRun(splitInput.getRun());
+                neuron.setCurrentLoop(splitInput.getEpoch());
+                neuron.setEpoch(splitInput.getRun());
                 neuron.addSignals(signalStorage.getSignalsForNeuron(neuron.getId()));
                 neuron.setCyclingNeuronInputMapping(splitInput.getServiceInputsMap());
                 neuron.processSignals();

@@ -152,12 +152,11 @@ public class Layer<N extends INeuron> implements ILayer<N> {
         for (Long neuronId : map.keySet()) {
             if (input.containsKey(neuronId)) {
                 neur = map.get(neuronId);
-                neur.setEpoch(inputResolver.getEpoch());
                 neur.setCyclingNeuronInputMapping(inputResolver.getCycleNeuronAddressMapping());
                 neur.setSignalHistory(inputResolver.getSignalsHistoryStorage());
                 neur.addSignals(input.get(neuronId));
-                neur.setRun(inputResolver.getCurrentRun());
                 neur.setEpoch(inputResolver.getEpoch());
+                neur.setCurrentLoop(inputResolver.getCurrentLoop());
                 ns.addNeuron(neur);
             }
         }

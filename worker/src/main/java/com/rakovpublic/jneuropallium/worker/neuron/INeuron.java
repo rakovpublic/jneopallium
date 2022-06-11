@@ -40,13 +40,13 @@ public interface INeuron extends Serializable {
     /**
      *  @return the number of runs(invokes of this neuron)
      **/
-    Long getRun();
+    Long getEpoch();
 
     /**
      * set the amount of runs
      * @param run amount of runs
      **/
-    void setRun(Long run);
+    void setEpoch(Long epoch);
 
     /**
      * Provides access to signal history
@@ -218,9 +218,9 @@ public interface INeuron extends Serializable {
      *
      * @return the amount of loops the have been passed after previous Input populating
      * */
-    Integer getEpoch();
+    Integer getCurrentLoop();
 
-    void setEpoch(Integer epoch);
+    void setCurrentLoop(Integer currentLoop);
 
     /**
      * Checks if neuron can process this signal

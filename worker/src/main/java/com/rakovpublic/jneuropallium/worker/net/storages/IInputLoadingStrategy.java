@@ -36,7 +36,7 @@ public interface IInputLoadingStrategy {
     /**
      * @return current amount of run after start excluding loops
      * */
-    Long getCurrentRunCount();
+    Long getEpoch();
 
     /**
      * This method updates inputs and mapping

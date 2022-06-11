@@ -98,7 +98,7 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
     }
 
     @Override
-    public Long getCurrentRunCount() {
+    public Long getEpoch() {
         return run;
     }
 

@@ -44,12 +44,12 @@ public interface IInputResolver {
     /**
      * @return current loop inside run
      * */
-    Integer getEpoch();
+    Integer getCurrentLoop();
 
     /**
      * @return amount of runs from the beginning of the processing
      * */
-    Long getCurrentRun();
+    Long getEpoch();
 
     /**
      * save signals from signal storage to history

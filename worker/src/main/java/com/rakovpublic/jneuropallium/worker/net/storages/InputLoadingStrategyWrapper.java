@@ -32,8 +32,8 @@ public class InputLoadingStrategyWrapper implements IInputLoadingStrategy {
     }
 
     @Override
-    public Long getCurrentRunCount() {
-        return iInputLoadingStrategy.getCurrentRunCount();
+    public Long getEpoch() {
+        return iInputLoadingStrategy.getEpoch();
     }
 
     @Override
