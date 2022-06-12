@@ -5,7 +5,7 @@ import com.rakovpublic.jneuropallium.worker.synchronizer.IContext;
 public interface IRunner {
     IContext getContext();
 
-    void runNet(String mode);
+    void runNet(String mode, String jarPath);
 
 
 }

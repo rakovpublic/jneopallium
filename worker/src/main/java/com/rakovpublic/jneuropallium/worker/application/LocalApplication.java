@@ -27,6 +27,7 @@ import com.rakovpublic.jneuropallium.worker.net.study.IResultComparingStrategy;
 import com.rakovpublic.jneuropallium.worker.net.study.StudyingAlgoFactory;
 import com.rakovpublic.jneuropallium.worker.synchronizer.IContext;
 import com.rakovpublic.jneuropallium.worker.synchronizer.utils.InstantiationUtils;
+import com.rakovpublic.jneuropallium.worker.util.JarClassLoaderService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -41,7 +42,7 @@ public class LocalApplication implements IApplication {
     private static final Logger logger = LogManager.getLogger(LocalApplication.class);
 
     @Override
-    public void startApplication(IContext context) {
+    public void startApplication(IContext context, JarClassLoaderService classLoaderService) {
         StructBuilder structBuilder = new StructBuilder();
         String layerPath = context.getProperty("configuration.input.layermeta");
 

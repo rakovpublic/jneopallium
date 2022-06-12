@@ -5,7 +5,7 @@ import com.rakovpublic.jneuropallium.worker.application.IRunner;
 public class App {
     public static void main(String[] args) {
         IRunner runner = new SimpleRunner();
-        runner.runNet("local");
+        runner.runNet(args[0],args[1]);
        /* System.out.println("\""+NeuronLayerCreator.getFirstLayer()+"\"");
         System.out.println("\""+NeuronLayerCreator.getSecondLayerLayer()+"\"");
         System.out.println("\""+NeuronLayerCreator.getResultLayerLayer()+"\"");*/

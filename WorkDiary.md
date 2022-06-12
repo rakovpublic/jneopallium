@@ -10,6 +10,7 @@ Design-85%
 Implementation - 70%  
 Test- 0%  
 Documentation -40%  
+//TODO: add meta with all class names to neuron net configuration and check if it exists in the jar
 IN PROGRESS  
 
 Phase #3  

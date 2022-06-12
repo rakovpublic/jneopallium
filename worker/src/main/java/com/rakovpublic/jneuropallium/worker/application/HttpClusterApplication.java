@@ -11,6 +11,7 @@ import com.rakovpublic.jneuropallium.worker.net.storages.ISplitInput;
 import com.rakovpublic.jneuropallium.worker.neuron.IAxon;
 import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.synchronizer.IContext;
+import com.rakovpublic.jneuropallium.worker.util.JarClassLoaderService;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -19,7 +20,7 @@ import java.util.List;
 public class HttpClusterApplication implements IApplication {
     private  final static String UUID = java.util.UUID.randomUUID().toString();
     @Override
-    public void startApplication(IContext context) {
+    public void startApplication(IContext context, JarClassLoaderService classLoaderService) {
         String registerLink = context.getProperty("master.address") + "/nodeManager/register";
         String getSplitInputLink = context.getProperty("master.address") + "/nodeManager/nextRun";
         String sendResultLink = context.getProperty("master.address") + "/input/callback";
