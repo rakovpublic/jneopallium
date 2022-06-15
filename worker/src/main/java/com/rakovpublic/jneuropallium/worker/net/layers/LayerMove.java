@@ -1,17 +1,18 @@
 package com.rakovpublic.jneuropallium.worker.net.layers;
 
+import java.util.List;
 import java.util.Objects;
 
 public class LayerMove {
     private Integer layerRemoved;
     private Integer nextLayer;
 
-    private Integer prevLayer;
+    private List<Long> nextLayerNeuronIds;
 
-    public LayerMove(Integer layerRemoved, Integer nextLayer, Integer prevLayer) {
+    public LayerMove(Integer layerRemoved, Integer nextLayer, List<Long> nextLayerNeuronIds) {
         this.layerRemoved = layerRemoved;
         this.nextLayer = nextLayer;
-        this.prevLayer = prevLayer;
+        this.nextLayerNeuronIds = nextLayerNeuronIds;
     }
 
     public Integer getLayerRemoved() {
@@ -30,24 +31,25 @@ public class LayerMove {
         this.nextLayer = nextLayer;
     }
 
-    public Integer getPrevLayer() {
-        return prevLayer;
+    public List<Long> getNextLayerNeuronIds() {
+        return nextLayerNeuronIds;
     }
 
-    public void setPrevLayer(Integer prevLayer) {
-        this.prevLayer = prevLayer;
+    public void setNextLayerNeuronIds(List<Long> nextLayerNeuronIds) {
+        this.nextLayerNeuronIds = nextLayerNeuronIds;
     }
 
     @Override
     public boolean equals(Object o) {
+
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         LayerMove layerMove = (LayerMove) o;
-        return Objects.equals(layerRemoved, layerMove.layerRemoved) && Objects.equals(nextLayer, layerMove.nextLayer) && Objects.equals(prevLayer, layerMove.prevLayer);
+        return Objects.equals(layerRemoved, layerMove.layerRemoved) && Objects.equals(nextLayer, layerMove.nextLayer) && Objects.equals(nextLayerNeuronIds, layerMove.nextLayerNeuronIds);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(layerRemoved, nextLayer, prevLayer);
+        return Objects.hash(layerRemoved, nextLayer, nextLayerNeuronIds);
     }
 }

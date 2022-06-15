@@ -107,5 +107,7 @@ public interface IAxon extends Serializable {
      * */
     Boolean isConnectionsWrapped();
 
-    void moveConnection(LayerMove layerMove);
+    void moveConnection(LayerMove layerMove, int currentLayer, Long currentNeuronId);
+
+    void setDefaultWeights(HashMap<Class<? extends ISignal>, IWeight> defaultWeights);
 }

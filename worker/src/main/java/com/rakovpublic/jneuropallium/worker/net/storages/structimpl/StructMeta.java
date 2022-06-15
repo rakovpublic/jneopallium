@@ -11,6 +11,7 @@ import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 
 import java.util.List;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 /*
 
@@ -72,8 +73,9 @@ public class StructMeta implements IStructMeta {
             layers.put(layerMeta.getID(),layerMeta);
         }
         Integer nextLayerId = layers.higherKey(layerId);
-        Integer prevLayerId = layers.ceilingKey(layerId);
-        LayerMove layerMove = new LayerMove(layerId,nextLayerId,prevLayerId);
+        ILayerMeta nextLayer = layers.get(nextLayerId);
+        List<Long> neuronIds =  nextLayer.getNeurons().stream().map(n->n.getId()).collect(Collectors.toList());
+        LayerMove layerMove = new LayerMove(layerId,nextLayerId,neuronIds);
         for(ILayerMeta layerMeta : layersMeta.getLayers()){
             layerMeta.addLayerMove(layerMove);
         }

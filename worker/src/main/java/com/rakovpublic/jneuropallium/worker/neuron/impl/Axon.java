@@ -4,6 +4,7 @@ import com.rakovpublic.jneuropallium.worker.net.layers.LayerMove;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.neuron.IAxon;
 import com.rakovpublic.jneuropallium.worker.neuron.ISynapse;
+import com.rakovpublic.jneuropallium.worker.neuron.IWeight;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,6 +12,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Axon implements IAxon {
+
+
+
+    private HashMap<Class<? extends ISignal>, IWeight> defaultWeights;
     private HashMap<Class<? extends ISignal>, List<ISynapse>> connectionMap;
     private HashMap<Integer, HashMap<Long, List<ISynapse>>> addressMap;
     private Boolean connectionsWrapped;
@@ -20,6 +25,11 @@ public class Axon implements IAxon {
         this.connectionMap = new HashMap<>();
         this.addressMap = new HashMap<>();
         connectionsWrapped = false;
+        defaultWeights = new HashMap<>();
+    }
+
+    public void setDefaultWeights(HashMap<Class<? extends ISignal>, IWeight> defaultWeights) {
+        this.defaultWeights = defaultWeights;
     }
 
     public Boolean isConnectionsWrapped() {
@@ -27,8 +37,26 @@ public class Axon implements IAxon {
     }
 
     @Override
-    public void moveConnection(LayerMove layerMove) {
-        //TODO: add implementation possibly redesign layermove
+    public void moveConnection(LayerMove layerMove, int currentLayer, Long currentNeuronId) {
+        if(addressMap.containsKey(layerMove.getLayerRemoved())){
+            HashMap<Long,List<ISynapse>> newConnections = new HashMap<>();
+            for(Long neuronId:layerMove.getNextLayerNeuronIds()){
+                List<ISynapse> synapses = new LinkedList<>();
+                for(Class<? extends ISignal> clazz: defaultWeights.keySet()){
+                    ISynapse synapse = NeuronSynapse.createConnection(layerMove.getNextLayer(),currentLayer,neuronId,currentNeuronId,defaultWeights.get(clazz),"");
+                    synapses.add(synapse );
+                    if(connectionMap.containsKey(clazz)){
+                        connectionMap.get(clazz).add(synapse);
+                    }else {
+                        List<ISynapse> synapseList = new LinkedList<>();
+                        synapseList.add(synapse);
+                        connectionMap.put(clazz,synapseList);
+                    }
+                }
+                newConnections.put(neuronId,synapses);
+            }
+            addressMap.put(layerMove.getNextLayer(),newConnections);
+        }
     }
 
 
