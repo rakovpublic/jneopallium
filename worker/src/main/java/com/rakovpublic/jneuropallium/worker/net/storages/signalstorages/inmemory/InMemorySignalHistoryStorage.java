@@ -6,9 +6,10 @@ import com.rakovpublic.jneuropallium.worker.net.storages.NeuronAddress;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 
 public class InMemorySignalHistoryStorage implements ISignalHistoryStorage {
-    private HashMap<Long, HashMap<Integer, HashMap<Long, List<ISignal>>>> history;
+    private HashMap<Long, TreeMap<Integer, HashMap<Long, List<ISignal>>>> history;
 
     public InMemorySignalHistoryStorage() {
         this.history = new HashMap<>();
@@ -20,7 +21,7 @@ public class InMemorySignalHistoryStorage implements ISignalHistoryStorage {
     }
 
     @Override
-    public void save(HashMap<Integer, HashMap<Long, List<ISignal>>> history, Long run) {
+    public void save(TreeMap<Integer, HashMap<Long, List<ISignal>>> history, Long run) {
         this.history.put(run, history);
     }
 }

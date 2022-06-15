@@ -1,5 +1,6 @@
 package com.rakovpublic.jneuropallium.worker.net.storages;
 
+import com.rakovpublic.jneuropallium.worker.net.layers.LayerMove;
 import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 
 import java.util.Collection;
@@ -13,6 +14,8 @@ public interface ILayerMeta extends IStorageMeta {
      * @return  layer id
      * */
     int getID();
+
+    void addLayerMove(LayerMove layerMove);
 
 
     /**

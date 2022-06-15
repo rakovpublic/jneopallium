@@ -44,7 +44,7 @@ public interface INeuron extends Serializable {
 
     /**
      * set the amount of runs
-     * @param run amount of runs
+     * @param epoch amount of runs
      **/
     void setEpoch(Long epoch);
 
@@ -243,5 +243,8 @@ public interface INeuron extends Serializable {
     <I extends ISignal> void addActivationFunction(Class<I> clazz, IActivationFunction<I> activationFunction);
 
     void setActivationFunctions(HashMap<Class<?extends ISignal>, IActivationFunction> functions);
+
+    public IDendrites getDendrites();
+    public void setDendrites(IDendrites dendrites);
 
 }

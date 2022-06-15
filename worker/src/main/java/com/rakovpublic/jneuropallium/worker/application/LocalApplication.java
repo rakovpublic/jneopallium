@@ -104,7 +104,7 @@ public class LocalApplication implements IApplication {
                             while ((idsToFix = resultComparingStrategy.getIdsStudy(lr.interpretResult(), desiredResult)).size() > 0) {
                                 meta.getInputResolver().saveHistory();
                                 meta.getInputResolver().getSignalPersistStorage().cleanMiddleLayerSignals();
-                                meta.study(directLearningAlgorithm.learn(meta, desiredResult));
+                                meta.learn(directLearningAlgorithm.learn(meta, desiredResult));
                                 lr = process(meta);
                             }
 

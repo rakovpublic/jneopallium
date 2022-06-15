@@ -1,6 +1,7 @@
 package com.rakovpublic.jneuropallium.worker.neuron;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.rakovpublic.jneuropallium.worker.net.layers.LayerMove;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.neuron.impl.Axon;
 
@@ -105,4 +106,6 @@ public interface IAxon extends Serializable {
      * @return true if connection wrapped
      * */
     Boolean isConnectionsWrapped();
+
+    void moveConnection(LayerMove layerMove);
 }

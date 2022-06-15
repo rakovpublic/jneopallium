@@ -1,5 +1,6 @@
 package com.rakovpublic.jneuropallium.worker.neuron.impl;
 
+import com.rakovpublic.jneuropallium.worker.net.layers.LayerMove;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.neuron.IAxon;
 import com.rakovpublic.jneuropallium.worker.neuron.ISynapse;
@@ -23,6 +24,11 @@ public class Axon implements IAxon {
 
     public Boolean isConnectionsWrapped() {
         return connectionsWrapped;
+    }
+
+    @Override
+    public void moveConnection(LayerMove layerMove) {
+        //TODO: add implementation possibly redesign layermove
     }
 
 

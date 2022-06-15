@@ -6,6 +6,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.rakovpublic.jneuropallium.worker.net.layers.LayerMove;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.ILayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IStorage;
@@ -33,6 +34,11 @@ public class FileLayerMeta<S extends IStorageItem> implements ILayerMeta {
         String layer = fileSystem.read(file);
         JSONHelper helper = new JSONHelper();
         return Integer.parseInt(helper.extractField(layer, "layerId"));
+    }
+
+    @Override
+    public void addLayerMove(LayerMove layerMove) {
+
     }
 
     @Override

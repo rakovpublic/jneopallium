@@ -28,4 +28,6 @@ public interface ILayersMeta extends Serializable {
      * @param layerMeta
      * */
     void addLayerMeta(ILayerMeta layerMeta);
+
+    void removeLayer(ILayerMeta layerMeta);
 }

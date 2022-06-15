@@ -95,4 +95,9 @@ public class FileLayersMeta<S extends IStorageItem> implements ILayersMeta {
         layers.put(layerMeta.getID(), layerMeta);
 
     }
+
+    @Override
+    public void removeLayer(ILayerMeta layerMeta) {
+        layers.remove(layerMeta);
+    }
 }

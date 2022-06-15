@@ -14,8 +14,10 @@ public interface IStructMeta extends IStorageMeta {
     IInputResolver getInputResolver();
 
 
-    void study(List<ILearningRequest> requests);
+    void learn(List<ILearningRequest> requests);
 
     IResultLayerMeta getResultLayer();
+
+    void removeLayer(Integer layerId);
 
 }

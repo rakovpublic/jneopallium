@@ -4,6 +4,7 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 
 /**
  * This class represents storage for signals to process
@@ -35,6 +36,8 @@ public interface ISignalsPersistStorage {
      * This method return signals structure
      * @return layerId neuronId signals structure
      * */
-    HashMap<Integer, HashMap<Long, List<ISignal>>> getAllSignals();
+    TreeMap<Integer, HashMap<Long, List<ISignal>>> getAllSignals();
+
+    void deletedLayerInput(Integer deletedLayerId);
 
 }

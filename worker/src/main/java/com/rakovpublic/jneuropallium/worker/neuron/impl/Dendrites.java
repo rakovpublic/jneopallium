@@ -1,5 +1,6 @@
 package com.rakovpublic.jneuropallium.worker.neuron.impl;
 
+import com.rakovpublic.jneuropallium.worker.net.layers.LayerMove;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.neuron.IDendrites;
 import com.rakovpublic.jneuropallium.worker.neuron.ISignalProcessor;
@@ -11,6 +12,13 @@ import java.util.stream.Collectors;
 
 public class Dendrites implements IDendrites {
     private HashMap<NeuronAddress, HashMap<Class<? extends ISignal>, IWeight>> weights;
+
+    private HashMap<Class<? extends ISignal>, IWeight> defaultDendritesWeights;
+
+    @Override
+    public void setDefaultDendritesWeights(HashMap<Class<? extends ISignal>, IWeight> defaultDendritesWeights) {
+        this.defaultDendritesWeights =defaultDendritesWeights;
+    }
 
     @Override
     public void updateWeight(NeuronAddress neuronAddress, Class<? extends ISignal> signalClass, IWeight weight) {
@@ -31,18 +39,30 @@ public class Dendrites implements IDendrites {
             if(weights.containsKey(neuronAddress)){
                 if(weights.get(neuronAddress).containsKey(signal.getCurrentSignalClass())){
                     IWeight weight= weights.get(neuronAddress).get(signal.getCurrentSignalClass());
-                    if(weight.getSignalClass().equals(signal.getCurrentSignalClass())){
-                        return weight.process(signal);
-                    }else if(signal.canUseProcessorForParent()){
+                    return weight.process(signal);
 
-                    }else {
-                        //TODO: add warn logging of missed weight for specific signal class
-                        return signal;
-                    }
+                } else    if(defaultDendritesWeights.containsKey(signal.getCurrentSignalClass())){
+                    IWeight weight = defaultDendritesWeights.get(signal.getCurrentSignalClass());
+                    weights.get(neuronAddress).put(signal.getCurrentSignalClass(),weight);
+                    return weight.process(signal);
+                }else {
+
+                    //TODO: add warn logging of missed weight for specific signal class
+                    return signal;
+                }
+            }else{
+                HashMap<Class<? extends ISignal>, IWeight> newWeights = new HashMap<>();
+                if(defaultDendritesWeights.containsKey(signal.getCurrentSignalClass())){
+                    IWeight weight = defaultDendritesWeights.get(signal.getCurrentSignalClass());
+                    newWeights.put(signal.getCurrentSignalClass(),weight);
+                    weights.put(neuronAddress,newWeights);
+                    return weight.process(signal);
+                }else {
+                    //TODO: add warn logging of missed weight for specific signal address
+                    return signal;
                 }
             }
-            //TODO: add warn logging of missed weight for specific signal address
-            return signal;
+
         }).collect(Collectors.toList());
     }
 
@@ -56,6 +76,15 @@ public class Dendrites implements IDendrites {
         if(weights.containsKey(neuronAddress)){
             if(weights.get(neuronAddress).containsKey(signalClass)){
                 weights.get(neuronAddress).remove(signalClass);
+            }
+        }
+    }
+
+    @Override
+    public void moveConnection(LayerMove layerMove) {
+        for(NeuronAddress neuronAddress: weights.keySet()){
+            if(neuronAddress.getLayerId().equals(layerMove.getLayerRemoved())){
+                weights.remove(neuronAddress);
             }
         }
     }

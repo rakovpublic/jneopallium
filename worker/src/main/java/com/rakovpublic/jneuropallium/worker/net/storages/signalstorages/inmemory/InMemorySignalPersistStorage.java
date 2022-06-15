@@ -5,12 +5,13 @@ import com.rakovpublic.jneuropallium.worker.net.storages.ISignalsPersistStorage;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 
 public class InMemorySignalPersistStorage implements ISignalsPersistStorage {
-    private HashMap<Integer, HashMap<Long, List<ISignal>>> signals;
+    private TreeMap<Integer, HashMap<Long, List<ISignal>>> signals;
 
     public InMemorySignalPersistStorage() {
-        this.signals = new HashMap<>();
+        this.signals = new TreeMap<>();
     }
 
     @Override
@@ -52,12 +53,28 @@ public class InMemorySignalPersistStorage implements ISignalsPersistStorage {
 
     @Override
     public void cleanMiddleLayerSignals() {
-        //TODO: add implementation
+        boolean first = true;
+        for(Integer layerId: signals.keySet()){
+            if(layerId == Integer.MIN_VALUE){
+                continue;
+            }
+            if(first){
+                first =false;
+                continue;
+            }
+            signals.put(layerId, new HashMap<>());
+
+        }
     }
 
     @Override
-    public HashMap<Integer, HashMap<Long, List<ISignal>>> getAllSignals() {
+    public TreeMap<Integer, HashMap<Long, List<ISignal>>> getAllSignals() {
         return signals;
+    }
+
+    @Override
+    public void deletedLayerInput(Integer deletedLayerId) {
+      signals.remove(deletedLayerId);
     }
 
 }
