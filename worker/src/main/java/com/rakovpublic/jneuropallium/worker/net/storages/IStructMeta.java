@@ -18,6 +18,6 @@ public interface IStructMeta extends IStorageMeta {
 
     IResultLayerMeta getResultLayer();
 
-    void removeLayer(Integer layerId);
+    void removeLayer(Integer layerId, ReconnectStrategy reconnectStrategy);
 
 }

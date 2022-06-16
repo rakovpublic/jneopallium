@@ -2,13 +2,11 @@ package com.rakovpublic.jneuropallium.worker.net.storages.structimpl;
 
 import com.rakovpublic.jneuropallium.worker.net.layers.IInputResolver;
 import com.rakovpublic.jneuropallium.worker.net.layers.LayerMove;
-import com.rakovpublic.jneuropallium.worker.net.storages.ILayerMeta;
-import com.rakovpublic.jneuropallium.worker.net.storages.ILayersMeta;
-import com.rakovpublic.jneuropallium.worker.net.storages.IResultLayerMeta;
-import com.rakovpublic.jneuropallium.worker.net.storages.IStructMeta;
+import com.rakovpublic.jneuropallium.worker.net.storages.*;
 import com.rakovpublic.jneuropallium.worker.net.study.ILearningRequest;
 import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
@@ -67,19 +65,15 @@ public class StructMeta implements IStructMeta {
     }
 
     @Override
-    public void removeLayer(Integer layerId) {
-        TreeMap<Integer,ILayerMeta> layers = new TreeMap<>();
-        for(ILayerMeta layerMeta : layersMeta.getLayers()){
-            layers.put(layerMeta.getID(),layerMeta);
+    public void removeLayer(Integer layerId, ReconnectStrategy reconnectStrategy) {
+
+        HashMap<Integer,HashMap<Long,HashMap<Integer, List<Long>>>> updateMap = reconnectStrategy.getNewConnections(layersMeta,layerId);
+
+        for(Integer layersToFix: updateMap.keySet()){
+            ILayerMeta layerMeta = layersMeta.getLayerByID(layersToFix);
+            layerMeta.addLayerMove( new LayerMove(updateMap.get(layersToFix),layerId));
         }
-        Integer nextLayerId = layers.higherKey(layerId);
-        ILayerMeta nextLayer = layers.get(nextLayerId);
-        List<Long> neuronIds =  nextLayer.getNeurons().stream().map(n->n.getId()).collect(Collectors.toList());
-        LayerMove layerMove = new LayerMove(layerId,nextLayerId,neuronIds);
-        for(ILayerMeta layerMeta : layersMeta.getLayers()){
-            layerMeta.addLayerMove(layerMove);
-        }
-        ILayerMeta layerToRemove = layers.get(layerId);
+        ILayerMeta layerToRemove = layersMeta.getLayerByID(layerId);
         layersMeta.removeLayer(layerToRemove);
     }
 

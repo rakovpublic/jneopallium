@@ -1,6 +1,5 @@
 package com.rakovpublic.jneuropallium.worker.neuron.impl;
 
-import com.rakovpublic.jneuropallium.worker.net.layers.LayerMove;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.neuron.IAxon;
 import com.rakovpublic.jneuropallium.worker.neuron.ISynapse;
@@ -12,7 +11,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Axon implements IAxon {
-
 
 
     private HashMap<Class<? extends ISignal>, IWeight> defaultWeights;
@@ -37,26 +35,28 @@ public class Axon implements IAxon {
     }
 
     @Override
-    public void moveConnection(LayerMove layerMove, int currentLayer, Long currentNeuronId) {
-        if(addressMap.containsKey(layerMove.getLayerRemoved())){
-            HashMap<Long,List<ISynapse>> newConnections = new HashMap<>();
-            for(Long neuronId:layerMove.getNextLayerNeuronIds()){
+    public void moveConnection(HashMap<Integer, List<Long>> addressesToConnect, int currentLayer, Long currentNeuronId) {
+        for (Integer layerId : addressesToConnect.keySet()) {
+            HashMap<Long, List<ISynapse>> newConnections = new HashMap<>();
+            for (Long neuronId : addressesToConnect.get(layerId)) {
                 List<ISynapse> synapses = new LinkedList<>();
-                for(Class<? extends ISignal> clazz: defaultWeights.keySet()){
-                    ISynapse synapse = NeuronSynapse.createConnection(layerMove.getNextLayer(),currentLayer,neuronId,currentNeuronId,defaultWeights.get(clazz),"");
-                    synapses.add(synapse );
-                    if(connectionMap.containsKey(clazz)){
+                for (Class<? extends ISignal> clazz : defaultWeights.keySet()) {
+                    ISynapse synapse = NeuronSynapse.createConnection(layerId, currentLayer, neuronId, currentNeuronId, defaultWeights.get(clazz), "");
+                    synapses.add(synapse);
+                    if (connectionMap.containsKey(clazz)) {
                         connectionMap.get(clazz).add(synapse);
-                    }else {
+                    } else {
                         List<ISynapse> synapseList = new LinkedList<>();
                         synapseList.add(synapse);
-                        connectionMap.put(clazz,synapseList);
+                        connectionMap.put(clazz, synapseList);
                     }
+
                 }
-                newConnections.put(neuronId,synapses);
+                newConnections.put(neuronId, synapses);
             }
-            addressMap.put(layerMove.getNextLayer(),newConnections);
+            addressMap.put(layerId, newConnections);
         }
+
     }
 
 
@@ -133,22 +133,22 @@ public class Axon implements IAxon {
     @Override
     public HashMap<Integer, HashMap<Long, List<ISignal>>> getSignalResultStructure(HashMap<ISignal, List<ISynapse>> signalConnectionMap) {
         HashMap<Integer, HashMap<Long, List<ISignal>>> result = new HashMap<>();
-        for(ISignal signal : signalConnectionMap.keySet()){
-            for(ISynapse synapse : signalConnectionMap.get(signal)){
-                if(result.containsKey(synapse.getTargetLayerId())){
-                    if(result.get(synapse.getTargetLayerId()).containsKey(synapse.getTargetNeuronId())){
+        for (ISignal signal : signalConnectionMap.keySet()) {
+            for (ISynapse synapse : signalConnectionMap.get(signal)) {
+                if (result.containsKey(synapse.getTargetLayerId())) {
+                    if (result.get(synapse.getTargetLayerId()).containsKey(synapse.getTargetNeuronId())) {
                         result.get(synapse.getTargetLayerId()).get(synapse.getTargetNeuronId()).add(signal);
-                    }else {
+                    } else {
                         List<ISignal> signals = new LinkedList<>();
                         signals.add(signal);
-                        result.get(synapse.getTargetLayerId()).put(synapse.getTargetNeuronId(),signals);
+                        result.get(synapse.getTargetLayerId()).put(synapse.getTargetNeuronId(), signals);
                     }
-                }else{
-                    HashMap<Long, List<ISignal>> neuronInput= new HashMap<>();
+                } else {
+                    HashMap<Long, List<ISignal>> neuronInput = new HashMap<>();
                     List<ISignal> signals = new LinkedList<>();
                     signals.add(signal);
-                    neuronInput.put(synapse.getTargetNeuronId(),signals);
-                    result.put(synapse.getTargetLayerId(),neuronInput);
+                    neuronInput.put(synapse.getTargetNeuronId(), signals);
+                    result.put(synapse.getTargetLayerId(), neuronInput);
                 }
             }
         }

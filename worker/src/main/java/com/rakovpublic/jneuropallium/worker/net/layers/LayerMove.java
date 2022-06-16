@@ -1,18 +1,18 @@
 package com.rakovpublic.jneuropallium.worker.net.layers;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
 public class LayerMove {
+
+    private HashMap<Long,HashMap<Integer, List<Long>>> movingMap;
+
     private Integer layerRemoved;
-    private Integer nextLayer;
 
-    private List<Long> nextLayerNeuronIds;
-
-    public LayerMove(Integer layerRemoved, Integer nextLayer, List<Long> nextLayerNeuronIds) {
+    public LayerMove(HashMap<Long,HashMap<Integer, List<Long>>> movingMap, Integer layerRemoved) {
+        this.movingMap = movingMap;
         this.layerRemoved = layerRemoved;
-        this.nextLayer = nextLayer;
-        this.nextLayerNeuronIds = nextLayerNeuronIds;
     }
 
     public Integer getLayerRemoved() {
@@ -23,33 +23,24 @@ public class LayerMove {
         this.layerRemoved = layerRemoved;
     }
 
-    public Integer getNextLayer() {
-        return nextLayer;
+    public HashMap<Long, HashMap<Integer, List<Long>>> getMovingMap() {
+        return movingMap;
     }
 
-    public void setNextLayer(Integer nextLayer) {
-        this.nextLayer = nextLayer;
-    }
-
-    public List<Long> getNextLayerNeuronIds() {
-        return nextLayerNeuronIds;
-    }
-
-    public void setNextLayerNeuronIds(List<Long> nextLayerNeuronIds) {
-        this.nextLayerNeuronIds = nextLayerNeuronIds;
+    public void setMovingMap(HashMap<Long, HashMap<Integer, List<Long>>> movingMap) {
+        this.movingMap = movingMap;
     }
 
     @Override
     public boolean equals(Object o) {
-
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         LayerMove layerMove = (LayerMove) o;
-        return Objects.equals(layerRemoved, layerMove.layerRemoved) && Objects.equals(nextLayer, layerMove.nextLayer) && Objects.equals(nextLayerNeuronIds, layerMove.nextLayerNeuronIds);
+        return Objects.equals(movingMap, layerMove.movingMap) && Objects.equals(layerRemoved, layerMove.layerRemoved);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(layerRemoved, nextLayer, nextLayerNeuronIds);
+        return Objects.hash(movingMap, layerRemoved);
     }
 }
