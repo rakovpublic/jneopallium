@@ -1,5 +1,6 @@
 package com.rakovpublic.jneuropallium.worker.neuron.impl;
 
+import com.rakovpublic.jneuropallium.worker.net.layers.LayerMove;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.neuron.IAxon;
 import com.rakovpublic.jneuropallium.worker.neuron.ISynapse;
@@ -35,10 +36,19 @@ public class Axon implements IAxon {
     }
 
     @Override
-    public void moveConnection(HashMap<Integer, List<Long>> addressesToConnect, int currentLayer, Long currentNeuronId) {
-        for (Integer layerId : addressesToConnect.keySet()) {
+    public void moveConnection(LayerMove layerMove, int currentLayer, Long currentNeuronId) {
+        Integer layerRemoved = layerMove.getLayerRemoved();
+        if(addressMap.containsKey(layerRemoved)){
+        for(Long neuronId:addressMap.get(layerRemoved).keySet()){
+            for(Class<? extends ISignal> clazz : connectionMap.keySet()){
+                connectionMap.get(clazz).removeAll(addressMap.get(layerRemoved).get(neuronId));
+            }
+        }
+            addressMap.remove(layerRemoved);
+        }
+        for (Integer layerId : layerMove.getMovingMap().get(currentLayer).keySet()) {
             HashMap<Long, List<ISynapse>> newConnections = new HashMap<>();
-            for (Long neuronId : addressesToConnect.get(layerId)) {
+            for (Long neuronId : layerMove.getMovingMap().get(currentLayer).get(layerId)) {
                 List<ISynapse> synapses = new LinkedList<>();
                 for (Class<? extends ISignal> clazz : defaultWeights.keySet()) {
                     ISynapse synapse = NeuronSynapse.createConnection(layerId, currentLayer, neuronId, currentNeuronId, defaultWeights.get(clazz), "");

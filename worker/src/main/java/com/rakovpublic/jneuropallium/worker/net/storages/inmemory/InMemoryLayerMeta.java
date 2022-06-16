@@ -38,7 +38,7 @@ public class InMemoryLayerMeta implements ILayerMeta {
             IDendrites dendrites = neuron.getDendrites();
             for(LayerMove layerMove :layerMoves){
                 if(layerMove.getMovingMap().containsKey(neuron.getId())){
-                    axon.moveConnection(layerMove.getMovingMap().get(neuron.getId()),this.id,neuron.getId());
+                    axon.moveConnection(layerMove,this.id,neuron.getId());
                 }
                 dendrites.moveConnection(layerMove);
             }
@@ -55,7 +55,7 @@ public class InMemoryLayerMeta implements ILayerMeta {
                 IDendrites dendrites = n.getDendrites();
                 for(LayerMove layerMove :layerMoves){
                     if(layerMove.getMovingMap().containsKey(n.getId())){
-                        axon.moveConnection(layerMove.getMovingMap().get(n.getId()),this.id,n.getId());
+                        axon.moveConnection(layerMove,this.id,n.getId());
                     }
                     dendrites.moveConnection(layerMove);
                 }
