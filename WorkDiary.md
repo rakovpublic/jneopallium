@@ -11,6 +11,7 @@ Implementation - 70%
 Test- 0%  
 Documentation -40%  
 //TODO: add meta with all class names to neuron net configuration and check if it exists in the jar and add default weights to layer
+//TODO: add remove layer neuron for service layer
 IN PROGRESS  
 
 Phase #3  
