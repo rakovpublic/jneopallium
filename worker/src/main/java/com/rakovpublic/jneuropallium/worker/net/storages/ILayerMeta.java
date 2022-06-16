@@ -9,12 +9,15 @@ import java.util.List;
  * This interface represents layer storage
  * */
 public interface ILayerMeta extends IStorageMeta {
+
+    //TODO: add meta info with default weights for axon and dendrite
     /**
      *
      * @return  layer id
      * */
     int getID();
 
+    //TODO: add reconnection strategy
     void addLayerMove(LayerMove layerMove);
 
 

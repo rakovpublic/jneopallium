@@ -7,6 +7,8 @@ import java.util.List;
  * */
 public interface ILayersMeta extends Serializable {
 
+    //TODO: add meta info with user defined classes list
+
     /**
      * @return the list of all layer metas
      * */
