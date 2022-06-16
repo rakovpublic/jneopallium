@@ -96,6 +96,8 @@ public class LocalApplication implements IApplication {
                 String algoType = context.getProperty("configuration.studyingalgotype");
                 for (; currentRun < maxRun || isInfinite; currentRun++) {
                     //Supervised learning
+
+
                     if (algoType != null && resultComparingStrategy != null) {
                         List<IResult> idsToFix;
                         if (algoType.equals("direct")) {

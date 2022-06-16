@@ -11,6 +11,12 @@ public abstract class AbstractSignal<T> implements ISignal<T> {
     private boolean fromExternalNet;
     private String inputName;
 
+    private Integer currentInnerLoop;
+
+    private Integer innerLoop;
+
+    private boolean needToRemoveDuringLearning;
+
     @Override
     public String getInputName() {
         return inputName;
@@ -39,6 +45,7 @@ public abstract class AbstractSignal<T> implements ISignal<T> {
         this.description = description;
         this.fromExternalNet = fromExternalNet;
         this.inputName = inputName;
+        this.needToRemoveDuringLearning = true;
     }
 
     @Override
@@ -93,5 +100,35 @@ public abstract class AbstractSignal<T> implements ISignal<T> {
     @Override
     public int getTimeAlive() {
         return timeAlive;
+    }
+
+    @Override
+    public boolean isNeedToRemoveDuringLearning() {
+        return needToRemoveDuringLearning;
+    }
+
+    @Override
+    public void setNeedToRemoveDuringLearning(boolean value) {
+        needToRemoveDuringLearning = value;
+    }
+
+    @Override
+    public Integer getCurrentInnerLoop() {
+        return currentInnerLoop;
+    }
+
+    @Override
+    public void setCurrentInnerLoop(Integer currentInnerLoop) {
+        this.currentInnerLoop = currentInnerLoop;
+    }
+
+    @Override
+    public Integer getInnerLoop() {
+        return innerLoop;
+    }
+
+    @Override
+    public void setInnerLoop(Integer innerLoop) {
+        this.innerLoop = innerLoop;
     }
 }

@@ -62,7 +62,14 @@ public class InMemorySignalPersistStorage implements ISignalsPersistStorage {
                 first =false;
                 continue;
             }
-            signals.put(layerId, new HashMap<>());
+            for (Long neuron : signals.get(layerId).keySet()) {
+                List<ISignal> neuronSignal = signals.get(layerId).get(neuron);
+                for (ISignal signal : neuronSignal) {
+                    if(signal.isNeedToRemoveDuringLearning()){
+                        neuronSignal.remove(signal);
+                    }
+                }
+            }
 
         }
     }

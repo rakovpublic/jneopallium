@@ -59,4 +59,8 @@ public interface ISignal<T> extends Serializable {
     void setInnerLoop(Integer loop);
 
     Integer getInnerLoop();
+
+    boolean isNeedToRemoveDuringLearning();
+
+    void setNeedToRemoveDuringLearning(boolean value);
 }
