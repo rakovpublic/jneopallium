@@ -46,6 +46,17 @@ public class LocalApplication implements IApplication {
         StructBuilder structBuilder = new StructBuilder();
         String layerPath = context.getProperty("configuration.input.layermeta");
 
+        String classesImplemented = context.getProperty("configuration.neuronnet.classes");
+        if(classesImplemented!=null&&classesImplemented.length()>1){
+        for(String className: classesImplemented.split(",")){
+            if(!classLoaderService.containsClass(className)){
+                logger.error("Cannot find class " +className+ " in provided jar");
+                return;
+            }
+
+        }
+        }
+
 
         String fileSystemClass = context.getProperty("configuration.storage.class");
         Class<IStorage> clazz = null;

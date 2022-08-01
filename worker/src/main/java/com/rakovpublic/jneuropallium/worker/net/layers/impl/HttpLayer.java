@@ -55,10 +55,10 @@ public class HttpLayer implements ILayer {
         try {
             communicationClient.sendRequest(HttpRequestResolver.createPost(createUrl,createNeuronRequest));
         } catch (IOException e) {
-            //TODO: add logger return
+            //TODO: add logger
             return;
         } catch (InterruptedException e) {
-            //TODO: add logger return
+            //TODO: add logger
             return;
         }
         UploadSignalsRequest uploadSignalsRequest = new UploadSignalsRequest();
