@@ -18,7 +18,7 @@ public abstract class AbstractSignal<T> implements ISignal<T> {
     private boolean needToRemoveDuringLearning;
 
     @Override
-    public boolean isNeedToProcessLearning() {
+    public boolean isNeedToProcessDuringLearning() {
         return needToProcessDuringLearning;
     }
 
