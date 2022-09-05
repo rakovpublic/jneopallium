@@ -62,5 +62,7 @@ public interface ISignal<T> extends Serializable {
 
     boolean isNeedToRemoveDuringLearning();
 
+    boolean isNeedToProcessDuringLearningLearning();
+
     void setNeedToRemoveDuringLearning(boolean value);
 }

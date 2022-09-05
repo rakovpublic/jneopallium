@@ -18,6 +18,13 @@ public abstract class AbstractSignal<T> implements ISignal<T> {
     private boolean needToRemoveDuringLearning;
 
     @Override
+    public boolean isNeedToProcessLearning() {
+        return needToProcessDuringLearning;
+    }
+
+    private boolean needToProcessDuringLearning;
+
+    @Override
     public String getInputName() {
         return inputName;
     }
@@ -37,7 +44,7 @@ public abstract class AbstractSignal<T> implements ISignal<T> {
         this.fromExternalNet = fromExternalNet;
     }
 
-    public AbstractSignal(T value, Integer sourceLayer, Long sourceNeuron, Integer timeAlive, String description, boolean fromExternalNet, String inputName) {
+    public AbstractSignal(T value, Integer sourceLayer, Long sourceNeuron, Integer timeAlive, String description, boolean fromExternalNet, String inputName, boolean needToRemoveDuringLearning, boolean needToProcessDuringLearning) {
         this.value = value;
         this.sourceLayer = sourceLayer;
         this.sourceNeuron = sourceNeuron;
@@ -45,7 +52,8 @@ public abstract class AbstractSignal<T> implements ISignal<T> {
         this.description = description;
         this.fromExternalNet = fromExternalNet;
         this.inputName = inputName;
-        this.needToRemoveDuringLearning = true;
+        this.needToRemoveDuringLearning = needToRemoveDuringLearning;
+        this.needToProcessDuringLearning = needToProcessDuringLearning;
     }
 
     @Override

@@ -141,8 +141,9 @@ public class Layer<N extends INeuron> implements ILayer<N> {
         HashMap<Long, List<ISignal>> inputs = inputResolver.getSignalPersistStorage().getLayerSignals(this.layerId);
         for (Long neuronID : inputs.keySet()) {
             for (ISignal signal : inputs.get(neuronID)) {
-                ISignal nextStepSignal = signal.prepareSignalToNextStep();
-                if (nextStepSignal != null) {
+                if(inputResolver.getCurrentLoop()!=0 && signal.isNeedToProcessLearning()){
+                    this.addInput(signal, neuronID);
+                }else {
                     this.addInput(signal, neuronID);
                 }
             }
