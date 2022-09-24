@@ -156,7 +156,7 @@ public class Layer<N extends INeuron> implements ILayer<N> {
                 neur.setCyclingNeuronInputMapping(inputResolver.getCycleNeuronAddressMapping());
                 neur.setSignalHistory(inputResolver.getSignalsHistoryStorage());
                 neur.addSignals(input.get(neuronId));
-                neur.setEpoch(inputResolver.getEpoch());
+                neur.setRun(inputResolver.getRun());
                 neur.setCurrentLoop(inputResolver.getCurrentLoop());
                 ns.addNeuron(neur);
             }

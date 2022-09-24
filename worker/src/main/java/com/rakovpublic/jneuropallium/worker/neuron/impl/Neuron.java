@@ -132,12 +132,12 @@ public class Neuron implements INeuron {
     }
 
     @Override
-    public Long getEpoch() {
+    public Long getRun() {
         return run;
     }
 
     @Override
-    public void setEpoch(Long run) {
+    public void setRun(Long run) {
         this.run = run;
     }
 

@@ -49,7 +49,7 @@ public interface IInputResolver {
     /**
      * @return amount of runs from the beginning of the processing
      * */
-    Long getEpoch();
+    Long getRun();
 
     /**
      * save signals from signal storage to history

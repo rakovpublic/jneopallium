@@ -38,15 +38,15 @@ public interface INeuron extends Serializable {
     Map<Class<? extends ISignal>, ISignalMerger> getMergerMap();
 
     /**
-     *  @return the number of runs(invokes of this neuron)
+     *  @return the number of runs(population new data from input resolver)
      **/
-    Long getEpoch();
+    Long getRun();
 
     /**
      * set the amount of runs
-     * @param epoch amount of runs
+     * @param run amount of runs
      **/
-    void setEpoch(Long epoch);
+    void setRun(Long run);
 
     /**
      * Provides access to signal history

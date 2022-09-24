@@ -121,7 +121,7 @@ public class LocalApplication implements IApplication {
                                 lr = process(meta);
                             }
 
-                            outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getEpoch(), context);
+                            outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getRun(), context);
                             meta.getInputResolver().saveHistory();
                             meta.getInputResolver().populateInput();
                         } else if (algoType.equals("object")) {
@@ -141,14 +141,14 @@ public class LocalApplication implements IApplication {
                                 inputResolver.getSignalPersistStorage().putSignals(studyingRequest);
                                 lr = process(meta);
                             }
-                            outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getEpoch(), context);
+                            outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getRun(), context);
                             meta.getInputResolver().saveHistory();
                             meta.getInputResolver().populateInput();
                         }
                         //Unsupervised or reinforced learning
                     } else {
                         IResultLayer lr = process(meta);
-                        outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getEpoch(), context);
+                        outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getRun(), context);
                         meta.getInputResolver().saveHistory();
                         meta.getInputResolver().populateInput();
                     }
@@ -157,7 +157,7 @@ public class LocalApplication implements IApplication {
                 //Unsupervised or reinforced learning
                 while (true) {
                     IResultLayer lr = process(meta);
-                    outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getEpoch(), context);
+                    outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getRun(), context);
                     meta.getInputResolver().saveHistory();
                     meta.getInputResolver().populateInput();
                 }

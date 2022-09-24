@@ -55,7 +55,7 @@ public class InMemoryInputResolver implements IInputResolver {
     }
 
     @Override
-    public Long getEpoch() {
+    public Long getRun() {
         return epoch;
     }
 
