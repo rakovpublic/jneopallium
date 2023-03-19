@@ -10,7 +10,7 @@ import java.util.HashMap;
 public class CycleNeuron extends Neuron {
     private int loopCount;
     private InputStatusMeta inputStatusMeta;
-    private HashMap<Class<? extends ISignal>, Integer> signalProcessingFrequencyMap;
+    private HashMap<Class<? extends ISignal>, ProcessingFrequency> signalProcessingFrequencyMap;
 
     public CycleNeuron(int loopCount, ISignalChain signalChain, InputStatusMeta inputMeta, Long id, Long run) {
         super(id, signalChain, run);
@@ -18,7 +18,7 @@ public class CycleNeuron extends Neuron {
         this.inputStatusMeta = inputMeta;
         signalProcessingFrequencyMap = new HashMap<>();
     }
-    public CycleNeuron(int loopCount, ISignalChain signalChain, InputStatusMeta inputMeta, Long id, Long run, HashMap<Class<? extends ISignal>, Integer> signalProcessingFrequencyMap) {
+    public CycleNeuron(int loopCount, ISignalChain signalChain, InputStatusMeta inputMeta, Long id, Long run, HashMap<Class<? extends ISignal>, ProcessingFrequency> signalProcessingFrequencyMap) {
         super(id, signalChain, run);
         this.loopCount = loopCount;
         this.inputStatusMeta = inputMeta;
@@ -42,7 +42,7 @@ public class CycleNeuron extends Neuron {
         this.inputStatusMeta = inputStatusMeta;
     }
 
-    public HashMap<Class<? extends ISignal>, Integer> getSignalProcessingFrequencyMap() {
+    public HashMap<Class<? extends ISignal>, ProcessingFrequency> getSignalProcessingFrequencyMap() {
         return signalProcessingFrequencyMap;
     }
 }

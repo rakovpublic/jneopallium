@@ -6,7 +6,8 @@ import java.util.Objects;
 
 public class ProcessingFrequencySignalItem {
     private Class<? extends ISignal> signalClass;
-    private Integer frequency;
+    private ProcessingFrequency frequency;
+
 
     public Class<? extends ISignal> getSignalClass() {
         return signalClass;
@@ -16,18 +17,18 @@ public class ProcessingFrequencySignalItem {
         this.signalClass = signalClass;
     }
 
-    public Integer getFrequency() {
+    public ProcessingFrequency getFrequency() {
         return frequency;
     }
 
-    public void setFrequency(Integer frequency) {
+    public void setFrequency(ProcessingFrequency frequency) {
         this.frequency = frequency;
     }
 
     public ProcessingFrequencySignalItem() {
     }
 
-    public ProcessingFrequencySignalItem(Class<? extends ISignal> signalClass, Integer frequency) {
+    public ProcessingFrequencySignalItem(Class<? extends ISignal> signalClass, ProcessingFrequency frequency) {
         this.signalClass = signalClass;
         this.frequency = frequency;
     }
