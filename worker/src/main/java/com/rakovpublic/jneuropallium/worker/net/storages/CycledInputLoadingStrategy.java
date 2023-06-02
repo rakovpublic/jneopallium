@@ -61,14 +61,20 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
         signalsPersistStorage.cleanOutdatedSignals();
         CycleNeuron cl = ((CycleNeuron) layersMeta.getLayerByID(Integer.MIN_VALUE).getNeuronByID(0l));
         HashMap<Class<? extends ISignal>, ProcessingFrequency> frequencyHashMap = cl.getSignalProcessingFrequencyMap();
+        CycleNeuron cycleNeuron =  (CycleNeuron) layersMeta.getLayerByID(Integer.MIN_VALUE).getNeuronByID(0l);
+        HashMap<IInitInput,ProcessingFrequency> inputProcessingFrequencyHashMap = cycleNeuron.getInputProcessingFrequencyHashMap();
         if (loop >= cl.getLoopCount()) {
             for (IInitInput iii : inputStatuses.keySet()) {
-                if (inputStatuses.get(iii).getCurrentRuns() >=
-                        ((CycleNeuron) layersMeta.getLayerByID(Integer.MIN_VALUE).getNeuronByID(neuronInputMapping.get(inputStatuses.get(iii).getName()))).getLoopCount()) {
+                ProcessingFrequency ipf = null;
+                if(inputProcessingFrequencyHashMap.containsKey(iii) ){
+                    ipf=inputProcessingFrequencyHashMap.get(iii);
+                }
+                if (inputStatuses.get(iii).getCurrentRuns() %
+                        cycleNeuron.getLoopCount() == 0 && (ipf!=null && (ipf.getLoop()!= null && loop%ipf.getLoop()==0 ) || (ipf.getEpoch()!= null && epoch%ipf.getEpoch()==0 ))) {
                     List<ISignal> signals = new LinkedList<>();
                     for (IInputSignal signal : iii.readSignals()){
                         ProcessingFrequency pf =  frequencyHashMap.get(signal.getCurrentSignalClass());
-                        if(pf.getLoop()%loop==0 && pf.getEpoch()%epoch==0){
+                        if(loop% pf.getLoop()==0 && epoch%pf.getEpoch()==0){
                             signal.setInnerLoop(defaultLoopsCount);
                             signals.add(signal);
                         }
