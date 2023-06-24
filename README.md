@@ -46,14 +46,15 @@ This  is the easiest part and does not required any additional code except signa
 #Phases:
 1. Make core. It will implement just core concepts without distributed mode and neuron nets synchronization.
 2. Add simple java http distributed part with neuron nets synchronization.
-3. Generate maven artifacts, host javadocs
-4. Add containers(docker/kubernetes) and infrastructure scripts python/shell.
-5. Add queues distributed part (optional)
-6. Design and implement open stack cluster integration(optional).
-7. Add neuron net graphic designer which will collect data about implemented classes and will pass to graphic plugin for eclipse and (optional)idea.
-8. Add cuda distributed mode(optional).
-9. Add aws lambda distributed mode.
-10. Design and implement amazon cluster integration(optional).
+3. Add grpc implementation for cluster mode
+4. Generate maven artifacts, host javadocs
+5. Add containers(docker/kubernetes) and infrastructure scripts python/shell.
+6. Add queues distributed part (optional)
+7. Design and implement open stack cluster integration(optional).
+8. Add neuron net graphic designer which will collect data about implemented classes and will pass to graphic plugin for eclipse and (optional)idea.
+9. Add cuda distributed mode(optional).
+10. Add aws lambda distributed mode.
+11. Design and implement amazon cluster integration(optional).
 
 p.s. Fill free to contatct me. I am looking for contributors for this project.
 p.p.s. Great thanks to kafedra of Informatics in Kharkiv National University of Radio and Electronics, Eugen Putiatin, Helen Matat, Tatiana Sinelnikova.
