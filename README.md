@@ -1,7 +1,20 @@
+Project aim:
+Purpose of the project is build neuron net model based on receptor existence probability, distance deviation between neuron with same receptors and receptor functional role.
 
-Main purpose of this framework is allow AI developers to build object oriented model of brain.
-Additional purpose is create platform which will allow to implement neuron net with any known design  
-and run it localy  or in distributed way on cluster, cuda cluster, aws lambdas.
+Project outputs:
+Neuron net model.
+Neuron net modeling tool.
+Documentation for neuron net modeling tool.
+Documentation for modeling process. 
+
+Current progress:
+Neuron net modeling tool has passed pre-alpha test.
+Tool architecture is ready on 95%.
+Tool implementation is ready on 75%.
+
+Project impact
+Project could lead to new generation of artificial neuron nets algorithms, help to analyze drug impact on neuron nets, build autonomous ai systems for different purposes, build modular ai, etc.
+
 
 #Intro
 
