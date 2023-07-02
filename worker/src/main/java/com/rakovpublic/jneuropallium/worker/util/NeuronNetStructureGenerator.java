@@ -22,7 +22,7 @@ public class NeuronNetStructureGenerator {
      */
     public ILayersMeta generateNeuronNet(HashMap<Integer,Long> layerSize,
                                          HashMap<Class<? extends INeuron>,NeuronStatisticalProperties> neuronStatisticalProperties,
-                                         List<NeighboringRules> generationRules){
+                                         List<NeighboringRules> generationRules, IConnectionGenerator connectionGenerator){
         ILayersMeta layersMeta = null;
         Random random = new Random();
         HashMap<Integer,List<INeuron>> layersSource = new HashMap<>();
@@ -56,6 +56,7 @@ public class NeuronNetStructureGenerator {
                 safeFlag++;
             }
         }
+        layersSource = connectionGenerator.generateConnections(layersSource);
         //TODO: add implementation
         return layersMeta;
     }
