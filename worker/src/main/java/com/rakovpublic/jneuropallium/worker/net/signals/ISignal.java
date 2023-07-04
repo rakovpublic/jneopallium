@@ -66,4 +66,7 @@ public interface ISignal<T> extends Serializable {
     boolean isNeedToProcessDuringLearning();
 
     void setNeedToRemoveDuringLearning(boolean value);
+
+    String getName();
+    void setName(String name);
 }

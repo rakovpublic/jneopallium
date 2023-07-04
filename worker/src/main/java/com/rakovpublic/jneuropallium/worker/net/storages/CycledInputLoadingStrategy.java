@@ -29,7 +29,7 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
     int defaultLoopsCount;
 
     public CycledInputLoadingStrategy(ILayersMeta layersMeta, HashMap<IInitInput, InputInitStrategy> externalInputs, int defaultLoopsCount, HashMap<IInitInput, InputStatusMeta> inputStatuses) {
-        epoch =0l;
+        epoch =0L;
         loop = 0;
         this.layersMeta = layersMeta;
         this.externalInputs = externalInputs;
@@ -111,7 +111,7 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
 
     @Override
     public Integer getCurrentLoopCount() {
-        return ((CycleNeuron) layersMeta.getLayerByID(Integer.MIN_VALUE).getNeuronByID(0l)).getLoopCount();
+        return ((CycleNeuron) layersMeta.getLayerByID(Integer.MIN_VALUE).getNeuronByID(0L)).getLoopCount();
     }
 
     @Override

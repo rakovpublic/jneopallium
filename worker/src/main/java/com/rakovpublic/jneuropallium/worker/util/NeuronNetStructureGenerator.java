@@ -1,10 +1,9 @@
 package com.rakovpublic.jneuropallium.worker.util;
 
-import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
-import com.rakovpublic.jneuropallium.worker.net.storages.ILayerMeta;
+
 import com.rakovpublic.jneuropallium.worker.net.storages.ILayersMeta;
 import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
-import com.rakovpublic.jneuropallium.worker.neuron.ISignalProcessor;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;

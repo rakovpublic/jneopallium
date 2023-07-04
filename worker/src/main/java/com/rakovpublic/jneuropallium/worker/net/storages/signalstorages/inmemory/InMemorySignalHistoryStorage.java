@@ -9,19 +9,40 @@ import java.util.List;
 import java.util.TreeMap;
 
 public class InMemorySignalHistoryStorage implements ISignalHistoryStorage {
-    private HashMap<Long, TreeMap<Integer, HashMap<Long, List<ISignal>>>> history;
+    private TreeMap<Integer,TreeMap< Long, TreeMap<Integer, HashMap<Long, List<ISignal>>>>> history;
+    private Integer loopsToStore = 0;
+    private Long runsToStore = 0l;
 
-    public InMemorySignalHistoryStorage() {
-        this.history = new HashMap<>();
+    public InMemorySignalHistoryStorage(Integer loopsToStore, Long runsToStore) {
+        this.loopsToStore = loopsToStore;
+        this.runsToStore = runsToStore;
+        this.history = new TreeMap<>();
+    }
+
+
+    @Override
+    public List<ISignal> getSourceSignalsForRun(Integer loop, Long nRun, NeuronAddress forTarget) {
+        if(history.containsKey(loop) && history.get(loop).containsKey(nRun)){
+            return history.get(loop).get(nRun).get(forTarget.getLayerId()).get(forTarget.getNeuronId());
+        }
+        return null;
+
     }
 
     @Override
-    public List<ISignal> getSourceSignalsForRun(Long nRun, NeuronAddress forTarget) {
-        return history.get(nRun).get(forTarget.getLayerId()).get(forTarget.getNeuronId());
-    }
-
-    @Override
-    public void save(TreeMap<Integer, HashMap<Long, List<ISignal>>> history, Long run) {
-        this.history.put(run, history);
+    public void save(TreeMap<Integer, HashMap<Long, List<ISignal>>> history, Long run, Integer loop) {
+        if(this.history.size()>=loopsToStore){
+            this.history.remove(history.firstKey());
+        }
+        if(this.history.containsKey(loop) && this.history.get(loop).size()>=runsToStore){
+            this.history.get(loop).remove(this.history.get(loop).firstKey());
+        }
+        if(this.history.containsKey(loop)){
+            this.history.get(loop).put(run, history);
+        } else {
+            TreeMap< Long, TreeMap<Integer, HashMap<Long, List<ISignal>>>> loopHistory = new TreeMap<>();
+            loopHistory.put(run,history);
+            this.history.put(loop,loopHistory);
+        }
     }
 }

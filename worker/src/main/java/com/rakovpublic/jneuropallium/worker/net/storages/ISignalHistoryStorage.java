@@ -16,12 +16,12 @@ public interface ISignalHistoryStorage {
      * @param forTarget neuron address for which will be extracted history
      * @return the list of signals which was on input for neuron on run
      * */
-    List<ISignal> getSourceSignalsForRun(Long nRun, NeuronAddress forTarget);
+    List<ISignal> getSourceSignalsForRun(Integer loop,Long nRun, NeuronAddress forTarget);
 
     /**
      * This method saves signals for history
      * @param history signals
      * @param run
      * */
-    void save(TreeMap<Integer, HashMap<Long, List<ISignal>>> history, Long run);
+    void save(TreeMap<Integer, HashMap<Long, List<ISignal>>> history, Long run, Integer loop);
 }
