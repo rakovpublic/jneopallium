@@ -15,6 +15,13 @@ Tool implementation is ready on 75%.
 Project impact
 Project could lead to new generation of artificial neuron nets algorithms, help to analyze drug impact on neuron nets, build autonomous ai systems for different purposes, build modular ai, etc.
 
+#Main features
+
+Neuron net can process different types of signals (which allows to model neuromediators behaviour ).
+Different signals can be processed with different frequency. It has 2 main frequency loops with adjustable ratio like 1:n(which mean that signals designed to process slowly will be processed once in n runs of fast processing signals). 
+More over each signal type can be processed once in m runs of their loop.(it allows to model difference in signal widespreading)
+Also the framework supports modular approach  to neuron net modeling where output of neuron net can be input of one or few neuron nets. Framework allows to send signals from top level neuron net to input neuron nets. 
+ 
 
 #Intro
 
@@ -22,6 +29,9 @@ I want to present to your attention my framework for neuron net building. The na
 I have chosen this name because it's designed to allow the processing of the output of neuron nets as input for other neuron nets (I think it can be useful for debugging AI and a modular approach for AI building). Furthermore, if the input source is a neuron net, it is possible to send learning signals (signals that change the weights of dendrites, axons, delete, create, or update neurons).
 The purpose of this framework is to give developers the ability to build object models of neuron structures.
 In order to achieve this goal, I have developed a specific approach to defining the neuron, layer and input.
+
+
+
 
 #Neuron.
 
