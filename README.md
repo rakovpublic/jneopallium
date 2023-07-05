@@ -19,6 +19,7 @@ Project could lead to new generation of artificial neuron nets algorithms, help 
 
 Neuron net can process different types of signals (which allows to model neuromediators behaviour ).
 Different signals can be processed with different frequency. It has 2 main frequency loops with adjustable ratio like 1:n(which mean that signals designed to process slowly will be processed once in n runs of fast processing signals). 
+Signals can be continuous and be processed n runs with value change or without.
 More over each signal type can be processed once in m runs of their loop.(it allows to model difference in signal widespreading)
 Also the framework supports modular approach  to neuron net modeling where output of neuron net can be input of one or few neuron nets. Framework allows to send signals from top level neuron net to input neuron nets. 
  
