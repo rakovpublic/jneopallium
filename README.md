@@ -1,8 +1,8 @@
 Project aim:
-Purpose of the project is build neuron net model based on receptor existence probability, distance deviation between neuron with same receptors and receptor functional role.
+Purpose of the project is to build a natural neuron net modeling tool that allows building a neuron net model based on receptor existence probability, distance deviation between neuron with same receptors and receptor functional role.
 
 Project outputs:
-Neuron net model.
+Neuron net model sample.
 Neuron net modeling tool.
 Documentation for neuron net modeling tool.
 Documentation for modeling process. 
