@@ -154,7 +154,7 @@ public class LocalApplication implements IApplication {
             } else {
                 String resultResolverClass = context.getProperty("configuration.resultResolver");
                 IResultResolver resultResolver =null;
-                List<StructMeta> discriminators = new LinkedList<>();
+                HashMap<String,StructMeta> discriminators = new HashMap<String,StructMeta> ();
                 //TODO: add discriminators init
                 try {
                     resultResolver = (IResultResolver) Class.forName(outputAggregatorClass).getDeclaredConstructor().newInstance();
