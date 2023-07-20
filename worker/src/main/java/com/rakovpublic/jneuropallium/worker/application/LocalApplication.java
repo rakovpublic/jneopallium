@@ -2,10 +2,7 @@ package com.rakovpublic.jneuropallium.worker.application;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rakovpublic.jneuropallium.worker.net.layers.IInputResolver;
-import com.rakovpublic.jneuropallium.worker.net.layers.ILayer;
-import com.rakovpublic.jneuropallium.worker.net.layers.IResult;
-import com.rakovpublic.jneuropallium.worker.net.layers.IResultLayer;
+import com.rakovpublic.jneuropallium.worker.net.layers.*;
 import com.rakovpublic.jneuropallium.worker.net.layers.impl.InMemoryInputResolver;
 import com.rakovpublic.jneuropallium.worker.net.layers.impl.InputArray;
 import com.rakovpublic.jneuropallium.worker.net.layers.impl.InputData;
@@ -36,6 +33,7 @@ import java.io.ObjectInputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 public class LocalApplication implements IApplication {
@@ -154,12 +152,24 @@ public class LocalApplication implements IApplication {
                     }
                 }
             } else {
+                String resultResolverClass = context.getProperty("configuration.resultResolver");
+                IResultResolver resultResolver =null;
+                List<StructMeta> discriminators = new LinkedList<>();
+                //TODO: add discriminators init
+                try {
+                    resultResolver = (IResultResolver) Class.forName(outputAggregatorClass).getDeclaredConstructor().newInstance();
+                } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException | InstantiationException |
+                        IllegalAccessException e) {
+                    logger.error("cannot create output aggregator object", e);
+                }
                 //Unsupervised or reinforced learning
                 while (true) {
                     IResultLayer lr = process(meta);
                     outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getRun(), context);
                     meta.getInputResolver().saveHistory();
                     meta.getInputResolver().populateInput();
+                    resultResolver.resolveResult(meta, discriminators,lr);
+
                 }
 
             }
