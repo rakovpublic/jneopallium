@@ -1,19 +1,34 @@
-Project aim:
+#Project aim:
 Purpose of the project is to build a natural neuron net modeling tool that allows building a neuron net model based on receptor existence probability, distance deviation between neuron with same receptors and receptor functional role.
 
-Project outputs:
+#Project outputs:
 Neuron net model sample.
 Neuron net modeling tool.
 Documentation for neuron net modeling tool.
 Documentation for modeling process. 
 
-Current progress:
+#Current progress:
 Neuron net modeling tool has passed pre-alpha test.
 Tool architecture is ready on 95%.
 Tool implementation is ready on 75%.
 
-Project impact
+#Project impact
 Project could lead to new generation of artificial neuron nets algorithms, help to analyze drug impact on neuron nets, build autonomous ai systems for different purposes, build modular ai, etc.
+
+
+
+#Modeling process
+
+1. Gather information about all neuron classes. Use the possibility of neurons to persist different types of information to separate and define neuron classes.
+2. Gather information about all neuro mediators and signals, and define signal classes. 
+3. Investigate signal impact on neurons (receptors), and define processor classes.
+4. Define neuron appearance probability for each layer.
+5. Define receptor appearance probability for each neuron class.
+6. Add connection generator and constraint rules which checks that neuron can have such connections.
+7. Gather information about signal wide-spreading speed, and add to configuration (uses relative frequencies).
+8. Implement the result layer
+9. Add discriminators neuron nets
+
 
 #Main features
 
