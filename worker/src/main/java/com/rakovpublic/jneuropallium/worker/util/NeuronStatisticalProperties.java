@@ -6,13 +6,13 @@ import com.rakovpublic.jneuropallium.worker.neuron.ISignalProcessor;
 import java.util.HashMap;
 
 public abstract class NeuronStatisticalProperties<K extends INeuron> {
-    public Float getProbability() {
-        return probability;
+    public Float getProbability(Integer layerId) {
+        return probability.get(layerId);
     }
 
-    private Float probability;
+    private HashMap<Integer, Float> probability;
     private HashMap<Class<? extends ISignalProcessor>, Float> processorProbabilityMap;
-    public NeuronStatisticalProperties(Float probability, HashMap<Class<? extends ISignalProcessor>, Float> processorProbabilityMap){
+    public NeuronStatisticalProperties( HashMap<Integer, Float>  probability, HashMap<Class<? extends ISignalProcessor>, Float> processorProbabilityMap){
         this.probability = probability;
         this.processorProbabilityMap = processorProbabilityMap;
     }

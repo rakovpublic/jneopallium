@@ -30,7 +30,7 @@ public class NeuronNetStructureGenerator {
             Long safeFlag = Long.MIN_VALUE;
             for(; neuronCount< layerSize.get(layerId) && safeFlag < layerSize.get(layerId); ){
                 for(Class<? extends INeuron> clazz: neuronStatisticalProperties.keySet()){
-                    if(random.nextFloat()<neuronStatisticalProperties.get(clazz).getProbability()){
+                    if(random.nextFloat()<neuronStatisticalProperties.get(clazz).getProbability(layerId)){
                         INeuron neuron = neuronStatisticalProperties.get(clazz).getNeuronInstance(Long.MIN_VALUE+10l+neuronCount,layerId);
                         boolean toContinue = true;
                         for (NeighboringRules rule: generationRules){
