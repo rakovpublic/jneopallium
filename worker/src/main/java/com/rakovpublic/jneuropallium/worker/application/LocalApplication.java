@@ -69,7 +69,9 @@ public class LocalApplication implements IApplication {
         String fileSystemConstructorArgsType = context.getProperty("configuration.storage.constructor.args.types");
         IStorage fs = InstantiationUtils.<IStorage>getObject(clazz, getObjects(fileSystemConstructorArgs), getTypes(fileSystemConstructorArgsType));
         String inputLoadingStrategy = context.getProperty("configuration.input.loadingstrategy");
-        IInputResolver inputResolver = new InMemoryInputResolver(new InMemorySignalPersistStorage(), new InMemorySignalHistoryStorage(), this.getLoadingStrategy(inputLoadingStrategy));
+        Integer historySlow = Integer.parseInt(context.getProperty("configuration.history.slow.runs"));
+        Long historyFast = Long.parseLong(context.getProperty("configuration.history.fast.runs"));
+        IInputResolver inputResolver = new InMemoryInputResolver(new InMemorySignalPersistStorage(), new InMemorySignalHistoryStorage(historySlow,historyFast), this.getLoadingStrategy(inputLoadingStrategy));
         String inputs = context.getProperty("configuration.input.inputs");
         for (InputData inputData : this.getInputs(inputs)) {
             inputResolver.registerInput(inputData.getiInputSource(), inputData.isMandatory(), inputData.getInitStrategy(), inputData.getAmountOfRuns());
@@ -157,7 +159,7 @@ public class LocalApplication implements IApplication {
                 HashMap<String,StructMeta> discriminators = new HashMap<String,StructMeta> ();
                 //TODO: add discriminators init
                 try {
-                    resultResolver = (IResultResolver) Class.forName(outputAggregatorClass).getDeclaredConstructor().newInstance();
+                    resultResolver = (IResultResolver) Class.forName(resultResolverClass).getDeclaredConstructor().newInstance();
                 } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException | InstantiationException |
                         IllegalAccessException e) {
                     logger.error("cannot create output aggregator object", e);
