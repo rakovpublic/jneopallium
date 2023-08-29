@@ -1,6 +1,5 @@
 package com.rakovpublic.jneuropallium.worker.util;
 
-import com.rakovpublic.jneuropallium.worker.application.LocalApplication;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,7 +22,7 @@ public class JarClassLoaderService extends URLClassLoader {
             return true;
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-            logger.error("Class loader cannot find user defined class. Please check Your jar or upload it.",e);
+            logger.error("Class loader cannot find user defined class. Please check Your jar or upload it.", e);
             return false;
         }
 

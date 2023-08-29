@@ -7,10 +7,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
 public class InputLoadingStrategyDeserializer extends StdDeserializer<IInputLoadingStrategy> {
+    private final static Logger logger = LogManager.getLogger(InputInitStrategyDeserializer.class);
+
     public InputLoadingStrategyDeserializer() {
         this(null);
     }
@@ -23,8 +27,7 @@ public class InputLoadingStrategyDeserializer extends StdDeserializer<IInputLoad
         try {
             return (IInputLoadingStrategy) mapper.readValue(jobject.getAsJsonObject("iInputLoadingStrategy").toString(), Class.forName(jobject.getAsJsonPrimitive("clazz").getAsString()));
         } catch (ClassNotFoundException e) {
-            //TODO: add logger
-            e.printStackTrace();
+            logger.error("Cannot find class " + jobject.getAsJsonPrimitive("clazz").getAsString(), e);
         }
         return null;
     }

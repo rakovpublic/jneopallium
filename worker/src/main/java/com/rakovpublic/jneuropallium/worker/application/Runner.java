@@ -4,7 +4,6 @@ import com.rakovpublic.jneuropallium.worker.synchronizer.IContext;
 import com.rakovpublic.jneuropallium.worker.util.JarClassLoaderService;
 
 import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URL;
 
 public abstract class Runner implements IRunner {

@@ -9,14 +9,14 @@ import java.util.List;
 
 /**
  * This interface encapsulate signal storing logic
- * */
+ */
 public interface ISignalStorage extends Serializable {
 
     /**
-     *
      * Method to read signals for neuron
+     *
      * @param neuronId
      * @return list of input signals for neuron
-     * */
+     */
     List<ISignal> getSignalsForNeuron(Long neuronId);
 }

@@ -17,7 +17,6 @@ import com.rakovpublic.jneuropallium.worker.neuron.IRule;
 import com.rakovpublic.jneuropallium.worker.neuron.impl.layersizing.CreateNeuronSignal;
 import com.rakovpublic.jneuropallium.worker.neuron.impl.layersizing.DeleteNeuronSignal;
 
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +26,7 @@ public class HttpLayer implements ILayer {
     private Integer layerId;
     private String UUID;
 
-    public HttpLayer(String masterAddress, Integer layerId, String UUID){
+    public HttpLayer(String masterAddress, Integer layerId, String UUID) {
         this.masterAddress = masterAddress;
         this.layerId = layerId;
         this.UUID = UUID;
@@ -42,7 +41,7 @@ public class HttpLayer implements ILayer {
         INeuron neuron = signal.getValue().getNeuron();
         String json;
         try {
-            json = ow.writeValueAsString( signal.getValue().getNeuron());
+            json = ow.writeValueAsString(signal.getValue().getNeuron());
         } catch (JsonProcessingException e) {
 
             //TODO: add logger return
@@ -53,7 +52,7 @@ public class HttpLayer implements ILayer {
         createNeuronRequest.setNeuronJson(json);
         createNeuronRequest.setNeuronClass(neuron.getCurrentNeuronClass().getCanonicalName());
         try {
-            communicationClient.sendRequest(HttpRequestResolver.createPost(createUrl,createNeuronRequest));
+            communicationClient.sendRequest(HttpRequestResolver.createPost(createUrl, createNeuronRequest));
         } catch (IOException e) {
             //TODO: add logger
             return;
@@ -65,7 +64,7 @@ public class HttpLayer implements ILayer {
         uploadSignalsRequest.setSignals(signal.getValue().getCreateRelationsSignals());
         uploadSignalsRequest.setName(UUID);
         try {
-            communicationClient.sendRequest(HttpRequestResolver.createPost(sendResultLink,uploadSignalsRequest));
+            communicationClient.sendRequest(HttpRequestResolver.createPost(sendResultLink, uploadSignalsRequest));
         } catch (IOException e) {
             //TODO: add logger
             return;
@@ -84,8 +83,8 @@ public class HttpLayer implements ILayer {
         deleteNeuronRequest.setNeuronId(deleteNeuronIntegration.getValue().getNeuronId());
         deleteNeuronRequest.setLayerId(layerId);
         try {
-            communicationClient.sendRequest(HttpRequestResolver.createPost(deleteUrl,deleteNeuronRequest));
-        }  catch (IOException e) {
+            communicationClient.sendRequest(HttpRequestResolver.createPost(deleteUrl, deleteNeuronRequest));
+        } catch (IOException e) {
             //TODO: add logger return
             return;
         } catch (InterruptedException e) {
@@ -96,7 +95,7 @@ public class HttpLayer implements ILayer {
         uploadSignalsRequest.setSignals(deleteNeuronIntegration.getValue().getCreateRelationsSignals());
         uploadSignalsRequest.setName(UUID);
         try {
-            communicationClient.sendRequest(HttpRequestResolver.createPost(sendResultLink,uploadSignalsRequest));
+            communicationClient.sendRequest(HttpRequestResolver.createPost(sendResultLink, uploadSignalsRequest));
         } catch (IOException e) {
             //TODO: add logger
             return;

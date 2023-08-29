@@ -38,12 +38,13 @@ public interface INeuron extends Serializable {
     Map<Class<? extends ISignal>, ISignalMerger> getMergerMap();
 
     /**
-     *  @return the number of runs(population new data from input resolver)
+     * @return the number of runs(population new data from input resolver)
      **/
     Long getRun();
 
     /**
      * set the amount of runs
+     *
      * @param run amount of runs
      **/
     void setRun(Long run);
@@ -57,12 +58,14 @@ public interface INeuron extends Serializable {
 
     /**
      * set the signal history storage
+     *
      * @param signalHistory signal history storage
      **/
     void setSignalHistory(ISignalHistoryStorage signalHistory);
 
     /**
      * set the neuron id
+     *
      * @param id neuron id
      **/
     void setId(Long id);
@@ -178,73 +181,69 @@ public interface INeuron extends Serializable {
     Class<? extends INeuron> getCurrentNeuronClass();
 
     /**
-     *
      * @return true if neuron has been changed
-     * */
+     */
     Boolean isChanged();
 
     /**
-     *
-     * @param  changed true if neuron has been changed
-     * */
+     * @param changed true if neuron has been changed
+     */
     void setChanged(Boolean changed);
 
     /**
-     *
      * @return true if neuron should been deleted
-     * */
+     */
     Boolean isOnDelete();
 
     /**
-     *
-     * @param  onDelete true if neuron should been changed
-     * */
+     * @param onDelete true if neuron should been changed
+     */
     void setOnDelete(Boolean onDelete);
 
 
     /**
-     *
      * @return map amount of runs should be passed before the IInitInput with this name will be populated next time
-     * */
+     */
     HashMap<String, Long> getCyclingNeuronInputMapping();
 
     /**
-     *
      * @param cyclingNeuronInputMapping mapping for cycle InitInputs populating
-     * */
+     */
     void setCyclingNeuronInputMapping(HashMap<String, Long> cyclingNeuronInputMapping);
 
     /**
-     *
      * @return the amount of loops the have been passed after previous Input populating
-     * */
+     */
     Integer getCurrentLoop();
 
     void setCurrentLoop(Integer currentLoop);
 
     /**
      * Checks if neuron can process this signal
+     *
      * @param signal ISignal signal
-     * @return  true if neuron can process this signal
-     * */
-    boolean canProcess( ISignal signal);
+     * @return true if neuron can process this signal
+     */
+    boolean canProcess(ISignal signal);
 
     /**
      * Set the layer of this neuron
+     *
      * @param layer
-     * */
+     */
     void setLayer(ILayer layer);
 
     /**
-     * @return  the layer of this neuron
-     * */
+     * @return the layer of this neuron
+     */
     ILayer getLayer();
 
     <I extends ISignal> void addActivationFunction(Class<I> clazz, IActivationFunction<I> activationFunction);
 
-    void setActivationFunctions(HashMap<Class<?extends ISignal>, IActivationFunction> functions);
+    void setActivationFunctions(HashMap<Class<? extends ISignal>, IActivationFunction> functions);
 
     public IDendrites getDendrites();
+
     public void setDendrites(IDendrites dendrites);
 
 }

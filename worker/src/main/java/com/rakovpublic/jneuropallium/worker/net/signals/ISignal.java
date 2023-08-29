@@ -55,6 +55,7 @@ public interface ISignal<T> extends Serializable {
     void setInputName(String inputName);
 
     void setCurrentInnerLoop(Integer loop);
+
     Integer getCurrentInnerLoop();
 
     void setInnerLoop(Integer loop);
@@ -68,5 +69,6 @@ public interface ISignal<T> extends Serializable {
     void setNeedToRemoveDuringLearning(boolean value);
 
     String getName();
+
     void setName(String name);
 }

@@ -33,7 +33,6 @@ import java.io.ObjectInputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 
 public class LocalApplication implements IApplication {
@@ -45,14 +44,14 @@ public class LocalApplication implements IApplication {
         String layerPath = context.getProperty("configuration.input.layermeta");
 
         String classesImplemented = context.getProperty("configuration.neuronnet.classes");
-        if(classesImplemented!=null&&classesImplemented.length()>1){
-        for(String className: classesImplemented.split(",")){
-            if(!classLoaderService.containsClass(className)){
-                logger.error("Cannot find class " +className+ " in provided jar");
-                return;
-            }
+        if (classesImplemented != null && classesImplemented.length() > 1) {
+            for (String className : classesImplemented.split(",")) {
+                if (!classLoaderService.containsClass(className)) {
+                    logger.error("Cannot find class " + className + " in provided jar");
+                    return;
+                }
 
-        }
+            }
         }
 
 
@@ -71,7 +70,7 @@ public class LocalApplication implements IApplication {
         String inputLoadingStrategy = context.getProperty("configuration.input.loadingstrategy");
         Integer historySlow = Integer.parseInt(context.getProperty("configuration.history.slow.runs"));
         Long historyFast = Long.parseLong(context.getProperty("configuration.history.fast.runs"));
-        IInputResolver inputResolver = new InMemoryInputResolver(new InMemorySignalPersistStorage(), new InMemorySignalHistoryStorage(historySlow,historyFast), this.getLoadingStrategy(inputLoadingStrategy));
+        IInputResolver inputResolver = new InMemoryInputResolver(new InMemorySignalPersistStorage(), new InMemorySignalHistoryStorage(historySlow, historyFast), this.getLoadingStrategy(inputLoadingStrategy));
         String inputs = context.getProperty("configuration.input.inputs");
         for (InputData inputData : this.getInputs(inputs)) {
             inputResolver.registerInput(inputData.getiInputSource(), inputData.isMandatory(), inputData.getInitStrategy(), inputData.getAmountOfRuns());
@@ -89,7 +88,7 @@ public class LocalApplication implements IApplication {
         try {
             outputAggregator = (IOutputAggregator) Class.forName(outputAggregatorClass).getDeclaredConstructor().newInstance();
         } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException | InstantiationException |
-                 IllegalAccessException e) {
+                IllegalAccessException e) {
             logger.error("cannot create output aggregator object", e);
         }
         for (; currentRun < maxRun || isInfinite; currentRun++) {
@@ -101,7 +100,7 @@ public class LocalApplication implements IApplication {
                 try {
                     resultComparingStrategy = (IResultComparingStrategy) Class.forName(resultComparingStrategyClass).getDeclaredConstructor().newInstance();
                 } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException |
-                         InstantiationException | IllegalAccessException e) {
+                        InstantiationException | IllegalAccessException e) {
                     logger.error("cannot create result comparing strategy object", e);
                 }
                 String algoType = context.getProperty("configuration.studyingalgotype");
@@ -133,7 +132,7 @@ public class LocalApplication implements IApplication {
                                 Integer layerId = meta.getResultLayer().getID();
                                 HashMap<Long, List<ISignal>> studyMap = new HashMap<>();
                                 for (IResult res : idsToFix) {
-                                    studyMap.put(res.getNeuronId(), iObjectStudyingAlgo.getLearningSignals(desiredResult,meta));
+                                    studyMap.put(res.getNeuronId(), iObjectStudyingAlgo.getLearningSignals(desiredResult, meta));
                                 }
                                 HashMap<Integer, HashMap<Long, List<ISignal>>> studyingRequest = new HashMap<>();
                                 studyingRequest.put(layerId, studyMap);
@@ -155,8 +154,8 @@ public class LocalApplication implements IApplication {
                 }
             } else {
                 String resultResolverClass = context.getProperty("configuration.resultResolver");
-                IResultResolver resultResolver =null;
-                HashMap<String,StructMeta> discriminators = new HashMap<String,StructMeta> ();
+                IResultResolver resultResolver = null;
+                HashMap<String, StructMeta> discriminators = new HashMap<String, StructMeta>();
                 //TODO: add discriminators init
                 try {
                     resultResolver = (IResultResolver) Class.forName(resultResolverClass).getDeclaredConstructor().newInstance();
@@ -170,7 +169,7 @@ public class LocalApplication implements IApplication {
                     outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getRun(), context);
                     meta.getInputResolver().saveHistory();
                     meta.getInputResolver().populateInput();
-                    resultResolver.resolveResult(meta, discriminators,lr);
+                    resultResolver.resolveResult(meta, discriminators, lr);
 
                 }
 

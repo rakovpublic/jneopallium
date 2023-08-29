@@ -2,7 +2,6 @@ package com.rakovpublic.jneuropallium.worker.net.storages.signalstorages.file;
 
 import com.rakovpublic.jneuropallium.worker.net.signals.IInputSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
-import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.IInitInput;
 import com.rakovpublic.jneuropallium.worker.net.storages.INeuronNetInput;
 

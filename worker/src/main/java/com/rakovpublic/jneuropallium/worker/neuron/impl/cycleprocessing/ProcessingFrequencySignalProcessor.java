@@ -8,6 +8,7 @@ import java.util.List;
 
 public class ProcessingFrequencySignalProcessor implements ISignalProcessor<ProcessingFrequencySignal, CycleNeuron> {
     private final static String DESCRIPTION = "Processor which changes processing frequency for specific signal class";
+
     @Override
     public <I extends ISignal> List<I> process(ProcessingFrequencySignal input, CycleNeuron neuron) {
         neuron.getSignalProcessingFrequencyMap().put(input.value.getSignalClass(), input.value.getFrequency());

@@ -5,7 +5,7 @@ import com.rakovpublic.jneuropallium.worker.neuron.impl.cycleprocessing.Abstract
 
 public class CreateNeuronSignal extends AbstractSignal<NewNeuronIntegration> implements ISignal<NewNeuronIntegration> {
     public CreateNeuronSignal(NewNeuronIntegration value, Integer sourceLayer, Long sourceNeuron, Integer timeAlive, String description, boolean fromExternalNet, String inputName) {
-        super(value, sourceLayer, sourceNeuron, timeAlive, description, fromExternalNet, inputName,true,true, CreateNeuronSignal.class.getName());
+        super(value, sourceLayer, sourceNeuron, timeAlive, description, fromExternalNet, inputName, true, true, CreateNeuronSignal.class.getName());
 
     }
 

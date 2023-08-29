@@ -6,5 +6,5 @@ import java.util.HashMap;
 import java.util.List;
 
 public interface IConnectionGenerator {
-    HashMap<Integer, List<INeuron>> generateConnections(HashMap<Integer,List<INeuron>> sourceStructure );
+    HashMap<Integer, List<INeuron>> generateConnections(HashMap<Integer, List<INeuron>> sourceStructure);
 }

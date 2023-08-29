@@ -44,7 +44,7 @@ public class InMemorySignalPersistStorage implements ISignalsPersistStorage {
                 List<ISignal> neuronSignal = signals.get(layerId).get(neuron);
                 for (ISignal signal : neuronSignal) {
                     neuronSignal.remove(signal);
-                    if(signal.getTimeAlive()>=1){
+                    if (signal.getTimeAlive() >= 1) {
                         neuronSignal.add(signal.prepareSignalToNextStep());
                     }
                 }
@@ -56,18 +56,18 @@ public class InMemorySignalPersistStorage implements ISignalsPersistStorage {
     @Override
     public void cleanMiddleLayerSignals() {
         boolean first = true;
-        for(Integer layerId: signals.keySet()){
-            if(layerId == Integer.MIN_VALUE){
+        for (Integer layerId : signals.keySet()) {
+            if (layerId == Integer.MIN_VALUE) {
                 continue;
             }
-            if(first){
-                first =false;
+            if (first) {
+                first = false;
                 continue;
             }
             for (Long neuron : signals.get(layerId).keySet()) {
                 List<ISignal> neuronSignal = signals.get(layerId).get(neuron);
                 for (ISignal signal : neuronSignal) {
-                    if(signal.isNeedToRemoveDuringLearning() || signal.getTimeAlive()<1){
+                    if (signal.isNeedToRemoveDuringLearning() || signal.getTimeAlive() < 1) {
                         neuronSignal.remove(signal);
                     }
                 }
@@ -83,7 +83,7 @@ public class InMemorySignalPersistStorage implements ISignalsPersistStorage {
 
     @Override
     public void deletedLayerInput(Integer deletedLayerId) {
-      signals.remove(deletedLayerId);
+        signals.remove(deletedLayerId);
     }
 
 }

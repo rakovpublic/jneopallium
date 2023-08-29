@@ -2,8 +2,6 @@ package com.rakovpublic.jneuropallium.worker.neuron.impl.cycleprocessing;
 
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
-import java.util.Objects;
-
 public class ProcessingFrequencySignalItem {
     private Class<? extends ISignal> signalClass;
     private ProcessingFrequency frequency;

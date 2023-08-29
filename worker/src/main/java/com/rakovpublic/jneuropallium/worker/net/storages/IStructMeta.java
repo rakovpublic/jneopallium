@@ -4,9 +4,10 @@ import com.rakovpublic.jneuropallium.worker.net.layers.IInputResolver;
 import com.rakovpublic.jneuropallium.worker.net.study.ILearningRequest;
 
 import java.util.List;
+
 /**
  * Deprecated
- * */
+ */
 
 public interface IStructMeta extends IStorageMeta {
     List<ILayerMeta> getLayers();

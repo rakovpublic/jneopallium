@@ -1,9 +1,6 @@
 package com.rakovpublic.jneuropallium.worker.net.storages.http;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import com.rakovpublic.jneuropallium.master.model.UploadSignalsRequest;
 import com.rakovpublic.jneuropallium.worker.application.HttpCommunicationClient;
 import com.rakovpublic.jneuropallium.worker.application.HttpRequestResolver;
@@ -37,7 +34,7 @@ public abstract class AbstractHttpInputMeta implements ISplitInput {
 
     private Integer layerId;
 
-    public AbstractHttpInputMeta(Long run, String nodeId, String readInputsEndpoint, String readNeuronsEndpoint, String sendResultEndpoint, HashMap<String, Long> neuronInputNameMapping, Integer currentInnerLoopCount,Long start, Long end, Integer layerId) {
+    public AbstractHttpInputMeta(Long run, String nodeId, String readInputsEndpoint, String readNeuronsEndpoint, String sendResultEndpoint, HashMap<String, Long> neuronInputNameMapping, Integer currentInnerLoopCount, Long start, Long end, Integer layerId) {
         this.run = run;
         this.nodeId = nodeId;
         this.readInputsEndpoint = readInputsEndpoint;
@@ -80,13 +77,13 @@ public abstract class AbstractHttpInputMeta implements ISplitInput {
 
 
     @Override
-    public void saveResults(HashMap<Integer,HashMap<Long, List<ISignal>>> signals) {
+    public void saveResults(HashMap<Integer, HashMap<Long, List<ISignal>>> signals) {
         HttpCommunicationClient communicationClient = new HttpCommunicationClient();
         UploadSignalsRequest uploadSignalsRequest = new UploadSignalsRequest();
         uploadSignalsRequest.setSignals(signals);
         uploadSignalsRequest.setName(nodeId);
         try {
-            communicationClient.sendRequest(HttpRequestResolver.createPost(sendResultEndpoint,uploadSignalsRequest));
+            communicationClient.sendRequest(HttpRequestResolver.createPost(sendResultEndpoint, uploadSignalsRequest));
         } catch (IOException e) {
             //TODO: add logger
             return;

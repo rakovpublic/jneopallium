@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-@Component
 public class InputService implements IInputService {
     private HashMap<IInitInput, InputStatusMeta> inputStatuses;
     private HashMap<String, NodeMeta> nodeMetas;
@@ -141,7 +140,7 @@ public class InputService implements IInputService {
                     nodeMetas.get(nodeName).setCurrentLayer(layerMeta.getID());
                 }
             }else{
-                signalHistoryStorage.save(signalsPersist.getAllSignals(),run);
+                signalHistoryStorage.save(signalsPersist.getAllSignals(),runningStrategy.getEpoch(),runningStrategy.getCurrentLoopCount());
                 signalsPersist.cleanOutdatedSignals();
                 runningStrategy.populateInput(signalsPersist,inputStatuses);
                 runFlag=true;

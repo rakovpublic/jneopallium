@@ -9,9 +9,9 @@ import java.net.http.HttpRequest;
 
 public class HttpRequestResolver {
 
-    public  static <K extends Object> HttpRequest createPost(String uri,K payload) throws JsonProcessingException {
+    public static <K extends Object> HttpRequest createPost(String uri, K payload) throws JsonProcessingException {
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String json = ow.writeValueAsString(payload);
-        return    HttpRequest.newBuilder(URI.create(uri)).POST(HttpRequest.BodyPublishers.ofString(json)).build();
+        return HttpRequest.newBuilder(URI.create(uri)).POST(HttpRequest.BodyPublishers.ofString(json)).build();
     }
 }

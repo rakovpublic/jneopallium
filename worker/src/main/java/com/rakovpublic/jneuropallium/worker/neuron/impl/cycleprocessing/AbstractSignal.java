@@ -63,6 +63,7 @@ public abstract class AbstractSignal<T> implements ISignal<T> {
     public String getName() {
         return name;
     }
+
     @Override
     public void setName(String name) {
         this.name = name;

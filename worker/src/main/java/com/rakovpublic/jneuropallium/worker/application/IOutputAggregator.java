@@ -1,7 +1,6 @@
 package com.rakovpublic.jneuropallium.worker.application;
 
 import com.rakovpublic.jneuropallium.worker.net.layers.IResult;
-import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.synchronizer.IContext;
 
 import java.util.List;

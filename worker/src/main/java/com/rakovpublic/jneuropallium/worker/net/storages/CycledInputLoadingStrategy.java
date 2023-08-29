@@ -7,8 +7,8 @@ import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.neuron.ISignalChain;
 import com.rakovpublic.jneuropallium.worker.neuron.impl.cycleprocessing.CycleNeuron;
 import com.rakovpublic.jneuropallium.worker.neuron.impl.cycleprocessing.CycleSignalsProcessingChain;
-
 import com.rakovpublic.jneuropallium.worker.neuron.impl.cycleprocessing.ProcessingFrequency;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,8 +17,7 @@ import java.util.TreeSet;
 
 /**
  * Input loading strategy designed to have different input loading delay for each init input
- *
- * */
+ */
 public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
     private ILayersMeta layersMeta;
     private HashMap<IInitInput, InputInitStrategy> externalInputs;
@@ -29,7 +28,7 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
     int defaultLoopsCount;
 
     public CycledInputLoadingStrategy(ILayersMeta layersMeta, HashMap<IInitInput, InputInitStrategy> externalInputs, int defaultLoopsCount, HashMap<IInitInput, InputStatusMeta> inputStatuses) {
-        epoch =0L;
+        epoch = 0L;
         loop = 0;
         this.layersMeta = layersMeta;
         this.externalInputs = externalInputs;
@@ -61,35 +60,35 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
         signalsPersistStorage.cleanOutdatedSignals();
         CycleNeuron cl = ((CycleNeuron) layersMeta.getLayerByID(Integer.MIN_VALUE).getNeuronByID(0l));
         HashMap<Class<? extends ISignal>, ProcessingFrequency> frequencyHashMap = cl.getSignalProcessingFrequencyMap();
-        CycleNeuron cycleNeuron =  (CycleNeuron) layersMeta.getLayerByID(Integer.MIN_VALUE).getNeuronByID(0l);
-        HashMap<IInitInput,ProcessingFrequency> inputProcessingFrequencyHashMap = cycleNeuron.getInputProcessingFrequencyHashMap();
+        CycleNeuron cycleNeuron = (CycleNeuron) layersMeta.getLayerByID(Integer.MIN_VALUE).getNeuronByID(0l);
+        HashMap<IInitInput, ProcessingFrequency> inputProcessingFrequencyHashMap = cycleNeuron.getInputProcessingFrequencyHashMap();
         if (loop >= cl.getLoopCount()) {
             for (IInitInput iii : inputStatuses.keySet()) {
                 ProcessingFrequency ipf = null;
-                if(inputProcessingFrequencyHashMap.containsKey(iii) ){
-                    ipf=inputProcessingFrequencyHashMap.get(iii);
+                if (inputProcessingFrequencyHashMap.containsKey(iii)) {
+                    ipf = inputProcessingFrequencyHashMap.get(iii);
                 }
                 if (inputStatuses.get(iii).getCurrentRuns() %
-                        cycleNeuron.getLoopCount() == 0 && (ipf!=null && (ipf.getLoop()!= null && loop%ipf.getLoop()==0 ) || (ipf.getEpoch()!= null && epoch%ipf.getEpoch()==0 ))) {
+                        cycleNeuron.getLoopCount() == 0 && (ipf != null && (ipf.getLoop() != null && loop % ipf.getLoop() == 0) || (ipf.getEpoch() != null && epoch % ipf.getEpoch() == 0))) {
                     List<ISignal> signals = new LinkedList<>();
-                    for (IInputSignal signal : iii.readSignals()){
-                        ProcessingFrequency pf =  frequencyHashMap.get(signal.getCurrentSignalClass());
-                        if(loop% pf.getLoop()==0 && epoch%pf.getEpoch()==0){
+                    for (IInputSignal signal : iii.readSignals()) {
+                        ProcessingFrequency pf = frequencyHashMap.get(signal.getCurrentSignalClass());
+                        if (loop % pf.getLoop() == 0 && epoch % pf.getEpoch() == 0) {
                             signal.setInnerLoop(defaultLoopsCount);
                             signals.add(signal);
                         }
                     }
-                    signalsPersistStorage.putSignals(externalInputs.get(iii).getInputs(layersMeta,signals));
+                    signalsPersistStorage.putSignals(externalInputs.get(iii).getInputs(layersMeta, signals));
                     inputStatuses.get(iii).setCurrentRuns(0);
                 } else {
                     inputStatuses.get(iii).setCurrentRuns(inputStatuses.get(iii).getCurrentRuns() + 1);
                 }
             }
             loop = 0;
-            if(epoch == Long.MAX_VALUE){
-                epoch = Long.MIN_VALUE+2;
-            }else {
-                epoch +=1;
+            if (epoch == Long.MAX_VALUE) {
+                epoch = Long.MIN_VALUE + 2;
+            } else {
+                epoch += 1;
             }
 
         } else {

@@ -12,9 +12,11 @@ public abstract class NeuronStatisticalProperties<K extends INeuron> {
 
     private HashMap<Integer, Float> probability;
     private HashMap<Class<? extends ISignalProcessor>, Float> processorProbabilityMap;
-    public NeuronStatisticalProperties( HashMap<Integer, Float>  probability, HashMap<Class<? extends ISignalProcessor>, Float> processorProbabilityMap){
+
+    public NeuronStatisticalProperties(HashMap<Integer, Float> probability, HashMap<Class<? extends ISignalProcessor>, Float> processorProbabilityMap) {
         this.probability = probability;
         this.processorProbabilityMap = processorProbabilityMap;
     }
+
     abstract K getNeuronInstance(Long neuronId, Integer layerId);
 }

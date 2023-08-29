@@ -33,12 +33,12 @@ public class InMemoryLayerMeta implements ILayerMeta {
 
     @Override
     public List<? extends INeuron> getNeurons() {
-        for(INeuron neuron: neurons){
+        for (INeuron neuron : neurons) {
             IAxon axon = neuron.getAxon();
             IDendrites dendrites = neuron.getDendrites();
-            for(LayerMove layerMove :layerMoves){
-                if(layerMove.getMovingMap().containsKey(neuron.getId())){
-                    axon.moveConnection(layerMove,this.id,neuron.getId());
+            for (LayerMove layerMove : layerMoves) {
+                if (layerMove.getMovingMap().containsKey(neuron.getId())) {
+                    axon.moveConnection(layerMove, this.id, neuron.getId());
                 }
                 dendrites.moveConnection(layerMove);
             }
@@ -53,9 +53,9 @@ public class InMemoryLayerMeta implements ILayerMeta {
             if (id.equals(n.getId())) {
                 IAxon axon = n.getAxon();
                 IDendrites dendrites = n.getDendrites();
-                for(LayerMove layerMove :layerMoves){
-                    if(layerMove.getMovingMap().containsKey(n.getId())){
-                        axon.moveConnection(layerMove,this.id,n.getId());
+                for (LayerMove layerMove : layerMoves) {
+                    if (layerMove.getMovingMap().containsKey(n.getId())) {
+                        axon.moveConnection(layerMove, this.id, n.getId());
                     }
                     dendrites.moveConnection(layerMove);
                 }

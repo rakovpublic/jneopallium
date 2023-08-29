@@ -174,7 +174,7 @@ public class Neuron implements INeuron {
     @Override
     public void addSignals(List<ISignal> signals) {
 
-        this.signals.addAll(signals.stream().map(s->{
+        this.signals.addAll(signals.stream().map(s -> {
             s.setCurrentInnerLoop(currentLoopAmount);
             return s;
         }).collect(Collectors.toList()));
@@ -317,13 +317,13 @@ public class Neuron implements INeuron {
     @Override
     public void activate() {
         List<ISignal> newResult = new LinkedList<>();
-        for(ISignal s : result){
-            if(activationFunctions.containsKey(s.getCurrentSignalClass())){
+        for (ISignal s : result) {
+            if (activationFunctions.containsKey(s.getCurrentSignalClass())) {
                 Optional<ISignal> sig = activationFunctions.get(s.getCurrentSignalClass()).activate(s);
-                if(sig.isPresent()){
+                if (sig.isPresent()) {
                     newResult.add(s);
                 }
-            }else {
+            } else {
                 newResult.add(s);
             }
         }
@@ -366,7 +366,7 @@ public class Neuron implements INeuron {
 
     @Override
     public <I extends ISignal> void addActivationFunction(Class<I> clazz, IActivationFunction<I> activationFunction) {
-        activationFunctions.put(clazz,activationFunction);
+        activationFunctions.put(clazz, activationFunction);
     }
 
     @Override

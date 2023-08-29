@@ -6,11 +6,11 @@ import java.util.Objects;
 
 public class LayerMove {
 
-    private HashMap<Long,HashMap<Integer, List<Long>>> movingMap;
+    private HashMap<Long, HashMap<Integer, List<Long>>> movingMap;
 
     private Integer layerRemoved;
 
-    public LayerMove(HashMap<Long,HashMap<Integer, List<Long>>> movingMap, Integer layerRemoved) {
+    public LayerMove(HashMap<Long, HashMap<Integer, List<Long>>> movingMap, Integer layerRemoved) {
         this.movingMap = movingMap;
         this.layerRemoved = layerRemoved;
     }

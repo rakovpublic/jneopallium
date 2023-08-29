@@ -3,7 +3,6 @@ package com.rakovpublic.jneuropallium.worker.net.study;
 import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.IStructMeta;
-import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 
 import java.io.Serializable;
 import java.util.HashMap;

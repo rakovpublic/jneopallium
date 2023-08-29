@@ -8,15 +8,12 @@ import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.TreeMap;
-import java.util.stream.Collectors;
 
 /*
 
  * TODO: refactor for usage  Input strategy
  **/
 public class StructMeta implements IStructMeta {
-
 
 
     private IInputResolver inputResolver;
@@ -67,11 +64,11 @@ public class StructMeta implements IStructMeta {
     @Override
     public void removeLayer(Integer layerId, ReconnectStrategy reconnectStrategy) {
 
-        HashMap<Integer,HashMap<Long,HashMap<Integer, List<Long>>>> updateMap = reconnectStrategy.getNewConnections(layersMeta,layerId);
+        HashMap<Integer, HashMap<Long, HashMap<Integer, List<Long>>>> updateMap = reconnectStrategy.getNewConnections(layersMeta, layerId);
 
-        for(Integer layersToFix: updateMap.keySet()){
+        for (Integer layersToFix : updateMap.keySet()) {
             ILayerMeta layerMeta = layersMeta.getLayerByID(layersToFix);
-            layerMeta.addLayerMove( new LayerMove(updateMap.get(layersToFix),layerId));
+            layerMeta.addLayerMove(new LayerMove(updateMap.get(layersToFix), layerId));
         }
         ILayerMeta layerToRemove = layersMeta.getLayerByID(layerId);
         layersMeta.removeLayer(layerToRemove);

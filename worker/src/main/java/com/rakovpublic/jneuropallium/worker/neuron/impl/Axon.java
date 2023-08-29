@@ -5,6 +5,8 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.neuron.IAxon;
 import com.rakovpublic.jneuropallium.worker.neuron.ISynapse;
 import com.rakovpublic.jneuropallium.worker.neuron.IWeight;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,7 +15,7 @@ import java.util.List;
 
 public class Axon implements IAxon {
 
-
+    private final static Logger logger = LogManager.getLogger(Axon.class);
     private HashMap<Class<? extends ISignal>, IWeight> defaultWeights;
     private HashMap<Class<? extends ISignal>, List<ISynapse>> connectionMap;
     private HashMap<Integer, HashMap<Long, List<ISynapse>>> addressMap;
@@ -38,12 +40,12 @@ public class Axon implements IAxon {
     @Override
     public void moveConnection(LayerMove layerMove, int currentLayer, Long currentNeuronId) {
         Integer layerRemoved = layerMove.getLayerRemoved();
-        if(addressMap.containsKey(layerRemoved)){
-        for(Long neuronId:addressMap.get(layerRemoved).keySet()){
-            for(Class<? extends ISignal> clazz : connectionMap.keySet()){
-                connectionMap.get(clazz).removeAll(addressMap.get(layerRemoved).get(neuronId));
+        if (addressMap.containsKey(layerRemoved)) {
+            for (Long neuronId : addressMap.get(layerRemoved).keySet()) {
+                for (Class<? extends ISignal> clazz : connectionMap.keySet()) {
+                    connectionMap.get(clazz).removeAll(addressMap.get(layerRemoved).get(neuronId));
+                }
             }
-        }
             addressMap.remove(layerRemoved);
         }
         for (Integer layerId : layerMove.getMovingMap().get(currentLayer).keySet()) {
@@ -127,8 +129,7 @@ public class Axon implements IAxon {
                     }
                 }
             } else {
-                //TODO:add warn for logger;
-
+                logger.warn("Axon has no connection for this signal class " + s.getCurrentSignalClass());
             }
         }
         return result;

@@ -18,7 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class HttpClusterApplication implements IApplication {
-    private  final static String UUID = java.util.UUID.randomUUID().toString();
+    private final static String UUID = java.util.UUID.randomUUID().toString();
+
     @Override
     public void startApplication(IContext context, JarClassLoaderService classLoaderService) {
         String registerLink = context.getProperty("master.address") + "/nodeManager/register";
@@ -30,7 +31,7 @@ public class HttpClusterApplication implements IApplication {
         HttpCommunicationClient communicationClient = new HttpCommunicationClient();
 
         try {
-            communicationClient.sendRequest(HttpRequestResolver.createPost(registerLink,nodeCompleteRequest));
+            communicationClient.sendRequest(HttpRequestResolver.createPost(registerLink, nodeCompleteRequest));
         } catch (IOException e) {
             //TODO: add logger
             return;
@@ -39,10 +40,10 @@ public class HttpClusterApplication implements IApplication {
             return;
         }
         String jsonSplitInput;
-        while(true){
+        while (true) {
             try {
-                jsonSplitInput = communicationClient.sendRequest(HttpRequestResolver.createPost(getSplitInputLink,nodeCompleteRequest));
-            }catch (IOException e) {
+                jsonSplitInput = communicationClient.sendRequest(HttpRequestResolver.createPost(getSplitInputLink, nodeCompleteRequest));
+            } catch (IOException e) {
                 //TODO: add logger
                 return;
             } catch (InterruptedException e) {
@@ -51,20 +52,20 @@ public class HttpClusterApplication implements IApplication {
             }
             ISplitInput splitInput = parseSplitInput(jsonSplitInput);
             ISignalStorage signalStorage = splitInput.readInputs();
-            for(INeuron neuron: splitInput.getNeurons()){
+            for (INeuron neuron : splitInput.getNeurons()) {
                 neuron.setCurrentLoop(splitInput.getEpoch());
                 neuron.setRun(splitInput.getRun());
                 neuron.addSignals(signalStorage.getSignalsForNeuron(neuron.getId()));
                 neuron.setCyclingNeuronInputMapping(splitInput.getServiceInputsMap());
                 neuron.processSignals();
                 neuron.activate();
-                IAxon axon =  neuron.getAxon();
-                HashMap<Integer,HashMap<Long,List<ISignal>>> result = axon.getSignalResultStructure(axon.processSignals(neuron.getResult()));
+                IAxon axon = neuron.getAxon();
+                HashMap<Integer, HashMap<Long, List<ISignal>>> result = axon.getSignalResultStructure(axon.processSignals(neuron.getResult()));
                 splitInput.saveResults(result);
                 ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
                 String json;
                 try {
-                    json = ow.writeValueAsString( neuron);
+                    json = ow.writeValueAsString(neuron);
                 } catch (JsonProcessingException e) {
 
                     //TODO: add logger return
@@ -75,7 +76,7 @@ public class HttpClusterApplication implements IApplication {
                 createNeuronRequest.setNeuronJson(json);
                 createNeuronRequest.setNeuronClass(neuron.getCurrentNeuronClass().getCanonicalName());
                 try {
-                    communicationClient.sendRequest(HttpRequestResolver.createPost(updateNeuronLink,createNeuronRequest));
+                    communicationClient.sendRequest(HttpRequestResolver.createPost(updateNeuronLink, createNeuronRequest));
                 } catch (IOException e) {
                     //TODO: add logger return
                     return;
@@ -87,16 +88,12 @@ public class HttpClusterApplication implements IApplication {
         }
     }
 
-    private ISplitInput parseSplitInput(String json){
+    private ISplitInput parseSplitInput(String json) {
 
         //TODO: implement
 
         return null;
     }
-
-
-
-
 
 
 }
