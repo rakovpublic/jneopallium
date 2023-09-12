@@ -2,17 +2,16 @@ package com.rakovpublic.jneuropallium.master.services;
 
 import com.rakovpublic.jneuropallium.master.model.InputRegistrationRequest;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
-import com.rakovpublic.jneuropallium.worker.net.storages.IInitInput;
-import com.rakovpublic.jneuropallium.worker.net.storages.ILayersMeta;
-import com.rakovpublic.jneuropallium.worker.net.storages.ISplitInput;
-import com.rakovpublic.jneuropallium.worker.net.storages.InputInitStrategy;
+import com.rakovpublic.jneuropallium.worker.net.storages.*;
 import com.rakovpublic.jneuropallium.worker.neuron.IResultNeuron;
 
 import java.util.HashMap;
 import java.util.List;
 
 
-public interface IInputService extends Service{
+public interface IInputService{
+    void updateConfiguration(ISignalsPersistStorage signalsPersist, ILayersMeta layersMeta, ISplitInput splitInput, Integer partitions, IInputLoadingStrategy runningStrategy, ISignalHistoryStorage signalHistoryStorage, IResultLayerRunner resultLayerRunner);
+
     void inputSourceUpdated(String name);
 
     void register(IInitInput iInputSource, boolean isMandatory, InputInitStrategy initStrategy, Integer amountOfRunsToUpdate);

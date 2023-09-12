@@ -6,12 +6,11 @@ import com.rakovpublic.jneuropallium.master.services.IResultLayerRunner;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.*;
 import com.rakovpublic.jneuropallium.worker.neuron.IResultNeuron;
-import org.springframework.stereotype.Component;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 public class InputService implements IInputService {
     private HashMap<IInitInput, InputStatusMeta> inputStatuses;
     private HashMap<String, NodeMeta> nodeMetas;
@@ -28,6 +27,22 @@ public class InputService implements IInputService {
     private IResultLayerRunner resultLayerRunner;
 
     public InputService(ISignalsPersistStorage signalsPersist, ILayersMeta layersMeta, ISplitInput splitInput, Integer partitions, IInputLoadingStrategy runningStrategy, ISignalHistoryStorage signalHistoryStorage,  IResultLayerRunner resultLayerRunner) {
+        this.signalsPersist = signalsPersist;
+        this.layersMeta = layersMeta;
+        this.preparedInputs = new ArrayList<>();
+        this.splitInput = splitInput;
+        this.partitions = partitions;
+        this.runningStrategy = runningStrategy;
+        this.nodeMetas = new HashMap<>();
+        this.inputs = new HashMap<>();
+        this.inputStatuses = new HashMap<>();
+        this.signalHistoryStorage = signalHistoryStorage;
+        runFlag = false;
+        this.resultLayerRunner = resultLayerRunner;
+    }
+
+    @Override
+    public void updateConfiguration(ISignalsPersistStorage signalsPersist, ILayersMeta layersMeta, ISplitInput splitInput, Integer partitions, IInputLoadingStrategy runningStrategy, ISignalHistoryStorage signalHistoryStorage, IResultLayerRunner resultLayerRunner) {
         this.signalsPersist = signalsPersist;
         this.layersMeta = layersMeta;
         this.preparedInputs = new ArrayList<>();
@@ -194,10 +209,5 @@ public class InputService implements IInputService {
     @Override
     public void processCallBackFromUpstream( HashMap<Integer, HashMap<Long, List<ISignal>>> signals) {
         signalsPersist.putSignals(signals);
-    }
-
-    @Override
-    public void updateConfiguration() {
-        //TODO: implement
     }
 }
