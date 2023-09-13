@@ -5,7 +5,10 @@ import com.rakovpublic.jneuropallium.master.model.UploadSignalsRequest;
 import com.rakovpublic.jneuropallium.master.services.IInputService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 //TODO: add status code sending
 
@@ -14,22 +17,24 @@ import org.springframework.web.bind.annotation.*;
 public class InputController {
     @Autowired
     private IInputService inputService;
+
     @PostMapping("/callback")
-    public ResponseEntity<?> persistCallback(@RequestBody UploadSignalsRequest request){
+    public ResponseEntity<?> persistCallback(@RequestBody UploadSignalsRequest request) {
         try {
-            inputService.uploadWorkerResult(request.getName(),request.getSignals());
-        }catch (Exception e){
+            inputService.uploadWorkerResult(request.getName(), request.getSignals());
+        } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e);
         }
         return ResponseEntity.ok().build();
 
     }
+
     @PostMapping("/register")
-    public ResponseEntity<?> registerInput(@RequestBody InputRegistrationRequest request){
+    public ResponseEntity<?> registerInput(@RequestBody InputRegistrationRequest request) {
         try {
             inputService.register(request);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e);
         }
         return ResponseEntity.ok().build();

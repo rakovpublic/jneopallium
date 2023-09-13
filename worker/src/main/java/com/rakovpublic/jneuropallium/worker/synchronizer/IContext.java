@@ -9,5 +9,7 @@ public interface IContext extends Serializable {
 
     String getProperty(String propertyName);
 
+    void update(String path);
+
 
 }

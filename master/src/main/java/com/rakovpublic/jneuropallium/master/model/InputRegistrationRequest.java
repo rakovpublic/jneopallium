@@ -1,7 +1,5 @@
 package com.rakovpublic.jneuropallium.master.model;
 
-import com.rakovpublic.jneuropallium.worker.net.storages.IInitInput;
-
 public class InputRegistrationRequest {
     private String iInputSourceJson;
     private String iInputSourceClass;

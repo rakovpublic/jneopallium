@@ -20,32 +20,35 @@ public class NodeManagerController {
     private NodeManager nodeManager;
 
     private IInputService inputService;
+
     @PostMapping("/completeRun")
-    public ResponseEntity<?> nodeComplete(@RequestBody NodeCompleteRequest request){
+    public ResponseEntity<?> nodeComplete(@RequestBody NodeCompleteRequest request) {
         try {
             nodeManager.setNodeStatus(request.getNodeName(), NodeStatus.IDLE);
 
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e);
         }
         return ResponseEntity.ok().build();
     }
+
     @PostMapping("/nextRun")
-    public ResponseEntity<?> getNextRun(@RequestBody NodeCompleteRequest request){
+    public ResponseEntity<?> getNextRun(@RequestBody NodeCompleteRequest request) {
         ISplitInput splitInput = null;
         try {
             splitInput = inputService.getNext(request.getNodeName());
-            nodeManager.setNodeStatus(request.getNodeName(),NodeStatus.RUNNING);
-        }catch (Exception e){
+            nodeManager.setNodeStatus(request.getNodeName(), NodeStatus.RUNNING);
+        } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e);
         }
         return ResponseEntity.ok(new SplitInputResponse(splitInput));
     }
+
     @PostMapping("/register")
-    public ResponseEntity<?> registerNode(@RequestBody NodeCompleteRequest request){
-        try{
-        nodeManager.register(request.getNodeName());
-        }catch (Exception e){
+    public ResponseEntity<?> registerNode(@RequestBody NodeCompleteRequest request) {
+        try {
+            nodeManager.register(request.getNodeName());
+        } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e);
         }
         return ResponseEntity.ok().build();

@@ -14,8 +14,6 @@ public class CreateNeuronRequest {
     }
 
 
-
-
     public String getNeuronClass() {
         return neuronClass;
     }

@@ -16,12 +16,15 @@ import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.neuron.IRule;
 import com.rakovpublic.jneuropallium.worker.neuron.impl.layersizing.CreateNeuronSignal;
 import com.rakovpublic.jneuropallium.worker.neuron.impl.layersizing.DeleteNeuronSignal;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 
 public class HttpLayer implements ILayer {
+    private static final Logger logger = LogManager.getLogger(HttpLayer.class);
     private String masterAddress;
     private Integer layerId;
     private String UUID;
@@ -43,8 +46,7 @@ public class HttpLayer implements ILayer {
         try {
             json = ow.writeValueAsString(signal.getValue().getNeuron());
         } catch (JsonProcessingException e) {
-
-            //TODO: add logger return
+            logger.error("Cannot generate json", e);
             return;
         }
         CreateNeuronRequest createNeuronRequest = new CreateNeuronRequest();
@@ -53,11 +55,8 @@ public class HttpLayer implements ILayer {
         createNeuronRequest.setNeuronClass(neuron.getCurrentNeuronClass().getCanonicalName());
         try {
             communicationClient.sendRequest(HttpRequestResolver.createPost(createUrl, createNeuronRequest));
-        } catch (IOException e) {
-            //TODO: add logger
-            return;
-        } catch (InterruptedException e) {
-            //TODO: add logger
+        } catch (IOException | InterruptedException e) {
+            logger.error("Cannot send create neuron request", e);
             return;
         }
         UploadSignalsRequest uploadSignalsRequest = new UploadSignalsRequest();
@@ -65,11 +64,8 @@ public class HttpLayer implements ILayer {
         uploadSignalsRequest.setName(UUID);
         try {
             communicationClient.sendRequest(HttpRequestResolver.createPost(sendResultLink, uploadSignalsRequest));
-        } catch (IOException e) {
-            //TODO: add logger
-            return;
-        } catch (InterruptedException e) {
-            //TODO: add logger
+        } catch (IOException | InterruptedException e) {
+            logger.error("Cannot send add neuron connections request", e);
             return;
         }
     }
@@ -84,11 +80,8 @@ public class HttpLayer implements ILayer {
         deleteNeuronRequest.setLayerId(layerId);
         try {
             communicationClient.sendRequest(HttpRequestResolver.createPost(deleteUrl, deleteNeuronRequest));
-        } catch (IOException e) {
-            //TODO: add logger return
-            return;
-        } catch (InterruptedException e) {
-            //TODO: add logger return
+        } catch (IOException | InterruptedException e) {
+            logger.error("Cannot send delete request", e);
             return;
         }
         UploadSignalsRequest uploadSignalsRequest = new UploadSignalsRequest();
@@ -96,15 +89,13 @@ public class HttpLayer implements ILayer {
         uploadSignalsRequest.setName(UUID);
         try {
             communicationClient.sendRequest(HttpRequestResolver.createPost(sendResultLink, uploadSignalsRequest));
-        } catch (IOException e) {
-            //TODO: add logger
-            return;
-        } catch (InterruptedException e) {
-            //TODO: add logger
+        } catch (IOException | InterruptedException e) {
+            logger.error("Cannot send update neuron connections request", e);
             return;
         }
     }
 
+    //TODO: add implementation
     @Override
     public long getLayerSize() {
         return 0;

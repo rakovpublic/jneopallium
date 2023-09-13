@@ -7,16 +7,21 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
+//TODO: add annotation fro json parser
 public class InitInputDeserializer extends StdDeserializer<IInitInput> {
+    private static final Logger logger = LogManager.getLogger(InitInputDeserializer.class);
+
     public InitInputDeserializer(Class<?> vc) {
         super(vc);
     }
 
     public InitInputDeserializer() {
-        this(null);
+        this(IInitInput.class);
     }
 
     @Override
@@ -27,8 +32,7 @@ public class InitInputDeserializer extends StdDeserializer<IInitInput> {
         try {
             return (IInitInput) mapper.readValue(jobject.getAsJsonObject("initInput").toString(), Class.forName(jobject.getAsJsonPrimitive("clazz").getAsString()));
         } catch (ClassNotFoundException e) {
-            //TODO: add logger
-            e.printStackTrace();
+            logger.error("cannot parse init input from json", e);
         }
         return null;
     }

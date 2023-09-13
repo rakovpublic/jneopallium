@@ -15,17 +15,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class ConfigurationController {
     @Autowired
     private IInputService inputService;
+
     @PostMapping("/update")
-    public void update(@RequestBody ConfigurationUpdateRequest request){
+    public void update(@RequestBody ConfigurationUpdateRequest request) {
 
 
     }
 
     @PostMapping("/callback")
-    public ResponseEntity<?> persistCallback(@RequestBody UploadSignalsRequest request){
+    public ResponseEntity<?> persistCallback(@RequestBody UploadSignalsRequest request) {
         try {
             inputService.processCallBackFromUpstream(request.getSignals());
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e);
         }
         return ResponseEntity.ok().build();

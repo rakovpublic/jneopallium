@@ -8,6 +8,8 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.ISignalStorage;
 import com.rakovpublic.jneuropallium.worker.net.storages.ISplitInput;
 import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.net.Authenticator;
@@ -20,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public abstract class AbstractHttpInputMeta implements ISplitInput {
+    private static final Logger logger = LogManager.getLogger(AbstractHttpInputMeta.class);
     private String nodeId;
     private String readInputsEndpoint;
     private String readNeuronsEndpoint;
@@ -64,12 +67,8 @@ public abstract class AbstractHttpInputMeta implements ISplitInput {
         HttpResponse<String> response = null;
         try {
             response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (IOException e) {
-            e.printStackTrace();
-            //TODO: add logger
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            //TODO: add logger
+        } catch (IOException | InterruptedException e) {
+            logger.error("cannot send request", e);
         }
 
         return parseSignalsForNeurons(response);
@@ -84,12 +83,8 @@ public abstract class AbstractHttpInputMeta implements ISplitInput {
         uploadSignalsRequest.setName(nodeId);
         try {
             communicationClient.sendRequest(HttpRequestResolver.createPost(sendResultEndpoint, uploadSignalsRequest));
-        } catch (IOException e) {
-            //TODO: add logger
-            return;
-        } catch (InterruptedException e) {
-            //TODO: add logger
-            return;
+        } catch (IOException | InterruptedException e) {
+            logger.error("cannot send request", e);
         }
     }
 
@@ -120,12 +115,8 @@ public abstract class AbstractHttpInputMeta implements ISplitInput {
         HttpResponse<String> response = null;
         try {
             response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (IOException e) {
-            e.printStackTrace();
-            //TODO: add logger
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-            //TODO: add logger
+        } catch (IOException | InterruptedException e) {
+            logger.error("cannot send request", e);
         }
 
         return parseNeurons(response);

@@ -5,7 +5,6 @@ import com.rakovpublic.jneuropallium.master.model.CreateNeuronRequest;
 import com.rakovpublic.jneuropallium.master.model.DeleteNeuronRequest;
 import com.rakovpublic.jneuropallium.master.services.ILayerService;
 import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,37 +17,40 @@ import org.springframework.web.bind.annotation.RestController;
 public class LayerController {
     //TODO: add service implementation
     private ILayerService layerService;
+
     @PostMapping("/updateNeuron")
-    public ResponseEntity<?> updateNeuron(@RequestBody CreateNeuronRequest request){
+    public ResponseEntity<?> updateNeuron(@RequestBody CreateNeuronRequest request) {
         try {
             ObjectMapper mapper = new ObjectMapper();
             INeuron neuron = (INeuron) mapper.readValue(request.getNeuronJson(), Class.forName(request.getNeuronClass()));
-            layerService.deleteNeuron(request.getLayerId(),neuron.getId());
-            layerService.addNeuron(neuron,request.getLayerId());
-        }catch (Exception e){
+            layerService.deleteNeuron(request.getLayerId(), neuron.getId());
+            layerService.addNeuron(neuron, request.getLayerId());
+        } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e);
         }
         return ResponseEntity.ok().build();
     }
+
     @PostMapping("/deleteNeuron")
-    public ResponseEntity<?> deleteNeuron(@RequestBody DeleteNeuronRequest request){
+    public ResponseEntity<?> deleteNeuron(@RequestBody DeleteNeuronRequest request) {
         try {
             ObjectMapper mapper = new ObjectMapper();
 
-            layerService.deleteNeuron(request.getLayerId(),request.getNeuronId());
+            layerService.deleteNeuron(request.getLayerId(), request.getNeuronId());
 
-        }catch (Exception e){
+        } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e);
         }
         return ResponseEntity.ok().build();
     }
+
     @PostMapping("/createNeuron")
-    public ResponseEntity<?> addNeuron(@RequestBody CreateNeuronRequest request){
+    public ResponseEntity<?> addNeuron(@RequestBody CreateNeuronRequest request) {
         try {
             ObjectMapper mapper = new ObjectMapper();
             INeuron neuron = (INeuron) mapper.readValue(request.getNeuronJson(), Class.forName(request.getNeuronClass()));
-            layerService.addNeuron(neuron,request.getLayerId());
-        }catch (Exception e){
+            layerService.addNeuron(neuron, request.getLayerId());
+        } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e);
         }
         return ResponseEntity.ok().build();

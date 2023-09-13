@@ -6,12 +6,15 @@ import com.rakovpublic.jneuropallium.master.services.IResultLayerRunner;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.*;
 import com.rakovpublic.jneuropallium.worker.neuron.IResultNeuron;
-
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 public class InputService implements IInputService {
+    private static final Logger logger = LogManager.getLogger(InputService.class);
     private HashMap<IInitInput, InputStatusMeta> inputStatuses;
     private HashMap<String, NodeMeta> nodeMetas;
     private HashMap<IInitInput, InputInitStrategy> inputs;
@@ -26,7 +29,7 @@ public class InputService implements IInputService {
     private Boolean runFlag;
     private IResultLayerRunner resultLayerRunner;
 
-    public InputService(ISignalsPersistStorage signalsPersist, ILayersMeta layersMeta, ISplitInput splitInput, Integer partitions, IInputLoadingStrategy runningStrategy, ISignalHistoryStorage signalHistoryStorage,  IResultLayerRunner resultLayerRunner) {
+    public InputService(ISignalsPersistStorage signalsPersist, ILayersMeta layersMeta, ISplitInput splitInput, Integer partitions, IInputLoadingStrategy runningStrategy, ISignalHistoryStorage signalHistoryStorage, IResultLayerRunner resultLayerRunner) {
         this.signalsPersist = signalsPersist;
         this.layersMeta = layersMeta;
         this.preparedInputs = new ArrayList<>();
@@ -129,21 +132,20 @@ public class InputService implements IInputService {
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
-                        //TODO: add logger
-                        e.printStackTrace();
+                        logger.error(e);
                     }
                 }
             }
             if (nodeMetas.get(nodeNames.get(0)).getCurrentLayer() + 1 < layersMeta.getLayers().size()) {
-                runFlag=false;
+                runFlag = false;
                 ILayerMeta layerMeta = layersMeta.getLayerByID(nodeMetas.get(nodeNames.get(0)).getCurrentLayer() + 1);
-                Long size = layerMeta.getSize() / nodeNames.size() <= partitions ? Long.parseLong(partitions+"") : nodeNames.size();
+                Long size = layerMeta.getSize() / nodeNames.size() <= partitions ? Long.parseLong(partitions + "") : nodeNames.size();
                 List<ISplitInput> resList = new ArrayList<>();
                 ISplitInput input = splitInput.getNewInstance();
-                Long atomic = layerMeta.getSize() / size>1? layerMeta.getSize() / size:1;
-                for(int i = 0;i<size; i++){
-                    input.setStart(i*atomic);
-                    input.setEnd((i+1)*atomic);
+                Long atomic = layerMeta.getSize() / size > 1 ? layerMeta.getSize() / size : 1;
+                for (int i = 0; i < size; i++) {
+                    input.setStart(i * atomic);
+                    input.setEnd((i + 1) * atomic);
                     input.setNodeIdentifier(nodeNames.get(0));
                     input.setLayer(layerMeta.getID());
                     input.setCurrentLoopCount(runningStrategy.getCurrentLoopCount());
@@ -154,11 +156,11 @@ public class InputService implements IInputService {
                 for (String nodeName : nodeNames) {
                     nodeMetas.get(nodeName).setCurrentLayer(layerMeta.getID());
                 }
-            }else{
-                signalHistoryStorage.save(signalsPersist.getAllSignals(),runningStrategy.getEpoch(),runningStrategy.getCurrentLoopCount());
+            } else {
+                signalHistoryStorage.save(signalsPersist.getAllSignals(), runningStrategy.getEpoch(), runningStrategy.getCurrentLoopCount());
                 signalsPersist.cleanOutdatedSignals();
-                runningStrategy.populateInput(signalsPersist,inputStatuses);
-                runFlag=true;
+                runningStrategy.populateInput(signalsPersist, inputStatuses);
+                runFlag = true;
             }
         }
 
@@ -207,7 +209,7 @@ public class InputService implements IInputService {
     }
 
     @Override
-    public void processCallBackFromUpstream( HashMap<Integer, HashMap<Long, List<ISignal>>> signals) {
+    public void processCallBackFromUpstream(HashMap<Integer, HashMap<Long, List<ISignal>>> signals) {
         signalsPersist.putSignals(signals);
     }
 }

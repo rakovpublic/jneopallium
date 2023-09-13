@@ -22,7 +22,7 @@ public abstract class Runner implements IRunner {
         try {
             uris = new URL[]{new URL(jarPath)};
         } catch (MalformedURLException e) {
-            logger.error("Incorrect url",e);
+            logger.error("Incorrect url", e);
             throw new RuntimeException(e);
         }
         JarClassLoaderService classLoaderService = new JarClassLoaderService(uris);
@@ -31,7 +31,7 @@ public abstract class Runner implements IRunner {
             application = new LocalApplication();
         } else if (mode.equals("http")) {
             application = new HttpClusterApplication();
-        }else{
+        } else {
             application = new GRPCBasedApplication();
         }
         application.startApplication(context, classLoaderService);

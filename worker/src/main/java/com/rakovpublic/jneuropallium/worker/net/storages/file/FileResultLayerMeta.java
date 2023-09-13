@@ -13,6 +13,8 @@ import com.rakovpublic.jneuropallium.worker.neuron.IActivationFunction;
 import com.rakovpublic.jneuropallium.worker.neuron.IResultNeuron;
 import com.rakovpublic.jneuropallium.worker.neuron.ISignalMerger;
 import com.rakovpublic.jneuropallium.worker.neuron.ISignalProcessor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,6 +23,8 @@ import java.util.List;
 import java.util.Map;
 
 public class FileResultLayerMeta extends FileLayerMeta implements IResultLayerMeta {
+    private static final Logger logger = LogManager.getLogger(FileResultLayerMeta.class);
+
     FileResultLayerMeta(IStorageItem file, IStorage fs) {
         super(file, fs);
     }
@@ -53,8 +57,7 @@ public class FileResultLayerMeta extends FileLayerMeta implements IResultLayerMe
                 }
                 result.add(neuron);
             } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-                //TODO:Add logger
+                logger.error("cannot parse neuron from json", e);
             }
         }
         return result;

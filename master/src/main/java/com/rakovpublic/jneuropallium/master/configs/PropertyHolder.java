@@ -4,12 +4,16 @@
 
 package com.rakovpublic.jneuropallium.master.configs;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
 public class PropertyHolder {
+    private static final Logger logger = LogManager.getLogger(PropertyHolder.class);
     private static PropertyHolder propertyHolder = new PropertyHolder();
     private Properties prop;
 
@@ -25,15 +29,14 @@ public class PropertyHolder {
         return prop.getProperty(propertyName);
     }
 
-    public synchronized void updateConfig(String path){
+    public synchronized void updateConfig(String path) {
         try {
             InputStream input = new FileInputStream(path);
             prop = new Properties();
             prop.load(input);
 
         } catch (IOException ex) {
-            ex.printStackTrace();
-            //TODO: add logger
+            logger.error("cannot read properties from path " + path, ex);
         }
     }
 
@@ -45,8 +48,7 @@ public class PropertyHolder {
             prop.load(input);
 
         } catch (IOException ex) {
-            ex.printStackTrace();
-            //TODO: add logger
+            logger.error("cannot read default properties", ex);
         }
 
     }

@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public interface IInputService{
+public interface IInputService {
     void updateConfiguration(ISignalsPersistStorage signalsPersist, ILayersMeta layersMeta, ISplitInput splitInput, Integer partitions, IInputLoadingStrategy runningStrategy, ISignalHistoryStorage signalHistoryStorage, IResultLayerRunner resultLayerRunner);
 
     void inputSourceUpdated(String name);
@@ -38,5 +38,5 @@ public interface IInputService{
 
     void setRun(Long run);
 
-    void processCallBackFromUpstream( HashMap<Integer, HashMap<Long, List<ISignal>>> signals);
+    void processCallBackFromUpstream(HashMap<Integer, HashMap<Long, List<ISignal>>> signals);
 }

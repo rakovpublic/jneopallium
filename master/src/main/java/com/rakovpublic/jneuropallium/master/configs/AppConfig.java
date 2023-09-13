@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Scope;
 public class AppConfig {
     @Bean
     @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
-    public IInputService getInputService(){
+    public IInputService getInputService() {
         return InputServiceConfigResolver.initService();
     }
 }

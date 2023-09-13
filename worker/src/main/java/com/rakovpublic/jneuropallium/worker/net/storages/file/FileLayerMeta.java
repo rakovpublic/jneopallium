@@ -15,11 +15,14 @@ import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.neuron.ISignalMerger;
 import com.rakovpublic.jneuropallium.worker.neuron.ISignalProcessor;
 import com.rakovpublic.jneuropallium.worker.synchronizer.utils.JSONHelper;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.*;
 
 public class FileLayerMeta<S extends IStorageItem> implements ILayerMeta {
+    private static final Logger logger = LogManager.getLogger(FileLayerMeta.class);
     protected S file;
     protected IStorage<S> fileSystem;
     protected List<? extends INeuron> neurons;
@@ -64,8 +67,7 @@ public class FileLayerMeta<S extends IStorageItem> implements ILayerMeta {
                 }
                 result.add(neuron);
             } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-                //TODO:Add logger
+                logger.error("cannot parse neuron from json " + jel.getAsJsonObject().toString(), e);
             }
         }
         return result;
@@ -94,8 +96,7 @@ public class FileLayerMeta<S extends IStorageItem> implements ILayerMeta {
         try {
             serializedObject = mapper.writeValueAsString(neuronMetas);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            //TODO:Add logger
+            logger.error("cannot save  neurons to json ", e);
         }
         sb.append(serializedObject);
         sb.append("}");
