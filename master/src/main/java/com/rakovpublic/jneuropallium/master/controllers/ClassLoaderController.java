@@ -1,12 +1,14 @@
 package com.rakovpublic.jneuropallium.master.controllers;
 
 import com.rakovpublic.jneuropallium.master.services.StorageService;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileInputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -50,14 +52,13 @@ public class ClassLoaderController {
 
     @GetMapping("/jar")
     public ResponseEntity<?> getJar(@RequestParam String path) {
-        Resource file = null;
+        InputStreamResource resource= null;
         try {
-            file = storageService.loadAsResource(path);
-
+            resource = storageService.loadAsResource(path);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e);
         }
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"").body(resource);
     }
 
     @GetMapping("/jars")
