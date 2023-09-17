@@ -1,14 +1,13 @@
 package com.rakovpublic.jneuropallium.master.controllers;
 
 import com.rakovpublic.jneuropallium.master.services.StorageService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileInputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -21,9 +20,13 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/classloader")
 public class ClassLoaderController {
-
-    //TODO: add implementation for service
     private StorageService storageService;
+
+
+    @Autowired
+    public ClassLoaderController(StorageService storageService) {
+        this.storageService = storageService;
+    }
 
     @PostMapping("/upload")
     public ResponseEntity<?> persistAndLoadClasses(@RequestParam("file") MultipartFile file) {

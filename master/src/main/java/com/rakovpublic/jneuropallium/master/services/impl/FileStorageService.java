@@ -9,7 +9,7 @@ import com.rakovpublic.jneuropallium.master.services.StorageService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileInputStream;
@@ -21,6 +21,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.stream.Stream;
 
+@Service
 public class FileStorageService implements StorageService {
     private String folder;
     private static final Logger logger = LogManager.getLogger(FileStorageService.class);
