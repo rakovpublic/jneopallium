@@ -3,6 +3,7 @@ package com.rakovpublic.jneuropallium.master.controllers;
 import com.rakovpublic.jneuropallium.master.configs.PropertyHolder;
 import com.rakovpublic.jneuropallium.master.model.ConfigurationUpdateRequest;
 import com.rakovpublic.jneuropallium.master.model.UploadSignalsRequest;
+import com.rakovpublic.jneuropallium.master.services.ConfigurationService;
 import com.rakovpublic.jneuropallium.master.services.IInputService;
 import com.rakovpublic.jneuropallium.master.services.StorageService;
 import com.rakovpublic.jneuropallium.master.services.impl.FileStorageService;
@@ -15,25 +16,34 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/configuration")
 public class ConfigurationController {
 
-    private IInputService inputService;
+    private ConfigurationService configurationService;
     private StorageService storageService;
 
     @Autowired
-    public ConfigurationController(IInputService inputService, StorageService storageService) {
-        this.inputService = inputService;
+    public ConfigurationController(ConfigurationService configurationService, StorageService storageService) {
+        this.configurationService = configurationService;
         this.storageService = storageService;
     }
+
+
 
     @PostMapping("/update")
     public void update(@RequestParam("config") ConfigurationUpdateRequest configurationUpdateRequest,@RequestParam("layersMetaPath") MultipartFile layersMetaPath) {
         String configurationPath = storageService.store(layersMetaPath);
         configurationUpdateRequest.setLayersMetaPath(configurationPath);
+        configurationService.update(configurationUpdateRequest);
+    }
+
+    @PostMapping("/confignet")
+    public void confignet(@RequestParam("config") MultipartFile config) {
+        String configurationPath = storageService.store(config);
+        PropertyHolder.getPropertyHolder().updateConfig(configurationPath);
     }
 
     @PostMapping("/callback")
     public ResponseEntity<?> persistCallback(@RequestBody UploadSignalsRequest request) {
         try {
-            inputService.processCallBackFromUpstream(request.getSignals());
+            configurationService.getInputService().processCallBackFromUpstream(request.getSignals());
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e);
         }
