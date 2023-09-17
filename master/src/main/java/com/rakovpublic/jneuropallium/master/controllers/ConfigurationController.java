@@ -25,9 +25,9 @@ public class ConfigurationController {
     }
 
     @PostMapping("/update")
-    public void update(@RequestParam("file") MultipartFile file) {
-        String configurationPath = storageService.store(file);
-        PropertyHolder.getPropertyHolder().updateConfig(configurationPath);
+    public void update(@RequestParam("config") ConfigurationUpdateRequest configurationUpdateRequest,@RequestParam("layersMetaPath") MultipartFile layersMetaPath) {
+        String configurationPath = storageService.store(layersMetaPath);
+        configurationUpdateRequest.setLayersMetaPath(configurationPath);
     }
 
     @PostMapping("/callback")

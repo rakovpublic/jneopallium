@@ -2,7 +2,7 @@ package com.rakovpublic.jneuropallium.master.services;
 
 import com.rakovpublic.jneuropallium.master.model.ConfigurationUpdateRequest;
 
-public interface ConfigurationService extends Service {
+public interface ConfigurationService {
 
-    public void update(ConfigurationUpdateRequest request);
+     void update(ConfigurationUpdateRequest request);
 }
