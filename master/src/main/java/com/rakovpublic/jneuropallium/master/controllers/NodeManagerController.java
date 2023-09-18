@@ -2,6 +2,7 @@ package com.rakovpublic.jneuropallium.master.controllers;
 
 import com.rakovpublic.jneuropallium.master.model.NodeCompleteRequest;
 import com.rakovpublic.jneuropallium.master.model.SplitInputResponse;
+import com.rakovpublic.jneuropallium.master.services.ConfigurationService;
 import com.rakovpublic.jneuropallium.master.services.IInputService;
 import com.rakovpublic.jneuropallium.master.services.impl.NodeManager;
 import com.rakovpublic.jneuropallium.master.services.impl.NodeStatus;
@@ -16,10 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/nodeManager")
 public class NodeManagerController {
-    @Autowired
     private NodeManager nodeManager;
+    private ConfigurationService configurationService;
 
-    private IInputService inputService;
+    @Autowired
+    public NodeManagerController(NodeManager nodeManager, ConfigurationService configurationService) {
+        this.nodeManager = nodeManager;
+        this.configurationService = configurationService;
+    }
 
     @PostMapping("/completeRun")
     public ResponseEntity<?> nodeComplete(@RequestBody NodeCompleteRequest request) {
@@ -36,7 +41,7 @@ public class NodeManagerController {
     public ResponseEntity<?> getNextRun(@RequestBody NodeCompleteRequest request) {
         ISplitInput splitInput = null;
         try {
-            splitInput = inputService.getNext(request.getNodeName());
+            splitInput = configurationService.getInputService().getNext(request.getNodeName());
             nodeManager.setNodeStatus(request.getNodeName(), NodeStatus.RUNNING);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e);

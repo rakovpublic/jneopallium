@@ -6,12 +6,8 @@ import com.rakovpublic.jneuropallium.master.model.DeleteNeuronRequest;
 import com.rakovpublic.jneuropallium.master.services.ILayerService;
 import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-//TODO: add status code sending
 @RestController
 @RequestMapping("/layer")
 public class LayerController {
@@ -55,4 +51,19 @@ public class LayerController {
         }
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/deletelayer")
+    public ResponseEntity<?> deleteLayer(@RequestParam Integer layerId) {
+        try {
+            //TODO: add connections update
+            layerService.deleteLayer(layerId);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e);
+        }
+        return ResponseEntity.ok().build();
+    }
+
+
+
+
 }

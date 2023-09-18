@@ -9,4 +9,6 @@ public interface ILayerService {
 
     void isProcessed(Long layerId);
 
+    void  deleteLayer(Integer layerId);
+
 }

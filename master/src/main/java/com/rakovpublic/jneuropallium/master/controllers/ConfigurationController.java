@@ -34,8 +34,8 @@ public class ConfigurationController {
         configurationService.update(configurationUpdateRequest);
     }
 
-    @PostMapping("/confignet")
-    public void confignet(@RequestParam("config") MultipartFile config) {
+    @PostMapping("/configapp")
+    public void configApp(@RequestParam("config") MultipartFile config) {
         String configurationPath = storageService.store(config);
         PropertyHolder.getPropertyHolder().updateConfig(configurationPath);
     }
