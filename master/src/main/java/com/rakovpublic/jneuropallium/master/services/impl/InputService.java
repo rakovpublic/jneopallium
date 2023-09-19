@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+//TODO: add timeout node timeout handling
 public class InputService implements IInputService {
     private static final Logger logger = LogManager.getLogger(InputService.class);
     private HashMap<IInitInput, InputStatusMeta> inputStatuses;

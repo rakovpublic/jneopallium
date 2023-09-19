@@ -41,6 +41,18 @@ public class NodeManagerController {
     public ResponseEntity<?> getNextRun(@RequestBody NodeCompleteRequest request) {
         ISplitInput splitInput = null;
         try {
+            if(configurationService.getInputService().runCompleted()){
+                //TODO: add result saving
+                configurationService.getInputService().prepareResults();
+
+                configurationService.getInputService().nextRun();
+                configurationService.getInputService().prepareInputs();
+            }
+            // TODO:
+            if(!configurationService.getInputService().hasPrepared()){
+                configurationService.getInputService().prepareInputs();
+            }
+
             splitInput = configurationService.getInputService().getNext(request.getNodeName());
             nodeManager.setNodeStatus(request.getNodeName(), NodeStatus.RUNNING);
         } catch (Exception e) {
