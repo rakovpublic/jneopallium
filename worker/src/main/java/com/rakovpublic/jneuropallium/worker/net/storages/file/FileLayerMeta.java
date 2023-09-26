@@ -25,7 +25,7 @@ public class FileLayerMeta<S extends IStorageItem> implements ILayerMeta {
     private static final Logger logger = LogManager.getLogger(FileLayerMeta.class);
     protected S file;
     protected IStorage<S> fileSystem;
-    protected List<? extends INeuron> neurons;
+    protected List<INeuron> neurons;
 
     FileLayerMeta(S file, IStorage<S> fs) {
         this.file = file;
@@ -45,7 +45,7 @@ public class FileLayerMeta<S extends IStorageItem> implements ILayerMeta {
     }
 
     @Override
-    public List<? extends INeuron> getNeurons() {
+    public List<INeuron> getNeurons() {
         String layer = fileSystem.read(file);
         List<INeuron> result = new ArrayList<>();
         JsonElement jelement = new JsonParser().parse(layer);
@@ -84,7 +84,7 @@ public class FileLayerMeta<S extends IStorageItem> implements ILayerMeta {
     }
 
     @Override
-    public void saveNeurons(Collection<? extends INeuron> neuronMetas) {
+    public void saveNeurons(List<INeuron> neuronMetas) {
         StringBuilder sb = new StringBuilder();
         sb.append("{\"layerID\":\"");
         sb.append(getID() + "\",");
@@ -107,7 +107,7 @@ public class FileLayerMeta<S extends IStorageItem> implements ILayerMeta {
     @Override
     public void dumpLayer() {
         if (neurons == null || neurons.size() == 0) {
-            getNeurons();
+            neurons= getNeurons();
         }
         saveNeurons(neurons);
     }

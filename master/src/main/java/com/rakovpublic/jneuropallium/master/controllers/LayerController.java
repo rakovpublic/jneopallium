@@ -3,6 +3,7 @@ package com.rakovpublic.jneuropallium.master.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rakovpublic.jneuropallium.master.model.CreateNeuronRequest;
 import com.rakovpublic.jneuropallium.master.model.DeleteNeuronRequest;
+import com.rakovpublic.jneuropallium.master.services.ConfigurationService;
 import com.rakovpublic.jneuropallium.master.services.ILayerService;
 import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 import org.springframework.http.ResponseEntity;
@@ -11,8 +12,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/layer")
 public class LayerController {
-    //TODO: add service implementation
+
     private ILayerService layerService;
+    //TODO: add service implementation
+    private ConfigurationService configurationService;
 
     @PostMapping("/updateNeuron")
     public ResponseEntity<?> updateNeuron(@RequestBody CreateNeuronRequest request) {
@@ -55,8 +58,7 @@ public class LayerController {
     @GetMapping("/deletelayer")
     public ResponseEntity<?> deleteLayer(@RequestParam Integer layerId) {
         try {
-            //TODO: add connections update
-            layerService.deleteLayer(layerId);
+            layerService.deleteLayer(layerId,configurationService.getReconnectionStrategy());
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e);
         }

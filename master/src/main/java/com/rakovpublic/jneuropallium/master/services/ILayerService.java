@@ -1,14 +1,13 @@
 package com.rakovpublic.jneuropallium.master.services;
 
+import com.rakovpublic.jneuropallium.worker.net.storages.ReconnectStrategy;
 import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 
 public interface ILayerService {
     void deleteNeuron(Integer layerId, Long neuronId);
 
-    <N extends INeuron> void addNeuron(N neuronJson, Integer layerId);
+    void addNeuron(INeuron neuron, Integer layerId);
 
-    void isProcessed(Long layerId);
-
-    void  deleteLayer(Integer layerId);
+    void  deleteLayer(Integer layerId, ReconnectStrategy reconnectStrategy);
 
 }

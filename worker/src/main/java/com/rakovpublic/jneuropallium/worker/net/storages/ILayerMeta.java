@@ -18,14 +18,13 @@ public interface ILayerMeta extends IStorageMeta {
      */
     int getID();
 
-    //TODO: add reconnection strategy
     void addLayerMove(LayerMove layerMove);
 
 
     /**
      * @return list of layer neurons
      */
-    List<? extends INeuron> getNeurons();
+    List<INeuron> getNeurons();
 
     /**
      * @param id neuron id
@@ -36,7 +35,7 @@ public interface ILayerMeta extends IStorageMeta {
     /**
      * @param neurons list of neurons to save
      */
-    void saveNeurons(Collection<? extends INeuron> neurons);
+    void saveNeurons(List<INeuron> neurons);
 
     /**
      * this method persist layer
