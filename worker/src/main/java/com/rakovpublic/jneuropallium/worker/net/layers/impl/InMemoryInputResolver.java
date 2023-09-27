@@ -28,8 +28,8 @@ public class InMemoryInputResolver implements IInputResolver {
     }
 
     @Override
-    public void registerInput(IInitInput iInputSource, boolean isMandatory, InputInitStrategy initStrategy, Integer amountOfRuns) {
-        inputStatuses.put(iInputSource, new InputStatusMeta(true, isMandatory, amountOfRuns, iInputSource.getName()));
+    public void registerInput(IInitInput iInputSource, boolean isMandatory, InputInitStrategy initStrategy) {
+        inputStatuses.put(iInputSource, new InputStatusMeta(true, isMandatory, iInputSource.getName()));
         inputs.put(iInputSource, initStrategy);
         inputLoadingStrategy.updateInputs(inputStatuses, inputs);
     }
@@ -61,7 +61,7 @@ public class InMemoryInputResolver implements IInputResolver {
 
     @Override
     public void saveHistory() {
-        signalHistoryStorage.save(signalsPersistStorage.getAllSignals(), epoch);
+        signalHistoryStorage.save(signalsPersistStorage.getAllSignals(), epoch,inputLoadingStrategy.getCurrentLoopCount());
     }
 
     @Override

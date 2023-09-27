@@ -3,15 +3,13 @@ package com.rakovpublic.jneuropallium.worker.net.storages;
 public class InputStatusMeta {
     private Boolean status;
     private Boolean mandatoryUpdated;
-    private Integer updateOnceInNRuns;
     private Integer currentRuns;
     private String name;
     private Boolean beenUsed;
 
-    public InputStatusMeta(Boolean status, Boolean mandatoryUpdated, Integer updateOnceInNRuns, String name) {
+    public InputStatusMeta(Boolean status, Boolean mandatoryUpdated, String name) {
         this.status = status;
         this.mandatoryUpdated = mandatoryUpdated;
-        this.updateOnceInNRuns = updateOnceInNRuns;
         currentRuns = 0;
         this.name = name;
         beenUsed = false;
@@ -42,13 +40,7 @@ public class InputStatusMeta {
         this.mandatoryUpdated = mandatoryUpdated;
     }
 
-    public Integer getUpdateOnceInNRuns() {
-        return updateOnceInNRuns;
-    }
 
-    public void setUpdateOnceInNRuns(Integer updateOnceInNRuns) {
-        this.updateOnceInNRuns = updateOnceInNRuns;
-    }
 
     public Integer getCurrentRuns() {
         return currentRuns;

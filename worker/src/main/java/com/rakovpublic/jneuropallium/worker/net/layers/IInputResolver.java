@@ -21,9 +21,8 @@ public interface IInputResolver {
      * @param iInputSource describes where get input
      * @param isMandatory  check if availability this input is mandatory to make next run
      * @param initStrategy describes how to populate this input to neurons(which layers and neurons should get the input)
-     * @param amountOfRuns describes how often this input should be populated
      */
-    void registerInput(IInitInput iInputSource, boolean isMandatory, InputInitStrategy initStrategy, Integer amountOfRuns);
+    void registerInput(IInitInput iInputSource, boolean isMandatory, InputInitStrategy initStrategy);
 
     /**
      * @return signals storage

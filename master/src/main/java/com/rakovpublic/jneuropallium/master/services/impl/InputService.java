@@ -1,8 +1,12 @@
 package com.rakovpublic.jneuropallium.master.services.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rakovpublic.jneuropallium.master.model.InputRegistrationRequest;
 import com.rakovpublic.jneuropallium.master.services.IInputService;
 import com.rakovpublic.jneuropallium.master.services.IResultLayerRunner;
+import com.rakovpublic.jneuropallium.worker.net.layers.impl.InputArray;
+import com.rakovpublic.jneuropallium.worker.net.layers.impl.InputData;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.*;
 import com.rakovpublic.jneuropallium.worker.neuron.IResultNeuron;
@@ -212,5 +216,17 @@ public class InputService implements IInputService {
     @Override
     public void processCallBackFromUpstream(HashMap<Integer, HashMap<Long, List<ISignal>>> signals) {
         signalsPersist.putSignals(signals);
+    }
+
+    private List<InputData> getInputs(String json) {
+        ObjectMapper mapper = new ObjectMapper();
+        List<InputData> result = null;
+        try {
+            result = mapper.readValue(json, InputArray.class).getInputData();
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            logger.error("Cannot parse json " + json, e);
+        }
+        return result;
     }
 }

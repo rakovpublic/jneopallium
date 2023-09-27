@@ -11,8 +11,10 @@ public class ConfigurationUpdateRequest {
     private String historyClass;
     private Long iterationsToStore;
     private String resultRunnerClass;
+    private String reconnectStrategyClass;
 
-    public ConfigurationUpdateRequest(String layersMetaPath, String layersMetaClass, String splitInputClass, String inputLoadingStrategyClass, Integer partitions, Integer defaultLoopsCount, String signalsPersistClass, String historyClass, Long iterationsToStore, String resultRunnerClass) {
+
+    public ConfigurationUpdateRequest(String layersMetaPath, String layersMetaClass, String splitInputClass, String inputLoadingStrategyClass, Integer partitions, Integer defaultLoopsCount, String signalsPersistClass, String historyClass, Long iterationsToStore, String resultRunnerClass, String reconnectStrategyClass) {
         this.layersMetaPath = layersMetaPath;
         this.layersMetaClass = layersMetaClass;
         this.splitInputClass = splitInputClass;
@@ -23,6 +25,7 @@ public class ConfigurationUpdateRequest {
         this.historyClass = historyClass;
         this.iterationsToStore = iterationsToStore;
         this.resultRunnerClass = resultRunnerClass;
+        this.reconnectStrategyClass = reconnectStrategyClass;
     }
 
     public ConfigurationUpdateRequest() {
@@ -106,5 +109,13 @@ public class ConfigurationUpdateRequest {
 
     public void setResultRunnerClass(String resultRunnerClass) {
         this.resultRunnerClass = resultRunnerClass;
+    }
+
+    public String getReconnectStrategyClass() {
+        return reconnectStrategyClass;
+    }
+
+    public void setReconnectStrategyClass(String reconnectStrategyClass) {
+        this.reconnectStrategyClass = reconnectStrategyClass;
     }
 }

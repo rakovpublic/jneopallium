@@ -73,7 +73,7 @@ public class LocalApplication implements IApplication {
         IInputResolver inputResolver = new InMemoryInputResolver(new InMemorySignalPersistStorage(), new InMemorySignalHistoryStorage(historySlow, historyFast), this.getLoadingStrategy(inputLoadingStrategy));
         String inputs = context.getProperty("configuration.input.inputs");
         for (InputData inputData : this.getInputs(inputs)) {
-            inputResolver.registerInput(inputData.getiInputSource(), inputData.isMandatory(), inputData.getInitStrategy(), inputData.getAmountOfRuns());
+            inputResolver.registerInput(inputData.getiInputSource(), inputData.isMandatory(), inputData.getInitStrategy());
         }
         structBuilder.withHiddenInputMeta(inputResolver);
         structBuilder.withLayersMeta(new FileLayersMeta<>(fs.getItem(layerPath), fs));

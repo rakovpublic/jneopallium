@@ -80,6 +80,7 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
                     }
                     signalsPersistStorage.putSignals(externalInputs.get(iii).getInputs(layersMeta, signals));
                     inputStatuses.get(iii).setCurrentRuns(0);
+                    inputStatuses.get(iii).setBeenUsed(true);
                 } else {
                     inputStatuses.get(iii).setCurrentRuns(inputStatuses.get(iii).getCurrentRuns() + 1);
                 }
