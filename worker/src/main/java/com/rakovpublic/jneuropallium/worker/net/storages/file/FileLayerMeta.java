@@ -6,6 +6,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.rakovpublic.jneuropallium.worker.net.layers.LayerMetaParam;
 import com.rakovpublic.jneuropallium.worker.net.layers.LayerMove;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.ILayerMeta;
@@ -30,6 +31,16 @@ public class FileLayerMeta<S extends IStorageItem> implements ILayerMeta {
     FileLayerMeta(S file, IStorage<S> fs) {
         this.file = file;
         this.fileSystem = fs;
+    }
+    //TODO: add implementation
+    @Override
+    public HashMap<String, LayerMetaParam> getLayerMetaParams() {
+        return null;
+    }
+
+    @Override
+    public void setLayerMetaParams(HashMap<String, LayerMetaParam> metaParams) {
+
     }
 
     @Override

@@ -13,6 +13,6 @@ public interface IResultLayerMeta extends ILayerMeta {
      *
      * @return neurons list
      */
-    List<? extends IResultNeuron> getNeurons();
+    List<IResultNeuron> getResultNeurons();
 
 }

@@ -2,6 +2,7 @@ package com.rakovpublic.jneuropallium.worker.net.layers.impl;
 
 import com.rakovpublic.jneuropallium.worker.net.layers.IInputResolver;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayer;
+import com.rakovpublic.jneuropallium.worker.net.layers.LayerMetaParam;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.ILayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.storages.INeuronSerializer;
@@ -31,9 +32,11 @@ public class Layer<N extends INeuron> implements ILayer<N> {
     private LinkedBlockingQueue<INeuron> notProcessed;
     private List<IRule> rules;
     private IInputResolver inputResolver;
+    private HashMap<String, LayerMetaParam> metaParams;
 
 
     public Layer(int layerId, IInputResolver meta) {
+        metaParams = new HashMap<>();
         neuronSerializerHashMap = new HashMap<>();
         rules = new ArrayList<>();
         isProcessed = false;
@@ -68,6 +71,16 @@ public class Layer<N extends INeuron> implements ILayer<N> {
 
         }
         inputResolver.getSignalPersistStorage().putSignals(signal.getValue().getCreateRelationsSignals());
+    }
+
+    @Override
+    public LayerMetaParam getLayerMetaParam(String key) {
+        return metaParams.get(key);
+    }
+
+    @Override
+    public void updateLayerMetaParam(String key, LayerMetaParam metaParam) {
+        metaParams.remove(key,metaParam);
     }
 
     @Override
