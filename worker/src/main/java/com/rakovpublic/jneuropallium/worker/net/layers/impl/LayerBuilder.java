@@ -32,12 +32,14 @@ public class LayerBuilder {
     public ILayer build() {
         ILayer layer = new Layer(layerMeta.getID(), meta);
         layer.registerAll(layerMeta.getNeurons());
+        layer.setLayerMetaParams(layerMeta.getLayerMetaParams());
         return layer;
     }
 
     public IResultLayer buildResultLayer() {
         IResultLayer layer = new ResultLayer(layerMeta.getID(), meta);
         layer.registerAll(layerMeta.getNeurons());
+        layer.setLayerMetaParams(layerMeta.getLayerMetaParams());
         return layer;
     }
 

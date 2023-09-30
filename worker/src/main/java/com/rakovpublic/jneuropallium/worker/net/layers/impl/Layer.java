@@ -80,7 +80,12 @@ public class Layer<N extends INeuron> implements ILayer<N> {
 
     @Override
     public void updateLayerMetaParam(String key, LayerMetaParam metaParam) {
-        metaParams.remove(key,metaParam);
+        metaParams.put(key,metaParam);
+    }
+
+    @Override
+    public void setLayerMetaParams(HashMap<String, LayerMetaParam> params) {
+        metaParams =params;
     }
 
     @Override

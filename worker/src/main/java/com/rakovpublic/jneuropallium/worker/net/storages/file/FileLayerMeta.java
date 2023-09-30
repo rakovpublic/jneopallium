@@ -1,6 +1,7 @@
 package com.rakovpublic.jneuropallium.worker.net.storages.file;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -27,6 +28,7 @@ public class FileLayerMeta<S extends IStorageItem> implements ILayerMeta {
     protected S file;
     protected IStorage<S> fileSystem;
     protected List<INeuron> neurons;
+    protected HashMap<String, LayerMetaParam> layerMetaParams;
 
     FileLayerMeta(S file, IStorage<S> fs) {
         this.file = file;
@@ -35,12 +37,30 @@ public class FileLayerMeta<S extends IStorageItem> implements ILayerMeta {
     //TODO: add implementation
     @Override
     public HashMap<String, LayerMetaParam> getLayerMetaParams() {
-        return null;
+        if(layerMetaParams==null){
+            layerMetaParams = new HashMap<>();
+            String layer = fileSystem.read(file);
+            JsonElement jelement = new JsonParser().parse(layer);
+            JsonObject jobject = jelement.getAsJsonObject();
+            ObjectMapper mapper = new ObjectMapper();
+            for (Map.Entry<String, JsonElement> e : jobject.getAsJsonObject().getAsJsonObject("metaParams").entrySet()) {
+                String paramName = e.getKey();
+                String cc = e.getValue().getAsJsonObject().getAsJsonPrimitive("paramClass").getAsString();
+                LayerMetaParam layerMetaParam = null;
+                try {
+                    layerMetaParam = new LayerMetaParam(mapper.readValue(e.getValue().getAsJsonObject().getAsJsonObject("param").toString(), Class.forName(cc)));
+                } catch (ClassNotFoundException | JsonProcessingException ex) {
+                    logger.error("cannot parse meta params from json " + jobject.getAsJsonObject().toString(), ex);
+                }
+                layerMetaParams.put(paramName,layerMetaParam);
+            }
+        }
+        return layerMetaParams;
     }
 
     @Override
     public void setLayerMetaParams(HashMap<String, LayerMetaParam> metaParams) {
-
+        layerMetaParams = metaParams;
     }
 
     @Override
@@ -110,6 +130,14 @@ public class FileLayerMeta<S extends IStorageItem> implements ILayerMeta {
             logger.error("cannot save  neurons to json ", e);
         }
         sb.append(serializedObject);
+        sb.append(",\"metaParams\":");
+        String serializedMetaParams = null;
+        try {
+            serializedMetaParams = mapper.writeValueAsString(layerMetaParams);
+        } catch (JsonProcessingException e) {
+            logger.error("cannot save  neurons to json ", e);
+        }
+        sb.append(serializedMetaParams);
         sb.append("}");
         fileSystem.rewrite(sb.toString(), file);
     }

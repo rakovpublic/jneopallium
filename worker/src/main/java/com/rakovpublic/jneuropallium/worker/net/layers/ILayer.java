@@ -30,6 +30,8 @@ public interface ILayer<N extends INeuron> extends Serializable {
 
     void updateLayerMetaParam(String key, LayerMetaParam metaParam);
 
+    void setLayerMetaParams(HashMap<String,LayerMetaParam> params);
+
     void deleteNeuron(DeleteNeuronSignal deleteNeuronIntegration);
 
     /**
