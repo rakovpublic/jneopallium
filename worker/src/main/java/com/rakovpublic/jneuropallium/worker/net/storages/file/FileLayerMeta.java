@@ -34,7 +34,7 @@ public class FileLayerMeta<S extends IStorageItem> implements ILayerMeta {
         this.file = file;
         this.fileSystem = fs;
     }
-    //TODO: add implementation
+
     @Override
     public HashMap<String, LayerMetaParam> getLayerMetaParams() {
         if(layerMetaParams==null){

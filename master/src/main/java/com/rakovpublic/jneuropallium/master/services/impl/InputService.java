@@ -2,6 +2,9 @@ package com.rakovpublic.jneuropallium.master.services.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.rakovpublic.jneuropallium.master.model.InputRegistrationRequest;
 import com.rakovpublic.jneuropallium.master.services.IInputService;
 import com.rakovpublic.jneuropallium.master.services.IResultLayerRunner;
@@ -79,7 +82,25 @@ public class InputService implements IInputService {
 
     @Override
     public void register(InputRegistrationRequest request) {
-//TODO: implement
+        String inputClass = request.getiInputSourceClass();
+        ObjectMapper mapper = new ObjectMapper();
+        IInitInput initInput =  null;
+        try {
+             initInput = (IInitInput) mapper.readValue(request.getiInputSourceJson(), Class.forName(inputClass));
+        } catch (JsonProcessingException | ClassNotFoundException e) {
+            logger.error("cannot parse initinput  " + request.getiInputSourceJson(),e);
+        }
+        String loadingStrategyClass = request.getInitStrategyClass();
+        InputInitStrategy inputLoadingStrategy = null;
+        try {
+            inputLoadingStrategy= (InputInitStrategy) mapper.readValue(request.getInitStrategy(), Class.forName(loadingStrategyClass));
+        } catch (JsonProcessingException | ClassNotFoundException e) {
+            logger.error("cannot parse initinput  " + request.getiInputSourceJson(),e);
+        }
+        if(initInput != null && inputLoadingStrategy != null){
+            register(initInput,request.getMandatory(),inputLoadingStrategy,request.getAmountOfRunsToUpdate());
+        }
+
     }
 
     @Override
