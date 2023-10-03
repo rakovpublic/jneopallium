@@ -1,43 +1,104 @@
 package com.rakovpublic.jneuropallium.master.model;
 
 public class ConfigurationUpdateRequest {
-    private String layersMetaPath;
+    private String layersMetaJson;
     private String layersMetaClass;
     private String splitInputClass;
     private String inputLoadingStrategyClass;
+    private String inputLoadingStrategyJson;
     private Integer partitions;
     private Integer defaultLoopsCount;
     private String signalsPersistClass;
+    private String signalsPersistJson;
     private String historyClass;
+    private String historyJson;
     private Long iterationsToStore;
+    private Integer loopsToStore;
     private String resultRunnerClass;
+    private String resultRunnerJson;
     private String reconnectStrategyClass;
+    private String reconnectStrategyJson;
 
 
-    public ConfigurationUpdateRequest(String layersMetaPath, String layersMetaClass, String splitInputClass, String inputLoadingStrategyClass, Integer partitions, Integer defaultLoopsCount, String signalsPersistClass, String historyClass, Long iterationsToStore, String resultRunnerClass, String reconnectStrategyClass) {
-        this.layersMetaPath = layersMetaPath;
+    public ConfigurationUpdateRequest(String layersMetaJson, String layersMetaClass, String splitInputClass, String inputLoadingStrategyClass, String inputLoadingStrategyJson, Integer partitions, Integer defaultLoopsCount, String signalsPersistClass, String signalsPersistJson, String historyClass, String historyJson, Long iterationsToStore, Integer loopsToStore, String resultRunnerClass, String resultRunnerJson, String reconnectStrategyClass, String reconnectStrategyJson) {
+        this.layersMetaJson = layersMetaJson;
         this.layersMetaClass = layersMetaClass;
         this.splitInputClass = splitInputClass;
         this.inputLoadingStrategyClass = inputLoadingStrategyClass;
+        this.inputLoadingStrategyJson = inputLoadingStrategyJson;
         this.partitions = partitions;
         this.defaultLoopsCount = defaultLoopsCount;
         this.signalsPersistClass = signalsPersistClass;
+        this.signalsPersistJson = signalsPersistJson;
         this.historyClass = historyClass;
+        this.historyJson = historyJson;
         this.iterationsToStore = iterationsToStore;
+        this.loopsToStore = loopsToStore;
         this.resultRunnerClass = resultRunnerClass;
+        this.resultRunnerJson = resultRunnerJson;
         this.reconnectStrategyClass = reconnectStrategyClass;
+        this.reconnectStrategyJson = reconnectStrategyJson;
+    }
+
+    public String getInputLoadingStrategyJson() {
+        return inputLoadingStrategyJson;
+    }
+
+    public void setInputLoadingStrategyJson(String inputLoadingStrategyJson) {
+        this.inputLoadingStrategyJson = inputLoadingStrategyJson;
+    }
+
+    public String getSignalsPersistJson() {
+        return signalsPersistJson;
+    }
+
+    public void setSignalsPersistJson(String signalsPersistJson) {
+        this.signalsPersistJson = signalsPersistJson;
+    }
+
+    public String getHistoryJson() {
+        return historyJson;
+    }
+
+    public void setHistoryJson(String historyJson) {
+        this.historyJson = historyJson;
+    }
+
+    public String getResultRunnerJson() {
+        return resultRunnerJson;
+    }
+
+    public void setResultRunnerJson(String resultRunnerJson) {
+        this.resultRunnerJson = resultRunnerJson;
+    }
+
+    public String getReconnectStrategyJson() {
+        return reconnectStrategyJson;
+    }
+
+    public void setReconnectStrategyJson(String reconnectStrategyJson) {
+        this.reconnectStrategyJson = reconnectStrategyJson;
+    }
+
+    public String getLayersMetaJson() {
+        return layersMetaJson;
+    }
+
+    public void setLayersMetaJson(String layersMetaJson) {
+        this.layersMetaJson = layersMetaJson;
+    }
+
+    public Integer getLoopsToStore() {
+        return loopsToStore;
+    }
+
+    public void setLoopsToStore(Integer loopsToStore) {
+        this.loopsToStore = loopsToStore;
     }
 
     public ConfigurationUpdateRequest() {
     }
 
-    public String getLayersMetaPath() {
-        return layersMetaPath;
-    }
-
-    public void setLayersMetaPath(String layersMetaPath) {
-        this.layersMetaPath = layersMetaPath;
-    }
 
     public String getLayersMetaClass() {
         return layersMetaClass;
