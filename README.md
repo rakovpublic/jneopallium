@@ -88,12 +88,10 @@ This  is the easiest part and does not required any additional code except signa
 3. Add grpc implementation for cluster mode
 4. Generate maven artifacts, host javadocs
 5. Add containers(docker/kubernetes) and infrastructure scripts python/shell.
-6. Add queues distributed part (optional)
-7. Design and implement open stack cluster integration(optional).
-8. Add neuron net graphic designer which will collect data about implemented classes and will pass to graphic plugin for eclipse and (optional)idea.
-9. Add cuda distributed mode(optional).
-10. Add aws lambda distributed mode.
-11. Design and implement amazon cluster integration(optional).
+6. Add neuron net graphic designer which will collect data about implemented classes and will pass to graphic plugin for eclipse and (optional)idea.
+7. Add redis as meta storage(optional).
+8. Add aws lambda distributed mode(optional).
+9. Design and implement amazon cluster integration(optional).
 
 p.s. Fill free to contatct me. I am looking for contributors for this project.
 p.p.s. Great thanks to kafedra of Informatics in Kharkiv National University of Radio and Electronics, Eugen Putiatin, Helen Matat, Tatiana Sinelnikova.
