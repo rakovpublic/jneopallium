@@ -17,8 +17,8 @@ import org.apache.logging.log4j.Logger;
 
 public class ConfigurationServiceImpl implements ConfigurationService {
     private static final Logger logger = LogManager.getLogger(ConfigurationServiceImpl.class);
-    private IInputService inputService;
-    private ReconnectStrategy reconnectStrategy;
+    private IInputService inputService = null;
+    private ReconnectStrategy reconnectStrategy = null;
 
 
 
@@ -97,13 +97,20 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
         try {
             layersMeta = (ILayersMeta) mapper.readValue(configuration.getLayersMetaJson(),Class.forName(configuration.getLayersMetaClass()));
+            layersMeta.setRootPath(configuration.getLayersMetaPath());
         } catch (JsonProcessingException | ClassNotFoundException e) {
             logger.error("Cannot create instance of ILayersMeta for class " + configuration.getLayersMetaClass(),e);
         }
         try {
-            splitInput = (ISplitInput) Class.forName(configuration.getLayersMetaClass()).newInstance();
+            if(configuration.getSplitInputJson()!=null){
+                splitInput = (ISplitInput)mapper.readValue(configuration.getSplitInputJson(),Class.forName(configuration.getSplitInputClass()));
+            }else {
+                splitInput = (ISplitInput) Class.forName(configuration.getSplitInputClass()).newInstance();
+            }
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-            logger.error("Cannot create instance of ISplitInput for class " + configuration.getLayersMetaClass(),e);
+            logger.error("Cannot create instance of ISplitInput for class " + configuration.getSplitInputClass(),e);
+        }catch (JsonProcessingException e) {
+            logger.error("Cannot create instance of ISplitInput for json " + configuration.getSplitInputJson(),e);
         }
         try {
             if(configuration.getReconnectStrategyJson()!=null){

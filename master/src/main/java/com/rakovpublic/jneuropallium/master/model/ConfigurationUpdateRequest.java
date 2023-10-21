@@ -4,6 +4,7 @@ public class ConfigurationUpdateRequest {
     private String layersMetaJson;
     private String layersMetaClass;
     private String splitInputClass;
+    private String splitInputJson;
     private String inputLoadingStrategyClass;
     private String inputLoadingStrategyJson;
     private Integer partitions;
@@ -18,12 +19,14 @@ public class ConfigurationUpdateRequest {
     private String resultRunnerJson;
     private String reconnectStrategyClass;
     private String reconnectStrategyJson;
+    private String layersMetaPath;
 
 
-    public ConfigurationUpdateRequest(String layersMetaJson, String layersMetaClass, String splitInputClass, String inputLoadingStrategyClass, String inputLoadingStrategyJson, Integer partitions, Integer defaultLoopsCount, String signalsPersistClass, String signalsPersistJson, String historyClass, String historyJson, Long iterationsToStore, Integer loopsToStore, String resultRunnerClass, String resultRunnerJson, String reconnectStrategyClass, String reconnectStrategyJson) {
+    public ConfigurationUpdateRequest(String layersMetaJson, String layersMetaClass, String splitInputClass, String splitInputJson, String inputLoadingStrategyClass, String inputLoadingStrategyJson, Integer partitions, Integer defaultLoopsCount, String signalsPersistClass, String signalsPersistJson, String historyClass, String historyJson, Long iterationsToStore, Integer loopsToStore, String resultRunnerClass, String resultRunnerJson, String reconnectStrategyClass, String reconnectStrategyJson, String layersMetaPath) {
         this.layersMetaJson = layersMetaJson;
         this.layersMetaClass = layersMetaClass;
         this.splitInputClass = splitInputClass;
+        this.splitInputJson = splitInputJson;
         this.inputLoadingStrategyClass = inputLoadingStrategyClass;
         this.inputLoadingStrategyJson = inputLoadingStrategyJson;
         this.partitions = partitions;
@@ -38,6 +41,7 @@ public class ConfigurationUpdateRequest {
         this.resultRunnerJson = resultRunnerJson;
         this.reconnectStrategyClass = reconnectStrategyClass;
         this.reconnectStrategyJson = reconnectStrategyJson;
+        this.layersMetaPath = layersMetaPath;
     }
 
     public String getInputLoadingStrategyJson() {
@@ -178,5 +182,21 @@ public class ConfigurationUpdateRequest {
 
     public void setReconnectStrategyClass(String reconnectStrategyClass) {
         this.reconnectStrategyClass = reconnectStrategyClass;
+    }
+
+    public String getLayersMetaPath() {
+        return layersMetaPath;
+    }
+
+    public void setLayersMetaPath(String layersMetaPath) {
+        this.layersMetaPath = layersMetaPath;
+    }
+
+    public String getSplitInputJson() {
+        return splitInputJson;
+    }
+
+    public void setSplitInputJson(String splitInputJson) {
+        this.splitInputJson = splitInputJson;
     }
 }

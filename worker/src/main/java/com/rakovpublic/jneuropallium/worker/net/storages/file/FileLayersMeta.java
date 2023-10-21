@@ -7,13 +7,14 @@ import com.rakovpublic.jneuropallium.worker.net.storages.IResultLayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IStorage;
 import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IStorageItem;
 
+import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 
 
 public class FileLayersMeta<S extends IStorageItem> implements ILayersMeta {
     private S file;
-    private IStorage fileSystem;
+    private IStorage<S> fileSystem;
     private HashMap<Integer, ILayerMeta> layers;
 
 
@@ -21,6 +22,12 @@ public class FileLayersMeta<S extends IStorageItem> implements ILayersMeta {
         this.fileSystem = fs;
         this.file = file;
         layers = new HashMap<>();
+    }
+
+
+    @Override
+    public void setRootPath(String path) {
+        file = (S) fileSystem.getItem(path);
     }
 
     @Override
