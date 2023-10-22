@@ -6,6 +6,7 @@ import com.rakovpublic.jneuropallium.master.model.DeleteNeuronRequest;
 import com.rakovpublic.jneuropallium.master.services.ConfigurationService;
 import com.rakovpublic.jneuropallium.master.services.ILayerService;
 import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,8 +15,13 @@ import org.springframework.web.bind.annotation.*;
 public class LayerController {
 
     private ILayerService layerService;
-    //TODO: add service implementation
     private ConfigurationService configurationService;
+
+    @Autowired
+    public LayerController(ILayerService layerService, ConfigurationService configurationService) {
+        this.layerService = layerService;
+        this.configurationService = configurationService;
+    }
 
     @PostMapping("/updateNeuron")
     public ResponseEntity<?> updateNeuron(@RequestBody CreateNeuronRequest request) {

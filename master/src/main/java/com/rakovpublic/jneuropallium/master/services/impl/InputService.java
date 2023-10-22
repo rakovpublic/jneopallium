@@ -239,6 +239,16 @@ public class InputService implements IInputService {
         signalsPersist.putSignals(signals);
     }
 
+    @Override
+    public ILayersMeta getLayersMeta() {
+        return layersMeta;
+    }
+
+    @Override
+    public void updateLayersMeta(ILayersMeta layersMeta) {
+        this.layersMeta = layersMeta;
+    }
+
     private List<InputData> getInputs(String json) {
         ObjectMapper mapper = new ObjectMapper();
         List<InputData> result = null;
