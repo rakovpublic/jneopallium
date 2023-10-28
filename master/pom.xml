@@ -14,9 +14,8 @@
         <version>1.0</version>
     </parent>
 
-    <name>jneuronnetmaster Maven Webapp</name>
-    <!-- FIXME change it to the project's website -->
-    <url>http://www.example.com</url>
+    <name>jneuronnet.master</name>
+    <url>https://github.com/rakovpublic/jneopallium</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
