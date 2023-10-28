@@ -1,4 +1,4 @@
-package com.rakovpublic.jneuropallium.master.model;
+package com.rakovpublic.jneuropallium.worker.model;
 
 public class UpdateNeuronRequest {
     private String neuronClass;

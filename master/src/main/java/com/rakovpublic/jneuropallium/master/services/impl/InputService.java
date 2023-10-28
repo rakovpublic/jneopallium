@@ -2,10 +2,7 @@ package com.rakovpublic.jneuropallium.master.services.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.rakovpublic.jneuropallium.master.model.InputRegistrationRequest;
+import com.rakovpublic.jneuropallium.worker.model.InputRegistrationRequest;
 import com.rakovpublic.jneuropallium.master.services.IInputService;
 import com.rakovpublic.jneuropallium.master.services.IResultLayerRunner;
 import com.rakovpublic.jneuropallium.worker.net.layers.impl.InputArray;

@@ -3,12 +3,13 @@ package com.rakovpublic.jneuropallium.worker.net.layers.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import com.rakovpublic.jneuropallium.master.model.CreateNeuronRequest;
-import com.rakovpublic.jneuropallium.master.model.DeleteNeuronRequest;
-import com.rakovpublic.jneuropallium.master.model.UploadSignalsRequest;
+import com.rakovpublic.jneuropallium.worker.model.CreateNeuronRequest;
+import com.rakovpublic.jneuropallium.worker.model.DeleteNeuronRequest;
+import com.rakovpublic.jneuropallium.worker.model.UploadSignalsRequest;
 import com.rakovpublic.jneuropallium.worker.application.HttpCommunicationClient;
 import com.rakovpublic.jneuropallium.worker.application.HttpRequestResolver;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayer;
+import com.rakovpublic.jneuropallium.worker.net.layers.LayerMetaParam;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.ILayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.storages.INeuronSerializer;
@@ -69,6 +70,8 @@ public class HttpLayer implements ILayer {
             return;
         }
     }
+
+
 
     @Override
     public void deleteNeuron(DeleteNeuronSignal deleteNeuronIntegration) {
@@ -179,5 +182,20 @@ public class HttpLayer implements ILayer {
     @Override
     public INeuronSerializer getNeuronSerializer(Class neuronClass) {
         return null;
+    }
+
+    @Override
+    public LayerMetaParam getLayerMetaParam(String key) {
+        return null;
+    }
+
+    @Override
+    public void updateLayerMetaParam(String key, LayerMetaParam metaParam) {
+
+    }
+
+    @Override
+    public void setLayerMetaParams(HashMap params) {
+
     }
 }

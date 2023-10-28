@@ -1,6 +1,6 @@
 package com.rakovpublic.jneuropallium.master.services;
 
-import com.rakovpublic.jneuropallium.master.model.InputRegistrationRequest;
+import com.rakovpublic.jneuropallium.worker.model.InputRegistrationRequest;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.*;
 import com.rakovpublic.jneuropallium.worker.neuron.IResultNeuron;

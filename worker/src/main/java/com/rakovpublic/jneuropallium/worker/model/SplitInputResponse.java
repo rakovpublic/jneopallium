@@ -1,4 +1,4 @@
-package com.rakovpublic.jneuropallium.master.model;
+package com.rakovpublic.jneuropallium.worker.model;
 
 import com.rakovpublic.jneuropallium.worker.net.storages.ISplitInput;
 

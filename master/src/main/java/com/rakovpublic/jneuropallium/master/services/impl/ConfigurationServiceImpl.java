@@ -6,7 +6,7 @@ package com.rakovpublic.jneuropallium.master.services.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rakovpublic.jneuropallium.master.model.ConfigurationUpdateRequest;
+import com.rakovpublic.jneuropallium.worker.model.ConfigurationUpdateRequest;
 import com.rakovpublic.jneuropallium.master.services.ConfigurationService;
 import com.rakovpublic.jneuropallium.master.services.IInputService;
 import com.rakovpublic.jneuropallium.master.services.IResultLayerRunner;

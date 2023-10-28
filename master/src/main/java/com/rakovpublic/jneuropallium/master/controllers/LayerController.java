@@ -1,8 +1,8 @@
 package com.rakovpublic.jneuropallium.master.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rakovpublic.jneuropallium.master.model.CreateNeuronRequest;
-import com.rakovpublic.jneuropallium.master.model.DeleteNeuronRequest;
+import com.rakovpublic.jneuropallium.worker.model.CreateNeuronRequest;
+import com.rakovpublic.jneuropallium.worker.model.DeleteNeuronRequest;
 import com.rakovpublic.jneuropallium.master.services.ConfigurationService;
 import com.rakovpublic.jneuropallium.master.services.ILayerService;
 import com.rakovpublic.jneuropallium.worker.neuron.INeuron;

@@ -1,4 +1,4 @@
-package com.rakovpublic.jneuropallium.master.model;
+package com.rakovpublic.jneuropallium.worker.model;
 
 public class NodeCompleteRequest {
     private String nodeName;

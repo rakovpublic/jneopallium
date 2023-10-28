@@ -1,6 +1,6 @@
 package com.rakovpublic.jneuropallium.master.services;
 
-import com.rakovpublic.jneuropallium.master.model.ConfigurationUpdateRequest;
+import com.rakovpublic.jneuropallium.worker.model.ConfigurationUpdateRequest;
 import com.rakovpublic.jneuropallium.worker.net.storages.ReconnectStrategy;
 import org.springframework.stereotype.Service;
 

@@ -1,7 +1,7 @@
 package com.rakovpublic.jneuropallium.worker.net.storages.http;
 
 
-import com.rakovpublic.jneuropallium.master.model.UploadSignalsRequest;
+import com.rakovpublic.jneuropallium.worker.model.UploadSignalsRequest;
 import com.rakovpublic.jneuropallium.worker.application.HttpCommunicationClient;
 import com.rakovpublic.jneuropallium.worker.application.HttpRequestResolver;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
