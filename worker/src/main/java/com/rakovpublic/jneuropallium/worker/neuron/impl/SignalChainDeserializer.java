@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.rakovpublic.jneuropallium.worker.exceptions.JSONParsingException;
 import com.rakovpublic.jneuropallium.worker.neuron.ISignalChain;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -31,8 +32,8 @@ public class SignalChainDeserializer extends StdDeserializer<ISignalChain> {
         try {
             return (ISignalChain) mapper.readValue(jobject.getAsJsonObject("signalChain").toString(), Class.forName(jobject.getAsJsonPrimitive("signalChainClass").getAsString()));
         } catch (ClassNotFoundException e) {
-            logger.error("Cannot deserialize signalChain " + jobject.getAsJsonObject("signalChain").toString() + " for class " + jobject.getAsJsonPrimitive("signalChainClass").getAsString(), e);
-            throw new NullPointerException(e.getMessage());
+            logger.error("Cannot deserialize signalChain " + jobject.getAsJsonObject("signalChain").toString() + " for class " + jobject.getAsJsonPrimitive("signalChainClass").getAsString(),e);
+            throw new JSONParsingException(e.getMessage());
         }
     }
 }
