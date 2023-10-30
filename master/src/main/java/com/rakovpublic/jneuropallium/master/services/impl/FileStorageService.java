@@ -6,6 +6,7 @@ package com.rakovpublic.jneuropallium.master.services.impl;
 
 import com.rakovpublic.jneuropallium.master.configs.PropertyHolder;
 import com.rakovpublic.jneuropallium.master.services.StorageService;
+import com.rakovpublic.jneuropallium.worker.exceptions.IncorrectFilePathForStorageException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.core.io.InputStreamResource;
@@ -43,6 +44,7 @@ public class FileStorageService implements StorageService {
             Files.copy(file.getInputStream(),Path.of(path), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             logger.error("Cannot create file " + path,e);
+            throw new IncorrectFilePathForStorageException("Cannot create file " + path +" message:" + e.getMessage());
         }
         return path;
     }
@@ -52,8 +54,8 @@ public class FileStorageService implements StorageService {
         try {
             return Files.list(Paths.get(folder));
         } catch (IOException e) {
-            logger.error("Empty storage foldr " + folder,e);
-            return Stream.<Path>builder().build();
+            logger.error("Empty storage folder " + folder,e);
+            throw new IncorrectFilePathForStorageException("Empty storage folder " + folder +" message:" + e.getMessage());
         }
     }
 
@@ -65,6 +67,7 @@ public class FileStorageService implements StorageService {
             resource = new InputStreamResource(new FileInputStream(folder+"/"+filename));
         } catch (FileNotFoundException e) {
             logger.error("Cannot found file " + filename,e);
+            throw new IncorrectFilePathForStorageException("Cannot found file " + filename +" message:" + e.getMessage());
         }
         return resource;
     }
