@@ -1,8 +1,10 @@
 package com.rakovpublic.jneuropallium.worker.net.storages;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * This interface represents logic of populating signals from inputs
@@ -44,4 +46,7 @@ public interface IInputLoadingStrategy {
      * @param inputStatuses mapping between initinputs and input status metadata
      */
     void updateInputs(HashMap<IInitInput, InputStatusMeta> inputStatuses, HashMap<IInitInput, InputInitStrategy> inputs);
+
+
+    HashMap<Long,HashMap<Integer, List<ISignal>>> getInputHistory();
 }

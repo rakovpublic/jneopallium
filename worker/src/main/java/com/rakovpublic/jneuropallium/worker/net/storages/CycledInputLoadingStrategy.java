@@ -26,6 +26,8 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
     private HashMap<String, Long> neuronInputMapping;
     private Long epoch;
     int defaultLoopsCount;
+    private  HashMap<Long, HashMap<Integer, List<ISignal>>> inputHistory;
+
 
     public CycledInputLoadingStrategy(ILayersMeta layersMeta, HashMap<IInitInput, InputInitStrategy> externalInputs, int defaultLoopsCount, HashMap<IInitInput, InputStatusMeta> inputStatuses) {
         epoch = 0L;
@@ -36,6 +38,7 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
         this.defaultLoopsCount = defaultLoopsCount;
         init(defaultLoopsCount);
         neuronInputMapping = new HashMap<>();
+        inputHistory = new HashMap<>();
 
     }
 
@@ -71,16 +74,31 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
                 if (inputStatuses.get(iii).getCurrentRuns() %
                         cycleNeuron.getLoopCount() == 0 && (ipf != null && (ipf.getLoop() != null && loop % ipf.getLoop() == 0) || (ipf.getEpoch() != null && epoch % ipf.getEpoch() == 0))) {
                     List<ISignal> signals = new LinkedList<>();
+                    List<ISignal> signalsHistory = new LinkedList<>();
                     for (IInputSignal signal : iii.readSignals()) {
                         ProcessingFrequency pf = frequencyHashMap.get(signal.getCurrentSignalClass());
                         if (loop % pf.getLoop() == 0 && epoch % pf.getEpoch() == 0) {
                             signal.setInnerLoop(defaultLoopsCount);
+                            signalsHistory.add(signal.copySignal());
                             signals.add(signal);
                         }
                     }
                     signalsPersistStorage.putSignals(externalInputs.get(iii).getInputs(layersMeta, signals));
                     inputStatuses.get(iii).setCurrentRuns(0);
                     inputStatuses.get(iii).setBeenUsed(true);
+                    if(inputHistory.containsKey(epoch)){
+                        if(inputHistory.get(epoch).containsKey(loop)){
+                            inputHistory.get(epoch).get(loop).addAll(signalsHistory);
+                        }else {
+                            HashMap<Integer,List<ISignal>> history=  new HashMap<>();
+                            history.put(loop,signalsHistory);
+                            inputHistory.put(epoch,history);
+                        }
+                    }else {
+                        HashMap<Integer,List<ISignal>> history=  new HashMap<>();
+                        history.put(loop,signalsHistory);
+                        inputHistory.put(epoch,history);
+                    }
                 } else {
                     inputStatuses.get(iii).setCurrentRuns(inputStatuses.get(iii).getCurrentRuns() + 1);
                 }
@@ -127,6 +145,10 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
         long neuronId = ids.last() + 1;
         ILayerMeta layerMeta = layersMeta.getLayerByID(Integer.MIN_VALUE);
         List<INeuron> neurons = new LinkedList<>();
+        if(layerMeta == null){
+            layerMeta = new InMemoryLayerMeta(Integer.MIN_VALUE, neurons);
+            layersMeta.addLayerMeta(layerMeta);
+        }
         neurons.addAll(layerMeta.getNeurons());
         for (InputStatusMeta meta : inputStatuses.values()) {
             if (!neuronInputMapping.containsKey(meta.getName())) {
@@ -135,5 +157,10 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
                 neuronId += 1;
             }
         }
+    }
+
+    @Override
+    public HashMap<Long, HashMap<Integer, List<ISignal>>> getInputHistory() {
+        return inputHistory;
     }
 }

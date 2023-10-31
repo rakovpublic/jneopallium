@@ -45,6 +45,11 @@ public class InMemoryInputResolver implements IInputResolver {
     }
 
     @Override
+    public HashMap<Long, HashMap<Integer, List<ISignal>>> getInputHistory() {
+        return inputLoadingStrategy.getInputHistory();
+    }
+
+    @Override
     public HashMap<String, Long> getCycleNeuronAddressMapping() {
         return inputLoadingStrategy.getNeuronInputMapping();
     }

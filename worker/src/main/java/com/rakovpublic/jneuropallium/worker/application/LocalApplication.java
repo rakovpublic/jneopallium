@@ -2,6 +2,9 @@ package com.rakovpublic.jneuropallium.worker.application;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.rakovpublic.jneuropallium.worker.net.layers.*;
 import com.rakovpublic.jneuropallium.worker.net.layers.impl.InMemoryInputResolver;
 import com.rakovpublic.jneuropallium.worker.net.layers.impl.InputArray;
@@ -253,13 +256,16 @@ public class LocalApplication implements IApplication {
 
     }
 
+
+
     private IInputLoadingStrategy getLoadingStrategy(String json) {
         ObjectMapper mapper = new ObjectMapper();
+        JsonElement jelement = new JsonParser().parse(json);
+        JsonObject jobject = jelement.getAsJsonObject();
         IInputLoadingStrategy result = null;
         try {
-            result = mapper.readValue(json, IInputLoadingStrategy.class);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            result = (IInputLoadingStrategy) mapper.readValue(jobject.getAsJsonObject("loadingStrategy").getAsString(), Class.forName(jobject.getAsJsonPrimitive("loadingStrategyClass").getAsString()));
+        } catch (JsonProcessingException | ClassNotFoundException e) {
             logger.error("Cannot parse loading strategy  " + json, e);
         }
         return result;

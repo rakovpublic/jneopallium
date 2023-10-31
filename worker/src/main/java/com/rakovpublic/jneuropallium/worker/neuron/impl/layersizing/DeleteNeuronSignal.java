@@ -17,4 +17,9 @@ public class DeleteNeuronSignal extends AbstractSignal<DeleteNeuronIntegration> 
     public Class<DeleteNeuronIntegration> getParamClass() {
         return DeleteNeuronIntegration.class;
     }
+
+    @Override
+    public ISignal copySignal() {
+        return new DeleteNeuronSignal(value,this.getSourceLayerId(),this.getSourceNeuronId(),this.getTimeAlive(),getInputName(),isFromExternalNet(),getDescription());
+    }
 }

@@ -34,6 +34,9 @@ public interface IInputResolver {
      */
     ISignalHistoryStorage getSignalsHistoryStorage();
 
+
+    HashMap<Long,HashMap<Integer,List<ISignal>>> getInputHistory();
+
     /**
      * @return mapping for service neuron on Layer id Long.MIN
      */

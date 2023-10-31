@@ -18,4 +18,9 @@ public class CreateNeuronSignal extends AbstractSignal<NewNeuronIntegration> imp
     public Class<NewNeuronIntegration> getParamClass() {
         return NewNeuronIntegration.class;
     }
+
+    @Override
+    public ISignal copySignal() {
+        return new CreateNeuronSignal(value,this.getSourceLayerId(),this.getSourceNeuronId(),this.getTimeAlive(),getInputName(),isFromExternalNet(),getDescription());
+    }
 }

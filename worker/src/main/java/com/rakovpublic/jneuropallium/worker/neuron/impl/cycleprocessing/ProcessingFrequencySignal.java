@@ -17,4 +17,9 @@ public class ProcessingFrequencySignal extends AbstractSignal<ProcessingFrequenc
     public Class<ProcessingFrequencySignalItem> getParamClass() {
         return ProcessingFrequencySignalItem.class;
     }
+
+    @Override
+    public ISignal copySignal() {
+        return new ProcessingFrequencySignal(value,this.getSourceLayerId(),this.getSourceNeuronId(),this.getTimeAlive(),getDescription(),isFromExternalNet(),getInputName(),this.isNeedToRemoveDuringLearning(), this.isNeedToProcessDuringLearning(), ProcessingFrequency.class.getName());
+    }
 }
