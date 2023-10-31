@@ -6,6 +6,8 @@ package com.rakovpublic.jneuropallium.master.services.impl;
 
 import com.rakovpublic.jneuropallium.master.services.ConfigurationService;
 import com.rakovpublic.jneuropallium.master.services.ILayerService;
+import com.rakovpublic.jneuropallium.worker.model.LayerParamUpdate;
+import com.rakovpublic.jneuropallium.worker.net.layers.LayerMetaParam;
 import com.rakovpublic.jneuropallium.worker.net.layers.LayerMove;
 import com.rakovpublic.jneuropallium.worker.net.storages.ILayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.storages.ILayersMeta;
@@ -26,7 +28,7 @@ public class LayerService implements ILayerService {
     public LayerService(ConfigurationService configurationService) {
         this.configurationService = configurationService;
     }
-
+ // TODO: add impl
     @Override
     public void deleteNeuron(Integer layerId, Long neuronId) {
 
@@ -52,6 +54,16 @@ public class LayerService implements ILayerService {
         }
         ILayerMeta layerToRemove = configurationService.getInputService().getLayersMeta().getLayerByID(layerId);
         configurationService.getInputService().getLayersMeta().removeLayer(layerToRemove);
+
+    }
+
+    @Override
+    public LayerMetaParam getMetaParam(String name) {
+        return null;
+    }
+
+    @Override
+    public void updateMetaParam(LayerParamUpdate layerParamUpdate) {
 
     }
 }

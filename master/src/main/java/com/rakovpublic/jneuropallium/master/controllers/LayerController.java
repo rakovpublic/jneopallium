@@ -5,6 +5,7 @@ import com.rakovpublic.jneuropallium.worker.model.CreateNeuronRequest;
 import com.rakovpublic.jneuropallium.worker.model.DeleteNeuronRequest;
 import com.rakovpublic.jneuropallium.master.services.ConfigurationService;
 import com.rakovpublic.jneuropallium.master.services.ILayerService;
+import com.rakovpublic.jneuropallium.worker.model.LayerParamUpdate;
 import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -72,6 +73,22 @@ public class LayerController {
     }
 
 
+    @PostMapping("/updateLayerParam")
+    public ResponseEntity<?> updateLayerParam(@RequestBody LayerParamUpdate param) {
+        try {
+            layerService.updateMetaParam(param);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e);
+        }
+        return ResponseEntity.ok().build();
+    }
 
-
+    @GetMapping("/getLayerParam")
+    public ResponseEntity<?> getLayerParam(@RequestParam String param) {
+        try {
+            return ResponseEntity.ok().body(layerService.getMetaParam(param));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e);
+        }
+    }
 }
