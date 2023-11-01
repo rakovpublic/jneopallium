@@ -1,12 +1,14 @@
 package com.rakovpublic.jneuropallium.worker.net.layers.impl;
 
 import com.rakovpublic.jneuropallium.worker.net.layers.IInputResolver;
+import com.rakovpublic.jneuropallium.worker.net.signals.IInputSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.*;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 
 public class InMemoryInputResolver implements IInputResolver {
     private HashMap<IInitInput, InputStatusMeta> inputStatuses;
@@ -45,7 +47,7 @@ public class InMemoryInputResolver implements IInputResolver {
     }
 
     @Override
-    public HashMap<Long, HashMap<Integer, List<ISignal>>> getInputHistory() {
+    public TreeMap<Long, TreeMap<Integer, List<IInputSignal>>> getInputHistory() {
         return inputLoadingStrategy.getInputHistory();
     }
 

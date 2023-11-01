@@ -1,5 +1,6 @@
 package com.rakovpublic.jneuropallium.worker.net.layers;
 
+import com.rakovpublic.jneuropallium.worker.net.signals.IInputSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.IInitInput;
@@ -9,6 +10,7 @@ import com.rakovpublic.jneuropallium.worker.net.storages.InputInitStrategy;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 
 /**
  * This object represents input managing logic
@@ -35,7 +37,7 @@ public interface IInputResolver {
     ISignalHistoryStorage getSignalsHistoryStorage();
 
 
-    HashMap<Long,HashMap<Integer,List<ISignal>>> getInputHistory();
+    TreeMap<Long, TreeMap<Integer, List<IInputSignal>>> getInputHistory();
 
     /**
      * @return mapping for service neuron on Layer id Long.MIN

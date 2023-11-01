@@ -9,10 +9,7 @@ import com.rakovpublic.jneuropallium.worker.neuron.impl.cycleprocessing.CycleNeu
 import com.rakovpublic.jneuropallium.worker.neuron.impl.cycleprocessing.CycleSignalsProcessingChain;
 import com.rakovpublic.jneuropallium.worker.neuron.impl.cycleprocessing.ProcessingFrequency;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.TreeSet;
+import java.util.*;
 
 
 /**
@@ -26,7 +23,7 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
     private HashMap<String, Long> neuronInputMapping;
     private Long epoch;
     int defaultLoopsCount;
-    private  HashMap<Long, HashMap<Integer, List<ISignal>>> inputHistory;
+    private TreeMap<Long, TreeMap<Integer, List<IInputSignal>>> inputHistory;
 
 
     public CycledInputLoadingStrategy(ILayersMeta layersMeta, HashMap<IInitInput, InputInitStrategy> externalInputs, int defaultLoopsCount, HashMap<IInitInput, InputStatusMeta> inputStatuses) {
@@ -38,7 +35,7 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
         this.defaultLoopsCount = defaultLoopsCount;
         init(defaultLoopsCount);
         neuronInputMapping = new HashMap<>();
-        inputHistory = new HashMap<>();
+        inputHistory = new TreeMap<>();
 
     }
 
@@ -74,14 +71,14 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
                 if (inputStatuses.get(iii).getCurrentRuns() %
                         cycleNeuron.getLoopCount() == 0 && (ipf != null && (ipf.getLoop() != null && loop % ipf.getLoop() == 0) || (ipf.getEpoch() != null && epoch % ipf.getEpoch() == 0))) {
                     List<ISignal> signals = new LinkedList<>();
-                    List<ISignal> signalsHistory = new LinkedList<>();
+                    List<IInputSignal> signalsHistory = new LinkedList<>();
                     for (IInputSignal signal : iii.readSignals()) {
                         ProcessingFrequency pf = frequencyHashMap.get(signal.getCurrentSignalClass());
                         if (loop % pf.getLoop() == 0 && epoch % pf.getEpoch() == 0) {
                             signal.setInnerLoop(defaultLoopsCount);
                             signal.setEpoch(epoch);
                             signal.setLoop(loop);
-                            signalsHistory.add(signal.copySignal());
+                            signalsHistory.add((IInputSignal)signal.copySignal());
                             signals.add(signal);
                         }
                     }
@@ -92,12 +89,12 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
                         if(inputHistory.get(epoch).containsKey(loop)){
                             inputHistory.get(epoch).get(loop).addAll(signalsHistory);
                         }else {
-                            HashMap<Integer,List<ISignal>> history=  new HashMap<>();
+                            TreeMap<Integer,List<IInputSignal>> history=  new TreeMap<>();
                             history.put(loop,signalsHistory);
                             inputHistory.put(epoch,history);
                         }
                     }else {
-                        HashMap<Integer,List<ISignal>> history=  new HashMap<>();
+                        TreeMap<Integer,List<IInputSignal>> history=  new TreeMap<>();
                         history.put(loop,signalsHistory);
                         inputHistory.put(epoch,history);
                     }
@@ -162,7 +159,7 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
     }
 
     @Override
-    public HashMap<Long, HashMap<Integer, List<ISignal>>> getInputHistory() {
+    public TreeMap<Long, TreeMap<Integer, List<IInputSignal>>> getInputHistory() {
         return inputHistory;
     }
 }
