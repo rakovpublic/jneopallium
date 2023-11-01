@@ -79,6 +79,8 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
                         ProcessingFrequency pf = frequencyHashMap.get(signal.getCurrentSignalClass());
                         if (loop % pf.getLoop() == 0 && epoch % pf.getEpoch() == 0) {
                             signal.setInnerLoop(defaultLoopsCount);
+                            signal.setEpoch(epoch);
+                            signal.setLoop(loop);
                             signalsHistory.add(signal.copySignal());
                             signals.add(signal);
                         }
