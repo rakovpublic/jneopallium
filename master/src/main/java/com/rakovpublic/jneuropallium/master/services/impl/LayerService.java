@@ -28,18 +28,15 @@ public class LayerService implements ILayerService {
     public LayerService(ConfigurationService configurationService) {
         this.configurationService = configurationService;
     }
- // TODO: add impl
+
     @Override
     public void deleteNeuron(Integer layerId, Long neuronId) {
-
+        configurationService.getInputService().getLayersMeta().getLayerByID(layerId).removeNeuron(neuronId);
     }
 
     @Override
     public  void addNeuron(INeuron neuron, Integer layerId) {
-        List<INeuron> neurons =configurationService.getInputService().getLayersMeta().getLayerByID(layerId).getNeurons();
-        neurons.add(neuron);
-        configurationService.getInputService().getLayersMeta().getLayerByID(layerId).saveNeurons(neurons);
-
+        configurationService.getInputService().getLayersMeta().getLayerByID(layerId).addNeuron(neuron);
     }
 
 
@@ -58,12 +55,15 @@ public class LayerService implements ILayerService {
     }
 
     @Override
-    public LayerMetaParam getMetaParam(String name) {
-        return null;
+    public LayerMetaParam getMetaParam(String name, Integer layerId) {
+
+        return configurationService.getInputService().getLayersMeta().getLayerByID(layerId).getLayerMetaParams().get(name);
     }
 
     @Override
     public void updateMetaParam(LayerParamUpdate layerParamUpdate) {
+        HashMap<String, LayerMetaParam>  params =  configurationService.getInputService().getLayersMeta().getLayerByID(layerParamUpdate.getLayerId()).getLayerMetaParams();
+        params.put(layerParamUpdate.getParamName(),layerParamUpdate.getLayerMetaParam());
 
     }
 }

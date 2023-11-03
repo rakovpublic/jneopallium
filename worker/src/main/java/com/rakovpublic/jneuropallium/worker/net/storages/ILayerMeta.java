@@ -41,6 +41,10 @@ public interface ILayerMeta extends IStorageMeta {
      */
     INeuron getNeuronByID(Long id);
 
+    void removeNeuron(Long neuron);
+
+    void addNeuron(INeuron neuron);
+
     /**
      * @param neurons list of neurons to save
      */

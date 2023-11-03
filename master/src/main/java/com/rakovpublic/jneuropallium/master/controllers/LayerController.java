@@ -84,9 +84,9 @@ public class LayerController {
     }
 
     @GetMapping("/getLayerParam")
-    public ResponseEntity<?> getLayerParam(@RequestParam String param) {
+    public ResponseEntity<?> getLayerParam(@RequestParam String param, @RequestParam Integer layerId) {
         try {
-            return ResponseEntity.ok().body(layerService.getMetaParam(param));
+            return ResponseEntity.ok().body(layerService.getMetaParam(param,layerId));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e);
         }

@@ -80,6 +80,16 @@ public class InMemoryLayerMeta implements ILayerMeta {
     }
 
     @Override
+    public void removeNeuron(Long neuron) {
+
+    }
+
+    @Override
+    public void addNeuron(INeuron neuron) {
+
+    }
+
+    @Override
     public void saveNeurons(List<INeuron> neuronMetas) {
 
     }

@@ -12,7 +12,7 @@ public interface ILayerService {
 
     void  deleteLayer(Integer layerId, ReconnectStrategy reconnectStrategy);
 
-    LayerMetaParam getMetaParam(String name);
+    LayerMetaParam getMetaParam(String name, Integer layerId);
 
     void updateMetaParam(LayerParamUpdate layerParamUpdate);
 
