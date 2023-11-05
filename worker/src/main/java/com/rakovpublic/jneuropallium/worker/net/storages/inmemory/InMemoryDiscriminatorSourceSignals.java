@@ -36,8 +36,9 @@ public class InMemoryDiscriminatorSourceSignals implements IInitInput {
     @Override
     public List<IInputSignal> readSignals() {
         List<IInputSignal> results = new LinkedList<>();
-        for(Long i = inputResolver.getRun()-amountOfEpoch; i<inputResolver.getRun(); i++){
-            for(Integer j = history.get(i).lastKey() - amountOfLoops; j<history.get(i).lastKey();j++){
+        for(Long i = inputResolver.getRun()-amountOfEpoch>-0?inputResolver.getRun()-amountOfEpoch:0; i<inputResolver.getRun(); i++){
+            for(Integer j = Math.max(history.get(i).lastKey() - amountOfLoops, 0); j<history.get(i).lastKey(); j++){
+
                 results.addAll(history.get(i).get(j));
             }
         }
