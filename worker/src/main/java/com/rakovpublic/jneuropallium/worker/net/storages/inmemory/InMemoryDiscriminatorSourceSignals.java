@@ -17,27 +17,24 @@ import java.util.List;
 import java.util.TreeMap;
 
 public class InMemoryDiscriminatorSourceSignals implements IInitInput {
-    private TreeMap<Long,TreeMap<Integer, List<IInputSignal>>> history;
+    private IInputResolver history;
     private Long amountOfEpoch;
     private Integer amountOfLoops;
-    private IInputResolver inputResolver;
-
     private String name;
 
-    public InMemoryDiscriminatorSourceSignals(TreeMap<Long, TreeMap<Integer, List<IInputSignal>>> history, Long amountOfEpoch, Integer amountOfLoops, IInputResolver inputResolver, String name) {
+    public InMemoryDiscriminatorSourceSignals(IInputResolver history, Long amountOfEpoch, Integer amountOfLoops,  String name) {
         this.history = history;
         this.amountOfEpoch = amountOfEpoch;
         this.amountOfLoops = amountOfLoops;
-        this.inputResolver = inputResolver;
         this.name = name;
     }
 
     @Override
     public List<IInputSignal> readSignals() {
         List<IInputSignal> results = new LinkedList<>();
-        for(Long i = inputResolver.getRun()-amountOfEpoch>history.firstKey()?inputResolver.getRun()-amountOfEpoch:history.firstKey(); i<inputResolver.getRun(); i++){
-            for(Integer j = Math.max(history.get(i).lastKey() - amountOfLoops, history.get(i).firstKey()); j<history.get(i).lastKey(); j++){
-                results.addAll(history.get(i).get(j));
+        for(Long i = history.getRun()-amountOfEpoch>history.getInputHistory().firstKey()?history.getRun()-amountOfEpoch:history.getInputHistory().firstKey(); i<history.getRun(); i++){
+            for(Integer j = Math.max(history.getInputHistory().get(i).lastKey() - amountOfLoops, history.getInputHistory().get(i).firstKey()); j<history.getInputHistory().get(i).lastKey(); j++){
+                results.addAll(history.getInputHistory().get(i).get(j));
             }
         }
         return results;

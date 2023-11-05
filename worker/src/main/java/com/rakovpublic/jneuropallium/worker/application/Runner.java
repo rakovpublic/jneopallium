@@ -34,6 +34,12 @@ public abstract class Runner implements IRunner {
         } else {
             application = new GRPCBasedApplication();
         }
-        application.startApplication(context, classLoaderService);
+        try {
+            application.startApplication(context, classLoaderService);
+        }
+        catch (Exception e){
+            logger.error(e);
+        }
+
     }
 }

@@ -1,5 +1,6 @@
 package com.rakovpublic.jneuropallium.worker.net.storages;
 
+import com.rakovpublic.jneuropallium.worker.net.signals.IInputSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 import java.util.List;
@@ -11,5 +12,5 @@ public interface INeuronNetInput extends IInitInput {
     /**
      * @param signals studying signals NOTE: the programmer should keep the contract with the input neuron net
      */
-    void sendCallBack(List<ISignal> signals);
+    void sendCallBack(List<IInputSignal> signals);
 }

@@ -6,17 +6,19 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.rakovpublic.jneuropallium.worker.net.layers.*;
-import com.rakovpublic.jneuropallium.worker.net.layers.impl.InMemoryInputResolver;
-import com.rakovpublic.jneuropallium.worker.net.layers.impl.InputArray;
-import com.rakovpublic.jneuropallium.worker.net.layers.impl.InputData;
-import com.rakovpublic.jneuropallium.worker.net.layers.impl.LayerBuilder;
+import com.rakovpublic.jneuropallium.worker.net.layers.impl.*;
 import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.IInputLoadingStrategy;
 import com.rakovpublic.jneuropallium.worker.net.storages.ILayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.storages.IResultLayerMeta;
+import com.rakovpublic.jneuropallium.worker.net.storages.InMemoryInitInput;
 import com.rakovpublic.jneuropallium.worker.net.storages.file.FileLayersMeta;
 import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IStorage;
+import com.rakovpublic.jneuropallium.worker.net.storages.inmemory.InMemoryDiscriminatorResultSignals;
+import com.rakovpublic.jneuropallium.worker.net.storages.inmemory.InMemoryDiscriminatorSourceSignals;
+import com.rakovpublic.jneuropallium.worker.net.storages.inmemory.InMemoryInitInputImpl;
+import com.rakovpublic.jneuropallium.worker.net.storages.inmemory.ResultLayerHolder;
 import com.rakovpublic.jneuropallium.worker.net.storages.signalstorages.inmemory.InMemorySignalHistoryStorage;
 import com.rakovpublic.jneuropallium.worker.net.storages.signalstorages.inmemory.InMemorySignalPersistStorage;
 import com.rakovpublic.jneuropallium.worker.net.storages.structimpl.StructBuilder;
@@ -153,12 +155,40 @@ public class LocalApplication implements IApplication {
                         outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getRun(), context);
                         meta.getInputResolver().saveHistory();
                         meta.getInputResolver().populateInput();
+
                     }
                 }
             } else {
                 String resultResolverClass = context.getProperty("configuration.resultResolver");
                 IResultResolver resultResolver = null;
                 HashMap<String, StructMeta> discriminators = new HashMap<String, StructMeta>();
+                Integer discriminatorsAmount = Integer.parseInt(context.getProperty("configuration.discriminatorsAmount"));
+                boolean isPass = true;
+                ResultLayerHolder resultLayerHolder = new ResultLayerHolder();
+                for(int i=0;i<discriminatorsAmount;i++){
+                    String inputLoadingStrategyDiscriminator = context.getProperty("configuration.input.loadingstrategy.discriminator."+i);
+                    String nameDiscriminator = context.getProperty("configuration.name.discriminator."+i);
+                    Long discriminatorEpoch = Long.parseLong(context.getProperty("configuration.fast.runs.discriminator."+i));
+                    Integer discriminatorLoop = Integer.parseInt(context.getProperty("configuration.slow.runs.discriminator."+i));
+                    Integer historySlowDiscriminator = Integer.parseInt(context.getProperty("configuration.history.slow.runs.discriminator."+i));
+                    Long historyFastDiscriminator = Long.parseLong(context.getProperty("configuration.history.fast.runs.discriminator."+i));
+                    String layerPathDiscriminator = context.getProperty("configuration.input.layermeta.discriminator."+i);
+                    IInputResolver inputResolverDiscriminator = new InMemoryInputResolver(new InMemorySignalPersistStorage(), new InMemorySignalHistoryStorage(historySlowDiscriminator, historyFastDiscriminator), this.getLoadingStrategy(inputLoadingStrategyDiscriminator));
+                    StructBuilder structBuilderDiscriminator = new StructBuilder();
+                    structBuilderDiscriminator.withHiddenInputMeta(inputResolverDiscriminator);
+                    structBuilderDiscriminator.withLayersMeta(new FileLayersMeta<>(fs.getItem(layerPathDiscriminator), fs));
+                    InMemoryInitInput inMemoryInitInput = new InMemoryInitInputImpl(nameDiscriminator);
+                    InMemoryDiscriminatorResultSignals inMemoryDiscriminatorResultSignals = new InMemoryDiscriminatorResultSignals(inMemoryInitInput,nameDiscriminator,resultLayerHolder);
+                    InMemoryDiscriminatorSourceSignals inMemoryDiscriminatorSourceSignals = new InMemoryDiscriminatorSourceSignals(inputResolver,discriminatorEpoch,discriminatorLoop,nameDiscriminator);
+
+                    //move to resolver
+                  /*  DiscriminatorResultLayer lrDiscriminator = (DiscriminatorResultLayer)process(metaDiscriminator);
+                    isPass = lrDiscriminator.hasPass();
+                    if(!isPass){
+                        logger.warn("Failed on discriminator id " +i);
+                        break;
+                    }*/
+                }
                 //TODO: add discriminators init
                 try {
                     resultResolver = (IResultResolver) Class.forName(resultResolverClass).getDeclaredConstructor().newInstance();
@@ -169,6 +199,7 @@ public class LocalApplication implements IApplication {
                 //Unsupervised or reinforced learning
                 while (true) {
                     IResultLayer lr = process(meta);
+                    resultLayerHolder.setResultLayer(lr);
                     outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getRun(), context);
                     meta.getInputResolver().saveHistory();
                     meta.getInputResolver().populateInput();
