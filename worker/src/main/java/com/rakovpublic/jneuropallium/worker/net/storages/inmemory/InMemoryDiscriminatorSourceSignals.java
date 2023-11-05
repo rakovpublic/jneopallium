@@ -21,15 +21,14 @@ public class InMemoryDiscriminatorSourceSignals implements IInitInput {
     private Long amountOfEpoch;
     private Integer amountOfLoops;
     private IInputResolver inputResolver;
-    private INeuronNetInput callback;
+
     private String name;
 
-    public InMemoryDiscriminatorSourceSignals(TreeMap<Long, TreeMap<Integer, List<IInputSignal>>> history, Long amountOfEpoch, Integer amountOfLoops, IInputResolver inputResolver, INeuronNetInput callback, String name) {
+    public InMemoryDiscriminatorSourceSignals(TreeMap<Long, TreeMap<Integer, List<IInputSignal>>> history, Long amountOfEpoch, Integer amountOfLoops, IInputResolver inputResolver, String name) {
         this.history = history;
         this.amountOfEpoch = amountOfEpoch;
         this.amountOfLoops = amountOfLoops;
         this.inputResolver = inputResolver;
-        this.callback = callback;
         this.name = name;
     }
 
@@ -49,10 +48,7 @@ public class InMemoryDiscriminatorSourceSignals implements IInitInput {
         return name;
     }
 
-    @Override
-    public INeuronNetInput getNeuronNetInput() {
-        return callback;
-    }
+
 
     @Override
     public HashMap<String, List<IResultSignal>> getDesiredResults() {

@@ -23,10 +23,6 @@ public interface IInitInput {
      */
     String getName();
 
-    /**
-     * @return the call back input if input comes from other neuron net and it supports callback studying, null if not
-     */
-    INeuronNetInput getNeuronNetInput();
 
     /**
      * @return desired result for this input

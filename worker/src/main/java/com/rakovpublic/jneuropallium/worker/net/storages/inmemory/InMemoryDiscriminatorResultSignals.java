@@ -7,19 +7,21 @@ package com.rakovpublic.jneuropallium.worker.net.storages.inmemory;
 import com.rakovpublic.jneuropallium.worker.net.layers.IInputResolver;
 import com.rakovpublic.jneuropallium.worker.net.signals.IInputSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.IInitInput;
 import com.rakovpublic.jneuropallium.worker.net.storages.INeuronNetInput;
+import com.rakovpublic.jneuropallium.worker.net.storages.InMemoryInitInput;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-public class InMemoryDiscriminatorResultSignals implements IInitInput {
-    private INeuronNetInput callback;
+public class InMemoryDiscriminatorResultSignals implements INeuronNetInput {
+    private InMemoryInitInput callback;
     private String name;
     private List <IInputSignal> inputSignals;
 
-    public InMemoryDiscriminatorResultSignals(INeuronNetInput callback, String name, List<IResultSignal> resultSignals) {
+    public InMemoryDiscriminatorResultSignals(InMemoryInitInput callback, String name, List<IResultSignal> resultSignals) {
         this.callback = callback;
         this.name = name;
         this.inputSignals = new LinkedList<>();
@@ -38,13 +40,15 @@ public class InMemoryDiscriminatorResultSignals implements IInitInput {
         return name;
     }
 
-    @Override
-    public INeuronNetInput getNeuronNetInput() {
-        return callback;
-    }
+
 
     @Override
     public HashMap<String, List<IResultSignal>> getDesiredResults() {
         return new HashMap<>();
+    }
+
+    @Override
+    public void sendCallBack(List<ISignal> signals) {
+        callback.putSignals(signals);
     }
 }
