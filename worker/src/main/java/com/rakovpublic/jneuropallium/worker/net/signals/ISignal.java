@@ -77,5 +77,5 @@ public interface ISignal<T> extends Serializable {
 
     void setName(String name);
 
-    ISignal copySignal();
+    <K extends ISignal<T>> K copySignal();
 }

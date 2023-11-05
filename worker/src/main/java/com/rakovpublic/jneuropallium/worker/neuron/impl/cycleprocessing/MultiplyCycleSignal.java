@@ -18,7 +18,7 @@ public class MultiplyCycleSignal extends AbstractSignal<Float> implements ISigna
     }
 
     @Override
-    public ISignal copySignal() {
+    public MultiplyCycleSignal copySignal() {
         return new MultiplyCycleSignal(value,this.getSourceLayerId(),this.getSourceNeuronId(),this.getTimeAlive(),getDescription(),isFromExternalNet(),getInputName());
     }
 }
