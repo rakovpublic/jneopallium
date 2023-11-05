@@ -32,6 +32,6 @@ public class ResultInputSignalWrapper<T> extends AbstractSignal<T> implements II
 
     @Override
     public ISignal copySignal() {
-        return new ResultInputSignalWrapper(inputSignal);
+        return new ResultInputSignalWrapper((IResultSignal)inputSignal.copySignal());
     }
 }
