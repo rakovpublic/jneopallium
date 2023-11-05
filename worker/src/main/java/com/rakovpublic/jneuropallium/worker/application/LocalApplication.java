@@ -9,10 +9,7 @@ import com.rakovpublic.jneuropallium.worker.net.layers.*;
 import com.rakovpublic.jneuropallium.worker.net.layers.impl.*;
 import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
-import com.rakovpublic.jneuropallium.worker.net.storages.IInputLoadingStrategy;
-import com.rakovpublic.jneuropallium.worker.net.storages.ILayerMeta;
-import com.rakovpublic.jneuropallium.worker.net.storages.IResultLayerMeta;
-import com.rakovpublic.jneuropallium.worker.net.storages.InMemoryInitInput;
+import com.rakovpublic.jneuropallium.worker.net.storages.*;
 import com.rakovpublic.jneuropallium.worker.net.storages.file.FileLayersMeta;
 import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IStorage;
 import com.rakovpublic.jneuropallium.worker.net.storages.inmemory.InMemoryDiscriminatorResultSignals;
@@ -59,19 +56,9 @@ public class LocalApplication implements IApplication {
             }
         }
 
-
-        String fileSystemClass = context.getProperty("configuration.storage.class");
-        Class<IStorage> clazz = null;
-        try {
-            clazz = (Class<IStorage>) Class.forName(fileSystemClass);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            logger.error("Cannot find file system class" + fileSystemClass, e);
-            return;
-        }
-        String fileSystemConstructorArgs = context.getProperty("configuration.storage.constructor.args");
-        String fileSystemConstructorArgsType = context.getProperty("configuration.storage.constructor.args.types");
-        IStorage fs = InstantiationUtils.<IStorage>getObject(clazz, getObjects(fileSystemConstructorArgs), getTypes(fileSystemConstructorArgsType));
+        
+        String storageJson = context.getProperty("configuration.storage.json");
+        IStorage fs = getStorage(storageJson);
         String inputLoadingStrategy = context.getProperty("configuration.input.loadingstrategy");
         Integer historySlow = Integer.parseInt(context.getProperty("configuration.history.slow.runs"));
         Long historyFast = Long.parseLong(context.getProperty("configuration.history.fast.runs"));
@@ -111,8 +98,6 @@ public class LocalApplication implements IApplication {
                 String algoType = context.getProperty("configuration.studyingalgotype");
                 for (; currentRun < maxRun || isInfinite; currentRun++) {
                     //Supervised learning
-
-
                     if (algoType != null && resultComparingStrategy != null) {
                         List<IResult> idsToFix;
                         if (algoType.equals("direct")) {
@@ -173,37 +158,31 @@ public class LocalApplication implements IApplication {
                     Integer historySlowDiscriminator = Integer.parseInt(context.getProperty("configuration.history.slow.runs.discriminator."+i));
                     Long historyFastDiscriminator = Long.parseLong(context.getProperty("configuration.history.fast.runs.discriminator."+i));
                     String layerPathDiscriminator = context.getProperty("configuration.input.layermeta.discriminator."+i);
+                    String initStrategyDiscriminatorResult =  context.getProperty("configuration.input.initStrategy.result.discriminator."+i);;
+                    String initStrategyDiscriminatorSource=  context.getProperty("configuration.input.initStrategy.source.discriminator."+i);;
+                    String initStrategyDiscriminatorCallback=  context.getProperty("configuration.input.initStrategy.callback.discriminator."+i);;
                     IInputResolver inputResolverDiscriminator = new InMemoryInputResolver(new InMemorySignalPersistStorage(), new InMemorySignalHistoryStorage(historySlowDiscriminator, historyFastDiscriminator), this.getLoadingStrategy(inputLoadingStrategyDiscriminator));
-                    StructBuilder structBuilderDiscriminator = new StructBuilder();
-                    structBuilderDiscriminator.withHiddenInputMeta(inputResolverDiscriminator);
-                    structBuilderDiscriminator.withLayersMeta(new FileLayersMeta<>(fs.getItem(layerPathDiscriminator), fs));
                     InMemoryInitInput inMemoryInitInput = new InMemoryInitInputImpl(nameDiscriminator);
                     InMemoryDiscriminatorResultSignals inMemoryDiscriminatorResultSignals = new InMemoryDiscriminatorResultSignals(inMemoryInitInput,nameDiscriminator,resultLayerHolder);
                     InMemoryDiscriminatorSourceSignals inMemoryDiscriminatorSourceSignals = new InMemoryDiscriminatorSourceSignals(inputResolver,discriminatorEpoch,discriminatorLoop,nameDiscriminator);
-
-                    //move to resolver
-                  /*  DiscriminatorResultLayer lrDiscriminator = (DiscriminatorResultLayer)process(metaDiscriminator);
-                    isPass = lrDiscriminator.hasPass();
-                    if(!isPass){
-                        logger.warn("Failed on discriminator id " +i);
-                        break;
-                    }*/
+                    inputResolverDiscriminator.registerInput(inMemoryDiscriminatorResultSignals,true,getInputInitStrategy(initStrategyDiscriminatorResult));
+                    inputResolverDiscriminator.registerInput(inMemoryDiscriminatorSourceSignals,true,getInputInitStrategy(initStrategyDiscriminatorSource));
+                    inputResolver.registerInput(inMemoryInitInput,false,getInputInitStrategy(initStrategyDiscriminatorCallback));
+                    StructBuilder structBuilderDiscriminator = new StructBuilder();
+                    structBuilderDiscriminator.withHiddenInputMeta(inputResolverDiscriminator);
+                    structBuilderDiscriminator.withLayersMeta(new FileLayersMeta<>(fs.getItem(layerPathDiscriminator), fs));
+                    discriminators.put(nameDiscriminator,structBuilder.build());
                 }
-                //TODO: add discriminators init
-                try {
-                    resultResolver = (IResultResolver) Class.forName(resultResolverClass).getDeclaredConstructor().newInstance();
-                } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException | InstantiationException |
-                        IllegalAccessException e) {
-                    logger.error("cannot create output aggregator object", e);
-                }
-                //Unsupervised or reinforced learning
+                resultResolver = getResultResolver(resultResolverClass);
                 while (true) {
                     IResultLayer lr = process(meta);
                     resultLayerHolder.setResultLayer(lr);
-                    outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getRun(), context);
+                    if( resultResolver.resolveResult(meta, discriminators, lr)){
+                       outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getRun(), context);
+                    }
                     meta.getInputResolver().saveHistory();
                     meta.getInputResolver().populateInput();
-                    resultResolver.resolveResult(meta, discriminators, lr);
+
 
                 }
 
@@ -246,48 +225,19 @@ public class LocalApplication implements IApplication {
 
     }
 
-    private List<Class<?>> getTypes(String str) {
 
-        List<Class<?>> reuslt = new ArrayList<>();
-        if (str.equals("empty")) {
-            return reuslt;
-        }
+    private IResultResolver  getResultResolver(String json) {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonElement jelement = new JsonParser().parse(json);
+        JsonObject jobject = jelement.getAsJsonObject();
+        IResultResolver result = null;
         try {
-            if (str.contains(":")) {
-                String[] parts = str.split(":");
-                for (String cl : parts) {
-                    reuslt.add(Class.forName(cl));
-                }
-            } else {
-                reuslt.add(Class.forName(str));
-            }
-        } catch (ClassNotFoundException e) {
-            logger.error("Cannot find class for name: " + str, e);
+            result = (IResultResolver) mapper.readValue(jobject.getAsJsonObject("resultResolver").getAsString(), Class.forName(jobject.getAsJsonPrimitive("resultResolverClass").getAsString()));
+        } catch (JsonProcessingException | ClassNotFoundException e) {
+            logger.error("Cannot parse loading strategy  " + json, e);
         }
-        return reuslt;
-
+        return result;
     }
-
-
-    //TODO: refactore it
-    private Object[] getObjects(String str) {
-        if (str.equals("empty")) {
-            return new Object[0];
-        }
-        Object[] obj = null;
-        try {
-            byte b[] = str.getBytes();
-            ByteArrayInputStream bi = new ByteArrayInputStream(b);
-            ObjectInputStream si = new ObjectInputStream(bi);
-            obj = (Object[]) si.readObject();
-        } catch (Exception ex) {
-            logger.error("Cannot deserialize string to object array ", ex);
-        }
-        return obj;
-
-    }
-
-
 
     private IInputLoadingStrategy getLoadingStrategy(String json) {
         ObjectMapper mapper = new ObjectMapper();
@@ -301,6 +251,33 @@ public class LocalApplication implements IApplication {
         }
         return result;
     }
+
+    private InputInitStrategy getInputInitStrategy(String json) {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonElement jelement = new JsonParser().parse(json);
+        JsonObject jobject = jelement.getAsJsonObject();
+        InputInitStrategy result = null;
+        try {
+            result = (InputInitStrategy) mapper.readValue(jobject.getAsJsonObject("initStrategy").getAsString(), Class.forName(jobject.getAsJsonPrimitive("initStrategyClass").getAsString()));
+        } catch (JsonProcessingException | ClassNotFoundException e) {
+            logger.error("Cannot parse init strategy  " + json, e);
+        }
+        return result;
+    }
+
+    private IStorage getStorage(String json) {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonElement jelement = new JsonParser().parse(json);
+        JsonObject jobject = jelement.getAsJsonObject();
+        IStorage result = null;
+        try {
+            result = (IStorage) mapper.readValue(jobject.getAsJsonObject("storage").getAsString(), Class.forName(jobject.getAsJsonPrimitive("storageClass").getAsString()));
+        } catch (JsonProcessingException | ClassNotFoundException e) {
+            logger.error("Cannot parse init strategy  " + json, e);
+        }
+        return result;
+    }
+
 
     private List<InputData> getInputs(String json) {
         ObjectMapper mapper = new ObjectMapper();
