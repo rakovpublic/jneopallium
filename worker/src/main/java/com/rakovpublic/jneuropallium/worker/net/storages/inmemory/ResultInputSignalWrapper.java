@@ -16,7 +16,7 @@ public class ResultInputSignalWrapper<T> extends AbstractSignal<T> implements II
     }
     public ResultInputSignalWrapper(IResultSignal<T> inputSignal) {
         super(inputSignal.getValue(), inputSignal.getSourceLayerId(), inputSignal.getSourceNeuronId(), inputSignal.getTimeAlive(), inputSignal.getDescription(), inputSignal.isFromExternalNet(), inputSignal.getInputName(), inputSignal.isNeedToRemoveDuringLearning(), inputSignal.isNeedToProcessDuringLearning(), inputSignal.getName());
-        this.inputSignal = inputSignal;
+        this.inputSignal = inputSignal.copySignal();
     }
 
 

@@ -7,6 +7,7 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.*;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -97,7 +98,11 @@ public class InMemoryInputResolver implements IInputResolver {
     public void sendCallBack(String name, List<ISignal> signals) {
         IInitInput input = initInput.get(name);
         if (input instanceof INeuronNetInput) {
-            ((INeuronNetInput) input).sendCallBack(signals);
+            List<IInputSignal> inputSignals = new LinkedList<>();
+            for(ISignal signal:signals){
+                inputSignals.add(new SimpleInputSignalWrapper(signal));
+            }
+            ((INeuronNetInput) input).sendCallBack(inputSignals);
         }
     }
 
