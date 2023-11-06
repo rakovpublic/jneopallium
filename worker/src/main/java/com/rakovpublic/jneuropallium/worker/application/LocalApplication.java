@@ -56,7 +56,7 @@ public class LocalApplication implements IApplication {
             }
         }
 
-        
+
         String storageJson = context.getProperty("configuration.storage.json");
         IStorage fs = getStorage(storageJson);
         String inputLoadingStrategy = context.getProperty("configuration.input.loadingstrategy");
@@ -148,7 +148,6 @@ public class LocalApplication implements IApplication {
                 IResultResolver resultResolver = null;
                 HashMap<String, StructMeta> discriminators = new HashMap<String, StructMeta>();
                 Integer discriminatorsAmount = Integer.parseInt(context.getProperty("configuration.discriminatorsAmount"));
-                boolean isPass = true;
                 ResultLayerHolder resultLayerHolder = new ResultLayerHolder();
                 for(int i=0;i<discriminatorsAmount;i++){
                     String inputLoadingStrategyDiscriminator = context.getProperty("configuration.input.loadingstrategy.discriminator."+i);
@@ -173,11 +172,11 @@ public class LocalApplication implements IApplication {
                     structBuilderDiscriminator.withLayersMeta(new FileLayersMeta<>(fs.getItem(layerPathDiscriminator), fs));
                     discriminators.put(nameDiscriminator,structBuilder.build());
                 }
-                resultResolver = getResultResolver(resultResolverClass);
+                resultResolver = new SimpleResultResolver();
                 while (true) {
                     IResultLayer lr = process(meta);
                     resultLayerHolder.setResultLayer(lr);
-                    if( resultResolver.resolveResult(meta, discriminators, lr)){
+                    if( resultResolver.resolveResult(meta, discriminators)){
                        outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getRun(), context);
                     }
                     meta.getInputResolver().saveHistory();
@@ -208,7 +207,7 @@ public class LocalApplication implements IApplication {
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                   logger.error(e);
                 }
             }
             layer.dumpNeurons(met);
