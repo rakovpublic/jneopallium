@@ -1,5 +1,6 @@
 package com.rakovpublic.jneuropallium.worker.net.storages;
 
+import com.rakovpublic.jneuropallium.worker.net.layers.IInputResolver;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 
@@ -14,7 +15,7 @@ public interface ISplitInput extends IStorageMeta {
     /**
      * @return signal storage
      */
-    ISignalStorage readInputs();
+    IInputResolver getInputResolver();
 
     /**
      * This method save the the input for the processing
@@ -49,39 +50,13 @@ public interface ISplitInput extends IStorageMeta {
      */
     List<? extends INeuron> getNeurons();
 
-    /**
-     * Set the mapping for service neurons on Long.MIN layerid for example for cycling
-     *
-     * @param neuronInputNameMapping
-     */
-    void setServiceInputsMap(HashMap<String, Long> neuronInputNameMapping);
-
-    /**
-     * @return service neuron mapping on Long.MIN layerId
-     */
-    HashMap<String, Long> getServiceInputsMap();
-
-    /**
-     * @return amount of runs which passed after last input population
-     */
-    Integer getEpoch();
-
-    void setCurrentLoopCount(Integer currentLoopCount);
 
     /**
      * @return the node name
      */
     String getNodeIdentifier();
 
-    /**
-     * @param run amount of input populations -1 have passed after neuron net started
-     */
-    void setRun(Long run);
 
-    /**
-     * @return the amount of input population -1 passed after neuron net started
-     */
-    Long getRun();
 
 
     Long getStart();

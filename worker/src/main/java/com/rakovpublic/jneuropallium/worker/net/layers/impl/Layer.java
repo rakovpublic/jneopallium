@@ -24,10 +24,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 public class Layer<N extends INeuron> implements ILayer<N> {
     protected TreeMap<Long, INeuron> map;
-    private HashMap<Long, List<ISignal>> input;
-    private HashMap<Class<? extends INeuron>, INeuronSerializer> neuronSerializerHashMap;
     private Boolean isProcessed;
-    private long size;
     private int layerId;
     private LinkedBlockingQueue<INeuron> notProcessed;
     private List<IRule> rules;
@@ -37,14 +34,12 @@ public class Layer<N extends INeuron> implements ILayer<N> {
 
     public Layer(int layerId, IInputResolver meta) {
         metaParams = new HashMap<>();
-        neuronSerializerHashMap = new HashMap<>();
         rules = new ArrayList<>();
         isProcessed = false;
         notProcessed = new LinkedBlockingQueue<INeuron>();
         this.layerId = layerId;
         inputResolver = meta;
         map = new TreeMap<Long, INeuron>();
-        input = new HashMap<Long, List<ISignal>>();
         INeuron sizingNeuron = new LayerManipulatingNeuron(Long.MIN_VALUE, new LayerManipulatingProcessingChain(), 0l, this);
         sizingNeuron.setLayer(this);
         map.put(Long.MIN_VALUE, sizingNeuron);
@@ -96,7 +91,7 @@ public class Layer<N extends INeuron> implements ILayer<N> {
 
     @Override
     public long getLayerSize() {
-        return size;
+        return this.map.size();
     }
 
     @Override
@@ -142,30 +137,10 @@ public class Layer<N extends INeuron> implements ILayer<N> {
     }
 
 
-    @Override
-    public void addInput(ISignal signal, Long neuronId) {
-
-        if (input.containsKey(neuronId)) {
-            input.get(neuronId).add(signal);
-        } else {
-            List<ISignal> list = new ArrayList<>();
-            list.add(signal);
-            input.put(neuronId, list);
-        }
-    }
 
     @Override
     public void process() {
-        HashMap<Long, List<ISignal>> inputs = inputResolver.getSignalPersistStorage().getLayerSignals(this.layerId);
-        for (Long neuronID : inputs.keySet()) {
-            for (ISignal signal : inputs.get(neuronID)) {
-                if (inputResolver.getCurrentLoop() != 0 && signal.isNeedToProcessDuringLearning()) {
-                    this.addInput(signal, neuronID);
-                } else {
-                    this.addInput(signal, neuronID);
-                }
-            }
-        }
+        HashMap<Long, List<ISignal>> input = inputResolver.getSignalPersistStorage().getLayerSignals(this.layerId);
         INeuron neur;
         NeuronRunnerService ns = NeuronRunnerService.getService();
         for (Long neuronId : map.keySet()) {
@@ -292,7 +267,6 @@ public class Layer<N extends INeuron> implements ILayer<N> {
         Layer layer = (Layer) o;
         return layerId == layer.layerId &&
                 Objects.equals(map, layer.map) &&
-                Objects.equals(input, layer.input) &&
                 Objects.equals(isProcessed, layer.isProcessed) &&
                 Objects.equals(notProcessed, layer.notProcessed) &&
                 Objects.equals(rules, layer.rules);
@@ -300,6 +274,6 @@ public class Layer<N extends INeuron> implements ILayer<N> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(map, input, isProcessed, notProcessed, rules, layerId);
+        return Objects.hash(map, isProcessed, notProcessed, rules, layerId);
     }
 }

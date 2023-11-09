@@ -74,13 +74,6 @@ public interface ILayer<N extends INeuron> extends Serializable {
      */
     void registerAll(List<? extends N> neuron);
 
-    /**
-     * add input to layer
-     *
-     * @param signal
-     * @param neuronId neuron id
-     */
-    void addInput(ISignal signal, Long neuronId);
 
     /**
      * this method launch the layer processing

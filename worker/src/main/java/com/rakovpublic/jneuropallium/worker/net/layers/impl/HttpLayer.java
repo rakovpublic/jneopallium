@@ -130,11 +130,6 @@ public class HttpLayer implements ILayer {
     }
 
     @Override
-    public void addInput(ISignal signal, Long neuronId) {
-
-    }
-
-    @Override
     public void process() {
 
     }
@@ -168,7 +163,7 @@ public class HttpLayer implements ILayer {
     public String toJSON() {
         return null;
     }
-    
+
 
     @Override
     public void sendCallBack(String name, List list) {
