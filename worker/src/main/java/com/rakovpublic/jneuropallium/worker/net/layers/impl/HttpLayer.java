@@ -168,21 +168,13 @@ public class HttpLayer implements ILayer {
     public String toJSON() {
         return null;
     }
-
-    @Override
-    public void addNeuronSerializer(INeuronSerializer serializer) {
-
-    }
+    
 
     @Override
     public void sendCallBack(String name, List list) {
 
     }
 
-    @Override
-    public INeuronSerializer getNeuronSerializer(Class neuronClass) {
-        return null;
-    }
 
     @Override
     public LayerMetaParam getLayerMetaParam(String key) {

@@ -125,9 +125,6 @@ public interface ILayer<N extends INeuron> extends Serializable {
      **/
     String toJSON();
 
-    void addNeuronSerializer(INeuronSerializer serializer);
-
-    <N extends INeuron> INeuronSerializer<N> getNeuronSerializer(Class<N> neuronClass);
 
     void sendCallBack(String name, List<ISignal> signals);
 

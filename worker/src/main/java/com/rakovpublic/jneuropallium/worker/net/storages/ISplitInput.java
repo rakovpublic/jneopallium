@@ -24,6 +24,13 @@ public interface ISplitInput extends IStorageMeta {
     void saveResults(HashMap<Integer, HashMap<Long, List<ISignal>>> signals);
 
     /**
+     * This method save the neuron
+     *
+     * @param neuron neuronToUpdate
+     **/
+    void saveNeuron(INeuron neuron);
+
+    /**
      * This method set the name of worker where it will be processed
      *
      * @param name

@@ -1,6 +1,10 @@
 package com.rakovpublic.jneuropallium.worker.net.storages;
 
+import com.rakovpublic.jneuropallium.worker.net.signals.IInputSignal;
+
 import java.util.HashMap;
+import java.util.List;
+import java.util.TreeMap;
 
 public class InputLoadingStrategyWrapper implements IInputLoadingStrategy {
     private IInputLoadingStrategy iInputLoadingStrategy;
@@ -39,6 +43,11 @@ public class InputLoadingStrategyWrapper implements IInputLoadingStrategy {
     @Override
     public void updateInputs(HashMap<IInitInput, InputStatusMeta> inputStatuses, HashMap<IInitInput, InputInitStrategy> inputs) {
         iInputLoadingStrategy.updateInputs(inputStatuses, inputs);
+    }
+
+    @Override
+    public TreeMap<Long, TreeMap<Integer, List<IInputSignal>>> getInputHistory() {
+        return iInputLoadingStrategy.getInputHistory();
     }
 
 }

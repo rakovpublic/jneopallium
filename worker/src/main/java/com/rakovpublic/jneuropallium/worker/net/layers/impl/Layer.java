@@ -279,16 +279,6 @@ public class Layer<N extends INeuron> implements ILayer<N> {
         return null;
     }
 
-    @Override
-    public void addNeuronSerializer(INeuronSerializer serializer) {
-        neuronSerializerHashMap.put(serializer.getDeserializedClass(), serializer);
-
-    }
-
-    @Override
-    public <N extends INeuron> INeuronSerializer<N> getNeuronSerializer(Class<N> neuronClass) {
-        return neuronSerializerHashMap.get(neuronClass);
-    }
 
     @Override
     public void sendCallBack(String name, List<ISignal> signals) {

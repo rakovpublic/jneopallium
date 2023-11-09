@@ -24,8 +24,6 @@ public class HttpClusterApplication implements IApplication {
     public void startApplication(IContext context, JarClassLoaderService classLoaderService) {
         String registerLink = context.getProperty("master.address") + "/nodeManager/register";
         String getSplitInputLink = context.getProperty("master.address") + "/nodeManager/nextRun";
-        String sendResultLink = context.getProperty("master.address") + "/input/callback";
-        String updateNeuronLink = context.getProperty("master.address") + "/layer/updateNeuron";
         NodeCompleteRequest nodeCompleteRequest = new NodeCompleteRequest();
         nodeCompleteRequest.setNodeName(UUID);
         HttpCommunicationClient communicationClient = new HttpCommunicationClient();
@@ -62,28 +60,7 @@ public class HttpClusterApplication implements IApplication {
                 IAxon axon = neuron.getAxon();
                 HashMap<Integer, HashMap<Long, List<ISignal>>> result = axon.getSignalResultStructure(axon.processSignals(neuron.getResult()));
                 splitInput.saveResults(result);
-                ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-                String json;
-                try {
-                    json = ow.writeValueAsString(neuron);
-                } catch (JsonProcessingException e) {
-
-                    //TODO: add logger return
-                    return;
-                }
-                CreateNeuronRequest createNeuronRequest = new CreateNeuronRequest();
-                createNeuronRequest.setLayerId(neuron.getLayer().getId());
-                createNeuronRequest.setNeuronJson(json);
-                createNeuronRequest.setNeuronClass(neuron.getCurrentNeuronClass().getCanonicalName());
-                try {
-                    communicationClient.sendRequest(HttpRequestResolver.createPost(updateNeuronLink, createNeuronRequest));
-                } catch (IOException e) {
-                    //TODO: add logger return
-                    return;
-                } catch (InterruptedException e) {
-                    //TODO: add logger return
-                    return;
-                }
+                splitInput.saveNeuron(neuron);
             }
         }
     }

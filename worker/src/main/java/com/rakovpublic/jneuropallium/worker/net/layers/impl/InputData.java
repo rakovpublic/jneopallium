@@ -3,7 +3,6 @@ package com.rakovpublic.jneuropallium.worker.net.layers.impl;
 import com.rakovpublic.jneuropallium.worker.net.storages.IInitInput;
 import com.rakovpublic.jneuropallium.worker.net.storages.InputInitStrategy;
 
-//TODO: add json annotations and mappers on interfaces
 public class InputData {
     private IInitInput iInputSource;
     private boolean isMandatory;
