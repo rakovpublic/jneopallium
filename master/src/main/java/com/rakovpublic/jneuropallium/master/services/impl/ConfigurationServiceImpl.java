@@ -6,6 +6,7 @@ package com.rakovpublic.jneuropallium.master.services.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.rakovpublic.jneuropallium.worker.exceptions.InputServiceInitException;
 import com.rakovpublic.jneuropallium.worker.model.ConfigurationUpdateRequest;
 import com.rakovpublic.jneuropallium.master.services.ConfigurationService;
 import com.rakovpublic.jneuropallium.master.services.IInputService;
@@ -31,6 +32,10 @@ public class ConfigurationServiceImpl implements ConfigurationService {
 
     @Override
     public IInputService getInputService() {
+        if(inputService==null){
+            throw new InputServiceInitException("Input service has not been registered");
+        }
+
         return inputService;
     }
 

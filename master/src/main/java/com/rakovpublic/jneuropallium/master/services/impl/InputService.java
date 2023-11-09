@@ -72,7 +72,6 @@ public class InputService implements IInputService {
 
     @Override
     public void register(IInitInput iInputSource, boolean isMandatory, InputInitStrategy initStrategy, Integer amountOfRuns) {
-        //signalsPersist.putSignals(initStrategy.getInputs(layersMeta, iInputSource.readSignals()));
         inputStatuses.put(iInputSource, new InputStatusMeta(true, isMandatory, iInputSource.getName()));
         inputs.put(iInputSource, initStrategy);
     }
@@ -171,8 +170,6 @@ public class InputService implements IInputService {
                     input.setEnd((i + 1) * atomic);
                     input.setNodeIdentifier(nodeNames.get(0));
                     input.setLayer(layerMeta.getID());
-                    input.setCurrentLoopCount(runningStrategy.getCurrentLoopCount());
-                    input.setRun(runningStrategy.getEpoch());
                     resList.add(input);
 
                 }
@@ -246,15 +243,4 @@ public class InputService implements IInputService {
         this.layersMeta = layersMeta;
     }
 
-    private List<InputData> getInputs(String json) {
-        ObjectMapper mapper = new ObjectMapper();
-        List<InputData> result = null;
-        try {
-            result = mapper.readValue(json, InputArray.class).getInputData();
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            logger.error("Cannot parse json " + json, e);
-        }
-        return result;
-    }
 }
