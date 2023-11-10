@@ -25,15 +25,11 @@ import com.rakovpublic.jneuropallium.worker.net.study.IObjectLearningAlgo;
 import com.rakovpublic.jneuropallium.worker.net.study.IResultComparingStrategy;
 import com.rakovpublic.jneuropallium.worker.net.study.StudyingAlgoFactory;
 import com.rakovpublic.jneuropallium.worker.synchronizer.IContext;
-import com.rakovpublic.jneuropallium.worker.synchronizer.utils.InstantiationUtils;
 import com.rakovpublic.jneuropallium.worker.util.JarClassLoaderService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.ByteArrayInputStream;
-import java.io.ObjectInputStream;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
