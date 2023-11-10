@@ -1,22 +1,11 @@
 package com.rakovpublic.jneuropallium.worker.net.storages.http;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.rakovpublic.jneuropallium.worker.model.UploadSignalsRequest;
-import com.rakovpublic.jneuropallium.worker.application.HttpCommunicationClient;
-import com.rakovpublic.jneuropallium.worker.application.HttpRequestResolver;
 import com.rakovpublic.jneuropallium.worker.net.layers.IInputResolver;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayer;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
-import com.rakovpublic.jneuropallium.worker.net.storages.ISignalStorage;
 import com.rakovpublic.jneuropallium.worker.net.storages.ISplitInput;
 import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
-import com.rakovpublic.jneuropallium.worker.neuron.ISignalMerger;
-import com.rakovpublic.jneuropallium.worker.neuron.ISignalProcessor;
 import com.rakovpublic.jneuropallium.worker.util.NeuronParser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -28,13 +17,11 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public abstract class AbstractHttpInputMeta implements ISplitInput {
-    private static final Logger logger = LogManager.getLogger(AbstractHttpInputMeta.class);
+public  class HttpInputMeta implements ISplitInput {
+    private static final Logger logger = LogManager.getLogger(HttpInputMeta.class);
     private String nodeId;
     private String readNeuronsEndpoint;
     private String sendResultEndpoint;
@@ -46,7 +33,7 @@ public abstract class AbstractHttpInputMeta implements ISplitInput {
     private Long end;
 
 
-    public AbstractHttpInputMeta(String nodeId, String readNeuronsEndpoint, String sendResultEndpoint, IInputResolver inputResolver, ILayer layer, Long start, Long end) {
+    public HttpInputMeta(String nodeId, String readNeuronsEndpoint, String sendResultEndpoint, IInputResolver inputResolver, ILayer layer, Long start, Long end) {
         this.nodeId = nodeId;
         this.readNeuronsEndpoint = readNeuronsEndpoint;
         this.sendResultEndpoint = sendResultEndpoint;
@@ -108,6 +95,11 @@ public abstract class AbstractHttpInputMeta implements ISplitInput {
     }
 
     @Override
+    public ISplitInput getNewInstance() {
+        return new HttpInputMeta(this.nodeId,this.readNeuronsEndpoint,this.sendResultEndpoint,this.inputResolver,this.layer,this.start,this.end);
+    }
+
+    @Override
     public String getNodeIdentifier() {
         return nodeId;
     }
@@ -115,7 +107,7 @@ public abstract class AbstractHttpInputMeta implements ISplitInput {
     @Override
     public List<? extends INeuron> getNeurons() {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(readNeuronsEndpoint))
+                .uri(URI.create(readNeuronsEndpoint+"?layerId="+layer.getId()+"&startIndex="+start+"&endIndex="+end))
                 .timeout(Duration.ofMinutes(2))
                 .header("Content-Type", "application/json")
                 .GET()
