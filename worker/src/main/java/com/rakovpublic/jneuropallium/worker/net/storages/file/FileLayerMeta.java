@@ -17,6 +17,7 @@ import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.neuron.ISignalMerger;
 import com.rakovpublic.jneuropallium.worker.neuron.ISignalProcessor;
 import com.rakovpublic.jneuropallium.worker.synchronizer.utils.JSONHelper;
+import com.rakovpublic.jneuropallium.worker.util.NeuronParser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -78,30 +79,7 @@ public class FileLayerMeta<S extends IStorageItem> implements ILayerMeta {
     @Override
     public List<INeuron> getNeurons() {
         String layer = fileSystem.read(file);
-        List<INeuron> result = new ArrayList<>();
-        JsonElement jelement = new JsonParser().parse(layer);
-        JsonObject jobject = jelement.getAsJsonObject();
-        JsonArray jarray = jobject.getAsJsonArray("neurons");
-        ObjectMapper mapper = new ObjectMapper();
-        for (JsonElement jel : jarray) {
-            String cl = jel.getAsJsonObject().getAsJsonPrimitive("currentNeuronClass").getAsString();
-            try {
-                INeuron neuron = (INeuron) mapper.readValue(jel.getAsJsonObject().toString(), Class.forName(cl));
-                HashMap<Class<?>, ISignalProcessor> p = new HashMap<>();
-                for (Map.Entry<String, JsonElement> e : jel.getAsJsonObject().getAsJsonObject("processorMap").entrySet()) {
-                    String cc = e.getValue().getAsJsonObject().getAsJsonPrimitive("signalProcessorClass").getAsString();
-                    neuron.addSignalProcessor((Class<? extends ISignal>) Class.forName(e.getKey()), (ISignalProcessor) mapper.readValue(e.getValue().getAsJsonObject().toString(), Class.forName(cc)));
-                }
-                for (Map.Entry<String, JsonElement> e : jel.getAsJsonObject().getAsJsonObject("mergerMap").entrySet()) {
-                    String cc = e.getValue().getAsJsonObject().getAsJsonPrimitive("signalMergerClass").getAsString();
-                    neuron.addSignalMerger((Class<? extends ISignal>) Class.forName(e.getKey()), (ISignalMerger) mapper.readValue(e.getValue().getAsJsonObject().toString(), Class.forName(cc)));
-                }
-                result.add(neuron);
-            } catch (IOException | ClassNotFoundException e) {
-                logger.error("cannot parse neuron from json " + jel.getAsJsonObject().toString(), e);
-            }
-        }
-        return result;
+        return NeuronParser.parseNeurons(layer);
     }
 
     @Override
