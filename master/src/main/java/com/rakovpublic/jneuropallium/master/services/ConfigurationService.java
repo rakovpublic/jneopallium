@@ -11,4 +11,6 @@ public interface ConfigurationService {
      IInputService getInputService();
 
      ReconnectStrategy getReconnectionStrategy();
+
+
 }

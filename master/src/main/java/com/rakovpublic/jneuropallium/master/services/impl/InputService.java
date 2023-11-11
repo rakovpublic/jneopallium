@@ -33,6 +33,7 @@ public class InputService implements IInputService {
     private Long run;
     private Boolean runFlag;
     private IResultLayerRunner resultLayerRunner;
+    private HashMap<String,ILayersMeta> discriminators;
 
     public InputService(ISignalsPersistStorage signalsPersist, ILayersMeta layersMeta, ISplitInput splitInput, Integer partitions, IInputLoadingStrategy runningStrategy, ISignalHistoryStorage signalHistoryStorage, IResultLayerRunner resultLayerRunner) {
         this.signalsPersist = signalsPersist;
@@ -241,6 +242,31 @@ public class InputService implements IInputService {
     @Override
     public void updateLayersMeta(ILayersMeta layersMeta) {
         this.layersMeta = layersMeta;
+    }
+
+    @Override
+    public void updateDiscriminators(HashMap<String, ILayersMeta> discriminators) {
+
+    }
+
+    @Override
+    public boolean hasDiscriminators() {
+        return false;
+    }
+
+    @Override
+    public void prepareDiscriminatorsInputs() {
+
+    }
+
+    @Override
+    public boolean isDiscriminatorsDone() {
+        return false;
+    }
+
+    @Override
+    public ISplitInput getNextDiscriminators(String name) {
+        return null;
     }
 
 }

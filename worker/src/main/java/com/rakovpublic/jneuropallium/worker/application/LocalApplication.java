@@ -140,7 +140,6 @@ public class LocalApplication implements IApplication {
                     }
                 }
             } else {
-                String resultResolverClass = context.getProperty("configuration.resultResolver");
                 IResultResolver resultResolver = null;
                 HashMap<String, StructMeta> discriminators = new HashMap<String, StructMeta>();
                 Integer discriminatorsAmount = Integer.parseInt(context.getProperty("configuration.discriminatorsAmount"));

@@ -43,4 +43,15 @@ public interface IInputService {
     ILayersMeta getLayersMeta();
 
     void updateLayersMeta(ILayersMeta layersMeta);
+
+    void updateDiscriminators(HashMap<String,ILayersMeta> discriminators);
+
+    boolean hasDiscriminators();
+
+    void prepareDiscriminatorsInputs();
+
+    boolean isDiscriminatorsDone();
+
+    boolean isResultValid();
+    ISplitInput getNextDiscriminators(String name);
 }

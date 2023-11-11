@@ -1,5 +1,6 @@
 package com.rakovpublic.jneuropallium.master.controllers;
 
+import com.rakovpublic.jneuropallium.master.services.IInputService;
 import com.rakovpublic.jneuropallium.worker.model.NodeCompleteRequest;
 import com.rakovpublic.jneuropallium.worker.model.SplitInputResponse;
 import com.rakovpublic.jneuropallium.master.services.ConfigurationService;
@@ -38,21 +39,25 @@ public class NodeManagerController {
 
     @PostMapping("/nextRun")
     public ResponseEntity<?> getNextRun(@RequestBody NodeCompleteRequest request) {
+        IInputService inputService = configurationService.getInputService();
         ISplitInput splitInput = null;
         try {
-            if(configurationService.getInputService().runCompleted()){
-                //TODO: add result saving
-                configurationService.getInputService().prepareResults();
-
-                configurationService.getInputService().nextRun();
-                configurationService.getInputService().prepareInputs();
+            if(inputService.runCompleted()){
+                if(inputService.hasDiscriminators()&& !inputService.isDiscriminatorsDone()){
+                    inputService.prepareDiscriminatorsInputs();
+                    splitInput =inputService.getNextDiscriminators(request.getNodeName());
+                }else {
+                    if(inputService.isResultValid()){
+                        //TODO: add result saving
+                        inputService.prepareResults();
+                    }
+                    inputService.nextRun();
+                    inputService.prepareInputs();
+                    splitInput = configurationService.getInputService().getNext(request.getNodeName());
+                }
+            }else {
+                splitInput = configurationService.getInputService().getNext(request.getNodeName());
             }
-            // TODO:
-            if(!configurationService.getInputService().hasPrepared()){
-                configurationService.getInputService().prepareInputs();
-            }
-
-            splitInput = configurationService.getInputService().getNext(request.getNodeName());
             nodeManager.setNodeStatus(request.getNodeName(), NodeStatus.RUNNING);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e);
