@@ -71,5 +71,7 @@ public interface ISplitInput extends IStorageMeta {
 
     void setLayer(Integer layerId);
 
+    void applyMeta(ILayersMeta layersMeta);
+
 
 }

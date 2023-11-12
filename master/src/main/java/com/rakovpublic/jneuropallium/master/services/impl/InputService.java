@@ -34,6 +34,7 @@ public class InputService implements IInputService {
     private Boolean runFlag;
     private IResultLayerRunner resultLayerRunner;
     private HashMap<String,ILayersMeta> discriminators;
+    private List<DiscriminatorStatus> discriminatorStatuses;
 
     public InputService(ISignalsPersistStorage signalsPersist, ILayersMeta layersMeta, ISplitInput splitInput, Integer partitions, IInputLoadingStrategy runningStrategy, ISignalHistoryStorage signalHistoryStorage, IResultLayerRunner resultLayerRunner) {
         this.signalsPersist = signalsPersist;
@@ -46,6 +47,7 @@ public class InputService implements IInputService {
         this.inputs = new HashMap<>();
         this.inputStatuses = new HashMap<>();
         this.signalHistoryStorage = signalHistoryStorage;
+        this.discriminators = new HashMap<>();
         runFlag = false;
         this.resultLayerRunner = resultLayerRunner;
     }
@@ -64,6 +66,7 @@ public class InputService implements IInputService {
         this.signalHistoryStorage = signalHistoryStorage;
         runFlag = false;
         this.resultLayerRunner = resultLayerRunner;
+        this.discriminators = new HashMap<>();
     }
 
     @Override
@@ -165,6 +168,7 @@ public class InputService implements IInputService {
                 Long size = layerMeta.getSize() / nodeNames.size() <= partitions ? Long.parseLong(partitions + "") : nodeNames.size();
                 List<ISplitInput> resList = new ArrayList<>();
                 ISplitInput input = splitInput.getNewInstance();
+                input.applyMeta(layersMeta);
                 Long atomic = layerMeta.getSize() / size > 1 ? layerMeta.getSize() / size : 1;
                 for (int i = 0; i < size; i++) {
                     input.setStart(i * atomic);
@@ -246,12 +250,13 @@ public class InputService implements IInputService {
 
     @Override
     public void updateDiscriminators(HashMap<String, ILayersMeta> discriminators) {
+        this.discriminators=discriminators;
 
     }
 
     @Override
     public boolean hasDiscriminators() {
-        return false;
+        return discriminators.size()>0;
     }
 
     @Override
@@ -261,9 +266,24 @@ public class InputService implements IInputService {
 
     @Override
     public boolean isDiscriminatorsDone() {
-        return false;
+        for(DiscriminatorStatus discriminatorStatus: discriminatorStatuses){
+            if(!discriminatorStatus.isProcessed()){
+                return false;
+            }
+        }
+        return true;
     }
 
+    @Override
+    public boolean isResultValid() {
+        for(DiscriminatorStatus discriminatorStatus: discriminatorStatuses){
+            if(!discriminatorStatus.isValid()){
+                return false;
+            }
+        }
+        return true;
+    }
+//TODO: add implementation
     @Override
     public ISplitInput getNextDiscriminators(String name) {
         return null;
