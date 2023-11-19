@@ -15,6 +15,8 @@ import com.rakovpublic.jneuropallium.worker.net.storages.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.HashMap;
+
 
 public class ConfigurationServiceImpl implements ConfigurationService {
     private static final Logger logger = LogManager.getLogger(ConfigurationServiceImpl.class);
@@ -129,9 +131,13 @@ public class ConfigurationServiceImpl implements ConfigurationService {
         } catch (JsonProcessingException e) {
             logger.error("Cannot create instance of ReconnectStrategy for json " + configuration.getReconnectStrategyJson(),e);
         }
-
-
-        inputService = new InputService(signalsPersist,layersMeta,splitInput,partitions,runningStrategy,signalHistoryStorage,resultLayerRunner);
+        //TODO: add parsing discriminators
+         HashMap<String,IInputLoadingStrategy> discriminatorsLoadingStrategies=null;
+         HashMap<String,ISignalsPersistStorage> discriminatorsSignalStorage= null;
+         HashMap<String,ISignalHistoryStorage> discriminatorsSignalStorageHistory= null;
+         HashMap<String,HashMap<IInitInput, InputStatusMeta>> inputDiscriminatorStatuses= null;
+         
+        inputService = new InputService(signalsPersist,layersMeta,splitInput,partitions,runningStrategy,signalHistoryStorage,resultLayerRunner,discriminatorsLoadingStrategies,discriminatorsSignalStorage,discriminatorsSignalStorageHistory,inputDiscriminatorStatuses);
 
 
     }
