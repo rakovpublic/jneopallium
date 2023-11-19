@@ -10,7 +10,7 @@ import java.util.List;
 
 
 public interface IInputService {
-    void updateConfiguration(ISignalsPersistStorage signalsPersist, ILayersMeta layersMeta, ISplitInput splitInput, Integer partitions, IInputLoadingStrategy runningStrategy, ISignalHistoryStorage signalHistoryStorage, IResultLayerRunner resultLayerRunner);
+    void updateConfiguration(ISignalsPersistStorage signalsPersist, ILayersMeta layersMeta, ISplitInput splitInput, Integer partitions, IInputLoadingStrategy runningStrategy, ISignalHistoryStorage signalHistoryStorage, IResultLayerRunner resultLayerRunner,HashMap<String,IInputLoadingStrategy> discriminatorsLoadingStrategies, HashMap<String,ISignalsPersistStorage> discriminatorsSignalStorage, HashMap<String,ISignalHistoryStorage> discriminatorsSignalStorageHistory,HashMap<String,HashMap<IInitInput, InputStatusMeta>> inputDiscriminatorStatuses);
 
     void inputSourceUpdated(String name);
 

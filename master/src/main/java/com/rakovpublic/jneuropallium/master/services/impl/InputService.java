@@ -5,8 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rakovpublic.jneuropallium.worker.model.InputRegistrationRequest;
 import com.rakovpublic.jneuropallium.master.services.IInputService;
 import com.rakovpublic.jneuropallium.master.services.IResultLayerRunner;
-import com.rakovpublic.jneuropallium.worker.net.layers.impl.InputArray;
-import com.rakovpublic.jneuropallium.worker.net.layers.impl.InputData;
+import com.rakovpublic.jneuropallium.worker.net.layers.DiscriminatorResultLayer;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.*;
 import com.rakovpublic.jneuropallium.worker.neuron.IResultNeuron;
@@ -15,9 +14,10 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
-//TODO: add timeout node timeout handling
+//TODO: add timeout node timeout handling and fault tolerance
 public class InputService implements IInputService {
     private static final Logger logger = LogManager.getLogger(InputService.class);
     private HashMap<IInitInput, InputStatusMeta> inputStatuses;
@@ -35,10 +35,16 @@ public class InputService implements IInputService {
     private IResultLayerRunner resultLayerRunner;
     private HashMap<String,ILayersMeta> discriminators;
     private List<DiscriminatorStatus> discriminatorStatuses;
+    private List<ISplitInput> preparedDiscriminatorsInputs;
+    private HashMap<String,IInputLoadingStrategy> discriminatorsLoadingStrategies;
+    private HashMap<String,ISignalsPersistStorage> discriminatorsSignalStorage;
+    private HashMap<String,ISignalHistoryStorage> discriminatorsSignalStorageHistory;
+    private HashMap<String,HashMap<IInitInput, InputStatusMeta>> inputDiscriminatorStatuses;
 
-    public InputService(ISignalsPersistStorage signalsPersist, ILayersMeta layersMeta, ISplitInput splitInput, Integer partitions, IInputLoadingStrategy runningStrategy, ISignalHistoryStorage signalHistoryStorage, IResultLayerRunner resultLayerRunner) {
+    public InputService(ISignalsPersistStorage signalsPersist, ILayersMeta layersMeta, ISplitInput splitInput, Integer partitions, IInputLoadingStrategy runningStrategy, ISignalHistoryStorage signalHistoryStorage, IResultLayerRunner resultLayerRunner, HashMap<String, IInputLoadingStrategy> discriminatorsLoadingStrategies, HashMap<String, ISignalsPersistStorage> discriminatorsSignalStorage, HashMap<String, ISignalHistoryStorage> discriminatorsSignalStorageHistory, HashMap<String, HashMap<IInitInput, InputStatusMeta>> inputDiscriminatorStatuses) {
         this.signalsPersist = signalsPersist;
         this.layersMeta = layersMeta;
+        this.inputDiscriminatorStatuses = inputDiscriminatorStatuses;
         this.preparedInputs = new ArrayList<>();
         this.splitInput = splitInput;
         this.partitions = partitions;
@@ -48,12 +54,17 @@ public class InputService implements IInputService {
         this.inputStatuses = new HashMap<>();
         this.signalHistoryStorage = signalHistoryStorage;
         this.discriminators = new HashMap<>();
+        preparedDiscriminatorsInputs =new LinkedList<>();
+        discriminatorStatuses = new LinkedList<>();
         runFlag = false;
         this.resultLayerRunner = resultLayerRunner;
+        this.discriminatorsLoadingStrategies = discriminatorsLoadingStrategies;
+        this.discriminatorsSignalStorage = discriminatorsSignalStorage;
+        this.discriminatorsSignalStorageHistory = discriminatorsSignalStorageHistory;
     }
 
     @Override
-    public void updateConfiguration(ISignalsPersistStorage signalsPersist, ILayersMeta layersMeta, ISplitInput splitInput, Integer partitions, IInputLoadingStrategy runningStrategy, ISignalHistoryStorage signalHistoryStorage, IResultLayerRunner resultLayerRunner) {
+    public void updateConfiguration(ISignalsPersistStorage signalsPersist, ILayersMeta layersMeta, ISplitInput splitInput, Integer partitions, IInputLoadingStrategy runningStrategy, ISignalHistoryStorage signalHistoryStorage, IResultLayerRunner resultLayerRunner,HashMap<String,IInputLoadingStrategy> discriminatorsLoadingStrategies,HashMap<String,ISignalsPersistStorage> discriminatorsSignalStorage, HashMap<String,ISignalHistoryStorage> discriminatorsSignalStorageHistory,HashMap<String,HashMap<IInitInput, InputStatusMeta>> inputDiscriminatorStatuses) {
         this.signalsPersist = signalsPersist;
         this.layersMeta = layersMeta;
         this.preparedInputs = new ArrayList<>();
@@ -67,6 +78,12 @@ public class InputService implements IInputService {
         runFlag = false;
         this.resultLayerRunner = resultLayerRunner;
         this.discriminators = new HashMap<>();
+        preparedDiscriminatorsInputs =new LinkedList<>();
+        discriminatorStatuses = new LinkedList<>();
+        this.discriminatorsLoadingStrategies =discriminatorsLoadingStrategies;
+        this.discriminatorsSignalStorage = discriminatorsSignalStorage;
+        this.discriminatorsSignalStorageHistory = discriminatorsSignalStorageHistory;
+        this.inputDiscriminatorStatuses = inputDiscriminatorStatuses;
     }
 
     @Override
@@ -102,7 +119,7 @@ public class InputService implements IInputService {
         }
 
     }
-
+//TODO: add discriminator handling
     @Override
     public void uploadWorkerResult(String name, HashMap<Integer, HashMap<Long, List<ISignal>>> signals) {
         signalsPersist.putSignals(signals);
@@ -162,7 +179,7 @@ public class InputService implements IInputService {
                     }
                 }
             }
-            if (nodeMetas.get(nodeNames.get(0)).getCurrentLayer() + 1 < layersMeta.getLayers().size()) {
+            if (nodeMetas.get(nodeNames.get(0)).getCurrentLayer() < layersMeta.getLayers().size()) {
                 runFlag = false;
                 ILayerMeta layerMeta = layersMeta.getLayerByID(nodeMetas.get(nodeNames.get(0)).getCurrentLayer() + 1);
                 Long size = layerMeta.getSize() / nodeNames.size() <= partitions ? Long.parseLong(partitions + "") : nodeNames.size();
@@ -181,6 +198,7 @@ public class InputService implements IInputService {
                 for (String nodeName : nodeNames) {
                     nodeMetas.get(nodeName).setCurrentLayer(layerMeta.getID());
                 }
+                preparedInputs.addAll(resList);
             } else {
                 signalHistoryStorage.save(signalsPersist.getAllSignals(), runningStrategy.getEpoch(), runningStrategy.getCurrentLoopCount());
                 signalsPersist.cleanOutdatedSignals();
@@ -193,9 +211,14 @@ public class InputService implements IInputService {
 
     @Override
     public Boolean runCompleted() {
-        if (layersMeta.getLayers().size() == nodeMetas.values().iterator().next().getCurrentLayer()) {
+        if (layersMeta.getLayers().get(layersMeta.getLayers().size()-1).getID() == nodeMetas.values().iterator().next().getCurrentLayer()) {
             for (NodeMeta meta : nodeMetas.values()) {
                 if (!meta.getStatus()) {
+                    return false;
+                }
+            }
+            for(DiscriminatorStatus discriminatorStatus:discriminatorStatuses){
+                if(!discriminatorStatus.isProcessed()||!discriminatorStatus.isValid()){
                     return false;
                 }
             }
@@ -213,7 +236,7 @@ public class InputService implements IInputService {
         return null;
 
     }
-
+//TODO: add discriminator preparation
     @Override
     public void nextRun() {
         if (runFlag) {
@@ -261,6 +284,62 @@ public class InputService implements IInputService {
 
     @Override
     public void prepareDiscriminatorsInputs() {
+        //TODO: pass initsignals and result signals to discriminators
+        DiscriminatorStatus currentDiscriminator =null;
+        for(DiscriminatorStatus discriminatorStatus: discriminatorStatuses){
+            if(!discriminatorStatus.isProcessed()){
+                currentDiscriminator = discriminatorStatus;
+            }
+        }
+
+
+        if (preparedDiscriminatorsInputs.size() == 0 && currentDiscriminator!=null) {
+            String discriminatorName = currentDiscriminator.getName();
+            List<String> nodeNames = new ArrayList<>();
+            nodeNames.addAll(nodeMetas.keySet());
+            for (int i = 0; i < nodeNames.size(); i++) {
+                if (!nodeMetas.get(nodeNames.get(i)).getStatus()) {
+                    i = 0;
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        logger.error(e);
+                    }
+                }
+            }
+            ILayersMeta discriminatorLayersMeta =  discriminators.get(discriminatorName);
+            if (currentDiscriminator.getCurrentLayer() + 1 < discriminatorLayersMeta.getLayers().size()) {
+                ILayerMeta layerMeta = discriminatorLayersMeta.getLayerByID(nodeMetas.get(nodeNames.get(0)).getCurrentLayer() + 1);
+                Long size = layerMeta.getSize() / nodeNames.size() <= partitions ? Long.parseLong(partitions + "") : nodeNames.size();
+                List<ISplitInput> resList = new ArrayList<>();
+                ISplitInput input = splitInput.getNewInstance();
+                input.applyMeta(discriminators.get(currentDiscriminator.getName()));
+                Long atomic = layerMeta.getSize() / size > 1 ? layerMeta.getSize() / size : 1;
+                for (int i = 0; i < size; i++) {
+                    input.setStart(i * atomic);
+                    input.setEnd((i + 1) * atomic);
+                    input.setNodeIdentifier(nodeNames.get(0));
+                    input.setLayer(layerMeta.getID());
+                    resList.add(input);
+
+                }
+                for (String nodeName : nodeNames) {
+                    nodeMetas.get(nodeName).setCurrentLayer(layerMeta.getID());
+                }
+                preparedDiscriminatorsInputs.addAll(resList);
+            } else {
+                //TODO: add discriminator callback spreading
+                DiscriminatorResultLayer resultLayer = (DiscriminatorResultLayer) discriminatorLayersMeta.getResultLayer();
+                currentDiscriminator.setValid(resultLayer.hasPass());
+                ISignalHistoryStorage discriminatorSignalHistoryStorage =  discriminatorsSignalStorageHistory.get(discriminatorName);
+                ISignalsPersistStorage discriminatorSignalsPersistStorage =   discriminatorsSignalStorage.get(discriminatorName);
+                IInputLoadingStrategy discriminatorInputLoadingStrategy =discriminatorsLoadingStrategies.get(discriminatorName);
+                currentDiscriminator.setProcessed(true);
+                discriminatorSignalHistoryStorage.save( discriminatorSignalsPersistStorage.getAllSignals(), discriminatorInputLoadingStrategy.getEpoch(), discriminatorInputLoadingStrategy.getCurrentLoopCount());
+                discriminatorSignalsPersistStorage.cleanOutdatedSignals();
+                discriminatorInputLoadingStrategy.populateInput(discriminatorSignalsPersistStorage, inputDiscriminatorStatuses.get(discriminatorName));
+            }
+        }
 
     }
 
@@ -283,10 +362,27 @@ public class InputService implements IInputService {
         }
         return true;
     }
-//TODO: add implementation
+
     @Override
     public ISplitInput getNextDiscriminators(String name) {
-        return null;
+        ISplitInput res;
+        if (preparedDiscriminatorsInputs.size() > 0) {
+            res = preparedDiscriminatorsInputs.get(0);
+            preparedDiscriminatorsInputs.remove(0);
+            res.setNodeIdentifier(name);
+            nodeMetas.get(name).setStatus(false);
+        } else {
+            prepareInputs();
+            if (preparedDiscriminatorsInputs.size() > 0) {
+                res = preparedDiscriminatorsInputs.get(0);
+                preparedDiscriminatorsInputs.remove(0);
+                res.setNodeIdentifier(name);
+                nodeMetas.get(name).setStatus(false);
+            } else {
+                res = null;
+            }
+        }
+        return res;
     }
 
 }

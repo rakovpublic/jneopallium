@@ -11,12 +11,22 @@ public class DiscriminatorStatus {
     private String name;
     private boolean processed;
     private boolean valid;
+    private int currentLayer;
 
-    public DiscriminatorStatus(StructMeta structMeta, String name, boolean processed, boolean valid) {
+    public DiscriminatorStatus(StructMeta structMeta, String name, boolean processed, boolean valid, int currentLayer) {
         this.structMeta = structMeta;
         this.name = name;
         this.processed = processed;
         this.valid = valid;
+        this.currentLayer = currentLayer;
+    }
+
+    public int getCurrentLayer() {
+        return currentLayer;
+    }
+
+    public void setCurrentLayer(int currentLayer) {
+        this.currentLayer = currentLayer;
     }
 
     public StructMeta getStructMeta() {
