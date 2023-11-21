@@ -157,8 +157,8 @@ public class LocalApplication implements IApplication {
                     String initStrategyDiscriminatorCallback=  context.getProperty("configuration.input.initStrategy.callback.discriminator."+i);;
                     IInputResolver inputResolverDiscriminator = new InMemoryInputResolver(new InMemorySignalPersistStorage(), new InMemorySignalHistoryStorage(historySlowDiscriminator, historyFastDiscriminator), this.getLoadingStrategy(inputLoadingStrategyDiscriminator));
                     InMemoryInitInput inMemoryInitInput = new InMemoryInitInputImpl(nameDiscriminator);
-                    InMemoryDiscriminatorResultSignals inMemoryDiscriminatorResultSignals = new InMemoryDiscriminatorResultSignals(inMemoryInitInput,nameDiscriminator,resultLayerHolder);
-                    InMemoryDiscriminatorSourceSignals inMemoryDiscriminatorSourceSignals = new InMemoryDiscriminatorSourceSignals(inputResolver,discriminatorEpoch,discriminatorLoop,nameDiscriminator);
+                    InMemoryDiscriminatorResultSignals inMemoryDiscriminatorResultSignals = new InMemoryDiscriminatorResultSignals(inMemoryInitInput,nameDiscriminator+"Result",resultLayerHolder);
+                    InMemoryDiscriminatorSourceSignals inMemoryDiscriminatorSourceSignals = new InMemoryDiscriminatorSourceSignals(inputResolver,discriminatorEpoch,discriminatorLoop,nameDiscriminator+"Input");
                     inputResolverDiscriminator.registerInput(inMemoryDiscriminatorResultSignals,true,getInputInitStrategy(initStrategyDiscriminatorResult));
                     inputResolverDiscriminator.registerInput(inMemoryDiscriminatorSourceSignals,true,getInputInitStrategy(initStrategyDiscriminatorSource));
                     inputResolver.registerInput(inMemoryInitInput,false,getInputInitStrategy(initStrategyDiscriminatorCallback));
@@ -176,8 +176,6 @@ public class LocalApplication implements IApplication {
                     }
                     meta.getInputResolver().saveHistory();
                     meta.getInputResolver().populateInput();
-
-
                 }
 
             }

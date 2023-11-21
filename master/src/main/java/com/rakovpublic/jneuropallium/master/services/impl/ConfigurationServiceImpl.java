@@ -11,6 +11,7 @@ import com.rakovpublic.jneuropallium.worker.model.ConfigurationUpdateRequest;
 import com.rakovpublic.jneuropallium.master.services.ConfigurationService;
 import com.rakovpublic.jneuropallium.master.services.IInputService;
 import com.rakovpublic.jneuropallium.master.services.IResultLayerRunner;
+import com.rakovpublic.jneuropallium.worker.net.DiscriminatorSplitInput;
 import com.rakovpublic.jneuropallium.worker.net.storages.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -136,8 +137,9 @@ public class ConfigurationServiceImpl implements ConfigurationService {
          HashMap<String,ISignalsPersistStorage> discriminatorsSignalStorage= null;
          HashMap<String,ISignalHistoryStorage> discriminatorsSignalStorageHistory= null;
          HashMap<String,HashMap<IInitInput, InputStatusMeta>> inputDiscriminatorStatuses= null;
-         
-        inputService = new InputService(signalsPersist,layersMeta,splitInput,partitions,runningStrategy,signalHistoryStorage,resultLayerRunner,discriminatorsLoadingStrategies,discriminatorsSignalStorage,discriminatorsSignalStorageHistory,inputDiscriminatorStatuses);
+          DiscriminatorSplitInput discriminatorSplitInput =null;
+
+        inputService = new InputService(signalsPersist,layersMeta,splitInput,partitions,runningStrategy,signalHistoryStorage,resultLayerRunner,discriminatorsLoadingStrategies,discriminatorsSignalStorage,discriminatorsSignalStorageHistory,inputDiscriminatorStatuses, discriminatorSplitInput);
 
 
     }

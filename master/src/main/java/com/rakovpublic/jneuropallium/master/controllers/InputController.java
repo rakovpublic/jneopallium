@@ -20,7 +20,11 @@ public class InputController {
     @PostMapping("/callback")
     public ResponseEntity<?> persistCallback(@RequestBody UploadSignalsRequest request) {
         try {
-            configurationService.getInputService().uploadWorkerResult(request.getName(), request.getSignals());
+            if(!request.isDiscriminator()){
+                configurationService.getInputService().uploadWorkerResult(request.getName(), request.getSignals());
+            }else {
+
+            }
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e);
         }

@@ -24,6 +24,7 @@ public interface ISplitInput extends IStorageMeta {
      **/
     void saveResults(HashMap<Integer, HashMap<Long, List<ISignal>>> signals);
 
+
     /**
      * This method save the neuron
      *

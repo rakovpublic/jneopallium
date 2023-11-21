@@ -8,6 +8,24 @@ import java.util.List;
 public class UploadSignalsRequest {
     private String name;
     private HashMap<Integer, HashMap<Long, List<ISignal>>> signals;
+    private boolean discriminator;
+    private String discriminatorName;
+
+    public boolean isDiscriminator() {
+        return discriminator;
+    }
+
+    public void setDiscriminator(boolean discriminator) {
+        this.discriminator = discriminator;
+    }
+
+    public String getDiscriminatorName() {
+        return discriminatorName;
+    }
+
+    public void setDiscriminatorName(String discriminatorName) {
+        this.discriminatorName = discriminatorName;
+    }
 
     public String getName() {
         return name;

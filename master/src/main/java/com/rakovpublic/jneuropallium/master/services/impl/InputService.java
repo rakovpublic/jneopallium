@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rakovpublic.jneuropallium.worker.model.InputRegistrationRequest;
 import com.rakovpublic.jneuropallium.master.services.IInputService;
 import com.rakovpublic.jneuropallium.master.services.IResultLayerRunner;
+import com.rakovpublic.jneuropallium.worker.net.DiscriminatorSplitInput;
 import com.rakovpublic.jneuropallium.worker.net.layers.DiscriminatorResultLayer;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.*;
@@ -40,11 +41,14 @@ public class InputService implements IInputService {
     private HashMap<String,ISignalsPersistStorage> discriminatorsSignalStorage;
     private HashMap<String,ISignalHistoryStorage> discriminatorsSignalStorageHistory;
     private HashMap<String,HashMap<IInitInput, InputStatusMeta>> inputDiscriminatorStatuses;
+    private DiscriminatorSplitInput discriminatorSplitInput;
 
-    public InputService(ISignalsPersistStorage signalsPersist, ILayersMeta layersMeta, ISplitInput splitInput, Integer partitions, IInputLoadingStrategy runningStrategy, ISignalHistoryStorage signalHistoryStorage, IResultLayerRunner resultLayerRunner, HashMap<String, IInputLoadingStrategy> discriminatorsLoadingStrategies, HashMap<String, ISignalsPersistStorage> discriminatorsSignalStorage, HashMap<String, ISignalHistoryStorage> discriminatorsSignalStorageHistory, HashMap<String, HashMap<IInitInput, InputStatusMeta>> inputDiscriminatorStatuses) {
+
+    public InputService(ISignalsPersistStorage signalsPersist, ILayersMeta layersMeta, ISplitInput splitInput, Integer partitions, IInputLoadingStrategy runningStrategy, ISignalHistoryStorage signalHistoryStorage, IResultLayerRunner resultLayerRunner, HashMap<String, IInputLoadingStrategy> discriminatorsLoadingStrategies, HashMap<String, ISignalsPersistStorage> discriminatorsSignalStorage, HashMap<String, ISignalHistoryStorage> discriminatorsSignalStorageHistory, HashMap<String, HashMap<IInitInput, InputStatusMeta>> inputDiscriminatorStatuses, DiscriminatorSplitInput discriminatorSplitInput) {
         this.signalsPersist = signalsPersist;
         this.layersMeta = layersMeta;
         this.inputDiscriminatorStatuses = inputDiscriminatorStatuses;
+        this.discriminatorSplitInput = discriminatorSplitInput;
         this.preparedInputs = new ArrayList<>();
         this.splitInput = splitInput;
         this.partitions = partitions;
@@ -64,7 +68,7 @@ public class InputService implements IInputService {
     }
 
     @Override
-    public void updateConfiguration(ISignalsPersistStorage signalsPersist, ILayersMeta layersMeta, ISplitInput splitInput, Integer partitions, IInputLoadingStrategy runningStrategy, ISignalHistoryStorage signalHistoryStorage, IResultLayerRunner resultLayerRunner,HashMap<String,IInputLoadingStrategy> discriminatorsLoadingStrategies,HashMap<String,ISignalsPersistStorage> discriminatorsSignalStorage, HashMap<String,ISignalHistoryStorage> discriminatorsSignalStorageHistory,HashMap<String,HashMap<IInitInput, InputStatusMeta>> inputDiscriminatorStatuses) {
+    public void updateConfiguration(ISignalsPersistStorage signalsPersist, ILayersMeta layersMeta, ISplitInput splitInput, Integer partitions, IInputLoadingStrategy runningStrategy, ISignalHistoryStorage signalHistoryStorage, IResultLayerRunner resultLayerRunner,HashMap<String,IInputLoadingStrategy> discriminatorsLoadingStrategies,HashMap<String,ISignalsPersistStorage> discriminatorsSignalStorage, HashMap<String,ISignalHistoryStorage> discriminatorsSignalStorageHistory,HashMap<String,HashMap<IInitInput, InputStatusMeta>> inputDiscriminatorStatuses,DiscriminatorSplitInput discriminatorSplitInput) {
         this.signalsPersist = signalsPersist;
         this.layersMeta = layersMeta;
         this.preparedInputs = new ArrayList<>();
@@ -84,6 +88,7 @@ public class InputService implements IInputService {
         this.discriminatorsSignalStorage = discriminatorsSignalStorage;
         this.discriminatorsSignalStorageHistory = discriminatorsSignalStorageHistory;
         this.inputDiscriminatorStatuses = inputDiscriminatorStatuses;
+        this.discriminatorSplitInput = discriminatorSplitInput;
     }
 
     @Override
@@ -119,10 +124,16 @@ public class InputService implements IInputService {
         }
 
     }
-//TODO: add discriminator handling
+
     @Override
     public void uploadWorkerResult(String name, HashMap<Integer, HashMap<Long, List<ISignal>>> signals) {
         signalsPersist.putSignals(signals);
+        nodeMetas.get(name).setStatus(true);
+    }
+
+    @Override
+    public void uploadDiscriminatorWorkerResult(String name, String nameDiscriminator, HashMap<Integer, HashMap<Long, List<ISignal>>> signals) {
+        discriminatorsSignalStorage.get(nameDiscriminator).putSignals(signals);
         nodeMetas.get(name).setStatus(true);
     }
 
