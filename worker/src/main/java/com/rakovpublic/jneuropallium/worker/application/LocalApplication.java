@@ -162,6 +162,7 @@ public class LocalApplication implements IApplication {
                     inputResolverDiscriminator.registerInput(inMemoryDiscriminatorResultSignals,true,getInputInitStrategy(initStrategyDiscriminatorResult));
                     inputResolverDiscriminator.registerInput(inMemoryDiscriminatorSourceSignals,true,getInputInitStrategy(initStrategyDiscriminatorSource));
                     inputResolver.registerInput(inMemoryInitInput,false,getInputInitStrategy(initStrategyDiscriminatorCallback));
+                    inputResolverDiscriminator.populateInput();
                     StructBuilder structBuilderDiscriminator = new StructBuilder();
                     structBuilderDiscriminator.withHiddenInputMeta(inputResolverDiscriminator);
                     structBuilderDiscriminator.withLayersMeta(new FileLayersMeta<>(fs.getItem(layerPathDiscriminator), fs));

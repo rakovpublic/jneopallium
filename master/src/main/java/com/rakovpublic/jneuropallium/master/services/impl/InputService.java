@@ -36,7 +36,7 @@ public class InputService implements IInputService {
     private IResultLayerRunner resultLayerRunner;
     private HashMap<String,ILayersMeta> discriminators;
     private List<DiscriminatorStatus> discriminatorStatuses;
-    private List<ISplitInput> preparedDiscriminatorsInputs;
+    private List<DiscriminatorSplitInput> preparedDiscriminatorsInputs;
     private HashMap<String,IInputLoadingStrategy> discriminatorsLoadingStrategies;
     private HashMap<String,ISignalsPersistStorage> discriminatorsSignalStorage;
     private HashMap<String,ISignalHistoryStorage> discriminatorsSignalStorageHistory;
@@ -295,7 +295,6 @@ public class InputService implements IInputService {
 
     @Override
     public void prepareDiscriminatorsInputs() {
-        //TODO: pass initsignals and result signals to discriminators
         DiscriminatorStatus currentDiscriminator =null;
         for(DiscriminatorStatus discriminatorStatus: discriminatorStatuses){
             if(!discriminatorStatus.isProcessed()){
@@ -306,6 +305,7 @@ public class InputService implements IInputService {
 
         if (preparedDiscriminatorsInputs.size() == 0 && currentDiscriminator!=null) {
             String discriminatorName = currentDiscriminator.getName();
+            discriminatorsLoadingStrategies.get(discriminatorName).populateInput(discriminatorsSignalStorage.get(discriminatorName),inputDiscriminatorStatuses.get(discriminatorName));
             List<String> nodeNames = new ArrayList<>();
             nodeNames.addAll(nodeMetas.keySet());
             for (int i = 0; i < nodeNames.size(); i++) {
@@ -322,8 +322,8 @@ public class InputService implements IInputService {
             if (currentDiscriminator.getCurrentLayer() + 1 < discriminatorLayersMeta.getLayers().size()) {
                 ILayerMeta layerMeta = discriminatorLayersMeta.getLayerByID(nodeMetas.get(nodeNames.get(0)).getCurrentLayer() + 1);
                 Long size = layerMeta.getSize() / nodeNames.size() <= partitions ? Long.parseLong(partitions + "") : nodeNames.size();
-                List<ISplitInput> resList = new ArrayList<>();
-                ISplitInput input = splitInput.getNewInstance();
+                List<DiscriminatorSplitInput> resList = new ArrayList<>();
+                DiscriminatorSplitInput input = discriminatorSplitInput.getNewInstance();
                 input.applyMeta(discriminators.get(currentDiscriminator.getName()));
                 Long atomic = layerMeta.getSize() / size > 1 ? layerMeta.getSize() / size : 1;
                 for (int i = 0; i < size; i++) {
@@ -339,7 +339,6 @@ public class InputService implements IInputService {
                 }
                 preparedDiscriminatorsInputs.addAll(resList);
             } else {
-                //TODO: add discriminator callback spreading
                 DiscriminatorResultLayer resultLayer = (DiscriminatorResultLayer) discriminatorLayersMeta.getResultLayer();
                 currentDiscriminator.setValid(resultLayer.hasPass());
                 ISignalHistoryStorage discriminatorSignalHistoryStorage =  discriminatorsSignalStorageHistory.get(discriminatorName);
@@ -375,8 +374,8 @@ public class InputService implements IInputService {
     }
 
     @Override
-    public ISplitInput getNextDiscriminators(String name) {
-        ISplitInput res;
+    public DiscriminatorSplitInput getNextDiscriminators(String name) {
+        DiscriminatorSplitInput res;
         if (preparedDiscriminatorsInputs.size() > 0) {
             res = preparedDiscriminatorsInputs.get(0);
             preparedDiscriminatorsInputs.remove(0);
