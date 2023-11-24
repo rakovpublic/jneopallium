@@ -57,4 +57,5 @@ public interface IInputService {
 
     boolean isResultValid();
     ISplitInput getNextDiscriminators(String name);
+    void nextRunDiscriminator();
 }

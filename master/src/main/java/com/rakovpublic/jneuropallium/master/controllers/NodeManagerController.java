@@ -53,9 +53,20 @@ public class NodeManagerController {
                     }
                     inputService.nextRun();
                     inputService.prepareInputs();
+                    inputService.nextRunDiscriminator();
                     splitInput = configurationService.getInputService().getNext(request.getNodeName());
                 }
             }else {
+                splitInput = configurationService.getInputService().getNext(request.getNodeName());
+            }
+            if(splitInput==null){
+                if(inputService.isResultValid()){
+                    //TODO: add result saving
+                    inputService.prepareResults();
+                }
+                inputService.nextRun();
+                inputService.nextRunDiscriminator();
+                inputService.prepareInputs();
                 splitInput = configurationService.getInputService().getNext(request.getNodeName());
             }
             nodeManager.setNodeStatus(request.getNodeName(), NodeStatus.RUNNING);

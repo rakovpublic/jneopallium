@@ -258,6 +258,15 @@ public class InputService implements IInputService {
     }
 
     @Override
+    public void nextRunDiscriminator() {
+        for(DiscriminatorStatus discriminatorStatus: discriminatorStatuses){
+            discriminatorStatus.setProcessed(false);
+            discriminatorStatus.setInputPopulated(false);
+        }
+    }
+
+
+    @Override
     public void setLayersMeta(ILayersMeta layersMeta) {
         this.layersMeta = layersMeta;
     }
@@ -299,13 +308,16 @@ public class InputService implements IInputService {
         for(DiscriminatorStatus discriminatorStatus: discriminatorStatuses){
             if(!discriminatorStatus.isProcessed()){
                 currentDiscriminator = discriminatorStatus;
+
             }
         }
 
 
         if (preparedDiscriminatorsInputs.size() == 0 && currentDiscriminator!=null) {
             String discriminatorName = currentDiscriminator.getName();
-            discriminatorsLoadingStrategies.get(discriminatorName).populateInput(discriminatorsSignalStorage.get(discriminatorName),inputDiscriminatorStatuses.get(discriminatorName));
+            if(!currentDiscriminator.isInputPopulated()){
+                discriminatorsLoadingStrategies.get(discriminatorName).populateInput(discriminatorsSignalStorage.get(discriminatorName),inputDiscriminatorStatuses.get(discriminatorName));
+            }
             List<String> nodeNames = new ArrayList<>();
             nodeNames.addAll(nodeMetas.keySet());
             for (int i = 0; i < nodeNames.size(); i++) {
@@ -339,6 +351,7 @@ public class InputService implements IInputService {
                 }
                 preparedDiscriminatorsInputs.addAll(resList);
             } else {
+
                 DiscriminatorResultLayer resultLayer = (DiscriminatorResultLayer) discriminatorLayersMeta.getResultLayer();
                 currentDiscriminator.setValid(resultLayer.hasPass());
                 ISignalHistoryStorage discriminatorSignalHistoryStorage =  discriminatorsSignalStorageHistory.get(discriminatorName);
