@@ -42,6 +42,7 @@ public class InputService implements IInputService {
     private HashMap<String,ISignalHistoryStorage> discriminatorsSignalStorageHistory;
     private HashMap<String,HashMap<IInitInput, InputStatusMeta>> inputDiscriminatorStatuses;
     private DiscriminatorSplitInput discriminatorSplitInput;
+    private HashMap<Long,HashMap<Integer,List<IResultNeuron>>> results;
 
 
     public InputService(ISignalsPersistStorage signalsPersist, ILayersMeta layersMeta, ISplitInput splitInput, Integer partitions, IInputLoadingStrategy runningStrategy, ISignalHistoryStorage signalHistoryStorage, IResultLayerRunner resultLayerRunner, HashMap<String, IInputLoadingStrategy> discriminatorsLoadingStrategies, HashMap<String, ISignalsPersistStorage> discriminatorsSignalStorage, HashMap<String, ISignalHistoryStorage> discriminatorsSignalStorageHistory, HashMap<String, HashMap<IInitInput, InputStatusMeta>> inputDiscriminatorStatuses, DiscriminatorSplitInput discriminatorSplitInput) {
@@ -65,6 +66,13 @@ public class InputService implements IInputService {
         this.discriminatorsLoadingStrategies = discriminatorsLoadingStrategies;
         this.discriminatorsSignalStorage = discriminatorsSignalStorage;
         this.discriminatorsSignalStorageHistory = discriminatorsSignalStorageHistory;
+        this.results =new HashMap<>();
+    }
+
+
+    @Override
+    public List<IResultNeuron> getResults(Integer loop, Long epoch) {
+        return results.get(epoch).get(loop);
     }
 
     @Override
@@ -239,15 +247,20 @@ public class InputService implements IInputService {
     }
 
     @Override
-    public List<? extends IResultNeuron> prepareResults() {
+    public void prepareResults() {
         if (this.runCompleted()) {
             runFlag = true;
-            return this.resultLayerRunner.getResults(layersMeta.getResultLayer(), signalsPersist.getLayerSignals(layersMeta.getResultLayer().getID()));
+            List<IResultNeuron> neurons = (List<IResultNeuron>)this.resultLayerRunner.getResults(layersMeta.getResultLayer(), signalsPersist.getLayerSignals(layersMeta.getResultLayer().getID()));
+            if(results.containsKey(runningStrategy.getEpoch())){
+                results.get(runningStrategy.getEpoch()).put(runningStrategy.getCurrentLoopCount(),neurons);
+            }else {
+                HashMap<Integer,List<IResultNeuron>> resultNeurons= new HashMap<>();
+                resultNeurons.put(runningStrategy.getCurrentLoopCount(),neurons);
+                results.put(runningStrategy.getEpoch(),resultNeurons);
+            }
         }
-        return null;
-
     }
-//TODO: add discriminator preparation
+
     @Override
     public void nextRun() {
         if (runFlag) {

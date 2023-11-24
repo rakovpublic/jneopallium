@@ -1,6 +1,7 @@
 package com.rakovpublic.jneuropallium.master.services;
 
 import com.rakovpublic.jneuropallium.worker.model.ConfigurationUpdateRequest;
+import com.rakovpublic.jneuropallium.worker.net.layers.ResultInterpreter;
 import com.rakovpublic.jneuropallium.worker.net.storages.ReconnectStrategy;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +12,8 @@ public interface ConfigurationService {
      IInputService getInputService();
 
      ReconnectStrategy getReconnectionStrategy();
+
+     ResultInterpreter getResultInterpreter();
 
 
 }

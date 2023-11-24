@@ -12,6 +12,7 @@ import com.rakovpublic.jneuropallium.master.services.ConfigurationService;
 import com.rakovpublic.jneuropallium.master.services.IInputService;
 import com.rakovpublic.jneuropallium.master.services.IResultLayerRunner;
 import com.rakovpublic.jneuropallium.worker.net.DiscriminatorSplitInput;
+import com.rakovpublic.jneuropallium.worker.net.layers.ResultInterpreter;
 import com.rakovpublic.jneuropallium.worker.net.storages.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -45,6 +46,12 @@ public class ConfigurationServiceImpl implements ConfigurationService {
     @Override
     public ReconnectStrategy getReconnectionStrategy() {
         return reconnectStrategy;
+    }
+
+    @Override
+    public ResultInterpreter getResultInterpreter() {
+        //TODO: add parsing
+        return null;
     }
 
     private void updateInputService(ConfigurationUpdateRequest configuration){
