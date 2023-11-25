@@ -43,13 +43,13 @@ public class NodeManagerController {
         IInputService inputService = configurationService.getInputService();
         ISplitInput splitInput = null;
         try {
-            if(inputService.runCompleted()){
-                if(inputService.hasDiscriminators()&& !inputService.isDiscriminatorsDone()){
+            splitInput = configurationService.getInputService().getNext(request.getNodeName());
+            if(splitInput==null){
+                if(inputService.hasDiscriminators()&& !inputService.isDiscriminatorsDone()&& inputService.runCompleted()){
                     inputService.prepareDiscriminatorsInputs();
                     splitInput =inputService.getNextDiscriminators(request.getNodeName());
                 }else {
                     if(inputService.isResultValid()){
-
                         inputService.prepareResults();
                     }else if(inputService.runCompleted()){
                         inputService.nextRun();
@@ -60,21 +60,9 @@ public class NodeManagerController {
                         return ResponseEntity.status(HttpStatus.TEMPORARY_REDIRECT).build();
                     }
                 }
-            }else {
-                splitInput = configurationService.getInputService().getNext(request.getNodeName());
             }
-            if(splitInput==null){
-                if(inputService.isResultValid()){
-                    inputService.prepareResults();
-                }else if(inputService.runCompleted()){
-                    inputService.nextRun();
-                    inputService.nextRunDiscriminator();
-                    inputService.prepareInputs();
-                    splitInput = configurationService.getInputService().getNext(request.getNodeName());
-                }else {
-                    return ResponseEntity.status(HttpStatus.TEMPORARY_REDIRECT).build();
-                }
-            }
+
+
             nodeManager.setNodeStatus(request.getNodeName(), NodeStatus.RUNNING);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e);

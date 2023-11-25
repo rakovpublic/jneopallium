@@ -7,15 +7,13 @@ package com.rakovpublic.jneuropallium.master.services.impl;
 import com.rakovpublic.jneuropallium.worker.net.storages.structimpl.StructMeta;
 
 public class DiscriminatorStatus {
-    private StructMeta structMeta;
     private String name;
     private boolean processed;
     private boolean valid;
     private int currentLayer;
     private boolean inputPopulated;
 
-    public DiscriminatorStatus(StructMeta structMeta, String name, boolean processed, boolean valid, int currentLayer, boolean inputPopulated) {
-        this.structMeta = structMeta;
+    public DiscriminatorStatus(String name, boolean processed, boolean valid, int currentLayer, boolean inputPopulated) {
         this.name = name;
         this.processed = processed;
         this.valid = valid;
@@ -29,14 +27,6 @@ public class DiscriminatorStatus {
 
     public void setCurrentLayer(int currentLayer) {
         this.currentLayer = currentLayer;
-    }
-
-    public StructMeta getStructMeta() {
-        return structMeta;
-    }
-
-    public void setStructMeta(StructMeta structMeta) {
-        this.structMeta = structMeta;
     }
 
     public String getName() {

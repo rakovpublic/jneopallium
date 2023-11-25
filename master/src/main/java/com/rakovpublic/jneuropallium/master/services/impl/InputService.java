@@ -36,17 +36,17 @@ public class InputService implements IInputService {
     private IResultLayerRunner resultLayerRunner;
     private HashMap<String,ILayersMeta> discriminators;
     private List<DiscriminatorStatus> discriminatorStatuses;
-    private List<DiscriminatorSplitInput> preparedDiscriminatorsInputs;
+    private List<ISplitInput> preparedDiscriminatorsInputs;
     private HashMap<String,IInputLoadingStrategy> discriminatorsLoadingStrategies;
     private HashMap<String,ISignalsPersistStorage> discriminatorsSignalStorage;
     private HashMap<String,ISignalHistoryStorage> discriminatorsSignalStorageHistory;
     private HashMap<String,HashMap<IInitInput, InputStatusMeta>> inputDiscriminatorStatuses;
-    private DiscriminatorSplitInput discriminatorSplitInput;
+    private ISplitInput discriminatorSplitInput;
     private HashMap<Long,HashMap<Integer,List<IResultNeuron>>> results;
     private Long nodeTimeOut;
 
 
-    public InputService(ISignalsPersistStorage signalsPersist, ILayersMeta layersMeta, ISplitInput splitInput, Integer partitions, IInputLoadingStrategy runningStrategy, ISignalHistoryStorage signalHistoryStorage, IResultLayerRunner resultLayerRunner, HashMap<String, IInputLoadingStrategy> discriminatorsLoadingStrategies, HashMap<String, ISignalsPersistStorage> discriminatorsSignalStorage, HashMap<String, ISignalHistoryStorage> discriminatorsSignalStorageHistory, HashMap<String, HashMap<IInitInput, InputStatusMeta>> inputDiscriminatorStatuses, DiscriminatorSplitInput discriminatorSplitInput, Long nodeTimeOut) {
+    public InputService(ISignalsPersistStorage signalsPersist, ILayersMeta layersMeta, ISplitInput splitInput, Integer partitions, IInputLoadingStrategy runningStrategy, ISignalHistoryStorage signalHistoryStorage, IResultLayerRunner resultLayerRunner, HashMap<String, IInputLoadingStrategy> discriminatorsLoadingStrategies, HashMap<String, ISignalsPersistStorage> discriminatorsSignalStorage, HashMap<String, ISignalHistoryStorage> discriminatorsSignalStorageHistory, HashMap<String, HashMap<IInitInput, InputStatusMeta>> inputDiscriminatorStatuses, ISplitInput discriminatorSplitInput, Long nodeTimeOut) {
         this.signalsPersist = signalsPersist;
         this.layersMeta = layersMeta;
         this.inputDiscriminatorStatuses = inputDiscriminatorStatuses;
@@ -78,7 +78,7 @@ public class InputService implements IInputService {
     }
 
     @Override
-    public void updateConfiguration(ISignalsPersistStorage signalsPersist, ILayersMeta layersMeta, ISplitInput splitInput, Integer partitions, IInputLoadingStrategy runningStrategy, ISignalHistoryStorage signalHistoryStorage, IResultLayerRunner resultLayerRunner,HashMap<String,IInputLoadingStrategy> discriminatorsLoadingStrategies,HashMap<String,ISignalsPersistStorage> discriminatorsSignalStorage, HashMap<String,ISignalHistoryStorage> discriminatorsSignalStorageHistory,HashMap<String,HashMap<IInitInput, InputStatusMeta>> inputDiscriminatorStatuses,DiscriminatorSplitInput discriminatorSplitInput, Long nodeTimeOut) {
+    public void updateConfiguration(ISignalsPersistStorage signalsPersist, ILayersMeta layersMeta, ISplitInput splitInput, Integer partitions, IInputLoadingStrategy runningStrategy, ISignalHistoryStorage signalHistoryStorage, IResultLayerRunner resultLayerRunner,HashMap<String,IInputLoadingStrategy> discriminatorsLoadingStrategies,HashMap<String,ISignalsPersistStorage> discriminatorsSignalStorage, HashMap<String,ISignalHistoryStorage> discriminatorsSignalStorageHistory,HashMap<String,HashMap<IInitInput, InputStatusMeta>> inputDiscriminatorStatuses,ISplitInput discriminatorSplitInput, Long nodeTimeOut) {
         this.signalsPersist = signalsPersist;
         this.layersMeta = layersMeta;
         this.nodeTimeOut = nodeTimeOut;
@@ -219,9 +219,9 @@ public class InputService implements IInputService {
                     }
                 }
             }
-            if (nodeMetas.get(nodeNames.get(0)).getCurrentLayer() < layersMeta.getLayers().size()) {
+            if (nodeMetas.get(nodeNames.get(0)).getCurrentLayer() <= layersMeta.getResultLayer().getID()) {
                 runFlag = false;
-                ILayerMeta layerMeta = layersMeta.getLayerByID(nodeMetas.get(nodeNames.get(0)).getCurrentLayer() + 1);
+                ILayerMeta layerMeta = nodeMetas.get(nodeNames.get(0)).getCurrentLayer() == layersMeta.getResultLayer().getID()?layersMeta.getResultLayer():layersMeta.getLayerByID(nodeMetas.get(nodeNames.get(0)).getCurrentLayer() + 1);
                 Long size = layerMeta.getSize() / nodeNames.size() <= partitions ? Long.parseLong(partitions + "") : nodeNames.size();
                 List<ISplitInput> resList = new ArrayList<>();
                 ISplitInput input = splitInput.getNewInstance();
@@ -229,7 +229,7 @@ public class InputService implements IInputService {
                 Long atomic = layerMeta.getSize() / size > 1 ? layerMeta.getSize() / size : 1;
                 for (int i = 0; i < size; i++) {
                     input.setStart(i * atomic);
-                    input.setEnd((i + 1) * atomic);
+                    input.setEnd((i + 1) * atomic<layerMeta.getSize()?(i + 1) * atomic:layerMeta.getSize()-1);
                     input.setNodeIdentifier(nodeNames.get(0));
                     input.setLayer(layerMeta.getID());
                     resList.add(input);
@@ -240,10 +240,19 @@ public class InputService implements IInputService {
                 }
                 preparedInputs.addAll(resList);
             } else {
-                signalHistoryStorage.save(signalsPersist.getAllSignals(), runningStrategy.getEpoch(), runningStrategy.getCurrentLoopCount());
-                signalsPersist.cleanOutdatedSignals();
-                runningStrategy.populateInput(signalsPersist, inputStatuses);
-                runFlag = true;
+                boolean isDisc = false;
+                for(DiscriminatorStatus discriminatorStatus:discriminatorStatuses){
+                    if(!discriminatorStatus.isProcessed() || !discriminatorStatus.isValid()){
+                        break;
+                    }
+                    isDisc= true;
+                }
+                if(isDisc||discriminatorStatuses==null||discriminatorStatuses.size()==0){
+                    signalHistoryStorage.save(signalsPersist.getAllSignals(), runningStrategy.getEpoch(), runningStrategy.getCurrentLoopCount());
+                    signalsPersist.cleanOutdatedSignals();
+                    runningStrategy.populateInput(signalsPersist, inputStatuses);
+                    runFlag = true;
+                }
             }
         }
 
@@ -251,14 +260,9 @@ public class InputService implements IInputService {
 
     @Override
     public Boolean runCompleted() {
-        if (layersMeta.getLayers().get(layersMeta.getLayers().size()-1).getID() == nodeMetas.values().iterator().next().getCurrentLayer()) {
+        if (layersMeta.getResultLayer().getID() == nodeMetas.values().iterator().next().getCurrentLayer()) {
             for (NodeMeta meta : nodeMetas.values()) {
                 if (!meta.getStatus()) {
-                    return false;
-                }
-            }
-            for(DiscriminatorStatus discriminatorStatus:discriminatorStatuses){
-                if(!discriminatorStatus.isProcessed()||!discriminatorStatus.isValid()){
                     return false;
                 }
             }
@@ -295,6 +299,8 @@ public class InputService implements IInputService {
     public void nextRunDiscriminator() {
         for(DiscriminatorStatus discriminatorStatus: discriminatorStatuses){
             discriminatorStatus.setProcessed(false);
+            discriminatorStatus.setValid(false);
+            discriminatorStatus.setCurrentLayer(0);
             discriminatorStatus.setInputPopulated(false);
         }
     }
@@ -328,6 +334,10 @@ public class InputService implements IInputService {
     @Override
     public void updateDiscriminators(HashMap<String, ILayersMeta> discriminators) {
         this.discriminators=discriminators;
+        this.discriminatorStatuses.clear();
+        for(String name: discriminators.keySet()){
+            discriminatorStatuses.add(new DiscriminatorStatus(name,false,false,0,false));
+        }
 
     }
 
@@ -345,7 +355,7 @@ public class InputService implements IInputService {
 
             }
         }
-
+        boolean isDisc = false;
 
         if (preparedDiscriminatorsInputs.size() == 0 && currentDiscriminator!=null) {
             String discriminatorName = currentDiscriminator.getName();
@@ -365,11 +375,12 @@ public class InputService implements IInputService {
                 }
             }
             ILayersMeta discriminatorLayersMeta =  discriminators.get(discriminatorName);
-            if (currentDiscriminator.getCurrentLayer() + 1 < discriminatorLayersMeta.getLayers().size()) {
-                ILayerMeta layerMeta = discriminatorLayersMeta.getLayerByID(nodeMetas.get(nodeNames.get(0)).getCurrentLayer() + 1);
+            if (currentDiscriminator.getCurrentLayer() + 1 <= discriminatorLayersMeta.getResultLayer().getID()) {
+
+                ILayerMeta layerMeta = currentDiscriminator.getCurrentLayer() + 1 == discriminatorLayersMeta.getResultLayer().getID() ? discriminatorLayersMeta.getResultLayer(): discriminatorLayersMeta.getLayerByID(nodeMetas.get(nodeNames.get(0)).getCurrentLayer() + 1);
                 Long size = layerMeta.getSize() / nodeNames.size() <= partitions ? Long.parseLong(partitions + "") : nodeNames.size();
-                List<DiscriminatorSplitInput> resList = new ArrayList<>();
-                DiscriminatorSplitInput input = discriminatorSplitInput.getNewInstance();
+                List<ISplitInput> resList = new ArrayList<>();
+                ISplitInput input = discriminatorSplitInput.getNewInstance();
                 input.applyMeta(discriminators.get(currentDiscriminator.getName()));
                 Long atomic = layerMeta.getSize() / size > 1 ? layerMeta.getSize() / size : 1;
                 for (int i = 0; i < size; i++) {
@@ -383,6 +394,7 @@ public class InputService implements IInputService {
                 for (String nodeName : nodeNames) {
                     nodeMetas.get(nodeName).setCurrentLayer(layerMeta.getID());
                 }
+                currentDiscriminator.setCurrentLayer(nodeMetas.get(nodeNames.get(0)).getCurrentLayer() + 1);
                 preparedDiscriminatorsInputs.addAll(resList);
             } else {
 
@@ -395,6 +407,32 @@ public class InputService implements IInputService {
                 discriminatorSignalHistoryStorage.save( discriminatorSignalsPersistStorage.getAllSignals(), discriminatorInputLoadingStrategy.getEpoch(), discriminatorInputLoadingStrategy.getCurrentLoopCount());
                 discriminatorSignalsPersistStorage.cleanOutdatedSignals();
                 discriminatorInputLoadingStrategy.populateInput(discriminatorSignalsPersistStorage, inputDiscriminatorStatuses.get(discriminatorName));
+
+                for(DiscriminatorStatus discriminatorStatus:discriminatorStatuses){
+                    if(!discriminatorStatus.isProcessed() || !discriminatorStatus.isValid()){
+                        break;
+                    }
+                    isDisc= true;
+                }
+                if(isDisc){
+                    signalHistoryStorage.save(signalsPersist.getAllSignals(), runningStrategy.getEpoch(), runningStrategy.getCurrentLoopCount());
+                    signalsPersist.cleanOutdatedSignals();
+                    runningStrategy.populateInput(signalsPersist, inputStatuses);
+                    runFlag = true;
+                }
+            }
+        }else {
+            for(DiscriminatorStatus discriminatorStatus:discriminatorStatuses){
+                if(!discriminatorStatus.isProcessed() || !discriminatorStatus.isValid()){
+                    break;
+                }
+                isDisc= true;
+            }
+            if(isDisc){
+                signalHistoryStorage.save(signalsPersist.getAllSignals(), runningStrategy.getEpoch(), runningStrategy.getCurrentLoopCount());
+                signalsPersist.cleanOutdatedSignals();
+                runningStrategy.populateInput(signalsPersist, inputStatuses);
+                runFlag = true;
             }
         }
 
@@ -421,8 +459,8 @@ public class InputService implements IInputService {
     }
 
     @Override
-    public DiscriminatorSplitInput getNextDiscriminators(String name) {
-        DiscriminatorSplitInput res = null;
+    public ISplitInput getNextDiscriminators(String name) {
+        ISplitInput res = null;
         if (preparedDiscriminatorsInputs.size() > 0) {
             res = preparedDiscriminatorsInputs.get(0);
             preparedDiscriminatorsInputs.remove(0);
@@ -440,7 +478,7 @@ public class InputService implements IInputService {
             } else {
                 for(NodeMeta meta : nodeMetas.values()){
                     if(System.currentTimeMillis()-meta.getTimestamp()>this.nodeTimeOut){
-                        res = (DiscriminatorSplitInput) meta.getCurrentInput();
+                        res =  meta.getCurrentInput();
                         meta.setCurrentInput(null);
                         res.setNodeIdentifier(name);
                         meta.setStatus(true);

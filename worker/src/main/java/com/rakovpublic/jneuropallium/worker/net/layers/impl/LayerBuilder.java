@@ -23,7 +23,7 @@ public class LayerBuilder {
         this.meta = meta;
         return this;
     }
-    
+
     public ILayer build() {
         ILayer layer = new Layer(layerMeta.getID(), meta);
         layer.registerAll(layerMeta.getNeurons());

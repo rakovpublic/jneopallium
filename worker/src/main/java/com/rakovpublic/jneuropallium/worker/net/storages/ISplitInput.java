@@ -11,6 +11,8 @@ import java.util.List;
  * The interface incapsulate input for worker run in cluster mode
  */
 public interface ISplitInput extends IStorageMeta {
+    String getDiscriminatorName();
+    void setDiscriminatorName(String name);
 
     /**
      * @return signal storage
