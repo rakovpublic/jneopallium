@@ -23,12 +23,7 @@ public class LayerBuilder {
         this.meta = meta;
         return this;
     }
-
-    public LayerBuilder withNeuronRange(int start, int end) {
-        //TODO:add implementation
-        return this;
-    }
-
+    
     public ILayer build() {
         ILayer layer = new Layer(layerMeta.getID(), meta);
         layer.registerAll(layerMeta.getNeurons());

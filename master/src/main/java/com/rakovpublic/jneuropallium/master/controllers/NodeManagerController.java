@@ -9,6 +9,7 @@ import com.rakovpublic.jneuropallium.master.services.impl.NodeStatus;
 import com.rakovpublic.jneuropallium.worker.net.storages.ISplitInput;
 import com.rakovpublic.jneuropallium.worker.neuron.IResultNeuron;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,11 +51,14 @@ public class NodeManagerController {
                     if(inputService.isResultValid()){
 
                         inputService.prepareResults();
+                    }else if(inputService.runCompleted()){
+                        inputService.nextRun();
+                        inputService.prepareInputs();
+                        inputService.nextRunDiscriminator();
+                        splitInput = configurationService.getInputService().getNext(request.getNodeName());
+                    }else {
+                        return ResponseEntity.status(HttpStatus.TEMPORARY_REDIRECT).build();
                     }
-                    inputService.nextRun();
-                    inputService.prepareInputs();
-                    inputService.nextRunDiscriminator();
-                    splitInput = configurationService.getInputService().getNext(request.getNodeName());
                 }
             }else {
                 splitInput = configurationService.getInputService().getNext(request.getNodeName());
@@ -62,11 +66,14 @@ public class NodeManagerController {
             if(splitInput==null){
                 if(inputService.isResultValid()){
                     inputService.prepareResults();
+                }else if(inputService.runCompleted()){
+                    inputService.nextRun();
+                    inputService.nextRunDiscriminator();
+                    inputService.prepareInputs();
+                    splitInput = configurationService.getInputService().getNext(request.getNodeName());
+                }else {
+                    return ResponseEntity.status(HttpStatus.TEMPORARY_REDIRECT).build();
                 }
-                inputService.nextRun();
-                inputService.nextRunDiscriminator();
-                inputService.prepareInputs();
-                splitInput = configurationService.getInputService().getNext(request.getNodeName());
             }
             nodeManager.setNodeStatus(request.getNodeName(), NodeStatus.RUNNING);
         } catch (Exception e) {
@@ -85,7 +92,7 @@ public class NodeManagerController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/getResults")
+    @GetMapping("/getResults")
     public ResponseEntity<?> getResults(@RequestParam Integer loop,@RequestParam Long epoch) {
         List<IResultNeuron> resultNeurons = configurationService.getInputService().getResults(loop, epoch);
         if(configurationService.getResultInterpreter()!=null && resultNeurons!= null && resultNeurons.size()>0){
@@ -94,6 +101,10 @@ public class NodeManagerController {
             return ResponseEntity.ok().body(resultNeurons);
         }
         return ResponseEntity.notFound().build();
+    }
+    @GetMapping("/isProcessing")
+    public ResponseEntity<?> getResults(@RequestParam String name) {
+        return ResponseEntity.ok(configurationService.getInputService().isProcessing(name));
     }
 
 }

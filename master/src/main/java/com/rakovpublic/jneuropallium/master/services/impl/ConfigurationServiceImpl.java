@@ -146,7 +146,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
          HashMap<String,HashMap<IInitInput, InputStatusMeta>> inputDiscriminatorStatuses= null;
           DiscriminatorSplitInput discriminatorSplitInput =null;
 
-        inputService = new InputService(signalsPersist,layersMeta,splitInput,partitions,runningStrategy,signalHistoryStorage,resultLayerRunner,discriminatorsLoadingStrategies,discriminatorsSignalStorage,discriminatorsSignalStorageHistory,inputDiscriminatorStatuses, discriminatorSplitInput);
+        inputService = new InputService(signalsPersist,layersMeta,splitInput,partitions,runningStrategy,signalHistoryStorage,resultLayerRunner,discriminatorsLoadingStrategies,discriminatorsSignalStorage,discriminatorsSignalStorageHistory,inputDiscriminatorStatuses, discriminatorSplitInput, nodeTimeOut);
 
 
     }

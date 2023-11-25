@@ -15,7 +15,7 @@ public interface IInputService {
 
     List<IResultNeuron> getResults(Integer loop, Long epoch);
 
-    void updateConfiguration(ISignalsPersistStorage signalsPersist, ILayersMeta layersMeta, ISplitInput splitInput, Integer partitions, IInputLoadingStrategy runningStrategy, ISignalHistoryStorage signalHistoryStorage, IResultLayerRunner resultLayerRunner, HashMap<String,IInputLoadingStrategy> discriminatorsLoadingStrategies, HashMap<String,ISignalsPersistStorage> discriminatorsSignalStorage, HashMap<String,ISignalHistoryStorage> discriminatorsSignalStorageHistory, HashMap<String,HashMap<IInitInput, InputStatusMeta>> inputDiscriminatorStatuses, DiscriminatorSplitInput discriminatorSplitInput);
+    void updateConfiguration(ISignalsPersistStorage signalsPersist, ILayersMeta layersMeta, ISplitInput splitInput, Integer partitions, IInputLoadingStrategy runningStrategy, ISignalHistoryStorage signalHistoryStorage, IResultLayerRunner resultLayerRunner, HashMap<String,IInputLoadingStrategy> discriminatorsLoadingStrategies, HashMap<String,ISignalsPersistStorage> discriminatorsSignalStorage, HashMap<String,ISignalHistoryStorage> discriminatorsSignalStorageHistory, HashMap<String,HashMap<IInitInput, InputStatusMeta>> inputDiscriminatorStatuses, DiscriminatorSplitInput discriminatorSplitInput, Long nodeTimeOut);
 
     void inputSourceUpdated(String name);
 
@@ -24,6 +24,8 @@ public interface IInputService {
     void register(InputRegistrationRequest request);
 
     void uploadWorkerResult(String name, HashMap<Integer, HashMap<Long, List<ISignal>>> signals);
+
+    Boolean isProcessing(String name);
 
     void uploadDiscriminatorWorkerResult(String name, String nameDiscriminator, HashMap<Integer, HashMap<Long, List<ISignal>>> signals);
 
