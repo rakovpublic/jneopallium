@@ -18,6 +18,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 
 public class ConfigurationServiceImpl implements ConfigurationService {
@@ -140,13 +142,20 @@ public class ConfigurationServiceImpl implements ConfigurationService {
             logger.error("Cannot create instance of ReconnectStrategy for json " + configuration.getReconnectStrategyJson(),e);
         }
         //TODO: add parsing discriminators
+        List<String> discriminators = configuration.getDiscriminators();
          HashMap<String,IInputLoadingStrategy> discriminatorsLoadingStrategies=null;
          HashMap<String,ISignalsPersistStorage> discriminatorsSignalStorage= null;
          HashMap<String,ISignalHistoryStorage> discriminatorsSignalStorageHistory= null;
          HashMap<String,HashMap<IInitInput, InputStatusMeta>> inputDiscriminatorStatuses= null;
           DiscriminatorSplitInput discriminatorSplitInput =null;
+         HashMap<String,ILayersMeta> discriminatorsLayers;
+          for (String name: discriminators){
 
-        inputService = new InputService(signalsPersist,layersMeta,splitInput,partitions,runningStrategy,signalHistoryStorage,resultLayerRunner,discriminatorsLoadingStrategies,discriminatorsSignalStorage,discriminatorsSignalStorageHistory,inputDiscriminatorStatuses, discriminatorSplitInput, nodeTimeOut);
+          }
+
+
+
+        inputService = new InputService(signalsPersist,layersMeta,splitInput,partitions,runningStrategy,signalHistoryStorage,resultLayerRunner,discriminatorsLoadingStrategies,discriminatorsSignalStorage,discriminatorsSignalStorageHistory,inputDiscriminatorStatuses, discriminatorSplitInput, configuration.getNodeTimeout());
 
 
     }
