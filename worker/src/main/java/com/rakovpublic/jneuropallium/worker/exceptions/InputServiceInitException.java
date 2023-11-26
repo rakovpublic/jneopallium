@@ -4,8 +4,6 @@
 
 package com.rakovpublic.jneuropallium.worker.exceptions;
 
-import java.io.FileNotFoundException;
-
 public class InputServiceInitException extends NullPointerException {
     public InputServiceInitException() {
     }

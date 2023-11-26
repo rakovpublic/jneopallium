@@ -6,10 +6,8 @@ package com.rakovpublic.jneuropallium.worker.net.storages.inmemory;
 
 
 import com.rakovpublic.jneuropallium.worker.net.layers.IResult;
-import com.rakovpublic.jneuropallium.worker.net.layers.IResultLayer;
 import com.rakovpublic.jneuropallium.worker.net.signals.IInputSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
-
 import com.rakovpublic.jneuropallium.worker.net.storages.INeuronNetInput;
 import com.rakovpublic.jneuropallium.worker.net.storages.InMemoryInitInput;
 
@@ -20,21 +18,21 @@ import java.util.List;
 public class InMemoryDiscriminatorResultSignals implements INeuronNetInput {
     private InMemoryInitInput callback;
     private String name;
-    private List <IInputSignal> inputSignals;
+    private List<IInputSignal> inputSignals;
     private ResultLayerHolder resultLayer;
 
     public InMemoryDiscriminatorResultSignals(InMemoryInitInput callback, String name, ResultLayerHolder resultSignals) {
         this.callback = callback;
         this.name = name;
         this.inputSignals = new LinkedList<>();
-        this.resultLayer =resultSignals;
+        this.resultLayer = resultSignals;
 
     }
 
     @Override
     public List<IInputSignal> readSignals() {
         List<IResult> results = resultLayer.getResultLayer().interpretResult();
-        for(IResult resultSignal :results){
+        for (IResult resultSignal : results) {
             inputSignals.add(new ResultInputSignalWrapper(resultSignal.getResult()));
         }
         return inputSignals;
@@ -44,7 +42,6 @@ public class InMemoryDiscriminatorResultSignals implements INeuronNetInput {
     public String getName() {
         return name;
     }
-
 
 
     @Override

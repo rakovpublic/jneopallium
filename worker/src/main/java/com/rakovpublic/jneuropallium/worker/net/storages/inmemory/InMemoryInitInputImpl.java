@@ -6,7 +6,6 @@ package com.rakovpublic.jneuropallium.worker.net.storages.inmemory;
 
 import com.rakovpublic.jneuropallium.worker.net.signals.IInputSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
-
 import com.rakovpublic.jneuropallium.worker.net.storages.InMemoryInitInput;
 
 import java.util.HashMap;
@@ -24,7 +23,7 @@ public class InMemoryInitInputImpl implements InMemoryInitInput {
 
     @Override
     public void putSignals(List<IInputSignal> signals) {
-        this.signals=signals;
+        this.signals = signals;
     }
 
     @Override

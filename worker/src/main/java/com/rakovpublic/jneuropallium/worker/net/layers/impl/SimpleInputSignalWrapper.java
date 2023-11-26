@@ -11,7 +11,7 @@ import com.rakovpublic.jneuropallium.worker.neuron.impl.cycleprocessing.Abstract
 public class SimpleInputSignalWrapper<T> extends AbstractSignal<T> implements IInputSignal<T> {
     private ISignal<T> signal;
 
-    public SimpleInputSignalWrapper( ISignal<T> inputSignal) {
+    public SimpleInputSignalWrapper(ISignal<T> inputSignal) {
 
         super(inputSignal.getValue(), inputSignal.getSourceLayerId(), inputSignal.getSourceNeuronId(), inputSignal.getTimeAlive(), inputSignal.getDescription(), inputSignal.isFromExternalNet(), inputSignal.getInputName(), inputSignal.isNeedToRemoveDuringLearning(), inputSignal.isNeedToProcessDuringLearning(), inputSignal.getName());
         this.signal = inputSignal.copySignal();

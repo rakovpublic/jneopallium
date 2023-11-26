@@ -20,7 +20,7 @@ import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 
-public  class HttpInputMeta implements ISplitInput {
+public class HttpInputMeta implements ISplitInput {
     private static final Logger logger = LogManager.getLogger(HttpInputMeta.class);
     private String nodeId;
     private String readNeuronsEndpoint;
@@ -96,7 +96,7 @@ public  class HttpInputMeta implements ISplitInput {
 
     @Override
     public ISplitInput getNewInstance() {
-        return new HttpInputMeta(this.nodeId,this.readNeuronsEndpoint,this.sendResultEndpoint,this.inputResolver,this.layer,this.start,this.end);
+        return new HttpInputMeta(this.nodeId, this.readNeuronsEndpoint, this.sendResultEndpoint, this.inputResolver, this.layer, this.start, this.end);
     }
 
     @Override
@@ -107,7 +107,7 @@ public  class HttpInputMeta implements ISplitInput {
     @Override
     public List<? extends INeuron> getNeurons() {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(readNeuronsEndpoint+"?layerId="+layer.getId()+"&startIndex="+start+"&endIndex="+end))
+                .uri(URI.create(readNeuronsEndpoint + "?layerId=" + layer.getId() + "&startIndex=" + start + "&endIndex=" + end))
                 .timeout(Duration.ofMinutes(2))
                 .header("Content-Type", "application/json")
                 .GET()
@@ -128,7 +128,7 @@ public  class HttpInputMeta implements ISplitInput {
         return parseNeurons(response);
     }
 
-    protected  List<? extends INeuron> parseNeurons(HttpResponse<String> response){
+    protected List<? extends INeuron> parseNeurons(HttpResponse<String> response) {
         return NeuronParser.parseNeurons(response.body());
     }
 

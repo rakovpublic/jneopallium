@@ -1,10 +1,10 @@
 package com.rakovpublic.jneuropallium.master.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rakovpublic.jneuropallium.worker.model.CreateNeuronRequest;
-import com.rakovpublic.jneuropallium.worker.model.DeleteNeuronRequest;
 import com.rakovpublic.jneuropallium.master.services.ConfigurationService;
 import com.rakovpublic.jneuropallium.master.services.ILayerService;
+import com.rakovpublic.jneuropallium.worker.model.CreateNeuronRequest;
+import com.rakovpublic.jneuropallium.worker.model.DeleteNeuronRequest;
 import com.rakovpublic.jneuropallium.worker.model.LayerParamUpdate;
 import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +65,7 @@ public class LayerController {
     @GetMapping("/deletelayer")
     public ResponseEntity<?> deleteLayer(@RequestParam Integer layerId) {
         try {
-            layerService.deleteLayer(layerId,configurationService.getReconnectionStrategy());
+            layerService.deleteLayer(layerId, configurationService.getReconnectionStrategy());
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e);
         }
@@ -86,7 +86,7 @@ public class LayerController {
     @GetMapping("/getLayerParam")
     public ResponseEntity<?> getLayerParam(@RequestParam String param, @RequestParam Integer layerId) {
         try {
-            return ResponseEntity.ok().body(layerService.getMetaParam(param,layerId));
+            return ResponseEntity.ok().body(layerService.getMetaParam(param, layerId));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e);
         }

@@ -4,6 +4,6 @@
 
 package com.rakovpublic.jneuropallium.worker.net.layers;
 
-public interface DiscriminatorResultLayer extends IResultLayer{
+public interface DiscriminatorResultLayer extends IResultLayer {
     boolean hasPass();
 }

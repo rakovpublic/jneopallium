@@ -16,6 +16,6 @@ public class AppConfig {
     @Bean
     @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
     public ConfigurationService getInputService() {
-        return  new ConfigurationServiceImpl();
+        return new ConfigurationServiceImpl();
     }
 }

@@ -12,6 +12,7 @@ import java.util.List;
  */
 public interface ISplitInput extends IStorageMeta {
     String getDiscriminatorName();
+
     void setDiscriminatorName(String name);
 
     /**
@@ -58,8 +59,6 @@ public interface ISplitInput extends IStorageMeta {
      * @return the node name
      */
     String getNodeIdentifier();
-
-
 
 
     Long getStart();

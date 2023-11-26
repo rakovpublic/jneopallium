@@ -10,7 +10,6 @@ import com.rakovpublic.jneuropallium.worker.model.LayerParamUpdate;
 import com.rakovpublic.jneuropallium.worker.net.layers.LayerMetaParam;
 import com.rakovpublic.jneuropallium.worker.net.layers.LayerMove;
 import com.rakovpublic.jneuropallium.worker.net.storages.ILayerMeta;
-import com.rakovpublic.jneuropallium.worker.net.storages.ILayersMeta;
 import com.rakovpublic.jneuropallium.worker.net.storages.ReconnectStrategy;
 import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +34,7 @@ public class LayerService implements ILayerService {
     }
 
     @Override
-    public  void addNeuron(INeuron neuron, Integer layerId) {
+    public void addNeuron(INeuron neuron, Integer layerId) {
         configurationService.getInputService().getLayersMeta().getLayerByID(layerId).addNeuron(neuron);
     }
 
@@ -62,8 +61,8 @@ public class LayerService implements ILayerService {
 
     @Override
     public void updateMetaParam(LayerParamUpdate layerParamUpdate) {
-        HashMap<String, LayerMetaParam>  params =  configurationService.getInputService().getLayersMeta().getLayerByID(layerParamUpdate.getLayerId()).getLayerMetaParams();
-        params.put(layerParamUpdate.getParamName(),layerParamUpdate.getLayerMetaParam());
+        HashMap<String, LayerMetaParam> params = configurationService.getInputService().getLayersMeta().getLayerByID(layerParamUpdate.getLayerId()).getLayerMetaParams();
+        params.put(layerParamUpdate.getParamName(), layerParamUpdate.getLayerMetaParam());
 
     }
 }

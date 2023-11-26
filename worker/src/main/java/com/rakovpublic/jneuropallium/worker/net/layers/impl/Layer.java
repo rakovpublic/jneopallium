@@ -5,7 +5,6 @@ import com.rakovpublic.jneuropallium.worker.net.layers.ILayer;
 import com.rakovpublic.jneuropallium.worker.net.layers.LayerMetaParam;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.ILayerMeta;
-import com.rakovpublic.jneuropallium.worker.net.storages.INeuronSerializer;
 import com.rakovpublic.jneuropallium.worker.neuron.IAxon;
 import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.neuron.IRule;
@@ -75,12 +74,12 @@ public class Layer<N extends INeuron> implements ILayer<N> {
 
     @Override
     public void updateLayerMetaParam(String key, LayerMetaParam metaParam) {
-        metaParams.put(key,metaParam);
+        metaParams.put(key, metaParam);
     }
 
     @Override
     public void setLayerMetaParams(HashMap<String, LayerMetaParam> params) {
-        metaParams =params;
+        metaParams = params;
     }
 
     @Override
@@ -135,7 +134,6 @@ public class Layer<N extends INeuron> implements ILayer<N> {
             map.put(ner.getId(), ner);
         }
     }
-
 
 
     @Override

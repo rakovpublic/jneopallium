@@ -8,12 +8,13 @@ import org.springframework.stereotype.Service;
 @Service
 public interface ConfigurationService {
 
-     void update(ConfigurationUpdateRequest request);
-     IInputService getInputService();
+    void update(ConfigurationUpdateRequest request);
 
-     ReconnectStrategy getReconnectionStrategy();
+    IInputService getInputService();
 
-     ResultInterpreter getResultInterpreter();
+    ReconnectStrategy getReconnectionStrategy();
+
+    ResultInterpreter getResultInterpreter();
 
 
 }

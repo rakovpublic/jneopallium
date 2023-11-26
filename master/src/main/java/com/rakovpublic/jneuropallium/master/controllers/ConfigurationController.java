@@ -1,10 +1,10 @@
 package com.rakovpublic.jneuropallium.master.controllers;
 
 import com.rakovpublic.jneuropallium.master.configs.PropertyHolder;
-import com.rakovpublic.jneuropallium.worker.model.ConfigurationUpdateRequest;
-import com.rakovpublic.jneuropallium.worker.model.UploadSignalsRequest;
 import com.rakovpublic.jneuropallium.master.services.ConfigurationService;
 import com.rakovpublic.jneuropallium.master.services.StorageService;
+import com.rakovpublic.jneuropallium.worker.model.ConfigurationUpdateRequest;
+import com.rakovpublic.jneuropallium.worker.model.UploadSignalsRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,9 +24,8 @@ public class ConfigurationController {
     }
 
 
-
     @PostMapping("/update")
-    public void update(@RequestParam("config") ConfigurationUpdateRequest configurationUpdateRequest,@RequestParam("layersMetaPath") MultipartFile layersMetaPath) {
+    public void update(@RequestParam("config") ConfigurationUpdateRequest configurationUpdateRequest, @RequestParam("layersMetaPath") MultipartFile layersMetaPath) {
         String configurationPath = storageService.store(layersMetaPath);
         configurationUpdateRequest.setLayersMetaPath(configurationPath);
         configurationService.update(configurationUpdateRequest);

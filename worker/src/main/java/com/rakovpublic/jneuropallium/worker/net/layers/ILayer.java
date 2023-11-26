@@ -11,7 +11,6 @@ package com.rakovpublic.jneuropallium.worker.net.layers;
 
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.ILayerMeta;
-import com.rakovpublic.jneuropallium.worker.net.storages.INeuronSerializer;
 import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.neuron.IRule;
 import com.rakovpublic.jneuropallium.worker.neuron.impl.layersizing.CreateNeuronSignal;
@@ -30,7 +29,7 @@ public interface ILayer<N extends INeuron> extends Serializable {
 
     void updateLayerMetaParam(String key, LayerMetaParam metaParam);
 
-    void setLayerMetaParams(HashMap<String,LayerMetaParam> params);
+    void setLayerMetaParams(HashMap<String, LayerMetaParam> params);
 
     void deleteNeuron(DeleteNeuronSignal deleteNeuronIntegration);
 

@@ -36,8 +36,7 @@ public abstract class Runner implements IRunner {
         }
         try {
             application.startApplication(context, classLoaderService);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             logger.error(e);
         }
 

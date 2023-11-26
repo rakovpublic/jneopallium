@@ -3,16 +3,15 @@ package com.rakovpublic.jneuropallium.worker.net.layers.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.rakovpublic.jneuropallium.worker.application.HttpCommunicationClient;
+import com.rakovpublic.jneuropallium.worker.application.HttpRequestResolver;
 import com.rakovpublic.jneuropallium.worker.model.CreateNeuronRequest;
 import com.rakovpublic.jneuropallium.worker.model.DeleteNeuronRequest;
 import com.rakovpublic.jneuropallium.worker.model.UploadSignalsRequest;
-import com.rakovpublic.jneuropallium.worker.application.HttpCommunicationClient;
-import com.rakovpublic.jneuropallium.worker.application.HttpRequestResolver;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayer;
 import com.rakovpublic.jneuropallium.worker.net.layers.LayerMetaParam;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.ILayerMeta;
-import com.rakovpublic.jneuropallium.worker.net.storages.INeuronSerializer;
 import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.neuron.IRule;
 import com.rakovpublic.jneuropallium.worker.neuron.impl.layersizing.CreateNeuronSignal;
@@ -70,7 +69,6 @@ public class HttpLayer implements ILayer {
             return;
         }
     }
-
 
 
     @Override

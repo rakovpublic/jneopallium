@@ -1,5 +1,6 @@
 package com.rakovpublic.jneuropallium.worker.net.storages;
 
+import com.rakovpublic.jneuropallium.worker.exceptions.ConfigurationClassMissedException;
 import com.rakovpublic.jneuropallium.worker.net.signals.IInputSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.inmemory.InMemoryLayerMeta;
@@ -8,6 +9,8 @@ import com.rakovpublic.jneuropallium.worker.neuron.ISignalChain;
 import com.rakovpublic.jneuropallium.worker.neuron.impl.cycleprocessing.CycleNeuron;
 import com.rakovpublic.jneuropallium.worker.neuron.impl.cycleprocessing.CycleSignalsProcessingChain;
 import com.rakovpublic.jneuropallium.worker.neuron.impl.cycleprocessing.ProcessingFrequency;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
@@ -16,6 +19,7 @@ import java.util.*;
  * Input loading strategy designed to have different input loading delay for each init input
  */
 public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
+    private static final Logger logger = LogManager.getLogger(CycledInputLoadingStrategy.class);
     private ILayersMeta layersMeta;
     private HashMap<IInitInput, InputInitStrategy> externalInputs;
     private Integer loop;
@@ -26,30 +30,39 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
     private TreeMap<Long, TreeMap<Integer, List<IInputSignal>>> inputHistory;
 
 
-    public CycledInputLoadingStrategy(ILayersMeta layersMeta, HashMap<IInitInput, InputInitStrategy> externalInputs, int defaultLoopsCount, HashMap<IInitInput, InputStatusMeta> inputStatuses) {
+    public CycledInputLoadingStrategy(ILayersMeta layersMeta, HashMap<IInitInput, InputInitStrategy> externalInputs, int defaultLoopsCount, HashMap<IInitInput, InputStatusMeta> inputStatuses, HashMap<String, ProcessingFrequency> signalProcessingFrequencyMap) {
         epoch = 0L;
         loop = 0;
         this.layersMeta = layersMeta;
         this.externalInputs = externalInputs;
         this.inputStatuses = inputStatuses;
         this.defaultLoopsCount = defaultLoopsCount;
-        init(defaultLoopsCount);
+        init(defaultLoopsCount, signalProcessingFrequencyMap);
         neuronInputMapping = new HashMap<>();
         inputHistory = new TreeMap<>();
 
     }
 
-    private void init(int defaultLoopsCount) {
+    private void init(int defaultLoopsCount, HashMap<String, ProcessingFrequency> signalProcessingFrequencyMap) {
         ISignalChain signalChain = new CycleSignalsProcessingChain();
-        CycleNeuron cycleNeuron = new CycleNeuron(defaultLoopsCount, signalChain, null, 0l, epoch);
         List<INeuron> neurons = new LinkedList<>();
-        neurons.add(cycleNeuron);
-        long neuronId = 1l;
-        for (InputStatusMeta meta : inputStatuses.values()) {
-            neurons.add(new CycleNeuron(defaultLoopsCount, signalChain, meta, neuronId, epoch));
-            neuronInputMapping.put(meta.getName(), neuronId);
-            neuronId += 1;
+        CycleNeuron cycleNeuron = new CycleNeuron(defaultLoopsCount, signalChain, 0l, epoch);
+        HashMap<IInitInput, ProcessingFrequency> inputProcessingFrequency = cycleNeuron.getInputProcessingFrequencyHashMap();
+        for (IInitInput initInput : inputStatuses.keySet()) {
+            inputProcessingFrequency.put(initInput, new ProcessingFrequency(initInput.getDefaultProcessingFrequency().getEpoch(), initInput.getDefaultProcessingFrequency().getLoop()));
         }
+        cycleNeuron.setInputProcessingFrequencyHashMap(inputProcessingFrequency);
+        HashMap<Class<? extends ISignal>, ProcessingFrequency> signalProcessingFrequencyMapIn = new HashMap<>();
+        for (String className : signalProcessingFrequencyMap.keySet()) {
+            try {
+                signalProcessingFrequencyMapIn.put((Class<? extends ISignal>) Class.forName(className), signalProcessingFrequencyMap.get(className));
+            } catch (ClassNotFoundException e) {
+                logger.error("Cannot find configuration class in jar:", e);
+                throw new ConfigurationClassMissedException(e.getMessage());
+            }
+        }
+        cycleNeuron.setSignalProcessingFrequencyMap(signalProcessingFrequencyMapIn);
+        neurons.add(cycleNeuron);
         ILayerMeta layerMeta = new InMemoryLayerMeta(Integer.MIN_VALUE, neurons, new HashMap<>());
         layersMeta.addLayerMeta(layerMeta);
 
@@ -58,59 +71,62 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
     @Override
     public Boolean populateInput(ISignalsPersistStorage signalsPersistStorage, HashMap<IInitInput, InputStatusMeta> inputStatuses) {
         signalsPersistStorage.cleanOutdatedSignals();
-        CycleNeuron cl = ((CycleNeuron) layersMeta.getLayerByID(Integer.MIN_VALUE).getNeuronByID(0l));
-        HashMap<Class<? extends ISignal>, ProcessingFrequency> frequencyHashMap = cl.getSignalProcessingFrequencyMap();
-        CycleNeuron cycleNeuron = (CycleNeuron) layersMeta.getLayerByID(Integer.MIN_VALUE).getNeuronByID(0l);
-        HashMap<IInitInput, ProcessingFrequency> inputProcessingFrequencyHashMap = cycleNeuron.getInputProcessingFrequencyHashMap();
-        if (loop >= cl.getLoopCount()) {
-            for (IInitInput iii : inputStatuses.keySet()) {
-                ProcessingFrequency ipf = null;
-                if (inputProcessingFrequencyHashMap.containsKey(iii)) {
-                    ipf = inputProcessingFrequencyHashMap.get(iii);
-                }
-                if (inputStatuses.get(iii).getCurrentRuns() %
-                        cycleNeuron.getLoopCount() == 0 && (ipf != null && (ipf.getLoop() != null && loop % ipf.getLoop() == 0) || (ipf.getEpoch() != null && epoch % ipf.getEpoch() == 0))) {
-                    List<ISignal> signals = new LinkedList<>();
-                    List<IInputSignal> signalsHistory = new LinkedList<>();
-                    for (IInputSignal signal : iii.readSignals()) {
-                        ProcessingFrequency pf = frequencyHashMap.get(signal.getCurrentSignalClass());
-                        if (loop % pf.getLoop() == 0 && epoch % pf.getEpoch() == 0) {
-                            signal.setInnerLoop(defaultLoopsCount);
-                            signal.setEpoch(epoch);
-                            signal.setLoop(loop);
-                            signalsHistory.add((IInputSignal)signal.copySignal());
-                            signals.add(signal);
-                        }
-                    }
-                    signalsPersistStorage.putSignals(externalInputs.get(iii).getInputs(layersMeta, signals));
-                    inputStatuses.get(iii).setCurrentRuns(0);
-                    inputStatuses.get(iii).setBeenUsed(true);
-                    if(inputHistory.containsKey(epoch)){
-                        if(inputHistory.get(epoch).containsKey(loop)){
-                            inputHistory.get(epoch).get(loop).addAll(signalsHistory);
-                        }else {
-                            TreeMap<Integer,List<IInputSignal>> history=  new TreeMap<>();
-                            history.put(loop,signalsHistory);
-                            inputHistory.put(epoch,history);
-                        }
-                    }else {
-                        TreeMap<Integer,List<IInputSignal>> history=  new TreeMap<>();
-                        history.put(loop,signalsHistory);
-                        inputHistory.put(epoch,history);
-                    }
-                } else {
-                    inputStatuses.get(iii).setCurrentRuns(inputStatuses.get(iii).getCurrentRuns() + 1);
-                }
-            }
-            loop = 0;
-            if (epoch == Long.MAX_VALUE) {
-                epoch = Long.MIN_VALUE + 2;
-            } else {
-                epoch += 1;
-            }
+        if (layersMeta.getLayerByID(Integer.MIN_VALUE) != null) {
+            CycleNeuron cl = ((CycleNeuron) layersMeta.getLayerByID(Integer.MIN_VALUE).getNeuronByID(0l));
+            HashMap<Class<? extends ISignal>, ProcessingFrequency> frequencyHashMap = cl.getSignalProcessingFrequencyMap();
 
-        } else {
-            loop += 1;
+            HashMap<IInitInput, ProcessingFrequency> inputProcessingFrequencyHashMap = cl.getInputProcessingFrequencyHashMap();
+
+            if (loop >= cl.getLoopCount()) {
+                for (IInitInput iii : inputStatuses.keySet()) {
+                    ProcessingFrequency ipf = null;
+                    if (inputProcessingFrequencyHashMap.containsKey(iii)) {
+                        ipf = inputProcessingFrequencyHashMap.get(iii);
+                    }
+                    if (inputStatuses.get(iii).getCurrentRuns() %
+                            cl.getLoopCount() == 0 && (ipf != null && (ipf.getLoop() != null && loop % ipf.getLoop() == 0) || (ipf.getEpoch() != null && epoch % ipf.getEpoch() == 0))) {
+                        List<ISignal> signals = new LinkedList<>();
+                        List<IInputSignal> signalsHistory = new LinkedList<>();
+                        for (IInputSignal signal : iii.readSignals()) {
+                            ProcessingFrequency pf = frequencyHashMap.get(signal.getCurrentSignalClass());
+                            if (loop % pf.getLoop() == 0 && epoch % pf.getEpoch() == 0) {
+                                signal.setInnerLoop(defaultLoopsCount);
+                                signal.setEpoch(epoch);
+                                signal.setLoop(loop);
+                                signalsHistory.add((IInputSignal) signal.copySignal());
+                                signals.add(signal);
+                            }
+                        }
+                        signalsPersistStorage.putSignals(externalInputs.get(iii).getInputs(layersMeta, signals));
+                        inputStatuses.get(iii).setCurrentRuns(0);
+                        inputStatuses.get(iii).setBeenUsed(true);
+                        if (inputHistory.containsKey(epoch)) {
+                            if (inputHistory.get(epoch).containsKey(loop)) {
+                                inputHistory.get(epoch).get(loop).addAll(signalsHistory);
+                            } else {
+                                TreeMap<Integer, List<IInputSignal>> history = new TreeMap<>();
+                                history.put(loop, signalsHistory);
+                                inputHistory.put(epoch, history);
+                            }
+                        } else {
+                            TreeMap<Integer, List<IInputSignal>> history = new TreeMap<>();
+                            history.put(loop, signalsHistory);
+                            inputHistory.put(epoch, history);
+                        }
+                    } else {
+                        inputStatuses.get(iii).setCurrentRuns(inputStatuses.get(iii).getCurrentRuns() + 1);
+                    }
+                }
+                loop = 0;
+                if (epoch == Long.MAX_VALUE) {
+                    epoch = Long.MIN_VALUE + 2;
+                } else {
+                    epoch += 1;
+                }
+
+            } else {
+                loop += 1;
+            }
         }
         return true;
     }
@@ -128,7 +144,7 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
 
     @Override
     public Integer getCurrentLoopCount() {
-        return ((CycleNeuron) layersMeta.getLayerByID(Integer.MIN_VALUE).getNeuronByID(0L)).getLoopCount();
+        return loop;
     }
 
     @Override
@@ -143,19 +159,26 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
         ids.addAll(neuronInputMapping.values());
         long neuronId = ids.last() + 1;
         ILayerMeta layerMeta = layersMeta.getLayerByID(Integer.MIN_VALUE);
-        List<INeuron> neurons = new LinkedList<>();
-        if(layerMeta == null){
+        if (layerMeta == null) {
+            List<INeuron> neurons = new LinkedList<>();
+            CycleNeuron cycleNeuron = new CycleNeuron(defaultLoopsCount, signalChain, neuronId, epoch);
+            HashMap<IInitInput, ProcessingFrequency> inputProcessingFrequency = cycleNeuron.getInputProcessingFrequencyHashMap();
+            for (IInitInput initInput : inputStatuses.keySet()) {
+                inputProcessingFrequency.put(initInput, new ProcessingFrequency(initInput.getDefaultProcessingFrequency().getEpoch(), initInput.getDefaultProcessingFrequency().getLoop()));
+            }
+            cycleNeuron.setInputProcessingFrequencyHashMap(inputProcessingFrequency);
+            neurons.add(cycleNeuron);
             layerMeta = new InMemoryLayerMeta(Integer.MIN_VALUE, neurons, new HashMap<>());
             layersMeta.addLayerMeta(layerMeta);
-        }
-        neurons.addAll(layerMeta.getNeurons());
-        for (InputStatusMeta meta : inputStatuses.values()) {
-            if (!neuronInputMapping.containsKey(meta.getName())) {
-                neurons.add(new CycleNeuron(defaultLoopsCount, signalChain, meta, neuronId, epoch));
-                neuronInputMapping.put(meta.getName(), neuronId);
-                neuronId += 1;
+        } else {
+            CycleNeuron cycleNeuron = (CycleNeuron) layerMeta.getNeuronByID(0l);
+            HashMap<IInitInput, ProcessingFrequency> inputProcessingFrequency = cycleNeuron.getInputProcessingFrequencyHashMap();
+            for (IInitInput initInput : inputStatuses.keySet()) {
+                inputProcessingFrequency.put(initInput, new ProcessingFrequency(initInput.getDefaultProcessingFrequency().getEpoch(), initInput.getDefaultProcessingFrequency().getLoop()));
             }
+            cycleNeuron.setInputProcessingFrequencyHashMap(inputProcessingFrequency);
         }
+
     }
 
     @Override

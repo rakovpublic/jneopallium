@@ -5,7 +5,7 @@ import com.rakovpublic.jneuropallium.worker.net.storages.ISplitInput;
 public class NodeMeta {
     private Integer currentLayer;
     private Boolean status;
-    private ISplitInput  currentInput;
+    private ISplitInput currentInput;
     private Long timestamp;
 
     public NodeMeta(Integer currentLayer, Boolean status) {

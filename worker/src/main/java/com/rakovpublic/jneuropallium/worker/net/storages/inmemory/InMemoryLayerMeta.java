@@ -15,7 +15,7 @@ public class InMemoryLayerMeta implements ILayerMeta {
     private List<LayerMove> layerMoves;
     private Integer id;
     private List<INeuron> neurons;
-    private  HashMap<String, LayerMetaParam> layerMetaParams;
+    private HashMap<String, LayerMetaParam> layerMetaParams;
 
     public InMemoryLayerMeta(Integer id, List<INeuron> neurons, HashMap<String, LayerMetaParam> metaParams) {
         this.id = id;
@@ -23,7 +23,6 @@ public class InMemoryLayerMeta implements ILayerMeta {
         layerMetaParams = metaParams;
         layerMoves = new LinkedList<>();
     }
-
 
 
     @Override
@@ -79,10 +78,11 @@ public class InMemoryLayerMeta implements ILayerMeta {
         }
         return null;
     }
+
     @Override
     public void removeNeuron(Long neuron) {
         for (INeuron n : neurons) {
-            if(n.getId()==neuron){
+            if (n.getId() == neuron) {
                 neurons.remove(n);
             }
         }

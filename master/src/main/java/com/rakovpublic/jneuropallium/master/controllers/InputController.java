@@ -1,11 +1,14 @@
 package com.rakovpublic.jneuropallium.master.controllers;
 
+import com.rakovpublic.jneuropallium.master.services.ConfigurationService;
 import com.rakovpublic.jneuropallium.worker.model.InputRegistrationRequest;
 import com.rakovpublic.jneuropallium.worker.model.UploadSignalsRequest;
-import com.rakovpublic.jneuropallium.master.services.ConfigurationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/input")
@@ -20,9 +23,9 @@ public class InputController {
     @PostMapping("/callback")
     public ResponseEntity<?> persistCallback(@RequestBody UploadSignalsRequest request) {
         try {
-            if(!request.isDiscriminator()){
+            if (!request.isDiscriminator()) {
                 configurationService.getInputService().uploadWorkerResult(request.getName(), request.getSignals());
-            }else {
+            } else {
 
             }
         } catch (Exception e) {

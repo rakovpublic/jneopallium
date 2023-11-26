@@ -4,7 +4,6 @@ import com.rakovpublic.jneuropallium.worker.net.layers.LayerMetaParam;
 import com.rakovpublic.jneuropallium.worker.net.layers.LayerMove;
 import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -16,11 +15,9 @@ public interface ILayerMeta extends IStorageMeta {
     //TODO: add meta info with default weights for axon and dendrite
 
 
-
-
     HashMap<String, LayerMetaParam> getLayerMetaParams();
 
-    void setLayerMetaParams( HashMap<String, LayerMetaParam>  metaParams);
+    void setLayerMetaParams(HashMap<String, LayerMetaParam> metaParams);
 
     /**
      * @return layer id

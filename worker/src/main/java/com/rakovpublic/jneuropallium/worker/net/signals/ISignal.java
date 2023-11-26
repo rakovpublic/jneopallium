@@ -63,8 +63,11 @@ public interface ISignal<T> extends Serializable {
     Integer getInnerLoop();
 
     void setEpoch(Long epoch);
+
     Long getEpoch();
+
     void setLoop(Integer loop);
+
     Integer getLoop();
 
     boolean isNeedToRemoveDuringLearning();

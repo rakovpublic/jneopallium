@@ -20,6 +20,6 @@ public class ProcessingFrequencySignal extends AbstractSignal<ProcessingFrequenc
 
     @Override
     public ProcessingFrequencySignal copySignal() {
-        return new ProcessingFrequencySignal(value,this.getSourceLayerId(),this.getSourceNeuronId(),this.getTimeAlive(),getDescription(),isFromExternalNet(),getInputName(),this.isNeedToRemoveDuringLearning(), this.isNeedToProcessDuringLearning(), ProcessingFrequency.class.getName());
+        return new ProcessingFrequencySignal(value, this.getSourceLayerId(), this.getSourceNeuronId(), this.getTimeAlive(), getDescription(), isFromExternalNet(), getInputName(), this.isNeedToRemoveDuringLearning(), this.isNeedToProcessDuringLearning(), ProcessingFrequency.class.getName());
     }
 }

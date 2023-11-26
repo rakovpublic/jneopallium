@@ -1,7 +1,8 @@
 package com.rakovpublic.jneuropallium.worker.model;
 
 import com.rakovpublic.jneuropallium.worker.net.DiscriminatorSplitInput;
-import com.rakovpublic.jneuropallium.worker.net.storages.*;
+import com.rakovpublic.jneuropallium.worker.net.storages.IInitInput;
+import com.rakovpublic.jneuropallium.worker.net.storages.InputStatusMeta;
 
 import java.util.HashMap;
 import java.util.List;
@@ -89,7 +90,7 @@ public class ConfigurationUpdateRequest {
     private HashMap<String, ConfigurationRecord> discriminatorsLoadingStrategies;
     private HashMap<String, ConfigurationRecord> discriminatorsSignalStorage;
     private HashMap<String, ConfigurationRecord> discriminatorsSignalStorageHistory;
-    private HashMap<String,HashMap<IInitInput, InputStatusMeta>> inputDiscriminatorStatuses;
+    private HashMap<String, HashMap<IInitInput, InputStatusMeta>> inputDiscriminatorStatuses;
     private DiscriminatorSplitInput discriminatorSplitInput;
 
 

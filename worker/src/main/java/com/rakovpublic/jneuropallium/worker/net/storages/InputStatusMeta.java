@@ -41,7 +41,6 @@ public class InputStatusMeta {
     }
 
 
-
     public Integer getCurrentRuns() {
         return currentRuns;
     }

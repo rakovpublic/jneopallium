@@ -1,28 +1,24 @@
 package com.rakovpublic.jneuropallium.worker.net.storages.file;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.rakovpublic.jneuropallium.worker.net.layers.LayerMetaParam;
 import com.rakovpublic.jneuropallium.worker.net.layers.LayerMove;
-import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.ILayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IStorage;
 import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IStorageItem;
 import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
-import com.rakovpublic.jneuropallium.worker.neuron.ISignalMerger;
-import com.rakovpublic.jneuropallium.worker.neuron.ISignalProcessor;
 import com.rakovpublic.jneuropallium.worker.synchronizer.utils.JSONHelper;
 import com.rakovpublic.jneuropallium.worker.util.NeuronParser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class FileLayerMeta<S extends IStorageItem> implements ILayerMeta {
     private static final Logger logger = LogManager.getLogger(FileLayerMeta.class);
@@ -38,7 +34,7 @@ public class FileLayerMeta<S extends IStorageItem> implements ILayerMeta {
 
     @Override
     public HashMap<String, LayerMetaParam> getLayerMetaParams() {
-        if(layerMetaParams==null){
+        if (layerMetaParams == null) {
             layerMetaParams = new HashMap<>();
             String layer = fileSystem.read(file);
             JsonElement jelement = new JsonParser().parse(layer);
@@ -53,7 +49,7 @@ public class FileLayerMeta<S extends IStorageItem> implements ILayerMeta {
                 } catch (ClassNotFoundException | JsonProcessingException ex) {
                     logger.error("cannot parse meta params from json " + jobject.getAsJsonObject().toString(), ex);
                 }
-                layerMetaParams.put(paramName,layerMetaParam);
+                layerMetaParams.put(paramName, layerMetaParam);
             }
         }
         return layerMetaParams;
@@ -134,7 +130,7 @@ public class FileLayerMeta<S extends IStorageItem> implements ILayerMeta {
     @Override
     public void dumpLayer() {
         if (neurons == null || neurons.size() == 0) {
-            neurons= getNeurons();
+            neurons = getNeurons();
         }
         saveNeurons(neurons);
     }

@@ -69,7 +69,7 @@ public class InMemoryInputResolver implements IInputResolver {
 
     @Override
     public void saveHistory() {
-        signalHistoryStorage.save(signalsPersistStorage.getAllSignals(), epoch,inputLoadingStrategy.getCurrentLoopCount());
+        signalHistoryStorage.save(signalsPersistStorage.getAllSignals(), epoch, inputLoadingStrategy.getCurrentLoopCount());
     }
 
     @Override
@@ -99,7 +99,7 @@ public class InMemoryInputResolver implements IInputResolver {
         IInitInput input = initInput.get(name);
         if (input instanceof INeuronNetInput) {
             List<IInputSignal> inputSignals = new LinkedList<>();
-            for(ISignal signal:signals){
+            for (ISignal signal : signals) {
                 inputSignals.add(new SimpleInputSignalWrapper(signal));
             }
             ((INeuronNetInput) input).sendCallBack(inputSignals);

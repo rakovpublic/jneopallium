@@ -1,7 +1,6 @@
 package com.rakovpublic.jneuropallium.master.services;
 
 import com.rakovpublic.jneuropallium.worker.model.InputRegistrationRequest;
-import com.rakovpublic.jneuropallium.worker.net.DiscriminatorSplitInput;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.*;
 import com.rakovpublic.jneuropallium.worker.neuron.IResultNeuron;
@@ -15,7 +14,7 @@ public interface IInputService {
 
     List<IResultNeuron> getResults(Integer loop, Long epoch);
 
-    void updateConfiguration(ISignalsPersistStorage signalsPersist, ILayersMeta layersMeta, ISplitInput splitInput, Integer partitions, IInputLoadingStrategy runningStrategy, ISignalHistoryStorage signalHistoryStorage, IResultLayerRunner resultLayerRunner, HashMap<String,IInputLoadingStrategy> discriminatorsLoadingStrategies, HashMap<String,ISignalsPersistStorage> discriminatorsSignalStorage, HashMap<String,ISignalHistoryStorage> discriminatorsSignalStorageHistory, HashMap<String,HashMap<IInitInput, InputStatusMeta>> inputDiscriminatorStatuses, ISplitInput discriminatorSplitInput, Long nodeTimeOut);
+    void updateConfiguration(ISignalsPersistStorage signalsPersist, ILayersMeta layersMeta, ISplitInput splitInput, Integer partitions, IInputLoadingStrategy runningStrategy, ISignalHistoryStorage signalHistoryStorage, IResultLayerRunner resultLayerRunner, HashMap<String, IInputLoadingStrategy> discriminatorsLoadingStrategies, HashMap<String, ISignalsPersistStorage> discriminatorsSignalStorage, HashMap<String, ISignalHistoryStorage> discriminatorsSignalStorageHistory, HashMap<String, HashMap<IInitInput, InputStatusMeta>> inputDiscriminatorStatuses, ISplitInput discriminatorSplitInput, Long nodeTimeOut);
 
     void inputSourceUpdated(String name);
 
@@ -39,7 +38,7 @@ public interface IInputService {
 
     Boolean runCompleted();
 
-   void prepareResults();
+    void prepareResults();
 
     void nextRun();
 
@@ -53,7 +52,7 @@ public interface IInputService {
 
     void updateLayersMeta(ILayersMeta layersMeta);
 
-    void updateDiscriminators(HashMap<String,ILayersMeta> discriminators);
+    void updateDiscriminators(HashMap<String, ILayersMeta> discriminators);
 
     boolean hasDiscriminators();
 
@@ -62,6 +61,8 @@ public interface IInputService {
     boolean isDiscriminatorsDone();
 
     boolean isResultValid();
+
     ISplitInput getNextDiscriminators(String name);
+
     void nextRunDiscriminator();
 }

@@ -144,36 +144,39 @@ public class LocalApplication implements IApplication {
                 HashMap<String, StructMeta> discriminators = new HashMap<String, StructMeta>();
                 Integer discriminatorsAmount = Integer.parseInt(context.getProperty("configuration.discriminatorsAmount"));
                 ResultLayerHolder resultLayerHolder = new ResultLayerHolder();
-                for(int i=0;i<discriminatorsAmount;i++){
-                    String inputLoadingStrategyDiscriminator = context.getProperty("configuration.input.loadingstrategy.discriminator."+i);
-                    String nameDiscriminator = context.getProperty("configuration.name.discriminator."+i);
-                    Long discriminatorEpoch = Long.parseLong(context.getProperty("configuration.fast.runs.discriminator."+i));
-                    Integer discriminatorLoop = Integer.parseInt(context.getProperty("configuration.slow.runs.discriminator."+i));
-                    Integer historySlowDiscriminator = Integer.parseInt(context.getProperty("configuration.history.slow.runs.discriminator."+i));
-                    Long historyFastDiscriminator = Long.parseLong(context.getProperty("configuration.history.fast.runs.discriminator."+i));
-                    String layerPathDiscriminator = context.getProperty("configuration.input.layermeta.discriminator."+i);
-                    String initStrategyDiscriminatorResult =  context.getProperty("configuration.input.initStrategy.result.discriminator."+i);;
-                    String initStrategyDiscriminatorSource=  context.getProperty("configuration.input.initStrategy.source.discriminator."+i);;
-                    String initStrategyDiscriminatorCallback=  context.getProperty("configuration.input.initStrategy.callback.discriminator."+i);;
+                for (int i = 0; i < discriminatorsAmount; i++) {
+                    String inputLoadingStrategyDiscriminator = context.getProperty("configuration.input.loadingstrategy.discriminator." + i);
+                    String nameDiscriminator = context.getProperty("configuration.name.discriminator." + i);
+                    Long discriminatorEpoch = Long.parseLong(context.getProperty("configuration.fast.runs.discriminator." + i));
+                    Integer discriminatorLoop = Integer.parseInt(context.getProperty("configuration.slow.runs.discriminator." + i));
+                    Integer historySlowDiscriminator = Integer.parseInt(context.getProperty("configuration.history.slow.runs.discriminator." + i));
+                    Long historyFastDiscriminator = Long.parseLong(context.getProperty("configuration.history.fast.runs.discriminator." + i));
+                    String layerPathDiscriminator = context.getProperty("configuration.input.layermeta.discriminator." + i);
+                    String initStrategyDiscriminatorResult = context.getProperty("configuration.input.initStrategy.result.discriminator." + i);
+                    ;
+                    String initStrategyDiscriminatorSource = context.getProperty("configuration.input.initStrategy.source.discriminator." + i);
+                    ;
+                    String initStrategyDiscriminatorCallback = context.getProperty("configuration.input.initStrategy.callback.discriminator." + i);
+                    ;
                     IInputResolver inputResolverDiscriminator = new InMemoryInputResolver(new InMemorySignalPersistStorage(), new InMemorySignalHistoryStorage(historySlowDiscriminator, historyFastDiscriminator), this.getLoadingStrategy(inputLoadingStrategyDiscriminator));
                     InMemoryInitInput inMemoryInitInput = new InMemoryInitInputImpl(nameDiscriminator);
-                    InMemoryDiscriminatorResultSignals inMemoryDiscriminatorResultSignals = new InMemoryDiscriminatorResultSignals(inMemoryInitInput,nameDiscriminator+"Result",resultLayerHolder);
-                    InMemoryDiscriminatorSourceSignals inMemoryDiscriminatorSourceSignals = new InMemoryDiscriminatorSourceSignals(inputResolver,discriminatorEpoch,discriminatorLoop,nameDiscriminator+"Input");
-                    inputResolverDiscriminator.registerInput(inMemoryDiscriminatorResultSignals,true,getInputInitStrategy(initStrategyDiscriminatorResult));
-                    inputResolverDiscriminator.registerInput(inMemoryDiscriminatorSourceSignals,true,getInputInitStrategy(initStrategyDiscriminatorSource));
-                    inputResolver.registerInput(inMemoryInitInput,false,getInputInitStrategy(initStrategyDiscriminatorCallback));
+                    InMemoryDiscriminatorResultSignals inMemoryDiscriminatorResultSignals = new InMemoryDiscriminatorResultSignals(inMemoryInitInput, nameDiscriminator + "Result", resultLayerHolder);
+                    InMemoryDiscriminatorSourceSignals inMemoryDiscriminatorSourceSignals = new InMemoryDiscriminatorSourceSignals(inputResolver, discriminatorEpoch, discriminatorLoop, nameDiscriminator + "Input");
+                    inputResolverDiscriminator.registerInput(inMemoryDiscriminatorResultSignals, true, getInputInitStrategy(initStrategyDiscriminatorResult));
+                    inputResolverDiscriminator.registerInput(inMemoryDiscriminatorSourceSignals, true, getInputInitStrategy(initStrategyDiscriminatorSource));
+                    inputResolver.registerInput(inMemoryInitInput, false, getInputInitStrategy(initStrategyDiscriminatorCallback));
                     inputResolverDiscriminator.populateInput();
                     StructBuilder structBuilderDiscriminator = new StructBuilder();
                     structBuilderDiscriminator.withHiddenInputMeta(inputResolverDiscriminator);
                     structBuilderDiscriminator.withLayersMeta(new FileLayersMeta<>(fs.getItem(layerPathDiscriminator), fs));
-                    discriminators.put(nameDiscriminator,structBuilder.build());
+                    discriminators.put(nameDiscriminator, structBuilder.build());
                 }
                 resultResolver = new SimpleResultResolver();
                 while (true) {
                     IResultLayer lr = process(meta);
                     resultLayerHolder.setResultLayer(lr);
-                    if( resultResolver.resolveResult(meta, discriminators)){
-                       outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getRun(), context);
+                    if (resultResolver.resolveResult(meta, discriminators)) {
+                        outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getRun(), context);
                     }
                     meta.getInputResolver().saveHistory();
                     meta.getInputResolver().populateInput();
@@ -201,7 +204,7 @@ public class LocalApplication implements IApplication {
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
-                   logger.error(e);
+                    logger.error(e);
                 }
             }
             layer.dumpNeurons(met);
@@ -219,7 +222,7 @@ public class LocalApplication implements IApplication {
     }
 
 
-    private IResultResolver  getResultResolver(String json) {
+    private IResultResolver getResultResolver(String json) {
         ObjectMapper mapper = new ObjectMapper();
         JsonElement jelement = new JsonParser().parse(json);
         JsonObject jobject = jelement.getAsJsonObject();

@@ -4,10 +4,8 @@
 
 package com.rakovpublic.jneuropallium.worker.net.layers.impl;
 
-import com.rakovpublic.jneuropallium.worker.application.LocalApplication;
 import com.rakovpublic.jneuropallium.worker.net.layers.DiscriminatorResultLayer;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayer;
-import com.rakovpublic.jneuropallium.worker.net.layers.IResultLayer;
 import com.rakovpublic.jneuropallium.worker.net.layers.IResultResolver;
 import com.rakovpublic.jneuropallium.worker.net.storages.ILayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.storages.IResultLayerMeta;
@@ -19,11 +17,12 @@ import java.util.HashMap;
 
 public class SimpleResultResolver implements IResultResolver {
     private static final Logger logger = LogManager.getLogger(SimpleResultResolver.class);
+
     @Override
     public boolean resolveResult(StructMeta targetNeuronNet, HashMap<String, StructMeta> discriminators) {
-        for(String discriminatorName : discriminators.keySet()){
-            DiscriminatorResultLayer lr = process( discriminators.get(discriminatorName));
-            if(!lr.hasPass()){
+        for (String discriminatorName : discriminators.keySet()) {
+            DiscriminatorResultLayer lr = process(discriminators.get(discriminatorName));
+            if (!lr.hasPass()) {
                 return false;
             }
         }
@@ -54,7 +53,7 @@ public class SimpleResultResolver implements IResultResolver {
         LayerBuilder lb = new LayerBuilder();
         lb.withLayer(reMeta);
         lb.withInput(meta.getInputResolver());
-        DiscriminatorResultLayer layer = (DiscriminatorResultLayer)lb.buildResultLayer();
+        DiscriminatorResultLayer layer = (DiscriminatorResultLayer) lb.buildResultLayer();
         layer.process();
         layer.dumpNeurons(reMeta);
         return layer;

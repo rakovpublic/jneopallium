@@ -10,7 +10,7 @@ public interface ILayerService {
 
     void addNeuron(INeuron neuron, Integer layerId);
 
-    void  deleteLayer(Integer layerId, ReconnectStrategy reconnectStrategy);
+    void deleteLayer(Integer layerId, ReconnectStrategy reconnectStrategy);
 
     LayerMetaParam getMetaParam(String name, Integer layerId);
 

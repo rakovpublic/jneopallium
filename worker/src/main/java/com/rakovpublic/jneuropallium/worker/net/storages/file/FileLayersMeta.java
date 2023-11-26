@@ -7,7 +7,6 @@ import com.rakovpublic.jneuropallium.worker.net.storages.IResultLayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IStorage;
 import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IStorageItem;
 
-import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 

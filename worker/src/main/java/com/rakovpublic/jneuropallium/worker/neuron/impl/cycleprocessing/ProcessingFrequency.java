@@ -1,8 +1,8 @@
 package com.rakovpublic.jneuropallium.worker.neuron.impl.cycleprocessing;
 
 public class ProcessingFrequency {
-    private Long epoch;
-    private Integer loop;
+    private long epoch;
+    private int loop;
 
     public ProcessingFrequency(Long epoch, Integer loop) {
         this.epoch = epoch;

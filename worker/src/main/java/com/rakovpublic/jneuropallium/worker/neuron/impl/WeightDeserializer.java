@@ -16,6 +16,7 @@ import java.io.IOException;
 
 public class WeightDeserializer extends StdDeserializer<IWeight> {
     private static final Logger logger = LogManager.getLogger(WeightDeserializer.class);
+
     public WeightDeserializer() {
         this(null);
     }

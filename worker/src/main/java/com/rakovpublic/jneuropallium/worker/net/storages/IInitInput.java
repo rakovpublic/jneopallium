@@ -3,6 +3,7 @@ package com.rakovpublic.jneuropallium.worker.net.storages;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.rakovpublic.jneuropallium.worker.net.signals.IInputSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
+import com.rakovpublic.jneuropallium.worker.neuron.impl.cycleprocessing.ProcessingFrequency;
 
 import java.util.HashMap;
 import java.util.List;
@@ -28,4 +29,6 @@ public interface IInitInput {
      * @return desired result for this input
      */
     HashMap<String, List<IResultSignal>> getDesiredResults();
+
+    ProcessingFrequency getDefaultProcessingFrequency();
 }

@@ -4,7 +4,7 @@
 
 package com.rakovpublic.jneuropallium.worker.net.layers;
 
-public class LayerMetaParam <K>{
+public class LayerMetaParam<K> {
     private K param;
     private String paramClass;
 

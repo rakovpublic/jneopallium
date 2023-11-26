@@ -24,7 +24,8 @@ import java.util.Map;
 
 public class NeuronParser {
     private static final Logger logger = LogManager.getLogger(NeuronParser.class);
-    public static List<INeuron> parseNeurons(String json){
+
+    public static List<INeuron> parseNeurons(String json) {
         List<INeuron> result = new ArrayList<>();
         JsonElement jelement = new JsonParser().parse(json);
         JsonObject jobject = jelement.getAsJsonObject();

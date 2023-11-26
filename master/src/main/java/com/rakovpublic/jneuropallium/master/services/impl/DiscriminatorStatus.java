@@ -4,8 +4,6 @@
 
 package com.rakovpublic.jneuropallium.master.services.impl;
 
-import com.rakovpublic.jneuropallium.worker.net.storages.structimpl.StructMeta;
-
 public class DiscriminatorStatus {
     private String name;
     private boolean processed;

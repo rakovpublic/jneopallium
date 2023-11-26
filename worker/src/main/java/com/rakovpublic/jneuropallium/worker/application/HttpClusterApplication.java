@@ -1,15 +1,9 @@
 package com.rakovpublic.jneuropallium.worker.application;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 import com.rakovpublic.jneuropallium.worker.exceptions.HttpClusterCommunicationException;
-import com.rakovpublic.jneuropallium.worker.model.CreateNeuronRequest;
 import com.rakovpublic.jneuropallium.worker.model.NodeCompleteRequest;
 import com.rakovpublic.jneuropallium.worker.net.layers.IInputResolver;
-import com.rakovpublic.jneuropallium.worker.net.layers.impl.HttpLayer;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
-import com.rakovpublic.jneuropallium.worker.net.storages.ISignalStorage;
 import com.rakovpublic.jneuropallium.worker.net.storages.ISplitInput;
 import com.rakovpublic.jneuropallium.worker.neuron.IAxon;
 import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
@@ -37,20 +31,20 @@ public class HttpClusterApplication implements IApplication {
         try {
             communicationClient.sendRequest(HttpRequestResolver.createPost(registerLink, nodeCompleteRequest));
         } catch (IOException | InterruptedException e) {
-            logger.error("Cannot register node",e);
-            throw  new HttpClusterCommunicationException(e.getMessage());
+            logger.error("Cannot register node", e);
+            throw new HttpClusterCommunicationException(e.getMessage());
         }
         String jsonSplitInput;
         while (true) {
             try {
                 jsonSplitInput = communicationClient.sendRequest(HttpRequestResolver.createPost(getSplitInputLink, nodeCompleteRequest));
             } catch (IOException | InterruptedException e) {
-                logger.error("Cannot register node",e);
-                throw  new HttpClusterCommunicationException(e.getMessage());
+                logger.error("Cannot register node", e);
+                throw new HttpClusterCommunicationException(e.getMessage());
             }
             ISplitInput splitInput = parseSplitInput(jsonSplitInput);
             IInputResolver inputResolver = splitInput.getInputResolver();
-            HashMap<Long, List<ISignal>>  input = inputResolver.getSignalPersistStorage().getLayerSignals(splitInput.getLayerId());
+            HashMap<Long, List<ISignal>> input = inputResolver.getSignalPersistStorage().getLayerSignals(splitInput.getLayerId());
             for (INeuron neuron : splitInput.getNeurons()) {
                 neuron.setCurrentLoop(inputResolver.getCurrentLoop());
                 neuron.setRun(inputResolver.getRun());

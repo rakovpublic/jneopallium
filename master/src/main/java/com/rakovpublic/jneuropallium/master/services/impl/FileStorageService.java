@@ -28,23 +28,23 @@ public class FileStorageService implements StorageService {
     private static final Logger logger = LogManager.getLogger(FileStorageService.class);
 
     public FileStorageService() {
-       folder = PropertyHolder.getPropertyHolder().getProp("storage.file.path");
+        folder = PropertyHolder.getPropertyHolder().getProp("storage.file.path");
     }
 
     @Override
     public void init(String folder) {
-        this.folder =folder;
+        this.folder = folder;
     }
 
     @Override
     public String store(MultipartFile file) {
-        String path =null;
+        String path = null;
         try {
-            path = folder+"/"+file.getOriginalFilename();
-            Files.copy(file.getInputStream(),Path.of(path), StandardCopyOption.REPLACE_EXISTING);
+            path = folder + "/" + file.getOriginalFilename();
+            Files.copy(file.getInputStream(), Path.of(path), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
-            logger.error("Cannot create file " + path,e);
-            throw new IncorrectFilePathForStorageException("Cannot create file " + path +" message:" + e.getMessage());
+            logger.error("Cannot create file " + path, e);
+            throw new IncorrectFilePathForStorageException("Cannot create file " + path + " message:" + e.getMessage());
         }
         return path;
     }
@@ -54,8 +54,8 @@ public class FileStorageService implements StorageService {
         try {
             return Files.list(Paths.get(folder));
         } catch (IOException e) {
-            logger.error("Empty storage folder " + folder,e);
-            throw new IncorrectFilePathForStorageException("Empty storage folder " + folder +" message:" + e.getMessage());
+            logger.error("Empty storage folder " + folder, e);
+            throw new IncorrectFilePathForStorageException("Empty storage folder " + folder + " message:" + e.getMessage());
         }
     }
 
@@ -64,10 +64,10 @@ public class FileStorageService implements StorageService {
     public InputStreamResource loadAsResource(String filename) {
         InputStreamResource resource = null;
         try {
-            resource = new InputStreamResource(new FileInputStream(folder+"/"+filename));
+            resource = new InputStreamResource(new FileInputStream(folder + "/" + filename));
         } catch (FileNotFoundException e) {
-            logger.error("Cannot found file " + filename,e);
-            throw new IncorrectFilePathForStorageException("Cannot found file " + filename +" message:" + e.getMessage());
+            logger.error("Cannot found file " + filename, e);
+            throw new IncorrectFilePathForStorageException("Cannot found file " + filename + " message:" + e.getMessage());
         }
         return resource;
     }

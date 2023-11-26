@@ -16,6 +16,7 @@ import java.io.IOException;
 
 public class SignalChainDeserializer extends StdDeserializer<ISignalChain> {
     private static final Logger logger = LogManager.getLogger(SignalChainDeserializer.class);
+
     public SignalChainDeserializer() {
         this(null);
     }
@@ -32,7 +33,7 @@ public class SignalChainDeserializer extends StdDeserializer<ISignalChain> {
         try {
             return (ISignalChain) mapper.readValue(jobject.getAsJsonObject("signalChain").toString(), Class.forName(jobject.getAsJsonPrimitive("signalChainClass").getAsString()));
         } catch (ClassNotFoundException e) {
-            logger.error("Cannot deserialize signalChain " + jobject.getAsJsonObject("signalChain").toString() + " for class " + jobject.getAsJsonPrimitive("signalChainClass").getAsString(),e);
+            logger.error("Cannot deserialize signalChain " + jobject.getAsJsonObject("signalChain").toString() + " for class " + jobject.getAsJsonPrimitive("signalChainClass").getAsString(), e);
             throw new JSONParsingException(e.getMessage());
         }
     }

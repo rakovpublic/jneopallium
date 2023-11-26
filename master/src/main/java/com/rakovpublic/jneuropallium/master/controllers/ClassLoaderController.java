@@ -55,7 +55,7 @@ public class ClassLoaderController {
 
     @GetMapping("/jar")
     public ResponseEntity<?> getJar(@RequestParam String path) {
-        InputStreamResource resource= null;
+        InputStreamResource resource = null;
         try {
             resource = storageService.loadAsResource(path);
         } catch (Exception e) {
