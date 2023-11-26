@@ -5,9 +5,19 @@
 package com.rakovpublic.jneuropallium.worker.net.storages.inmemory;
 
 import com.rakovpublic.jneuropallium.worker.net.layers.IResultLayer;
+import com.rakovpublic.jneuropallium.worker.net.storages.IResultLayerMeta;
 
 public class ResultLayerHolder {
     private IResultLayer resultLayer;
+    private IResultLayerMeta iResultLayerMeta;
+
+    public IResultLayerMeta getResultLayerMeta() {
+        return iResultLayerMeta;
+    }
+
+    public void setResultLayerMeta(IResultLayerMeta iResultLayerMeta) {
+        this.iResultLayerMeta = iResultLayerMeta;
+    }
 
     public ResultLayerHolder() {
     }

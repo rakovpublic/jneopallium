@@ -8,6 +8,7 @@ import com.rakovpublic.jneuropallium.worker.model.InputRegistrationRequest;
 import com.rakovpublic.jneuropallium.worker.net.layers.DiscriminatorResultLayer;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.*;
+import com.rakovpublic.jneuropallium.worker.net.storages.inmemory.ResultLayerHolder;
 import com.rakovpublic.jneuropallium.worker.neuron.IResultNeuron;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,7 +18,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-//TODO: add timeout node timeout handling and fault tolerance
 public class InputService implements IInputService {
     private static final Logger logger = LogManager.getLogger(InputService.class);
     private HashMap<IInitInput, InputStatusMeta> inputStatuses;
@@ -43,9 +43,10 @@ public class InputService implements IInputService {
     private ISplitInput discriminatorSplitInput;
     private HashMap<Long, HashMap<Integer, List<IResultNeuron>>> results;
     private Long nodeTimeOut;
+    private ResultLayerHolder resultLayerHolder;
 
 
-    public InputService(ISignalsPersistStorage signalsPersist, ILayersMeta layersMeta, ISplitInput splitInput, Integer partitions, IInputLoadingStrategy runningStrategy, ISignalHistoryStorage signalHistoryStorage, IResultLayerRunner resultLayerRunner, HashMap<String, IInputLoadingStrategy> discriminatorsLoadingStrategies, HashMap<String, ISignalsPersistStorage> discriminatorsSignalStorage, HashMap<String, ISignalHistoryStorage> discriminatorsSignalStorageHistory, HashMap<String, HashMap<IInitInput, InputStatusMeta>> inputDiscriminatorStatuses, ISplitInput discriminatorSplitInput, Long nodeTimeOut) {
+    public InputService(ISignalsPersistStorage signalsPersist, ILayersMeta layersMeta, ISplitInput splitInput, Integer partitions, IInputLoadingStrategy runningStrategy, ISignalHistoryStorage signalHistoryStorage, IResultLayerRunner resultLayerRunner, HashMap<String, IInputLoadingStrategy> discriminatorsLoadingStrategies, HashMap<String, ISignalsPersistStorage> discriminatorsSignalStorage, HashMap<String, ISignalHistoryStorage> discriminatorsSignalStorageHistory, HashMap<String, HashMap<IInitInput, InputStatusMeta>> inputDiscriminatorStatuses, ISplitInput discriminatorSplitInput, Long nodeTimeOut, ResultLayerHolder resultLayerHolder) {
         this.signalsPersist = signalsPersist;
         this.layersMeta = layersMeta;
         this.inputDiscriminatorStatuses = inputDiscriminatorStatuses;
@@ -68,6 +69,7 @@ public class InputService implements IInputService {
         this.discriminatorsSignalStorage = discriminatorsSignalStorage;
         this.discriminatorsSignalStorageHistory = discriminatorsSignalStorageHistory;
         this.results = new HashMap<>();
+        this.resultLayerHolder = resultLayerHolder;
     }
 
 
@@ -219,6 +221,9 @@ public class InputService implements IInputService {
                 }
             }
             if (nodeMetas.get(nodeNames.get(0)).getCurrentLayer() <= layersMeta.getResultLayer().getID()) {
+                if (nodeMetas.get(nodeNames.get(0)).getCurrentLayer() == layersMeta.getResultLayer().getID()) {
+                    resultLayerHolder.setResultLayerMeta(layersMeta.getResultLayer());
+                }
                 runFlag = false;
                 ILayerMeta layerMeta = nodeMetas.get(nodeNames.get(0)).getCurrentLayer() == layersMeta.getResultLayer().getID() ? layersMeta.getResultLayer() : layersMeta.getLayerByID(nodeMetas.get(nodeNames.get(0)).getCurrentLayer() + 1);
                 Long size = layerMeta.getSize() / nodeNames.size() <= partitions ? Long.parseLong(partitions + "") : nodeNames.size();

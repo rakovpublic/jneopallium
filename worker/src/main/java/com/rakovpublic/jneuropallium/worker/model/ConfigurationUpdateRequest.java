@@ -1,9 +1,5 @@
 package com.rakovpublic.jneuropallium.worker.model;
 
-import com.rakovpublic.jneuropallium.worker.net.DiscriminatorSplitInput;
-import com.rakovpublic.jneuropallium.worker.net.storages.IInitInput;
-import com.rakovpublic.jneuropallium.worker.net.storages.InputStatusMeta;
-
 import java.util.HashMap;
 import java.util.List;
 
@@ -26,6 +22,112 @@ public class ConfigurationUpdateRequest {
     private String resultRunnerJson;
     private String reconnectStrategyClass;
     private String reconnectStrategyJson;
+    private String resultInterpreterClass;
+    private String resultInterpreterJson;
+    private List<String> discriminators;
+    private HashMap<String, ConfigurationRecord> discriminatorsLoadingStrategies;
+    private HashMap<String, ConfigurationRecord> discriminatorsSignalStorage;
+    private HashMap<String, ConfigurationRecord> discriminatorsSignalStorageHistory;
+    private HashMap<String, ConfigurationRecord> inputDiscriminatorStatuses;
+    private HashMap<String, ConfigurationRecord> discriminatorsLayers;
+    private String discriminatorSplitInput;
+    private String discriminatorSplitInputJson;
+    private HashMap<String, ConfigurationRecord> discriminatorsInitStrategySource;
+    private HashMap<String, ConfigurationRecord> discriminatorsInitStrategyInputs;
+    private HashMap<String, ConfigurationRecord> discriminatorsInitStrategyInputsCallback;
+
+
+    public ConfigurationUpdateRequest(String layersMetaJson, String layersMetaClass, String splitInputClass, String splitInputJson, String inputLoadingStrategyClass, String inputLoadingStrategyJson, Integer partitions, Integer defaultLoopsCount, String signalsPersistClass, String signalsPersistJson, String historyClass, String historyJson, Long iterationsToStore, Integer loopsToStore, String resultRunnerClass, String resultRunnerJson, String reconnectStrategyClass, String reconnectStrategyJson, String resultInterpreterClass, String resultInterpreterJson, List<String> discriminators, HashMap<String, ConfigurationRecord> discriminatorsLoadingStrategies, HashMap<String, ConfigurationRecord> discriminatorsSignalStorage, HashMap<String, ConfigurationRecord> discriminatorsSignalStorageHistory, HashMap<String, ConfigurationRecord> inputDiscriminatorStatuses, HashMap<String, ConfigurationRecord> discriminatorsLayers, String discriminatorSplitInput, String discriminatorSplitInputJson, HashMap<String, ConfigurationRecord> discriminatorsInitStrategySource, HashMap<String, ConfigurationRecord> discriminatorsInitStrategyInputs, HashMap<String, ConfigurationRecord> discriminatorsInitStrategyInputsCallback, String layersMetaPath, Long nodeTimeout) {
+        this.layersMetaJson = layersMetaJson;
+        this.layersMetaClass = layersMetaClass;
+        this.splitInputClass = splitInputClass;
+        this.splitInputJson = splitInputJson;
+        this.inputLoadingStrategyClass = inputLoadingStrategyClass;
+        this.inputLoadingStrategyJson = inputLoadingStrategyJson;
+        this.partitions = partitions;
+        this.defaultLoopsCount = defaultLoopsCount;
+        this.signalsPersistClass = signalsPersistClass;
+        this.signalsPersistJson = signalsPersistJson;
+        this.historyClass = historyClass;
+        this.historyJson = historyJson;
+        this.iterationsToStore = iterationsToStore;
+        this.loopsToStore = loopsToStore;
+        this.resultRunnerClass = resultRunnerClass;
+        this.resultRunnerJson = resultRunnerJson;
+        this.reconnectStrategyClass = reconnectStrategyClass;
+        this.reconnectStrategyJson = reconnectStrategyJson;
+        this.resultInterpreterClass = resultInterpreterClass;
+        this.resultInterpreterJson = resultInterpreterJson;
+        this.discriminators = discriminators;
+        this.discriminatorsLoadingStrategies = discriminatorsLoadingStrategies;
+        this.discriminatorsSignalStorage = discriminatorsSignalStorage;
+        this.discriminatorsSignalStorageHistory = discriminatorsSignalStorageHistory;
+        this.inputDiscriminatorStatuses = inputDiscriminatorStatuses;
+        this.discriminatorsLayers = discriminatorsLayers;
+        this.discriminatorSplitInput = discriminatorSplitInput;
+        this.discriminatorSplitInputJson = discriminatorSplitInputJson;
+        this.discriminatorsInitStrategySource = discriminatorsInitStrategySource;
+        this.discriminatorsInitStrategyInputs = discriminatorsInitStrategyInputs;
+        this.discriminatorsInitStrategyInputsCallback = discriminatorsInitStrategyInputsCallback;
+        this.layersMetaPath = layersMetaPath;
+        this.nodeTimeout = nodeTimeout;
+    }
+
+    public String getResultInterpreterClass() {
+        return resultInterpreterClass;
+    }
+
+    public void setResultInterpreterClass(String resultInterpreterClass) {
+        this.resultInterpreterClass = resultInterpreterClass;
+    }
+
+    public String getResultInterpreterJson() {
+        return resultInterpreterJson;
+    }
+
+    public void setResultInterpreterJson(String resultInterpreterJson) {
+        this.resultInterpreterJson = resultInterpreterJson;
+    }
+
+    public HashMap<String, ConfigurationRecord> getDiscriminatorsInitStrategySource() {
+        return discriminatorsInitStrategySource;
+    }
+
+    public void setDiscriminatorsInitStrategySource(HashMap<String, ConfigurationRecord> discriminatorsInitStrategySource) {
+        this.discriminatorsInitStrategySource = discriminatorsInitStrategySource;
+    }
+
+    public HashMap<String, ConfigurationRecord> getDiscriminatorsInitStrategyInputs() {
+        return discriminatorsInitStrategyInputs;
+    }
+
+    public void setDiscriminatorsInitStrategyInputs(HashMap<String, ConfigurationRecord> discriminatorsInitStrategyInputs) {
+        this.discriminatorsInitStrategyInputs = discriminatorsInitStrategyInputs;
+    }
+
+    public HashMap<String, ConfigurationRecord> getDiscriminatorsInitStrategyInputsCallback() {
+        return discriminatorsInitStrategyInputsCallback;
+    }
+
+    public void setDiscriminatorsInitStrategyInputsCallback(HashMap<String, ConfigurationRecord> discriminatorsInitStrategyInputsCallback) {
+        this.discriminatorsInitStrategyInputsCallback = discriminatorsInitStrategyInputsCallback;
+    }
+
+    public HashMap<String, ConfigurationRecord> getInputDiscriminatorStatuses() {
+        return inputDiscriminatorStatuses;
+    }
+
+    public void setInputDiscriminatorStatuses(HashMap<String, ConfigurationRecord> inputDiscriminatorStatuses) {
+        this.inputDiscriminatorStatuses = inputDiscriminatorStatuses;
+    }
+
+    public HashMap<String, ConfigurationRecord> getDiscriminatorsLayers() {
+        return discriminatorsLayers;
+    }
+
+    public void setDiscriminatorsLayers(HashMap<String, ConfigurationRecord> discriminatorsLayers) {
+        this.discriminatorsLayers = discriminatorsLayers;
+    }
 
     public Long getNodeTimeout() {
         return nodeTimeout;
@@ -70,57 +172,21 @@ public class ConfigurationUpdateRequest {
         this.discriminatorsSignalStorageHistory = discriminatorsSignalStorageHistory;
     }
 
-    public HashMap<String, HashMap<IInitInput, InputStatusMeta>> getInputDiscriminatorStatuses() {
-        return inputDiscriminatorStatuses;
-    }
 
-    public void setInputDiscriminatorStatuses(HashMap<String, HashMap<IInitInput, InputStatusMeta>> inputDiscriminatorStatuses) {
-        this.inputDiscriminatorStatuses = inputDiscriminatorStatuses;
-    }
-
-    public DiscriminatorSplitInput getDiscriminatorSplitInput() {
+    public String getDiscriminatorSplitInput() {
         return discriminatorSplitInput;
     }
 
-    public void setDiscriminatorSplitInput(DiscriminatorSplitInput discriminatorSplitInput) {
+    public void setDiscriminatorSplitInput(String discriminatorSplitInput) {
         this.discriminatorSplitInput = discriminatorSplitInput;
     }
 
-    private List<String> discriminators;
-    private HashMap<String, ConfigurationRecord> discriminatorsLoadingStrategies;
-    private HashMap<String, ConfigurationRecord> discriminatorsSignalStorage;
-    private HashMap<String, ConfigurationRecord> discriminatorsSignalStorageHistory;
-    private HashMap<String, HashMap<IInitInput, InputStatusMeta>> inputDiscriminatorStatuses;
-    private DiscriminatorSplitInput discriminatorSplitInput;
+    public String getDiscriminatorSplitInputJson() {
+        return discriminatorSplitInputJson;
+    }
 
-
-    public ConfigurationUpdateRequest(String layersMetaJson, String layersMetaClass, String splitInputClass, String splitInputJson, String inputLoadingStrategyClass, String inputLoadingStrategyJson, Integer partitions, Integer defaultLoopsCount, String signalsPersistClass, String signalsPersistJson, String historyClass, String historyJson, Long iterationsToStore, Integer loopsToStore, String resultRunnerClass, String resultRunnerJson, String reconnectStrategyClass, String reconnectStrategyJson, String layersMetaPath, Long nodeTimeout, List<String> discriminators, HashMap<String, ConfigurationRecord> discriminatorsLoadingStrategies, HashMap<String, ConfigurationRecord> discriminatorsSignalStorage, HashMap<String, ConfigurationRecord> discriminatorsSignalStorageHistory, HashMap<String, HashMap<IInitInput, InputStatusMeta>> inputDiscriminatorStatuses, DiscriminatorSplitInput discriminatorSplitInput) {
-        this.layersMetaJson = layersMetaJson;
-        this.layersMetaClass = layersMetaClass;
-        this.splitInputClass = splitInputClass;
-        this.splitInputJson = splitInputJson;
-        this.inputLoadingStrategyClass = inputLoadingStrategyClass;
-        this.inputLoadingStrategyJson = inputLoadingStrategyJson;
-        this.partitions = partitions;
-        this.defaultLoopsCount = defaultLoopsCount;
-        this.signalsPersistClass = signalsPersistClass;
-        this.signalsPersistJson = signalsPersistJson;
-        this.historyClass = historyClass;
-        this.historyJson = historyJson;
-        this.iterationsToStore = iterationsToStore;
-        this.loopsToStore = loopsToStore;
-        this.resultRunnerClass = resultRunnerClass;
-        this.resultRunnerJson = resultRunnerJson;
-        this.reconnectStrategyClass = reconnectStrategyClass;
-        this.reconnectStrategyJson = reconnectStrategyJson;
-        this.layersMetaPath = layersMetaPath;
-        this.nodeTimeout = nodeTimeout;
-        this.discriminators = discriminators;
-        this.discriminatorsLoadingStrategies = discriminatorsLoadingStrategies;
-        this.discriminatorsSignalStorage = discriminatorsSignalStorage;
-        this.discriminatorsSignalStorageHistory = discriminatorsSignalStorageHistory;
-        this.inputDiscriminatorStatuses = inputDiscriminatorStatuses;
-        this.discriminatorSplitInput = discriminatorSplitInput;
+    public void setDiscriminatorSplitInputJson(String discriminatorSplitInputJson) {
+        this.discriminatorSplitInputJson = discriminatorSplitInputJson;
     }
 
     public String getInputLoadingStrategyJson() {
@@ -277,5 +343,39 @@ public class ConfigurationUpdateRequest {
 
     public void setSplitInputJson(String splitInputJson) {
         this.splitInputJson = splitInputJson;
+    }
+
+
+    @Override
+    public String toString() {
+        return "ConfigurationUpdateRequest{" +
+                "layersMetaJson='" + layersMetaJson + '\'' +
+                ", layersMetaClass='" + layersMetaClass + '\'' +
+                ", splitInputClass='" + splitInputClass + '\'' +
+                ", splitInputJson='" + splitInputJson + '\'' +
+                ", inputLoadingStrategyClass='" + inputLoadingStrategyClass + '\'' +
+                ", inputLoadingStrategyJson='" + inputLoadingStrategyJson + '\'' +
+                ", partitions=" + partitions +
+                ", defaultLoopsCount=" + defaultLoopsCount +
+                ", signalsPersistClass='" + signalsPersistClass + '\'' +
+                ", signalsPersistJson='" + signalsPersistJson + '\'' +
+                ", historyClass='" + historyClass + '\'' +
+                ", historyJson='" + historyJson + '\'' +
+                ", iterationsToStore=" + iterationsToStore +
+                ", loopsToStore=" + loopsToStore +
+                ", resultRunnerClass='" + resultRunnerClass + '\'' +
+                ", resultRunnerJson='" + resultRunnerJson + '\'' +
+                ", reconnectStrategyClass='" + reconnectStrategyClass + '\'' +
+                ", reconnectStrategyJson='" + reconnectStrategyJson + '\'' +
+                ", discriminators=" + discriminators.toString() +
+                ", discriminatorsLoadingStrategies=" + discriminatorsLoadingStrategies.toString() +
+                ", discriminatorsSignalStorage=" + discriminatorsSignalStorage.toString() +
+                ", discriminatorsSignalStorageHistory=" + discriminatorsSignalStorageHistory.toString() +
+                ", inputDiscriminatorStatuses=" + inputDiscriminatorStatuses.toString() +
+                ", discriminatorsLayers=" + discriminatorsLayers.toString() +
+                ", discriminatorSplitInput=" + discriminatorSplitInput +
+                ", layersMetaPath='" + layersMetaPath + '\'' +
+                ", nodeTimeout=" + nodeTimeout +
+                '}';
     }
 }

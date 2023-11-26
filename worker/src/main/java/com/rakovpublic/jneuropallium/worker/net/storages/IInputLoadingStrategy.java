@@ -48,6 +48,8 @@ public interface IInputLoadingStrategy {
      */
     void updateInputs(HashMap<IInitInput, InputStatusMeta> inputStatuses, HashMap<IInitInput, InputInitStrategy> inputs);
 
+    void registerInput(IInitInput initInput, InputInitStrategy initStrategy);
+
 
     TreeMap<Long, TreeMap<Integer, List<IInputSignal>>> getInputHistory();
 }

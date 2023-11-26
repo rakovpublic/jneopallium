@@ -44,7 +44,6 @@ public class StructMeta implements IStructMeta {
 
     @Override
     public void learn(List<ILearningRequest> requests) {
-        //TODO:write optimization now work for small local config
         for (ILearningRequest request : requests) {
             ILayerMeta lm = layersMeta.getLayerByID(request.getLayerId());
             INeuron ner = lm.getNeuronByID(request.getNeuronId());

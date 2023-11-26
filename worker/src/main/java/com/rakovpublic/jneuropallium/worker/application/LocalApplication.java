@@ -24,6 +24,7 @@ import com.rakovpublic.jneuropallium.worker.net.study.IDirectLearningAlgorithm;
 import com.rakovpublic.jneuropallium.worker.net.study.IObjectLearningAlgo;
 import com.rakovpublic.jneuropallium.worker.net.study.IResultComparingStrategy;
 import com.rakovpublic.jneuropallium.worker.net.study.StudyingAlgoFactory;
+import com.rakovpublic.jneuropallium.worker.neuron.impl.cycleprocessing.ProcessingFrequency;
 import com.rakovpublic.jneuropallium.worker.synchronizer.IContext;
 import com.rakovpublic.jneuropallium.worker.util.JarClassLoaderService;
 import org.apache.logging.log4j.LogManager;
@@ -58,7 +59,8 @@ public class LocalApplication implements IApplication {
         String inputLoadingStrategy = context.getProperty("configuration.input.loadingstrategy");
         Integer historySlow = Integer.parseInt(context.getProperty("configuration.history.slow.runs"));
         Long historyFast = Long.parseLong(context.getProperty("configuration.history.fast.runs"));
-        IInputResolver inputResolver = new InMemoryInputResolver(new InMemorySignalPersistStorage(), new InMemorySignalHistoryStorage(historySlow, historyFast), this.getLoadingStrategy(inputLoadingStrategy));
+        IInputLoadingStrategy inputLoadingStrategyMain = this.getLoadingStrategy(inputLoadingStrategy);
+        IInputResolver inputResolver = new InMemoryInputResolver(new InMemorySignalPersistStorage(), new InMemorySignalHistoryStorage(historySlow, historyFast), inputLoadingStrategyMain);
         String inputs = context.getProperty("configuration.input.inputs");
         for (InputData inputData : this.getInputs(inputs)) {
             inputResolver.registerInput(inputData.getiInputSource(), inputData.isMandatory(), inputData.getInitStrategy());
@@ -153,15 +155,12 @@ public class LocalApplication implements IApplication {
                     Long historyFastDiscriminator = Long.parseLong(context.getProperty("configuration.history.fast.runs.discriminator." + i));
                     String layerPathDiscriminator = context.getProperty("configuration.input.layermeta.discriminator." + i);
                     String initStrategyDiscriminatorResult = context.getProperty("configuration.input.initStrategy.result.discriminator." + i);
-                    ;
                     String initStrategyDiscriminatorSource = context.getProperty("configuration.input.initStrategy.source.discriminator." + i);
-                    ;
                     String initStrategyDiscriminatorCallback = context.getProperty("configuration.input.initStrategy.callback.discriminator." + i);
-                    ;
                     IInputResolver inputResolverDiscriminator = new InMemoryInputResolver(new InMemorySignalPersistStorage(), new InMemorySignalHistoryStorage(historySlowDiscriminator, historyFastDiscriminator), this.getLoadingStrategy(inputLoadingStrategyDiscriminator));
                     InMemoryInitInput inMemoryInitInput = new InMemoryInitInputImpl(nameDiscriminator);
-                    InMemoryDiscriminatorResultSignals inMemoryDiscriminatorResultSignals = new InMemoryDiscriminatorResultSignals(inMemoryInitInput, nameDiscriminator + "Result", resultLayerHolder);
-                    InMemoryDiscriminatorSourceSignals inMemoryDiscriminatorSourceSignals = new InMemoryDiscriminatorSourceSignals(inputResolver, discriminatorEpoch, discriminatorLoop, nameDiscriminator + "Input");
+                    InMemoryDiscriminatorResultSignals inMemoryDiscriminatorResultSignals = new InMemoryDiscriminatorResultSignals(inMemoryInitInput, nameDiscriminator + "Result", resultLayerHolder, new ProcessingFrequency(1l, 1));
+                    InMemoryDiscriminatorSourceSignals inMemoryDiscriminatorSourceSignals = new InMemoryDiscriminatorSourceSignals(inputLoadingStrategyMain, discriminatorEpoch, discriminatorLoop, nameDiscriminator + "Input", new ProcessingFrequency(1l, 1));
                     inputResolverDiscriminator.registerInput(inMemoryDiscriminatorResultSignals, true, getInputInitStrategy(initStrategyDiscriminatorResult));
                     inputResolverDiscriminator.registerInput(inMemoryDiscriminatorSourceSignals, true, getInputInitStrategy(initStrategyDiscriminatorSource));
                     inputResolver.registerInput(inMemoryInitInput, false, getInputInitStrategy(initStrategyDiscriminatorCallback));

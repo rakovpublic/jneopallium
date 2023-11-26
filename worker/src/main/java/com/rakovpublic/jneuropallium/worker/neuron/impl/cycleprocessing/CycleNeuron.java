@@ -25,6 +25,10 @@ public class CycleNeuron extends Neuron {
         super(id, signalChain, run);
         this.loopCount = loopCount;
         signalProcessingFrequencyMap = new HashMap<>();
+        this.addSignalProcessor(CycleInputUpdateSignal.class, new CycleInputUpdateProcessor());
+        this.addSignalProcessor(ProcessingFrequencySignal.class, new ProcessingFrequencySignalProcessor());
+        this.addSignalProcessor(SumCycleSignal.class, new SumCycleSignalProcessor());
+        this.addSignalProcessor(MultiplyCycleSignal.class, new MultiplyCycleSignalProcessor());
     }
 
     public CycleNeuron(int loopCount, ISignalChain signalChain, Long id, Long run, HashMap<Class<? extends ISignal>, ProcessingFrequency> signalProcessingFrequencyMap, HashMap<IInitInput, ProcessingFrequency> inputProcessingFrequencyHashMap) {
@@ -32,6 +36,10 @@ public class CycleNeuron extends Neuron {
         this.loopCount = loopCount;
         this.signalProcessingFrequencyMap = signalProcessingFrequencyMap;
         this.inputProcessingFrequencyHashMap = inputProcessingFrequencyHashMap;
+        this.addSignalProcessor(CycleInputUpdateSignal.class, new CycleInputUpdateProcessor());
+        this.addSignalProcessor(ProcessingFrequencySignal.class, new ProcessingFrequencySignalProcessor());
+        this.addSignalProcessor(SumCycleSignal.class, new SumCycleSignalProcessor());
+        this.addSignalProcessor(MultiplyCycleSignal.class, new MultiplyCycleSignalProcessor());
     }
 
 

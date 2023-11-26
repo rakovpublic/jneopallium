@@ -10,6 +10,8 @@ import com.rakovpublic.jneuropallium.worker.net.signals.IInputSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.INeuronNetInput;
 import com.rakovpublic.jneuropallium.worker.net.storages.InMemoryInitInput;
+import com.rakovpublic.jneuropallium.worker.neuron.IResultNeuron;
+import com.rakovpublic.jneuropallium.worker.neuron.impl.cycleprocessing.ProcessingFrequency;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -20,10 +22,12 @@ public class InMemoryDiscriminatorResultSignals implements INeuronNetInput {
     private String name;
     private List<IInputSignal> inputSignals;
     private ResultLayerHolder resultLayer;
+    private ProcessingFrequency processingFrequency;
 
-    public InMemoryDiscriminatorResultSignals(InMemoryInitInput callback, String name, ResultLayerHolder resultSignals) {
+    public InMemoryDiscriminatorResultSignals(InMemoryInitInput callback, String name, ResultLayerHolder resultSignals, ProcessingFrequency processingFrequency) {
         this.callback = callback;
         this.name = name;
+        this.processingFrequency = processingFrequency;
         this.inputSignals = new LinkedList<>();
         this.resultLayer = resultSignals;
 
@@ -31,9 +35,16 @@ public class InMemoryDiscriminatorResultSignals implements INeuronNetInput {
 
     @Override
     public List<IInputSignal> readSignals() {
-        List<IResult> results = resultLayer.getResultLayer().interpretResult();
-        for (IResult resultSignal : results) {
-            inputSignals.add(new ResultInputSignalWrapper(resultSignal.getResult()));
+        inputSignals.clear();
+        if (resultLayer.getResultLayer() != null) {
+            List<IResult> results = resultLayer.getResultLayer().interpretResult();
+            for (IResult resultSignal : results) {
+                inputSignals.add(new ResultInputSignalWrapper(resultSignal.getResult()));
+            }
+        } else {
+            for (IResultNeuron resultNeuron : resultLayer.getResultLayerMeta().getResultNeurons()) {
+                inputSignals.add(new ResultInputSignalWrapper(resultNeuron.getFinalResult()));
+            }
         }
         return inputSignals;
     }
@@ -47,6 +58,11 @@ public class InMemoryDiscriminatorResultSignals implements INeuronNetInput {
     @Override
     public HashMap<String, List<IResultSignal>> getDesiredResults() {
         return new HashMap<>();
+    }
+
+    @Override
+    public ProcessingFrequency getDefaultProcessingFrequency() {
+        return processingFrequency;
     }
 
     @Override

@@ -182,6 +182,12 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
     }
 
     @Override
+    public void registerInput(IInitInput initInput, InputInitStrategy initStrategy) {
+
+    }
+
+
+    @Override
     public TreeMap<Long, TreeMap<Integer, List<IInputSignal>>> getInputHistory() {
         return inputHistory;
     }

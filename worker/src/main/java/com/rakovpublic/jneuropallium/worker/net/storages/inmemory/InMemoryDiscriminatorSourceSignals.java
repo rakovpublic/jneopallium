@@ -4,32 +4,35 @@
 
 package com.rakovpublic.jneuropallium.worker.net.storages.inmemory;
 
-import com.rakovpublic.jneuropallium.worker.net.layers.IInputResolver;
 import com.rakovpublic.jneuropallium.worker.net.signals.IInputSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
 import com.rakovpublic.jneuropallium.worker.net.storages.IInitInput;
+import com.rakovpublic.jneuropallium.worker.net.storages.IInputLoadingStrategy;
+import com.rakovpublic.jneuropallium.worker.neuron.impl.cycleprocessing.ProcessingFrequency;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 public class InMemoryDiscriminatorSourceSignals implements IInitInput {
-    private IInputResolver history;
+    private IInputLoadingStrategy history;
     private Long amountOfEpoch;
     private Integer amountOfLoops;
     private String name;
+    private ProcessingFrequency processingFrequency;
 
-    public InMemoryDiscriminatorSourceSignals(IInputResolver history, Long amountOfEpoch, Integer amountOfLoops, String name) {
+    public InMemoryDiscriminatorSourceSignals(IInputLoadingStrategy history, Long amountOfEpoch, Integer amountOfLoops, String name, ProcessingFrequency processingFrequency) {
         this.history = history;
         this.amountOfEpoch = amountOfEpoch;
         this.amountOfLoops = amountOfLoops;
         this.name = name;
+        this.processingFrequency = processingFrequency;
     }
 
     @Override
     public List<IInputSignal> readSignals() {
         List<IInputSignal> results = new LinkedList<>();
-        for (Long i = history.getRun() - amountOfEpoch > history.getInputHistory().firstKey() ? history.getRun() - amountOfEpoch : history.getInputHistory().firstKey(); i < history.getRun(); i++) {
+        for (Long i = history.getEpoch() - amountOfEpoch > history.getInputHistory().firstKey() ? history.getEpoch() - amountOfEpoch : history.getInputHistory().firstKey(); i < history.getEpoch(); i++) {
             for (Integer j = Math.max(history.getInputHistory().get(i).lastKey() - amountOfLoops, history.getInputHistory().get(i).firstKey()); j < history.getInputHistory().get(i).lastKey(); j++) {
                 results.addAll(history.getInputHistory().get(i).get(j));
             }
@@ -46,5 +49,10 @@ public class InMemoryDiscriminatorSourceSignals implements IInitInput {
     @Override
     public HashMap<String, List<IResultSignal>> getDesiredResults() {
         return new HashMap<>();
+    }
+
+    @Override
+    public ProcessingFrequency getDefaultProcessingFrequency() {
+        return processingFrequency;
     }
 }
