@@ -1,6 +1,6 @@
 package com.rakovpublic.jneuropallium.worker.application;
 
-import com.rakovpublic.jneuropallium.worker.synchronizer.IContext;
+import com.rakovpublic.jneuropallium.worker.util.IContext;
 
 public interface IRunner {
     IContext getContext();

@@ -2,8 +2,8 @@ package com.rakovpublic.jneuropallium.master.services;
 
 import com.rakovpublic.jneuropallium.worker.model.LayerParamUpdate;
 import com.rakovpublic.jneuropallium.worker.net.layers.LayerMetaParam;
-import com.rakovpublic.jneuropallium.worker.net.storages.ReconnectStrategy;
-import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
+import com.rakovpublic.jneuropallium.worker.net.signals.ReconnectStrategy;
+import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
 
 public interface ILayerService {
     void deleteNeuron(Integer layerId, Long neuronId);

@@ -1,8 +1,8 @@
 package com.rakovpublic.jneuropallium.worker.util;
 
 
-import com.rakovpublic.jneuropallium.worker.net.storages.ILayersMeta;
-import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
+import com.rakovpublic.jneuropallium.worker.net.layers.ILayersMeta;
+import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
 
 import java.util.ArrayList;
 import java.util.HashMap;

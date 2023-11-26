@@ -1,6 +1,6 @@
 package com.rakovpublic.jneuropallium.worker.model;
 
-import com.rakovpublic.jneuropallium.worker.net.storages.ISplitInput;
+import com.rakovpublic.jneuropallium.worker.net.signals.storage.ISplitInput;
 
 public class SplitInputResponse {
     private String className;

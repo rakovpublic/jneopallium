@@ -1,6 +1,6 @@
 package com.rakovpublic.jneuropallium.worker.net.signals;
 
-import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
+import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
 
 public interface IChangingSignal<K, T extends INeuron> extends ISignal<K> {
 

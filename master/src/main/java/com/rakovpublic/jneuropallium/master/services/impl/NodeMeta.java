@@ -1,6 +1,6 @@
 package com.rakovpublic.jneuropallium.master.services.impl;
 
-import com.rakovpublic.jneuropallium.worker.net.storages.ISplitInput;
+import com.rakovpublic.jneuropallium.worker.net.signals.storage.ISplitInput;
 
 public class NodeMeta {
     private Integer currentLayer;

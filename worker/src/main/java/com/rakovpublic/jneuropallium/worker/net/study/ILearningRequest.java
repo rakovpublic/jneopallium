@@ -1,7 +1,7 @@
 package com.rakovpublic.jneuropallium.worker.net.study;
 
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
-import com.rakovpublic.jneuropallium.worker.neuron.ISynapse;
+import com.rakovpublic.jneuropallium.worker.net.neuron.ISynapse;
 
 import java.io.Serializable;
 import java.util.HashMap;

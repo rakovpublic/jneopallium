@@ -2,7 +2,7 @@ package com.rakovpublic.jneuropallium.master.services;
 
 import com.rakovpublic.jneuropallium.worker.model.ConfigurationUpdateRequest;
 import com.rakovpublic.jneuropallium.worker.net.layers.ResultInterpreter;
-import com.rakovpublic.jneuropallium.worker.net.storages.ReconnectStrategy;
+import com.rakovpublic.jneuropallium.worker.net.signals.ReconnectStrategy;
 import org.springframework.stereotype.Service;
 
 @Service

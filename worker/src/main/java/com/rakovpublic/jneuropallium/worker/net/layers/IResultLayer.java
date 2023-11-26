@@ -1,6 +1,6 @@
 package com.rakovpublic.jneuropallium.worker.net.layers;
 
-import com.rakovpublic.jneuropallium.worker.neuron.IResultNeuron;
+import com.rakovpublic.jneuropallium.worker.net.neuron.IResultNeuron;
 
 import java.util.List;
 

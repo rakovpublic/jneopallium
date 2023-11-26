@@ -6,10 +6,13 @@ import com.rakovpublic.jneuropallium.master.services.IInputService;
 import com.rakovpublic.jneuropallium.master.services.IResultLayerRunner;
 import com.rakovpublic.jneuropallium.worker.model.InputRegistrationRequest;
 import com.rakovpublic.jneuropallium.worker.net.layers.DiscriminatorResultLayer;
-import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
-import com.rakovpublic.jneuropallium.worker.net.storages.*;
-import com.rakovpublic.jneuropallium.worker.net.storages.inmemory.ResultLayerHolder;
-import com.rakovpublic.jneuropallium.worker.neuron.IResultNeuron;
+import com.rakovpublic.jneuropallium.worker.net.layers.ILayerMeta;
+import com.rakovpublic.jneuropallium.worker.net.layers.ILayersMeta;
+import com.rakovpublic.jneuropallium.worker.net.signals.*;
+import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInitInput;
+import com.rakovpublic.jneuropallium.worker.net.signals.storage.ISplitInput;
+import com.rakovpublic.jneuropallium.worker.net.layers.ResultLayerHolder;
+import com.rakovpublic.jneuropallium.worker.net.neuron.IResultNeuron;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

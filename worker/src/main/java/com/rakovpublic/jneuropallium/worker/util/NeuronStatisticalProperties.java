@@ -1,7 +1,7 @@
 package com.rakovpublic.jneuropallium.worker.util;
 
-import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
-import com.rakovpublic.jneuropallium.worker.neuron.ISignalProcessor;
+import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
+import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;
 
 import java.util.HashMap;
 
