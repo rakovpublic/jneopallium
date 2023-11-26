@@ -50,7 +50,7 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
             neuronInputMapping.put(meta.getName(), neuronId);
             neuronId += 1;
         }
-        ILayerMeta layerMeta = new InMemoryLayerMeta(Integer.MIN_VALUE, neurons);
+        ILayerMeta layerMeta = new InMemoryLayerMeta(Integer.MIN_VALUE, neurons, new HashMap<>());
         layersMeta.addLayerMeta(layerMeta);
 
     }
@@ -145,7 +145,7 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
         ILayerMeta layerMeta = layersMeta.getLayerByID(Integer.MIN_VALUE);
         List<INeuron> neurons = new LinkedList<>();
         if(layerMeta == null){
-            layerMeta = new InMemoryLayerMeta(Integer.MIN_VALUE, neurons);
+            layerMeta = new InMemoryLayerMeta(Integer.MIN_VALUE, neurons, new HashMap<>());
             layersMeta.addLayerMeta(layerMeta);
         }
         neurons.addAll(layerMeta.getNeurons());

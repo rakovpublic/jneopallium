@@ -7,7 +7,6 @@ import com.rakovpublic.jneuropallium.worker.neuron.IAxon;
 import com.rakovpublic.jneuropallium.worker.neuron.IDendrites;
 import com.rakovpublic.jneuropallium.worker.neuron.INeuron;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,23 +15,25 @@ public class InMemoryLayerMeta implements ILayerMeta {
     private List<LayerMove> layerMoves;
     private Integer id;
     private List<INeuron> neurons;
+    private  HashMap<String, LayerMetaParam> layerMetaParams;
 
-    public InMemoryLayerMeta(Integer id, List<INeuron> neurons) {
+    public InMemoryLayerMeta(Integer id, List<INeuron> neurons, HashMap<String, LayerMetaParam> metaParams) {
         this.id = id;
         this.neurons = neurons;
+        layerMetaParams = metaParams;
         layerMoves = new LinkedList<>();
     }
 
 
-    //TODO: add implementation
+
     @Override
     public HashMap<String, LayerMetaParam> getLayerMetaParams() {
-        return null;
+        return layerMetaParams;
     }
 
     @Override
     public void setLayerMetaParams(HashMap<String, LayerMetaParam> metaParams) {
-
+        this.layerMetaParams = metaParams;
     }
 
     @Override
@@ -78,20 +79,23 @@ public class InMemoryLayerMeta implements ILayerMeta {
         }
         return null;
     }
-
     @Override
     public void removeNeuron(Long neuron) {
-
+        for (INeuron n : neurons) {
+            if(n.getId()==neuron){
+                neurons.remove(n);
+            }
+        }
     }
 
     @Override
     public void addNeuron(INeuron neuron) {
-
+        neurons.add(neuron);
     }
 
     @Override
     public void saveNeurons(List<INeuron> neuronMetas) {
-
+        neurons = neuronMetas;
     }
 
 
