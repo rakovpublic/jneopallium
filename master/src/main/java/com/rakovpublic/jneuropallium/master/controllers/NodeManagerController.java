@@ -61,8 +61,6 @@ public class NodeManagerController {
                     }
                 }
             }
-
-
             nodeManager.setNodeStatus(request.getNodeName(), NodeStatus.RUNNING);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e);

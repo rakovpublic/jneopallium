@@ -76,6 +76,8 @@ public class InputService implements IInputService {
     }
 
 
+
+
     @Override
     public List<IResultNeuron> getResults(Integer loop, Long epoch) {
         return results.get(epoch).get(loop);
@@ -179,6 +181,7 @@ public class InputService implements IInputService {
             } else {
                 for (NodeMeta meta : nodeMetas.values()) {
                     if (System.currentTimeMillis() - meta.getTimestamp() > this.nodeTimeOut) {
+                        nodeMetas.remove(meta.getCurrentInput().getNodeIdentifier());
                         res = meta.getCurrentInput();
                         res.setNodeIdentifier(name);
                         meta.setCurrentInput(null);
@@ -228,7 +231,7 @@ public class InputService implements IInputService {
                     resultLayerHolder.setResultLayerMeta(layersMeta.getResultLayer());
                 }
                 runFlag = false;
-                ILayerMeta layerMeta = nodeMetas.get(nodeNames.get(0)).getCurrentLayer() == layersMeta.getResultLayer().getID() ? layersMeta.getResultLayer() : layersMeta.getLayerByID(nodeMetas.get(nodeNames.get(0)).getCurrentLayer() + 1);
+                ILayerMeta layerMeta = nodeMetas.get(nodeNames.get(0)).getCurrentLayer() == layersMeta.getResultLayer().getID() ? layersMeta.getResultLayer() : layersMeta.getLayerByPosition(nodeMetas.get(nodeNames.get(0)).getCurrentLayer() + 1);
                 Long size = layerMeta.getSize() / nodeNames.size() <= partitions ? Long.parseLong(partitions + "") : nodeNames.size();
                 List<ISplitInput> resList = new ArrayList<>();
                 ISplitInput input = splitInput.getNewInstance();
@@ -243,7 +246,7 @@ public class InputService implements IInputService {
 
                 }
                 for (String nodeName : nodeNames) {
-                    nodeMetas.get(nodeName).setCurrentLayer(layerMeta.getID());
+                    nodeMetas.get(nodeName).setCurrentLayer(nodeMetas.get(nodeNames.get(0)).getCurrentLayer() + 1);
                 }
                 preparedInputs.addAll(resList);
             } else {
@@ -307,7 +310,7 @@ public class InputService implements IInputService {
         for (DiscriminatorStatus discriminatorStatus : discriminatorStatuses) {
             discriminatorStatus.setProcessed(false);
             discriminatorStatus.setValid(false);
-            discriminatorStatus.setCurrentLayer(0);
+            discriminatorStatus.setCurrentLayer(-1);
             discriminatorStatus.setInputPopulated(false);
         }
     }
@@ -382,9 +385,9 @@ public class InputService implements IInputService {
                 }
             }
             ILayersMeta discriminatorLayersMeta = discriminators.get(discriminatorName);
-            if (currentDiscriminator.getCurrentLayer() + 1 <= discriminatorLayersMeta.getResultLayer().getID()) {
+            if (currentDiscriminator.getCurrentLayer() <= discriminatorLayersMeta.getLayers().size()) {
 
-                ILayerMeta layerMeta = currentDiscriminator.getCurrentLayer() + 1 == discriminatorLayersMeta.getResultLayer().getID() ? discriminatorLayersMeta.getResultLayer() : discriminatorLayersMeta.getLayerByID(nodeMetas.get(nodeNames.get(0)).getCurrentLayer() + 1);
+                ILayerMeta layerMeta = currentDiscriminator.getCurrentLayer() + 1 == discriminatorLayersMeta.getLayers().size() ? discriminatorLayersMeta.getResultLayer() : discriminatorLayersMeta.getLayerByPosition(nodeMetas.get(nodeNames.get(0)).getCurrentLayer() + 1);
                 Long size = layerMeta.getSize() / nodeNames.size() <= partitions ? Long.parseLong(partitions + "") : nodeNames.size();
                 List<ISplitInput> resList = new ArrayList<>();
                 ISplitInput input = discriminatorSplitInput.getNewInstance();
@@ -399,7 +402,7 @@ public class InputService implements IInputService {
 
                 }
                 for (String nodeName : nodeNames) {
-                    nodeMetas.get(nodeName).setCurrentLayer(layerMeta.getID());
+                    nodeMetas.get(nodeName).setCurrentLayer(nodeMetas.get(nodeNames.get(0)).getCurrentLayer() + 1);
                 }
                 currentDiscriminator.setCurrentLayer(nodeMetas.get(nodeNames.get(0)).getCurrentLayer() + 1);
                 preparedDiscriminatorsInputs.addAll(resList);
@@ -485,6 +488,7 @@ public class InputService implements IInputService {
             } else {
                 for (NodeMeta meta : nodeMetas.values()) {
                     if (System.currentTimeMillis() - meta.getTimestamp() > this.nodeTimeOut) {
+                        nodeMetas.remove(meta.getCurrentInput().getNodeIdentifier());
                         res = meta.getCurrentInput();
                         meta.setCurrentInput(null);
                         res.setNodeIdentifier(name);

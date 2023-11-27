@@ -76,8 +76,8 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
     @Override
     public Boolean populateInput(ISignalsPersistStorage signalsPersistStorage, HashMap<IInitInput, InputStatusMeta> inputStatuses) {
         signalsPersistStorage.cleanOutdatedSignals();
-        if (layersMeta.getLayerByID(Integer.MIN_VALUE) != null) {
-            CycleNeuron cl = ((CycleNeuron) layersMeta.getLayerByID(Integer.MIN_VALUE).getNeuronByID(0l));
+        if (layersMeta.getLayerByPosition(Integer.MIN_VALUE) != null) {
+            CycleNeuron cl = ((CycleNeuron) layersMeta.getLayerByPosition(Integer.MIN_VALUE).getNeuronByID(0l));
             HashMap<Class<? extends ISignal>, ProcessingFrequency> frequencyHashMap = cl.getSignalProcessingFrequencyMap();
 
             HashMap<IInitInput, ProcessingFrequency> inputProcessingFrequencyHashMap = cl.getInputProcessingFrequencyHashMap();
@@ -163,7 +163,7 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
         TreeSet<Long> ids = new TreeSet<>();
         ids.addAll(neuronInputMapping.values());
         long neuronId = ids.last() + 1;
-        ILayerMeta layerMeta = layersMeta.getLayerByID(Integer.MIN_VALUE);
+        ILayerMeta layerMeta = layersMeta.getLayerByPosition(Integer.MIN_VALUE);
         if (layerMeta == null) {
             List<INeuron> neurons = new LinkedList<>();
             CycleNeuron cycleNeuron = new CycleNeuron(defaultLoopsCount, signalChain, neuronId, epoch);

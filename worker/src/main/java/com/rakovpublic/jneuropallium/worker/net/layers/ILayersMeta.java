@@ -29,7 +29,8 @@ public interface ILayersMeta extends Serializable {
      * @param id the layer id
      * @return layer id meta
      */
-    ILayerMeta getLayerByID(int id);
+    ILayerMeta getLayerByPosition(int id);
+
 
     /**
      * this method add new layer to current net

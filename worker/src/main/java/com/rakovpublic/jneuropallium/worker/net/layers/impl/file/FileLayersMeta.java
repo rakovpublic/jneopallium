@@ -91,10 +91,11 @@ public class FileLayersMeta<S extends IStorageItem> implements ILayersMeta {
     }
 
     @Override
-    public ILayerMeta getLayerByID(int id) {
+    public ILayerMeta getLayerByPosition(int id) {
 
         return layers.get(id);
     }
+
 
     @Override
     public void addLayerMeta(ILayerMeta layerMeta) {
