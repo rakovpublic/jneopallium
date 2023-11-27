@@ -1,7 +1,7 @@
 package com.rakovpublic.jneuropallium.worker.net.layers.impl;
 
-import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInitInput;
 import com.rakovpublic.jneuropallium.worker.net.signals.InputInitStrategy;
+import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInitInput;
 
 public class InputData {
     private IInitInput iInputSource;

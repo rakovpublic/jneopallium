@@ -1,9 +1,9 @@
 package com.rakovpublic.jneuropallium.worker.net.layers.impl;
 
-import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInputResolver;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayer;
-import com.rakovpublic.jneuropallium.worker.net.layers.IResultLayer;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayerMeta;
+import com.rakovpublic.jneuropallium.worker.net.layers.IResultLayer;
+import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInputResolver;
 
 
 public class LayerBuilder {

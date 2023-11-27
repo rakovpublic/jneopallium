@@ -4,9 +4,9 @@
 
 package com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing;
 
+import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInitInput;
-import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;
 
 import java.util.HashMap;
 import java.util.LinkedList;

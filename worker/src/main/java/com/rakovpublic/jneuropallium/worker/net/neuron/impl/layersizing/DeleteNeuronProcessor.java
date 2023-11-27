@@ -1,8 +1,8 @@
 package com.rakovpublic.jneuropallium.worker.net.neuron.impl.layersizing;
 
-import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ILayerManipulatingNeuron;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;
+import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 import java.util.LinkedList;
 import java.util.List;

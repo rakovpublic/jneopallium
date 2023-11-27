@@ -1,8 +1,8 @@
 package com.rakovpublic.jneuropallium.worker.net.neuron;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.WeightDeserializer;
+import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 import java.io.Serializable;
 

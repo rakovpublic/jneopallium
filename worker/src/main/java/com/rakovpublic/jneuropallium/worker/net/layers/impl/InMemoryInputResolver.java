@@ -3,7 +3,6 @@ package com.rakovpublic.jneuropallium.worker.net.layers.impl;
 import com.rakovpublic.jneuropallium.worker.net.signals.*;
 import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInitInput;
 import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInputResolver;
-import com.rakovpublic.jneuropallium.worker.net.signals.INeuronNetInput;
 
 import java.util.HashMap;
 import java.util.LinkedList;

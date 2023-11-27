@@ -9,10 +9,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalMerger;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;
+import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

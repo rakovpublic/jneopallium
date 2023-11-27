@@ -5,14 +5,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.rakovpublic.jneuropallium.worker.net.layers.ILayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.layers.LayerMetaParam;
 import com.rakovpublic.jneuropallium.worker.net.layers.LayerMove;
-import com.rakovpublic.jneuropallium.worker.net.layers.ILayerMeta;
+import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IStorage;
 import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IStorageItem;
-import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
-import com.rakovpublic.jneuropallium.worker.util.json.JSONHelper;
 import com.rakovpublic.jneuropallium.worker.util.NeuronParser;
+import com.rakovpublic.jneuropallium.worker.util.json.JSONHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

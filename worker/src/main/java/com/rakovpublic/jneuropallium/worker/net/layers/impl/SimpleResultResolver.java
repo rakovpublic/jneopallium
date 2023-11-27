@@ -4,12 +4,7 @@
 
 package com.rakovpublic.jneuropallium.worker.net.layers.impl;
 
-import com.rakovpublic.jneuropallium.worker.net.layers.DiscriminatorResultLayer;
-import com.rakovpublic.jneuropallium.worker.net.layers.ILayer;
-import com.rakovpublic.jneuropallium.worker.net.layers.IResultResolver;
-import com.rakovpublic.jneuropallium.worker.net.layers.ILayerMeta;
-import com.rakovpublic.jneuropallium.worker.net.layers.IResultLayerMeta;
-import com.rakovpublic.jneuropallium.worker.net.layers.StructMeta;
+import com.rakovpublic.jneuropallium.worker.net.layers.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

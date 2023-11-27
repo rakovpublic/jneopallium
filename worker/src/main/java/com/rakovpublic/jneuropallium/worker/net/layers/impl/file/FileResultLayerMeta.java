@@ -5,14 +5,14 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.layers.IResultLayerMeta;
-import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IStorage;
-import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IStorageItem;
 import com.rakovpublic.jneuropallium.worker.net.neuron.IActivationFunction;
 import com.rakovpublic.jneuropallium.worker.net.neuron.IResultNeuron;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalMerger;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;
+import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
+import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IStorage;
+import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IStorageItem;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

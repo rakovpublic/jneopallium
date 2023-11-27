@@ -1,8 +1,8 @@
 package com.rakovpublic.jneuropallium.worker.net.neuron;
 
 import com.rakovpublic.jneuropallium.worker.net.layers.LayerMove;
-import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.NeuronAddress;
+import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 import java.util.HashMap;
 import java.util.List;

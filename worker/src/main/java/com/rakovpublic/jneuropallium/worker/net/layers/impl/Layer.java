@@ -1,10 +1,8 @@
 package com.rakovpublic.jneuropallium.worker.net.layers.impl;
 
-import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInputResolver;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayer;
-import com.rakovpublic.jneuropallium.worker.net.layers.LayerMetaParam;
-import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayerMeta;
+import com.rakovpublic.jneuropallium.worker.net.layers.LayerMetaParam;
 import com.rakovpublic.jneuropallium.worker.net.neuron.IAxon;
 import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.net.neuron.IRule;
@@ -14,6 +12,8 @@ import com.rakovpublic.jneuropallium.worker.net.neuron.impl.layersizing.CreateNe
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.layersizing.DeleteNeuronSignal;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.layersizing.LayerManipulatingNeuron;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.layersizing.LayerManipulatingProcessingChain;
+import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInputResolver;
 
 import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;

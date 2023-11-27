@@ -4,7 +4,6 @@
 
 package com.rakovpublic.jneuropallium.worker.net.signals;
 
-import com.rakovpublic.jneuropallium.worker.net.signals.IInputSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInitInput;
 
 import java.util.List;

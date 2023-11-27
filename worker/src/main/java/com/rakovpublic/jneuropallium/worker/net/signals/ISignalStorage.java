@@ -4,8 +4,6 @@
 
 package com.rakovpublic.jneuropallium.worker.net.signals;
 
-import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
-
 import java.io.Serializable;
 import java.util.List;
 

@@ -4,8 +4,6 @@
 
 package com.rakovpublic.jneuropallium.worker.net.layers;
 
-import com.rakovpublic.jneuropallium.worker.net.layers.ILayerMeta;
-import com.rakovpublic.jneuropallium.worker.net.layers.IResultLayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.signals.ReconnectStrategy;
 import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInputResolver;
 import com.rakovpublic.jneuropallium.worker.net.storages.IStorageMeta;

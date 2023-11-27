@@ -4,8 +4,8 @@
 
 package com.rakovpublic.jneuropallium.worker.net.layers;
 
-import com.rakovpublic.jneuropallium.worker.net.storages.IStorageMeta;
 import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
+import com.rakovpublic.jneuropallium.worker.net.storages.IStorageMeta;
 
 import java.util.HashMap;
 import java.util.List;

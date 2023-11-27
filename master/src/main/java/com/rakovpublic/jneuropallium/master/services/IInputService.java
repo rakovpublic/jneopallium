@@ -2,10 +2,10 @@ package com.rakovpublic.jneuropallium.master.services;
 
 import com.rakovpublic.jneuropallium.worker.model.InputRegistrationRequest;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayersMeta;
+import com.rakovpublic.jneuropallium.worker.net.neuron.IResultNeuron;
 import com.rakovpublic.jneuropallium.worker.net.signals.*;
 import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInitInput;
 import com.rakovpublic.jneuropallium.worker.net.signals.storage.ISplitInput;
-import com.rakovpublic.jneuropallium.worker.net.neuron.IResultNeuron;
 
 import java.util.HashMap;
 import java.util.List;

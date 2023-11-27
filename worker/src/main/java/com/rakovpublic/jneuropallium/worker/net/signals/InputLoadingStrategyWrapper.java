@@ -5,7 +5,6 @@
 package com.rakovpublic.jneuropallium.worker.net.signals;
 
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayersMeta;
-import com.rakovpublic.jneuropallium.worker.net.signals.*;
 import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInitInput;
 
 import java.util.HashMap;
@@ -53,7 +52,7 @@ public class InputLoadingStrategyWrapper implements IInputLoadingStrategy {
 
     @Override
     public void registerInput(IInitInput initInput, InputInitStrategy initStrategy) {
-        iInputLoadingStrategy.registerInput(initInput,initStrategy);
+        iInputLoadingStrategy.registerInput(initInput, initStrategy);
     }
 
     @Override

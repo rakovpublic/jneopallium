@@ -1,8 +1,8 @@
 package com.rakovpublic.jneuropallium.worker.net.neuron.impl;
 
-import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISynapse;
 import com.rakovpublic.jneuropallium.worker.net.neuron.IWeight;
+import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 public class NeuronSynapse<K extends ISignal> implements ISynapse<K> {
     private int targetLayerId;

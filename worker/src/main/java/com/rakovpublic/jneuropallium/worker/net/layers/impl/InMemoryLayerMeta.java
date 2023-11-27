@@ -4,9 +4,9 @@
 
 package com.rakovpublic.jneuropallium.worker.net.layers.impl;
 
+import com.rakovpublic.jneuropallium.worker.net.layers.ILayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.layers.LayerMetaParam;
 import com.rakovpublic.jneuropallium.worker.net.layers.LayerMove;
-import com.rakovpublic.jneuropallium.worker.net.layers.ILayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.neuron.IAxon;
 import com.rakovpublic.jneuropallium.worker.net.neuron.IDendrites;
 import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;

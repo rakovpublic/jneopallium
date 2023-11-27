@@ -4,9 +4,9 @@
 
 package com.rakovpublic.jneuropallium.worker.net.signals.storage;
 
+import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.ProcessingFrequency;
 import com.rakovpublic.jneuropallium.worker.net.signals.IInputSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
-import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.ProcessingFrequency;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +30,6 @@ public class FileInitInput implements IInitInput {
     public String getName() {
         return null;
     }
-
 
 
     @Override

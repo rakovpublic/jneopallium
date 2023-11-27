@@ -7,7 +7,6 @@ package com.rakovpublic.jneuropallium.worker.util.json;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.rakovpublic.jneuropallium.worker.util.json.IDeserializationHelper;
 
 
 public class JSONHelper implements IDeserializationHelper {

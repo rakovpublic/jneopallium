@@ -1,7 +1,7 @@
 package com.rakovpublic.jneuropallium.worker.net.neuron.impl.layersizing;
 
-import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
+import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 import java.util.HashMap;
 import java.util.List;

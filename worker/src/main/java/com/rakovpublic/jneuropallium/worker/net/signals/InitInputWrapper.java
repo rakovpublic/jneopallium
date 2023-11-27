@@ -4,10 +4,7 @@
 
 package com.rakovpublic.jneuropallium.worker.net.signals;
 
-import com.rakovpublic.jneuropallium.worker.net.signals.IInputSignal;
-import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInitInput;
-import com.rakovpublic.jneuropallium.worker.net.signals.INeuronNetInput;
 
 import java.util.HashMap;
 import java.util.List;

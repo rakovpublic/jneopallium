@@ -2,11 +2,11 @@ package com.rakovpublic.jneuropallium.worker.application;
 
 import com.rakovpublic.jneuropallium.worker.exceptions.HttpClusterCommunicationException;
 import com.rakovpublic.jneuropallium.worker.model.NodeCompleteRequest;
-import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInputResolver;
-import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
-import com.rakovpublic.jneuropallium.worker.net.signals.storage.ISplitInput;
 import com.rakovpublic.jneuropallium.worker.net.neuron.IAxon;
 import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
+import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInputResolver;
+import com.rakovpublic.jneuropallium.worker.net.signals.storage.ISplitInput;
 import com.rakovpublic.jneuropallium.worker.util.IContext;
 import com.rakovpublic.jneuropallium.worker.util.JarClassLoaderService;
 import org.apache.logging.log4j.LogManager;

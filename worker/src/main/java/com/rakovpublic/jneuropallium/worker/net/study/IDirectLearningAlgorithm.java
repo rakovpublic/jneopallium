@@ -1,7 +1,7 @@
 package com.rakovpublic.jneuropallium.worker.net.study;
 
-import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
 import com.rakovpublic.jneuropallium.worker.net.layers.IStructMeta;
+import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
 
 import java.io.Serializable;
 import java.util.HashMap;

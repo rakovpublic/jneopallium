@@ -9,13 +9,13 @@ import com.rakovpublic.jneuropallium.worker.model.CreateNeuronRequest;
 import com.rakovpublic.jneuropallium.worker.model.DeleteNeuronRequest;
 import com.rakovpublic.jneuropallium.worker.model.UploadSignalsRequest;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayer;
-import com.rakovpublic.jneuropallium.worker.net.layers.LayerMetaParam;
-import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayerMeta;
+import com.rakovpublic.jneuropallium.worker.net.layers.LayerMetaParam;
 import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.net.neuron.IRule;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.layersizing.CreateNeuronSignal;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.layersizing.DeleteNeuronSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

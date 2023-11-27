@@ -6,14 +6,10 @@ package com.rakovpublic.jneuropallium.worker.net.signals.storage;
 
 
 import com.rakovpublic.jneuropallium.worker.net.layers.IResult;
-import com.rakovpublic.jneuropallium.worker.net.signals.IInputSignal;
-import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
-import com.rakovpublic.jneuropallium.worker.net.signals.INeuronNetInput;
-import com.rakovpublic.jneuropallium.worker.net.signals.InMemoryInitInput;
-import com.rakovpublic.jneuropallium.worker.net.signals.ResultInputSignalWrapper;
 import com.rakovpublic.jneuropallium.worker.net.layers.ResultLayerHolder;
 import com.rakovpublic.jneuropallium.worker.net.neuron.IResultNeuron;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.ProcessingFrequency;
+import com.rakovpublic.jneuropallium.worker.net.signals.*;
 
 import java.util.HashMap;
 import java.util.LinkedList;

@@ -8,11 +8,11 @@ import com.rakovpublic.jneuropallium.worker.model.InputRegistrationRequest;
 import com.rakovpublic.jneuropallium.worker.net.layers.DiscriminatorResultLayer;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayersMeta;
+import com.rakovpublic.jneuropallium.worker.net.layers.ResultLayerHolder;
+import com.rakovpublic.jneuropallium.worker.net.neuron.IResultNeuron;
 import com.rakovpublic.jneuropallium.worker.net.signals.*;
 import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInitInput;
 import com.rakovpublic.jneuropallium.worker.net.signals.storage.ISplitInput;
-import com.rakovpublic.jneuropallium.worker.net.layers.ResultLayerHolder;
-import com.rakovpublic.jneuropallium.worker.net.neuron.IResultNeuron;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -74,8 +74,6 @@ public class InputService implements IInputService {
         this.results = new HashMap<>();
         this.resultLayerHolder = resultLayerHolder;
     }
-
-
 
 
     @Override

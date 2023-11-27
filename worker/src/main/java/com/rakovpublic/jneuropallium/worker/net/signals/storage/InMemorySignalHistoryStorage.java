@@ -4,9 +4,9 @@
 
 package com.rakovpublic.jneuropallium.worker.net.signals.storage;
 
+import com.rakovpublic.jneuropallium.worker.net.neuron.NeuronAddress;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignalHistoryStorage;
-import com.rakovpublic.jneuropallium.worker.net.neuron.NeuronAddress;
 
 import java.util.HashMap;
 import java.util.List;

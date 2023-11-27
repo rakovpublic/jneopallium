@@ -4,12 +4,7 @@
 
 package com.rakovpublic.jneuropallium.worker.net.signals.storage;
 
-import com.rakovpublic.jneuropallium.worker.net.signals.IInputSignal;
-import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
-import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
-import com.rakovpublic.jneuropallium.worker.net.signals.ISignalHistoryStorage;
-import com.rakovpublic.jneuropallium.worker.net.signals.ISignalsPersistStorage;
-import com.rakovpublic.jneuropallium.worker.net.signals.InputInitStrategy;
+import com.rakovpublic.jneuropallium.worker.net.signals.*;
 
 import java.util.HashMap;
 import java.util.List;

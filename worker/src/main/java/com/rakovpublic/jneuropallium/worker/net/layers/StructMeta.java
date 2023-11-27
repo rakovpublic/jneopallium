@@ -4,10 +4,10 @@
 
 package com.rakovpublic.jneuropallium.worker.net.layers;
 
+import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.net.signals.ReconnectStrategy;
 import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInputResolver;
 import com.rakovpublic.jneuropallium.worker.net.study.ILearningRequest;
-import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
 
 import java.util.HashMap;
 import java.util.List;

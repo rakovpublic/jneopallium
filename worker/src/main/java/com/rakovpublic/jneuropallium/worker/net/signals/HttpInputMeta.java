@@ -5,11 +5,11 @@
 package com.rakovpublic.jneuropallium.worker.net.signals;
 
 
-import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInputResolver;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayer;
-import com.rakovpublic.jneuropallium.worker.net.signals.storage.ISplitInput;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayersMeta;
 import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
+import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInputResolver;
+import com.rakovpublic.jneuropallium.worker.net.signals.storage.ISplitInput;
 import com.rakovpublic.jneuropallium.worker.util.NeuronParser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -23,6 +23,7 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
+
 //TODO: add implementation
 public class HttpInputMeta implements ISplitInput {
     private static final Logger logger = LogManager.getLogger(HttpInputMeta.class);

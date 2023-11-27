@@ -5,8 +5,6 @@
 package com.rakovpublic.jneuropallium.worker.net.signals;
 
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayersMeta;
-import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
-import com.rakovpublic.jneuropallium.worker.net.signals.InputInitStrategy;
 
 import java.util.HashMap;
 import java.util.List;

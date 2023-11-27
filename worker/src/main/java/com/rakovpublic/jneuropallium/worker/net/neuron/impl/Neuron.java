@@ -6,10 +6,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.rakovpublic.jneuropallium.worker.exceptions.CannotFindSignalMergerException;
 import com.rakovpublic.jneuropallium.worker.exceptions.CannotFindSignalProcessorException;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayer;
+import com.rakovpublic.jneuropallium.worker.net.neuron.*;
 import com.rakovpublic.jneuropallium.worker.net.signals.IChangingSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignalHistoryStorage;
-import com.rakovpublic.jneuropallium.worker.net.neuron.*;
 
 import java.util.*;
 import java.util.stream.Collectors;

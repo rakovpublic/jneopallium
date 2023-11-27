@@ -7,13 +7,13 @@ package com.rakovpublic.jneuropallium.worker.net.signals;
 import com.rakovpublic.jneuropallium.worker.exceptions.ConfigurationClassMissedException;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayersMeta;
-import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInitInput;
 import com.rakovpublic.jneuropallium.worker.net.layers.impl.InMemoryLayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalChain;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.CycleNeuron;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.CycleSignalsProcessingChain;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.ProcessingFrequency;
+import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInitInput;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
