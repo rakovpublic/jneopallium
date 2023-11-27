@@ -161,11 +161,11 @@ public class InputService implements IInputService {
 
     @Override
     public synchronized ISplitInput getNext(String name) {
-        if(!nodeMetas.containsKey(name)){
-            if(nodeMetas.size()==0){
-                nodeMetas.put(name, new NodeMeta(0,false));
-            }else {
-                nodeMetas.put(name, new NodeMeta(nodeMetas.get(0).getCurrentLayer(),false));
+        if (!nodeMetas.containsKey(name)) {
+            if (nodeMetas.size() == 0) {
+                nodeMetas.put(name, new NodeMeta(0, false));
+            } else {
+                nodeMetas.put(name, new NodeMeta(nodeMetas.get(0).getCurrentLayer(), false));
             }
         }
         ISplitInput res = null;
@@ -307,7 +307,7 @@ public class InputService implements IInputService {
             runFlag = false;
             runningStrategy.populateInput(signalsPersist, inputStatuses);
             run++;
-            for (String name :nodeMetas.keySet()){
+            for (String name : nodeMetas.keySet()) {
                 nodeMetas.get(name).setCurrentLayer(0);
             }
         }
@@ -322,7 +322,7 @@ public class InputService implements IInputService {
             discriminatorStatus.setCurrentLayer(-1);
             discriminatorStatus.setInputPopulated(false);
         }
-        for (String name :nodeMetas.keySet()){
+        for (String name : nodeMetas.keySet()) {
             nodeMetas.get(name).setCurrentLayer(0);
         }
     }
@@ -482,11 +482,11 @@ public class InputService implements IInputService {
 
     @Override
     public ISplitInput getNextDiscriminators(String name) {
-        if(!nodeMetas.containsKey(name)){
-            if(nodeMetas.size()==0){
-                nodeMetas.put(name, new NodeMeta(0,false));
-            }else {
-                nodeMetas.put(name, new NodeMeta(nodeMetas.get(0).getCurrentLayer(),false));
+        if (!nodeMetas.containsKey(name)) {
+            if (nodeMetas.size() == 0) {
+                nodeMetas.put(name, new NodeMeta(0, false));
+            } else {
+                nodeMetas.put(name, new NodeMeta(nodeMetas.get(0).getCurrentLayer(), false));
             }
         }
         ISplitInput res = null;

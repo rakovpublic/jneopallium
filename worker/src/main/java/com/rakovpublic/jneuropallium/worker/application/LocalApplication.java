@@ -149,7 +149,7 @@ public class LocalApplication implements IApplication {
                     String initStrategyDiscriminatorSource = context.getProperty("configuration.input.initStrategy.source.discriminator." + i);
                     String initStrategyDiscriminatorCallback = context.getProperty("configuration.input.initStrategy.callback.discriminator." + i);
                     IInputResolver inputResolverDiscriminator = new InMemoryInputResolver(new InMemorySignalPersistStorage(), new InMemorySignalHistoryStorage(historySlowDiscriminator, historyFastDiscriminator), this.getLoadingStrategy(inputLoadingStrategyDiscriminator));
-                    InMemoryInitInput inMemoryInitInput = new InMemoryInitInputImpl(nameDiscriminator);
+                    InMemoryInitInput inMemoryInitInput = new InMemoryInitInputImpl(nameDiscriminator, new ProcessingFrequency(1l, 1));
                     InMemoryDiscriminatorResultSignals inMemoryDiscriminatorResultSignals = new InMemoryDiscriminatorResultSignals(inMemoryInitInput, nameDiscriminator + "Result", resultLayerHolder, new ProcessingFrequency(1l, 1));
                     InMemoryDiscriminatorSourceSignals inMemoryDiscriminatorSourceSignals = new InMemoryDiscriminatorSourceSignals(inputLoadingStrategyMain, discriminatorEpoch, discriminatorLoop, nameDiscriminator + "Input", new ProcessingFrequency(1l, 1));
                     inputResolverDiscriminator.registerInput(inMemoryDiscriminatorResultSignals, true, getInputInitStrategy(initStrategyDiscriminatorResult));

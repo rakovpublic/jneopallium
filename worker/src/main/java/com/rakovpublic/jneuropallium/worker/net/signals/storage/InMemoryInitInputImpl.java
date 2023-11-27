@@ -16,9 +16,11 @@ import java.util.List;
 public class InMemoryInitInputImpl implements InMemoryInitInput {
     private List<IInputSignal> signals;
     private String name;
+    private ProcessingFrequency processingFrequency;
 
-    public InMemoryInitInputImpl(String name) {
+    public InMemoryInitInputImpl(String name, ProcessingFrequency processingFrequency) {
         this.name = name;
+        this.processingFrequency = processingFrequency;
         signals = new LinkedList<>();
     }
 
@@ -45,9 +47,8 @@ public class InMemoryInitInputImpl implements InMemoryInitInput {
         return new HashMap<>();
     }
 
-    //TODO: implement
     @Override
     public ProcessingFrequency getDefaultProcessingFrequency() {
-        return null;
+        return processingFrequency;
     }
 }

@@ -234,7 +234,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
             discriminatorsSignalStorage.put(name, discriminatorSignalsPersist);
             discriminatorsSignalStorageHistory.put(name, discriminatorSignalHistoryStorage);
             discriminatorsLayers.put(name, discriminatorLayersMeta);
-            InMemoryInitInput inMemoryInitInput = new InMemoryInitInputImpl(name);
+            InMemoryInitInput inMemoryInitInput = new InMemoryInitInputImpl(name, new ProcessingFrequency(1l, 1));
             InMemoryDiscriminatorResultSignals inMemoryDiscriminatorResultSignals = new InMemoryDiscriminatorResultSignals(inMemoryInitInput, name + "Result", resultLayerHolder, new ProcessingFrequency(1l, 1));
             InMemoryDiscriminatorSourceSignals inMemoryDiscriminatorSourceSignals = new InMemoryDiscriminatorSourceSignals(runningStrategy, 0l, 0, name + "Input", new ProcessingFrequency(1l, 1));
             inputs.put(inMemoryDiscriminatorResultSignals, new InputStatusMeta(true, true, inMemoryDiscriminatorResultSignals.getName()));

@@ -12,10 +12,7 @@ import com.rakovpublic.jneuropallium.worker.net.study.ILearningRequest;
 import java.util.HashMap;
 import java.util.List;
 
-/*
 
- * TODO: refactor for usage  Input strategy
- **/
 public class StructMeta implements IStructMeta {
 
 

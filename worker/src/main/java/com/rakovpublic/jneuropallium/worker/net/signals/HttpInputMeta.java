@@ -5,7 +5,7 @@
 package com.rakovpublic.jneuropallium.worker.net.signals;
 
 
-import com.rakovpublic.jneuropallium.worker.net.layers.ILayer;
+import com.rakovpublic.jneuropallium.worker.net.layers.ILayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayersMeta;
 import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInputResolver;
@@ -24,38 +24,38 @@ import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 
-//TODO: add implementation
+
 public class HttpInputMeta implements ISplitInput {
     private static final Logger logger = LogManager.getLogger(HttpInputMeta.class);
     private String nodeId;
     private String readNeuronsEndpoint;
     private String sendResultEndpoint;
     private IInputResolver inputResolver;
-    private ILayer layer;
-
-
+    private ILayerMeta layer;
     private Long start;
     private Long end;
+    private ILayersMeta layersMeta;
+    private String discriminatorName;
 
 
-    public HttpInputMeta(String nodeId, String readNeuronsEndpoint, String sendResultEndpoint, IInputResolver inputResolver, ILayer layer, Long start, Long end) {
+    public HttpInputMeta(String nodeId, String readNeuronsEndpoint, String sendResultEndpoint, IInputResolver inputResolver, ILayersMeta layer, Long start, Long end) {
         this.nodeId = nodeId;
         this.readNeuronsEndpoint = readNeuronsEndpoint;
         this.sendResultEndpoint = sendResultEndpoint;
         this.inputResolver = inputResolver;
-        this.layer = layer;
+        this.layersMeta = layer;
         this.start = start;
         this.end = end;
     }
 
     @Override
     public String getDiscriminatorName() {
-        return null;
+        return discriminatorName;
     }
 
     @Override
     public void setDiscriminatorName(String name) {
-
+        discriminatorName = name;
     }
 
     @Override
@@ -65,43 +65,20 @@ public class HttpInputMeta implements ISplitInput {
 
     @Override
     public void saveNeuron(INeuron neuron) {
+        layer.addNeuron(neuron);
+        layer.dumpLayer();
 
     }
 
     @Override
     public void setLayer(Integer layerId) {
-        this.layer = layer;
+        this.layer = layersMeta.getLayerByPosition(layerId);
     }
 
     @Override
     public void applyMeta(ILayersMeta layersMeta) {
-
+        this.layersMeta = layersMeta;
     }
-    /*
-
-    @Override
-    public ISignalStorage readInputs() {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(readInputsEndpoint))
-                .timeout(Duration.ofMinutes(2))
-                .header("Content-Type", "application/json")
-                .GET()
-                .build();
-        HttpClient client = HttpClient.newBuilder()
-                .version(HttpClient.Version.HTTP_1_1)
-                .followRedirects(HttpClient.Redirect.NORMAL)
-                .connectTimeout(Duration.ofSeconds(20))
-                .authenticator(Authenticator.getDefault())
-                .build();
-        HttpResponse<String> response = null;
-        try {
-            response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        } catch (IOException | InterruptedException e) {
-            logger.error("cannot send request", e);
-        }
-
-        return parseSignalsForNeurons(response);
-    }*/
 
 
     @Override
@@ -116,7 +93,7 @@ public class HttpInputMeta implements ISplitInput {
 
     @Override
     public ISplitInput getNewInstance() {
-        return new HttpInputMeta(this.nodeId, this.readNeuronsEndpoint, this.sendResultEndpoint, this.inputResolver, this.layer, this.start, this.end);
+        return new HttpInputMeta(this.nodeId, this.readNeuronsEndpoint, this.sendResultEndpoint, this.inputResolver, this.layersMeta, this.start, this.end);
     }
 
     @Override
@@ -127,7 +104,7 @@ public class HttpInputMeta implements ISplitInput {
     @Override
     public List<? extends INeuron> getNeurons() {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(readNeuronsEndpoint + "?layerId=" + layer.getId() + "&startIndex=" + start + "&endIndex=" + end))
+                .uri(URI.create(readNeuronsEndpoint + "?layerId=" + layer.getID() + "&startIndex=" + start + "&endIndex=" + end))
                 .timeout(Duration.ofMinutes(2))
                 .header("Content-Type", "application/json")
                 .GET()
@@ -175,6 +152,6 @@ public class HttpInputMeta implements ISplitInput {
 
     @Override
     public Integer getLayerId() {
-        return this.layer.getId();
+        return this.layer.getID();
     }
 }
