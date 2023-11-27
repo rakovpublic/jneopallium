@@ -202,6 +202,7 @@ public class Layer<N extends INeuron> implements ILayer<N> {
             neurons.add(n);
         }
         layerMeta.saveNeurons(neurons);
+        layerMeta.setLayerMetaParams(metaParams);
         layerMeta.dumpLayer();
 
     }

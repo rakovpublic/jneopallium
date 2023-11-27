@@ -15,9 +15,6 @@ import java.util.List;
  */
 public interface ILayerMeta extends IStorageMeta {
 
-    //TODO: add meta info with default weights for axon and dendrite
-
-
     HashMap<String, LayerMetaParam> getLayerMetaParams();
 
     void setLayerMetaParams(HashMap<String, LayerMetaParam> metaParams);

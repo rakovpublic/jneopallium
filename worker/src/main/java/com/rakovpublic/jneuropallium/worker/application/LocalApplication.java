@@ -98,7 +98,7 @@ public class LocalApplication implements IApplication {
                     if (algoType != null && resultComparingStrategy != null) {
                         List<IResult> idsToFix;
                         if (algoType.equals("direct")) {
-                            IDirectLearningAlgorithm directLearningAlgorithm = StudyingAlgoFactory.getDirectStudyingAlgo();
+                            IDirectLearningAlgorithm directLearningAlgorithm = StudyingAlgoFactory.getDirectStudyingAlgo();//TODO:refactore
                             IResultLayer lr = process(meta);
                             while ((idsToFix = resultComparingStrategy.getIdsStudy(lr.interpretResult(), desiredResult)).size() > 0) {
                                 meta.getInputResolver().saveHistory();
@@ -111,7 +111,7 @@ public class LocalApplication implements IApplication {
                             meta.getInputResolver().saveHistory();
                             meta.getInputResolver().populateInput();
                         } else if (algoType.equals("object")) {
-                            IObjectLearningAlgo iObjectStudyingAlgo = StudyingAlgoFactory.getObjectStudyingAlgo();
+                            IObjectLearningAlgo iObjectStudyingAlgo = StudyingAlgoFactory.getObjectStudyingAlgo();//TODO:refactore
                             IResultLayer lr = process(meta);
                             while ((idsToFix = resultComparingStrategy.getIdsStudy(lr.interpretResult(), desiredResult)).size() > 0) {
                                 meta.getInputResolver().saveHistory();
