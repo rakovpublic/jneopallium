@@ -161,6 +161,13 @@ public class InputService implements IInputService {
 
     @Override
     public synchronized ISplitInput getNext(String name) {
+        if(!nodeMetas.containsKey(name)){
+            if(nodeMetas.size()==0){
+                nodeMetas.put(name, new NodeMeta(0,false));
+            }else {
+                nodeMetas.put(name, new NodeMeta(nodeMetas.get(0).getCurrentLayer(),false));
+            }
+        }
         ISplitInput res = null;
         if (preparedInputs.size() > 0) {
             res = preparedInputs.get(0);
@@ -300,7 +307,11 @@ public class InputService implements IInputService {
             runFlag = false;
             runningStrategy.populateInput(signalsPersist, inputStatuses);
             run++;
+            for (String name :nodeMetas.keySet()){
+                nodeMetas.get(name).setCurrentLayer(0);
+            }
         }
+
     }
 
     @Override
@@ -310,6 +321,9 @@ public class InputService implements IInputService {
             discriminatorStatus.setValid(false);
             discriminatorStatus.setCurrentLayer(-1);
             discriminatorStatus.setInputPopulated(false);
+        }
+        for (String name :nodeMetas.keySet()){
+            nodeMetas.get(name).setCurrentLayer(0);
         }
     }
 
@@ -468,6 +482,13 @@ public class InputService implements IInputService {
 
     @Override
     public ISplitInput getNextDiscriminators(String name) {
+        if(!nodeMetas.containsKey(name)){
+            if(nodeMetas.size()==0){
+                nodeMetas.put(name, new NodeMeta(0,false));
+            }else {
+                nodeMetas.put(name, new NodeMeta(nodeMetas.get(0).getCurrentLayer(),false));
+            }
+        }
         ISplitInput res = null;
         if (preparedDiscriminatorsInputs.size() > 0) {
             res = preparedDiscriminatorsInputs.get(0);
