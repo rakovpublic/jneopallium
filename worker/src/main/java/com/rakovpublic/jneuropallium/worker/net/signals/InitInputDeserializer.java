@@ -17,7 +17,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
-//TODO: add annotation fro json parser
+
 public class InitInputDeserializer extends StdDeserializer<IInitInput> {
     private static final Logger logger = LogManager.getLogger(InitInputDeserializer.class);
 

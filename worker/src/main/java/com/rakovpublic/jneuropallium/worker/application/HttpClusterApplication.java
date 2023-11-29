@@ -1,9 +1,15 @@
 package com.rakovpublic.jneuropallium.worker.application;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.rakovpublic.jneuropallium.worker.exceptions.HttpClusterCommunicationException;
 import com.rakovpublic.jneuropallium.worker.model.NodeCompleteRequest;
 import com.rakovpublic.jneuropallium.worker.net.neuron.IAxon;
 import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
+import com.rakovpublic.jneuropallium.worker.net.signals.IInputLoadingStrategy;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInputResolver;
 import com.rakovpublic.jneuropallium.worker.net.signals.storage.ISplitInput;
@@ -61,10 +67,17 @@ public class HttpClusterApplication implements IApplication {
     }
 
     private ISplitInput parseSplitInput(String json) {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonElement jelement = new JsonParser().parse(json);
+        JsonObject jobject = jelement.getAsJsonObject();
+        ISplitInput result = null;
+        try {
+            result = (ISplitInput) mapper.readValue(jobject.getAsJsonObject("splitInput").getAsString(), Class.forName(jobject.getAsJsonPrimitive("className").getAsString()));
+        } catch (JsonProcessingException | ClassNotFoundException e) {
+            logger.error("Cannot parse loading strategy  " + json, e);
+        }
+        return result;
 
-        //TODO: implement
-
-        return null;
     }
 
 

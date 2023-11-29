@@ -15,7 +15,6 @@ import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IStorage;
 import com.rakovpublic.jneuropallium.worker.net.study.IDirectLearningAlgorithm;
 import com.rakovpublic.jneuropallium.worker.net.study.IObjectLearningAlgo;
 import com.rakovpublic.jneuropallium.worker.net.study.IResultComparingStrategy;
-import com.rakovpublic.jneuropallium.worker.net.study.StudyingAlgoFactory;
 import com.rakovpublic.jneuropallium.worker.util.IContext;
 import com.rakovpublic.jneuropallium.worker.util.JarClassLoaderService;
 import org.apache.logging.log4j.LogManager;
@@ -85,12 +84,28 @@ public class LocalApplication implements IApplication {
                     logger.error("cannot create result comparing strategy object", e);
                 }
                 String algoType = context.getProperty("configuration.studyingalgotype");
+                ObjectMapper mapper = new ObjectMapper();
                 for (; currentRun < maxRun || isInfinite; currentRun++) {
                     //Supervised learning
                     if (algoType != null && resultComparingStrategy != null) {
                         List<IResult> idsToFix;
                         if (algoType.equals("direct")) {
-                            IDirectLearningAlgorithm directLearningAlgorithm = StudyingAlgoFactory.getDirectStudyingAlgo();//TODO:refactore
+                            IDirectLearningAlgorithm directLearningAlgorithm =null;
+                            String directClass = context.getProperty("configuration.learning.direct.class");
+                            String directJson = context.getProperty("configuration.learning.direct.json");
+                            try {
+                                if (directJson != null) {
+                                    directLearningAlgorithm = (IDirectLearningAlgorithm) mapper.readValue(directJson, Class.forName(directClass));
+                                } else {
+                                    directLearningAlgorithm = (IDirectLearningAlgorithm) Class.forName(directClass).newInstance();
+                                }
+                            } catch (IllegalAccessException | InstantiationException | ClassNotFoundException e) {
+                                logger.error("Cannot create instance of IDirectLearningAlgorithm for class " + directClass, e);
+                            } catch (JsonProcessingException e) {
+                                logger.error("Cannot create instance of IDirectLearningAlgorithm for json " + directJson, e);
+                            } catch (NullPointerException e) {
+                                logger.error("Wrong configuration for IDirectLearningAlgorithm " + directClass + " config " + directJson);
+                            }
                             IResultLayer lr = process(meta);
                             while ((idsToFix = resultComparingStrategy.getIdsStudy(lr.interpretResult(), desiredResult)).size() > 0) {
                                 meta.getInputResolver().saveHistory();
@@ -103,7 +118,22 @@ public class LocalApplication implements IApplication {
                             meta.getInputResolver().saveHistory();
                             meta.getInputResolver().populateInput();
                         } else if (algoType.equals("object")) {
-                            IObjectLearningAlgo iObjectStudyingAlgo = StudyingAlgoFactory.getObjectStudyingAlgo();//TODO:refactore
+                            IObjectLearningAlgo iObjectStudyingAlgo = null;
+                            String objectClass = context.getProperty("configuration.learning.object.class");
+                            String objectJson = context.getProperty("configuration.learning.object.json");
+                            try {
+                                if (objectJson != null) {
+                                    iObjectStudyingAlgo = (IObjectLearningAlgo) mapper.readValue(objectJson, Class.forName(objectClass));
+                                } else {
+                                    iObjectStudyingAlgo = (IObjectLearningAlgo) Class.forName(objectClass).newInstance();
+                                }
+                            } catch (IllegalAccessException | InstantiationException | ClassNotFoundException e) {
+                                logger.error("Cannot create instance of IObjectLearningAlgo for class " + objectClass, e);
+                            } catch (JsonProcessingException e) {
+                                logger.error("Cannot create instance of IObjectLearningAlgo for json " + objectJson, e);
+                            } catch (NullPointerException e) {
+                                logger.error("Wrong configuration for IObjectLearningAlgo " + objectClass + " config " + objectJson);
+                            }
                             IResultLayer lr = process(meta);
                             while ((idsToFix = resultComparingStrategy.getIdsStudy(lr.interpretResult(), desiredResult)).size() > 0) {
                                 meta.getInputResolver().saveHistory();
