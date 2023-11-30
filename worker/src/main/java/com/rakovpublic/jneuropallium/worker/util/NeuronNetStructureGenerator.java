@@ -18,7 +18,7 @@ public class NeuronNetStructureGenerator {
      * @param neuronStatisticalProperties contains information of statical properties of neuron i.e probability that it exists on the layer and probability that it has specific processors
      * @param generationRules             rules which allows to understand if two neurons can have connection
      */
-    public ILayersMeta generateNeuronNet(HashMap<Integer, Long> layerSize,
+    public HashMap<Integer,List<INeuron>> generateNeuronNet(HashMap<Integer, Long> layerSize,
                                          HashMap<Class<? extends INeuron>, NeuronStatisticalProperties> neuronStatisticalProperties,
                                          List<NeighboringRules> generationRules, IConnectionGenerator connectionGenerator) {
         ILayersMeta layersMeta = null;
@@ -55,8 +55,7 @@ public class NeuronNetStructureGenerator {
             }
         }
         layersSource = connectionGenerator.generateConnections(layersSource);
-        //TODO: add implementation
-        return layersMeta;
+        return layersSource;
     }
 
 }
