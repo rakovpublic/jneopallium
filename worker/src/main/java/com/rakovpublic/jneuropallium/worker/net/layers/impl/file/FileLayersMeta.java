@@ -1,5 +1,6 @@
 package com.rakovpublic.jneuropallium.worker.net.layers.impl.file;
 
+import com.google.gson.internal.LinkedTreeMap;
 import com.rakovpublic.jneuropallium.worker.exceptions.LayersFolderIsEmptyOrNotExistsException;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayersMeta;
@@ -14,13 +15,15 @@ import java.util.stream.Collectors;
 public class FileLayersMeta<S extends IStorageItem> implements ILayersMeta {
     private S file;
     private IStorage<S> fileSystem;
-    private HashMap<Integer, ILayerMeta> layers;
+    private LinkedTreeMap<Integer, ILayerMeta> layers;
+    private LinkedList<ILayerMeta> layerMetas;
 
 
     public FileLayersMeta(S file, IStorage<S> fs) {
         this.fileSystem = fs;
         this.file = file;
-        layers = new HashMap<>();
+        layers = new LinkedTreeMap<>();
+        layerMetas = new LinkedList<>();
     }
 
 
@@ -57,6 +60,8 @@ public class FileLayersMeta<S extends IStorageItem> implements ILayersMeta {
                     break;
                 }
             }
+            layerMetas.clear();
+            layerMetas.addAll(layers.values());
             return res;
         } else {
             return layers.values().stream().collect(Collectors.toList());
@@ -92,14 +97,18 @@ public class FileLayersMeta<S extends IStorageItem> implements ILayersMeta {
 
     @Override
     public ILayerMeta getLayerByPosition(int id) {
+        return layerMetas.get(id);
+    }
 
+    @Override
+    public ILayerMeta getLayerById(int id) {
         return layers.get(id);
     }
 
 
     @Override
     public void addLayerMeta(ILayerMeta layerMeta) {
-        layers.put(layers.size()-2, layerMeta);
+        layers.put(layerMeta.getID(), layerMeta);
 
     }
 
