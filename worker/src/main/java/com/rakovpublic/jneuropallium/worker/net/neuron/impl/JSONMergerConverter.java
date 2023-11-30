@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.rakovpublic.jneuropallium.worker.application.LocalApplication;
 import com.rakovpublic.jneuropallium.worker.exceptions.JSONParsingException;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalMerger;
 import org.apache.logging.log4j.LogManager;

@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.databind.util.Converter;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.rakovpublic.jneuropallium.worker.application.LocalApplication;
 import com.rakovpublic.jneuropallium.worker.exceptions.JSONParsingException;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;
 import org.apache.logging.log4j.LogManager;

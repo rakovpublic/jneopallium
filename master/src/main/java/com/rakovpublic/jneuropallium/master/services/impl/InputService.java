@@ -231,12 +231,12 @@ public class InputService implements IInputService {
                     }
                 }
             }
-            if (nodeMetas.get(nodeNames.get(0)).getCurrentLayer() <= layersMeta.getLayers().size()-1) {
-                if (nodeMetas.get(nodeNames.get(0)).getCurrentLayer() == layersMeta.getLayers().size()-1) {
+            if (nodeMetas.get(nodeNames.get(0)).getCurrentLayer() <= layersMeta.getLayers().size() - 1) {
+                if (nodeMetas.get(nodeNames.get(0)).getCurrentLayer() == layersMeta.getLayers().size() - 1) {
                     resultLayerHolder.setResultLayerMeta(layersMeta.getResultLayer());
                 }
                 runFlag = false;
-                ILayerMeta layerMeta = nodeMetas.get(nodeNames.get(0)).getCurrentLayer() == layersMeta.getLayers().size()-1 ? layersMeta.getResultLayer() : layersMeta.getLayerByPosition(nodeMetas.get(nodeNames.get(0)).getCurrentLayer() + 1);
+                ILayerMeta layerMeta = nodeMetas.get(nodeNames.get(0)).getCurrentLayer() == layersMeta.getLayers().size() - 1 ? layersMeta.getResultLayer() : layersMeta.getLayerByPosition(nodeMetas.get(nodeNames.get(0)).getCurrentLayer() + 1);
                 Long size = layerMeta.getSize() / nodeNames.size() <= partitions ? Long.parseLong(partitions + "") : nodeNames.size();
                 List<ISplitInput> resList = new ArrayList<>();
                 ISplitInput input = splitInput.getNewInstance();

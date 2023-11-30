@@ -90,7 +90,7 @@ public class LocalApplication implements IApplication {
                     if (algoType != null && resultComparingStrategy != null) {
                         List<IResult> idsToFix;
                         if (algoType.equals("direct")) {
-                            IDirectLearningAlgorithm directLearningAlgorithm =null;
+                            IDirectLearningAlgorithm directLearningAlgorithm = null;
                             String directClass = context.getProperty("configuration.learning.direct.class");
                             String directJson = context.getProperty("configuration.learning.direct.json");
                             try {

@@ -69,7 +69,7 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
         cycleNeuron.setSignalProcessingFrequencyMap(signalProcessingFrequencyMapIn);
         neurons.add(cycleNeuron);
         ILayerMeta layerMeta = new InMemoryLayerMeta(Integer.MIN_VALUE, neurons, new HashMap<>());
-        layersMeta.addLayerMeta(layerMeta,0);
+        layersMeta.addLayerMeta(layerMeta, 0);
 
     }
 
@@ -174,7 +174,7 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
             cycleNeuron.setInputProcessingFrequencyHashMap(inputProcessingFrequency);
             neurons.add(cycleNeuron);
             layerMeta = new InMemoryLayerMeta(Integer.MIN_VALUE, neurons, new HashMap<>());
-            layersMeta.addLayerMeta(layerMeta,0);
+            layersMeta.addLayerMeta(layerMeta, 0);
         } else {
             CycleNeuron cycleNeuron = (CycleNeuron) layerMeta.getNeuronByID(0l);
             HashMap<IInitInput, ProcessingFrequency> inputProcessingFrequency = cycleNeuron.getInputProcessingFrequencyHashMap();
