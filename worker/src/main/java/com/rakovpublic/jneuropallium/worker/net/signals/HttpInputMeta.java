@@ -72,7 +72,7 @@ public class HttpInputMeta implements ISplitInput {
 
     @Override
     public void setLayer(Integer layerId) {
-        this.layer = layersMeta.getLayerByPosition(layerId);
+        this.layer = layersMeta.getLayerById(layerId);
     }
 
     @Override

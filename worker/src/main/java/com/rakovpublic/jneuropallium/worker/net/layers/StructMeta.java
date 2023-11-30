@@ -45,7 +45,7 @@ public class StructMeta implements IStructMeta {
     @Override
     public void learn(List<ILearningRequest> requests) {
         for (ILearningRequest request : requests) {
-            ILayerMeta lm = layersMeta.getLayerByPosition(request.getLayerId());
+            ILayerMeta lm = layersMeta.getLayerById(request.getLayerId());
             INeuron ner = lm.getNeuronByID(request.getNeuronId());
             ner.getAxon().resetConnection(request.getNewConnections());
         }
@@ -66,10 +66,10 @@ public class StructMeta implements IStructMeta {
         HashMap<Integer, HashMap<Long, HashMap<Integer, List<Long>>>> updateMap = reconnectStrategy.getNewConnections(layersMeta, layerId);
 
         for (Integer layersToFix : updateMap.keySet()) {
-            ILayerMeta layerMeta = layersMeta.getLayerByPosition(layersToFix);
+            ILayerMeta layerMeta = layersMeta.getLayerById(layersToFix);
             layerMeta.addLayerMove(new LayerMove(updateMap.get(layersToFix), layerId));
         }
-        ILayerMeta layerToRemove = layersMeta.getLayerByPosition(layerId);
+        ILayerMeta layerToRemove = layersMeta.getLayerById(layerId);
         layersMeta.removeLayer(layerToRemove);
     }
 

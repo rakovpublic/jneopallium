@@ -30,12 +30,12 @@ public class LayerService implements ILayerService {
 
     @Override
     public void deleteNeuron(Integer layerId, Long neuronId) {
-        configurationService.getInputService().getLayersMeta().getLayerByPosition(layerId).removeNeuron(neuronId);
+        configurationService.getInputService().getLayersMeta().getLayerById(layerId).removeNeuron(neuronId);
     }
 
     @Override
     public void addNeuron(INeuron neuron, Integer layerId) {
-        configurationService.getInputService().getLayersMeta().getLayerByPosition(layerId).addNeuron(neuron);
+        configurationService.getInputService().getLayersMeta().getLayerById(layerId).addNeuron(neuron);
     }
 
 
@@ -45,10 +45,10 @@ public class LayerService implements ILayerService {
         HashMap<Integer, HashMap<Long, HashMap<Integer, List<Long>>>> updateMap = reconnectStrategy.getNewConnections(configurationService.getInputService().getLayersMeta(), layerId);
 
         for (Integer layersToFix : updateMap.keySet()) {
-            ILayerMeta layerMeta = configurationService.getInputService().getLayersMeta().getLayerByPosition(layersToFix);
+            ILayerMeta layerMeta = configurationService.getInputService().getLayersMeta().getLayerById(layersToFix);
             layerMeta.addLayerMove(new LayerMove(updateMap.get(layersToFix), layerId));
         }
-        ILayerMeta layerToRemove = configurationService.getInputService().getLayersMeta().getLayerByPosition(layerId);
+        ILayerMeta layerToRemove = configurationService.getInputService().getLayersMeta().getLayerById(layerId);
         configurationService.getInputService().getLayersMeta().removeLayer(layerToRemove);
 
     }
@@ -56,12 +56,12 @@ public class LayerService implements ILayerService {
     @Override
     public LayerMetaParam getMetaParam(String name, Integer layerId) {
 
-        return configurationService.getInputService().getLayersMeta().getLayerByPosition(layerId).getLayerMetaParams().get(name);
+        return configurationService.getInputService().getLayersMeta().getLayerById(layerId).getLayerMetaParams().get(name);
     }
 
     @Override
     public void updateMetaParam(LayerParamUpdate layerParamUpdate) {
-        HashMap<String, LayerMetaParam> params = configurationService.getInputService().getLayersMeta().getLayerByPosition(layerParamUpdate.getLayerId()).getLayerMetaParams();
+        HashMap<String, LayerMetaParam> params = configurationService.getInputService().getLayersMeta().getLayerById(layerParamUpdate.getLayerId()).getLayerMetaParams();
         params.put(layerParamUpdate.getParamName(), layerParamUpdate.getLayerMetaParam());
 
     }

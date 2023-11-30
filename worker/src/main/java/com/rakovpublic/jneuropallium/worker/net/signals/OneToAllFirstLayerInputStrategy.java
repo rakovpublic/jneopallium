@@ -18,6 +18,9 @@ public class OneToAllFirstLayerInputStrategy implements InputInitStrategy {
     @Override
     public HashMap<Integer, HashMap<Long, List<ISignal>>> getInputs(ILayersMeta layersMeta, List<ISignal> signals) {
         ILayerMeta layerMeta = layersMeta.getLayerByPosition(0);
+        if(layersMeta.getLayerByPosition(0).getNeurons().size()==1){
+            layerMeta = layersMeta.getLayerByPosition(1);
+        }
         HashMap<Integer, HashMap<Long, List<ISignal>>> result = new HashMap<>();
         HashMap<Long, List<ISignal>> layer = new HashMap<>();
         for (INeuron neuron : layerMeta.getNeurons()) {
