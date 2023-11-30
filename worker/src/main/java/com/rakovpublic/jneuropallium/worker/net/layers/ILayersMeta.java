@@ -39,6 +39,8 @@ public interface ILayersMeta extends Serializable {
      */
     void addLayerMeta(ILayerMeta layerMeta);
 
+    void addLayerMeta(ILayerMeta layerMeta, int position);
+
     void removeLayer(ILayerMeta layerMeta);
 
 }

@@ -99,8 +99,13 @@ public class FileLayersMeta<S extends IStorageItem> implements ILayersMeta {
 
     @Override
     public void addLayerMeta(ILayerMeta layerMeta) {
-        layers.put(layerMeta.getID(), layerMeta);
+        layers.put(layers.size()-2, layerMeta);
 
+    }
+
+    @Override
+    public void addLayerMeta(ILayerMeta layerMeta, int position) {
+        layers.put(position,layerMeta);
     }
 
     @Override
