@@ -6,13 +6,18 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.databind.util.Converter;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.rakovpublic.jneuropallium.worker.application.LocalApplication;
+import com.rakovpublic.jneuropallium.worker.exceptions.JSONParsingException;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
-public class JSONProcCovertor implements Converter<String, ISignalProcessor> {
+public class JSONProcConvertor implements Converter<String, ISignalProcessor> {
+    private static final Logger logger = LogManager.getLogger(JSONProcConvertor.class);
 
-    public JSONProcCovertor() {
+    public JSONProcConvertor() {
     }
 
     @Override
@@ -24,12 +29,12 @@ public class JSONProcCovertor implements Converter<String, ISignalProcessor> {
         try {
             return (ISignalProcessor) mapper.readValue(s, Class.forName(cl));
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e);
+            throw new JSONParsingException(e.getMessage());
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            logger.error(e);
+            throw new JSONParsingException(e.getMessage());
         }
-        //TODO: add logger
-        return null;
     }
 
     @Override

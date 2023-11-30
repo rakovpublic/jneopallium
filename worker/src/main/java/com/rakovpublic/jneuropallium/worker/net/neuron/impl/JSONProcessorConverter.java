@@ -8,11 +8,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.rakovpublic.jneuropallium.worker.exceptions.JSONParsingException;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
 public class JSONProcessorConverter extends StdDeserializer<ISignalProcessor> {
+    private static final Logger logger = LogManager.getLogger(JSONProcessorConverter.class);
 
     protected JSONProcessorConverter(Class<?> vc) {
         super(vc);
@@ -42,11 +46,12 @@ public class JSONProcessorConverter extends StdDeserializer<ISignalProcessor> {
         try {
             return (ISignalProcessor) mapper.readValue(s, Class.forName(cl));
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e);
+            throw new JSONParsingException(e.getMessage());
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            logger.error(e);
+            throw new JSONParsingException(e.getMessage());
         }
-        //TODO: add logger
-        return null;
+
     }
 }

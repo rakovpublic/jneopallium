@@ -8,11 +8,16 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.rakovpublic.jneuropallium.worker.application.LocalApplication;
+import com.rakovpublic.jneuropallium.worker.exceptions.JSONParsingException;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalMerger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
 public class JSONMergerConverter extends StdDeserializer<ISignalMerger> {
+    private static final Logger logger = LogManager.getLogger(JSONMergerConverter.class);
 
     protected JSONMergerConverter(Class<?> vc) {
         super(vc);
@@ -41,11 +46,11 @@ public class JSONMergerConverter extends StdDeserializer<ISignalMerger> {
         try {
             return (ISignalMerger) mapper.readValue(s, Class.forName(cl));
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e);
+            throw new JSONParsingException(e.getMessage());
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            logger.error(e);
+            throw new JSONParsingException(e.getMessage());
         }
-        //TODO: add logger
-        return null;
     }
 }
