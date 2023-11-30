@@ -30,7 +30,7 @@ public class FileResultLayerMeta extends FileLayerMeta implements IResultLayerMe
     }
 
     @Override
-    public List<? extends IResultNeuron> getNeurons() {
+    public List<IResultNeuron> getResultNeurons() {
         String layer = fileSystem.read(file);
         List<IResultNeuron> result = new ArrayList<>();
         JsonElement jelement = new JsonParser().parse(layer);
@@ -62,4 +62,5 @@ public class FileResultLayerMeta extends FileLayerMeta implements IResultLayerMe
         }
         return result;
     }
+
 }
