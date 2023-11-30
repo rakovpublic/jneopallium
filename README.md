@@ -1,5 +1,5 @@
 #Project aim:
-Purpose of the project is to build a natural neuron net modeling tool that allows building a neuron net model based on receptor existence probability, distance deviation between neuron with same receptors and receptor functional role.
+Purpose of the project is to build a natural neuron net modeling tool that allows building a neuron net model based on receptor existence probability, distance deviation between neurons with the same receptors, and receptor functional role.
 
 #Project outputs:
 Neuron net model sample.
@@ -9,18 +9,18 @@ Documentation for modeling process.
 
 #Current progress:
 Neuron net modeling tool has passed pre-alpha test.
-Tool architecture is ready on 95%.
-Tool implementation is ready on 75%.
+Tool architecture is ready.
+Tool implementation is ready on 95%.
 
 #Project impact
-Project could lead to new generation of artificial neuron nets algorithms, help to analyze drug impact on neuron nets, build autonomous ai systems for different purposes, build modular ai, etc.
+The project could lead to new generation of artificial neuron nets algorithms, help to analyze drug impact on neuron nets, build autonomous AI systems for different purposes, build modular AI, etc.
 
 
 
 #Modeling process
 
 1. Gather information about all neuron classes. Use the possibility of neurons to persist different types of information to separate and define neuron classes.
-2. Gather information about all neuro mediators and signals, and define signal classes. 
+2. Gather information about all neuromediators and signals, and define signal classes. 
 3. Investigate signal impact on neurons (receptors), and define processor classes.
 4. Define neuron appearance probability for each layer.
 5. Define receptor appearance probability for each neuron class.
@@ -32,11 +32,11 @@ Project could lead to new generation of artificial neuron nets algorithms, help 
 
 #Main features
 
-Neuron net can process different types of signals (which allows to model neuromediators behaviour ).
-Different signals can be processed with different frequency. It has 2 main frequency loops with adjustable ratio like 1:n(which mean that signals designed to process slowly will be processed once in n runs of fast processing signals). 
+Neuron net can process different types of signals (which allows modeling neuromediators behavior).
+Different signals can be processed with different frequencies. It has 2 main frequency loops with an adjustable ratio like 1:n(which means that signals designed to process slowly will be processed once in n runs of fast processing signals). 
 Signals can be continuous and be processed n runs with value change or without.
 More over each signal type can be processed once in m runs of their loop.(it allows to model difference in signal widespreading)
-Also the framework supports modular approach  to neuron net modeling where output of neuron net can be input of one or few neuron nets. Framework allows to send signals from top level neuron net to input neuron nets. 
+Also, the framework supports a modular approach  to neuron net modeling where the output of neuron net can be the input of one or few neuron nets. Framework allows sending signals from the top-level neuron layer to input neuron nets. 
  
 
 #Intro
@@ -73,14 +73,6 @@ The input strategy class defines how the input should be populated with neurons.
    Input is compound and can have different input sources. Each source has a value that shows how often input from an input source should be populated into the neuron net. It also has a callback in case the input source is another neuron net and it can get a study signal from upstream.
    The input strategy class defines how the input should be populated with neurons.
 
-#Learning 
-
-#Supervised learning
-   In order to implement this type of learning client should define comparing strategy which will compare actual result with desired and return neuron ids to change and learning algorythm which will change the weight.
-   Then add it to configuration.
-
-#Unsupervised or reinforced learning
-This  is the easiest part and does not required any additional code except signals and processors definition.
 
 #Phases:
 1. Make core. It will implement just core concepts without distributed mode and neuron nets synchronization.
