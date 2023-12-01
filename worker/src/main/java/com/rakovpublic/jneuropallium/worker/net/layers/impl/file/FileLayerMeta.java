@@ -17,6 +17,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -26,10 +27,12 @@ public class FileLayerMeta<S extends IStorageItem> implements ILayerMeta {
     protected IStorage<S> fileSystem;
     protected List<INeuron> neurons;
     protected HashMap<String, LayerMetaParam> layerMetaParams;
+    protected  List<LayerMove> layerMoves;
 
     FileLayerMeta(S file, IStorage<S> fs) {
         this.file = file;
         this.fileSystem = fs;
+        layerMoves=  new LinkedList<>();
     }
 
     @Override
@@ -69,7 +72,7 @@ public class FileLayerMeta<S extends IStorageItem> implements ILayerMeta {
 
     @Override
     public void addLayerMove(LayerMove layerMove) {
-        //TODO: add implementation
+        layerMoves.add(layerMove);
     }
 
     @Override
@@ -90,12 +93,17 @@ public class FileLayerMeta<S extends IStorageItem> implements ILayerMeta {
 
     @Override
     public void removeNeuron(Long neuron) {
-
+        for (INeuron iNeuron : neurons){
+            if (neuron.equals(iNeuron.getId())){
+                neurons.remove(iNeuron);
+                break;
+            }
+        }
     }
 
     @Override
     public void addNeuron(INeuron neuron) {
-
+        neurons.add(neuron);
     }
 
     @Override
