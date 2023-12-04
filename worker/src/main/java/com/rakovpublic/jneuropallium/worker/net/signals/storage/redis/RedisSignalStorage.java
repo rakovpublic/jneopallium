@@ -15,7 +15,7 @@ import java.util.TreeMap;
 public class RedisSignalStorage implements ISignalsPersistStorage {
     @Override
     public void putSignals(HashMap<Integer, HashMap<Long, List<ISignal>>> signals) {
-        
+
     }
 
     @Override
