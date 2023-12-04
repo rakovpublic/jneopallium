@@ -260,6 +260,7 @@ public class HttpLayer<N extends INeuron> implements ILayer<N> {
         splitInput.getInputResolver().sendCallBack(name, signals);
     }
 
+    //TODO: add implementation
 
     @Override
     public LayerMetaParam getLayerMetaParam(String key) {

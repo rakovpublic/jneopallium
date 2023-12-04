@@ -20,14 +20,12 @@ public class Neuron implements INeuron {
     private Boolean isProcessed;
     private IDendrites dendrites;
     private IAxon axon;
-
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private HashMap<Class<? extends ISignal>, IActivationFunction> activationFunctions;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private HashMap<Class<? extends ISignal>, ISignalProcessor> processorMap;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private HashMap<Class<? extends ISignal>, ISignalMerger> mergerMap;
-    @JsonIgnore
     private ILayer layer;
     private Long neuronId;
     protected List<ISignal> result;

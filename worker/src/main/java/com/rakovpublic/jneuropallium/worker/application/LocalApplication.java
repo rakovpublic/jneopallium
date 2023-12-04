@@ -165,6 +165,7 @@ public class LocalApplication implements IApplication {
                     }
                 }
             } else {
+                //Unsupervised or reinforced learning
                 IResultResolver resultResolver = null;
                 HashMap<String, StructMeta> discriminators = new HashMap<String, StructMeta>();
                 Integer discriminatorsAmount = Integer.parseInt(context.getProperty("configuration.discriminatorsAmount"));
@@ -243,19 +244,6 @@ public class LocalApplication implements IApplication {
 
     }
 
-
-    private IResultResolver getResultResolver(String json) {
-        ObjectMapper mapper = new ObjectMapper();
-        JsonElement jelement = new JsonParser().parse(json);
-        JsonObject jobject = jelement.getAsJsonObject();
-        IResultResolver result = null;
-        try {
-            result = (IResultResolver) mapper.readValue(jobject.getAsJsonObject("resultResolver").getAsString(), Class.forName(jobject.getAsJsonPrimitive("resultResolverClass").getAsString()));
-        } catch (JsonProcessingException | ClassNotFoundException e) {
-            logger.error("Cannot parse loading strategy  " + json, e);
-        }
-        return result;
-    }
 
     private IInputLoadingStrategy getLoadingStrategy(String json) {
         ObjectMapper mapper = new ObjectMapper();
