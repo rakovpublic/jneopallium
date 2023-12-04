@@ -1,6 +1,6 @@
 package com.rakovpublic.jneuropallium.worker.net.neuron.impl;
 
-import com.rakovpublic.jneuropallium.worker.net.layers.LayerMove;
+import com.rakovpublic.jneuropallium.worker.net.layers.impl.LayerMove;
 import com.rakovpublic.jneuropallium.worker.net.neuron.IAxon;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISynapse;
 import com.rakovpublic.jneuropallium.worker.net.neuron.IWeight;

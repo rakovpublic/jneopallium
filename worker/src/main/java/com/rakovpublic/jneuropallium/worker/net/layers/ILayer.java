@@ -9,6 +9,7 @@ package com.rakovpublic.jneuropallium.worker.net.layers;
  *
  */
 
+import com.rakovpublic.jneuropallium.worker.net.layers.impl.LayerMetaParam;
 import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.net.neuron.IRule;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.layersizing.CreateNeuronSignal;

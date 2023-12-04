@@ -4,6 +4,7 @@
 
 package com.rakovpublic.jneuropallium.worker.net.layers;
 
+import com.rakovpublic.jneuropallium.worker.net.layers.impl.Result;
 import com.rakovpublic.jneuropallium.worker.net.neuron.IResultNeuron;
 
 import java.util.List;

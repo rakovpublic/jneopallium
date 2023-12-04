@@ -1,4 +1,8 @@
-package com.rakovpublic.jneuropallium.worker.net.layers;
+/*
+ * Copyright (c) 2023. Rakovskyi Dmytro
+ */
+
+package com.rakovpublic.jneuropallium.worker.net.layers.impl;
 
 import java.util.HashMap;
 import java.util.List;

@@ -2,12 +2,13 @@
  * Copyright (c) 2023. Rakovskyi Dmytro
  */
 
-package com.rakovpublic.jneuropallium.worker.net.signals;
+package com.rakovpublic.jneuropallium.worker.net.signals.storage.http;
 
 
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayersMeta;
 import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
+import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInputResolver;
 import com.rakovpublic.jneuropallium.worker.net.signals.storage.ISplitInput;
 import com.rakovpublic.jneuropallium.worker.util.NeuronParser;

@@ -6,8 +6,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayerMeta;
-import com.rakovpublic.jneuropallium.worker.net.layers.LayerMetaParam;
-import com.rakovpublic.jneuropallium.worker.net.layers.LayerMove;
+import com.rakovpublic.jneuropallium.worker.net.layers.impl.LayerMetaParam;
+import com.rakovpublic.jneuropallium.worker.net.layers.impl.LayerMove;
 import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IStorage;
 import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IStorageItem;
@@ -72,7 +72,11 @@ public class FileLayerMeta<S extends IStorageItem> implements ILayerMeta {
 
     @Override
     public void addLayerMove(LayerMove layerMove) {
-        layerMoves.add(layerMove);
+        HashMap<Long, HashMap<Integer,List<Long>>> moves = layerMove.getMovingMap();
+        for(Long targetNeuronId:moves.keySet()){
+            INeuron neuron = getNeuronByID(targetNeuronId);
+            neuron.getAxon().moveConnection(layerMove,neuron.getLayer().getId(),targetNeuronId);
+        }
     }
 
     @Override

@@ -2,7 +2,7 @@
  * Copyright (c) 2023. Rakovskyi Dmytro
  */
 
-package com.rakovpublic.jneuropallium.worker.net.layers;
+package com.rakovpublic.jneuropallium.worker.net.layers.impl;
 
 public class LayerMetaParam<K> {
     private K param;

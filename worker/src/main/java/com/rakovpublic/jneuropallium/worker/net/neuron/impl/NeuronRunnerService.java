@@ -8,13 +8,14 @@ import com.rakovpublic.jneuropallium.worker.util.IContext;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /***
  * Created by Rakovskyi Dmytro on 14.06.2018.
  */
 public class NeuronRunnerService {
 
-    private Queue<INeuron> neuronQueue;
+    private ConcurrentLinkedQueue<INeuron> neuronQueue;
     private static NeuronRunnerService service = new NeuronRunnerService();
     private static String neuronPool = "neuron.pool.size";
     private IContext context;
@@ -47,7 +48,7 @@ public class NeuronRunnerService {
         }
     }
 
-    Queue<INeuron> getNeuronQueue() {
+    public ConcurrentLinkedQueue<INeuron> getNeuronQueue() {
         return neuronQueue;
     }
 

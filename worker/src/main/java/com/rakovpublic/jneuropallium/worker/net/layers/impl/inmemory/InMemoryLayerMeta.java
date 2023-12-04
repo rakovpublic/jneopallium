@@ -2,11 +2,11 @@
  * Copyright (c) 2023. Rakovskyi Dmytro
  */
 
-package com.rakovpublic.jneuropallium.worker.net.layers.impl;
+package com.rakovpublic.jneuropallium.worker.net.layers.impl.inmemory;
 
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayerMeta;
-import com.rakovpublic.jneuropallium.worker.net.layers.LayerMetaParam;
-import com.rakovpublic.jneuropallium.worker.net.layers.LayerMove;
+import com.rakovpublic.jneuropallium.worker.net.layers.impl.LayerMetaParam;
+import com.rakovpublic.jneuropallium.worker.net.layers.impl.LayerMove;
 import com.rakovpublic.jneuropallium.worker.net.neuron.IAxon;
 import com.rakovpublic.jneuropallium.worker.net.neuron.IDendrites;
 import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
@@ -46,7 +46,11 @@ public class InMemoryLayerMeta implements ILayerMeta {
 
     @Override
     public void addLayerMove(LayerMove layerMove) {
-        layerMoves.add(layerMove);
+        HashMap<Long, HashMap<Integer,List<Long>>> moves = layerMove.getMovingMap();
+        for(Long targetNeuronId:moves.keySet()){
+            INeuron neuron = getNeuronByID(targetNeuronId);
+            neuron.getAxon().moveConnection(layerMove,id,targetNeuronId);
+        }
     }
 
     @Override

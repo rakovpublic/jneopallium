@@ -2,7 +2,10 @@
  * Copyright (c) 2023. Rakovskyi Dmytro
  */
 
-package com.rakovpublic.jneuropallium.worker.net.layers;
+package com.rakovpublic.jneuropallium.worker.net.layers.impl;
+
+import com.rakovpublic.jneuropallium.worker.net.layers.IResultLayer;
+import com.rakovpublic.jneuropallium.worker.net.layers.IResultLayerMeta;
 
 public class ResultLayerHolder {
     private IResultLayer resultLayer;

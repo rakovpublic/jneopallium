@@ -2,7 +2,7 @@
  * Copyright (c) 2023. Rakovskyi Dmytro
  */
 
-package com.rakovpublic.jneuropallium.worker.net.signals.storage;
+package com.rakovpublic.jneuropallium.worker.net.signals.storage.inmemory;
 
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignalsPersistStorage;

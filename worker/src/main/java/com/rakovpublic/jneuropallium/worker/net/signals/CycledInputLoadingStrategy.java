@@ -7,7 +7,7 @@ package com.rakovpublic.jneuropallium.worker.net.signals;
 import com.rakovpublic.jneuropallium.worker.exceptions.ConfigurationClassMissedException;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayersMeta;
-import com.rakovpublic.jneuropallium.worker.net.layers.impl.InMemoryLayerMeta;
+import com.rakovpublic.jneuropallium.worker.net.layers.impl.inmemory.InMemoryLayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalChain;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.CycleNeuron;

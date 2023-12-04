@@ -1,7 +1,7 @@
 package com.rakovpublic.jneuropallium.worker.net.neuron;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.rakovpublic.jneuropallium.worker.net.layers.LayerMove;
+import com.rakovpublic.jneuropallium.worker.net.layers.impl.LayerMove;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.Axon;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 

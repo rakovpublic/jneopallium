@@ -1,5 +1,10 @@
-package com.rakovpublic.jneuropallium.worker.net.layers.impl;
+/*
+ * Copyright (c) 2023. Rakovskyi Dmytro
+ */
 
+package com.rakovpublic.jneuropallium.worker.net.layers.impl.inmemory;
+
+import com.rakovpublic.jneuropallium.worker.net.layers.impl.SimpleInputSignalWrapper;
 import com.rakovpublic.jneuropallium.worker.net.signals.*;
 import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInitInput;
 import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInputResolver;

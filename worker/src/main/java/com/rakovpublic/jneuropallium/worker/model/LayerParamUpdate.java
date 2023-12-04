@@ -4,7 +4,7 @@
 
 package com.rakovpublic.jneuropallium.worker.model;
 
-import com.rakovpublic.jneuropallium.worker.net.layers.LayerMetaParam;
+import com.rakovpublic.jneuropallium.worker.net.layers.impl.LayerMetaParam;
 
 public class LayerParamUpdate {
     private String paramName;

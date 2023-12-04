@@ -2,8 +2,9 @@
  * Copyright (c) 2023. Rakovskyi Dmytro
  */
 
-package com.rakovpublic.jneuropallium.worker.net.layers;
+package com.rakovpublic.jneuropallium.worker.net.layers.impl;
 
+import com.rakovpublic.jneuropallium.worker.net.layers.ILayersMeta;
 import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInputResolver;
 
 public class StructBuilder {

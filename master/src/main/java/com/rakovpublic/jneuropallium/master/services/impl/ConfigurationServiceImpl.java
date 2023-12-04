@@ -14,10 +14,13 @@ import com.rakovpublic.jneuropallium.worker.model.ConfigurationRecord;
 import com.rakovpublic.jneuropallium.worker.model.ConfigurationUpdateRequest;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayersMeta;
 import com.rakovpublic.jneuropallium.worker.net.layers.ResultInterpreter;
-import com.rakovpublic.jneuropallium.worker.net.layers.ResultLayerHolder;
+import com.rakovpublic.jneuropallium.worker.net.layers.impl.ResultLayerHolder;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.ProcessingFrequency;
 import com.rakovpublic.jneuropallium.worker.net.signals.*;
 import com.rakovpublic.jneuropallium.worker.net.signals.storage.*;
+import com.rakovpublic.jneuropallium.worker.net.signals.storage.inmemory.InMemoryDiscriminatorResultSignals;
+import com.rakovpublic.jneuropallium.worker.net.signals.storage.inmemory.InMemoryDiscriminatorSourceSignals;
+import com.rakovpublic.jneuropallium.worker.net.signals.storage.inmemory.InMemoryInitInputImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

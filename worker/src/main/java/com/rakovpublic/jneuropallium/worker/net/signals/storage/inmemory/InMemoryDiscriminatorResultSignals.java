@@ -2,11 +2,11 @@
  * Copyright (c) 2023. Rakovskyi Dmytro
  */
 
-package com.rakovpublic.jneuropallium.worker.net.signals.storage;
+package com.rakovpublic.jneuropallium.worker.net.signals.storage.inmemory;
 
 
 import com.rakovpublic.jneuropallium.worker.net.layers.IResult;
-import com.rakovpublic.jneuropallium.worker.net.layers.ResultLayerHolder;
+import com.rakovpublic.jneuropallium.worker.net.layers.impl.ResultLayerHolder;
 import com.rakovpublic.jneuropallium.worker.net.neuron.IResultNeuron;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.ProcessingFrequency;
 import com.rakovpublic.jneuropallium.worker.net.signals.*;

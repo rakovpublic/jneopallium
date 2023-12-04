@@ -2,7 +2,6 @@ package com.rakovpublic.jneuropallium.worker.net.layers.impl;
 
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayer;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayerMeta;
-import com.rakovpublic.jneuropallium.worker.net.layers.LayerMetaParam;
 import com.rakovpublic.jneuropallium.worker.net.neuron.IAxon;
 import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.net.neuron.IRule;
@@ -16,7 +15,7 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInputResolver;
 
 import java.util.*;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /***
  * Created by Rakovskyi Dmytro on 08.06.2018.
@@ -25,7 +24,7 @@ public class Layer<N extends INeuron> implements ILayer<N> {
     protected TreeMap<Long, INeuron> map;
     private Boolean isProcessed;
     private int layerId;
-    private LinkedBlockingQueue<INeuron> notProcessed;
+    private ConcurrentLinkedQueue<INeuron> notProcessed;
     private List<IRule> rules;
     private IInputResolver inputResolver;
     private HashMap<String, LayerMetaParam> metaParams;
@@ -35,7 +34,7 @@ public class Layer<N extends INeuron> implements ILayer<N> {
         metaParams = new HashMap<>();
         rules = new ArrayList<>();
         isProcessed = false;
-        notProcessed = new LinkedBlockingQueue<INeuron>();
+        notProcessed = new ConcurrentLinkedQueue<INeuron>();
         this.layerId = layerId;
         inputResolver = meta;
         map = new TreeMap<Long, INeuron>();
@@ -141,6 +140,7 @@ public class Layer<N extends INeuron> implements ILayer<N> {
         HashMap<Long, List<ISignal>> input = inputResolver.getSignalPersistStorage().getLayerSignals(this.layerId);
         INeuron neur;
         NeuronRunnerService ns = NeuronRunnerService.getService();
+        notProcessed = ns.getNeuronQueue();
         for (Long neuronId : map.keySet()) {
             if (input.containsKey(neuronId)) {
                 neur = map.get(neuronId);
