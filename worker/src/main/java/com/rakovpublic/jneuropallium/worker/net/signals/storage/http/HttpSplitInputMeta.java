@@ -5,8 +5,8 @@
 package com.rakovpublic.jneuropallium.worker.net.signals.storage.http;
 
 
-import com.rakovpublic.jneuropallium.worker.net.layers.ILayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayersMeta;
+import com.rakovpublic.jneuropallium.worker.net.layers.impl.http.HttpLayer;
 import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInputResolver;
@@ -26,27 +26,30 @@ import java.util.HashMap;
 import java.util.List;
 
 
-public class HttpInputMeta implements ISplitInput {
-    private static final Logger logger = LogManager.getLogger(HttpInputMeta.class);
+public class HttpSplitInputMeta implements ISplitInput {
+    private static final Logger logger = LogManager.getLogger(HttpSplitInputMeta.class);
     private String nodeId;
     private String readNeuronsEndpoint;
+    private String masterAddress;
     private String sendResultEndpoint;
     private IInputResolver inputResolver;
-    private ILayerMeta layer;
     private Long start;
     private Long end;
     private ILayersMeta layersMeta;
     private String discriminatorName;
+    private Integer layerId;
 
 
-    public HttpInputMeta(String nodeId, String readNeuronsEndpoint, String sendResultEndpoint, IInputResolver inputResolver, ILayersMeta layer, Long start, Long end) {
+    public HttpSplitInputMeta(String nodeId, String readNeuronsEndpoint, String masterAddress, String sendResultEndpoint, IInputResolver inputResolver, ILayersMeta layer, Long start, Long end, Integer layerId) {
         this.nodeId = nodeId;
         this.readNeuronsEndpoint = readNeuronsEndpoint;
+        this.masterAddress = masterAddress;
         this.sendResultEndpoint = sendResultEndpoint;
         this.inputResolver = inputResolver;
         this.layersMeta = layer;
         this.start = start;
         this.end = end;
+        this.layerId = layerId;
     }
 
     @Override
@@ -66,14 +69,14 @@ public class HttpInputMeta implements ISplitInput {
 
     @Override
     public void saveNeuron(INeuron neuron) {
-        layer.addNeuron(neuron);
-        layer.dumpLayer();
+        layersMeta.getLayerById(getLayerId()).addNeuron(neuron);
+        layersMeta.getLayerById(getLayerId()).dumpLayer();
 
     }
 
     @Override
     public void setLayer(Integer layerId) {
-        this.layer = layersMeta.getLayerById(layerId);
+        this.layerId = layerId;
     }
 
     @Override
@@ -94,7 +97,7 @@ public class HttpInputMeta implements ISplitInput {
 
     @Override
     public ISplitInput getNewInstance() {
-        return new HttpInputMeta(this.nodeId, this.readNeuronsEndpoint, this.sendResultEndpoint, this.inputResolver, this.layersMeta, this.start, this.end);
+        return new HttpSplitInputMeta(this.nodeId, this.readNeuronsEndpoint, masterAddress, this.sendResultEndpoint, this.inputResolver, this.layersMeta, this.start, this.end, layerId);
     }
 
     @Override
@@ -105,7 +108,7 @@ public class HttpInputMeta implements ISplitInput {
     @Override
     public List<? extends INeuron> getNeurons() {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(readNeuronsEndpoint + "?layerId=" + layer.getID() + "&startIndex=" + start + "&endIndex=" + end))
+                .uri(URI.create(readNeuronsEndpoint + "?layerId=" + layerId + "&startIndex=" + start + "&endIndex=" + end))
                 .timeout(Duration.ofMinutes(2))
                 .header("Content-Type", "application/json")
                 .GET()
@@ -127,6 +130,11 @@ public class HttpInputMeta implements ISplitInput {
     }
 
     protected List<? extends INeuron> parseNeurons(HttpResponse<String> response) {
+        List<INeuron> res = NeuronParser.parseNeurons(response.body());
+        for(INeuron neuron: res){
+            HttpLayer httpLayer = new HttpLayer( masterAddress,  layerId, this.hashCode()+"",res.size(), this);
+            neuron.setLayer(httpLayer);
+        }
         return NeuronParser.parseNeurons(response.body());
     }
 
@@ -153,6 +161,6 @@ public class HttpInputMeta implements ISplitInput {
 
     @Override
     public Integer getLayerId() {
-        return this.layer.getID();
+        return this.layerId;
     }
 }

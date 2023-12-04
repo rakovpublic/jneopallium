@@ -26,6 +26,7 @@ public class Neuron implements INeuron {
     private HashMap<Class<? extends ISignal>, ISignalProcessor> processorMap;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private HashMap<Class<? extends ISignal>, ISignalMerger> mergerMap;
+    @JsonIgnore
     private ILayer layer;
     private Long neuronId;
     protected List<ISignal> result;
