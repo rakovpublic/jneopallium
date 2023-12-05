@@ -22,9 +22,10 @@ public class SimpleInputSignalWrapper<T> extends AbstractSignal<T> implements II
         super(value, sourceLayer, sourceNeuron, timeAlive, description, fromExternalNet, inputName, needToRemoveDuringLearning, needToProcessDuringLearning, name);
     }
 
+
     @Override
-    public Class<? extends ISignal> getCurrentSignalClass() {
-        return signal.getCurrentSignalClass();
+    public Class<? extends ISignal<T>> getCurrentSignalClass() {
+        return (Class<? extends ISignal<T>>) signal.getClass();
     }
 
     @Override

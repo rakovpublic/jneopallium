@@ -4,6 +4,7 @@
 
 package com.rakovpublic.jneuropallium.worker.net.signals;
 
+import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.ProcessingFrequency;
 import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInitInput;
 
 import java.util.HashMap;
@@ -28,13 +29,14 @@ public class InitInputWrapper implements IInitInput {
         return initInput.getName();
     }
 
-    @Override
-    public INeuronNetInput getNeuronNetInput() {
-        return initInput.getNeuronNetInput();
-    }
 
     @Override
     public HashMap<String, List<IResultSignal>> getDesiredResults() {
         return initInput.getDesiredResults();
+    }
+
+    @Override
+    public ProcessingFrequency getDefaultProcessingFrequency() {
+        return initInput.getDefaultProcessingFrequency();
     }
 }
