@@ -10,9 +10,6 @@ public class SumCycleSignalProcessor implements ISignalProcessor<SumCycleSignal,
     @Override
     public <I extends ISignal> List<I> process(SumCycleSignal input, CycleNeuron neuron) {
         neuron.setLoopCount((neuron.getLoopCount() + input.getValue()));
-        if (neuron.getInputStatusMeta() != null) {
-            neuron.getInputStatusMeta().setUpdateOnceInNRuns(neuron.getLoopCount());
-        }
         return new ArrayList<I>();
     }
 
