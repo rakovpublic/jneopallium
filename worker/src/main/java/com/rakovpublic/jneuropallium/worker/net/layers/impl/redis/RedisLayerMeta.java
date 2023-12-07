@@ -4,111 +4,79 @@
 
 package com.rakovpublic.jneuropallium.worker.net.layers.impl.redis;
 
-import com.rakovpublic.jneuropallium.worker.net.layers.ILayer;
+
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.layers.impl.LayerMetaParam;
+import com.rakovpublic.jneuropallium.worker.net.layers.impl.LayerMove;
 import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
-import com.rakovpublic.jneuropallium.worker.net.neuron.IRule;
-import com.rakovpublic.jneuropallium.worker.net.neuron.impl.layersizing.CreateNeuronSignal;
-import com.rakovpublic.jneuropallium.worker.net.neuron.impl.layersizing.DeleteNeuronSignal;
-import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
+import com.rakovpublic.jneuropallium.worker.util.RedisContext;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import redis.clients.jedis.JedisPool;
+
 
 import java.util.HashMap;
 import java.util.List;
 //TODO: add implementation
-public class RedisLayerMeta implements ILayer {
-    @Override
-    public void createNeuron(CreateNeuronSignal signal) {
+public class RedisLayerMeta implements ILayerMeta {
+    private static final Logger logger = LogManager.getLogger(RedisLayerMeta.class);
+    private JedisPool pool= null;
+    private String host;
+    private Integer port;
+    private String neuronNetName;
 
-    }
-
     @Override
-    public LayerMetaParam getLayerMetaParam(String key) {
+    public HashMap<String, LayerMetaParam> getLayerMetaParams() {
         return null;
     }
 
     @Override
-    public void updateLayerMetaParam(String key, LayerMetaParam metaParam) {
+    public void setLayerMetaParams(HashMap<String, LayerMetaParam> metaParams) {
 
     }
 
     @Override
-    public void deleteNeuron(DeleteNeuronSignal deleteNeuronIntegration) {
-
-    }
-
-    @Override
-    public long getLayerSize() {
+    public int getID() {
         return 0;
     }
 
     @Override
-    public Boolean validateGlobal() {
+    public void addLayerMove(LayerMove layerMove) {
+
+    }
+
+    @Override
+    public List<INeuron> getNeurons() {
         return null;
     }
 
     @Override
-    public Boolean validateLocal() {
+    public INeuron getNeuronByID(Long id) {
         return null;
     }
 
     @Override
-    public void addGlobalRule(IRule rule) {
+    public void removeNeuron(Long neuron) {
 
     }
 
     @Override
-    public void register(INeuron neuron) {
+    public void addNeuron(INeuron neuron) {
 
     }
 
     @Override
-    public void registerAll(List neuron) {
+    public void saveNeurons(List<INeuron> neurons) {
 
     }
 
     @Override
-    public void process() {
+    public void dumpLayer() {
 
     }
 
     @Override
-    public int getId() {
-        return 0;
-    }
-
-    @Override
-    public Boolean isProcessed() {
+    public Long getSize() {
         return null;
-    }
-
-    @Override
-    public void dumpResult() {
-
-    }
-
-    @Override
-    public void dumpNeurons(ILayerMeta layerMeta) {
-
-    }
-
-    @Override
-    public HashMap<Integer, HashMap<Long, List<ISignal>>> getResults() {
-        return null;
-    }
-
-    @Override
-    public String toJSON() {
-        return null;
-    }
-
-    @Override
-    public void sendCallBack(String name, List list) {
-
-    }
-
-    @Override
-    public void setLayerMetaParams(HashMap params) {
-
     }
 }

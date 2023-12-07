@@ -16,7 +16,6 @@ import java.util.Properties;
  * Created by Rakovskyi Dmytro on 08.06.2018.
  */
 
-//TODO: add redis context and context choosing on application startup
 public class Context implements IContext {
     private static final Logger logger = LogManager.getLogger(Context.class);
     private static Context ctx = new Context();
