@@ -28,9 +28,11 @@ public class Layer<N extends INeuron> implements ILayer<N> {
     private List<IRule> rules;
     private IInputResolver inputResolver;
     private HashMap<String, LayerMetaParam> metaParams;
+    private int threads;
 
 
-    public Layer(int layerId, IInputResolver meta) {
+    public Layer(int layerId, IInputResolver meta, int threads) {
+        this.threads = threads;
         metaParams = new HashMap<>();
         rules = new ArrayList<>();
         isProcessed = false;
@@ -152,7 +154,7 @@ public class Layer<N extends INeuron> implements ILayer<N> {
                 ns.addNeuron(neur);
             }
         }
-        ns.process();
+        ns.process(threads);
 
     }
 

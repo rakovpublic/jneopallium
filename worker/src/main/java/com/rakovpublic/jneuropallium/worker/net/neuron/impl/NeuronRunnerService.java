@@ -17,13 +17,12 @@ public class NeuronRunnerService {
 
     private ConcurrentLinkedQueue<INeuron> neuronQueue;
     private static NeuronRunnerService service = new NeuronRunnerService();
-    private static String neuronPool = "neuron.pool.size";
-    private IContext context;
+
 
     private NeuronRunnerService() {
 
         neuronQueue = new ConcurrentLinkedQueue<>();
-        context = Context.getContext();
+
 
 
     }
@@ -39,8 +38,8 @@ public class NeuronRunnerService {
         }
     }
 
-    public void process() {
-        int poolSize = Integer.parseInt(context.getProperty(neuronPool));
+    public void process( int poolSize ) {
+
         for (int i = 0; i < poolSize; i++) {
             NeuronRunner ne = new NeuronRunner(this);
             Thread th = new Thread(ne);

@@ -67,6 +67,7 @@ public class LocalApplication implements IApplication {
         Boolean isInfinite = Boolean.valueOf(context.getProperty("configuration.infiniteRun"));
         IOutputAggregator outputAggregator = null;
         String outputAggregatorClass = context.getProperty("configuration.outputAggregator");
+        Integer threads = Integer.parseInt(context.getProperty("worker.threads.amount"));
         try {
             outputAggregator = (IOutputAggregator) Class.forName(outputAggregatorClass).getDeclaredConstructor().newInstance();
         } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException | InstantiationException |
@@ -108,12 +109,12 @@ public class LocalApplication implements IApplication {
                             } catch (NullPointerException e) {
                                 logger.error("Wrong configuration for IDirectLearningAlgorithm " + directClass + " config " + directJson);
                             }
-                            IResultLayer lr = process(meta);
+                            IResultLayer lr = process(meta,threads);
                             while ((idsToFix = resultComparingStrategy.getIdsStudy(lr.interpretResult(), desiredResult)).size() > 0) {
                                 meta.getInputResolver().saveHistory();
                                 meta.getInputResolver().getSignalPersistStorage().cleanMiddleLayerSignals();
                                 meta.learn(directLearningAlgorithm.learn(meta, desiredResult));
-                                lr = process(meta);
+                                lr = process(meta,threads);
                             }
 
                             outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getRun(), context);
@@ -136,7 +137,7 @@ public class LocalApplication implements IApplication {
                             } catch (NullPointerException e) {
                                 logger.error("Wrong configuration for IObjectLearningAlgo " + objectClass + " config " + objectJson);
                             }
-                            IResultLayer lr = process(meta);
+                            IResultLayer lr = process(meta, threads);
                             while ((idsToFix = resultComparingStrategy.getIdsStudy(lr.interpretResult(), desiredResult)).size() > 0) {
                                 meta.getInputResolver().saveHistory();
                                 meta.getInputResolver().getSignalPersistStorage().cleanMiddleLayerSignals();
@@ -149,7 +150,7 @@ public class LocalApplication implements IApplication {
                                 studyingRequest.put(layerId, studyMap);
                                 meta.getInputResolver().getSignalPersistStorage().cleanMiddleLayerSignals();
                                 inputResolver.getSignalPersistStorage().putSignals(studyingRequest);
-                                lr = process(meta);
+                                lr = process(meta, threads);
                             }
                             outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getRun(), context);
                             meta.getInputResolver().saveHistory();
@@ -157,7 +158,7 @@ public class LocalApplication implements IApplication {
                         }
                         //Unsupervised or reinforced learning
                     } else {
-                        IResultLayer lr = process(meta);
+                        IResultLayer lr = process(meta, threads);
                         outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getRun(), context);
                         meta.getInputResolver().saveHistory();
                         meta.getInputResolver().populateInput();
@@ -194,9 +195,9 @@ public class LocalApplication implements IApplication {
                     structBuilderDiscriminator.withLayersMeta(new FileLayersMeta<>(fs.getItem(layerPathDiscriminator), fs));
                     discriminators.put(nameDiscriminator, structBuilder.build());
                 }
-                resultResolver = new SimpleResultResolver();
+                resultResolver = new SimpleResultResolver(context);
                 while (true) {
-                    IResultLayer lr = process(meta);
+                    IResultLayer lr = process(meta,threads);
                     resultLayerHolder.setResultLayer(lr);
                     if (resultResolver.resolveResult(meta, discriminators)) {
                         outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getRun(), context);
@@ -212,13 +213,14 @@ public class LocalApplication implements IApplication {
     }
 
 
-    private IResultLayer process(StructMeta meta) {
+    private IResultLayer process(StructMeta meta,int threads) {
+
         int i = 0;
         for (ILayerMeta met : meta.getLayers()) {
             LayerBuilder lb = new LayerBuilder();
             lb.withLayer(met);
             lb.withInput(meta.getInputResolver());
-            ILayer layer = lb.build();
+            ILayer layer = lb.build(threads);
             if (layer.validateGlobal() && layer.validateLocal()) {
                 logger.error("Layer validation rules violation");
             }
@@ -236,7 +238,7 @@ public class LocalApplication implements IApplication {
         LayerBuilder lb = new LayerBuilder();
         lb.withLayer(reMeta);
         lb.withInput(meta.getInputResolver());
-        IResultLayer layer = lb.buildResultLayer();
+        IResultLayer layer = lb.buildResultLayer(threads);
         layer.process();
         layer.dumpNeurons(reMeta);
         return layer;

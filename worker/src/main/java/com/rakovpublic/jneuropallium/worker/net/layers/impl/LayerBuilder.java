@@ -24,15 +24,15 @@ public class LayerBuilder {
         return this;
     }
 
-    public ILayer build() {
-        ILayer layer = new Layer(layerMeta.getID(), meta);
+    public ILayer build(int threads) {
+        ILayer layer = new Layer(layerMeta.getID(), meta, threads);
         layer.registerAll(layerMeta.getNeurons());
         layer.setLayerMetaParams(layerMeta.getLayerMetaParams());
         return layer;
     }
 
-    public IResultLayer buildResultLayer() {
-        IResultLayer layer = new ResultLayer(layerMeta.getID(), meta);
+    public IResultLayer buildResultLayer(int threads) {
+        IResultLayer layer = new ResultLayer(layerMeta.getID(), meta, threads);
         layer.registerAll(layerMeta.getNeurons());
         layer.setLayerMetaParams(layerMeta.getLayerMetaParams());
         return layer;

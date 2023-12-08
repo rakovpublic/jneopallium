@@ -13,8 +13,8 @@ import java.util.TreeSet;
 
 public class ResultLayer<K extends IResultSignal> extends Layer implements IResultLayer {
 
-    public ResultLayer(int layerId, IInputResolver meta) {
-        super(layerId, meta);
+    public ResultLayer(int layerId, IInputResolver meta, int threads) {
+        super(layerId, meta, threads);
 
     }
 

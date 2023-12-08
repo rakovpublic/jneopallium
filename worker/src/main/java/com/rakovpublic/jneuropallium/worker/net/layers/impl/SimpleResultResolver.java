@@ -5,6 +5,7 @@
 package com.rakovpublic.jneuropallium.worker.net.layers.impl;
 
 import com.rakovpublic.jneuropallium.worker.net.layers.*;
+import com.rakovpublic.jneuropallium.worker.util.IContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,6 +13,11 @@ import java.util.HashMap;
 
 public class SimpleResultResolver implements IResultResolver {
     private static final Logger logger = LogManager.getLogger(SimpleResultResolver.class);
+    private IContext iContext;
+
+    public SimpleResultResolver(IContext iContext) {
+        this.iContext = iContext;
+    }
 
     @Override
     public boolean resolveResult(StructMeta targetNeuronNet, HashMap<String, StructMeta> discriminators) {
@@ -26,11 +32,12 @@ public class SimpleResultResolver implements IResultResolver {
 
 
     private DiscriminatorResultLayer process(StructMeta meta) {
+        Integer threads = Integer.parseInt(iContext.getProperty("worker.threads.amount"));
         for (ILayerMeta met : meta.getLayers()) {
             LayerBuilder lb = new LayerBuilder();
             lb.withLayer(met);
             lb.withInput(meta.getInputResolver());
-            ILayer layer = lb.build();
+            ILayer layer = lb.build(threads);
             if (layer.validateGlobal() && layer.validateLocal()) {
                 logger.error("Layer validation rules violation");
             }
@@ -48,7 +55,7 @@ public class SimpleResultResolver implements IResultResolver {
         LayerBuilder lb = new LayerBuilder();
         lb.withLayer(reMeta);
         lb.withInput(meta.getInputResolver());
-        DiscriminatorResultLayer layer = (DiscriminatorResultLayer) lb.buildResultLayer();
+        DiscriminatorResultLayer layer = (DiscriminatorResultLayer) lb.buildResultLayer(threads);
         layer.process();
         layer.dumpNeurons(reMeta);
         return layer;
