@@ -168,7 +168,7 @@ public class HttpLayer<N extends INeuron> implements ILayer<N> {
                 ns.addNeuron(neur);
             }
         }
-        ns.process();
+        ns.process(4);
     }
 
     @Override
