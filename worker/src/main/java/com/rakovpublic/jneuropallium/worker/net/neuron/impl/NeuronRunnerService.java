@@ -24,7 +24,6 @@ public class NeuronRunnerService {
         neuronQueue = new ConcurrentLinkedQueue<>();
 
 
-
     }
 
 

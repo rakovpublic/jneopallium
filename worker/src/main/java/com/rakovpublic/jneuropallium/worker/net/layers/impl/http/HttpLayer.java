@@ -30,6 +30,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.stream.Collectors;
 
 public class HttpLayer<N extends INeuron> implements ILayer<N> {
     private static final Logger logger = LogManager.getLogger(HttpLayer.class);
@@ -40,14 +41,16 @@ public class HttpLayer<N extends INeuron> implements ILayer<N> {
     private TreeMap<Long,INeuron> neurons;
     private boolean isProcessed;
     private ConcurrentLinkedQueue<INeuron> notProcessed;
+    private Integer threads;
 
     private ISplitInput splitInput;
 
-    public HttpLayer(String masterAddress, Integer layerId, String UUID, Integer layerSize, ISplitInput splitInput) {
+    public HttpLayer(String masterAddress, Integer layerId, String UUID, Integer layerSize, Integer threads, ISplitInput splitInput) {
         this.masterAddress = masterAddress;
         this.layerId = layerId;
         this.UUID = UUID;
         this.layerSize = layerSize;
+        this.threads = threads;
         notProcessed = new ConcurrentLinkedQueue<INeuron>();
         this.splitInput = splitInput;
         neurons = new TreeMap<>();
@@ -168,7 +171,7 @@ public class HttpLayer<N extends INeuron> implements ILayer<N> {
                 ns.addNeuron(neur);
             }
         }
-        ns.process(4);
+        ns.process(threads);
     }
 
     @Override
@@ -208,7 +211,7 @@ public class HttpLayer<N extends INeuron> implements ILayer<N> {
 
     @Override
     public void dumpNeurons(ILayerMeta layerMeta) {
-
+       layerMeta.saveNeurons(neurons.values().stream().collect(Collectors.toList()));
     }
 
     @Override

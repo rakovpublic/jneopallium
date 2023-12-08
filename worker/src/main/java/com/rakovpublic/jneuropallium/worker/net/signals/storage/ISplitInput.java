@@ -80,5 +80,7 @@ public interface ISplitInput extends IStorageMeta {
 
     void applyMeta(ILayersMeta layersMeta);
 
+    Integer getThreads();
+
 
 }

@@ -9,6 +9,7 @@ import com.rakovpublic.jneuropallium.worker.exceptions.HttpClusterCommunicationE
 import com.rakovpublic.jneuropallium.worker.model.NodeCompleteRequest;
 import com.rakovpublic.jneuropallium.worker.net.neuron.IAxon;
 import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
+import com.rakovpublic.jneuropallium.worker.net.neuron.impl.NeuronRunnerService;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInputResolver;
 import com.rakovpublic.jneuropallium.worker.net.signals.storage.ISplitInput;
@@ -50,17 +51,28 @@ public class HttpClusterApplication implements IApplication {
             ISplitInput splitInput = parseSplitInput(jsonSplitInput);
             IInputResolver inputResolver = splitInput.getInputResolver();
             HashMap<Long, List<ISignal>> input = inputResolver.getSignalPersistStorage().getLayerSignals(splitInput.getLayerId());
-            for (INeuron neuron : splitInput.getNeurons()) {
+            NeuronRunnerService neuronRunnerService = NeuronRunnerService.getService();
+            List<INeuron> neurons = (List<INeuron>) splitInput.getNeurons();
+
+
+            for (INeuron neuron :neurons) {
                 neuron.setCurrentLoop(inputResolver.getCurrentLoop());
                 neuron.setRun(inputResolver.getRun());
                 neuron.addSignals(input.get(neuron.getId()));
                 neuron.setCyclingNeuronInputMapping(inputResolver.getCycleNeuronAddressMapping());
-                neuron.processSignals();
-                neuron.activate();
-                IAxon axon = neuron.getAxon();
-                HashMap<Integer, HashMap<Long, List<ISignal>>> result = axon.getSignalResultStructure(axon.processSignals(neuron.getResult()));
-                splitInput.saveResults(result);
-                splitInput.saveNeuron(neuron);
+                neuronRunnerService.addNeuron(neuron);
+            }
+            neuronRunnerService.process(splitInput.getThreads());
+            while(neurons.size()>0){
+                for(INeuron neuron:neurons){
+                    if(neuron.hasResult()){
+                        IAxon axon = neuron.getAxon();
+                        HashMap<Integer, HashMap<Long, List<ISignal>>> result = axon.getSignalResultStructure(axon.processSignals(neuron.getResult()));
+                        splitInput.saveResults(result);
+                        splitInput.saveNeuron(neuron);
+                        neurons.remove(neuron);
+                    }
+                }
             }
         }
     }

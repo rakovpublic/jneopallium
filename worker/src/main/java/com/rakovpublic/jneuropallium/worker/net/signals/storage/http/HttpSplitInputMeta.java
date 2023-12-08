@@ -38,9 +38,10 @@ public class HttpSplitInputMeta implements ISplitInput {
     private ILayersMeta layersMeta;
     private String discriminatorName;
     private Integer layerId;
+    private Integer threads;
 
 
-    public HttpSplitInputMeta(String nodeId, String readNeuronsEndpoint, String masterAddress, String sendResultEndpoint, IInputResolver inputResolver, ILayersMeta layer, Long start, Long end, Integer layerId) {
+    public HttpSplitInputMeta(String nodeId, String readNeuronsEndpoint, String masterAddress, String sendResultEndpoint, IInputResolver inputResolver, ILayersMeta layer, Long start, Long end, Integer layerId, Integer threads) {
         this.nodeId = nodeId;
         this.readNeuronsEndpoint = readNeuronsEndpoint;
         this.masterAddress = masterAddress;
@@ -50,6 +51,7 @@ public class HttpSplitInputMeta implements ISplitInput {
         this.start = start;
         this.end = end;
         this.layerId = layerId;
+        this.threads = threads;
     }
 
     @Override
@@ -84,6 +86,11 @@ public class HttpSplitInputMeta implements ISplitInput {
         this.layersMeta = layersMeta;
     }
 
+    @Override
+    public Integer getThreads() {
+        return threads;
+    }
+
 
     @Override
     public void saveResults(HashMap<Integer, HashMap<Long, List<ISignal>>> signals) {
@@ -97,7 +104,7 @@ public class HttpSplitInputMeta implements ISplitInput {
 
     @Override
     public ISplitInput getNewInstance() {
-        return new HttpSplitInputMeta(this.nodeId, this.readNeuronsEndpoint, masterAddress, this.sendResultEndpoint, this.inputResolver, this.layersMeta, this.start, this.end, layerId);
+        return new HttpSplitInputMeta(this.nodeId, this.readNeuronsEndpoint, masterAddress, this.sendResultEndpoint, this.inputResolver, this.layersMeta, this.start, this.end, layerId, threads);
     }
 
     @Override
@@ -132,7 +139,7 @@ public class HttpSplitInputMeta implements ISplitInput {
     protected List<? extends INeuron> parseNeurons(HttpResponse<String> response) {
         List<INeuron> res = NeuronParser.parseNeurons(response.body());
         for(INeuron neuron: res){
-            HttpLayer httpLayer = new HttpLayer( masterAddress,  layerId, this.hashCode()+"",res.size(), this);
+            HttpLayer httpLayer = new HttpLayer( masterAddress,  layerId, this.hashCode()+"",res.size(), threads, this);
             neuron.setLayer(httpLayer);
         }
         return NeuronParser.parseNeurons(response.body());
