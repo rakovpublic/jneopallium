@@ -18,16 +18,17 @@ import java.util.Properties;
 
 public class Context implements IContext {
     private static final Logger logger = LogManager.getLogger(Context.class);
-    private static Context ctx = new Context();
     private Properties prop;
+    private String path;
+
+    public Context(String path) {
+        this.path = path;
+    }
 
     private Context() {
         init();
     }
 
-    public static Context getContext() {
-        return ctx;
-    }
 
     @Override
     public String getProperty(String propertyName) {
@@ -48,15 +49,13 @@ public class Context implements IContext {
 
     private void init() {
         try {
-            InputStream input = getClass()
-                    .getClassLoader().getResourceAsStream("config.properties");
+            InputStream input = new FileInputStream(path);
             prop = new Properties();
             prop.load(input);
 
         } catch (IOException ex) {
-            logger.error("cannot read default properties", ex);
+            logger.error("cannot read properties from path " + path, ex);
         }
-
     }
 
 
