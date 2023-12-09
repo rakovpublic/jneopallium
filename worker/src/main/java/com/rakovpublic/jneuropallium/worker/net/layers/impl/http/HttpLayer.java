@@ -7,18 +7,21 @@ package com.rakovpublic.jneuropallium.worker.net.layers.impl.http;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.rakovpublic.jneuropallium.worker.application.HttpCommunicationClient;
 import com.rakovpublic.jneuropallium.worker.application.HttpRequestResolver;
+import com.rakovpublic.jneuropallium.worker.exceptions.JSONParsingException;
 import com.rakovpublic.jneuropallium.worker.model.CreateNeuronRequest;
 import com.rakovpublic.jneuropallium.worker.model.DeleteNeuronRequest;
+import com.rakovpublic.jneuropallium.worker.model.LayerParamUpdate;
 import com.rakovpublic.jneuropallium.worker.model.UploadSignalsRequest;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayer;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.layers.impl.LayerMetaParam;
-import com.rakovpublic.jneuropallium.worker.net.neuron.IAxon;
-import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
-import com.rakovpublic.jneuropallium.worker.net.neuron.IRule;
-import com.rakovpublic.jneuropallium.worker.net.neuron.ISynapse;
+import com.rakovpublic.jneuropallium.worker.net.neuron.*;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.NeuronRunnerService;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.layersizing.CreateNeuronSignal;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.layersizing.DeleteNeuronSignal;
@@ -263,16 +266,46 @@ public class HttpLayer<N extends INeuron> implements ILayer<N> {
         splitInput.getInputResolver().sendCallBack(name, signals);
     }
 
-    //TODO: add implementation
-
     @Override
     public LayerMetaParam getLayerMetaParam(String key) {
-        return null;
+
+        String getLayerParam = masterAddress + "/layer/getLayerParam?param="+key+"&layerId="+layerId;
+        HttpCommunicationClient communicationClient = new HttpCommunicationClient();
+       String resultJson =null;
+        try {
+            resultJson= communicationClient.sendRequest(HttpRequestResolver.createGet(getLayerParam));
+        } catch (IOException | InterruptedException e) {
+            logger.error("Cannot send delete request", e);
+            return null;
+        }
+       if(resultJson != null){
+           JsonElement jelement = new JsonParser().parse(resultJson);
+           JsonObject jobject = jelement.getAsJsonObject();
+           String cl =jobject.getAsJsonPrimitive("paramClass").getAsString();
+           ObjectMapper mapper = new ObjectMapper();
+           try {
+                LayerMetaParam metaParam = new LayerMetaParam(mapper.readValue(jobject.getAsJsonPrimitive("param").getAsString(),Class.forName(cl)));
+                return metaParam;
+           } catch (IOException | ClassNotFoundException e) {
+               logger.error("cannot parse layer meta param from json " + resultJson, e);
+           }
+
+
+       }
+       return null;
     }
 
     @Override
     public void updateLayerMetaParam(String key, LayerMetaParam metaParam) {
-
+        String sendMetaParam = masterAddress + "/layer/updateLayerParam";
+        HttpCommunicationClient communicationClient = new HttpCommunicationClient();
+        LayerParamUpdate layerParamUpdate = new LayerParamUpdate(key,layerId,metaParam);
+        try {
+            communicationClient.sendRequest(HttpRequestResolver.createPost(sendMetaParam, layerParamUpdate));
+        } catch (IOException | InterruptedException e) {
+            logger.error("Cannot send delete request", e);
+            return;
+        }
     }
 
     @Override

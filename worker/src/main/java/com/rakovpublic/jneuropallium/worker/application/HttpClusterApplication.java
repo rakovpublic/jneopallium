@@ -85,6 +85,7 @@ public class HttpClusterApplication implements IApplication {
                         }
                     }
                     neuronRunnerService.getNeuronQueue().addAll(neurons);
+                    neuronRunnerService.process(splitInput.getThreads());
                 }
             }
         }

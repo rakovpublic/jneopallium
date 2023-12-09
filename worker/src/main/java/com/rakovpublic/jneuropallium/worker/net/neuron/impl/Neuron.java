@@ -3,6 +3,7 @@ package com.rakovpublic.jneuropallium.worker.net.neuron.impl;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.rakovpublic.jneuropallium.worker.application.HttpClusterApplication;
 import com.rakovpublic.jneuropallium.worker.exceptions.CannotFindSignalMergerException;
 import com.rakovpublic.jneuropallium.worker.exceptions.CannotFindSignalProcessorException;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayer;
@@ -10,6 +11,8 @@ import com.rakovpublic.jneuropallium.worker.net.neuron.*;
 import com.rakovpublic.jneuropallium.worker.net.signals.IChangingSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignalHistoryStorage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -182,6 +185,7 @@ public class Neuron implements INeuron {
     //TODO:refactor this method
     @Override
     public void processSignals() {
+        try{
         HashMap<Class<? extends ISignal>, List<ISignal>> signalsMap = new HashMap<>();
         List<ISignal> signalsForProcessing = dendrites.processSignalsWithDendrites(signals);
         for (ISignal s : signalsForProcessing) {
@@ -250,7 +254,13 @@ public class Neuron implements INeuron {
                 }
             }
         }
-        this.isProcessed = true;
+        }catch (Exception e){
+            Logger logger = LogManager.getLogger(Neuron.class);
+            logger.error("Error during neuron processing", e);
+        }finally {
+            this.isProcessed = true;
+        }
+
 
     }
 
