@@ -73,6 +73,19 @@ public class HttpClusterApplication implements IApplication {
                         neurons.remove(neuron);
                     }
                 }
+                //fault tolerance
+                if(neuronRunnerService.getNeuronQueue().isEmpty()){
+                    for(INeuron neuron:neurons){
+                        if(neuron.hasResult()){
+                            IAxon axon = neuron.getAxon();
+                            HashMap<Integer, HashMap<Long, List<ISignal>>> result = axon.getSignalResultStructure(axon.processSignals(neuron.getResult()));
+                            splitInput.saveResults(result);
+                            splitInput.saveNeuron(neuron);
+                            neurons.remove(neuron);
+                        }
+                    }
+                    neuronRunnerService.getNeuronQueue().addAll(neurons);
+                }
             }
         }
     }
