@@ -77,6 +77,7 @@ public class FileLayerMeta<S extends IStorageItem> implements ILayerMeta {
             INeuron neuron = getNeuronByID(targetNeuronId);
             neuron.getAxon().moveConnection(layerMove,neuron.getLayer().getId(),targetNeuronId);
         }
+        dumpLayer();
     }
 
     @Override
