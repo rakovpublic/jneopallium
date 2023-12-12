@@ -15,6 +15,7 @@ public abstract class AbstractSignal<T> implements ISignal<T> {
     private Long epoch;
     private Integer innerLoop;
     private Integer loop;
+    private String currentClassName;
 
     private boolean needToRemoveDuringLearning;
 
@@ -60,6 +61,7 @@ public abstract class AbstractSignal<T> implements ISignal<T> {
         this.name = name;
         this.epoch = 0l;
         this.loop = 0;
+        this.currentClassName = getCurrentSignalClass().getCanonicalName();
     }
 
     @Override
