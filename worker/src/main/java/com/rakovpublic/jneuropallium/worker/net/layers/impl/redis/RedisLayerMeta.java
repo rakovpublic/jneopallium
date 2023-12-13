@@ -163,6 +163,6 @@ public class RedisLayerMeta implements ILayerMeta {
 
     @Override
     public Long getSize() {
-        return 0l;
+        return Long.parseLong( getNeurons().size()+"");
     }
 }
