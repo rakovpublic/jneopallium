@@ -10,6 +10,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
+import com.rakovpublic.jneuropallium.worker.net.neuron.IResultNeuron;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalMerger;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
@@ -35,6 +36,33 @@ public class NeuronParser {
             String cl = jel.getAsJsonObject().getAsJsonPrimitive("currentNeuronClass").getAsString();
             try {
                 INeuron neuron = (INeuron) mapper.readValue(jel.getAsJsonObject().toString(), Class.forName(cl));
+                HashMap<Class<?>, ISignalProcessor> p = new HashMap<>();
+                for (Map.Entry<String, JsonElement> e : jel.getAsJsonObject().getAsJsonObject("processorMap").entrySet()) {
+                    String cc = e.getValue().getAsJsonObject().getAsJsonPrimitive("signalProcessorClass").getAsString();
+                    neuron.addSignalProcessor((Class<? extends ISignal>) Class.forName(e.getKey()), (ISignalProcessor) mapper.readValue(e.getValue().getAsJsonObject().toString(), Class.forName(cc)));
+                }
+                for (Map.Entry<String, JsonElement> e : jel.getAsJsonObject().getAsJsonObject("mergerMap").entrySet()) {
+                    String cc = e.getValue().getAsJsonObject().getAsJsonPrimitive("signalMergerClass").getAsString();
+                    neuron.addSignalMerger((Class<? extends ISignal>) Class.forName(e.getKey()), (ISignalMerger) mapper.readValue(e.getValue().getAsJsonObject().toString(), Class.forName(cc)));
+                }
+                result.add(neuron);
+            } catch (IOException | ClassNotFoundException e) {
+                logger.error("cannot parse neuron from json " + jel.getAsJsonObject().toString(), e);
+            }
+        }
+        return result;
+    }
+
+    public static List<IResultNeuron> parseResultNeurons(String json) {
+        List<IResultNeuron> result = new ArrayList<>();
+        JsonElement jelement = new JsonParser().parse(json);
+        JsonObject jobject = jelement.getAsJsonObject();
+        JsonArray jarray = jobject.getAsJsonArray("neurons");
+        ObjectMapper mapper = new ObjectMapper();
+        for (JsonElement jel : jarray) {
+            String cl = jel.getAsJsonObject().getAsJsonPrimitive("currentNeuronClass").getAsString();
+            try {
+                IResultNeuron neuron = (IResultNeuron) mapper.readValue(jel.getAsJsonObject().toString(), Class.forName(cl));
                 HashMap<Class<?>, ISignalProcessor> p = new HashMap<>();
                 for (Map.Entry<String, JsonElement> e : jel.getAsJsonObject().getAsJsonObject("processorMap").entrySet()) {
                     String cc = e.getValue().getAsJsonObject().getAsJsonPrimitive("signalProcessorClass").getAsString();

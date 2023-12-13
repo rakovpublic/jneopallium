@@ -30,11 +30,11 @@ import java.util.Map;
 
 public class RedisLayerMeta implements ILayerMeta {
     private static final Logger logger = LogManager.getLogger(RedisLayerMeta.class);
-    private JedisPool pool = null;
-    private String host;
-    private Integer port;
-    private String neuronNetName;
-    private Integer layerId;
+    protected JedisPool pool = null;
+    protected String host;
+    protected Integer port;
+    protected String neuronNetName;
+    protected Integer layerId;
 
     public RedisLayerMeta(String host, Integer port, String neuronNetName, Integer layerId) {
         this.host = host;

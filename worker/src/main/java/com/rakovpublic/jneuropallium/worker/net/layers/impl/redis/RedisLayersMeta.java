@@ -51,7 +51,8 @@ public class RedisLayersMeta implements ILayersMeta {
 
     @Override
     public IResultLayerMeta getResultLayer() {
-        return null;
+
+        return new RedisResultLayerMeta(host,port,neuronNetName,Integer.MAX_VALUE);
     }
 
     @Override
