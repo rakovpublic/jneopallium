@@ -4,8 +4,6 @@
 
 package com.rakovpublic.jneuropallium.worker.net.signals;
 
-import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.AbstractSignal;
-
 public class ResultInputSignalWrapper<T> extends AbstractSignal<T> implements IInputSignal<T> {
     private IResultSignal<T> inputSignal;
 

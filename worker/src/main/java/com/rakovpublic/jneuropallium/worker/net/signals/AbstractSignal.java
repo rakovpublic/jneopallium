@@ -1,4 +1,8 @@
-package com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing;
+/*
+ * Copyright (c) 2023. Rakovskyi Dmytro
+ */
+
+package com.rakovpublic.jneuropallium.worker.net.signals;
 
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 

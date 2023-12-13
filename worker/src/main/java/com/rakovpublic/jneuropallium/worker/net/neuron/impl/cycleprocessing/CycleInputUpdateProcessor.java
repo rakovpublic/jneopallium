@@ -19,8 +19,8 @@ public class CycleInputUpdateProcessor implements ISignalProcessor<CycleInputUpd
     public <I extends ISignal> List<I> process(CycleInputUpdateSignal input, CycleNeuron neuron) {
         HashMap<IInitInput, ProcessingFrequency> result = neuron.getInputProcessingFrequencyHashMap();
         for (IInitInput initInput : result.keySet()) {
-            if (initInput.getName().equals(input.value.getName())) {
-                result.put(initInput, input.value.getFrequency());
+            if (initInput.getName().equals(input.getValue().getName())) {
+                result.put(initInput, input.getValue().getFrequency());
             }
         }
         neuron.setInputProcessingFrequencyHashMap(result);

@@ -1,6 +1,6 @@
 package com.rakovpublic.jneuropallium.worker.net.neuron.impl.layersizing;
 
-import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.AbstractSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.AbstractSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 public class DeleteNeuronSignal extends AbstractSignal<DeleteNeuronIntegration> implements ISignal<DeleteNeuronIntegration> {

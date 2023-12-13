@@ -1,5 +1,6 @@
 package com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing;
 
+import com.rakovpublic.jneuropallium.worker.net.signals.AbstractSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 public class MultiplyCycleSignal extends AbstractSignal<Float> implements ISignal<Float> {

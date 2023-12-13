@@ -9,7 +9,7 @@ import java.util.List;
 public class MultiplyCycleSignalProcessor implements ISignalProcessor<MultiplyCycleSignal, CycleNeuron> {
     @Override
     public <I extends ISignal> List<I> process(MultiplyCycleSignal input, CycleNeuron neuron) {
-        neuron.setLoopCount((int)(neuron.getLoopCount()*input.value));
+        neuron.setLoopCount((int)(neuron.getLoopCount()*input.getValue()));
         return new ArrayList<I>();
     }
 

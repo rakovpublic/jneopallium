@@ -11,7 +11,7 @@ public class ProcessingFrequencySignalProcessor implements ISignalProcessor<Proc
 
     @Override
     public <I extends ISignal> List<I> process(ProcessingFrequencySignal input, CycleNeuron neuron) {
-        neuron.getSignalProcessingFrequencyMap().put(input.value.getSignalClass(), input.value.getFrequency());
+        neuron.getSignalProcessingFrequencyMap().put(input.getValue().getSignalClass(), input.getValue().getFrequency());
         return new ArrayList<>();
     }
 
