@@ -1,0 +1,32 @@
+syntax = "proto3";
+option java_multiple_files = true;
+package com.rakovpublic.jneuropallium.worker;
+message SplitInputConfig {
+    string nodeId;
+    string inputResolverClass;
+    string inputResolverJson;
+    long start;
+    long end;
+    string layersMetaClass;
+    string layersMetaJson;
+    string discriminatorName;
+    integer layerId;
+    integer threads;
+}
+message NodeRequest {
+    string nodeIdentifier = 2;
+}
+message Result {
+    map<int, map<long,repeated string>> result = 1;
+    string nodeIdentifier = 2;
+}
+message ResultDiscriminator {
+    map<int, map<long,repeated string>> result = 1;
+    string discriminatorName = 2;
+    string nodeIdentifier = 3;
+}
+service GRPCMasterService {
+    rpc save(Result) returns (google.protobuf.Empty);
+    rpc saveDiscriminator(ResultDiscriminator) returns (google.protobuf.Empty);
+    rpc getRun(NodeRequest) returns (SplitInputConfig);
+}
