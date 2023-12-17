@@ -1,4 +1,8 @@
-package com.rakovpublic.jneuropallium.master.services.impl;
+/*
+ * Copyright (c) 2023. Rakovskyi Dmytro
+ */
+
+package com.rakovpublic.jneuropallium.worker.model;
 
 import com.rakovpublic.jneuropallium.worker.net.signals.storage.ISplitInput;
 

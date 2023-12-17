@@ -1,7 +1,7 @@
 package com.rakovpublic.jneuropallium.master.controllers;
 
 import com.rakovpublic.jneuropallium.master.services.ConfigurationService;
-import com.rakovpublic.jneuropallium.master.services.IInputService;
+import com.rakovpublic.jneuropallium.worker.net.core.IInputService;
 import com.rakovpublic.jneuropallium.master.services.impl.NodeManager;
 import com.rakovpublic.jneuropallium.master.services.impl.NodeStatus;
 import com.rakovpublic.jneuropallium.worker.model.NodeCompleteRequest;

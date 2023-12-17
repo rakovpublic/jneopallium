@@ -1,10 +1,14 @@
-package com.rakovpublic.jneuropallium.master.services.impl;
+/*
+ * Copyright (c) 2023. Rakovskyi Dmytro
+ */
+
+package com.rakovpublic.jneuropallium.worker.net.core;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rakovpublic.jneuropallium.master.services.IInputService;
-import com.rakovpublic.jneuropallium.master.services.IResultLayerRunner;
+import com.rakovpublic.jneuropallium.worker.model.DiscriminatorStatus;
 import com.rakovpublic.jneuropallium.worker.model.InputRegistrationRequest;
+import com.rakovpublic.jneuropallium.worker.model.NodeMeta;
 import com.rakovpublic.jneuropallium.worker.net.layers.DiscriminatorResultLayer;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayersMeta;

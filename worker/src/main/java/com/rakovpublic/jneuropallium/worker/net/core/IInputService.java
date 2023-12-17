@@ -1,4 +1,8 @@
-package com.rakovpublic.jneuropallium.master.services;
+/*
+ * Copyright (c) 2023. Rakovskyi Dmytro
+ */
+
+package com.rakovpublic.jneuropallium.worker.net.core;
 
 import com.rakovpublic.jneuropallium.worker.model.InputRegistrationRequest;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayersMeta;

@@ -2,7 +2,7 @@
  * Copyright (c) 2023. Rakovskyi Dmytro
  */
 
-package com.rakovpublic.jneuropallium.master.services.impl;
+package com.rakovpublic.jneuropallium.worker.model;
 
 public class DiscriminatorStatus {
     private String name;
