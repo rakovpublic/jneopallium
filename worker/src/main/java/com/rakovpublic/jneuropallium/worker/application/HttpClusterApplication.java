@@ -43,7 +43,10 @@ public class HttpClusterApplication implements IApplication {
         String jsonSplitInput;
         while (true) {
             try {
-                jsonSplitInput = communicationClient.sendRequest(HttpRequestResolver.createPost(getSplitInputLink, nodeCompleteRequest));
+                while ((jsonSplitInput = communicationClient.sendRequest(HttpRequestResolver.createPost(getSplitInputLink, nodeCompleteRequest)))==null){
+                    Thread.sleep(1000);
+                }
+
             } catch (IOException | InterruptedException e) {
                 logger.error("Cannot register node", e);
                 throw new HttpClusterCommunicationException(e.getMessage());

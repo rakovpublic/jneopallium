@@ -14,8 +14,10 @@ public class HttpCommunicationClient {
                 .connectTimeout(Duration.ofSeconds(20))
                 .build();
         HttpResponse<String> response = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-        if (response.statusCode() >= 300) {
+        if (response.statusCode() >= 400) {
             throw new IOException("master is down reason: " + response.body());
+        }else if(response.statusCode()>=300 &&response.statusCode()<400){
+            return null;
         }
         return response.body();
     }

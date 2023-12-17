@@ -49,7 +49,7 @@ public class NodeManagerController {
                     inputService.prepareDiscriminatorsInputs();
                     splitInput = inputService.getNextDiscriminators(request.getNodeName());
                 } else {
-                    if (inputService.isResultValid()) {
+                    if (inputService.isResultValid() && inputService.runCompleted()) {
                         inputService.prepareResults();
                     } else if (inputService.runCompleted()) {
                         inputService.nextRun();
