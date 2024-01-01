@@ -4,25 +4,31 @@
 
 package com.rakovpublic.jneuropallium.worker.application;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.rakovpublic.jneuropallium.worker.MasterServiceGrpc;
+import com.rakovpublic.jneuropallium.worker.SplitInputConfig;
 import com.rakovpublic.jneuropallium.worker.net.core.IInputService;
-import com.rakovpublic.jneuropallium.worker.net.core.InputService;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
-import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInitInput;
 import com.rakovpublic.jneuropallium.worker.net.signals.storage.ISplitInput;
 import com.rakovpublic.jneuropallium.worker.util.IContext;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 
 public class GRPCServer extends MasterServiceGrpc.MasterServiceImplBase {
+    private static final Logger logger = LogManager.getLogger(GRPCServer.class);
     private IInputService iInputService;
-    private IContext context;
 
-    public GRPCServer(IInputService iInputService, IContext context) {
+    public GRPCServer(IInputService iInputService) {
         this.iInputService = iInputService;
-        this.context = context;
     }
 
     @Override
@@ -30,7 +36,7 @@ public class GRPCServer extends MasterServiceGrpc.MasterServiceImplBase {
                      io.grpc.stub.StreamObserver<com.google.protobuf.Empty> responseObserver) {
         HashMap<Integer,HashMap<Long, List<ISignal>>> result = new HashMap<>();
         for(Integer layerId: request.getResultMap().keySet()){
-
+            parseAndSave(request.getResultMap().get(layerId),result,layerId);
         }
         iInputService.uploadWorkerResult(request.getNodeIdentifier(),result);
 
@@ -44,7 +50,7 @@ public class GRPCServer extends MasterServiceGrpc.MasterServiceImplBase {
                                   io.grpc.stub.StreamObserver<com.google.protobuf.Empty> responseObserver) {
         HashMap<Integer,HashMap<Long, List<ISignal>>> result = new HashMap<>();
         for(Integer layerId: request.getResultMap().keySet()){
-
+            parseAndSave(request.getResultMap().get(layerId),result,layerId);
         }
         iInputService.uploadDiscriminatorWorkerResult(request.getNodeIdentifier(),request.getDiscriminatorName(),result);
     }
@@ -63,6 +69,7 @@ public class GRPCServer extends MasterServiceGrpc.MasterServiceImplBase {
                 if (iInputService.isResultValid() && iInputService.runCompleted()) {
                     iInputService.prepareResults();
                 } else if (iInputService.runCompleted()) {
+                    //TODO: add save
                     iInputService.nextRun();
                     iInputService.prepareInputs();
                     iInputService.nextRunDiscriminator();
@@ -71,13 +78,49 @@ public class GRPCServer extends MasterServiceGrpc.MasterServiceImplBase {
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        logger.error(e);
                     }
                 }
             }
         }
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            SplitInputConfig splitInputConfig = SplitInputConfig.newBuilder().setDiscriminatorName(payload.getDiscriminatorName())
+                    .setEnd(payload.getEnd()).setInputResolverClass(payload.getInputResolver().getClass().getCanonicalName())
+                    .setInputResolverJson(objectMapper.writeValueAsString(payload.getInputResolver()))
+                    .setLayerId(payload.getLayerId()).setLayersMetaClass(iInputService.getLayersMeta().getClass().getCanonicalName())
+                    .setLayersMetaJson(objectMapper.writeValueAsString(iInputService.getLayersMeta()))
+                    .setNodeId(request.getNodeIdentifier()).setStart(payload.getStart()).setThreads(payload.getThreads()).build();
+            responseObserver.onNext(splitInputConfig);
+            responseObserver.onCompleted();
+        } catch (JsonProcessingException e) {
+            logger.error(e);
+           responseObserver.onError(e);
+        }
 
 
+    }
+
+    private void parseAndSave(String input,HashMap<Integer,HashMap<Long, List<ISignal>>> result, Integer layerId ){
+        JsonElement jelement = new JsonParser().parse(input);
+        HashMap<Long, List<ISignal>> signalsMap = new HashMap<>();
+        ObjectMapper mapper = new ObjectMapper();
+        for (Map.Entry<String, JsonElement> e : jelement.getAsJsonObject().entrySet()) {
+            Long neuronId = Long.parseLong(e.getKey());
+            List<ISignal> signals = new LinkedList<>();
+            for(JsonElement signal: e.getValue().getAsJsonArray()){
+                String cc = signal.getAsJsonObject().getAsJsonPrimitive("currentClassName").getAsString();
+                try {
+                    signals.add( (ISignal) mapper.readValue(signal.getAsJsonObject().toString(), Class.forName(cc)));
+                } catch (JsonProcessingException ex) {
+                    logger.error("Cannot parse this signal json " + signal.getAsJsonObject().toString(),ex);
+                } catch (ClassNotFoundException ex) {
+                    logger.error("Cannot find this signal class class " + cc,ex);
+                }
+            }
+            signalsMap.put(neuronId,signals);
+        }
+        result.put(layerId,signalsMap);
     }
 
 }

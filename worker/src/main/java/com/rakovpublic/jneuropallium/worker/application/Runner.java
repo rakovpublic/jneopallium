@@ -2,7 +2,6 @@ package com.rakovpublic.jneuropallium.worker.application;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rakovpublic.jneuropallium.worker.net.study.IDirectLearningAlgorithm;
 import com.rakovpublic.jneuropallium.worker.util.IContext;
 import com.rakovpublic.jneuropallium.worker.util.JarClassLoaderService;
 import org.apache.logging.log4j.LogManager;
@@ -41,13 +40,15 @@ public  class Runner implements IRunner {
             throw new RuntimeException(e);
         }
         JarClassLoaderService classLoaderService = new JarClassLoaderService(uris);
-        IApplication application;
+        IApplication application=null;
         if (mode.equals("local")) {
             application = new LocalApplication();
         } else if (mode.equals("http")) {
             application = new HttpClusterApplication();
-        } else {
-            application = new GRPCBasedApplication();
+        } else if(mode.equals("grpc-client")) {
+            application = new GRPCClientApplication();
+        }else if(mode.equals("grpc-master")){
+            application = new GRPCServerApplication();
         }
         try {
             application.startApplication(context, classLoaderService);

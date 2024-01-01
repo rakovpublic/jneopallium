@@ -46,38 +46,22 @@ public class HttpClusterApplication implements IApplication {
                 while ((jsonSplitInput = communicationClient.sendRequest(HttpRequestResolver.createPost(getSplitInputLink, nodeCompleteRequest)))==null){
                     Thread.sleep(1000);
                 }
-
-            } catch (IOException | InterruptedException e) {
-                logger.error("Cannot register node", e);
-                throw new HttpClusterCommunicationException(e.getMessage());
-            }
-            ISplitInput splitInput = parseSplitInput(jsonSplitInput);
-            IInputResolver inputResolver = splitInput.getInputResolver();
-            HashMap<Long, List<ISignal>> input = inputResolver.getSignalPersistStorage().getLayerSignals(splitInput.getLayerId());
-            NeuronRunnerService neuronRunnerService = NeuronRunnerService.getService();
-            List<INeuron> neurons = (List<INeuron>) splitInput.getNeurons();
+                ISplitInput splitInput = parseSplitInput(jsonSplitInput);
+                IInputResolver inputResolver = splitInput.getInputResolver();
+                HashMap<Long, List<ISignal>> input = inputResolver.getSignalPersistStorage().getLayerSignals(splitInput.getLayerId());
+                NeuronRunnerService neuronRunnerService = NeuronRunnerService.getService();
+                List<INeuron> neurons = (List<INeuron>) splitInput.getNeurons();
 
 
-            for (INeuron neuron :neurons) {
-                neuron.setCurrentLoop(inputResolver.getCurrentLoop());
-                neuron.setRun(inputResolver.getRun());
-                neuron.addSignals(input.get(neuron.getId()));
-                neuron.setCyclingNeuronInputMapping(inputResolver.getCycleNeuronAddressMapping());
-                neuronRunnerService.addNeuron(neuron);
-            }
-            neuronRunnerService.process(splitInput.getThreads());
-            while(neurons.size()>0){
-                for(INeuron neuron:neurons){
-                    if(neuron.hasResult()){
-                        IAxon axon = neuron.getAxon();
-                        HashMap<Integer, HashMap<Long, List<ISignal>>> result = axon.getSignalResultStructure(axon.processSignals(neuron.getResult()));
-                        splitInput.saveResults(result);
-                        splitInput.saveNeuron(neuron);
-                        neurons.remove(neuron);
-                    }
+                for (INeuron neuron :neurons) {
+                    neuron.setCurrentLoop(inputResolver.getCurrentLoop());
+                    neuron.setRun(inputResolver.getRun());
+                    neuron.addSignals(input.get(neuron.getId()));
+                    neuron.setCyclingNeuronInputMapping(inputResolver.getCycleNeuronAddressMapping());
+                    neuronRunnerService.addNeuron(neuron);
                 }
-                //fault tolerance
-                if(neuronRunnerService.getNeuronQueue().isEmpty()){
+                neuronRunnerService.process(splitInput.getThreads());
+                while(neurons.size()>0){
                     for(INeuron neuron:neurons){
                         if(neuron.hasResult()){
                             IAxon axon = neuron.getAxon();
@@ -87,9 +71,24 @@ public class HttpClusterApplication implements IApplication {
                             neurons.remove(neuron);
                         }
                     }
-                    neuronRunnerService.getNeuronQueue().addAll(neurons);
-                    neuronRunnerService.process(splitInput.getThreads());
+                    //fault tolerance
+                    if(neuronRunnerService.getNeuronQueue().isEmpty()){
+                        for(INeuron neuron:neurons){
+                            if(neuron.hasResult()){
+                                IAxon axon = neuron.getAxon();
+                                HashMap<Integer, HashMap<Long, List<ISignal>>> result = axon.getSignalResultStructure(axon.processSignals(neuron.getResult()));
+                                splitInput.saveResults(result);
+                                splitInput.saveNeuron(neuron);
+                                neurons.remove(neuron);
+                            }
+                        }
+                        neuronRunnerService.getNeuronQueue().addAll(neurons);
+                        neuronRunnerService.process(splitInput.getThreads());
+                    }
                 }
+            } catch (IOException | InterruptedException e) {
+                logger.error("Cannot register node", e);
+                throw new HttpClusterCommunicationException(e.getMessage());
             }
         }
     }
@@ -105,8 +104,5 @@ public class HttpClusterApplication implements IApplication {
             logger.error("Cannot parse loading strategy  " + json, e);
         }
         return result;
-
     }
-
-
 }
