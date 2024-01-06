@@ -34,6 +34,12 @@ public interface ILayerMeta extends IStorageMeta {
      */
     List<INeuron> getNeurons();
 
+
+    /**
+     * @return list of layer neurons
+     */
+    List<INeuron> getNeurons(Long start,Long end);
+
     /**
      * @param id neuron id
      * @return neuron

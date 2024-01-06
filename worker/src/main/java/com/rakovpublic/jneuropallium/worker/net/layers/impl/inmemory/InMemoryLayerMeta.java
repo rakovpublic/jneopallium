@@ -70,6 +70,17 @@ public class InMemoryLayerMeta implements ILayerMeta {
     }
 
     @Override
+    public List<INeuron> getNeurons(Long start, Long end) {
+        List<INeuron> result = new LinkedList<>();
+        for(INeuron neuron : neurons){
+            if(neuron.getId()>=start&& neuron.getId()<end){
+                result.add(neuron);
+            }
+        }
+        return result;
+    }
+
+    @Override
     public INeuron getNeuronByID(Long id) {
         for (INeuron n : neurons) {
             if (id.equals(n.getId())) {

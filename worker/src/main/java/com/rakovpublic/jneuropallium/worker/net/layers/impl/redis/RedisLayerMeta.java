@@ -17,6 +17,7 @@ import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.util.NeuronParser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.json.JSONArray;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPooled;
@@ -113,6 +114,19 @@ public class RedisLayerMeta implements ILayerMeta {
         JedisPooled jedisPooled = new JedisPooled(this.host, this.port);
         String json = jedisPooled.jsonGet(neuronNetName+"_layer_neurons"+ layerId).toString();
         return NeuronParser.parseNeurons(json);
+    }
+
+    @Override
+    public List<INeuron> getNeurons(Long start, Long end) {
+        List<INeuron> result = new LinkedList<>();
+        JedisPooled jedisPooled = new JedisPooled(this.host, this.port);
+        List<JSONArray> json = jedisPooled.jsonMGet( Path2.of("$..[?(@.neuronId => "+start+" && @.neuronId < "+end+" )]"), neuronNetName+"_layer_neurons"+ layerId);
+        for (JSONArray jsonArray: json){
+            //TODO: dooble check
+            result.addAll(NeuronParser.parseNeurons(jsonArray.toString()));
+            //result.add(NeuronParser.parseNeuron(jsonArray.toString()));
+        }
+        return result;
     }
 
     @Override

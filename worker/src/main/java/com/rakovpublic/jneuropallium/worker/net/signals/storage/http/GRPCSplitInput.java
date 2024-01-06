@@ -4,8 +4,10 @@
 
 package com.rakovpublic.jneuropallium.worker.net.signals.storage.http;
 
+import com.rakovpublic.jneuropallium.worker.net.layers.ILayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayersMeta;
 import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
+import com.rakovpublic.jneuropallium.worker.net.neuron.impl.Neuron;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInputResolver;
 import com.rakovpublic.jneuropallium.worker.net.signals.storage.ISplitInput;
@@ -14,7 +16,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.List;
-//TODO: add implementation
+
 public class GRPCSplitInput implements ISplitInput {
     private static final Logger logger = LogManager.getLogger(GRPCSplitInput.class);
     private String nodeId;
@@ -39,86 +41,94 @@ public class GRPCSplitInput implements ISplitInput {
 
     @Override
     public String getDiscriminatorName() {
-        return null;
+        return discriminatorName;
     }
 
     @Override
     public void setDiscriminatorName(String name) {
-
+        discriminatorName =name;
     }
 
     @Override
     public IInputResolver getInputResolver() {
-        return null;
+        return inputResolver;
     }
 
     @Override
     public void saveResults(HashMap<Integer, HashMap<Long, List<ISignal>>> signals) {
-
+            inputResolver.getSignalPersistStorage().putSignals(signals);
     }
 
     @Override
     public void saveNeuron(INeuron neuron) {
-
+        ILayerMeta meta = layersMeta.getLayerById(neuron.getLayer().getId());
+        List<INeuron> neurons = meta.getNeurons();
+        for(INeuron iNeuron: neurons){
+            if(iNeuron.getId() == neuron.getId()){
+                neurons.remove(iNeuron);
+                break;
+            }
+        }
+        meta.saveNeurons(neurons);
     }
 
     @Override
     public void setNodeIdentifier(String name) {
-
+        nodeId=name;
     }
 
     @Override
     public ISplitInput getNewInstance() {
-        return null;
+        return new GRPCSplitInput(nodeId, inputResolver, start, end, layersMeta, discriminatorName, layerId,threads) ;
     }
 
     @Override
     public List<? extends INeuron> getNeurons() {
-        return null;
+        return  layersMeta.getLayerById(layerId).getNeurons(start,end);
     }
 
     @Override
     public String getNodeIdentifier() {
-        return null;
+        return nodeId;
     }
 
     @Override
     public Long getStart() {
-        return null;
+        return start;
     }
 
     @Override
     public Long getEnd() {
-        return null;
+        return end;
     }
 
     @Override
     public void setStart(Long start) {
-
+        this.start =start;
     }
 
     @Override
     public void setEnd(Long end) {
-
+        this.end = end;
     }
 
     @Override
     public Integer getLayerId() {
-        return null;
+        return layerId;
     }
 
     @Override
     public void setLayer(Integer layerId) {
-
+        this.layerId =layerId;
     }
 
     @Override
     public void applyMeta(ILayersMeta layersMeta) {
-
+        this.layersMeta = layersMeta;
     }
 
     @Override
     public Integer getThreads() {
-        return null;
+        return threads;
     }
 }

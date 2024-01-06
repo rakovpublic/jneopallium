@@ -87,6 +87,17 @@ public class FileLayerMeta<S extends IStorageItem> implements ILayerMeta {
     }
 
     @Override
+    public List<INeuron> getNeurons(Long start, Long end) {
+        List<INeuron> result = new LinkedList<>();
+        for(INeuron neuron : neurons){
+            if(neuron.getId()>=start&& neuron.getId()<end){
+                result.add(neuron);
+            }
+        }
+        return result;
+    }
+
+    @Override
     public INeuron getNeuronByID(Long id) {
         for (INeuron ner : getNeurons()) {
             if (ner.getId() == id) {

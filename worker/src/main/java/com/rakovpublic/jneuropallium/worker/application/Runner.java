@@ -46,7 +46,7 @@ public  class Runner implements IRunner {
         } else if (mode.equals("http")) {
             application = new HttpClusterApplication();
         } else if(mode.equals("grpc-client")) {
-            application = new GRPCClientApplication();
+            application = new GRPCClient();
         }else if(mode.equals("grpc-master")){
             application = new GRPCServerApplication();
         }

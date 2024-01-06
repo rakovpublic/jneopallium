@@ -69,7 +69,6 @@ public class GRPCServer extends MasterServiceGrpc.MasterServiceImplBase {
                 if (iInputService.isResultValid() && iInputService.runCompleted()) {
                     iInputService.prepareResults();
                 } else if (iInputService.runCompleted()) {
-                    //TODO: add save
                     iInputService.nextRun();
                     iInputService.prepareInputs();
                     iInputService.nextRunDiscriminator();
