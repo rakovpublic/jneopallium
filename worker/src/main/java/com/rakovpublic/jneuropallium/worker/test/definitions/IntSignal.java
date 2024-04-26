@@ -2,7 +2,7 @@
  * Copyright (c) 2024. Rakovskyi Dmytro
  */
 
-package com.rakovpublic.jneuropallium.worker.test;
+package com.rakovpublic.jneuropallium.worker.test.definitions;
 
 import com.rakovpublic.jneuropallium.worker.net.signals.AbstractSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;

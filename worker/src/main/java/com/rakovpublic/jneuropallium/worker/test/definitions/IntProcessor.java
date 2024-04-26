@@ -2,16 +2,16 @@
  * Copyright (c) 2024. Rakovskyi Dmytro
  */
 
-package com.rakovpublic.jneuropallium.worker.test;
+package com.rakovpublic.jneuropallium.worker.test.definitions;
 
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 import java.util.List;
 
-public class DoubleProcessor implements ISignalProcessor<DoubleSignal, NeuronWithDoubleField> {
+public class IntProcessor implements ISignalProcessor<IntSignal, NeuronIntField> {
     @Override
-    public <I extends ISignal> List<I> process(DoubleSignal input, NeuronWithDoubleField neuron) {
+    public <I extends ISignal> List<I> process(IntSignal input, NeuronIntField neuron) {
         return null;
     }
 
@@ -31,7 +31,7 @@ public class DoubleProcessor implements ISignalProcessor<DoubleSignal, NeuronWit
     }
 
     @Override
-    public Class<NeuronWithDoubleField> getNeuronClass() {
+    public Class<NeuronIntField> getNeuronClass() {
         return null;
     }
 }
