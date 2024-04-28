@@ -14,16 +14,16 @@ public class IntSignal extends AbstractSignal<Integer> {
 
     @Override
     public Class<? extends ISignal<Integer>> getCurrentSignalClass() {
-        return null;
+        return IntSignal.class;
     }
 
     @Override
     public Class<Integer> getParamClass() {
-        return null;
+        return Integer.class;
     }
 
     @Override
-    public <K extends ISignal<Integer>> K copySignal() {
-        return null;
+    public IntSignal copySignal() {
+        return new IntSignal(value, sourceLayer,  sourceNeuron,  timeAlive,  description,  fromExternalNet,  inputName,  needToRemoveDuringLearning,  needToProcessDuringLearning,  name);
     }
 }
