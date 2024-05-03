@@ -40,6 +40,8 @@ public class NeuronA extends Neuron implements NeuronIntField, NeuronWithDoubleF
         Double d = doubleField%intField;
         if(d>=1){
             result.add( new ASignal(d.intValue(), getLayer().getId(), getId(), 1, "a signal", false, this.currentNeuronClass.getName(), false, true, ASignal.class.getName()));
+            intField = 0;
+            doubleField = 0.0;
         }
     }
 }

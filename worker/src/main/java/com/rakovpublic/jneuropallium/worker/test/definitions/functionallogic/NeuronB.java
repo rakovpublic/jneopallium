@@ -25,6 +25,7 @@ public class NeuronB extends Neuron implements NeuronIntField {
         if(d>1){
             result.add(new DoubleSignal(d, getLayer().getId(), getId(), 1, "Double signal", false, this.currentNeuronClass.getName(), false, true, DoubleSignal.class.getName()));
             result.add(new IntSignal(d.intValue(), getLayer().getId(), getId(), 1, "Integer signal", false, this.currentNeuronClass.getName(), false, true, IntSignal.class.getName()));
+            intField = 0;
         }
     }
 }
