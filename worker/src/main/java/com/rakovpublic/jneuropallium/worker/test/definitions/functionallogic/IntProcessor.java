@@ -2,7 +2,7 @@
  * Copyright (c) 2024. Rakovskyi Dmytro
  */
 
-package com.rakovpublic.jneuropallium.worker.test.definitions;
+package com.rakovpublic.jneuropallium.worker.test.definitions.functionallogic;
 
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
