@@ -7,31 +7,35 @@ package com.rakovpublic.jneuropallium.worker.test.definitions;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class DoubleProcessor implements ISignalProcessor<DoubleSignal, NeuronWithDoubleField> {
+    private static String DESCRIPTION = "processor for DoubleSignal and  NeuronWithDoubleField ";
+
     @Override
     public <I extends ISignal> List<I> process(DoubleSignal input, NeuronWithDoubleField neuron) {
-        return null;
+        neuron.setDoubleField(neuron.getDoubleField() + input.getValue());
+        return new LinkedList<>();
     }
 
     @Override
     public String getDescription() {
-        return null;
+        return DESCRIPTION;
     }
 
     @Override
     public Boolean hasMerger() {
-        return null;
+        return false;
     }
 
     @Override
     public Class<? extends ISignalProcessor> getSignalProcessorClass() {
-        return null;
+        return DoubleProcessor.class;
     }
 
     @Override
     public Class<NeuronWithDoubleField> getNeuronClass() {
-        return null;
+        return NeuronWithDoubleField.class;
     }
 }
