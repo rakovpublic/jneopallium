@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2024. Rakovskyi Dmytro
+ */
+
+
 package com.rakovpublic.jneuropallium.worker.util;
 
 import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
@@ -10,13 +15,13 @@ public abstract class NeuronStatisticalProperties<K extends INeuron> {
         return probability.get(layerId);
     }
 
-    private HashMap<Integer, Float> probability;
-    private HashMap<Class<? extends ISignalProcessor>, Float> processorProbabilityMap;
+    protected HashMap<Integer, Float> probability;
+    protected HashMap<Class<? extends ISignalProcessor>, Float> processorProbabilityMap;
 
     public NeuronStatisticalProperties(HashMap<Integer, Float> probability, HashMap<Class<? extends ISignalProcessor>, Float> processorProbabilityMap) {
         this.probability = probability;
         this.processorProbabilityMap = processorProbabilityMap;
     }
 
-    abstract K getNeuronInstance(Long neuronId, Integer layerId);
+    public abstract K getNeuronInstance(Long neuronId, Integer layerId);
 }
