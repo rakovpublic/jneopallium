@@ -16,6 +16,8 @@ import java.util.Map;
  *
  */
 public interface INeuron extends Serializable {
+    List<Class<? extends ISignal>> getResultClasses();
+
     /**
      * Provides access to signal processing chain which describes in which order signals should be processed
      *

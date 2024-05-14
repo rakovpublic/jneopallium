@@ -4,10 +4,23 @@
 
 package com.rakovpublic.jneuropallium.worker.test.definitions.functionallogic;
 
+import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalChain;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.Neuron;
 
 public class NeuronB extends Neuron implements NeuronIntField {
     private  Integer intField;
+
+    public NeuronB() {
+        resultClasses.add(IntSignal.class);
+        resultClasses.add(DoubleSignal.class);
+    }
+
+    public NeuronB(Long neuronId, ISignalChain processingChain, Long run) {
+        super(neuronId, processingChain, run);
+        resultClasses.add(IntSignal.class);
+        resultClasses.add(DoubleSignal.class);
+    }
+
     @Override
     public Integer getIntField() {
         return intField;

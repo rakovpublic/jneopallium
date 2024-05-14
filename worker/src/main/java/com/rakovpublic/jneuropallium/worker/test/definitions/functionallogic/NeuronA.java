@@ -4,6 +4,7 @@
 
 package com.rakovpublic.jneuropallium.worker.test.definitions.functionallogic;
 
+import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalChain;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.Neuron;
 
 public class NeuronA extends Neuron implements NeuronIntField, NeuronWithDoubleField {
@@ -11,8 +12,14 @@ public class NeuronA extends Neuron implements NeuronIntField, NeuronWithDoubleF
     private Integer intField;
     private Double doubleField;
 
+    public NeuronA() {
+        resultClasses.add(ASignal.class);
+    }
 
-
+    public NeuronA(Long neuronId, ISignalChain processingChain, Long run) {
+        super(neuronId, processingChain, run);
+        resultClasses.add(ASignal.class);
+    }
 
     @Override
     public Integer getIntField() {
@@ -36,6 +43,7 @@ public class NeuronA extends Neuron implements NeuronIntField, NeuronWithDoubleF
 
     @Override
     public void activate() {
+
         super.activate();
         Double d = doubleField%intField;
         if(d>=1){

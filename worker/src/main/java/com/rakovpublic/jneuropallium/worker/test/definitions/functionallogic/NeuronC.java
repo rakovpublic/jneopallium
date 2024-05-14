@@ -4,10 +4,20 @@
 
 package com.rakovpublic.jneuropallium.worker.test.definitions.functionallogic;
 
+import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalChain;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.Neuron;
 
 public class NeuronC extends Neuron implements NeuronWithDoubleField {
     protected Double fieldDouble;
+
+    public NeuronC() {
+        resultClasses.add(DoubleSignal.class);
+    }
+
+    public NeuronC(Long neuronId, ISignalChain processingChain, Long run) {
+        super(neuronId, processingChain, run);
+        resultClasses.add(DoubleSignal.class);
+    }
 
     @Override
     public Double getDoubleField() {

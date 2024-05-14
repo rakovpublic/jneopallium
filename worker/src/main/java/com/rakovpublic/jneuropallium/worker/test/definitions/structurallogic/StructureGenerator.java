@@ -21,7 +21,7 @@ public class StructureGenerator {
         HashMap<Class<? extends INeuron>, NeuronStatisticalProperties> neuronStatisticalProperties =  new HashMap<>();
         List<NeighboringRules> generationRules = new LinkedList<>();
         generationRules.add(new AnyConfigurationAllowedRule());
-        IConnectionGenerator connectionGenerator = null;
+        IConnectionGenerator connectionGenerator = new TestConnectionGenerator(generationRules);
         neuronNetStructureGenerator.generateNeuronNet(layerSize, neuronStatisticalProperties, generationRules, connectionGenerator);
     }
 }
