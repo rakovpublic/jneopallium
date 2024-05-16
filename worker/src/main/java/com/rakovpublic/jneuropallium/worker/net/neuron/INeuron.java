@@ -228,6 +228,8 @@ public interface INeuron extends Serializable {
      */
     boolean canProcess(ISignal signal);
 
+    boolean canProcess(Class<? extends ISignal> signal);
+
     /**
      * Set the layer of this neuron
      *

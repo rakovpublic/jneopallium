@@ -7,6 +7,11 @@ package com.rakovpublic.jneuropallium.worker.test.definitions.structurallogic;
 import com.rakovpublic.jneuropallium.worker.net.neuron.IAxon;
 import com.rakovpublic.jneuropallium.worker.net.neuron.IDendrites;
 import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
+import com.rakovpublic.jneuropallium.worker.net.neuron.IWeight;
+import com.rakovpublic.jneuropallium.worker.net.neuron.impl.NeuronAddress;
+import com.rakovpublic.jneuropallium.worker.net.neuron.impl.NeuronSynapse;
+import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
+import com.rakovpublic.jneuropallium.worker.test.definitions.functionallogic.DummyWeight;
 import com.rakovpublic.jneuropallium.worker.util.IConnectionGenerator;
 import com.rakovpublic.jneuropallium.worker.util.NeighboringRules;
 
@@ -32,7 +37,12 @@ public class TestConnectionGenerator implements IConnectionGenerator {
                 for(Integer layerId:layerIds){
                     if(layerId<layerIds.last()){
                         for(INeuron iNeuron: sourceStructure.get(layerId)){
-                            //TODO: finish connection generation
+                            for(Class<? extends ISignal> clazz: iNeuron.getResultClasses()){
+                                if(neuron.canProcess(clazz)){
+                                    dendrites.updateWeight(new NeuronAddress(layerId,iNeuron.getId()),clazz, new DummyWeight());
+                                    neuron.getAxon().putConnection(clazz,new NeuronSynapse<>(layerIds.last(), layerId, neuron.getId(), iNeuron.getId(), new DummyWeight<>(), "auto generated"));
+                                }
+                            }
                         }
                     }
                 }

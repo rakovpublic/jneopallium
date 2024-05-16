@@ -85,6 +85,15 @@ public class Neuron implements INeuron {
     }
 
     @Override
+    public boolean canProcess(Class<? extends ISignal> signal) {
+        Set<Class<? extends ISignal>> canProcess = processorMap.keySet();
+        if (canProcess.contains(signal)) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public void setLayer(ILayer layer) {
         this.layer = layer;
     }
