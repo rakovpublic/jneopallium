@@ -18,6 +18,10 @@ public class StructureGenerator {
     public static void main(String [] args){
         NeuronNetStructureGenerator neuronNetStructureGenerator = new NeuronNetStructureGenerator();
         HashMap<Integer, Long> layerSize = new HashMap<>();
+        layerSize.put(0,100l);
+        layerSize.put(1,100l);
+        layerSize.put(2,100l);
+        layerSize.put(3,20l);
         HashMap<Class<? extends INeuron>, NeuronStatisticalProperties> neuronStatisticalProperties =  new HashMap<>();
         List<NeighboringRules> generationRules = new LinkedList<>();
         generationRules.add(new AnyConfigurationAllowedRule());

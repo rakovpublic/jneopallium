@@ -18,6 +18,6 @@ public class NeuronCStatisticalProperties extends NeuronStatisticalProperties<Ne
 
     @Override
     public NeuronC getNeuronInstance(Long neuronId, Integer layerId) {
-        return null;
+        return new NeuronC();
     }
 }
