@@ -6,6 +6,7 @@ package com.rakovpublic.jneuropallium.worker.test.definitions.structurallogic;
 
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;
 import com.rakovpublic.jneuropallium.worker.test.definitions.functionallogic.NeuronB;
+import com.rakovpublic.jneuropallium.worker.test.definitions.functionallogic.TestNeuronsSignalProcessingChain;
 import com.rakovpublic.jneuropallium.worker.util.NeuronStatisticalProperties;
 
 import java.util.HashMap;
@@ -18,6 +19,6 @@ public class NeuronBStatisticalProperties extends NeuronStatisticalProperties<Ne
 
     @Override
     public NeuronB getNeuronInstance(Long neuronId, Integer layerId) {
-        return null;
+        return new NeuronB( neuronId, new TestNeuronsSignalProcessingChain() , 0l);
     }
 }
