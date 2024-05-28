@@ -4,10 +4,11 @@
 
 package com.rakovpublic.jneuropallium.worker.test.definitions.functionallogic;
 
+import com.rakovpublic.jneuropallium.worker.net.neuron.IResultNeuron;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalChain;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.Neuron;
 
-public class NeuronA extends Neuron implements NeuronIntField, NeuronWithDoubleField {
+public class NeuronA extends Neuron implements IResultNeuron<TestResultSignal>,NeuronIntField, NeuronWithDoubleField {
 
     private Integer intField;
     private Double doubleField;
@@ -51,5 +52,10 @@ public class NeuronA extends Neuron implements NeuronIntField, NeuronWithDoubleF
             intField = 0;
             doubleField = 0.0;
         }
+    }
+
+    @Override
+    public TestResultSignal getFinalResult() {
+        return null;
     }
 }
