@@ -21,7 +21,7 @@ public class TestResultSignal extends AbstractSignal<String> implements IResultS
 
     @Override
     public Class<? extends ISignal<String>> getCurrentSignalClass() {
-        return null;
+        return TestResultSignal.class;
     }
 
     @Override
