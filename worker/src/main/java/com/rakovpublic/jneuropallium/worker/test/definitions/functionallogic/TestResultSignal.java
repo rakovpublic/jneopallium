@@ -11,12 +11,12 @@ public class TestResultSignal extends AbstractSignal<String> implements IResultS
 
     @Override
     public String getResultObject() {
-        return null;
+        return value;
     }
 
     @Override
     public Class<String> getResultObjectClass() {
-        return null;
+        return String.class;
     }
 
     @Override
@@ -26,11 +26,11 @@ public class TestResultSignal extends AbstractSignal<String> implements IResultS
 
     @Override
     public Class<String> getParamClass() {
-        return null;
+        return String.class;
     }
 
     @Override
-    public <K extends ISignal<String>> K copySignal() {
-        return null;
+    public TestResultSignal copySignal() {
+        return new TestResultSignal (value, sourceLayer, sourceNeuron, timeAlive, description, fromExternalNet, inputName, needToRemoveDuringLearning, needToProcessDuringLearning, name);
     }
 }

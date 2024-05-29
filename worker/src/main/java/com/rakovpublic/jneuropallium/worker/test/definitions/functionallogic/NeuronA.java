@@ -56,6 +56,9 @@ public class NeuronA extends Neuron implements IResultNeuron<TestResultSignal>,N
 
     @Override
     public TestResultSignal getFinalResult() {
-        return null;
+
+        String res = result.toString();
+        TestResultSignal resultSignal = new TestResultSignal(res, this.getLayer().getId(), this.getId(), 1, "", false, this.getClass().getCanonicalName(), false, false, "");
+        return resultSignal;
     }
 }
