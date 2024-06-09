@@ -4,6 +4,9 @@
 
 package com.rakovpublic.jneuropallium.worker.test.definitions.structurallogic;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.rakovpublic.jneuropallium.worker.net.layers.impl.file.FileLayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;
 import com.rakovpublic.jneuropallium.worker.test.definitions.functionallogic.*;
@@ -11,12 +14,19 @@ import com.rakovpublic.jneuropallium.worker.util.IConnectionGenerator;
 import com.rakovpublic.jneuropallium.worker.util.NeighboringRules;
 import com.rakovpublic.jneuropallium.worker.util.NeuronNetStructureGenerator;
 import com.rakovpublic.jneuropallium.worker.util.NeuronStatisticalProperties;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 public class StructureGenerator {
+    private static final Logger logger = LogManager.getLogger(StructureGenerator.class);
+
     public static void main(String [] args){
         NeuronNetStructureGenerator neuronNetStructureGenerator = new NeuronNetStructureGenerator();
         HashMap<Integer, Long> layerSize = new HashMap<>();
@@ -55,6 +65,43 @@ public class StructureGenerator {
         List<NeighboringRules> generationRules = new LinkedList<>();
         generationRules.add(new AnyConfigurationAllowedRule());
         IConnectionGenerator connectionGenerator = new TestConnectionGenerator(generationRules);
-        neuronNetStructureGenerator.generateNeuronNet(layerSize, neuronStatisticalProperties, generationRules, connectionGenerator);
+        HashMap<Integer,List<INeuron>> layersMap = neuronNetStructureGenerator.generateNeuronNet(layerSize, neuronStatisticalProperties, generationRules, connectionGenerator);
+        for(Integer layerId : layersMap.keySet()){
+            StringBuilder sb = new StringBuilder();
+            sb.append("{\"layerID\":\"");
+            sb.append(layerId + "\",");
+            sb.append("\"layerSize\":\"");
+            sb.append(layersMap.get(layerId).size() + "\",");
+            sb.append("\"neurons\":");
+            ObjectMapper mapper = new ObjectMapper();
+            String serializedObject = null;
+            try {
+                serializedObject = mapper.writeValueAsString(layersMap.get(layerId));
+            } catch (JsonProcessingException e) {
+                logger.error("cannot save  neurons to json ", e);
+                e.printStackTrace();
+            }
+            sb.append(serializedObject);
+            sb.append(",\"metaParams\":");
+            String serializedMetaParams = "{}";
+            sb.append(serializedMetaParams);
+            sb.append("}");
+            BufferedWriter writer = null;
+            try {
+                writer = new BufferedWriter(new FileWriter("C:\\git\\"+layerId));
+                writer.write(sb.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }finally {
+
+                try {
+                    writer.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+        }
     }
 }
