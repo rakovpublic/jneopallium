@@ -32,4 +32,9 @@ public class MultiplyCycleSignalProcessor implements ISignalProcessor<MultiplyCy
     public Class<CycleNeuron> getNeuronClass() {
         return CycleNeuron.class;
     }
+
+    @Override
+    public Class<MultiplyCycleSignal> getSignalClass() {
+        return MultiplyCycleSignal.class;
+    }
 }

@@ -34,4 +34,9 @@ public class CreateNeuronSignalProcessor implements ISignalProcessor<CreateNeuro
     public Class<ILayerManipulatingNeuron> getNeuronClass() {
         return ILayerManipulatingNeuron.class;
     }
+
+    @Override
+    public Class<CreateNeuronSignal> getSignalClass() {
+        return CreateNeuronSignal.class;
+    }
 }

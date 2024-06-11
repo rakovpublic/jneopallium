@@ -34,4 +34,9 @@ public class ProcessingFrequencySignalProcessor implements ISignalProcessor<Proc
     public Class<CycleNeuron> getNeuronClass() {
         return CycleNeuron.class;
     }
+
+    @Override
+    public Class<ProcessingFrequencySignal> getSignalClass() {
+        return ProcessingFrequencySignal.class;
+    }
 }

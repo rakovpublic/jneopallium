@@ -33,4 +33,9 @@ public class DeleteNeuronProcessor implements ISignalProcessor<DeleteNeuronSigna
     public Class<ILayerManipulatingNeuron> getNeuronClass() {
         return ILayerManipulatingNeuron.class;
     }
+
+    @Override
+    public Class<DeleteNeuronSignal> getSignalClass() {
+        return DeleteNeuronSignal.class;
+    }
 }

@@ -1,8 +1,11 @@
 package com.rakovpublic.jneuropallium.worker.util;
 
 
+import com.rakovpublic.jneuropallium.worker.net.layers.ILayer;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayersMeta;
+import com.rakovpublic.jneuropallium.worker.net.layers.impl.Layer;
 import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
+import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,10 +29,19 @@ public class NeuronNetStructureGenerator {
         for (Integer layerId : layerSize.keySet()) {
             Long neuronCount = 0l;
             Long safeFlag = Long.MIN_VALUE;
+            ILayer layer = new Layer(layerId,null,8);
             for (; neuronCount < layerSize.get(layerId) && safeFlag < layerSize.get(layerId); ) {
                 for (Class<? extends INeuron> clazz : neuronStatisticalProperties.keySet()) {
                     if (random.nextFloat() < neuronStatisticalProperties.get(clazz).getProbability(layerId)) {
-                        INeuron neuron = neuronStatisticalProperties.get(clazz).getNeuronInstance(Long.MIN_VALUE + 10l + neuronCount, layerId);
+                        INeuron neuron = neuronStatisticalProperties.get(clazz).getNeuronInstance(Long.MIN_VALUE + neuronCount, layerId);
+                        neuron.setLayer(layer);
+                        HashMap< ISignalProcessor, Float> processorsMap = neuronStatisticalProperties.get(clazz).getProcessorProbabilityMap();
+                        for(ISignalProcessor signalProcessor : processorsMap.keySet()){
+                            if(random.nextFloat()<= processorsMap.get(signalProcessor)){
+                                neuron.addSignalProcessor(signalProcessor.getSignalClass(),signalProcessor);
+                            }
+                        }
+
                         boolean toContinue = true;
                         for (NeighboringRules rule : generationRules) {
                             toContinue = rule.canBeNeighbours(neuron, layersSource);

@@ -8,6 +8,8 @@ import com.rakovpublic.jneuropallium.worker.net.neuron.IAxon;
 import com.rakovpublic.jneuropallium.worker.net.neuron.IDendrites;
 import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.net.neuron.IWeight;
+import com.rakovpublic.jneuropallium.worker.net.neuron.impl.Axon;
+import com.rakovpublic.jneuropallium.worker.net.neuron.impl.Dendrites;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.NeuronAddress;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.NeuronSynapse;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
@@ -33,6 +35,9 @@ public class TestConnectionGenerator implements IConnectionGenerator {
         if(sourceStructure.size()>1){
             List<INeuron> neuronsToConnect = sourceStructure.get(layerIds.last());
             for(INeuron neuron : neuronsToConnect){
+                if(neuron.getDendrites()==null){
+                    neuron.setDendrites(new Dendrites());
+                }
                 IDendrites dendrites = neuron.getDendrites();
                 for(Integer layerId:layerIds){
                     if(layerId<layerIds.last()){
@@ -40,7 +45,10 @@ public class TestConnectionGenerator implements IConnectionGenerator {
                             for(Class<? extends ISignal> clazz: iNeuron.getResultClasses()){
                                 if(neuron.canProcess(clazz)){
                                     dendrites.updateWeight(new NeuronAddress(layerId,iNeuron.getId()),clazz, new DummyWeight());
-                                    neuron.getAxon().putConnection(clazz,new NeuronSynapse<>(layerIds.last(), layerId, neuron.getId(), iNeuron.getId(), new DummyWeight<>(), "auto generated"));
+                                    if(iNeuron.getAxon() ==null){
+                                        iNeuron.setAxon(new Axon());
+                                    }
+                                    iNeuron.getAxon().putConnection(clazz,new NeuronSynapse<>(layerIds.last(), layerId, neuron.getId(), iNeuron.getId(), new DummyWeight<>(), "auto generated"));
                                 }
                             }
                         }

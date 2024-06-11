@@ -16,11 +16,35 @@ import java.util.List;
 public class Axon implements IAxon {
 
     private final static Logger logger = LogManager.getLogger(Axon.class);
-    private HashMap<Class<? extends ISignal>, IWeight> defaultWeights;
-    private HashMap<Class<? extends ISignal>, List<ISynapse>> connectionMap;
-    private HashMap<Integer, HashMap<Long, List<ISynapse>>> addressMap;
-    private Boolean connectionsWrapped;
 
+    public HashMap<Class<? extends ISignal>, IWeight> defaultWeights;
+    public HashMap<Class<? extends ISignal>, List<ISynapse>> connectionMap;
+    public HashMap<Integer, HashMap<Long, List<ISynapse>>> addressMap;
+    public Boolean connectionsWrapped;
+
+    public HashMap<Class<? extends ISignal>, IWeight> getDefaultWeights() {
+        return defaultWeights;
+    }
+
+    public void setConnectionMap(HashMap<Class<? extends ISignal>, List<ISynapse>> connectionMap) {
+        this.connectionMap = connectionMap;
+    }
+
+    public HashMap<Integer, HashMap<Long, List<ISynapse>>> getAddressMap() {
+        return addressMap;
+    }
+
+    public void setAddressMap(HashMap<Integer, HashMap<Long, List<ISynapse>>> addressMap) {
+        this.addressMap = addressMap;
+    }
+
+    public Boolean getConnectionsWrapped() {
+        return connectionsWrapped;
+    }
+
+    public void setConnectionsWrapped(Boolean connectionsWrapped) {
+        this.connectionsWrapped = connectionsWrapped;
+    }
 
     public Axon() {
         this.connectionMap = new HashMap<>();

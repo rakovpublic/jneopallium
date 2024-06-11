@@ -46,4 +46,9 @@ public class CycleInputUpdateProcessor implements ISignalProcessor<CycleInputUpd
     public Class<CycleNeuron> getNeuronClass() {
         return CycleNeuron.class;
     }
+
+    @Override
+    public Class<CycleInputUpdateSignal> getSignalClass() {
+        return CycleInputUpdateSignal.class;
+    }
 }

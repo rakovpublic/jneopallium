@@ -38,4 +38,9 @@ public class IntProcessor implements ISignalProcessor<IntSignal, NeuronIntField>
     public Class<NeuronIntField> getNeuronClass() {
         return NeuronIntField.class;
     }
+
+    @Override
+    public Class<IntSignal> getSignalClass() {
+        return IntSignal.class;
+    }
 }

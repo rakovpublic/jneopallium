@@ -21,8 +21,8 @@ import java.util.stream.Collectors;
 public class Neuron implements INeuron {
     private List<ISignal> signals;
     private Boolean isProcessed;
-    private IDendrites dendrites;
-    private IAxon axon;
+    private Dendrites dendrites;
+    private Axon axon;
     protected List<Class<? extends ISignal>> resultClasses;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private HashMap<Class<? extends ISignal>, IActivationFunction> activationFunctions;
@@ -283,7 +283,7 @@ public class Neuron implements INeuron {
     }
 
     @Override
-    public void setAxon(IAxon axon) {
+    public void setAxon(Axon axon) {
         this.axon = axon;
     }
 
@@ -326,7 +326,7 @@ public class Neuron implements INeuron {
     }
 
     @Override
-    public IAxon getAxon() {
+    public Axon getAxon() {
         return this.axon;
     }
 
@@ -373,11 +373,11 @@ public class Neuron implements INeuron {
 
     }
 
-    public IDendrites getDendrites() {
+    public Dendrites getDendrites() {
         return dendrites;
     }
 
-    public void setDendrites(IDendrites dendrites) {
+    public void setDendrites(Dendrites dendrites) {
         this.dendrites = dendrites;
     }
 

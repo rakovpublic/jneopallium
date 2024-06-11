@@ -2,6 +2,8 @@ package com.rakovpublic.jneuropallium.worker.net.neuron;
 
 
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayer;
+import com.rakovpublic.jneuropallium.worker.net.neuron.impl.Axon;
+import com.rakovpublic.jneuropallium.worker.net.neuron.impl.Dendrites;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignalHistoryStorage;
 
@@ -103,7 +105,7 @@ public interface INeuron extends Serializable {
      *
      * @param axon axon object
      **/
-    void setAxon(IAxon axon);
+    void setAxon(Axon axon);
 
     // void setAxon(Axon axon);
 
@@ -164,7 +166,7 @@ public interface INeuron extends Serializable {
      *
      * @return axon object
      **/
-    IAxon getAxon();
+    Axon getAxon();
 
     String toJSON();
 
@@ -246,8 +248,8 @@ public interface INeuron extends Serializable {
 
     void setActivationFunctions(HashMap<Class<? extends ISignal>, IActivationFunction> functions);
 
-    public IDendrites getDendrites();
+    public Dendrites getDendrites();
 
-    public void setDendrites(IDendrites dendrites);
+    public void setDendrites(Dendrites dendrites);
 
 }

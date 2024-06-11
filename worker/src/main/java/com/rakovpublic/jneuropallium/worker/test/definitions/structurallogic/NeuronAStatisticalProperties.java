@@ -14,7 +14,7 @@ import java.util.HashMap;
 
 public class NeuronAStatisticalProperties extends NeuronStatisticalProperties<NeuronA> {
 
-    public NeuronAStatisticalProperties(HashMap<Integer, Float> probability, HashMap<Class<? extends ISignalProcessor>, Float> processorProbabilityMap) {
+    public NeuronAStatisticalProperties(HashMap<Integer, Float> probability, HashMap<ISignalProcessor, Float> processorProbabilityMap) {
         super(probability, processorProbabilityMap);
     }
 

@@ -4,6 +4,8 @@
 
 package com.rakovpublic.jneuropallium.worker.test.definitions.structurallogic;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rakovpublic.jneuropallium.worker.net.layers.impl.file.FileLayerMeta;
@@ -36,28 +38,33 @@ public class StructureGenerator {
         layerSize.put(3,20l);
         HashMap<Class<? extends INeuron>, NeuronStatisticalProperties> neuronStatisticalProperties =  new HashMap<>();
         HashMap<Integer, Float> probabilityA = new HashMap<>();
-        HashMap<Class<? extends ISignalProcessor>, Float> processorProbabilityMapA = new HashMap<>();
+        HashMap<ISignalProcessor, Float> processorProbabilityMapA = new HashMap<>();
+        probabilityA.put(0,0f);
+        probabilityA.put(1,0f);
+        probabilityA.put(2,0f);
         probabilityA.put(3,1f);
-        processorProbabilityMapA.put(IntProcessor.class,1f);
-        processorProbabilityMapA.put(DoubleProcessor.class,1f);
+        processorProbabilityMapA.put( new IntProcessor(),1f);
+        processorProbabilityMapA.put(new DoubleProcessor(),1f);
         NeuronAStatisticalProperties neuronAStatisticalProperties = new NeuronAStatisticalProperties(probabilityA, processorProbabilityMapA);
         neuronStatisticalProperties.put(NeuronA.class,neuronAStatisticalProperties);
 
         HashMap<Integer, Float> probabilityB = new HashMap<>();
-        HashMap<Class<? extends ISignalProcessor>, Float> processorProbabilityMapB = new HashMap<>();
-        probabilityA.put(0,0.5f);
-        probabilityA.put(1,0.5f);
-        probabilityA.put(2,0.5f);
-        processorProbabilityMapB.put(IntProcessor.class,1f);
+        HashMap< ISignalProcessor, Float> processorProbabilityMapB = new HashMap<>();
+        probabilityB.put(0,0.5f);
+        probabilityB.put(1,0.5f);
+        probabilityB.put(2,0.5f);
+        probabilityB.put(3,0f);
+        processorProbabilityMapB.put(new IntProcessor(),1f);
         NeuronBStatisticalProperties neuronBStatisticalProperties = new NeuronBStatisticalProperties(probabilityB, processorProbabilityMapB);
         neuronStatisticalProperties.put(NeuronB.class,neuronBStatisticalProperties);
 
         HashMap<Integer, Float> probabilityC = new HashMap<>();
-        HashMap<Class<? extends ISignalProcessor>, Float> processorProbabilityMapC = new HashMap<>();
-        probabilityA.put(0,0.5f);
-        probabilityA.put(1,0.5f);
-        probabilityA.put(2,0.5f);
-        processorProbabilityMapC.put(DoubleProcessor.class,1f);
+        HashMap< ISignalProcessor, Float> processorProbabilityMapC = new HashMap<>();
+        probabilityC.put(0,0.5f);
+        probabilityC.put(1,0.5f);
+        probabilityC.put(2,0.5f);
+        probabilityC.put(3,0f);
+        processorProbabilityMapC.put(new DoubleProcessor(),1f);
         NeuronCStatisticalProperties neuronCStatisticalProperties = new NeuronCStatisticalProperties(probabilityC, processorProbabilityMapC);
         neuronStatisticalProperties.put(NeuronC.class,neuronCStatisticalProperties);
 
@@ -74,6 +81,7 @@ public class StructureGenerator {
             sb.append(layersMap.get(layerId).size() + "\",");
             sb.append("\"neurons\":");
             ObjectMapper mapper = new ObjectMapper();
+            mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
             String serializedObject = null;
             try {
                 serializedObject = mapper.writeValueAsString(layersMap.get(layerId));
@@ -88,7 +96,7 @@ public class StructureGenerator {
             sb.append("}");
             BufferedWriter writer = null;
             try {
-                writer = new BufferedWriter(new FileWriter("C:\\git\\"+layerId));
+                writer = new BufferedWriter(new FileWriter("F:\\git\\"+layerId));
                 writer.write(sb.toString());
             } catch (IOException e) {
                 e.printStackTrace();

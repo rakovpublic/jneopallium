@@ -35,4 +35,6 @@ public interface ISignalProcessor<S extends ISignal, K extends INeuron> extends 
 
     Class<K> getNeuronClass();
 
+    Class<S> getSignalClass();
+
 }

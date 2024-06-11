@@ -38,4 +38,9 @@ public class DoubleProcessor implements ISignalProcessor<DoubleSignal, NeuronWit
     public Class<NeuronWithDoubleField> getNeuronClass() {
         return NeuronWithDoubleField.class;
     }
+
+    @Override
+    public Class<DoubleSignal> getSignalClass() {
+        return DoubleSignal.class;
+    }
 }

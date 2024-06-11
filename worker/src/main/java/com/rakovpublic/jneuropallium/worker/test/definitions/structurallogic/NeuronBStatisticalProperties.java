@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 public class NeuronBStatisticalProperties extends NeuronStatisticalProperties<NeuronB> {
 
-    public NeuronBStatisticalProperties(HashMap<Integer, Float> probability, HashMap<Class<? extends ISignalProcessor>, Float> processorProbabilityMap) {
+    public NeuronBStatisticalProperties(HashMap<Integer, Float> probability, HashMap<ISignalProcessor, Float> processorProbabilityMap) {
         super(probability, processorProbabilityMap);
     }
 
