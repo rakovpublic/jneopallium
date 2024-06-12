@@ -90,4 +90,16 @@ public class InMemorySignalPersistStorage implements ISignalsPersistStorage {
         signals.remove(deletedLayerId);
     }
 
+    @Override
+    public boolean hasSignalsToProcess() {
+        for(Integer layerId: signals.keySet()){
+            for(Long neuronId: signals.get(layerId).keySet()){
+                if(signals.get(layerId).get(neuronId).size()>0){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 }

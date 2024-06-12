@@ -11,7 +11,7 @@ import com.rakovpublic.jneuropallium.worker.net.layers.impl.file.FileLayersMeta;
 import com.rakovpublic.jneuropallium.worker.net.layers.impl.inmemory.InMemoryInputResolver;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.ProcessingFrequency;
 import com.rakovpublic.jneuropallium.worker.net.signals.*;
-import com.rakovpublic.jneuropallium.worker.net.signals.storage.*;
+import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInputResolver;
 import com.rakovpublic.jneuropallium.worker.net.signals.storage.inmemory.*;
 import com.rakovpublic.jneuropallium.worker.net.storages.filesystem.IStorage;
 import com.rakovpublic.jneuropallium.worker.net.study.IDirectLearningAlgorithm;
@@ -75,98 +75,101 @@ public class LocalApplication implements IApplication {
             logger.error("cannot create output aggregator object", e);
         }
         for (; currentRun < maxRun || isInfinite; currentRun++) {
+            if (meta.getInputResolver().getSignalPersistStorage().hasSignalsToProcess()) {
+                HashMap<String, List<IResultSignal>> desiredResult = inputResolver.getDesiredResult();
+                if (isTeacherStudying && desiredResult != null) {
+                    IResultComparingStrategy resultComparingStrategy = null;
+                    String resultComparingStrategyClass = context.getProperty("configuration.resultComparingStrategyClass");
+                    try {
+                        resultComparingStrategy = (IResultComparingStrategy) Class.forName(resultComparingStrategyClass).getDeclaredConstructor().newInstance();
+                    } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException |
+                            InstantiationException | IllegalAccessException e) {
+                        logger.error("cannot create result comparing strategy object", e);
+                    }
+                    String algoType = context.getProperty("configuration.studyingalgotype");
+                    ObjectMapper mapper = new ObjectMapper();
+                    for (; currentRun < maxRun || isInfinite; currentRun++) {
+                        //Supervised learning
 
-            HashMap<String, List<IResultSignal>> desiredResult = inputResolver.getDesiredResult();
-            if (isTeacherStudying && desiredResult != null) {
-                IResultComparingStrategy resultComparingStrategy = null;
-                String resultComparingStrategyClass = context.getProperty("configuration.resultComparingStrategyClass");
-                try {
-                    resultComparingStrategy = (IResultComparingStrategy) Class.forName(resultComparingStrategyClass).getDeclaredConstructor().newInstance();
-                } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException |
-                        InstantiationException | IllegalAccessException e) {
-                    logger.error("cannot create result comparing strategy object", e);
-                }
-                String algoType = context.getProperty("configuration.studyingalgotype");
-                ObjectMapper mapper = new ObjectMapper();
-                for (; currentRun < maxRun || isInfinite; currentRun++) {
-                    //Supervised learning
-                    if (algoType != null && resultComparingStrategy != null) {
-                        List<IResult> idsToFix;
-                        if (algoType.equals("direct")) {
-                            IDirectLearningAlgorithm directLearningAlgorithm = null;
-                            String directClass = context.getProperty("configuration.learning.direct.class");
-                            String directJson = context.getProperty("configuration.learning.direct.json");
-                            try {
-                                if (directJson != null) {
-                                    directLearningAlgorithm = (IDirectLearningAlgorithm) mapper.readValue(directJson, Class.forName(directClass));
-                                } else {
-                                    directLearningAlgorithm = (IDirectLearningAlgorithm) Class.forName(directClass).newInstance();
+                        if (algoType != null && resultComparingStrategy != null) {
+                            List<IResult> idsToFix;
+                            if (algoType.equals("direct")) {
+                                IDirectLearningAlgorithm directLearningAlgorithm = null;
+                                String directClass = context.getProperty("configuration.learning.direct.class");
+                                String directJson = context.getProperty("configuration.learning.direct.json");
+                                try {
+                                    if (directJson != null) {
+                                        directLearningAlgorithm = (IDirectLearningAlgorithm) mapper.readValue(directJson, Class.forName(directClass));
+                                    } else {
+                                        directLearningAlgorithm = (IDirectLearningAlgorithm) Class.forName(directClass).newInstance();
+                                    }
+                                } catch (IllegalAccessException | InstantiationException | ClassNotFoundException e) {
+                                    logger.error("Cannot create instance of IDirectLearningAlgorithm for class " + directClass, e);
+                                } catch (JsonProcessingException e) {
+                                    logger.error("Cannot create instance of IDirectLearningAlgorithm for json " + directJson, e);
+                                } catch (NullPointerException e) {
+                                    logger.error("Wrong configuration for IDirectLearningAlgorithm " + directClass + " config " + directJson);
                                 }
-                            } catch (IllegalAccessException | InstantiationException | ClassNotFoundException e) {
-                                logger.error("Cannot create instance of IDirectLearningAlgorithm for class " + directClass, e);
-                            } catch (JsonProcessingException e) {
-                                logger.error("Cannot create instance of IDirectLearningAlgorithm for json " + directJson, e);
-                            } catch (NullPointerException e) {
-                                logger.error("Wrong configuration for IDirectLearningAlgorithm " + directClass + " config " + directJson);
-                            }
-                            IResultLayer lr = process(meta,threads);
-                            while ((idsToFix = resultComparingStrategy.getIdsStudy(lr.interpretResult(), desiredResult)).size() > 0) {
+                                IResultLayer lr = process(meta, threads);
+                                while ((idsToFix = resultComparingStrategy.getIdsStudy(lr.interpretResult(), desiredResult)).size() > 0) {
+                                    meta.getInputResolver().saveHistory();
+                                    meta.getInputResolver().getSignalPersistStorage().cleanMiddleLayerSignals();
+                                    meta.learn(directLearningAlgorithm.learn(meta, desiredResult));
+                                    lr = process(meta, threads);
+                                }
+
+                                outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getRun(), context);
                                 meta.getInputResolver().saveHistory();
-                                meta.getInputResolver().getSignalPersistStorage().cleanMiddleLayerSignals();
-                                meta.learn(directLearningAlgorithm.learn(meta, desiredResult));
-                                lr = process(meta,threads);
+                                meta.getInputResolver().populateInput();
+                            } else if (algoType.equals("object")) {
+                                IObjectLearningAlgo iObjectStudyingAlgo = null;
+                                String objectClass = context.getProperty("configuration.learning.object.class");
+                                String objectJson = context.getProperty("configuration.learning.object.json");
+                                try {
+                                    if (objectJson != null) {
+                                        iObjectStudyingAlgo = (IObjectLearningAlgo) mapper.readValue(objectJson, Class.forName(objectClass));
+                                    } else {
+                                        iObjectStudyingAlgo = (IObjectLearningAlgo) Class.forName(objectClass).newInstance();
+                                    }
+                                } catch (IllegalAccessException | InstantiationException | ClassNotFoundException e) {
+                                    logger.error("Cannot create instance of IObjectLearningAlgo for class " + objectClass, e);
+                                } catch (JsonProcessingException e) {
+                                    logger.error("Cannot create instance of IObjectLearningAlgo for json " + objectJson, e);
+                                } catch (NullPointerException e) {
+                                    logger.error("Wrong configuration for IObjectLearningAlgo " + objectClass + " config " + objectJson);
+                                }
+                                IResultLayer lr = process(meta, threads);
+                                while ((idsToFix = resultComparingStrategy.getIdsStudy(lr.interpretResult(), desiredResult)).size() > 0) {
+                                    meta.getInputResolver().saveHistory();
+                                    meta.getInputResolver().getSignalPersistStorage().cleanMiddleLayerSignals();
+                                    Integer layerId = meta.getResultLayer().getID();
+                                    HashMap<Long, List<ISignal>> studyMap = new HashMap<>();
+                                    for (IResult res : idsToFix) {
+                                        studyMap.put(res.getNeuronId(), iObjectStudyingAlgo.getLearningSignals(desiredResult, meta));
+                                    }
+                                    HashMap<Integer, HashMap<Long, List<ISignal>>> studyingRequest = new HashMap<>();
+                                    studyingRequest.put(layerId, studyMap);
+                                    meta.getInputResolver().getSignalPersistStorage().cleanMiddleLayerSignals();
+                                    inputResolver.getSignalPersistStorage().putSignals(studyingRequest);
+                                    lr = process(meta, threads);
+                                }
+                                outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getRun(), context);
+                                meta.getInputResolver().saveHistory();
+                                meta.getInputResolver().populateInput();
                             }
 
-                            outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getRun(), context);
-                            meta.getInputResolver().saveHistory();
-                            meta.getInputResolver().populateInput();
-                        } else if (algoType.equals("object")) {
-                            IObjectLearningAlgo iObjectStudyingAlgo = null;
-                            String objectClass = context.getProperty("configuration.learning.object.class");
-                            String objectJson = context.getProperty("configuration.learning.object.json");
-                            try {
-                                if (objectJson != null) {
-                                    iObjectStudyingAlgo = (IObjectLearningAlgo) mapper.readValue(objectJson, Class.forName(objectClass));
-                                } else {
-                                    iObjectStudyingAlgo = (IObjectLearningAlgo) Class.forName(objectClass).newInstance();
-                                }
-                            } catch (IllegalAccessException | InstantiationException | ClassNotFoundException e) {
-                                logger.error("Cannot create instance of IObjectLearningAlgo for class " + objectClass, e);
-                            } catch (JsonProcessingException e) {
-                                logger.error("Cannot create instance of IObjectLearningAlgo for json " + objectJson, e);
-                            } catch (NullPointerException e) {
-                                logger.error("Wrong configuration for IObjectLearningAlgo " + objectClass + " config " + objectJson);
-                            }
+                        } else {
                             IResultLayer lr = process(meta, threads);
-                            while ((idsToFix = resultComparingStrategy.getIdsStudy(lr.interpretResult(), desiredResult)).size() > 0) {
-                                meta.getInputResolver().saveHistory();
-                                meta.getInputResolver().getSignalPersistStorage().cleanMiddleLayerSignals();
-                                Integer layerId = meta.getResultLayer().getID();
-                                HashMap<Long, List<ISignal>> studyMap = new HashMap<>();
-                                for (IResult res : idsToFix) {
-                                    studyMap.put(res.getNeuronId(), iObjectStudyingAlgo.getLearningSignals(desiredResult, meta));
-                                }
-                                HashMap<Integer, HashMap<Long, List<ISignal>>> studyingRequest = new HashMap<>();
-                                studyingRequest.put(layerId, studyMap);
-                                meta.getInputResolver().getSignalPersistStorage().cleanMiddleLayerSignals();
-                                inputResolver.getSignalPersistStorage().putSignals(studyingRequest);
-                                lr = process(meta, threads);
-                            }
                             outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getRun(), context);
                             meta.getInputResolver().saveHistory();
                             meta.getInputResolver().populateInput();
-                        }
-                        //Unsupervised or reinforced learning
-                    } else {
-                        IResultLayer lr = process(meta, threads);
-                        outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getRun(), context);
-                        meta.getInputResolver().saveHistory();
-                        meta.getInputResolver().populateInput();
 
+                        }
                     }
                 }
             } else {
-                //Unsupervised or reinforced learning
+                //Unsupervised or reinforced learning with discriminators and infinite runs
+
                 IResultResolver resultResolver = null;
                 HashMap<String, StructMeta> discriminators = new HashMap<String, StructMeta>();
                 Integer discriminatorsAmount = Integer.parseInt(context.getProperty("configuration.discriminatorsAmount"));
@@ -197,13 +200,21 @@ public class LocalApplication implements IApplication {
                 }
                 resultResolver = new SimpleResultResolver(context);
                 while (true) {
-                    IResultLayer lr = process(meta,threads);
-                    resultLayerHolder.setResultLayer(lr);
-                    if (resultResolver.resolveResult(meta, discriminators)) {
-                        outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getRun(), context);
+                    if (meta.getInputResolver().getSignalPersistStorage().hasSignalsToProcess()) {
+                        IResultLayer lr = process(meta, threads);
+                        resultLayerHolder.setResultLayer(lr);
+                        if (resultResolver.resolveResult(meta, discriminators)) {
+                            outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getRun(), context);
+                        }
+                        meta.getInputResolver().saveHistory();
+                        meta.getInputResolver().populateInput();
+                    } else {
+                        try {
+                            Thread.sleep(10000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
                     }
-                    meta.getInputResolver().saveHistory();
-                    meta.getInputResolver().populateInput();
                 }
 
             }
@@ -213,7 +224,7 @@ public class LocalApplication implements IApplication {
     }
 
 
-    private IResultLayer process(StructMeta meta,int threads) {
+    private IResultLayer process(StructMeta meta, int threads) {
 
         int i = 0;
         for (ILayerMeta met : meta.getLayers()) {
