@@ -75,9 +75,10 @@ public class LocalApplication implements IApplication {
             logger.error("cannot create output aggregator object", e);
         }
         for (; currentRun < maxRun || isInfinite; currentRun++) {
-            if (meta.getInputResolver().getSignalPersistStorage().hasSignalsToProcess()) {
-                HashMap<String, List<IResultSignal>> desiredResult = inputResolver.getDesiredResult();
-                if (isTeacherStudying && desiredResult != null) {
+
+            HashMap<String, List<IResultSignal>> desiredResult = inputResolver.getDesiredResult();
+            if (isTeacherStudying && desiredResult != null) {
+                if (meta.getInputResolver().getSignalPersistStorage().hasSignalsToProcess()) {
                     IResultComparingStrategy resultComparingStrategy = null;
                     String resultComparingStrategyClass = context.getProperty("configuration.resultComparingStrategyClass");
                     try {
@@ -166,6 +167,13 @@ public class LocalApplication implements IApplication {
 
                         }
                     }
+                } else {
+                    try {
+                        Thread.sleep(10000);
+                        meta.getInputResolver().populateInput();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             } else {
                 //Unsupervised or reinforced learning with discriminators and infinite runs
@@ -211,6 +219,7 @@ public class LocalApplication implements IApplication {
                     } else {
                         try {
                             Thread.sleep(10000);
+                            meta.getInputResolver().populateInput();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
