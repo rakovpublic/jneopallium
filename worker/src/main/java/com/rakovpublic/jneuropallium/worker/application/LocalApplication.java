@@ -160,6 +160,7 @@ public class LocalApplication implements IApplication {
                             }
 
                         } else {
+                            // run for trained net
                             IResultLayer lr = process(meta, threads);
                             outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getRun(), context);
                             meta.getInputResolver().saveHistory();
