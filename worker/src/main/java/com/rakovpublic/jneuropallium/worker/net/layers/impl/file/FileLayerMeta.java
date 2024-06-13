@@ -139,7 +139,7 @@ public class FileLayerMeta<S extends IStorageItem> implements ILayerMeta {
         }
         sb.append(serializedObject);
         sb.append(",\"metaParams\":");
-        String serializedMetaParams = null;
+        String serializedMetaParams = "{}";
         try {
             serializedMetaParams = mapper.writeValueAsString(layerMetaParams);
         } catch (JsonProcessingException e) {

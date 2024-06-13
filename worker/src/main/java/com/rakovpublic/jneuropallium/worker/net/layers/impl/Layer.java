@@ -146,6 +146,7 @@ public class Layer<N extends INeuron> implements ILayer<N> {
         for (Long neuronId : map.keySet()) {
             if (input.containsKey(neuronId)) {
                 neur = map.get(neuronId);
+                neur.setLayer(this);
                 neur.setCyclingNeuronInputMapping(inputResolver.getCycleNeuronAddressMapping());
                 neur.setSignalHistory(inputResolver.getSignalsHistoryStorage());
                 neur.addSignals(input.get(neuronId));

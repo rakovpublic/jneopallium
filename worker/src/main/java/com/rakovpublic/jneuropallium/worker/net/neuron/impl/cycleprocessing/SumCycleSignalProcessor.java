@@ -32,4 +32,9 @@ public class SumCycleSignalProcessor implements ISignalProcessor<SumCycleSignal,
     public Class<CycleNeuron> getNeuronClass() {
         return CycleNeuron.class;
     }
+
+    @Override
+    public Class<SumCycleSignal> getSignalClass() {
+        return SumCycleSignal.class;
+    }
 }

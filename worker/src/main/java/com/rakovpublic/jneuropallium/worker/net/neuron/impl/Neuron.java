@@ -21,8 +21,9 @@ import java.util.stream.Collectors;
 public class Neuron implements INeuron {
     private List<ISignal> signals;
     private Boolean isProcessed;
-    private IDendrites dendrites;
-    private IAxon axon;
+    private Dendrites dendrites;
+    private Axon axon;
+    protected List<Class<? extends ISignal>> resultClasses;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private HashMap<Class<? extends ISignal>, IActivationFunction> activationFunctions;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
@@ -84,6 +85,15 @@ public class Neuron implements INeuron {
     }
 
     @Override
+    public boolean canProcess(Class<? extends ISignal> signal) {
+        Set<Class<? extends ISignal>> canProcess = processorMap.keySet();
+        if (canProcess.contains(signal)) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public void setLayer(ILayer layer) {
         this.layer = layer;
     }
@@ -92,6 +102,12 @@ public class Neuron implements INeuron {
     public ILayer getLayer() {
         return layer;
     }
+
+    @Override
+    public List<Class<? extends ISignal>> getResultClasses() {
+        return resultClasses;
+    }
+
 
     public Neuron() {
         rules = new ArrayList<>();
@@ -102,6 +118,7 @@ public class Neuron implements INeuron {
         mergerMap = new HashMap<>();
         currentNeuronClass = Neuron.class;
         activationFunctions = new HashMap<>();
+        resultClasses = new LinkedList<>();
     }
 
     public Neuron(Long neuronId, ISignalChain processingChain, Long run) {
@@ -115,6 +132,7 @@ public class Neuron implements INeuron {
         activationFunctions = new HashMap<>();
         this.signalChain = processingChain;
         this.run = run;
+        resultClasses = new LinkedList<>();
 
     }
 
@@ -265,7 +283,7 @@ public class Neuron implements INeuron {
     }
 
     @Override
-    public void setAxon(IAxon axon) {
+    public void setAxon(Axon axon) {
         this.axon = axon;
     }
 
@@ -308,7 +326,7 @@ public class Neuron implements INeuron {
     }
 
     @Override
-    public IAxon getAxon() {
+    public Axon getAxon() {
         return this.axon;
     }
 
@@ -355,11 +373,11 @@ public class Neuron implements INeuron {
 
     }
 
-    public IDendrites getDendrites() {
+    public Dendrites getDendrites() {
         return dendrites;
     }
 
-    public void setDendrites(IDendrites dendrites) {
+    public void setDendrites(Dendrites dendrites) {
         this.dendrites = dendrites;
     }
 
@@ -376,6 +394,7 @@ public class Neuron implements INeuron {
     @Override
     public <I extends ISignal> void addActivationFunction(Class<I> clazz, IActivationFunction<I> activationFunction) {
         activationFunctions.put(clazz, activationFunction);
+        resultClasses.add(clazz);
     }
 
     @Override

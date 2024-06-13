@@ -8,29 +8,29 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 public abstract class AbstractSignal<T> implements ISignal<T> {
     protected T value;
-    private Integer sourceLayer;
-    private Long sourceNeuron;
-    private Integer timeAlive;
-    private String description;
-    private boolean fromExternalNet;
-    private String inputName;
+    protected Integer sourceLayer;
+    protected Long sourceNeuron;
+    protected Integer timeAlive;
+    protected String description;
+    protected boolean fromExternalNet;
+    protected String inputName;
 
     private Integer currentInnerLoop;
     private Long epoch;
     private Integer innerLoop;
-    private Integer loop;
+    protected Integer loop;
     private String currentClassName;
 
-    private boolean needToRemoveDuringLearning;
+    protected boolean needToRemoveDuringLearning;
 
-    private String name;
+    protected String name;
 
     @Override
     public boolean isNeedToProcessDuringLearning() {
         return needToProcessDuringLearning;
     }
 
-    private boolean needToProcessDuringLearning;
+    protected boolean needToProcessDuringLearning;
 
     @Override
     public String getInputName() {

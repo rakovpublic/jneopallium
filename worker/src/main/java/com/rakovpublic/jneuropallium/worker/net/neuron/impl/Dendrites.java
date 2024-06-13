@@ -13,9 +13,27 @@ import java.util.stream.Collectors;
 
 public class Dendrites implements IDendrites {
     private final static Logger logger = LogManager.getLogger(Dendrites.class);
-    private HashMap<NeuronAddress, HashMap<Class<? extends ISignal>, IWeight>> weights;
 
-    private HashMap<Class<? extends ISignal>, IWeight> defaultDendritesWeights;
+    public Dendrites() {
+        weights = new HashMap<>();
+        defaultDendritesWeights = new HashMap<>();
+    }
+
+    public HashMap<NeuronAddress, HashMap<Class<? extends ISignal>, IWeight>> weights;
+
+    public HashMap<Class<? extends ISignal>, IWeight> defaultDendritesWeights;
+
+    public HashMap<NeuronAddress, HashMap<Class<? extends ISignal>, IWeight>> getWeights() {
+        return weights;
+    }
+
+    public void setWeights(HashMap<NeuronAddress, HashMap<Class<? extends ISignal>, IWeight>> weights) {
+        this.weights = weights;
+    }
+
+    public HashMap<Class<? extends ISignal>, IWeight> getDefaultDendritesWeights() {
+        return defaultDendritesWeights;
+    }
 
     @Override
     public void setDefaultDendritesWeights(HashMap<Class<? extends ISignal>, IWeight> defaultDendritesWeights) {
@@ -24,6 +42,9 @@ public class Dendrites implements IDendrites {
 
     @Override
     public void updateWeight(NeuronAddress neuronAddress, Class<? extends ISignal> signalClass, IWeight weight) {
+        if(weights == null){
+            weights = new HashMap<>();
+        }
         if (weights.containsKey(neuronAddress)) {
             weights.get(neuronAddress).put(signalClass, weight);
         } else {

@@ -43,4 +43,6 @@ public interface ISignalsPersistStorage {
 
     void deletedLayerInput(Integer deletedLayerId);
 
+
+    boolean hasSignalsToProcess();
 }
