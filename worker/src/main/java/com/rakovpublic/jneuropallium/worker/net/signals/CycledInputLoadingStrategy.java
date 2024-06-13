@@ -25,22 +25,69 @@ import java.util.*;
  */
 public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
     private static final Logger logger = LogManager.getLogger(CycledInputLoadingStrategy.class);
-    private ILayersMeta layersMeta;
-    private HashMap<IInitInput, InputInitStrategy> externalInputs;
-    private Integer loop;
-    private HashMap<IInitInput, InputStatusMeta> inputStatuses;
-    private HashMap<String, Long> neuronInputMapping;
-    private Long epoch;
-    int defaultLoopsCount;
-    private TreeMap<Long, TreeMap<Integer, List<IInputSignal>>> inputHistory;
+    public ILayersMeta layersMeta;
+    public HashMap<IInitInput, InputInitStrategy> externalInputs;
+    public Integer loop;
+    public HashMap<IInitInput, InputStatusMeta> inputStatuses;
+    public HashMap<String, Long> neuronInputMapping;
+    public Long epoch;
+    public int defaultLoopsCount;
+    public TreeMap<Long, TreeMap<Integer, List<IInputSignal>>> inputHistory;
 
+    public ILayersMeta getLayersMeta() {
+        return layersMeta;
+    }
 
-    public CycledInputLoadingStrategy(ILayersMeta layersMeta, HashMap<IInitInput, InputInitStrategy> externalInputs, int defaultLoopsCount, HashMap<IInitInput, InputStatusMeta> inputStatuses, HashMap<String, ProcessingFrequency> signalProcessingFrequencyMap) {
+    public HashMap<IInitInput, InputInitStrategy> getExternalInputs() {
+        return externalInputs;
+    }
+
+    public void setExternalInputs(HashMap<IInitInput, InputInitStrategy> externalInputs) {
+        this.externalInputs = externalInputs;
+    }
+
+    public Integer getLoop() {
+        return loop;
+    }
+
+    public void setLoop(Integer loop) {
+        this.loop = loop;
+    }
+
+    public HashMap<IInitInput, InputStatusMeta> getInputStatuses() {
+        return inputStatuses;
+    }
+
+    public void setInputStatuses(HashMap<IInitInput, InputStatusMeta> inputStatuses) {
+        this.inputStatuses = inputStatuses;
+    }
+
+    public void setNeuronInputMapping(HashMap<String, Long> neuronInputMapping) {
+        this.neuronInputMapping = neuronInputMapping;
+    }
+
+    public void setEpoch(Long epoch) {
+        this.epoch = epoch;
+    }
+
+    public int getDefaultLoopsCount() {
+        return defaultLoopsCount;
+    }
+
+    public void setDefaultLoopsCount(int defaultLoopsCount) {
+        this.defaultLoopsCount = defaultLoopsCount;
+    }
+
+    public void setInputHistory(TreeMap<Long, TreeMap<Integer, List<IInputSignal>>> inputHistory) {
+        this.inputHistory = inputHistory;
+    }
+
+    public CycledInputLoadingStrategy(ILayersMeta layersMeta, int defaultLoopsCount, HashMap<String, ProcessingFrequency> signalProcessingFrequencyMap) {
         epoch = 0L;
         loop = 0;
         this.layersMeta = layersMeta;
-        this.externalInputs = externalInputs;
-        this.inputStatuses = inputStatuses;
+        this.externalInputs = new HashMap<>();
+        this.inputStatuses = new HashMap<>();
         this.defaultLoopsCount = defaultLoopsCount;
         init(defaultLoopsCount, signalProcessingFrequencyMap);
         neuronInputMapping = new HashMap<>();
@@ -188,7 +235,10 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
 
     @Override
     public void registerInput(IInitInput initInput, InputInitStrategy initStrategy) {
-
+        externalInputs.put(initInput,initStrategy);
+        CycleNeuron cycleNeuron = (CycleNeuron) layersMeta.getLayerByPosition(Integer.MIN_VALUE).getNeuronByID(0l);
+        cycleNeuron.getInputProcessingFrequencyHashMap().put(initInput, new ProcessingFrequency(initInput.getDefaultProcessingFrequency().getEpoch(), initInput.getDefaultProcessingFrequency().getLoop()));
+        inputStatuses.put(initInput, new InputStatusMeta(true,false,initInput.getName()));
     }
 
 

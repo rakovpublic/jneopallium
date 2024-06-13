@@ -25,6 +25,7 @@ import org.apache.logging.log4j.Logger;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class LocalApplication implements IApplication {
     private static final Logger logger = LogManager.getLogger(LocalApplication.class);
@@ -51,14 +52,24 @@ public class LocalApplication implements IApplication {
         String inputLoadingStrategy = context.getProperty("configuration.input.loadingstrategy");
         Integer historySlow = Integer.parseInt(context.getProperty("configuration.history.slow.runs"));
         Long historyFast = Long.parseLong(context.getProperty("configuration.history.fast.runs"));
-        IInputLoadingStrategy inputLoadingStrategyMain = this.getLoadingStrategy(inputLoadingStrategy);
+        Integer fastSlowRatio = Integer.parseInt(context.getProperty("configuration.slowfast.ratio"));
+        ILayersMeta layersMeta = new FileLayersMeta<>(fs.getItem(layerPath), fs);
+        HashMap<String,ProcessingFrequency> processingFrequencyHashMap =new HashMap<>();
+
+        try {
+            processingFrequencyHashMap =  new ObjectMapper().readValue(context.getProperty("configuration.processing.frequency.map"), HashMap.class);
+        } catch (JsonProcessingException e) {
+            logger.error("Cannot find parse " + context.getProperty("configuration.processing.frequency.map") + "  to processing frequency map", e);
+            e.printStackTrace();
+        }
+        IInputLoadingStrategy inputLoadingStrategyMain = new CycledInputLoadingStrategy(layersMeta,fastSlowRatio,processingFrequencyHashMap);
         IInputResolver inputResolver = new InMemoryInputResolver(new InMemorySignalPersistStorage(), new InMemorySignalHistoryStorage(historySlow, historyFast), inputLoadingStrategyMain);
         String inputs = context.getProperty("configuration.input.inputs");
         for (InputData inputData : this.getInputs(inputs)) {
             inputResolver.registerInput(inputData.getiInputSource(), inputData.isMandatory(), inputData.getInitStrategy());
         }
         structBuilder.withHiddenInputMeta(inputResolver);
-        structBuilder.withLayersMeta(new FileLayersMeta<>(fs.getItem(layerPath), fs));
+        structBuilder.withLayersMeta(layersMeta);
         StructMeta meta = structBuilder.build();
         boolean isTeacherStudying = Boolean.parseBoolean(context.getProperty("configuration.isteacherstudying"));
 
