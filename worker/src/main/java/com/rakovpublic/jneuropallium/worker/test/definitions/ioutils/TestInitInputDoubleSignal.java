@@ -19,7 +19,16 @@ public class TestInitInputDoubleSignal implements IInitInput {
     public List<InputDoubleSignal> inputIntSignals;
 
     public TestInitInputDoubleSignal() {
+        String description = "test signal";
         inputIntSignals = new ArrayList<>();
+        inputIntSignals.add(new InputDoubleSignal(0.5d, 0, 0l, 1, description, false, TestInitInputDoubleSignal.class.getCanonicalName(), false, false, TestInitInputDoubleSignal.class.getCanonicalName()));
+        inputIntSignals.add(new InputDoubleSignal(0.6d, 0, 0l, 1, description, false, TestInitInputDoubleSignal.class.getCanonicalName(), false, false, TestInitInputDoubleSignal.class.getCanonicalName()));
+        inputIntSignals.add(new InputDoubleSignal(0.7d, 0, 0l, 1, description, false, TestInitInputDoubleSignal.class.getCanonicalName(), false, false, TestInitInputDoubleSignal.class.getCanonicalName()));
+        inputIntSignals.add(new InputDoubleSignal(1.7d, 0, 0l, 1, description, false, TestInitInputDoubleSignal.class.getCanonicalName(), false, false, TestInitInputDoubleSignal.class.getCanonicalName()));
+        inputIntSignals.add(new InputDoubleSignal(2.7d, 0, 0l, 1, description, false, TestInitInputDoubleSignal.class.getCanonicalName(), false, false, TestInitInputDoubleSignal.class.getCanonicalName()));
+        inputIntSignals.add(new InputDoubleSignal(3.7d, 0, 0l, 1, description, false, TestInitInputDoubleSignal.class.getCanonicalName(), false, false, TestInitInputDoubleSignal.class.getCanonicalName()));
+
+
     }
 
     public List<InputDoubleSignal> getInputIntSignals() {

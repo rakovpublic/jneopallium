@@ -18,7 +18,13 @@ public class TestInitInputIntSignal implements IInitInput {
     public List<InputIntSignal> inputIntSignals;
 
     public TestInitInputIntSignal() {
+        String description = "test signal";
         inputIntSignals = new ArrayList<>();
+        inputIntSignals.add(new InputIntSignal(1,0,0l, 1, description, false, TestInitInputIntSignal.class.getCanonicalName(), false, false, InputIntSignal.class.getCanonicalName()));
+        inputIntSignals.add(new InputIntSignal(2,0,0l, 1, description, false, TestInitInputIntSignal.class.getCanonicalName(), false, false, InputIntSignal.class.getCanonicalName()));
+        inputIntSignals.add(new InputIntSignal(3,0,0l, 1, description, false, TestInitInputIntSignal.class.getCanonicalName(), false, false, InputIntSignal.class.getCanonicalName()));
+        inputIntSignals.add(new InputIntSignal(4,0,0l, 1, description, false, TestInitInputIntSignal.class.getCanonicalName(), false, false, InputIntSignal.class.getCanonicalName()));
+
     }
 
     public List<InputIntSignal> getInputIntSignals() {
