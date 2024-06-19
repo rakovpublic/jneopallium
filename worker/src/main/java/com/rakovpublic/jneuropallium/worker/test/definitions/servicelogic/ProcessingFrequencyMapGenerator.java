@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.ProcessingFrequency;
 import com.rakovpublic.jneuropallium.worker.test.definitions.functionallogic.DoubleSignal;
 import com.rakovpublic.jneuropallium.worker.test.definitions.functionallogic.IntSignal;
-import org.apache.kafka.common.protocol.types.Field;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
