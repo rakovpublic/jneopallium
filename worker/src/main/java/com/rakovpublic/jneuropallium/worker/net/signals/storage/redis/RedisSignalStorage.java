@@ -146,4 +146,17 @@ public class RedisSignalStorage implements ISignalsPersistStorage {
         JedisPooled jedisPooled = new JedisPooled(this.host, this.port);
         jedisPooled.jsonDel(neuronNetName+"_signalStorage_layerId_"+deletedLayerId);
     }
+
+    @Override
+    public boolean hasSignalsToProcess() {
+        TreeMap<Integer, HashMap<Long, List<ISignal>>> signals = getAllSignals();
+        for(Integer layerId: signals.keySet()){
+            for(Long neuronId: signals.get(layerId).keySet()){
+                if(signals.get(layerId).get(neuronId).size()>0){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }
