@@ -9,9 +9,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.rakovpublic.jneuropallium.worker.exceptions.ConfigurationClassMissedException;
-import com.rakovpublic.jneuropallium.worker.exceptions.JSONParsingException;
-import com.rakovpublic.jneuropallium.worker.net.layers.impl.redis.RedisLayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignalsPersistStorage;
 import org.apache.logging.log4j.LogManager;
@@ -145,5 +142,18 @@ public class RedisSignalStorage implements ISignalsPersistStorage {
     public void deletedLayerInput(Integer deletedLayerId) {
         JedisPooled jedisPooled = new JedisPooled(this.host, this.port);
         jedisPooled.jsonDel(neuronNetName+"_signalStorage_layerId_"+deletedLayerId);
+    }
+
+    @Override
+    public boolean hasSignalsToProcess() {
+        TreeMap<Integer, HashMap<Long, List<ISignal>>> signals = getAllSignals();
+        for(Integer layerId: signals.keySet()){
+            for(Long neuronId: signals.get(layerId).keySet()){
+                if(signals.get(layerId).get(neuronId).size()>0){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
