@@ -49,7 +49,6 @@ public class LocalApplication implements IApplication {
 
         String storageJson = context.getProperty("configuration.storage.json");
         IStorage fs = getStorage(storageJson);
-        String inputLoadingStrategy = context.getProperty("configuration.input.loadingstrategy");
         Integer historySlow = Integer.parseInt(context.getProperty("configuration.history.slow.runs"));
         Long historyFast = Long.parseLong(context.getProperty("configuration.history.fast.runs"));
         Integer fastSlowRatio = Integer.parseInt(context.getProperty("configuration.slowfast.ratio"));
