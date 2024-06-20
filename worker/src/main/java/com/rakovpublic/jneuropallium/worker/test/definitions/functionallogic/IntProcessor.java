@@ -11,8 +11,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class IntProcessor implements ISignalProcessor<IntSignal, NeuronIntField> {
-    private static String DESCRIPTION = "processor for IntSignal and  NeuronIntField ";
-
+    public String description = "processor for IntSignal and  NeuronIntField ";
+    public Class<? extends ISignalProcessor> signalProcessorClass = IntProcessor.class;
+    public Class<NeuronIntField> neuronClass =  NeuronIntField.class;
+    public Class<IntSignal> signalClass =  IntSignal.class;
     @Override
     public <I extends ISignal> List<I> process(IntSignal input, NeuronIntField neuron) {
         neuron.setIntField(neuron.getIntField() + input.getValue());
@@ -21,7 +23,7 @@ public class IntProcessor implements ISignalProcessor<IntSignal, NeuronIntField>
 
     @Override
     public String getDescription() {
-        return DESCRIPTION;
+        return description;
     }
 
     @Override

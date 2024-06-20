@@ -17,6 +17,10 @@ public class InMemorySignalHistoryStorage implements ISignalHistoryStorage {
     private Integer loopsToStore = 0;
     private Long runsToStore = 0l;
 
+
+    public InMemorySignalHistoryStorage() {
+    }
+
     public InMemorySignalHistoryStorage(Integer loopsToStore, Long runsToStore) {
         this.loopsToStore = loopsToStore;
         this.runsToStore = runsToStore;

@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 
 public class Neuron implements INeuron {
+    @JsonIgnore
     public List<ISignal> signals;
     public Boolean isProcessed;
     public Dendrites dendrites;
@@ -33,6 +34,7 @@ public class Neuron implements INeuron {
     @JsonIgnore
     public ILayer layer;
     public Long neuronId;
+    @JsonIgnore
     public List<ISignal> result;
     public ISignalChain signalChain;
     public List<IRule> rules;
@@ -40,7 +42,8 @@ public class Neuron implements INeuron {
     public Boolean changed;
     public Boolean onDelete;
     public Long run;
-    public ISignalHistoryStorage signalHistoryStorage;
+    @JsonIgnore
+    public ISignalHistoryStorage signalHistory;
 
     @Override
     public HashMap<String, Long> getCyclingNeuronInputMapping() {
@@ -51,9 +54,8 @@ public class Neuron implements INeuron {
     public void setCyclingNeuronInputMapping(HashMap<String, Long> cyclingNeuronInputMapping) {
         this.cyclingNeuronInputMapping = cyclingNeuronInputMapping;
     }
-
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    protected HashMap<String, Long> cyclingNeuronInputMapping;
+    @JsonIgnore
+    public HashMap<String, Long> cyclingNeuronInputMapping;
 
     public Integer currentLoopAmount;
 
@@ -123,9 +125,11 @@ public class Neuron implements INeuron {
         onDelete= false;
         changed=false;
         currentLoopAmount=0;
+        cyclingNeuronInputMapping= new HashMap<>();
     }
 
     public Neuron(Long neuronId, ISignalChain processingChain, Long run) {
+        cyclingNeuronInputMapping= new HashMap<>();
         rules = new ArrayList<>();
         this.neuronId = neuronId;
         isProcessed = false;
@@ -170,12 +174,13 @@ public class Neuron implements INeuron {
 
     @Override
     public ISignalHistoryStorage getSignalHistory() {
-        return signalHistoryStorage;
+        return signalHistory;
     }
+
 
     @Override
     public void setSignalHistory(ISignalHistoryStorage signalHistory) {
-        this.signalHistoryStorage = signalHistory;
+        this.signalHistory = signalHistory;
     }
 
     @Override
@@ -210,8 +215,14 @@ public class Neuron implements INeuron {
     //TODO:refactor this method
     @Override
     public void processSignals() {
+        if(cyclingNeuronInputMapping==null){
+            cyclingNeuronInputMapping= new HashMap<>();
+        }
         try{
         HashMap<Class<? extends ISignal>, List<ISignal>> signalsMap = new HashMap<>();
+        if(dendrites==null){
+            dendrites = new Dendrites();
+        }
         List<ISignal> signalsForProcessing = dendrites.processSignalsWithDendrites(signals);
         for (ISignal s : signalsForProcessing) {
 

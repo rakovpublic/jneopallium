@@ -4,6 +4,7 @@
 
 package com.rakovpublic.jneuropallium.worker.net.signals;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.rakovpublic.jneuropallium.worker.net.neuron.NeuronAddress;
 
 import java.util.HashMap;
@@ -13,6 +14,7 @@ import java.util.TreeMap;
 /**
  * This interface represents the history of signals for each neuron. It can be useful for studying
  */
+@JsonDeserialize(using = SignalHistoryDeserializer.class)
 public interface ISignalHistoryStorage {
     /**
      * This method return the signals which have got neuron on specific run

@@ -11,7 +11,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class DoubleProcessor implements ISignalProcessor<DoubleSignal, NeuronWithDoubleField> {
-    private static String DESCRIPTION = "processor for DoubleSignal and  NeuronWithDoubleField ";
+    public String description = "processor for DoubleSignal and  NeuronWithDoubleField ";
+    public Class<? extends ISignalProcessor> signalProcessorClass = DoubleProcessor.class;
+    public Class<NeuronWithDoubleField> neuronClass =  NeuronWithDoubleField.class;
+    public Class<DoubleSignal> signalClass =  DoubleSignal.class;
+
 
     @Override
     public <I extends ISignal> List<I> process(DoubleSignal input, NeuronWithDoubleField neuron) {
@@ -21,7 +25,7 @@ public class DoubleProcessor implements ISignalProcessor<DoubleSignal, NeuronWit
 
     @Override
     public String getDescription() {
-        return DESCRIPTION;
+        return description;
     }
 
     @Override
