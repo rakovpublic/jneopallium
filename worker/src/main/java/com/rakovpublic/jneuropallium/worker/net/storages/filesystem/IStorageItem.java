@@ -9,7 +9,7 @@ public interface IStorageItem {
 
     String getPath();
 
-    void setPath();
+    void setPath(String path);
 
 
 }
