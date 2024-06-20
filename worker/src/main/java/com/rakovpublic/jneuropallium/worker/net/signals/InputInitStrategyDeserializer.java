@@ -16,7 +16,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
-public class InputInitStrategyDeserializer extends StdDeserializer<InputInitStrategy> {
+public class InputInitStrategyDeserializer extends StdDeserializer<InputInitStrategyWrapper> {
     private final static Logger logger = LogManager.getLogger(InputInitStrategyDeserializer.class);
 
 
@@ -29,12 +29,12 @@ public class InputInitStrategyDeserializer extends StdDeserializer<InputInitStra
     }
 
     @Override
-    public InputInitStrategy deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
+    public InputInitStrategyWrapper deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         JsonElement jelement = new com.google.gson.JsonParser().parse(jsonParser.readValueAsTree().toString());
         JsonObject jobject = jelement.getAsJsonObject();
         try {
-            return (InputInitStrategy) mapper.readValue(jobject.getAsJsonObject("iNeuronNetInput").toString(), Class.forName(jobject.getAsJsonPrimitive("clazz").getAsString()));
+            return new InputInitStrategyWrapper((InputInitStrategy) mapper.readValue(jobject.getAsJsonObject("iNeuronNetInput").toString(), Class.forName(jobject.getAsJsonPrimitive("clazz").getAsString())));
         } catch (ClassNotFoundException e) {
             logger.error("Missed class for: " + jobject.getAsJsonPrimitive("clazz"), e);
         }

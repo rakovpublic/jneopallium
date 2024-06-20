@@ -8,14 +8,19 @@ import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalChain;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.Neuron;
 
 public class NeuronC extends Neuron implements NeuronWithDoubleField {
-    protected Double fieldDouble;
+    public Double fieldDouble;
 
     public NeuronC() {
+        super();
+        fieldDouble = 0d;
+        currentNeuronClass = NeuronC.class;
         resultClasses.add(DoubleSignal.class);
     }
 
     public NeuronC(Long neuronId, ISignalChain processingChain, Long run) {
         super(neuronId, processingChain, run);
+        currentNeuronClass = NeuronC.class;
+        fieldDouble = 0d;
         resultClasses.add(DoubleSignal.class);
     }
 

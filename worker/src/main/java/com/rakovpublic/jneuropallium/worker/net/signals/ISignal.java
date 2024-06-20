@@ -1,10 +1,13 @@
 package com.rakovpublic.jneuropallium.worker.net.signals;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import java.io.Serializable;
 
 /***
  * Created by Rakovskyi Dmytro on 27.10.2017.
  */
+
 public interface ISignal<T> extends Serializable {
     /**
      * @return value of signal

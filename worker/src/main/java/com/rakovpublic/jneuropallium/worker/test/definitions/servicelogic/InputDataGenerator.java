@@ -6,6 +6,8 @@ package com.rakovpublic.jneuropallium.worker.test.definitions.servicelogic;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rakovpublic.jneuropallium.worker.net.layers.impl.InputData;
+import com.rakovpublic.jneuropallium.worker.net.signals.InitInputWrapper;
+import com.rakovpublic.jneuropallium.worker.net.signals.InputInitStrategyWrapper;
 import com.rakovpublic.jneuropallium.worker.net.signals.OneToAllFirstLayerInputStrategy;
 import com.rakovpublic.jneuropallium.worker.test.definitions.ioutils.TestInitInputDoubleSignal;
 import com.rakovpublic.jneuropallium.worker.test.definitions.ioutils.TestInitInputIntSignal;
@@ -19,8 +21,8 @@ import java.util.List;
 public class InputDataGenerator {
     public static void main(String [] args){
         List<InputData> inputData = new ArrayList<>();
-        inputData.add(new InputData(new TestInitInputDoubleSignal(),false, new OneToAllFirstLayerInputStrategy(),1));
-        inputData.add(new InputData(new TestInitInputIntSignal(),false, new OneToAllFirstLayerInputStrategy(),1));
+        inputData.add(new InputData(new InitInputWrapper(new TestInitInputDoubleSignal()),false, new InputInitStrategyWrapper(new OneToAllFirstLayerInputStrategy()),1));
+        inputData.add(new InputData(new InitInputWrapper(new TestInitInputIntSignal()),false, new InputInitStrategyWrapper(new OneToAllFirstLayerInputStrategy()),1));
         ObjectMapper mapper = new ObjectMapper();
         BufferedWriter writer = null;
         try {

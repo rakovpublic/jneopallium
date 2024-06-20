@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * This interface incapsulate the logic of passing input signals to input layer of the neuron net
  */
-@JsonDeserialize(using = InitInputDeserializer.class)
+
 public interface InputInitStrategy {
     /**
      * @param layersMeta meta data which contains layers information

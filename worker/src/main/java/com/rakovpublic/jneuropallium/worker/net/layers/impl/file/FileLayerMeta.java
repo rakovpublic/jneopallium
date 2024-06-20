@@ -67,7 +67,7 @@ public class FileLayerMeta<S extends IStorageItem> implements ILayerMeta {
     public int getID() {
         String layer = fileSystem.read(file);
         JSONHelper helper = new JSONHelper();
-        return Integer.parseInt(helper.extractField(layer, "layerId"));
+        return Integer.parseInt(helper.extractField(layer, "layerID"));
     }
 
     @Override

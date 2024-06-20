@@ -9,7 +9,7 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 public class DummyChangeWeightSignal extends AbstractSignal<Integer> {
     public DummyChangeWeightSignal(Integer value, Integer sourceLayer, Long sourceNeuron, Integer timeAlive, String description, boolean fromExternalNet, String inputName, boolean needToRemoveDuringLearning, boolean needToProcessDuringLearning, String name) {
-        super(value, sourceLayer, sourceNeuron, timeAlive, description, fromExternalNet, inputName, needToRemoveDuringLearning, needToProcessDuringLearning, name);
+        super(value, sourceLayer, sourceNeuron, timeAlive, description, fromExternalNet, inputName, needToRemoveDuringLearning, needToProcessDuringLearning, name,DummyChangeWeightSignal.class.getCanonicalName());
     }
 
     @Override

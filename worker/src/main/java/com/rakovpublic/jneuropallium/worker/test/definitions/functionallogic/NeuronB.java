@@ -8,16 +8,21 @@ import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalChain;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.Neuron;
 
 public class NeuronB extends Neuron implements NeuronIntField {
-    private  Integer intField;
+    public  Integer intField;
 
     public NeuronB() {
+        super();
+        intField=0;
+        currentNeuronClass= NeuronB.class;
         resultClasses.add(IntSignal.class);
         resultClasses.add(DoubleSignal.class);
     }
 
     public NeuronB(Long neuronId, ISignalChain processingChain, Long run) {
         super(neuronId, processingChain, run);
+        intField=0;
         resultClasses.add(IntSignal.class);
+        currentNeuronClass= NeuronB.class;
         resultClasses.add(DoubleSignal.class);
     }
 

@@ -10,15 +10,22 @@ import com.rakovpublic.jneuropallium.worker.net.neuron.impl.Neuron;
 
 public class NeuronA extends Neuron implements IResultNeuron<TestResultSignal>,NeuronIntField, NeuronWithDoubleField {
 
-    private Integer intField;
-    private Double doubleField;
+    public Integer intField;
+    public Double doubleField;
 
     public NeuronA() {
+        super();
+        intField =0;
+        doubleField=0d;
+        currentNeuronClass = NeuronA.class;
         resultClasses.add(ASignal.class);
     }
 
     public NeuronA(Long neuronId, ISignalChain processingChain, Long run) {
         super(neuronId, processingChain, run);
+        currentNeuronClass = NeuronA.class;
+        intField =0;
+        doubleField=0d;
         resultClasses.add(ASignal.class);
     }
 

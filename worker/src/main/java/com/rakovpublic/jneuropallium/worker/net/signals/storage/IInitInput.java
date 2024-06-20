@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * This interface represents part of the input for neuron net
  */
-@JsonDeserialize(using = InitInputDeserializer.class)
+
 public interface IInitInput {
 
     /**

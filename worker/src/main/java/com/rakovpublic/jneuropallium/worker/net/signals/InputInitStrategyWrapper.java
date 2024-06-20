@@ -4,22 +4,38 @@
 
 package com.rakovpublic.jneuropallium.worker.net.signals;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayersMeta;
 
 import java.util.HashMap;
 import java.util.List;
 
-public class InputInitStrategyWrapper implements InputInitStrategy {
-    private InputInitStrategy iNeuronNetInput;
-    private Class<? extends InputInitStrategy> clazz;
+@JsonDeserialize(using = InputInitStrategyDeserializer.class)
+public class InputInitStrategyWrapper  {
+    public InputInitStrategy iNeuronNetInput;
+    public Class<? extends InputInitStrategy> clazz;
 
     public InputInitStrategyWrapper(InputInitStrategy iNeuronNetInput) {
         this.iNeuronNetInput = iNeuronNetInput;
         clazz = iNeuronNetInput.getClass();
     }
 
-    @Override
-    public HashMap<Integer, HashMap<Long, List<ISignal>>> getInputs(ILayersMeta layersMeta, List<ISignal> signals) {
-        return iNeuronNetInput.getInputs(layersMeta, signals);
+    public InputInitStrategyWrapper() {
+    }
+
+    public InputInitStrategy getiNeuronNetInput() {
+        return iNeuronNetInput;
+    }
+
+    public void setiNeuronNetInput(InputInitStrategy iNeuronNetInput) {
+        this.iNeuronNetInput = iNeuronNetInput;
+    }
+
+    public Class<? extends InputInitStrategy> getClazz() {
+        return clazz;
+    }
+
+    public void setClazz(Class<? extends InputInitStrategy> clazz) {
+        this.clazz = clazz;
     }
 }

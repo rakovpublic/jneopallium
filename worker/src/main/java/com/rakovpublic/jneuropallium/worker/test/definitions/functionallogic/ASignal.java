@@ -10,7 +10,7 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 public class ASignal  extends AbstractSignal<Integer>  {
 
     public ASignal(Integer value, Integer sourceLayer, Long sourceNeuron, Integer timeAlive, String description, boolean fromExternalNet, String inputName, boolean needToRemoveDuringLearning, boolean needToProcessDuringLearning, String name) {
-        super(value, sourceLayer, sourceNeuron, timeAlive, description, fromExternalNet, inputName, needToRemoveDuringLearning, needToProcessDuringLearning, name);
+        super(value, sourceLayer, sourceNeuron, timeAlive, description, fromExternalNet, inputName, needToRemoveDuringLearning, needToProcessDuringLearning, name, ASignal.class.getCanonicalName());
     }
 
     @Override

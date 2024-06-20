@@ -13,7 +13,15 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class OneToAllFirstLayerInputStrategy implements InputInitStrategy {
+    public String clazz = "com.rakovpublic.jneuropallium.worker.net.signals.OneToAllFirstLayerInputStrategy";
 
+    public String getClazz() {
+        return clazz;
+    }
+
+    public void setClazz(String clazz) {
+        this.clazz = clazz;
+    }
 
     @Override
     public HashMap<Integer, HashMap<Long, List<ISignal>>> getInputs(ILayersMeta layersMeta, List<ISignal> signals) {
