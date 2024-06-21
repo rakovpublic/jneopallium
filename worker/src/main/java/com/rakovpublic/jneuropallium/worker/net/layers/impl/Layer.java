@@ -140,6 +140,7 @@ public class Layer<N extends INeuron> implements ILayer<N> {
     @Override
     public void process() {
         HashMap<Long, List<ISignal>> input = inputResolver.getSignalPersistStorage().getLayerSignals(this.layerId);
+        if(input!=null){
         INeuron neur;
         NeuronRunnerService ns = NeuronRunnerService.getService();
         notProcessed = ns.getNeuronQueue();
@@ -156,6 +157,7 @@ public class Layer<N extends INeuron> implements ILayer<N> {
             }
         }
         ns.process(threads);
+        }
 
     }
 
