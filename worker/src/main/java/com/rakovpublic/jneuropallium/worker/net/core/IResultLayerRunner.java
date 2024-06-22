@@ -10,8 +10,9 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public interface IResultLayerRunner {
-    List<? extends IResultNeuron> getResults(IResultLayerMeta resultLayer, HashMap<Long, List<ISignal>> signals);
+    List<? extends IResultNeuron> getResults(IResultLayerMeta resultLayer, HashMap<Long, CopyOnWriteArrayList<ISignal>> signals);
 
 }

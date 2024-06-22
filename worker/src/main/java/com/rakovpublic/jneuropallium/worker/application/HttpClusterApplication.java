@@ -21,6 +21,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class HttpClusterApplication implements IApplication {
     private static final Logger logger = LogManager.getLogger(HttpClusterApplication.class);
@@ -48,7 +49,7 @@ public class HttpClusterApplication implements IApplication {
                 }
                 ISplitInput splitInput = parseSplitInput(jsonSplitInput);
                 IInputResolver inputResolver = splitInput.getInputResolver();
-                HashMap<Long, List<ISignal>> input = inputResolver.getSignalPersistStorage().getLayerSignals(splitInput.getLayerId());
+                HashMap<Long, CopyOnWriteArrayList<ISignal>> input = inputResolver.getSignalPersistStorage().getLayerSignals(splitInput.getLayerId());
                 NeuronRunnerService neuronRunnerService = NeuronRunnerService.getService();
                 List<INeuron> neurons = (List<INeuron>) splitInput.getNeurons();
 
@@ -65,7 +66,7 @@ public class HttpClusterApplication implements IApplication {
                     for(INeuron neuron:neurons){
                         if(neuron.hasResult()){
                             IAxon axon = neuron.getAxon();
-                            HashMap<Integer, HashMap<Long, List<ISignal>>> result = axon.getSignalResultStructure(axon.processSignals(neuron.getResult()));
+                            HashMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> result = axon.getSignalResultStructure(axon.processSignals(neuron.getResult()));
                             splitInput.saveResults(result);
                             splitInput.saveNeuron(neuron);
                             neurons.remove(neuron);
@@ -76,7 +77,7 @@ public class HttpClusterApplication implements IApplication {
                         for(INeuron neuron:neurons){
                             if(neuron.hasResult()){
                                 IAxon axon = neuron.getAxon();
-                                HashMap<Integer, HashMap<Long, List<ISignal>>> result = axon.getSignalResultStructure(axon.processSignals(neuron.getResult()));
+                                HashMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> result = axon.getSignalResultStructure(axon.processSignals(neuron.getResult()));
                                 splitInput.saveResults(result);
                                 splitInput.saveNeuron(neuron);
                                 neurons.remove(neuron);

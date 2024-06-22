@@ -4,6 +4,7 @@
 
 package com.rakovpublic.jneuropallium.worker.test.definitions.functionallogic;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.rakovpublic.jneuropallium.worker.net.neuron.IResultNeuron;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalChain;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.Neuron;
@@ -12,6 +13,7 @@ public class NeuronA extends Neuron implements IResultNeuron<TestResultSignal>,N
 
     public Integer intField;
     public Double doubleField;
+
 
     public NeuronA() {
         super();
@@ -59,8 +61,10 @@ public class NeuronA extends Neuron implements IResultNeuron<TestResultSignal>,N
             intField = 0;
             doubleField = 0.0;
         }
+        isProcessed=true;
     }
 
+    @JsonIgnore
     @Override
     public TestResultSignal getFinalResult() {
 

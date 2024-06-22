@@ -7,13 +7,11 @@ package com.rakovpublic.jneuropallium.worker.net.layers.impl.http;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.rakovpublic.jneuropallium.worker.application.HttpCommunicationClient;
 import com.rakovpublic.jneuropallium.worker.application.HttpRequestResolver;
-import com.rakovpublic.jneuropallium.worker.exceptions.JSONParsingException;
 import com.rakovpublic.jneuropallium.worker.model.CreateNeuronRequest;
 import com.rakovpublic.jneuropallium.worker.model.DeleteNeuronRequest;
 import com.rakovpublic.jneuropallium.worker.model.LayerParamUpdate;
@@ -33,6 +31,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 public class HttpLayer<N extends INeuron> implements ILayer<N> {
@@ -159,7 +158,7 @@ public class HttpLayer<N extends INeuron> implements ILayer<N> {
 
     @Override
     public void process() {
-        HashMap<Long, List<ISignal>> input = splitInput.getInputResolver().getSignalPersistStorage().getLayerSignals(this.layerId);
+        HashMap<Long, CopyOnWriteArrayList<ISignal>> input = splitInput.getInputResolver().getSignalPersistStorage().getLayerSignals(this.layerId);
         INeuron neur;
         NeuronRunnerService ns = NeuronRunnerService.getService();
         notProcessed = ns.getNeuronQueue();
@@ -208,7 +207,7 @@ public class HttpLayer<N extends INeuron> implements ILayer<N> {
 
     @Override
     public void dumpResult() {
-        HashMap<Integer, HashMap<Long, List<ISignal>>> result = getResults();
+        HashMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> result = getResults();
         splitInput.getInputResolver().getSignalPersistStorage().putSignals(result);
     }
 
@@ -218,8 +217,8 @@ public class HttpLayer<N extends INeuron> implements ILayer<N> {
     }
 
     @Override
-    public HashMap<Integer, HashMap<Long, List<ISignal>>> getResults() {
-        HashMap<Integer, HashMap<Long, List<ISignal>>> result = new HashMap<>();
+    public HashMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> getResults() {
+        HashMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> result = new HashMap<>();
         for (Long neurId : neurons.keySet()) {
             INeuron neur = neurons.get(neurId);
             IAxon axon = neur.getAxon();
@@ -237,14 +236,14 @@ public class HttpLayer<N extends INeuron> implements ILayer<N> {
                         if (result.get(layerId).containsKey(targetNeurId)) {
                             result.get(layerId).get(targetNeurId).add(signal);
                         } else {
-                            List<ISignal> signals = new ArrayList<>();
+                            CopyOnWriteArrayList<ISignal> signals = new CopyOnWriteArrayList<>();
                             signals.add(signal);
                             result.get(layerId).put(targetNeurId, signals);
                         }
                     } else {
-                        List<ISignal> signals = new ArrayList<>();
+                        CopyOnWriteArrayList<ISignal> signals = new CopyOnWriteArrayList<>();
                         signals.add(signal);
-                        HashMap<Long, List<ISignal>> ttMap = new HashMap<>();
+                        HashMap<Long, CopyOnWriteArrayList<ISignal>> ttMap = new HashMap<>();
                         ttMap.put(targetNeurId, signals);
                         result.put(layerId, ttMap);
                     }

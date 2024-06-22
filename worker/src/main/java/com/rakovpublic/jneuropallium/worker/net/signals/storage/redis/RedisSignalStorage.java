@@ -17,6 +17,7 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPooled;
 
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class RedisSignalStorage implements ISignalsPersistStorage {
     private static final Logger logger = LogManager.getLogger(RedisSignalStorage.class);
@@ -33,12 +34,12 @@ public class RedisSignalStorage implements ISignalsPersistStorage {
     }
 
     @Override
-    public void putSignals(HashMap<Integer, HashMap<Long, List<ISignal>>> signals) {
+    public void putSignals(HashMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> signals) {
         JedisPooled jedisPooled = new JedisPooled(this.host, this.port);
         ObjectMapper mapper = new ObjectMapper();
         for(Integer layerId:signals.keySet()){
-            HashMap<Long, List<ISignal>> existedSignals= getLayerSignals(layerId);
-            HashMap<Long, List<ISignal>> newSignal = signals.get(layerId);
+            HashMap<Long, CopyOnWriteArrayList<ISignal>> existedSignals= getLayerSignals(layerId);
+            HashMap<Long, CopyOnWriteArrayList<ISignal>> newSignal = signals.get(layerId);
             for (Long neuron: newSignal.keySet()){
                 if(existedSignals!= null&&existedSignals.containsKey(neuron)){
                     existedSignals.get(neuron).addAll(newSignal.get(neuron));
@@ -60,8 +61,8 @@ public class RedisSignalStorage implements ISignalsPersistStorage {
     }
 
     @Override
-    public HashMap<Long, List<ISignal>> getLayerSignals(Integer layerId) {
-        HashMap<Long, List<ISignal>> result = new HashMap<>();
+    public HashMap<Long, CopyOnWriteArrayList<ISignal>> getLayerSignals(Integer layerId) {
+        HashMap<Long, CopyOnWriteArrayList<ISignal>> result = new HashMap<>();
         ObjectMapper mapper = new ObjectMapper();
         JedisPooled jedisPooled = new JedisPooled(this.host, this.port);
         String json = jedisPooled.jsonGet(neuronNetName+"_signalStorage_layerId_"+layerId).toString();
@@ -69,7 +70,7 @@ public class RedisSignalStorage implements ISignalsPersistStorage {
         JsonObject jobject = jelement.getAsJsonObject();
         for (Map.Entry<String, JsonElement> e : jobject.entrySet()){
             Long id= Long.parseLong(e.getKey());
-            List<ISignal> signals = new LinkedList<>();
+            CopyOnWriteArrayList<ISignal> signals = new CopyOnWriteArrayList<>();
             for(JsonElement signal: e.getValue().getAsJsonArray()){
                String signalClass = signal.getAsJsonObject().getAsJsonPrimitive("currentClassName").getAsString();
                 try {
@@ -91,12 +92,12 @@ public class RedisSignalStorage implements ISignalsPersistStorage {
 
     @Override
     public void cleanOutdatedSignals() {
-        TreeMap<Integer, HashMap<Long, List<ISignal>>> signals = getAllSignals();
-        HashMap<Integer, HashMap<Long, List<ISignal>>> toSet= new HashMap<>();
+        TreeMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> signals = getAllSignals();
+        HashMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> toSet= new HashMap<>();
         for(Integer layerId: signals.keySet()){
-            HashMap<Long, List<ISignal>> layerSignals= signals.get(layerId);
+            HashMap<Long, CopyOnWriteArrayList<ISignal>> layerSignals= signals.get(layerId);
             for(Long neuronId: layerSignals.keySet()){
-                List<ISignal> newSignals = new LinkedList<>();
+                CopyOnWriteArrayList<ISignal> newSignals = new CopyOnWriteArrayList<>();
                 for(ISignal signal:layerSignals.get(neuronId)){
                     ISignal signalNew =signal.prepareSignalToNextStep();
                     if(signalNew!=null){
@@ -113,7 +114,7 @@ public class RedisSignalStorage implements ISignalsPersistStorage {
 
     @Override
     public void cleanMiddleLayerSignals() {
-        TreeMap<Integer, HashMap<Long, List<ISignal>>> signals = getAllSignals();
+        TreeMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> signals = getAllSignals();
         signals.remove(signals.firstKey());
         signals.remove(signals.firstKey());
         signals.remove(signals.lastKey());
@@ -125,8 +126,8 @@ public class RedisSignalStorage implements ISignalsPersistStorage {
     }
 
     @Override
-    public TreeMap<Integer, HashMap<Long, List<ISignal>>> getAllSignals() {
-        TreeMap<Integer, HashMap<Long, List<ISignal>>> result = new TreeMap<>();
+    public TreeMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> getAllSignals() {
+        TreeMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> result = new TreeMap<>();
         if(this.pool==null){
             this.pool = new JedisPool(this.host, this.port);
         }
@@ -146,7 +147,7 @@ public class RedisSignalStorage implements ISignalsPersistStorage {
 
     @Override
     public boolean hasSignalsToProcess() {
-        TreeMap<Integer, HashMap<Long, List<ISignal>>> signals = getAllSignals();
+        TreeMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> signals = getAllSignals();
         for(Integer layerId: signals.keySet()){
             for(Long neuronId: signals.get(layerId).keySet()){
                 if(signals.get(layerId).get(neuronId).size()>0){

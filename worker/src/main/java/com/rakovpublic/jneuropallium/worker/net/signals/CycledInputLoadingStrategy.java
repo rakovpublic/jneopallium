@@ -18,6 +18,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 
 /**
@@ -141,7 +142,7 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
                     }
                     if (inputStatuses.get(iii).getCurrentRuns() %
                             cl.getLoopCount() == 0 && (ipf != null && (ipf.getLoop() != null && loop % ipf.getLoop() == 0) || (ipf.getEpoch() != null && epoch % ipf.getEpoch() == 0))) {
-                        List<ISignal> signals = new LinkedList<>();
+                        CopyOnWriteArrayList<ISignal> signals = new CopyOnWriteArrayList<>();
                         List<IInputSignal> signalsHistory = new LinkedList<>();
                         for (IInputSignal signal : iii.readSignals()) {
                             ProcessingFrequency pf = frequencyHashMap.get(signal.getCurrentSignalClass());

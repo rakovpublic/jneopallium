@@ -10,6 +10,7 @@ import com.rakovpublic.jneuropallium.worker.net.neuron.NeuronAddress;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * This interface represents the history of signals for each neuron. It can be useful for studying
@@ -31,5 +32,5 @@ public interface ISignalHistoryStorage {
      * @param history signals
      * @param run
      */
-    void save(TreeMap<Integer, HashMap<Long, List<ISignal>>> history, Long run, Integer loop);
+    void save(TreeMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> history, Long run, Integer loop);
 }

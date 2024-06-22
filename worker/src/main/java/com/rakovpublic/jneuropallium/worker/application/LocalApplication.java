@@ -24,8 +24,10 @@ import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class LocalApplication implements IApplication {
     private static final Logger logger = LogManager.getLogger(LocalApplication.class);
@@ -53,19 +55,23 @@ public class LocalApplication implements IApplication {
         Long historyFast = Long.parseLong(context.getProperty("configuration.history.fast.runs"));
         Integer fastSlowRatio = Integer.parseInt(context.getProperty("configuration.slowfast.ratio"));
         ILayersMeta layersMeta = new FileLayersMeta<>(fs.getItem(layerPath), fs);
-        HashMap<String,ProcessingFrequency> processingFrequencyHashMap =new HashMap<>();
+        HashMap<String, LinkedHashMap<String,String>> processingFrequencyJSONMap =new HashMap<>();
+        HashMap<String,ProcessingFrequency> processingFrequencyMap =new HashMap<>();
 
         try {
-            processingFrequencyHashMap =  new ObjectMapper().readValue(context.getProperty("configuration.processing.frequency.map"), HashMap.class);
+            processingFrequencyJSONMap =  new ObjectMapper().readValue(context.getProperty("configuration.processing.frequency.map"), HashMap.class);
+            for(String key: processingFrequencyJSONMap.keySet()){
+                processingFrequencyMap.put(key,new ProcessingFrequency(Long.parseLong(processingFrequencyJSONMap.get(key).get("epoch")), Integer.parseInt(processingFrequencyJSONMap.get(key).get("loop"))));
+            }
         } catch (JsonProcessingException e) {
             logger.error("Cannot find parse " + context.getProperty("configuration.processing.frequency.map") + "  to processing frequency map", e);
             e.printStackTrace();
         }
-        IInputLoadingStrategy inputLoadingStrategyMain = new CycledInputLoadingStrategy(layersMeta,fastSlowRatio,processingFrequencyHashMap);
+        IInputLoadingStrategy inputLoadingStrategyMain = new CycledInputLoadingStrategy(layersMeta,fastSlowRatio,processingFrequencyMap);
         IInputResolver inputResolver = new InMemoryInputResolver(new InMemorySignalPersistStorage(), new InMemorySignalHistoryStorage(historySlow, historyFast), inputLoadingStrategyMain);
         String inputs = context.getProperty("configuration.input.inputs");
         for (InputData inputData : this.getInputs(inputs)) {
-            inputResolver.registerInput(inputData.getiInputSource(), inputData.isMandatory(), inputData.getInitStrategy());
+            inputResolver.registerInput(inputData.getiInputSource().getInitInput(), inputData.isMandatory(), inputData.getInitStrategy().getiNeuronNetInput());
         }
         structBuilder.withHiddenInputMeta(inputResolver);
         structBuilder.withLayersMeta(layersMeta);
@@ -154,11 +160,11 @@ public class LocalApplication implements IApplication {
                                     meta.getInputResolver().saveHistory();
                                     meta.getInputResolver().getSignalPersistStorage().cleanMiddleLayerSignals();
                                     Integer layerId = meta.getResultLayer().getID();
-                                    HashMap<Long, List<ISignal>> studyMap = new HashMap<>();
+                                    HashMap<Long, CopyOnWriteArrayList<ISignal>> studyMap = new HashMap<>();
                                     for (IResult res : idsToFix) {
                                         studyMap.put(res.getNeuronId(), iObjectStudyingAlgo.getLearningSignals(desiredResult, meta));
                                     }
-                                    HashMap<Integer, HashMap<Long, List<ISignal>>> studyingRequest = new HashMap<>();
+                                    HashMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> studyingRequest = new HashMap<>();
                                     studyingRequest.put(layerId, studyMap);
                                     meta.getInputResolver().getSignalPersistStorage().cleanMiddleLayerSignals();
                                     inputResolver.getSignalPersistStorage().putSignals(studyingRequest);
@@ -229,7 +235,7 @@ public class LocalApplication implements IApplication {
                         meta.getInputResolver().populateInput();
                     } else {
                         try {
-                            Thread.sleep(10000);
+                            Thread.sleep(100);
                             meta.getInputResolver().populateInput();
                         } catch (InterruptedException e) {
                             e.printStackTrace();
@@ -252,7 +258,7 @@ public class LocalApplication implements IApplication {
             lb.withLayer(met);
             lb.withInput(meta.getInputResolver());
             ILayer layer = lb.build(threads);
-            if (layer.validateGlobal() && layer.validateLocal()) {
+            if (!layer.validateGlobal() && !layer.validateLocal()) {
                 logger.error("Layer validation rules violation");
             }
             layer.process();
@@ -263,7 +269,10 @@ public class LocalApplication implements IApplication {
                     logger.error(e);
                 }
             }
-            layer.dumpNeurons(met);
+            if(layer.getId()!=-2147483648){
+                layer.dumpResult();
+                layer.dumpNeurons(met);
+            }
         }
         IResultLayerMeta reMeta = meta.getResultLayer();
         LayerBuilder lb = new LayerBuilder();
@@ -310,7 +319,7 @@ public class LocalApplication implements IApplication {
         JsonObject jobject = jelement.getAsJsonObject();
         IStorage result = null;
         try {
-            result = (IStorage) mapper.readValue(jobject.getAsJsonObject("storage").getAsString(), Class.forName(jobject.getAsJsonPrimitive("storageClass").getAsString()));
+            result = (IStorage) mapper.readValue(jobject.getAsJsonObject("storage").toString(), Class.forName(jobject.getAsJsonPrimitive("storageClass").getAsString()));
         } catch (JsonProcessingException | ClassNotFoundException e) {
             logger.error("Cannot parse init strategy  " + json, e);
         }

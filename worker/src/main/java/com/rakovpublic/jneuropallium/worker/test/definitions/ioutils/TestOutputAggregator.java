@@ -12,6 +12,8 @@ import com.rakovpublic.jneuropallium.worker.util.IContext;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 public class TestOutputAggregator implements IOutputAggregator {
@@ -20,6 +22,7 @@ public class TestOutputAggregator implements IOutputAggregator {
         ObjectMapper mapper = new ObjectMapper();
         BufferedWriter writer = null;
         try {
+            Files.createDirectories(Paths.get("F:\\git\\res\\"+run+"\\"+timestamp));
             writer = new BufferedWriter(new FileWriter("F:\\git\\res\\"+run+"\\"+timestamp+"\\result"));
             writer.write(mapper.writeValueAsString(results));
         } catch (IOException e) {

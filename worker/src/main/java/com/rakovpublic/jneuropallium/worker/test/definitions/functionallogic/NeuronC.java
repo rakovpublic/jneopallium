@@ -42,5 +42,6 @@ public class NeuronC extends Neuron implements NeuronWithDoubleField {
             result.add(new DoubleSignal(d, getLayer().getId(), getId(), 1, "Double signal", false, this.currentNeuronClass.getName(), false, true, DoubleSignal.class.getName()));
             fieldDouble = 0.0;
         }
+        isProcessed=true;
     }
 }

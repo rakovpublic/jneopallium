@@ -8,6 +8,7 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /***
  * Created by Rakovskyi Dmytro on 27.10.2017.
@@ -50,7 +51,7 @@ public interface IAxon extends Serializable {
      * @param signalConnectionMap HashMap where key is signal and value is list of connection object
      * @return structure key layer id  value  - HashMap key neuron id value list of signals
      **/
-    HashMap<Integer, HashMap<Long, List<ISignal>>> getSignalResultStructure(HashMap<ISignal, List<ISynapse>> signalConnectionMap);
+    HashMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> getSignalResultStructure(HashMap<ISignal, List<ISynapse>> signalConnectionMap);
 
     /**
      * Destroy connection

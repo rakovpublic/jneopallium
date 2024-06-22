@@ -293,11 +293,7 @@ public class Neuron implements INeuron {
         }catch (Exception e){
             Logger logger = LogManager.getLogger(Neuron.class);
             logger.error("Error during neuron processing", e);
-        }finally {
-            this.isProcessed = true;
         }
-
-
     }
 
     @Override
@@ -329,6 +325,7 @@ public class Neuron implements INeuron {
 
     @Override
     public List<ISignal> getResult() {
+        isProcessed = false;
         return this.result;
     }
 

@@ -13,6 +13,7 @@ import com.rakovpublic.jneuropallium.worker.net.signals.storage.ISplitInput;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 
 public interface IInputService {
@@ -28,11 +29,11 @@ public interface IInputService {
 
     void register(InputRegistrationRequest request);
 
-    void uploadWorkerResult(String name, HashMap<Integer, HashMap<Long, List<ISignal>>> signals);
+    void uploadWorkerResult(String name, HashMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> signals);
 
     Boolean isProcessing(String name);
 
-    void uploadDiscriminatorWorkerResult(String name, String nameDiscriminator, HashMap<Integer, HashMap<Long, List<ISignal>>> signals);
+    void uploadDiscriminatorWorkerResult(String name, String nameDiscriminator, HashMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> signals);
 
     ISplitInput getNext(String name);
 
@@ -52,7 +53,7 @@ public interface IInputService {
 
     void setRun(Long run);
 
-    void processCallBackFromUpstream(HashMap<Integer, HashMap<Long, List<ISignal>>> signals);
+    void processCallBackFromUpstream(HashMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> signals);
 
     ILayersMeta getLayersMeta();
 

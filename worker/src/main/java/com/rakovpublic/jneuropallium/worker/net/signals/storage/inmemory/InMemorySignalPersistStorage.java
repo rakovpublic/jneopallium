@@ -10,16 +10,17 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignalsPersistStorage;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class InMemorySignalPersistStorage implements ISignalsPersistStorage {
-    private TreeMap<Integer, HashMap<Long, List<ISignal>>> signals;
+    private TreeMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> signals;
 
     public InMemorySignalPersistStorage() {
         this.signals = new TreeMap<>();
     }
 
     @Override
-    public void putSignals(HashMap<Integer, HashMap<Long, List<ISignal>>> signalsInput) {
+    public void putSignals(HashMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> signalsInput) {
         for (Integer layerId : signalsInput.keySet()) {
             if (signals.containsKey(layerId)) {
                 for (Long neuronId : signalsInput.get(layerId).keySet()) {
@@ -37,7 +38,7 @@ public class InMemorySignalPersistStorage implements ISignalsPersistStorage {
     }
 
     @Override
-    public HashMap<Long, List<ISignal>> getLayerSignals(Integer layerId) {
+    public HashMap<Long, CopyOnWriteArrayList<ISignal>> getLayerSignals(Integer layerId) {
         return signals.get(layerId);
     }
 
@@ -81,7 +82,7 @@ public class InMemorySignalPersistStorage implements ISignalsPersistStorage {
     }
 
     @Override
-    public TreeMap<Integer, HashMap<Long, List<ISignal>>> getAllSignals() {
+    public TreeMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> getAllSignals() {
         return signals;
     }
 

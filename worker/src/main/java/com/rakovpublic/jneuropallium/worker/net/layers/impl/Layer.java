@@ -16,6 +16,7 @@ import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInputResolver;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /***
  * Created by Rakovskyi Dmytro on 08.06.2018.
@@ -139,7 +140,7 @@ public class Layer<N extends INeuron> implements ILayer<N> {
 
     @Override
     public void process() {
-        HashMap<Long, List<ISignal>> input = inputResolver.getSignalPersistStorage().getLayerSignals(this.layerId);
+        HashMap<Long, CopyOnWriteArrayList<ISignal>> input = inputResolver.getSignalPersistStorage().getLayerSignals(this.layerId);
         if(input!=null){
         INeuron neur;
         NeuronRunnerService ns = NeuronRunnerService.getService();
@@ -157,6 +158,8 @@ public class Layer<N extends INeuron> implements ILayer<N> {
             }
         }
         ns.process(threads);
+        }else{
+            isProcessed=true;
         }
 
     }
@@ -168,6 +171,9 @@ public class Layer<N extends INeuron> implements ILayer<N> {
 
     @Override
     public Boolean isProcessed() {
+        if(isProcessed){
+            return isProcessed;
+        }
 
         if (!isProcessed && notProcessed.size() == 0) {
             isProcessed = true;
@@ -178,13 +184,12 @@ public class Layer<N extends INeuron> implements ILayer<N> {
                 }
             }
         } else {
-
-            for (INeuron ner : notProcessed) {
-                if (ner.hasResult()) {
-                    notProcessed.remove(ner);
-                }
-            }
             if (notProcessed.size() == 0) {
+                for (Long neuronId : map.keySet()) {
+                    if(!map.get(neuronId).hasResult()){
+                        return false;
+                    }
+                }
                 isProcessed = true;
             }
         }
@@ -193,7 +198,7 @@ public class Layer<N extends INeuron> implements ILayer<N> {
 
     @Override
     public void dumpResult() {
-        HashMap<Integer, HashMap<Long, List<ISignal>>> result = getResults();
+        HashMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> result = getResults();
         inputResolver.getSignalPersistStorage().putSignals(result);
     }
 
@@ -201,9 +206,6 @@ public class Layer<N extends INeuron> implements ILayer<N> {
     public void dumpNeurons(ILayerMeta layerMeta) {
         List<INeuron> neurons = new LinkedList<>();
         for (INeuron n : map.values()) {
-            if (!n.getAxon().isConnectionsWrapped()) {
-                n.getAxon().wrapConnections();
-            }
             neurons.add(n);
         }
         layerMeta.saveNeurons(neurons);
@@ -213,14 +215,11 @@ public class Layer<N extends INeuron> implements ILayer<N> {
     }
 
     @Override
-    public HashMap<Integer, HashMap<Long, List<ISignal>>> getResults() {
-        HashMap<Integer, HashMap<Long, List<ISignal>>> result = new HashMap<>();
+    public HashMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> getResults() {
+        HashMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> result = new HashMap<>();
         for (Long neurId : map.keySet()) {
             INeuron neur = map.get(neurId);
             IAxon axon = neur.getAxon();
-            if (axon.isConnectionsWrapped()) {
-                axon.unwrapConnections();
-            }
             HashMap<ISignal, List<ISynapse>> tMap = axon.processSignals(neur.getResult());
             for (ISignal signal : tMap.keySet()) {
                 signal.setSourceLayerId(this.layerId);
@@ -232,14 +231,14 @@ public class Layer<N extends INeuron> implements ILayer<N> {
                         if (result.get(layerId).containsKey(targetNeurId)) {
                             result.get(layerId).get(targetNeurId).add(signal);
                         } else {
-                            List<ISignal> signals = new ArrayList<>();
+                            CopyOnWriteArrayList<ISignal> signals = new CopyOnWriteArrayList<>();
                             signals.add(signal);
                             result.get(layerId).put(targetNeurId, signals);
                         }
                     } else {
-                        List<ISignal> signals = new ArrayList<>();
+                        CopyOnWriteArrayList<ISignal> signals = new CopyOnWriteArrayList<>();
                         signals.add(signal);
-                        HashMap<Long, List<ISignal>> ttMap = new HashMap<>();
+                        HashMap<Long, CopyOnWriteArrayList<ISignal>> ttMap = new HashMap<>();
                         ttMap.put(targetNeurId, signals);
                         result.put(layerId, ttMap);
 

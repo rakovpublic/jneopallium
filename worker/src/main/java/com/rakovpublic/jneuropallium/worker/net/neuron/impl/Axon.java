@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Axon implements IAxon {
 
@@ -166,21 +167,21 @@ public class Axon implements IAxon {
     }
 
     @Override
-    public HashMap<Integer, HashMap<Long, List<ISignal>>> getSignalResultStructure(HashMap<ISignal, List<ISynapse>> signalConnectionMap) {
-        HashMap<Integer, HashMap<Long, List<ISignal>>> result = new HashMap<>();
+    public HashMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> getSignalResultStructure(HashMap<ISignal, List<ISynapse>> signalConnectionMap) {
+        HashMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> result = new HashMap<>();
         for (ISignal signal : signalConnectionMap.keySet()) {
             for (ISynapse synapse : signalConnectionMap.get(signal)) {
                 if (result.containsKey(synapse.getTargetLayerId())) {
                     if (result.get(synapse.getTargetLayerId()).containsKey(synapse.getTargetNeuronId())) {
                         result.get(synapse.getTargetLayerId()).get(synapse.getTargetNeuronId()).add(signal);
                     } else {
-                        List<ISignal> signals = new LinkedList<>();
+                        CopyOnWriteArrayList<ISignal> signals = new CopyOnWriteArrayList<>();
                         signals.add(signal);
                         result.get(synapse.getTargetLayerId()).put(synapse.getTargetNeuronId(), signals);
                     }
                 } else {
-                    HashMap<Long, List<ISignal>> neuronInput = new HashMap<>();
-                    List<ISignal> signals = new LinkedList<>();
+                    HashMap<Long, CopyOnWriteArrayList<ISignal>> neuronInput = new HashMap<>();
+                    CopyOnWriteArrayList<ISignal> signals = new CopyOnWriteArrayList<>();
                     signals.add(signal);
                     neuronInput.put(synapse.getTargetNeuronId(), signals);
                     result.put(synapse.getTargetLayerId(), neuronInput);

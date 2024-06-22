@@ -11,6 +11,7 @@ import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class OneToAllFirstLayerInputStrategy implements InputInitStrategy {
     public String clazz = "com.rakovpublic.jneuropallium.worker.net.signals.OneToAllFirstLayerInputStrategy";
@@ -24,15 +25,15 @@ public class OneToAllFirstLayerInputStrategy implements InputInitStrategy {
     }
 
     @Override
-    public HashMap<Integer, HashMap<Long, List<ISignal>>> getInputs(ILayersMeta layersMeta, List<ISignal> signals) {
+    public HashMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> getInputs(ILayersMeta layersMeta, CopyOnWriteArrayList<ISignal> signals) {
         ILayerMeta layerMeta = layersMeta.getLayerByPosition(0);
         if (layersMeta.getLayerByPosition(0).getNeurons().size() == 1) {
             layerMeta = layersMeta.getLayerByPosition(1);
         }
-        HashMap<Integer, HashMap<Long, List<ISignal>>> result = new HashMap<>();
-        HashMap<Long, List<ISignal>> layer = new HashMap<>();
+        HashMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> result = new HashMap<>();
+        HashMap<Long, CopyOnWriteArrayList<ISignal>> layer = new HashMap<>();
         for (INeuron neuron : layerMeta.getNeurons()) {
-            List<ISignal> neuronSignals = new LinkedList<>();
+            CopyOnWriteArrayList<ISignal> neuronSignals = new CopyOnWriteArrayList<>();
             for (ISignal signal : signals) {
                 if (neuron.canProcess(signal)) {
                     neuronSignals.add(signal);

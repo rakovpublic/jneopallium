@@ -11,9 +11,10 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignalHistoryStorage;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class InMemorySignalHistoryStorage implements ISignalHistoryStorage {
-    private TreeMap<Integer, TreeMap<Long, TreeMap<Integer, HashMap<Long, List<ISignal>>>>> history;
+    private TreeMap<Integer, TreeMap<Long, TreeMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>>>> history;
     private Integer loopsToStore = 0;
     private Long runsToStore = 0l;
 
@@ -38,7 +39,7 @@ public class InMemorySignalHistoryStorage implements ISignalHistoryStorage {
     }
 
     @Override
-    public void save(TreeMap<Integer, HashMap<Long, List<ISignal>>> history, Long run, Integer loop) {
+    public void save(TreeMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> history, Long run, Integer loop) {
         if (this.history.size() >= loopsToStore) {
             this.history.remove(history.firstKey());
         }
@@ -48,7 +49,7 @@ public class InMemorySignalHistoryStorage implements ISignalHistoryStorage {
         if (this.history.containsKey(loop)) {
             this.history.get(loop).put(run, history);
         } else {
-            TreeMap<Long, TreeMap<Integer, HashMap<Long, List<ISignal>>>> loopHistory = new TreeMap<>();
+            TreeMap<Long, TreeMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>>> loopHistory = new TreeMap<>();
             loopHistory.put(run, history);
             this.history.put(loop, loopHistory);
         }

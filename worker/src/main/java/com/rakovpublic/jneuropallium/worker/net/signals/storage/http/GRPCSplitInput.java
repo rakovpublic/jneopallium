@@ -16,6 +16,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GRPCSplitInput implements ISplitInput {
     private static final Logger logger = LogManager.getLogger(GRPCSplitInput.class);
@@ -55,7 +56,7 @@ public class GRPCSplitInput implements ISplitInput {
     }
 
     @Override
-    public void saveResults(HashMap<Integer, HashMap<Long, List<ISignal>>> signals) {
+    public void saveResults(HashMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> signals) {
             inputResolver.getSignalPersistStorage().putSignals(signals);
     }
 
