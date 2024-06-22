@@ -27,7 +27,7 @@ public class WeightDeserializer extends StdDeserializer<IWeight> {
     }
 
     @Override
-    public IWeight deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
+    public IWeight deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         Gson gson = new Gson();
         ObjectMapper mapper = new ObjectMapper();
         JsonElement jelement = new com.google.gson.JsonParser().parse(jsonParser.readValueAsTree().toString());

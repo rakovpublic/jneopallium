@@ -6,8 +6,8 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 //Add wrapper usage for weights
 class WeightWrapper<N extends IWeight, S extends ISignal, K extends ISignal> implements IWeight<S, K> {
-    private N weight;
-    private String weightClass;
+    private final N weight;
+    private final String weightClass;
 
     public WeightWrapper(N weight) {
         this.weight = weight;

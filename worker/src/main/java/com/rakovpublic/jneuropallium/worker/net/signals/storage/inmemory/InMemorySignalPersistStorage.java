@@ -13,7 +13,7 @@ import java.util.TreeMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class InMemorySignalPersistStorage implements ISignalsPersistStorage {
-    private TreeMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> signals;
+    private final TreeMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> signals;
 
     public InMemorySignalPersistStorage() {
         this.signals = new TreeMap<>();
@@ -93,9 +93,9 @@ public class InMemorySignalPersistStorage implements ISignalsPersistStorage {
 
     @Override
     public boolean hasSignalsToProcess() {
-        for(Integer layerId: signals.keySet()){
-            for(Long neuronId: signals.get(layerId).keySet()){
-                if(signals.get(layerId).get(neuronId).size()>0){
+        for (Integer layerId : signals.keySet()) {
+            for (Long neuronId : signals.get(layerId).keySet()) {
+                if (signals.get(layerId).get(neuronId).size() > 0) {
                     return true;
                 }
             }

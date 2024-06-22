@@ -10,7 +10,7 @@ import org.apache.logging.log4j.Logger;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public  class Runner implements IRunner {
+public class Runner implements IRunner {
 
     private final static Logger logger = LogManager.getLogger(Runner.class);
 
@@ -18,7 +18,7 @@ public  class Runner implements IRunner {
     @Override
     public void runNet(String mode, String jarPath, String contextClass, String contextJson) {
         URL[] uris = new URL[0];
-        IContext context =null;
+        IContext context = null;
         ObjectMapper mapper = new ObjectMapper();
         try {
             if (contextJson != null) {
@@ -40,14 +40,14 @@ public  class Runner implements IRunner {
             throw new RuntimeException(e);
         }
         JarClassLoaderService classLoaderService = new JarClassLoaderService(uris);
-        IApplication application=null;
+        IApplication application = null;
         if (mode.equals("local")) {
             application = new LocalApplication();
         } else if (mode.equals("http")) {
             application = new HttpClusterApplication();
-        } else if(mode.equals("grpc-client")) {
+        } else if (mode.equals("grpc-client")) {
             application = new GRPCClient();
-        }else if(mode.equals("grpc-master")){
+        } else if (mode.equals("grpc-master")) {
             application = new GRPCServerApplication();
         }
         try {

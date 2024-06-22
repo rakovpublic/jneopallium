@@ -37,6 +37,6 @@ public class LocalFileItem implements IStorageItem {
 
     @Override
     public void setPath(String path) {
-        file =  new File(path);
+        file = new File(path);
     }
 }

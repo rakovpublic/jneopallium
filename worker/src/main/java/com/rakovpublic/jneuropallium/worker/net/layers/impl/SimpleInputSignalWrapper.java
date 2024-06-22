@@ -13,13 +13,13 @@ public class SimpleInputSignalWrapper<T> extends AbstractSignal<T> implements II
 
     public SimpleInputSignalWrapper(ISignal<T> inputSignal) {
 
-        super(inputSignal.getValue(), inputSignal.getSourceLayerId(), inputSignal.getSourceNeuronId(), inputSignal.getTimeAlive(), inputSignal.getDescription(), inputSignal.isFromExternalNet(), inputSignal.getInputName(), inputSignal.isNeedToRemoveDuringLearning(), inputSignal.isNeedToProcessDuringLearning(), inputSignal.getName(),SimpleInputSignalWrapper.class.getCanonicalName());
+        super(inputSignal.getValue(), inputSignal.getSourceLayerId(), inputSignal.getSourceNeuronId(), inputSignal.getTimeAlive(), inputSignal.getDescription(), inputSignal.isFromExternalNet(), inputSignal.getInputName(), inputSignal.isNeedToRemoveDuringLearning(), inputSignal.isNeedToProcessDuringLearning(), inputSignal.getName(), SimpleInputSignalWrapper.class.getCanonicalName());
         this.signal = inputSignal.copySignal();
 
     }
 
     public SimpleInputSignalWrapper(T value, Integer sourceLayer, Long sourceNeuron, Integer timeAlive, String description, boolean fromExternalNet, String inputName, boolean needToRemoveDuringLearning, boolean needToProcessDuringLearning, String name) {
-        super(value, sourceLayer, sourceNeuron, timeAlive, description, fromExternalNet, inputName, needToRemoveDuringLearning, needToProcessDuringLearning, name,SimpleInputSignalWrapper.class.getCanonicalName());
+        super(value, sourceLayer, sourceNeuron, timeAlive, description, fromExternalNet, inputName, needToRemoveDuringLearning, needToProcessDuringLearning, name, SimpleInputSignalWrapper.class.getCanonicalName());
     }
 
 

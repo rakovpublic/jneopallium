@@ -36,7 +36,7 @@ public class JSONMergerConverter extends StdDeserializer<ISignalMerger> {
     }
 
     @Override
-    public ISignalMerger deserialize(com.fasterxml.jackson.core.JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
+    public ISignalMerger deserialize(com.fasterxml.jackson.core.JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         String s = jsonParser.getText();
         JsonElement jelement = new JsonParser().parse(s);
         JsonObject jobject = jelement.getAsJsonObject();

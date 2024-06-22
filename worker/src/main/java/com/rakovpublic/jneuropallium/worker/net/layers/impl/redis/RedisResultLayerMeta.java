@@ -21,7 +21,7 @@ public class RedisResultLayerMeta extends RedisLayerMeta implements IResultLayer
     @Override
     public List<IResultNeuron> getResultNeurons() {
         JedisPooled jedisPooled = new JedisPooled(this.host, this.port);
-        String json = jedisPooled.jsonGet(neuronNetName+"_layer_neurons"+ layerId).toString();
+        String json = jedisPooled.jsonGet(neuronNetName + "_layer_neurons" + layerId).toString();
         return NeuronParser.parseResultNeurons(json);
     }
 }

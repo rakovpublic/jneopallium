@@ -5,7 +5,6 @@
 package com.rakovpublic.jneuropallium.worker.net.signals;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.TreeMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 

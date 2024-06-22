@@ -6,7 +6,7 @@ package com.rakovpublic.jneuropallium.worker.net.layers.impl;
 
 public class LayerMetaParam<K> {
     private K param;
-    private String paramClass;
+    private final String paramClass;
 
     public LayerMetaParam(K param) {
         this.param = param;

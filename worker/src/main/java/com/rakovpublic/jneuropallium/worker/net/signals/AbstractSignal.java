@@ -4,8 +4,6 @@
 
 package com.rakovpublic.jneuropallium.worker.net.signals;
 
-import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
-
 public abstract class AbstractSignal<T> implements ISignal<T> {
     public T value;
     public Integer sourceLayer;

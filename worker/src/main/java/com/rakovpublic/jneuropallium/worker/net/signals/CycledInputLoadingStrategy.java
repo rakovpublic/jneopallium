@@ -17,7 +17,10 @@ import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInitInput;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.TreeMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 
@@ -94,7 +97,7 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
         init(defaultLoopsCount, signalProcessingFrequencyMap);
         neuronInputMapping = new HashMap<>();
         inputHistory = new TreeMap<>();
-        this.signalProcessingFrequencyMap=signalProcessingFrequencyMap;
+        this.signalProcessingFrequencyMap = signalProcessingFrequencyMap;
 
 
     }
@@ -106,7 +109,7 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
         HashMap<IInitInput, ProcessingFrequency> inputProcessingFrequency = cycleNeuron.getInputProcessingFrequencyHashMap();
         for (IInitInput initInput : inputStatuses.keySet()) {
             inputProcessingFrequency.put(initInput, new ProcessingFrequency(initInput.getDefaultProcessingFrequency().getEpoch(), initInput.getDefaultProcessingFrequency().getLoop()));
-            neuronInputMapping.put(initInput.getName(),cycleNeuron.getId());
+            neuronInputMapping.put(initInput.getName(), cycleNeuron.getId());
         }
         cycleNeuron.setInputProcessingFrequencyHashMap(inputProcessingFrequency);
         HashMap<Class<? extends ISignal>, ProcessingFrequency> signalProcessingFrequencyMapIn = new HashMap<>();
@@ -220,8 +223,8 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
             HashMap<IInitInput, ProcessingFrequency> inputProcessingFrequency = new HashMap<>();
             for (IInitInput initInput : inputStatuses.keySet()) {
                 inputProcessingFrequency.put(initInput, new ProcessingFrequency(initInput.getDefaultProcessingFrequency().getEpoch(), initInput.getDefaultProcessingFrequency().getLoop()));
-                neuronInputMapping.put(initInput.getName(),cycleNeuron.getId());
-                externalInputs.put(initInput,inputs.get(initInput));
+                neuronInputMapping.put(initInput.getName(), cycleNeuron.getId());
+                externalInputs.put(initInput, inputs.get(initInput));
             }
             cycleNeuron.setInputProcessingFrequencyHashMap(inputProcessingFrequency);
             HashMap<Class<? extends ISignal>, ProcessingFrequency> signalProcessingFrequencyMapIn = new HashMap<>();
@@ -240,13 +243,13 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
         } else {
             CycleNeuron cycleNeuron = (CycleNeuron) layerMeta.getNeuronByID(0l);
             HashMap<IInitInput, ProcessingFrequency> inputProcessingFrequency = cycleNeuron.getInputProcessingFrequencyHashMap();
-            if(inputProcessingFrequency==null){
+            if (inputProcessingFrequency == null) {
                 inputProcessingFrequency = new HashMap<>();
             }
             for (IInitInput initInput : inputStatuses.keySet()) {
                 inputProcessingFrequency.put(initInput, new ProcessingFrequency(initInput.getDefaultProcessingFrequency().getEpoch(), initInput.getDefaultProcessingFrequency().getLoop()));
-                neuronInputMapping.put(initInput.getName(),cycleNeuron.getId());
-                externalInputs.put(initInput,inputs.get(initInput));
+                neuronInputMapping.put(initInput.getName(), cycleNeuron.getId());
+                externalInputs.put(initInput, inputs.get(initInput));
             }
 
             cycleNeuron.setInputProcessingFrequencyHashMap(inputProcessingFrequency);
@@ -256,11 +259,11 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
 
     @Override
     public void registerInput(IInitInput initInput, InputInitStrategy initStrategy) {
-        externalInputs.put(initInput,initStrategy);
+        externalInputs.put(initInput, initStrategy);
         CycleNeuron cycleNeuron = (CycleNeuron) layersMeta.getLayerById(Integer.MIN_VALUE).getNeuronByID(0l);
         cycleNeuron.getInputProcessingFrequencyHashMap().put(initInput, new ProcessingFrequency(initInput.getDefaultProcessingFrequency().getEpoch(), initInput.getDefaultProcessingFrequency().getLoop()));
-        inputStatuses.put(initInput, new InputStatusMeta(true,false,initInput.getName()));
-        neuronInputMapping.put(initInput.getName(),cycleNeuron.getId());
+        inputStatuses.put(initInput, new InputStatusMeta(true, false, initInput.getName()));
+        neuronInputMapping.put(initInput.getName(), cycleNeuron.getId());
     }
 
 

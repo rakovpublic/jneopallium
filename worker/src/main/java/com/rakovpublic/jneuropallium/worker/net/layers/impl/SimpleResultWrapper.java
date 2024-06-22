@@ -4,8 +4,8 @@ import com.rakovpublic.jneuropallium.worker.net.layers.IResult;
 import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
 
 public class SimpleResultWrapper<K extends IResultSignal> implements IResult<K> {
-    private K result;
-    private Long neuronId;
+    private final K result;
+    private final Long neuronId;
 
     public SimpleResultWrapper(K result, Long neuronId) {
         this.result = result;

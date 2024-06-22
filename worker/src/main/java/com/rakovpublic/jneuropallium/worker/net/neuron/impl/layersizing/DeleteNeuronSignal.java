@@ -5,7 +5,7 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 public class DeleteNeuronSignal extends AbstractSignal<DeleteNeuronIntegration> implements ISignal<DeleteNeuronIntegration> {
     public DeleteNeuronSignal(DeleteNeuronIntegration value, Integer sourceLayer, Long sourceNeuron, Integer timeAlive, String description, boolean fromExternalNet, String inputName) {
-        super(value, sourceLayer, sourceNeuron, timeAlive, description, fromExternalNet, inputName, true, true, DeleteNeuronSignal.class.getName(),DeleteNeuronSignal.class.getCanonicalName());
+        super(value, sourceLayer, sourceNeuron, timeAlive, description, fromExternalNet, inputName, true, true, DeleteNeuronSignal.class.getName(), DeleteNeuronSignal.class.getCanonicalName());
     }
 
     @Override

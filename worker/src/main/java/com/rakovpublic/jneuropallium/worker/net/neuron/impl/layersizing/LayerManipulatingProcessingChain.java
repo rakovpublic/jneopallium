@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class LayerManipulatingProcessingChain implements ISignalChain {
-    private List<Class<? extends ISignal>> order;
+    private final List<Class<? extends ISignal>> order;
     private static final String description = "order for layer sizing signals processing";
 
     public LayerManipulatingProcessingChain() {

@@ -2,12 +2,14 @@ package com.rakovpublic.jneuropallium.worker.net.layers.impl;
 
 import com.rakovpublic.jneuropallium.worker.net.layers.IResult;
 import com.rakovpublic.jneuropallium.worker.net.layers.IResultLayer;
-import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.net.neuron.IResultNeuron;
 import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInputResolver;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class ResultLayer<K extends IResultSignal> extends Layer implements IResultLayer {
 
@@ -29,7 +31,7 @@ public class ResultLayer<K extends IResultSignal> extends Layer implements IResu
         }
         if (this.isProcessed()) {
             resultNeurons.addAll(this.map.values());
-            for(IResultNeuron resultNeuron : resultNeurons){
+            for (IResultNeuron resultNeuron : resultNeurons) {
                 res.add(new SimpleResultWrapper(resultNeuron.getFinalResult(), resultNeuron.getId()));
             }
 

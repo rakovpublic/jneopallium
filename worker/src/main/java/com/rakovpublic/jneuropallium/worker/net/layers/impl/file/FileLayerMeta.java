@@ -30,12 +30,12 @@ public class FileLayerMeta<S extends IStorageItem> implements ILayerMeta {
     protected IStorage<S> fileSystem;
     protected List<INeuron> neurons;
     protected HashMap<String, LayerMetaParam> layerMetaParams;
-    protected  List<LayerMove> layerMoves;
+    protected List<LayerMove> layerMoves;
 
     FileLayerMeta(S file, IStorage<S> fs) {
         this.file = file;
         this.fileSystem = fs;
-        layerMoves=  new LinkedList<>();
+        layerMoves = new LinkedList<>();
     }
 
     @Override
@@ -75,10 +75,10 @@ public class FileLayerMeta<S extends IStorageItem> implements ILayerMeta {
 
     @Override
     public void addLayerMove(LayerMove layerMove) {
-        HashMap<Long, HashMap<Integer,List<Long>>> moves = layerMove.getMovingMap();
-        for(Long targetNeuronId:moves.keySet()){
+        HashMap<Long, HashMap<Integer, List<Long>>> moves = layerMove.getMovingMap();
+        for (Long targetNeuronId : moves.keySet()) {
             INeuron neuron = getNeuronByID(targetNeuronId);
-            neuron.getAxon().moveConnection(layerMove,neuron.getLayer().getId(),targetNeuronId);
+            neuron.getAxon().moveConnection(layerMove, neuron.getLayer().getId(), targetNeuronId);
         }
         dumpLayer();
     }
@@ -92,8 +92,8 @@ public class FileLayerMeta<S extends IStorageItem> implements ILayerMeta {
     @Override
     public List<INeuron> getNeurons(Long start, Long end) {
         List<INeuron> result = new LinkedList<>();
-        for(INeuron neuron : neurons){
-            if(neuron.getId()>=start&& neuron.getId()<end){
+        for (INeuron neuron : neurons) {
+            if (neuron.getId() >= start && neuron.getId() < end) {
                 result.add(neuron);
             }
         }
@@ -112,8 +112,8 @@ public class FileLayerMeta<S extends IStorageItem> implements ILayerMeta {
 
     @Override
     public void removeNeuron(Long neuron) {
-        for (INeuron iNeuron : neurons){
-            if (neuron.equals(iNeuron.getId())){
+        for (INeuron iNeuron : neurons) {
+            if (neuron.equals(iNeuron.getId())) {
                 neurons.remove(iNeuron);
                 break;
             }

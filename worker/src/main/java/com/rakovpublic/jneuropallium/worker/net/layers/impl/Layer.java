@@ -24,12 +24,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class Layer<N extends INeuron> implements ILayer<N> {
     protected TreeMap<Long, INeuron> map;
     private Boolean isProcessed;
-    private int layerId;
+    private final int layerId;
     private ConcurrentLinkedQueue<INeuron> notProcessed;
-    private List<IRule> rules;
-    private IInputResolver inputResolver;
+    private final List<IRule> rules;
+    private final IInputResolver inputResolver;
     private HashMap<String, LayerMetaParam> metaParams;
-    private int threads;
+    private final int threads;
 
 
     public Layer(int layerId, IInputResolver meta, int threads) {
@@ -141,25 +141,25 @@ public class Layer<N extends INeuron> implements ILayer<N> {
     @Override
     public void process() {
         HashMap<Long, CopyOnWriteArrayList<ISignal>> input = inputResolver.getSignalPersistStorage().getLayerSignals(this.layerId);
-        if(input!=null){
-        INeuron neur;
-        NeuronRunnerService ns = NeuronRunnerService.getService();
-        notProcessed = ns.getNeuronQueue();
-        for (Long neuronId : map.keySet()) {
-            if (input.containsKey(neuronId)) {
-                neur = map.get(neuronId);
-                neur.setLayer(this);
-                neur.setCyclingNeuronInputMapping(inputResolver.getCycleNeuronAddressMapping());
-                neur.setSignalHistory(inputResolver.getSignalsHistoryStorage());
-                neur.addSignals(input.get(neuronId));
-                neur.setRun(inputResolver.getRun());
-                neur.setCurrentLoop(inputResolver.getCurrentLoop());
-                ns.addNeuron(neur);
+        if (input != null) {
+            INeuron neur;
+            NeuronRunnerService ns = NeuronRunnerService.getService();
+            notProcessed = ns.getNeuronQueue();
+            for (Long neuronId : map.keySet()) {
+                if (input.containsKey(neuronId)) {
+                    neur = map.get(neuronId);
+                    neur.setLayer(this);
+                    neur.setCyclingNeuronInputMapping(inputResolver.getCycleNeuronAddressMapping());
+                    neur.setSignalHistory(inputResolver.getSignalsHistoryStorage());
+                    neur.addSignals(input.get(neuronId));
+                    neur.setRun(inputResolver.getRun());
+                    neur.setCurrentLoop(inputResolver.getCurrentLoop());
+                    ns.addNeuron(neur);
+                }
             }
-        }
-        ns.process(threads);
-        }else{
-            isProcessed=true;
+            ns.process(threads);
+        } else {
+            isProcessed = true;
         }
 
     }
@@ -171,7 +171,7 @@ public class Layer<N extends INeuron> implements ILayer<N> {
 
     @Override
     public Boolean isProcessed() {
-        if(isProcessed){
+        if (isProcessed) {
             return isProcessed;
         }
 
@@ -186,7 +186,7 @@ public class Layer<N extends INeuron> implements ILayer<N> {
         } else {
             if (notProcessed.size() == 0) {
                 for (Long neuronId : map.keySet()) {
-                    if(!map.get(neuronId).hasResult()){
+                    if (!map.get(neuronId).hasResult()) {
                         return false;
                     }
                 }

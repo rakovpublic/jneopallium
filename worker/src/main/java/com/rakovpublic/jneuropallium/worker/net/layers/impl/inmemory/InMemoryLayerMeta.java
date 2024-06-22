@@ -16,8 +16,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class InMemoryLayerMeta implements ILayerMeta {
-    private List<LayerMove> layerMoves;
-    private Integer id;
+    private final List<LayerMove> layerMoves;
+    private final Integer id;
     private List<INeuron> neurons;
     private HashMap<String, LayerMetaParam> layerMetaParams;
 
@@ -46,10 +46,10 @@ public class InMemoryLayerMeta implements ILayerMeta {
 
     @Override
     public void addLayerMove(LayerMove layerMove) {
-        HashMap<Long, HashMap<Integer,List<Long>>> moves = layerMove.getMovingMap();
-        for(Long targetNeuronId:moves.keySet()){
+        HashMap<Long, HashMap<Integer, List<Long>>> moves = layerMove.getMovingMap();
+        for (Long targetNeuronId : moves.keySet()) {
             INeuron neuron = getNeuronByID(targetNeuronId);
-            neuron.getAxon().moveConnection(layerMove,id,targetNeuronId);
+            neuron.getAxon().moveConnection(layerMove, id, targetNeuronId);
         }
     }
 
@@ -72,8 +72,8 @@ public class InMemoryLayerMeta implements ILayerMeta {
     @Override
     public List<INeuron> getNeurons(Long start, Long end) {
         List<INeuron> result = new LinkedList<>();
-        for(INeuron neuron : neurons){
-            if(neuron.getId()>=start&& neuron.getId()<end){
+        for (INeuron neuron : neurons) {
+            if (neuron.getId() >= start && neuron.getId() < end) {
                 result.add(neuron);
             }
         }

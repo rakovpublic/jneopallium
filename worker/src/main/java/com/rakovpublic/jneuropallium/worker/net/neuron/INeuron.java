@@ -248,8 +248,8 @@ public interface INeuron extends Serializable {
 
     void setActivationFunctions(HashMap<Class<? extends ISignal>, IActivationFunction> functions);
 
-    public Dendrites getDendrites();
+    Dendrites getDendrites();
 
-    public void setDendrites(Dendrites dendrites);
+    void setDendrites(Dendrites dendrites);
 
 }

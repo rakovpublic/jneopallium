@@ -25,12 +25,11 @@ import io.grpc.ManagedChannelBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class GRPCClient implements IApplication  {
+public class GRPCClient implements IApplication {
     private static final Logger logger = LogManager.getLogger(HttpClusterApplication.class);
     private final static String UUID = java.util.UUID.randomUUID().toString();
 
@@ -47,7 +46,7 @@ public class GRPCClient implements IApplication  {
         SplitInputConfig jsonSplitInput;
         while (true) {
             try {
-                while ((jsonSplitInput=stub.getRun(nodeRequest))==null){
+                while ((jsonSplitInput = stub.getRun(nodeRequest)) == null) {
                     Thread.sleep(1000);
                 }
                 ISplitInput splitInput = parseSplitInput(jsonSplitInput);
@@ -57,7 +56,7 @@ public class GRPCClient implements IApplication  {
                 List<INeuron> neurons = (List<INeuron>) splitInput.getNeurons();
 
 
-                for (INeuron neuron :neurons) {
+                for (INeuron neuron : neurons) {
                     neuron.setCurrentLoop(inputResolver.getCurrentLoop());
                     neuron.setRun(inputResolver.getRun());
                     neuron.addSignals(input.get(neuron.getId()));
@@ -66,22 +65,22 @@ public class GRPCClient implements IApplication  {
                 }
                 neuronRunnerService.process(splitInput.getThreads());
                 HashMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> result = new HashMap<>();
-                while(neurons.size()>0){
-                    for(INeuron neuron:neurons){
-                        if(neuron.hasResult()){
+                while (neurons.size() > 0) {
+                    for (INeuron neuron : neurons) {
+                        if (neuron.hasResult()) {
                             IAxon axon = neuron.getAxon();
-                            result.putAll( axon.getSignalResultStructure(axon.processSignals(neuron.getResult())));
+                            result.putAll(axon.getSignalResultStructure(axon.processSignals(neuron.getResult())));
                             splitInput.saveResults(result);
                             splitInput.saveNeuron(neuron);
                             neurons.remove(neuron);
                         }
                     }
                     //fault tolerance
-                    if(neuronRunnerService.getNeuronQueue().isEmpty()){
-                        for(INeuron neuron:neurons){
-                            if(neuron.hasResult()){
+                    if (neuronRunnerService.getNeuronQueue().isEmpty()) {
+                        for (INeuron neuron : neurons) {
+                            if (neuron.hasResult()) {
                                 IAxon axon = neuron.getAxon();
-                                result.putAll( axon.getSignalResultStructure(axon.processSignals(neuron.getResult())));
+                                result.putAll(axon.getSignalResultStructure(axon.processSignals(neuron.getResult())));
                                 neurons.remove(neuron);
                             }
                         }
@@ -89,20 +88,20 @@ public class GRPCClient implements IApplication  {
                         neuronRunnerService.process(splitInput.getThreads());
                     }
                 }
-                HashMap<Integer,String> finalResult = new HashMap<>();
+                HashMap<Integer, String> finalResult = new HashMap<>();
                 ObjectMapper mapper = new ObjectMapper();
-                for(Integer layerId: result.keySet()){
+                for (Integer layerId : result.keySet()) {
                     try {
-                        finalResult.put(layerId,mapper.writeValueAsString(result.get(layerId)));
+                        finalResult.put(layerId, mapper.writeValueAsString(result.get(layerId)));
                     } catch (JsonProcessingException e) {
                         e.printStackTrace();
                     }
                 }
 
-                if(splitInput.getDiscriminatorName()!=null){
+                if (splitInput.getDiscriminatorName() != null) {
                     ResultDiscriminator resultDiscriminator = ResultDiscriminator.newBuilder().setNodeIdentifier(UUID).setDiscriminatorName(splitInput.getDiscriminatorName()).putAllResult(finalResult).build();
                     stub.saveDiscriminator(resultDiscriminator);
-                }else {
+                } else {
                     Result resultResp = Result.newBuilder().setNodeIdentifier(UUID).putAllResult(finalResult).build();
                     stub.save(resultResp);
                 }
@@ -116,8 +115,8 @@ public class GRPCClient implements IApplication  {
 
     private ISplitInput parseSplitInput(SplitInputConfig json) {
         ObjectMapper mapper = new ObjectMapper();
-        IInputResolver inputResolver =null;
-        ILayersMeta layersMeta =null;
+        IInputResolver inputResolver = null;
+        ILayersMeta layersMeta = null;
         JsonElement inputResolverJson = new JsonParser().parse(json.getInputResolverJson());
         JsonElement layersMetaJson = new JsonParser().parse(json.getLayersMetaJson());
         try {
@@ -130,7 +129,7 @@ public class GRPCClient implements IApplication  {
         } catch (JsonProcessingException | ClassNotFoundException e) {
             logger.error("Cannot parse layers meta " + layersMetaJson, e);
         }
-        ISplitInput result = new GRPCSplitInput(json.getNodeId(),inputResolver,json.getStart(),json.getEnd(),layersMeta,json.getDiscriminatorName(),json.getLayerId(),json.getThreads());
+        ISplitInput result = new GRPCSplitInput(json.getNodeId(), inputResolver, json.getStart(), json.getEnd(), layersMeta, json.getDiscriminatorName(), json.getLayerId(), json.getThreads());
         return result;
 
     }

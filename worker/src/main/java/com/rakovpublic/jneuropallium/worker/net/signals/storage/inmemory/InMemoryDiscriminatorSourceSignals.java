@@ -15,11 +15,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class InMemoryDiscriminatorSourceSignals implements IInitInput {
-    private IInputLoadingStrategy history;
-    private Long amountOfEpoch;
-    private Integer amountOfLoops;
-    private String name;
-    private ProcessingFrequency processingFrequency;
+    private final IInputLoadingStrategy history;
+    private final Long amountOfEpoch;
+    private final Integer amountOfLoops;
+    private final String name;
+    private final ProcessingFrequency processingFrequency;
 
     public InMemoryDiscriminatorSourceSignals(IInputLoadingStrategy history, Long amountOfEpoch, Integer amountOfLoops, String name, ProcessingFrequency processingFrequency) {
         this.history = history;

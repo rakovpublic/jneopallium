@@ -5,13 +5,9 @@
 package com.rakovpublic.jneuropallium.worker.net.signals;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.rakovpublic.jneuropallium.worker.net.layers.ILayersMeta;
-
-import java.util.HashMap;
-import java.util.List;
 
 @JsonDeserialize(using = InputInitStrategyDeserializer.class)
-public class InputInitStrategyWrapper  {
+public class InputInitStrategyWrapper {
     public InputInitStrategy iNeuronNetInput;
     public Class<? extends InputInitStrategy> clazz;
 

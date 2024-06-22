@@ -16,13 +16,13 @@ public abstract class NeuronStatisticalProperties<K extends INeuron> {
     }
 
     protected HashMap<Integer, Float> probability;
-    protected HashMap<  ISignalProcessor, Float> processorProbabilityMap;
+    protected HashMap<ISignalProcessor, Float> processorProbabilityMap;
 
-    public HashMap< ISignalProcessor, Float> getProcessorProbabilityMap() {
+    public HashMap<ISignalProcessor, Float> getProcessorProbabilityMap() {
         return processorProbabilityMap;
     }
 
-    public NeuronStatisticalProperties(HashMap<Integer, Float> probability, HashMap<  ISignalProcessor, Float> processorProbabilityMap) {
+    public NeuronStatisticalProperties(HashMap<Integer, Float> probability, HashMap<ISignalProcessor, Float> processorProbabilityMap) {
         this.probability = probability;
         this.processorProbabilityMap = processorProbabilityMap;
     }

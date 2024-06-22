@@ -4,11 +4,9 @@
 
 package com.rakovpublic.jneuropallium.worker.net.signals.storage;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.ProcessingFrequency;
 import com.rakovpublic.jneuropallium.worker.net.signals.IInputSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
-import com.rakovpublic.jneuropallium.worker.net.signals.InitInputDeserializer;
 
 import java.util.HashMap;
 import java.util.List;

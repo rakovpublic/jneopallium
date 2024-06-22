@@ -5,7 +5,7 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 public class CreateNeuronSignal extends AbstractSignal<NewNeuronIntegration> implements ISignal<NewNeuronIntegration> {
     public CreateNeuronSignal(NewNeuronIntegration value, Integer sourceLayer, Long sourceNeuron, Integer timeAlive, String description, boolean fromExternalNet, String inputName) {
-        super(value, sourceLayer, sourceNeuron, timeAlive, description, fromExternalNet, inputName, true, true, CreateNeuronSignal.class.getName(),CreateNeuronSignal.class.getCanonicalName());
+        super(value, sourceLayer, sourceNeuron, timeAlive, description, fromExternalNet, inputName, true, true, CreateNeuronSignal.class.getName(), CreateNeuronSignal.class.getCanonicalName());
 
     }
 

@@ -9,8 +9,6 @@ import com.rakovpublic.jneuropallium.worker.net.layers.ILayersMeta;
 import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
 
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class OneToAllFirstLayerInputStrategy implements InputInitStrategy {

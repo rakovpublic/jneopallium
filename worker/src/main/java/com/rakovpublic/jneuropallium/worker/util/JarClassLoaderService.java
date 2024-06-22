@@ -13,7 +13,6 @@ public class JarClassLoaderService extends URLClassLoader {
     private Boolean initiated;
 
 
-
     public JarClassLoaderService(URL[] path) {
         super(path);
     }

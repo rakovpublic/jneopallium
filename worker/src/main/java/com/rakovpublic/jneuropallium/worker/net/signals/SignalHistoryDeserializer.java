@@ -12,7 +12,7 @@ import com.rakovpublic.jneuropallium.worker.net.signals.storage.inmemory.InMemor
 
 import java.io.IOException;
 
-public class SignalHistoryDeserializer  extends StdDeserializer<ISignalHistoryStorage> {
+public class SignalHistoryDeserializer extends StdDeserializer<ISignalHistoryStorage> {
     protected SignalHistoryDeserializer(Class<?> vc) {
         super(vc);
     }
@@ -22,7 +22,7 @@ public class SignalHistoryDeserializer  extends StdDeserializer<ISignalHistorySt
     }
 
     @Override
-    public ISignalHistoryStorage deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
+    public ISignalHistoryStorage deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         return new InMemorySignalHistoryStorage();
     }
 }

@@ -30,7 +30,7 @@ public class InitInputDeserializer extends StdDeserializer<InitInputWrapper> {
     }
 
     @Override
-    public InitInputWrapper deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
+    public InitInputWrapper deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         JsonElement jelement = new com.google.gson.JsonParser().parse(jsonParser.readValueAsTree().toString());
         JsonObject jobject = jelement.getAsJsonObject();

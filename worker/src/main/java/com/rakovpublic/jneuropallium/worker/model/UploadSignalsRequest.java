@@ -3,7 +3,6 @@ package com.rakovpublic.jneuropallium.worker.model;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class UploadSignalsRequest {

@@ -35,8 +35,8 @@ import java.util.List;
 
 public class GRPCServerApplication implements IApplication {
     private static final Logger logger = LogManager.getLogger(GRPCServerApplication.class);
-    private ReconnectStrategy reconnectStrategy =null;
-    private ResultInterpreter resultInterpreter =null;
+    private ReconnectStrategy reconnectStrategy = null;
+    private ResultInterpreter resultInterpreter = null;
 
     @Override
     public void startApplication(IContext context, JarClassLoaderService classLoaderService) {
@@ -48,11 +48,12 @@ public class GRPCServerApplication implements IApplication {
             server.start();
             server.awaitTermination();
         } catch (IOException | InterruptedException e) {
-            logger.error("Server cannot start reason: ",e);
+            logger.error("Server cannot start reason: ", e);
         }
 
     }
-    private IInputService getInputService(IContext context){
+
+    private IInputService getInputService(IContext context) {
 
         IInputService inputService = null;
         ISignalsPersistStorage signalsPersist = null;
@@ -65,16 +66,16 @@ public class GRPCServerApplication implements IApplication {
         ObjectMapper mapper = new ObjectMapper();
         String inputLoadingStrategyJson = context.getProperty("inputLoadingStrategyJson");
         String inputLoadingStrategyClass = context.getProperty("inputLoadingStrategyClass");
-            try {
+        try {
             if (inputLoadingStrategyJson != null) {
                 runningStrategy = (IInputLoadingStrategy) mapper.readValue(inputLoadingStrategyJson, Class.forName(inputLoadingStrategyClass));
             } else {
                 runningStrategy = (IInputLoadingStrategy) Class.forName(inputLoadingStrategyClass).newInstance();
             }
         } catch (IllegalAccessException | InstantiationException | ClassNotFoundException e) {
-            logger.error("Cannot create instance of inputLoadingStrategy for class " +inputLoadingStrategyClass, e);
+            logger.error("Cannot create instance of inputLoadingStrategy for class " + inputLoadingStrategyClass, e);
         } catch (JsonProcessingException e) {
-            logger.error("Cannot create instance of inputLoadingStrategy for json " +inputLoadingStrategyJson, e);
+            logger.error("Cannot create instance of inputLoadingStrategy for json " + inputLoadingStrategyJson, e);
         } catch (NullPointerException e) {
             logger.error("Wrong configuration for inputLoadingStrategy ");
         }
@@ -93,8 +94,8 @@ public class GRPCServerApplication implements IApplication {
         } catch (NullPointerException e) {
             logger.error("Wrong configuration for IResultLayerRunner ");
         }
-        String signalsPersistJson  = context.getProperty("signalsPersistJson");
-        String signalsPersistClass  = context.getProperty("signalsPersistClass");
+        String signalsPersistJson = context.getProperty("signalsPersistJson");
+        String signalsPersistClass = context.getProperty("signalsPersistClass");
         try {
             if (signalsPersistJson != null) {
                 signalsPersist = (ISignalsPersistStorage) mapper.readValue(signalsPersistJson, Class.forName(signalsPersistClass));
@@ -108,8 +109,8 @@ public class GRPCServerApplication implements IApplication {
         } catch (NullPointerException e) {
             logger.error("Wrong configuration for ISignalsPersistStorage ");
         }
-        String historyJson  = context.getProperty("historyJson");
-        String historyClass  = context.getProperty("historyClass");
+        String historyJson = context.getProperty("historyJson");
+        String historyClass = context.getProperty("historyClass");
         try {
             if (historyJson != null) {
                 signalHistoryStorage = (ISignalHistoryStorage) mapper.readValue(historyJson, Class.forName(historyClass));
@@ -123,8 +124,8 @@ public class GRPCServerApplication implements IApplication {
         } catch (NullPointerException e) {
             logger.error("Wrong configuration for ISignalHistoryStorage ");
         }
-        String layersMetaJson  = context.getProperty("layersMetaJson");
-        String layersMetaClass  = context.getProperty("layersMetaClass");
+        String layersMetaJson = context.getProperty("layersMetaJson");
+        String layersMetaClass = context.getProperty("layersMetaClass");
         try {
             layersMeta = (ILayersMeta) mapper.readValue(layersMetaJson, Class.forName(layersMetaClass));
             layersMeta.setRootPath(context.getProperty("rootPath"));
@@ -133,8 +134,8 @@ public class GRPCServerApplication implements IApplication {
         } catch (NullPointerException e) {
             logger.error("Wrong configuration for ILayersMeta ");
         }
-        String splitInputJson  = context.getProperty("splitInputJson");
-        String splitInputClass  = context.getProperty("splitInputClass");
+        String splitInputJson = context.getProperty("splitInputJson");
+        String splitInputClass = context.getProperty("splitInputClass");
         try {
             if (splitInputJson != null) {
                 splitInput = (ISplitInput) mapper.readValue(splitInputJson, Class.forName(splitInputClass));
@@ -148,8 +149,8 @@ public class GRPCServerApplication implements IApplication {
         } catch (NullPointerException e) {
             logger.error("Wrong configuration for ISplitInput ");
         }
-        String reconnectStrategyJson  = context.getProperty("reconnectStrategyJson");
-        String reconnectStrategyClass  = context.getProperty("reconnectStrategyClass");
+        String reconnectStrategyJson = context.getProperty("reconnectStrategyJson");
+        String reconnectStrategyClass = context.getProperty("reconnectStrategyClass");
         try {
             if (reconnectStrategyJson != null) {
                 reconnectStrategy = (ReconnectStrategy) mapper.readValue(reconnectStrategyJson, Class.forName(reconnectStrategyClass));
@@ -157,14 +158,14 @@ public class GRPCServerApplication implements IApplication {
                 reconnectStrategy = (ReconnectStrategy) Class.forName(reconnectStrategyClass).newInstance();
             }
         } catch (IllegalAccessException | InstantiationException | ClassNotFoundException e) {
-            logger.error("Cannot create instance of ReconnectStrategy for class " +reconnectStrategyClass, e);
+            logger.error("Cannot create instance of ReconnectStrategy for class " + reconnectStrategyClass, e);
         } catch (JsonProcessingException e) {
             logger.error("Cannot create instance of ReconnectStrategy for json " + reconnectStrategyJson, e);
         } catch (NullPointerException e) {
             logger.error("Wrong configuration for reconnectStrategy ");
         }
-        String resultInterpreterJson  = context.getProperty("resultInterpreterJson");
-        String resultInterpreterClass  = context.getProperty("resultInterpreterClass");
+        String resultInterpreterJson = context.getProperty("resultInterpreterJson");
+        String resultInterpreterClass = context.getProperty("resultInterpreterClass");
         try {
             if (resultInterpreterJson != null) {
                 resultInterpreter = (ResultInterpreter) mapper.readValue(resultInterpreterJson, Class.forName(resultInterpreterClass));
@@ -174,13 +175,13 @@ public class GRPCServerApplication implements IApplication {
         } catch (IllegalAccessException | InstantiationException | ClassNotFoundException e) {
             logger.error("Cannot create instance of resultInterpreter for class " + resultInterpreterClass, e);
         } catch (JsonProcessingException e) {
-            logger.error("Cannot create instance of resultInterpreter for json " +resultInterpreterJson, e);
+            logger.error("Cannot create instance of resultInterpreter for json " + resultInterpreterJson, e);
         } catch (NullPointerException e) {
-            logger.error("Wrong configuration for resultInterpreter " );
+            logger.error("Wrong configuration for resultInterpreter ");
         }
         String discriminatorNames = context.getProperty("discriminatorNames");
         List<String> discriminators = new LinkedList<>();
-        if(discriminatorNames!=  null){
+        if (discriminatorNames != null) {
             discriminators = Arrays.asList(discriminatorNames.split(","));
         }
         HashMap<String, IInputLoadingStrategy> discriminatorsLoadingStrategies = new HashMap<>();
@@ -196,10 +197,10 @@ public class GRPCServerApplication implements IApplication {
             ISignalHistoryStorage discriminatorSignalHistoryStorage = null;
             ILayersMeta discriminatorLayersMeta = null;
             HashMap<IInitInput, InputStatusMeta> inputs = new HashMap<>();
-            String discriminatorsLoadingStrategiesJson =context.getProperty(name+".discriminatorsLoadingStrategiesJson");
-            String discriminatorsLoadingStrategiesClass =context.getProperty(name+".discriminatorsLoadingStrategiesClass");
+            String discriminatorsLoadingStrategiesJson = context.getProperty(name + ".discriminatorsLoadingStrategiesJson");
+            String discriminatorsLoadingStrategiesClass = context.getProperty(name + ".discriminatorsLoadingStrategiesClass");
             try {
-                if (discriminatorsLoadingStrategiesJson!= null) {
+                if (discriminatorsLoadingStrategiesJson != null) {
                     discriminatorRunningStrategy = (IInputLoadingStrategy) mapper.readValue(discriminatorsLoadingStrategiesJson, Class.forName(discriminatorsLoadingStrategiesClass));
                 } else {
                     discriminatorRunningStrategy = (IInputLoadingStrategy) Class.forName(discriminatorsLoadingStrategiesClass).newInstance();
@@ -207,12 +208,12 @@ public class GRPCServerApplication implements IApplication {
             } catch (IllegalAccessException | InstantiationException | ClassNotFoundException e) {
                 logger.error("Cannot create instance of inputLoadingStrategy for class " + discriminatorsLoadingStrategiesClass, e);
             } catch (JsonProcessingException e) {
-                logger.error("Cannot create instance of inputLoadingStrategy for json " , e);
+                logger.error("Cannot create instance of inputLoadingStrategy for json ", e);
             } catch (NullPointerException e) {
-                logger.error("Wrong configuration for discriminator " + name + " config " );
+                logger.error("Wrong configuration for discriminator " + name + " config ");
             }
-            String discriminatorsSignalStorageJson =context.getProperty(name+".discriminatorsSignalStorageJson");
-            String discriminatorsSignalStorageClass =context.getProperty(name+".discriminatorsSignalStorageClass");
+            String discriminatorsSignalStorageJson = context.getProperty(name + ".discriminatorsSignalStorageJson");
+            String discriminatorsSignalStorageClass = context.getProperty(name + ".discriminatorsSignalStorageClass");
             try {
                 if (discriminatorsSignalStorageJson != null) {
                     discriminatorSignalsPersist = (ISignalsPersistStorage) mapper.readValue(discriminatorsSignalStorageJson, Class.forName(discriminatorsSignalStorageClass));
@@ -224,10 +225,10 @@ public class GRPCServerApplication implements IApplication {
             } catch (JsonProcessingException e) {
                 logger.error("Cannot create instance of ISignalsPersistStorage for json " + discriminatorsSignalStorageJson, e);
             } catch (NullPointerException e) {
-                logger.error("Wrong configuration for discriminator " + name + " config " );
+                logger.error("Wrong configuration for discriminator " + name + " config ");
             }
-            String discriminatorsSignalStorageHistoryJson =context.getProperty(name+".discriminatorsSignalStorageHistoryJson");
-            String discriminatorsSignalStorageHistoryClass =context.getProperty(name+".discriminatorsSignalStorageHistoryClass");
+            String discriminatorsSignalStorageHistoryJson = context.getProperty(name + ".discriminatorsSignalStorageHistoryJson");
+            String discriminatorsSignalStorageHistoryClass = context.getProperty(name + ".discriminatorsSignalStorageHistoryClass");
             try {
                 if (discriminatorsSignalStorageHistoryJson != null) {
                     discriminatorSignalHistoryStorage = (ISignalHistoryStorage) mapper.readValue(discriminatorsSignalStorageHistoryJson, Class.forName(discriminatorsSignalStorageHistoryClass));
@@ -239,18 +240,18 @@ public class GRPCServerApplication implements IApplication {
             } catch (JsonProcessingException e) {
                 logger.error("Cannot create instance of ISignalHistoryStorage for json " + discriminatorsSignalStorageHistoryJson, e);
             } catch (NullPointerException e) {
-                logger.error("Wrong configuration for discriminator " + name + " config "+discriminatorsSignalStorageHistoryJson);
+                logger.error("Wrong configuration for discriminator " + name + " config " + discriminatorsSignalStorageHistoryJson);
             }
 
-            String discriminatorsLayersJson =context.getProperty(name+".discriminatorsLayersJson");
-            String discriminatorsLayersClass =context.getProperty(name+".discriminatorsLayersClass");
+            String discriminatorsLayersJson = context.getProperty(name + ".discriminatorsLayersJson");
+            String discriminatorsLayersClass = context.getProperty(name + ".discriminatorsLayersClass");
             try {
                 discriminatorLayersMeta = (ILayersMeta) mapper.readValue(discriminatorsLayersJson, Class.forName(discriminatorsLayersClass));
-                discriminatorLayersMeta.setRootPath(context.getProperty(name+".layersMetaPath"));
+                discriminatorLayersMeta.setRootPath(context.getProperty(name + ".layersMetaPath"));
             } catch (JsonProcessingException | ClassNotFoundException e) {
                 logger.error("Cannot create instance of ILayersMeta for class " + discriminatorsLayersClass, e);
             } catch (NullPointerException e) {
-                logger.error("Wrong configuration for discriminator " + name + " config " );
+                logger.error("Wrong configuration for discriminator " + name + " config ");
             }
             discriminatorsLoadingStrategies.put(name, discriminatorRunningStrategy);
             discriminatorsSignalStorage.put(name, discriminatorSignalsPersist);
@@ -261,13 +262,13 @@ public class GRPCServerApplication implements IApplication {
             InMemoryDiscriminatorSourceSignals inMemoryDiscriminatorSourceSignals = new InMemoryDiscriminatorSourceSignals(runningStrategy, 0l, 0, name + "Input", new ProcessingFrequency(1l, 1));
             inputs.put(inMemoryDiscriminatorResultSignals, new InputStatusMeta(true, true, inMemoryDiscriminatorResultSignals.getName()));
             inputs.put(inMemoryDiscriminatorSourceSignals, new InputStatusMeta(true, true, inMemoryDiscriminatorSourceSignals.getName()));
-            runningStrategy.registerInput(inMemoryInitInput, getInputInitStrategy(new ConfigurationRecord(context.getProperty(name+".discriminatorsInitStrategyInputsCallbackClass"),context.getProperty(name+".discriminatorsInitStrategyInputsCallbackJson"))));
-            discriminatorRunningStrategy.registerInput(inMemoryDiscriminatorSourceSignals, getInputInitStrategy(new ConfigurationRecord(context.getProperty(name+".discriminatorsInitStrategySourceClass"),context.getProperty(name+".discriminatorsInitStrategySourceJson"))));
-            discriminatorRunningStrategy.registerInput(inMemoryDiscriminatorResultSignals, getInputInitStrategy(new ConfigurationRecord(context.getProperty(name+".discriminatorsInitStrategyInputsClass"),context.getProperty(name+".discriminatorsInitStrategyInputsJson"))));
+            runningStrategy.registerInput(inMemoryInitInput, getInputInitStrategy(new ConfigurationRecord(context.getProperty(name + ".discriminatorsInitStrategyInputsCallbackClass"), context.getProperty(name + ".discriminatorsInitStrategyInputsCallbackJson"))));
+            discriminatorRunningStrategy.registerInput(inMemoryDiscriminatorSourceSignals, getInputInitStrategy(new ConfigurationRecord(context.getProperty(name + ".discriminatorsInitStrategySourceClass"), context.getProperty(name + ".discriminatorsInitStrategySourceJson"))));
+            discriminatorRunningStrategy.registerInput(inMemoryDiscriminatorResultSignals, getInputInitStrategy(new ConfigurationRecord(context.getProperty(name + ".discriminatorsInitStrategyInputsClass"), context.getProperty(name + ".discriminatorsInitStrategyInputsJson"))));
             inputDiscriminatorStatuses.put(name, inputs);
         }
-        String discriminatorSplitInputJson =context.getProperty("discriminatorSplitInputJson");
-        String discriminatorSplitInputClass =context.getProperty("discriminatorSplitInputClass");
+        String discriminatorSplitInputJson = context.getProperty("discriminatorSplitInputJson");
+        String discriminatorSplitInputClass = context.getProperty("discriminatorSplitInputClass");
         try {
             if (discriminatorSplitInputJson != null) {
                 discriminatorSplitInput = (ISplitInput) mapper.readValue(discriminatorSplitInputJson, Class.forName(discriminatorSplitInputClass));
@@ -275,16 +276,17 @@ public class GRPCServerApplication implements IApplication {
                 discriminatorSplitInput = (ISplitInput) Class.forName(discriminatorSplitInputClass).newInstance();
             }
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-            logger.error("Cannot create instance of ISplitInput for class " +discriminatorSplitInputClass, e);
+            logger.error("Cannot create instance of ISplitInput for class " + discriminatorSplitInputClass, e);
         } catch (JsonProcessingException e) {
             logger.error("Cannot create instance of ISplitInput for json " + discriminatorSplitInputJson, e);
         } catch (NullPointerException e) {
             logger.error("Wrong configuration for ISplitInput ");
         }
-        inputService = new InputService(signalsPersist, layersMeta, splitInput, partitions, runningStrategy, signalHistoryStorage, resultLayerRunner, discriminatorsLoadingStrategies, discriminatorsSignalStorage, discriminatorsSignalStorageHistory, inputDiscriminatorStatuses, discriminatorSplitInput,Long.parseLong( context.getProperty("nodeTimeout")), resultLayerHolder);
+        inputService = new InputService(signalsPersist, layersMeta, splitInput, partitions, runningStrategy, signalHistoryStorage, resultLayerRunner, discriminatorsLoadingStrategies, discriminatorsSignalStorage, discriminatorsSignalStorageHistory, inputDiscriminatorStatuses, discriminatorSplitInput, Long.parseLong(context.getProperty("nodeTimeout")), resultLayerHolder);
         inputService.updateDiscriminators(discriminatorsLayers);
         return inputService;
     }
+
     private InputInitStrategy getInputInitStrategy(ConfigurationRecord json) {
         ObjectMapper mapper = new ObjectMapper();
         InputInitStrategy result = null;

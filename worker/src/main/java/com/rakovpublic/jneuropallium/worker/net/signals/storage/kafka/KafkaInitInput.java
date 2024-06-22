@@ -26,10 +26,10 @@ import java.util.*;
 
 public class KafkaInitInput implements IInitInput {
     private static final Logger logger = LogManager.getLogger(KafkaInitInput.class);
-    private String name;
-    private String host;
-    private String topic;
-    private ProcessingFrequency defaultProcessingFrequency;
+    private final String name;
+    private final String host;
+    private final String topic;
+    private final ProcessingFrequency defaultProcessingFrequency;
 
     public KafkaInitInput(String name, String host, String topic, ProcessingFrequency defaultProcessingFrequency) {
         this.name = name;

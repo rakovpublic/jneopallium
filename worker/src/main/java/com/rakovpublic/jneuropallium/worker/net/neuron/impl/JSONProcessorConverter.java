@@ -37,7 +37,7 @@ public class JSONProcessorConverter extends StdDeserializer<ISignalProcessor> {
     }
 
     @Override
-    public ISignalProcessor deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
+    public ISignalProcessor deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         String s = jsonParser.getText();
         JsonElement jelement = new com.google.gson.JsonParser().parse(s);
         JsonObject jobject = jelement.getAsJsonObject();

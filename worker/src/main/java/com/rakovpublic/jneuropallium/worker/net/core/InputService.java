@@ -49,9 +49,9 @@ public class InputService implements IInputService {
     private HashMap<String, ISignalHistoryStorage> discriminatorsSignalStorageHistory;
     private HashMap<String, HashMap<IInitInput, InputStatusMeta>> inputDiscriminatorStatuses;
     private ISplitInput discriminatorSplitInput;
-    private HashMap<Long, HashMap<Integer, List<IResultNeuron>>> results;
+    private final HashMap<Long, HashMap<Integer, List<IResultNeuron>>> results;
     private Long nodeTimeOut;
-    private ResultLayerHolder resultLayerHolder;
+    private final ResultLayerHolder resultLayerHolder;
 
 
     public InputService(ISignalsPersistStorage signalsPersist, ILayersMeta layersMeta, ISplitInput splitInput, Integer partitions, IInputLoadingStrategy runningStrategy, ISignalHistoryStorage signalHistoryStorage, IResultLayerRunner resultLayerRunner, HashMap<String, IInputLoadingStrategy> discriminatorsLoadingStrategies, HashMap<String, ISignalsPersistStorage> discriminatorsSignalStorage, HashMap<String, ISignalHistoryStorage> discriminatorsSignalStorageHistory, HashMap<String, HashMap<IInitInput, InputStatusMeta>> inputDiscriminatorStatuses, ISplitInput discriminatorSplitInput, Long nodeTimeOut, ResultLayerHolder resultLayerHolder) {

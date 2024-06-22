@@ -15,13 +15,13 @@ import java.util.List;
 import java.util.TreeMap;
 
 public class InMemoryInputResolver implements IInputResolver {
-    private HashMap<IInitInput, InputStatusMeta> inputStatuses;
-    private HashMap<IInitInput, InputInitStrategy> inputs;
-    private ISignalsPersistStorage signalsPersistStorage;
-    private ISignalHistoryStorage signalHistoryStorage;
-    private Long epoch;
-    private IInputLoadingStrategy inputLoadingStrategy;
-    private HashMap<String, IInitInput> initInput;
+    private final HashMap<IInitInput, InputStatusMeta> inputStatuses;
+    private final HashMap<IInitInput, InputInitStrategy> inputs;
+    private final ISignalsPersistStorage signalsPersistStorage;
+    private final ISignalHistoryStorage signalHistoryStorage;
+    private final Long epoch;
+    private final IInputLoadingStrategy inputLoadingStrategy;
+    private final HashMap<String, IInitInput> initInput;
 
     public InMemoryInputResolver(ISignalsPersistStorage signalsPersistStorage, ISignalHistoryStorage signalHistoryStorage, IInputLoadingStrategy inputLoadingStrategy) {
         this.signalsPersistStorage = signalsPersistStorage;

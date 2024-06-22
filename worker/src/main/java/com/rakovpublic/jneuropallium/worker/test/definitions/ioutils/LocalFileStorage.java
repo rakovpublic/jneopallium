@@ -29,7 +29,7 @@ public class LocalFileStorage implements IStorage<LocalFileItem> {
                 = null;
         try {
             br = new BufferedReader(new FileReader(file));
-            while ((st = br.readLine()) != null){
+            while ((st = br.readLine()) != null) {
                 builder.append(st);
             }
         } catch (FileNotFoundException e) {
@@ -37,7 +37,6 @@ public class LocalFileStorage implements IStorage<LocalFileItem> {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
 
 
         return builder.toString();
@@ -63,7 +62,7 @@ public class LocalFileStorage implements IStorage<LocalFileItem> {
             fooWriter.write(content);
         } catch (IOException e) {
             e.printStackTrace();
-        }finally {
+        } finally {
             try {
                 fooWriter.close();
             } catch (IOException e) {
@@ -122,10 +121,10 @@ public class LocalFileStorage implements IStorage<LocalFileItem> {
     @Override
     public List<LocalFileItem> listFiles(LocalFileItem file) {
 
-        List<LocalFileItem>  result = new LinkedList<>();
-        if(file.isDirectory()){
+        List<LocalFileItem> result = new LinkedList<>();
+        if (file.isDirectory()) {
             File myFoo = new File(file.getPath());
-            for(File f:myFoo.listFiles()){
+            for (File f : myFoo.listFiles()) {
                 result.add(new LocalFileItem(f.getAbsolutePath()));
             }
         }

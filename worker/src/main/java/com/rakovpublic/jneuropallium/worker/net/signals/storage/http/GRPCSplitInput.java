@@ -7,7 +7,6 @@ package com.rakovpublic.jneuropallium.worker.net.signals.storage.http;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayersMeta;
 import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
-import com.rakovpublic.jneuropallium.worker.net.neuron.impl.Neuron;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInputResolver;
 import com.rakovpublic.jneuropallium.worker.net.signals.storage.ISplitInput;
@@ -21,13 +20,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class GRPCSplitInput implements ISplitInput {
     private static final Logger logger = LogManager.getLogger(GRPCSplitInput.class);
     private String nodeId;
-    private IInputResolver inputResolver;
+    private final IInputResolver inputResolver;
     private Long start;
     private Long end;
     private ILayersMeta layersMeta;
     private String discriminatorName;
     private Integer layerId;
-    private Integer threads;
+    private final Integer threads;
 
     public GRPCSplitInput(String nodeId, IInputResolver inputResolver, Long start, Long end, ILayersMeta layersMeta, String discriminatorName, Integer layerId, Integer threads) {
         this.nodeId = nodeId;
@@ -47,7 +46,7 @@ public class GRPCSplitInput implements ISplitInput {
 
     @Override
     public void setDiscriminatorName(String name) {
-        discriminatorName =name;
+        discriminatorName = name;
     }
 
     @Override
@@ -57,15 +56,15 @@ public class GRPCSplitInput implements ISplitInput {
 
     @Override
     public void saveResults(HashMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> signals) {
-            inputResolver.getSignalPersistStorage().putSignals(signals);
+        inputResolver.getSignalPersistStorage().putSignals(signals);
     }
 
     @Override
     public void saveNeuron(INeuron neuron) {
         ILayerMeta meta = layersMeta.getLayerById(neuron.getLayer().getId());
         List<INeuron> neurons = meta.getNeurons();
-        for(INeuron iNeuron: neurons){
-            if(iNeuron.getId() == neuron.getId()){
+        for (INeuron iNeuron : neurons) {
+            if (iNeuron.getId() == neuron.getId()) {
                 neurons.remove(iNeuron);
                 break;
             }
@@ -75,17 +74,17 @@ public class GRPCSplitInput implements ISplitInput {
 
     @Override
     public void setNodeIdentifier(String name) {
-        nodeId=name;
+        nodeId = name;
     }
 
     @Override
     public ISplitInput getNewInstance() {
-        return new GRPCSplitInput(nodeId, inputResolver, start, end, layersMeta, discriminatorName, layerId,threads) ;
+        return new GRPCSplitInput(nodeId, inputResolver, start, end, layersMeta, discriminatorName, layerId, threads);
     }
 
     @Override
     public List<? extends INeuron> getNeurons() {
-        return  layersMeta.getLayerById(layerId).getNeurons(start,end);
+        return layersMeta.getLayerById(layerId).getNeurons(start, end);
     }
 
     @Override
@@ -105,7 +104,7 @@ public class GRPCSplitInput implements ISplitInput {
 
     @Override
     public void setStart(Long start) {
-        this.start =start;
+        this.start = start;
     }
 
     @Override
@@ -120,7 +119,7 @@ public class GRPCSplitInput implements ISplitInput {
 
     @Override
     public void setLayer(Integer layerId) {
-        this.layerId =layerId;
+        this.layerId = layerId;
     }
 
     @Override

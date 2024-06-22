@@ -1,7 +1,5 @@
 package com.rakovpublic.jneuropallium.worker.net.signals;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
 import java.io.Serializable;
 
 /***

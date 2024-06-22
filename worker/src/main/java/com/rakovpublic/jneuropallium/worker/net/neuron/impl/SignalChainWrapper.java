@@ -6,8 +6,8 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import java.util.List;
 
 public class SignalChainWrapper<K extends ISignalChain> implements ISignalChain {
-    private K signalChain;
-    private Class<K> signalChainClass;
+    private final K signalChain;
+    private final Class<K> signalChainClass;
 
     public SignalChainWrapper(K signalChain, Class<K> signalChainClass) {
         this.signalChain = signalChain;

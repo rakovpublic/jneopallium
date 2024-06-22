@@ -44,7 +44,7 @@ public class HttpClusterApplication implements IApplication {
         String jsonSplitInput;
         while (true) {
             try {
-                while ((jsonSplitInput = communicationClient.sendRequest(HttpRequestResolver.createPost(getSplitInputLink, nodeCompleteRequest)))==null){
+                while ((jsonSplitInput = communicationClient.sendRequest(HttpRequestResolver.createPost(getSplitInputLink, nodeCompleteRequest))) == null) {
                     Thread.sleep(1000);
                 }
                 ISplitInput splitInput = parseSplitInput(jsonSplitInput);
@@ -54,7 +54,7 @@ public class HttpClusterApplication implements IApplication {
                 List<INeuron> neurons = (List<INeuron>) splitInput.getNeurons();
 
 
-                for (INeuron neuron :neurons) {
+                for (INeuron neuron : neurons) {
                     neuron.setCurrentLoop(inputResolver.getCurrentLoop());
                     neuron.setRun(inputResolver.getRun());
                     neuron.addSignals(input.get(neuron.getId()));
@@ -62,9 +62,9 @@ public class HttpClusterApplication implements IApplication {
                     neuronRunnerService.addNeuron(neuron);
                 }
                 neuronRunnerService.process(splitInput.getThreads());
-                while(neurons.size()>0){
-                    for(INeuron neuron:neurons){
-                        if(neuron.hasResult()){
+                while (neurons.size() > 0) {
+                    for (INeuron neuron : neurons) {
+                        if (neuron.hasResult()) {
                             IAxon axon = neuron.getAxon();
                             HashMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> result = axon.getSignalResultStructure(axon.processSignals(neuron.getResult()));
                             splitInput.saveResults(result);
@@ -73,9 +73,9 @@ public class HttpClusterApplication implements IApplication {
                         }
                     }
                     //fault tolerance
-                    if(neuronRunnerService.getNeuronQueue().isEmpty()){
-                        for(INeuron neuron:neurons){
-                            if(neuron.hasResult()){
+                    if (neuronRunnerService.getNeuronQueue().isEmpty()) {
+                        for (INeuron neuron : neurons) {
+                            if (neuron.hasResult()) {
                                 IAxon axon = neuron.getAxon();
                                 HashMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> result = axon.getSignalResultStructure(axon.processSignals(neuron.getResult()));
                                 splitInput.saveResults(result);

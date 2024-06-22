@@ -21,9 +21,10 @@ public class Dendrites implements IDendrites {
         weights = new HashMap<>();
         defaultDendritesWeights = new HashMap<>();
     }
+
     @JsonSerialize(keyUsing = NeuronAddressSerializer.class)
     @JsonDeserialize(keyUsing = NeuronAddressDeserializer.class)
-    public HashMap<NeuronAddress, List<IWeight> > weights;
+    public HashMap<NeuronAddress, List<IWeight>> weights;
 
     public HashMap<Class<? extends ISignal>, IWeight> defaultDendritesWeights;
 
@@ -46,14 +47,14 @@ public class Dendrites implements IDendrites {
 
     @Override
     public void updateWeight(NeuronAddress neuronAddress, Class<? extends ISignal> signalClass, IWeight weight) {
-        if(weights == null){
+        if (weights == null) {
             weights = new HashMap<>();
         }
         if (weights.containsKey(neuronAddress)) {
-            weights.get(neuronAddress).add( weight);
+            weights.get(neuronAddress).add(weight);
         } else {
             List<IWeight> weightMapping = new LinkedList<>();
-            weightMapping.add( weight);
+            weightMapping.add(weight);
             weights.put(neuronAddress, weightMapping);
         }
 
@@ -64,8 +65,8 @@ public class Dendrites implements IDendrites {
         return signals.parallelStream().map(signal -> {
             NeuronAddress neuronAddress = new NeuronAddress(signal.getSourceLayerId(), signal.getSourceNeuronId());
             if (weights.containsKey(neuronAddress)) {
-                for (IWeight w:weights.get(neuronAddress)){
-                    if(w.getSignalClass()==signal.getCurrentSignalClass()){
+                for (IWeight w : weights.get(neuronAddress)) {
+                    if (w.getSignalClass() == signal.getCurrentSignalClass()) {
                         return w.process(signal);
                     }
                 }
@@ -78,10 +79,10 @@ public class Dendrites implements IDendrites {
                     return signal;
                 }
             } else {
-                LinkedList< IWeight> newWeights = new LinkedList<>();
+                LinkedList<IWeight> newWeights = new LinkedList<>();
                 if (defaultDendritesWeights.containsKey(signal.getCurrentSignalClass())) {
                     IWeight weight = defaultDendritesWeights.get(signal.getCurrentSignalClass());
-                    newWeights.add( weight);
+                    newWeights.add(weight);
                     weights.put(neuronAddress, newWeights);
                     return weight.process(signal);
                 } else {
@@ -101,8 +102,8 @@ public class Dendrites implements IDendrites {
     @Override
     public void removeWeightForClass(NeuronAddress neuronAddress, Class<? extends ISignal> signalClass) {
         if (weights.containsKey(neuronAddress)) {
-            for (IWeight w:weights.get(neuronAddress)){
-                if(w.getSignalClass()==signalClass){
+            for (IWeight w : weights.get(neuronAddress)) {
+                if (w.getSignalClass() == signalClass) {
                     weights.get(neuronAddress).remove(signalClass);
                 }
             }

@@ -15,8 +15,8 @@ import java.util.List;
 
 public class InMemoryInitInputImpl implements InMemoryInitInput {
     private List<IInputSignal> signals;
-    private String name;
-    private ProcessingFrequency processingFrequency;
+    private final String name;
+    private final ProcessingFrequency processingFrequency;
 
     public InMemoryInitInputImpl(String name, ProcessingFrequency processingFrequency) {
         this.name = name;

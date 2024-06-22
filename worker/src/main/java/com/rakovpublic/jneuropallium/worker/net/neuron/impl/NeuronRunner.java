@@ -2,14 +2,13 @@ package com.rakovpublic.jneuropallium.worker.net.neuron.impl;
 
 import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
 
-import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /***
  * Created by Rakovskyi Dmytro on 14.06.2018.
  */
 class NeuronRunner implements Runnable {
-    private NeuronRunnerService service;
+    private final NeuronRunnerService service;
 
 
     NeuronRunner(NeuronRunnerService service) {
@@ -22,7 +21,7 @@ class NeuronRunner implements Runnable {
         ConcurrentLinkedQueue<INeuron> queue = service.getNeuronQueue();
         INeuron neuron;
         while ((neuron = queue.poll()) != null) {
-            if(!neuron.hasResult()){
+            if (!neuron.hasResult()) {
                 neuron.processSignals();
                 neuron.activate();
             }

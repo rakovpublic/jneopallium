@@ -17,7 +17,7 @@ public class NeuronAddressSerializer extends JsonSerializer<NeuronAddress> {
     public void serialize(NeuronAddress neuronAddress, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         StringWriter writer = new StringWriter();
         ObjectMapper mapper = new ObjectMapper();
-        String res = mapper.writeValueAsString( neuronAddress.getLayerId()+":"+neuronAddress.getNeuronId());
-        jsonGenerator.writeFieldName(neuronAddress.getLayerId()+":"+neuronAddress.getNeuronId());
+        String res = mapper.writeValueAsString(neuronAddress.getLayerId() + ":" + neuronAddress.getNeuronId());
+        jsonGenerator.writeFieldName(neuronAddress.getLayerId() + ":" + neuronAddress.getNeuronId());
     }
 }

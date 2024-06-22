@@ -14,7 +14,6 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignalHistoryStorage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPooled;
 
 import java.util.HashMap;
@@ -26,9 +25,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class RedisSignalHistoryStorage implements ISignalHistoryStorage {
     private static final Logger logger = LogManager.getLogger(RedisSignalHistoryStorage.class);
-    private String host;
-    private Integer port;
-    private String neuronNetName;
+    private final String host;
+    private final Integer port;
+    private final String neuronNetName;
 
     public RedisSignalHistoryStorage(String host, Integer port, String neuronNetName) {
         this.host = host;
@@ -66,12 +65,12 @@ public class RedisSignalHistoryStorage implements ISignalHistoryStorage {
     public void save(TreeMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> history, Long run, Integer loop) {
         ObjectMapper mapper = new ObjectMapper();
         JedisPooled jedisPooled = new JedisPooled(this.host, this.port);
-        for(Integer layerId:history.keySet()){
-            for(Long neuronId: history.get(layerId).keySet()){
+        for (Integer layerId : history.keySet()) {
+            for (Long neuronId : history.get(layerId).keySet()) {
                 try {
                     jedisPooled.jsonSet(neuronNetName + "_signalHistoryStorage_layerId_" + layerId + "_loop_" + loop + "_epoch_" + run + "_neuronId_" + neuronId, mapper.writeValueAsString(history.get(layerId).get(neuronId)));
                 } catch (JsonProcessingException e) {
-                    logger.error("Cannot serialize to json " , e);
+                    logger.error("Cannot serialize to json ", e);
                 }
             }
         }

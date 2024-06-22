@@ -8,7 +8,7 @@ public class InputStatusMeta {
     private Boolean status;
     private Boolean mandatoryUpdated;
     private Integer currentRuns;
-    private String name;
+    private final String name;
     private Boolean beenUsed;
 
     public InputStatusMeta(Boolean status, Boolean mandatoryUpdated, String name) {

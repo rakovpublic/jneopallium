@@ -13,7 +13,7 @@ import java.util.HashMap;
 
 public class SimpleResultResolver implements IResultResolver {
     private static final Logger logger = LogManager.getLogger(SimpleResultResolver.class);
-    private IContext iContext;
+    private final IContext iContext;
 
     public SimpleResultResolver(IContext iContext) {
         this.iContext = iContext;

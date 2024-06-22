@@ -16,11 +16,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class InMemoryDiscriminatorResultSignals implements INeuronNetInput {
-    private InMemoryInitInput callback;
-    private String name;
-    private List<IInputSignal> inputSignals;
-    private ResultLayerHolder resultLayer;
-    private ProcessingFrequency processingFrequency;
+    private final InMemoryInitInput callback;
+    private final String name;
+    private final List<IInputSignal> inputSignals;
+    private final ResultLayerHolder resultLayer;
+    private final ProcessingFrequency processingFrequency;
 
     public InMemoryDiscriminatorResultSignals(InMemoryInitInput callback, String name, ResultLayerHolder resultSignals, ProcessingFrequency processingFrequency) {
         this.callback = callback;

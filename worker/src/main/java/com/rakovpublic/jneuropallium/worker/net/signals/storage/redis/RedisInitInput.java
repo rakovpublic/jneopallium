@@ -11,6 +11,7 @@ import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInitInput;
 
 import java.util.HashMap;
 import java.util.List;
+
 //TODO: add implementation
 public class RedisInitInput implements IInitInput {
     @Override

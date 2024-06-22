@@ -5,13 +5,10 @@
 package com.rakovpublic.jneuropallium.worker.net.signals;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.ProcessingFrequency;
 import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInitInput;
 
-import java.util.HashMap;
-import java.util.List;
 @JsonDeserialize(using = InitInputDeserializer.class)
-public class InitInputWrapper  {
+public class InitInputWrapper {
     public IInitInput initInput;
     public Class<? extends IInitInput> clazz;
 

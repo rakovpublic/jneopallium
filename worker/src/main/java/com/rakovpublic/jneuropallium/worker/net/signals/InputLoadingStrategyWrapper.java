@@ -12,8 +12,8 @@ import java.util.List;
 import java.util.TreeMap;
 
 public class InputLoadingStrategyWrapper implements IInputLoadingStrategy {
-    private IInputLoadingStrategy iInputLoadingStrategy;
-    private Class<? extends IInputLoadingStrategy> clazz;
+    private final IInputLoadingStrategy iInputLoadingStrategy;
+    private final Class<? extends IInputLoadingStrategy> clazz;
 
     public InputLoadingStrategyWrapper(IInputLoadingStrategy iInputLoadingStrategy) {
         this.iInputLoadingStrategy = iInputLoadingStrategy;

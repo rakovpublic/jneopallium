@@ -26,7 +26,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class LocalApplication implements IApplication {
@@ -55,19 +54,19 @@ public class LocalApplication implements IApplication {
         Long historyFast = Long.parseLong(context.getProperty("configuration.history.fast.runs"));
         Integer fastSlowRatio = Integer.parseInt(context.getProperty("configuration.slowfast.ratio"));
         ILayersMeta layersMeta = new FileLayersMeta<>(fs.getItem(layerPath), fs);
-        HashMap<String, LinkedHashMap<String,String>> processingFrequencyJSONMap =new HashMap<>();
-        HashMap<String,ProcessingFrequency> processingFrequencyMap =new HashMap<>();
+        HashMap<String, LinkedHashMap<String, String>> processingFrequencyJSONMap = new HashMap<>();
+        HashMap<String, ProcessingFrequency> processingFrequencyMap = new HashMap<>();
 
         try {
-            processingFrequencyJSONMap =  new ObjectMapper().readValue(context.getProperty("configuration.processing.frequency.map"), HashMap.class);
-            for(String key: processingFrequencyJSONMap.keySet()){
-                processingFrequencyMap.put(key,new ProcessingFrequency(Long.parseLong(processingFrequencyJSONMap.get(key).get("epoch")), Integer.parseInt(processingFrequencyJSONMap.get(key).get("loop"))));
+            processingFrequencyJSONMap = new ObjectMapper().readValue(context.getProperty("configuration.processing.frequency.map"), HashMap.class);
+            for (String key : processingFrequencyJSONMap.keySet()) {
+                processingFrequencyMap.put(key, new ProcessingFrequency(Long.parseLong(processingFrequencyJSONMap.get(key).get("epoch")), Integer.parseInt(processingFrequencyJSONMap.get(key).get("loop"))));
             }
         } catch (JsonProcessingException e) {
             logger.error("Cannot find parse " + context.getProperty("configuration.processing.frequency.map") + "  to processing frequency map", e);
             e.printStackTrace();
         }
-        IInputLoadingStrategy inputLoadingStrategyMain = new CycledInputLoadingStrategy(layersMeta,fastSlowRatio,processingFrequencyMap);
+        IInputLoadingStrategy inputLoadingStrategyMain = new CycledInputLoadingStrategy(layersMeta, fastSlowRatio, processingFrequencyMap);
         IInputResolver inputResolver = new InMemoryInputResolver(new InMemorySignalPersistStorage(), new InMemorySignalHistoryStorage(historySlow, historyFast), inputLoadingStrategyMain);
         String inputs = context.getProperty("configuration.input.inputs");
         for (InputData inputData : this.getInputs(inputs)) {
@@ -269,7 +268,7 @@ public class LocalApplication implements IApplication {
                     logger.error(e);
                 }
             }
-            if(layer.getId()!=-2147483648){
+            if (layer.getId() != -2147483648) {
                 layer.dumpResult();
                 layer.dumpNeurons(met);
             }

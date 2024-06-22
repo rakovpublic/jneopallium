@@ -19,7 +19,10 @@ import com.rakovpublic.jneuropallium.worker.model.UploadSignalsRequest;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayer;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.layers.impl.LayerMetaParam;
-import com.rakovpublic.jneuropallium.worker.net.neuron.*;
+import com.rakovpublic.jneuropallium.worker.net.neuron.IAxon;
+import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
+import com.rakovpublic.jneuropallium.worker.net.neuron.IRule;
+import com.rakovpublic.jneuropallium.worker.net.neuron.ISynapse;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.NeuronRunnerService;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.layersizing.CreateNeuronSignal;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.layersizing.DeleteNeuronSignal;
@@ -29,23 +32,25 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.TreeMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 public class HttpLayer<N extends INeuron> implements ILayer<N> {
     private static final Logger logger = LogManager.getLogger(HttpLayer.class);
-    private String masterAddress;
-    private Integer layerId;
-    private String UUID;
-    private Integer layerSize;
-    private TreeMap<Long,INeuron> neurons;
+    private final String masterAddress;
+    private final Integer layerId;
+    private final String UUID;
+    private final Integer layerSize;
+    private final TreeMap<Long, INeuron> neurons;
     private boolean isProcessed;
     private ConcurrentLinkedQueue<INeuron> notProcessed;
-    private Integer threads;
+    private final Integer threads;
 
-    private ISplitInput splitInput;
+    private final ISplitInput splitInput;
 
     public HttpLayer(String masterAddress, Integer layerId, String UUID, Integer layerSize, Integer threads, ISplitInput splitInput) {
         this.masterAddress = masterAddress;
@@ -117,7 +122,8 @@ public class HttpLayer<N extends INeuron> implements ILayer<N> {
         } catch (IOException | InterruptedException e) {
             logger.error("Cannot send update neuron connections request", e);
 
-        }      return;
+        }
+        return;
     }
 
 
@@ -151,9 +157,8 @@ public class HttpLayer<N extends INeuron> implements ILayer<N> {
 
     @Override
     public void register(INeuron neuron) {
-        neurons.put(neuron.getId(),neuron);
+        neurons.put(neuron.getId(), neuron);
     }
-
 
 
     @Override
@@ -213,7 +218,7 @@ public class HttpLayer<N extends INeuron> implements ILayer<N> {
 
     @Override
     public void dumpNeurons(ILayerMeta layerMeta) {
-       layerMeta.saveNeurons(neurons.values().stream().collect(Collectors.toList()));
+        layerMeta.saveNeurons(neurons.values().stream().collect(Collectors.toList()));
     }
 
     @Override
@@ -261,44 +266,44 @@ public class HttpLayer<N extends INeuron> implements ILayer<N> {
 
 
     @Override
-    public void sendCallBack(String name,  List<ISignal> signals ) {
+    public void sendCallBack(String name, List<ISignal> signals) {
         splitInput.getInputResolver().sendCallBack(name, signals);
     }
 
     @Override
     public LayerMetaParam getLayerMetaParam(String key) {
 
-        String getLayerParam = masterAddress + "/layer/getLayerParam?param="+key+"&layerId="+layerId;
+        String getLayerParam = masterAddress + "/layer/getLayerParam?param=" + key + "&layerId=" + layerId;
         HttpCommunicationClient communicationClient = new HttpCommunicationClient();
-       String resultJson =null;
+        String resultJson = null;
         try {
-            resultJson= communicationClient.sendRequest(HttpRequestResolver.createGet(getLayerParam));
+            resultJson = communicationClient.sendRequest(HttpRequestResolver.createGet(getLayerParam));
         } catch (IOException | InterruptedException e) {
             logger.error("Cannot send delete request", e);
             return null;
         }
-       if(resultJson != null){
-           JsonElement jelement = new JsonParser().parse(resultJson);
-           JsonObject jobject = jelement.getAsJsonObject();
-           String cl =jobject.getAsJsonPrimitive("paramClass").getAsString();
-           ObjectMapper mapper = new ObjectMapper();
-           try {
-                LayerMetaParam metaParam = new LayerMetaParam(mapper.readValue(jobject.getAsJsonPrimitive("param").getAsString(),Class.forName(cl)));
+        if (resultJson != null) {
+            JsonElement jelement = new JsonParser().parse(resultJson);
+            JsonObject jobject = jelement.getAsJsonObject();
+            String cl = jobject.getAsJsonPrimitive("paramClass").getAsString();
+            ObjectMapper mapper = new ObjectMapper();
+            try {
+                LayerMetaParam metaParam = new LayerMetaParam(mapper.readValue(jobject.getAsJsonPrimitive("param").getAsString(), Class.forName(cl)));
                 return metaParam;
-           } catch (IOException | ClassNotFoundException e) {
-               logger.error("cannot parse layer meta param from json " + resultJson, e);
-           }
+            } catch (IOException | ClassNotFoundException e) {
+                logger.error("cannot parse layer meta param from json " + resultJson, e);
+            }
 
 
-       }
-       return null;
+        }
+        return null;
     }
 
     @Override
     public void updateLayerMetaParam(String key, LayerMetaParam metaParam) {
         String sendMetaParam = masterAddress + "/layer/updateLayerParam";
         HttpCommunicationClient communicationClient = new HttpCommunicationClient();
-        LayerParamUpdate layerParamUpdate = new LayerParamUpdate(key,layerId,metaParam);
+        LayerParamUpdate layerParamUpdate = new LayerParamUpdate(key, layerId, metaParam);
         try {
             communicationClient.sendRequest(HttpRequestResolver.createPost(sendMetaParam, layerParamUpdate));
         } catch (IOException | InterruptedException e) {
@@ -308,9 +313,9 @@ public class HttpLayer<N extends INeuron> implements ILayer<N> {
     }
 
     @Override
-    public void setLayerMetaParams(HashMap<String,LayerMetaParam> params) {
-        for(String key: params.keySet()){
-            updateLayerMetaParam(key,params.get(key));
+    public void setLayerMetaParams(HashMap<String, LayerMetaParam> params) {
+        for (String key : params.keySet()) {
+            updateLayerMetaParam(key, params.get(key));
         }
 
     }

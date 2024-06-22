@@ -33,7 +33,7 @@ public class Context implements IContext {
 
     @Override
     public String getProperty(String propertyName) {
-        if(prop==null){
+        if (prop == null) {
             init();
         }
         return prop.getProperty(propertyName, null);

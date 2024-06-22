@@ -30,16 +30,16 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class HttpSplitInputMeta implements ISplitInput {
     private static final Logger logger = LogManager.getLogger(HttpSplitInputMeta.class);
     private String nodeId;
-    private String readNeuronsEndpoint;
-    private String masterAddress;
-    private String sendResultEndpoint;
-    private IInputResolver inputResolver;
+    private final String readNeuronsEndpoint;
+    private final String masterAddress;
+    private final String sendResultEndpoint;
+    private final IInputResolver inputResolver;
     private Long start;
     private Long end;
     private ILayersMeta layersMeta;
     private String discriminatorName;
     private Integer layerId;
-    private Integer threads;
+    private final Integer threads;
 
 
     public HttpSplitInputMeta(String nodeId, String readNeuronsEndpoint, String masterAddress, String sendResultEndpoint, IInputResolver inputResolver, ILayersMeta layer, Long start, Long end, Integer layerId, Integer threads) {
@@ -139,8 +139,8 @@ public class HttpSplitInputMeta implements ISplitInput {
 
     protected List<? extends INeuron> parseNeurons(HttpResponse<String> response) {
         List<INeuron> res = NeuronParser.parseNeurons(response.body());
-        for(INeuron neuron: res){
-            HttpLayer httpLayer = new HttpLayer( masterAddress,  layerId, this.hashCode()+"",res.size(), threads, this);
+        for (INeuron neuron : res) {
+            HttpLayer httpLayer = new HttpLayer(masterAddress, layerId, this.hashCode() + "", res.size(), threads, this);
             neuron.setLayer(httpLayer);
         }
         return NeuronParser.parseNeurons(response.body());

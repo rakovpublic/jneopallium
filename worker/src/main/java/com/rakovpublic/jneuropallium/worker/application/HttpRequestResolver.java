@@ -14,7 +14,8 @@ public class HttpRequestResolver {
         String json = ow.writeValueAsString(payload);
         return HttpRequest.newBuilder(URI.create(uri)).POST(HttpRequest.BodyPublishers.ofString(json)).build();
     }
-    public static  HttpRequest createGet(String uri) throws JsonProcessingException {
+
+    public static HttpRequest createGet(String uri) throws JsonProcessingException {
         return HttpRequest.newBuilder(URI.create(uri)).GET().build();
     }
 }

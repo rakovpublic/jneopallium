@@ -9,5 +9,5 @@ public interface ILayerManipulatingNeuron extends INeuron {
     /**
      * @return the layer object
      */
-    public ILayer getLayer();
+    ILayer getLayer();
 }

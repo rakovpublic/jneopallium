@@ -5,5 +5,5 @@ package com.rakovpublic.jneuropallium.worker.net.layers;
  */
 public interface IResultExtractor {
 
-    public void gatherResult(IResultLayer resultLayer);
+    void gatherResult(IResultLayer resultLayer);
 }

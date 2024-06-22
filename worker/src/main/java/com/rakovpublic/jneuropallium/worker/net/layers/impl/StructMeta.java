@@ -8,7 +8,6 @@ import com.rakovpublic.jneuropallium.worker.net.layers.ILayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayersMeta;
 import com.rakovpublic.jneuropallium.worker.net.layers.IResultLayerMeta;
 import com.rakovpublic.jneuropallium.worker.net.layers.IStructMeta;
-import com.rakovpublic.jneuropallium.worker.net.layers.impl.LayerMove;
 import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.net.signals.ReconnectStrategy;
 import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInputResolver;
@@ -21,8 +20,8 @@ import java.util.List;
 public class StructMeta implements IStructMeta {
 
 
-    private IInputResolver inputResolver;
-    private ILayersMeta layersMeta;
+    private final IInputResolver inputResolver;
+    private final ILayersMeta layersMeta;
 
 
     public StructMeta(IInputResolver hiddenInputMeta, ILayersMeta layersMeta) {

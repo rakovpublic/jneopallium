@@ -14,9 +14,9 @@ import java.util.stream.Collectors;
 
 public class FileLayersMeta<S extends IStorageItem> implements ILayersMeta {
     private S file;
-    private IStorage<S> fileSystem;
-    private LinkedTreeMap<Integer, ILayerMeta> layers;
-    private LinkedList<ILayerMeta> layerMetas;
+    private final IStorage<S> fileSystem;
+    private final LinkedTreeMap<Integer, ILayerMeta> layers;
+    private final LinkedList<ILayerMeta> layerMetas;
 
 
     public FileLayersMeta(S file, IStorage<S> fs) {
@@ -30,14 +30,14 @@ public class FileLayersMeta<S extends IStorageItem> implements ILayersMeta {
 
     @Override
     public void setRootPath(String path) {
-        file = (S) fileSystem.getItem(path);
+        file = fileSystem.getItem(path);
     }
 
     @Override
     public List<ILayerMeta> getLayers() {
         // S layersDir = fileSystem.getItem(file+ fileSystem.getFolderSeparator()+"layers");
         //new File(file.getAbsolutePath() + File.pathSeparator + "layers");
-        if (layers.isEmpty()||layers.size()==1) {
+        if (layers.isEmpty() || layers.size() == 1) {
             List<ILayerMeta> res = new ArrayList<>();
             List<S> temp = new ArrayList<>();
             if (!file.exists() || !file.isDirectory()) {
@@ -82,10 +82,7 @@ public class FileLayersMeta<S extends IStorageItem> implements ILayersMeta {
 
         temp = fileSystem.listFiles(file);
         temp.removeIf(iFileSystemItem -> {
-            if (iFileSystemItem.isDirectory()) {
-                return true;
-            }
-            return false;
+            return iFileSystemItem.isDirectory();
         });
         Collections.sort(temp, new Comparator<IStorageItem>() {
             @Override
@@ -98,21 +95,21 @@ public class FileLayersMeta<S extends IStorageItem> implements ILayersMeta {
 
     @Override
     public ILayerMeta getLayerByPosition(int id) {
-        if(layerMetas.contains(id)){
+        if (layerMetas.contains(id)) {
             return layerMetas.get(id);
-        }else {
+        } else {
             return layers.get(id);
         }
     }
 
     @Override
     public ILayerMeta getLayerById(int id) {
-        for(ILayerMeta layer: layerMetas){
-            if(layer.getID() == id){
+        for (ILayerMeta layer : layerMetas) {
+            if (layer.getID() == id) {
                 return layer;
             }
         }
-        if(layers.containsKey(id)){
+        if (layers.containsKey(id)) {
             return layers.get(id);
         }
         return null;
