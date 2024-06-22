@@ -28,6 +28,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GRPCClient implements IApplication  {
     private static final Logger logger = LogManager.getLogger(HttpClusterApplication.class);
@@ -51,7 +52,7 @@ public class GRPCClient implements IApplication  {
                 }
                 ISplitInput splitInput = parseSplitInput(jsonSplitInput);
                 IInputResolver inputResolver = splitInput.getInputResolver();
-                HashMap<Long, List<ISignal>> input = inputResolver.getSignalPersistStorage().getLayerSignals(splitInput.getLayerId());
+                HashMap<Long, CopyOnWriteArrayList<ISignal>> input = inputResolver.getSignalPersistStorage().getLayerSignals(splitInput.getLayerId());
                 NeuronRunnerService neuronRunnerService = NeuronRunnerService.getService();
                 List<INeuron> neurons = (List<INeuron>) splitInput.getNeurons();
 
@@ -64,7 +65,7 @@ public class GRPCClient implements IApplication  {
                     neuronRunnerService.addNeuron(neuron);
                 }
                 neuronRunnerService.process(splitInput.getThreads());
-                HashMap<Integer, HashMap<Long, List<ISignal>>> result = new HashMap<>();
+                HashMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> result = new HashMap<>();
                 while(neurons.size()>0){
                     for(INeuron neuron:neurons){
                         if(neuron.hasResult()){

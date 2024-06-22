@@ -4,10 +4,11 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class UploadSignalsRequest {
     private String name;
-    private HashMap<Integer, HashMap<Long, List<ISignal>>> signals;
+    private HashMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> signals;
     private boolean discriminator;
     private String discriminatorName;
 
@@ -35,11 +36,11 @@ public class UploadSignalsRequest {
         this.name = name;
     }
 
-    public HashMap<Integer, HashMap<Long, List<ISignal>>> getSignals() {
+    public HashMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> getSignals() {
         return signals;
     }
 
-    public void setSignals(HashMap<Integer, HashMap<Long, List<ISignal>>> signals) {
+    public void setSignals(HashMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> signals) {
         this.signals = signals;
     }
 }

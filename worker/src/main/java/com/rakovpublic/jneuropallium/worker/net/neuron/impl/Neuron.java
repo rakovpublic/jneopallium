@@ -19,28 +19,31 @@ import java.util.stream.Collectors;
 
 
 public class Neuron implements INeuron {
-    private List<ISignal> signals;
-    private Boolean isProcessed;
-    private Dendrites dendrites;
-    private Axon axon;
-    protected List<Class<? extends ISignal>> resultClasses;
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private HashMap<Class<? extends ISignal>, IActivationFunction> activationFunctions;
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private HashMap<Class<? extends ISignal>, ISignalProcessor> processorMap;
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private HashMap<Class<? extends ISignal>, ISignalMerger> mergerMap;
     @JsonIgnore
-    private ILayer layer;
-    private Long neuronId;
-    protected List<ISignal> result;
-    protected ISignalChain signalChain;
-    private List<IRule> rules;
-    protected Class<? extends INeuron> currentNeuronClass;
-    private Boolean changed;
-    private Boolean onDelete;
-    protected Long run;
-    protected ISignalHistoryStorage signalHistoryStorage;
+    public List<ISignal> signals;
+    public Boolean isProcessed;
+    public Dendrites dendrites;
+    public Axon axon;
+    public List<Class<? extends ISignal>> resultClasses;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    public HashMap<Class<? extends ISignal>, IActivationFunction> activationFunctions;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    public HashMap<Class<? extends ISignal>, ISignalProcessor> processorMap;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    public HashMap<Class<? extends ISignal>, ISignalMerger> mergerMap;
+    @JsonIgnore
+    public ILayer layer;
+    public Long neuronId;
+    @JsonIgnore
+    public List<ISignal> result;
+    public ISignalChain signalChain;
+    public List<IRule> rules;
+    public Class<? extends INeuron> currentNeuronClass;
+    public Boolean changed;
+    public Boolean onDelete;
+    public Long run;
+    @JsonIgnore
+    public ISignalHistoryStorage signalHistory;
 
     @Override
     public HashMap<String, Long> getCyclingNeuronInputMapping() {
@@ -51,11 +54,10 @@ public class Neuron implements INeuron {
     public void setCyclingNeuronInputMapping(HashMap<String, Long> cyclingNeuronInputMapping) {
         this.cyclingNeuronInputMapping = cyclingNeuronInputMapping;
     }
+    @JsonIgnore
+    public HashMap<String, Long> cyclingNeuronInputMapping;
 
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    protected HashMap<String, Long> cyclingNeuronInputMapping;
-
-    private Integer currentLoopAmount;
+    public Integer currentLoopAmount;
 
     @Override
     public Integer getCurrentLoop() {
@@ -119,9 +121,15 @@ public class Neuron implements INeuron {
         currentNeuronClass = Neuron.class;
         activationFunctions = new HashMap<>();
         resultClasses = new LinkedList<>();
+        run = 0l;
+        onDelete= false;
+        changed=false;
+        currentLoopAmount=0;
+        cyclingNeuronInputMapping= new HashMap<>();
     }
 
     public Neuron(Long neuronId, ISignalChain processingChain, Long run) {
+        cyclingNeuronInputMapping= new HashMap<>();
         rules = new ArrayList<>();
         this.neuronId = neuronId;
         isProcessed = false;
@@ -133,6 +141,9 @@ public class Neuron implements INeuron {
         this.signalChain = processingChain;
         this.run = run;
         resultClasses = new LinkedList<>();
+        onDelete= false;
+        changed=false;
+        currentLoopAmount=0;
 
     }
 
@@ -163,12 +174,13 @@ public class Neuron implements INeuron {
 
     @Override
     public ISignalHistoryStorage getSignalHistory() {
-        return signalHistoryStorage;
+        return signalHistory;
     }
+
 
     @Override
     public void setSignalHistory(ISignalHistoryStorage signalHistory) {
-        this.signalHistoryStorage = signalHistory;
+        this.signalHistory = signalHistory;
     }
 
     @Override
@@ -203,8 +215,14 @@ public class Neuron implements INeuron {
     //TODO:refactor this method
     @Override
     public void processSignals() {
+        if(cyclingNeuronInputMapping==null){
+            cyclingNeuronInputMapping= new HashMap<>();
+        }
         try{
         HashMap<Class<? extends ISignal>, List<ISignal>> signalsMap = new HashMap<>();
+        if(dendrites==null){
+            dendrites = new Dendrites();
+        }
         List<ISignal> signalsForProcessing = dendrites.processSignalsWithDendrites(signals);
         for (ISignal s : signalsForProcessing) {
 
@@ -275,11 +293,7 @@ public class Neuron implements INeuron {
         }catch (Exception e){
             Logger logger = LogManager.getLogger(Neuron.class);
             logger.error("Error during neuron processing", e);
-        }finally {
-            this.isProcessed = true;
         }
-
-
     }
 
     @Override
@@ -311,6 +325,7 @@ public class Neuron implements INeuron {
 
     @Override
     public List<ISignal> getResult() {
+        isProcessed = false;
         return this.result;
     }
 

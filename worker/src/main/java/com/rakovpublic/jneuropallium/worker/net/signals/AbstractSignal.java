@@ -7,30 +7,30 @@ package com.rakovpublic.jneuropallium.worker.net.signals;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 public abstract class AbstractSignal<T> implements ISignal<T> {
-    protected T value;
-    protected Integer sourceLayer;
-    protected Long sourceNeuron;
-    protected Integer timeAlive;
-    protected String description;
-    protected boolean fromExternalNet;
-    protected String inputName;
+    public T value;
+    public Integer sourceLayer;
+    public Long sourceNeuron;
+    public Integer timeAlive;
+    public String description;
+    public boolean fromExternalNet;
+    public String inputName;
 
-    private Integer currentInnerLoop;
-    private Long epoch;
-    private Integer innerLoop;
-    protected Integer loop;
-    private String currentClassName;
+    public Integer currentInnerLoop;
+    public Long epoch;
+    public Integer innerLoop;
+    public Integer loop;
+    public String currentClassName;
 
-    protected boolean needToRemoveDuringLearning;
+    public boolean needToRemoveDuringLearning;
 
-    protected String name;
+    public String name;
 
     @Override
     public boolean isNeedToProcessDuringLearning() {
         return needToProcessDuringLearning;
     }
 
-    protected boolean needToProcessDuringLearning;
+    public boolean needToProcessDuringLearning;
 
     @Override
     public String getInputName() {
@@ -52,7 +52,10 @@ public abstract class AbstractSignal<T> implements ISignal<T> {
         this.fromExternalNet = fromExternalNet;
     }
 
-    public AbstractSignal(T value, Integer sourceLayer, Long sourceNeuron, Integer timeAlive, String description, boolean fromExternalNet, String inputName, boolean needToRemoveDuringLearning, boolean needToProcessDuringLearning, String name) {
+    public AbstractSignal() {
+    }
+
+    public AbstractSignal(T value, Integer sourceLayer, Long sourceNeuron, Integer timeAlive, String description, boolean fromExternalNet, String inputName, boolean needToRemoveDuringLearning, boolean needToProcessDuringLearning, String name, String currentClassName) {
         this.value = value;
         this.sourceLayer = sourceLayer;
         this.sourceNeuron = sourceNeuron;
@@ -65,7 +68,7 @@ public abstract class AbstractSignal<T> implements ISignal<T> {
         this.name = name;
         this.epoch = 0l;
         this.loop = 0;
-        this.currentClassName = getCurrentSignalClass().getCanonicalName();
+        this.currentClassName = currentClassName;
     }
 
     @Override

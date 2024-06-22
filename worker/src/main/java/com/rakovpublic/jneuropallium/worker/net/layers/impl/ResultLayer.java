@@ -7,9 +7,7 @@ import com.rakovpublic.jneuropallium.worker.net.neuron.IResultNeuron;
 import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInputResolver;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.TreeSet;
+import java.util.*;
 
 public class ResultLayer<K extends IResultSignal> extends Layer implements IResultLayer {
 
@@ -20,7 +18,7 @@ public class ResultLayer<K extends IResultSignal> extends Layer implements IResu
 
     @Override
     public List<IResult> interpretResult() {
-        TreeSet<INeuron> resultNeurons = new TreeSet<>();
+        Set<IResultNeuron> resultNeurons = new HashSet<>();
         List<IResult> res = new ArrayList<>();
         while (!this.isProcessed()) {
             try {
@@ -31,7 +29,10 @@ public class ResultLayer<K extends IResultSignal> extends Layer implements IResu
         }
         if (this.isProcessed()) {
             resultNeurons.addAll(this.map.values());
-            res.add(new SimpleResultWrapper(((IResultNeuron) resultNeurons.last()).getFinalResult(), resultNeurons.last().getId()));
+            for(IResultNeuron resultNeuron : resultNeurons){
+                res.add(new SimpleResultWrapper(resultNeuron.getFinalResult(), resultNeuron.getId()));
+            }
+
             return res;
         }
         return null;

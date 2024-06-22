@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 
 public class RedisSignalHistoryStorage implements ISignalHistoryStorage {
@@ -62,7 +63,7 @@ public class RedisSignalHistoryStorage implements ISignalHistoryStorage {
     }
 
     @Override
-    public void save(TreeMap<Integer, HashMap<Long, List<ISignal>>> history, Long run, Integer loop) {
+    public void save(TreeMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> history, Long run, Integer loop) {
         ObjectMapper mapper = new ObjectMapper();
         JedisPooled jedisPooled = new JedisPooled(this.host, this.port);
         for(Integer layerId:history.keySet()){

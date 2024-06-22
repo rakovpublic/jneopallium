@@ -1,7 +1,10 @@
 package com.rakovpublic.jneuropallium.worker.net.layers.impl.file;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -67,7 +70,7 @@ public class FileLayerMeta<S extends IStorageItem> implements ILayerMeta {
     public int getID() {
         String layer = fileSystem.read(file);
         JSONHelper helper = new JSONHelper();
-        return Integer.parseInt(helper.extractField(layer, "layerId"));
+        return Integer.parseInt(helper.extractField(layer, "layerID"));
     }
 
     @Override
@@ -131,6 +134,8 @@ public class FileLayerMeta<S extends IStorageItem> implements ILayerMeta {
         sb.append(getSize() + "\",");
         sb.append("\"neurons\":");
         ObjectMapper mapper = new ObjectMapper();
+        mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+        mapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
         String serializedObject = null;
         try {
             serializedObject = mapper.writeValueAsString(neuronMetas);

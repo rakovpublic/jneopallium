@@ -11,6 +11,7 @@ import com.rakovpublic.jneuropallium.worker.net.storages.IStorageMeta;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * The interface incapsulate input for worker run in cluster mode
@@ -30,7 +31,7 @@ public interface ISplitInput extends IStorageMeta {
      *
      * @param signals neuronId signals list map
      **/
-    void saveResults(HashMap<Integer, HashMap<Long, List<ISignal>>> signals);
+    void saveResults(HashMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> signals);
 
 
     /**

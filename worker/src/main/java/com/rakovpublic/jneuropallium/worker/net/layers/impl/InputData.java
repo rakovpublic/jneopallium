@@ -1,26 +1,30 @@
 package com.rakovpublic.jneuropallium.worker.net.layers.impl;
 
-import com.rakovpublic.jneuropallium.worker.net.signals.InputInitStrategy;
-import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInitInput;
+import com.rakovpublic.jneuropallium.worker.net.signals.InitInputWrapper;
+import com.rakovpublic.jneuropallium.worker.net.signals.InputInitStrategyWrapper;
+
 
 public class InputData {
-    private IInitInput iInputSource;
+    private InitInputWrapper iInputSource;
     private boolean isMandatory;
-    private InputInitStrategy initStrategy;
+    private InputInitStrategyWrapper initStrategy;
     private Integer amountOfRuns;
 
-    public InputData(IInitInput iInputSource, boolean isMandatory, InputInitStrategy initStrategy, Integer amountOfRuns) {
+    public InputData() {
+    }
+
+    public InputData(InitInputWrapper iInputSource, boolean isMandatory, InputInitStrategyWrapper initStrategy, Integer amountOfRuns) {
         this.iInputSource = iInputSource;
         this.isMandatory = isMandatory;
         this.initStrategy = initStrategy;
         this.amountOfRuns = amountOfRuns;
     }
 
-    public IInitInput getiInputSource() {
+    public InitInputWrapper getiInputSource() {
         return iInputSource;
     }
 
-    public void setiInputSource(IInitInput iInputSource) {
+    public void setiInputSource(InitInputWrapper iInputSource) {
         this.iInputSource = iInputSource;
     }
 
@@ -32,11 +36,11 @@ public class InputData {
         isMandatory = mandatory;
     }
 
-    public InputInitStrategy getInitStrategy() {
+    public InputInitStrategyWrapper getInitStrategy() {
         return initStrategy;
     }
 
-    public void setInitStrategy(InputInitStrategy initStrategy) {
+    public void setInitStrategy(InputInitStrategyWrapper initStrategy) {
         this.initStrategy = initStrategy;
     }
 

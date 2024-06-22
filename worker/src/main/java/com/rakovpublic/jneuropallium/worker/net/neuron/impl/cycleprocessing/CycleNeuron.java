@@ -4,6 +4,7 @@ import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalChain;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.Neuron;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInitInput;
+import com.rakovpublic.jneuropallium.worker.test.definitions.functionallogic.ASignal;
 
 import java.util.HashMap;
 
@@ -59,4 +60,11 @@ public class CycleNeuron extends Neuron {
     public HashMap<Class<? extends ISignal>, ProcessingFrequency> getSignalProcessingFrequencyMap() {
         return signalProcessingFrequencyMap;
     }
+    @Override
+    public void activate() {
+
+        super.activate();
+        isProcessed=true;
+    }
+
 }

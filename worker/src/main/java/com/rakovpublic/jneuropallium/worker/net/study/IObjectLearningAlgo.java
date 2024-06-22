@@ -7,10 +7,11 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public interface IObjectLearningAlgo extends ILearningAlgo, Serializable {
     /**
      * this method return signals for study
      */
-    List<ISignal> getLearningSignals(HashMap<String, List<IResultSignal>> expected, IStructMeta meta);
+    CopyOnWriteArrayList<ISignal> getLearningSignals(HashMap<String, List<IResultSignal>> expected, IStructMeta meta);
 }

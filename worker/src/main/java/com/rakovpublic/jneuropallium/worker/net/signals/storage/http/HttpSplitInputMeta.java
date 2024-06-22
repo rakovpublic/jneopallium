@@ -24,6 +24,7 @@ import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 
 public class HttpSplitInputMeta implements ISplitInput {
@@ -93,7 +94,7 @@ public class HttpSplitInputMeta implements ISplitInput {
 
 
     @Override
-    public void saveResults(HashMap<Integer, HashMap<Long, List<ISignal>>> signals) {
+    public void saveResults(HashMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> signals) {
         inputResolver.getSignalPersistStorage().putSignals(signals);
     }
 

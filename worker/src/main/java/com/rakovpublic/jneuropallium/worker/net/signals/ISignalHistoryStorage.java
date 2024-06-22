@@ -4,15 +4,18 @@
 
 package com.rakovpublic.jneuropallium.worker.net.signals;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.rakovpublic.jneuropallium.worker.net.neuron.NeuronAddress;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * This interface represents the history of signals for each neuron. It can be useful for studying
  */
+@JsonDeserialize(using = SignalHistoryDeserializer.class)
 public interface ISignalHistoryStorage {
     /**
      * This method return the signals which have got neuron on specific run
@@ -29,5 +32,5 @@ public interface ISignalHistoryStorage {
      * @param history signals
      * @param run
      */
-    void save(TreeMap<Integer, HashMap<Long, List<ISignal>>> history, Long run, Integer loop);
+    void save(TreeMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> history, Long run, Integer loop);
 }

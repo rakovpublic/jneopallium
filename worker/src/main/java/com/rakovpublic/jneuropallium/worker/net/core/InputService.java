@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class InputService implements IInputService {
     private static final Logger logger = LogManager.getLogger(InputService.class);
@@ -145,7 +146,7 @@ public class InputService implements IInputService {
     }
 
     @Override
-    public void uploadWorkerResult(String name, HashMap<Integer, HashMap<Long, List<ISignal>>> signals) {
+    public void uploadWorkerResult(String name, HashMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> signals) {
         if (nodeMetas.get(name).getCurrentInput() != null) {
             signalsPersist.putSignals(signals);
             nodeMetas.get(name).setStatus(true);
@@ -158,7 +159,7 @@ public class InputService implements IInputService {
     }
 
     @Override
-    public void uploadDiscriminatorWorkerResult(String name, String nameDiscriminator, HashMap<Integer, HashMap<Long, List<ISignal>>> signals) {
+    public void uploadDiscriminatorWorkerResult(String name, String nameDiscriminator, HashMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> signals) {
         discriminatorsSignalStorage.get(nameDiscriminator).putSignals(signals);
         nodeMetas.get(name).setStatus(true);
     }
@@ -343,7 +344,7 @@ public class InputService implements IInputService {
     }
 
     @Override
-    public void processCallBackFromUpstream(HashMap<Integer, HashMap<Long, List<ISignal>>> signals) {
+    public void processCallBackFromUpstream(HashMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> signals) {
         signalsPersist.putSignals(signals);
     }
 

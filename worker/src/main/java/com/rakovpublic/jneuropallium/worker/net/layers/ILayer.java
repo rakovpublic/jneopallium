@@ -19,6 +19,7 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public interface ILayer<N extends INeuron> extends Serializable {
 
@@ -108,7 +109,7 @@ public interface ILayer<N extends INeuron> extends Serializable {
      *
      * @return hash map with integer key - layer id , value - hash map with long key - neuron id, list value  - signals
      */
-    HashMap<Integer, HashMap<Long, List<ISignal>>> getResults();
+    HashMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> getResults();
 
     /**
      * serialize layer to json

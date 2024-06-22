@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 
 public class GRPCServer extends MasterServiceGrpc.MasterServiceImplBase {
@@ -34,7 +35,7 @@ public class GRPCServer extends MasterServiceGrpc.MasterServiceImplBase {
     @Override
     public void save(com.rakovpublic.jneuropallium.worker.Result request,
                      io.grpc.stub.StreamObserver<com.google.protobuf.Empty> responseObserver) {
-        HashMap<Integer,HashMap<Long, List<ISignal>>> result = new HashMap<>();
+        HashMap<Integer,HashMap<Long, CopyOnWriteArrayList<ISignal>>> result = new HashMap<>();
         for(Integer layerId: request.getResultMap().keySet()){
             parseAndSave(request.getResultMap().get(layerId),result,layerId);
         }
@@ -48,7 +49,7 @@ public class GRPCServer extends MasterServiceGrpc.MasterServiceImplBase {
     @Override
     public void saveDiscriminator(com.rakovpublic.jneuropallium.worker.ResultDiscriminator request,
                                   io.grpc.stub.StreamObserver<com.google.protobuf.Empty> responseObserver) {
-        HashMap<Integer,HashMap<Long, List<ISignal>>> result = new HashMap<>();
+        HashMap<Integer,HashMap<Long, CopyOnWriteArrayList<ISignal>>> result = new HashMap<>();
         for(Integer layerId: request.getResultMap().keySet()){
             parseAndSave(request.getResultMap().get(layerId),result,layerId);
         }
@@ -100,13 +101,13 @@ public class GRPCServer extends MasterServiceGrpc.MasterServiceImplBase {
 
     }
 
-    private void parseAndSave(String input,HashMap<Integer,HashMap<Long, List<ISignal>>> result, Integer layerId ){
+    private void parseAndSave(String input,HashMap<Integer,HashMap<Long, CopyOnWriteArrayList<ISignal>>> result, Integer layerId ){
         JsonElement jelement = new JsonParser().parse(input);
-        HashMap<Long, List<ISignal>> signalsMap = new HashMap<>();
+        HashMap<Long, CopyOnWriteArrayList<ISignal>> signalsMap = new HashMap<>();
         ObjectMapper mapper = new ObjectMapper();
         for (Map.Entry<String, JsonElement> e : jelement.getAsJsonObject().entrySet()) {
             Long neuronId = Long.parseLong(e.getKey());
-            List<ISignal> signals = new LinkedList<>();
+            CopyOnWriteArrayList<ISignal> signals = new CopyOnWriteArrayList<>();
             for(JsonElement signal: e.getValue().getAsJsonArray()){
                 String cc = signal.getAsJsonObject().getAsJsonPrimitive("currentClassName").getAsString();
                 try {

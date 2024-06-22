@@ -23,15 +23,19 @@ public class Context implements IContext {
 
     public Context(String path) {
         this.path = path;
+        init();
     }
 
-    private Context() {
+    public Context() {
         init();
     }
 
 
     @Override
     public String getProperty(String propertyName) {
+        if(prop==null){
+            init();
+        }
         return prop.getProperty(propertyName, null);
     }
 

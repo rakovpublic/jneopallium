@@ -24,6 +24,7 @@ public class FileLayersMeta<S extends IStorageItem> implements ILayersMeta {
         this.file = file;
         layers = new LinkedTreeMap<>();
         layerMetas = new LinkedList<>();
+        getLayers();
     }
 
 
@@ -36,7 +37,7 @@ public class FileLayersMeta<S extends IStorageItem> implements ILayersMeta {
     public List<ILayerMeta> getLayers() {
         // S layersDir = fileSystem.getItem(file+ fileSystem.getFolderSeparator()+"layers");
         //new File(file.getAbsolutePath() + File.pathSeparator + "layers");
-        if (layers.isEmpty()) {
+        if (layers.isEmpty()||layers.size()==1) {
             List<ILayerMeta> res = new ArrayList<>();
             List<S> temp = new ArrayList<>();
             if (!file.exists() || !file.isDirectory()) {
@@ -97,12 +98,24 @@ public class FileLayersMeta<S extends IStorageItem> implements ILayersMeta {
 
     @Override
     public ILayerMeta getLayerByPosition(int id) {
-        return layerMetas.get(id);
+        if(layerMetas.contains(id)){
+            return layerMetas.get(id);
+        }else {
+            return layers.get(id);
+        }
     }
 
     @Override
     public ILayerMeta getLayerById(int id) {
-        return layers.get(id);
+        for(ILayerMeta layer: layerMetas){
+            if(layer.getID() == id){
+                return layer;
+            }
+        }
+        if(layers.containsKey(id)){
+            return layers.get(id);
+        }
+        return null;
     }
 
 

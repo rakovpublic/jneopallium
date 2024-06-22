@@ -4,10 +4,11 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class DeleteNeuronIntegration {
     private Long neuronId;
-    private HashMap<Integer, HashMap<Long, List<ISignal>>> createRelationsSignals;
+    private HashMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> createRelationsSignals;
 
     public Long getNeuronId() {
         return neuronId;
@@ -17,11 +18,11 @@ public class DeleteNeuronIntegration {
         this.neuronId = neuronId;
     }
 
-    public HashMap<Integer, HashMap<Long, List<ISignal>>> getCreateRelationsSignals() {
+    public HashMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> getCreateRelationsSignals() {
         return createRelationsSignals;
     }
 
-    public void setCreateRelationsSignals(HashMap<Integer, HashMap<Long, List<ISignal>>> createRelationsSignals) {
+    public void setCreateRelationsSignals(HashMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> createRelationsSignals) {
         this.createRelationsSignals = createRelationsSignals;
     }
 }
