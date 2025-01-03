@@ -78,12 +78,13 @@ The input strategy class defines how the input should be populated with neurons.
 1. Make core. It will implement just core concepts without distributed mode and neuron nets synchronization.
 2. Add simple java http distributed part with neuron nets synchronization.
 3. Add grpc implementation for cluster mode
-4. Generate maven artifacts, host javadocs
-5. Add containers(docker/kubernetes) and infrastructure scripts python/shell.
-6. Add neuron net graphic designer which will collect data about implemented classes and will pass to graphic plugin for eclipse and (optional)idea.
-7. Add redis as meta storage(optional).
-8. Add aws lambda distributed mode(optional).
-9. Design and implement amazon cluster integration(optional).
+4. add Kafka input source implementation
+5. Generate maven artifacts, host javadocs
+6. Add containers(docker/kubernetes) and infrastructure scripts python/shell.
+7. Add neuron net graphic designer which will collect data about implemented classes and will pass to graphic plugin for eclipse and (optional)idea.
+8. Add redis as meta storage(optional).
+9. Add aws lambda distributed mode(optional).
+10. Design and implement amazon cluster integration(optional).
 
 p.s. Fill free to contatct me. I am looking for contributors for this project.
 p.p.s. Great thanks to kafedra of Informatics in Kharkiv National University of Radio and Electronics, Eugen Putiatin, Helen Matat, Tatiana Sinelnikova.
