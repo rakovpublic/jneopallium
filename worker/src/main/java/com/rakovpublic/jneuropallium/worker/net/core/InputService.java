@@ -269,7 +269,6 @@ public class InputService implements IInputService {
                 }
                 if (isDisc || discriminatorStatuses == null || discriminatorStatuses.size() == 0) {
                     signalHistoryStorage.save(signalsPersist.getAllSignals(), runningStrategy.getEpoch(), runningStrategy.getCurrentLoopCount());
-                    signalsPersist.cleanOutdatedSignals();
                     runningStrategy.populateInput(signalsPersist, inputStatuses);
                     runFlag = true;
                 }
