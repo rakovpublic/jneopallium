@@ -50,7 +50,7 @@ public class InMemorySignalPersistStorage implements ISignalsPersistStorage {
                 for (ISignal signal : neuronSignal) {
                     neuronSignal.remove(signal);
                     if (signal.getTimeAlive() >= 1) {
-                        neuronSignal.add(signal);
+                        neuronSignal.add(signal.prepareSignalToNextStep());
                     }
                 }
             }

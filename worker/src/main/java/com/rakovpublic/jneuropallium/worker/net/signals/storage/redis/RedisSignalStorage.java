@@ -104,7 +104,7 @@ public class RedisSignalStorage implements ISignalsPersistStorage {
                 for (ISignal signal : layerSignals.get(neuronId)) {
                     ISignal signalNew = signal;
                     if (signalNew != null) {
-                        newSignals.add(signalNew);
+                        newSignals.add(signalNew.prepareSignalToNextStep());
                     }
                 }
                 layerSignals.put(neuronId, newSignals);
