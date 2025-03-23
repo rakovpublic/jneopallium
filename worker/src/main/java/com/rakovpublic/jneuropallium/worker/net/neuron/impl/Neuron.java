@@ -252,9 +252,13 @@ public class Neuron implements INeuron {
                         if (signalMerger != null && (signalProcessor.hasMerger() != null ? signalProcessor.hasMerger() : true)) {
                             ISignal inS = signalMerger.mergeSignals(signalsMap.get(cl));
                             result.addAll(signalProcessor.process(inS, this));
+                            for(ISignal s: signalsMap.get(cl)){
+                                s.prepareSignalToNextStep();
+                            }
                         } else if (signalProcessor.hasMerger() == null || !signalProcessor.hasMerger()) {
                             for (ISignal s : signalsMap.get(cl)) {
                                 result.addAll(signalProcessor.process(s, this));
+                                s.prepareSignalToNextStep();
                             }
                         } else {
                             throw new CannotFindSignalMergerException("Cannot find signal merger for signal class" + cl.getCanonicalName() + " in neuron id" + this.neuronId);
@@ -273,9 +277,13 @@ public class Neuron implements INeuron {
                                 if (signalMerger != null && (signalProcessor.hasMerger() != null ? signalProcessor.hasMerger() : true)) {
                                     ISignal inS = signalMerger.mergeSignals(signalsMap.get(cl));
                                     result.addAll(signalProcessor.process(inS, this));
+                                    for(ISignal sig: signalsMap.get(cl)){
+                                        sig.prepareSignalToNextStep();
+                                    }
                                 } else if (signalProcessor.hasMerger() == null || !signalProcessor.hasMerger()) {
                                     for (ISignal st : signalsMap.get(cl)) {
                                         result.addAll(signalProcessor.process(st, this));
+                                        st.prepareSignalToNextStep();
                                     }
                                 } else {
                                     throw new CannotFindSignalMergerException("Cannot find signal merger for signal class" + cl.getCanonicalName() + " in neuron id" + this.neuronId);
@@ -285,6 +293,7 @@ public class Neuron implements INeuron {
                             clst = clst.getSuperclass();
                         }
                     }
+
                 }
             }
         } catch (Exception e) {
