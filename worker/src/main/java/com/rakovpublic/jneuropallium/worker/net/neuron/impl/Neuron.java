@@ -273,6 +273,7 @@ public class Neuron implements INeuron {
                                 if (signalMerger != null && (signalProcessor.hasMerger() != null ? signalProcessor.hasMerger() : true)) {
                                     ISignal inS = signalMerger.mergeSignals(signalsMap.get(cl));
                                     result.addAll(signalProcessor.process(inS, this));
+
                                 } else if (signalProcessor.hasMerger() == null || !signalProcessor.hasMerger()) {
                                     for (ISignal st : signalsMap.get(cl)) {
                                         result.addAll(signalProcessor.process(st, this));
@@ -285,6 +286,7 @@ public class Neuron implements INeuron {
                             clst = clst.getSuperclass();
                         }
                     }
+
                 }
             }
         } catch (Exception e) {
