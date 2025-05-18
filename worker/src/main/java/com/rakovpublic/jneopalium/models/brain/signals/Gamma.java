@@ -1,4 +1,4 @@
-package com.rakovpublic.jneopalium.model.brain.signals;
+package com.rakovpublic.jneopalium.models.brain.signals;
 
 import com.rakovpublic.jneuropallium.worker.net.signals.AbstractSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
