@@ -88,6 +88,7 @@ The input strategy class defines how the input should be populated with neurons.
 
 #articles
  https://www.ijsr.net/getabstract.php?paperid=SR24703042047
+ 
  https://dou.ua/forums/topic/49673/
 
 p.s. Fill free to contatct me. I am looking for contributors for this project.
