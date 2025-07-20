@@ -86,5 +86,9 @@ The input strategy class defines how the input should be populated with neurons.
 9. Add aws lambda distributed mode(optional).
 10. Design and implement amazon cluster integration(optional).
 
+#articles
+ https://www.ijsr.net/getabstract.php?paperid=SR24703042047
+ https://dou.ua/forums/topic/49673/
+
 p.s. Fill free to contatct me. I am looking for contributors for this project.
 p.p.s. Great thanks to kafedra of Informatics in Kharkiv National University of Radio and Electronics, Eugen Putiatin, Helen Matat, Tatiana Sinelnikova.
