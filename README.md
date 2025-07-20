@@ -87,6 +87,8 @@ The input strategy class defines how the input should be populated with neurons.
 10. Design and implement amazon cluster integration(optional).
 
 #articles
+
+
  https://www.ijsr.net/getabstract.php?paperid=SR24703042047
  
  https://dou.ua/forums/topic/49673/
