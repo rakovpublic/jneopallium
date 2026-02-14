@@ -271,6 +271,11 @@ public class HttpLayer<N extends INeuron> implements ILayer<N> {
     }
 
     @Override
+    public void processWeights() {
+
+    }
+
+    @Override
     public LayerMetaParam getLayerMetaParam(String key) {
 
         String getLayerParam = masterAddress + "/layer/getLayerParam?param=" + key + "&layerId=" + layerId;

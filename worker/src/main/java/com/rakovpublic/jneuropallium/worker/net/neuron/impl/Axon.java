@@ -4,6 +4,7 @@ import com.rakovpublic.jneuropallium.worker.net.layers.impl.LayerMove;
 import com.rakovpublic.jneuropallium.worker.net.neuron.IAxon;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISynapse;
 import com.rakovpublic.jneuropallium.worker.net.neuron.IWeight;
+import com.rakovpublic.jneuropallium.worker.net.signals.IChangingSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -206,7 +207,7 @@ public class Axon implements IAxon {
     }
 
     @Override
-    public void changeAllWeightsForNeuron(int layerId, Long neuronId, ISignal signal) {
+    public void changeAllWeightsForNeuron(int layerId, Long neuronId, IChangingSignal signal) {
         if (addressMap.containsKey(layerId) && addressMap.get(layerId).containsKey(neuronId)) {
             List<ISynapse> conns = addressMap.get(layerId).get(neuronId);
             for (ISynapse c : conns) {
@@ -216,7 +217,7 @@ public class Axon implements IAxon {
     }
 
     @Override
-    public void changeAllWeightsForNeuronAndSignal(int layerId, Long neuronId, Class<? extends ISignal> clazz, ISignal signal) {
+    public void changeAllWeightsForNeuronAndSignal(int layerId, Long neuronId, Class<? extends ISignal> clazz, IChangingSignal signal) {
         if (addressMap.containsKey(layerId) && addressMap.get(layerId).containsKey(neuronId)) {
             List<ISynapse> conns = addressMap.get(layerId).get(neuronId);
             for (ISynapse c : conns) {
@@ -228,7 +229,7 @@ public class Axon implements IAxon {
     }
 
     @Override
-    public void changeAllWeights(ISignal signal) {
+    public void changeAllWeights(IChangingSignal signal) {
         for (Class<? extends ISignal> cl : connectionMap.keySet()) {
             for (ISynapse con : connectionMap.get(cl)) {
                 con.getWeight().changeWeight(signal);

@@ -1,11 +1,12 @@
 package com.rakovpublic.jneuropallium.worker.net.neuron.impl;
 
 import com.rakovpublic.jneuropallium.worker.net.neuron.IWeight;
+import com.rakovpublic.jneuropallium.worker.net.signals.IChangingSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 
 //Add wrapper usage for weights
-class WeightWrapper<N extends IWeight, S extends ISignal, K extends ISignal> implements IWeight<S, K> {
+class WeightWrapper<N extends IWeight, S extends ISignal, K extends IChangingSignal> implements IWeight<S, K> {
     private final N weight;
     private final String weightClass;
 

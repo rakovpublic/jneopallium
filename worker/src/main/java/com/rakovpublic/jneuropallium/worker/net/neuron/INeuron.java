@@ -252,4 +252,8 @@ public interface INeuron extends Serializable {
 
     void setDendrites(Dendrites dendrites);
 
+
+    void processWeightSignals();
+
+
 }

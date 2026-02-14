@@ -121,5 +121,7 @@ public interface ILayer<N extends INeuron> extends Serializable {
 
     void sendCallBack(String name, List<ISignal> signals);
 
+    void processWeights();
+
 
 }

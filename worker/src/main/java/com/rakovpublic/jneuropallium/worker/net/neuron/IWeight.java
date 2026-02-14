@@ -2,6 +2,7 @@ package com.rakovpublic.jneuropallium.worker.net.neuron;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.WeightDeserializer;
+import com.rakovpublic.jneuropallium.worker.net.signals.IChangingSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 import java.io.Serializable;
@@ -11,7 +12,7 @@ import java.io.Serializable;
  * This class represents weight/value of connection between neurons.
  */
 @JsonDeserialize(using = WeightDeserializer.class)
-public interface IWeight<S extends ISignal, C extends ISignal> extends Serializable {
+public interface IWeight<S extends ISignal, C extends IChangingSignal> extends Serializable {
 
     /**
      * Process signal and change it due to the weight/value

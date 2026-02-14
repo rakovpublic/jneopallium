@@ -23,6 +23,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -131,6 +132,7 @@ public class LocalApplication implements IApplication {
                                     meta.getInputResolver().saveHistory();
                                     meta.getInputResolver().getSignalPersistStorage().cleanMiddleLayerSignals();
                                     meta.learn(directLearningAlgorithm.learn(meta, desiredResult));
+                                    processBackwards(meta, threads);
                                     lr = process(meta, threads);
                                 }
 
@@ -167,6 +169,7 @@ public class LocalApplication implements IApplication {
                                     studyingRequest.put(layerId, studyMap);
                                     meta.getInputResolver().getSignalPersistStorage().cleanMiddleLayerSignals();
                                     inputResolver.getSignalPersistStorage().putSignals(studyingRequest);
+                                    processBackwards(meta, threads);
                                     lr = process(meta, threads);
                                 }
                                 outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getRun(), context);
@@ -179,6 +182,7 @@ public class LocalApplication implements IApplication {
                             IResultLayer lr = process(meta, threads);
                             outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getRun(), context);
                             meta.getInputResolver().saveHistory();
+                            processBackwards(meta, threads);
                             meta.getInputResolver().populateInput();
 
                         }
@@ -231,6 +235,7 @@ public class LocalApplication implements IApplication {
                             outputAggregator.save(lr.interpretResult(), System.currentTimeMillis(), meta.getInputResolver().getRun(), context);
                         }
                         meta.getInputResolver().saveHistory();
+                        processBackwards(meta, threads);
                         meta.getInputResolver().populateInput();
                     } else {
                         try {
@@ -284,7 +289,31 @@ public class LocalApplication implements IApplication {
 
 
     }
+    private void processBackwards(StructMeta meta, int threads){
+        List<ILayerMeta> net = meta.getLayers();
+        Collections.reverse(net);
+        for (ILayerMeta met : net) {
+            LayerBuilder lb = new LayerBuilder();
+            lb.withLayer(met);
+            lb.withInput(meta.getInputResolver());
+            ILayer layer = lb.build(threads);
+            if (!layer.validateGlobal() && !layer.validateLocal()) {
+                logger.error("Layer validation rules violation");
+            }
+            layer.processWeights();
+            while (!layer.isProcessed()) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    logger.error(e);
+                }
+            }
 
+            layer.dumpResult();
+            layer.dumpNeurons(met);
+
+        }
+    }
 
     private IInputLoadingStrategy getLoadingStrategy(String json) {
         ObjectMapper mapper = new ObjectMapper();

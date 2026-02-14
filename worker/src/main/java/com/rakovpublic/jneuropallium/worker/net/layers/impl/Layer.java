@@ -6,6 +6,7 @@ import com.rakovpublic.jneuropallium.worker.net.neuron.IAxon;
 import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.net.neuron.IRule;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISynapse;
+import com.rakovpublic.jneuropallium.worker.net.neuron.impl.ChangeNeuronRunnerService;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.NeuronRunnerService;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.layersizing.CreateNeuronSignal;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.layersizing.DeleteNeuronSignal;
@@ -279,4 +280,31 @@ public class Layer<N extends INeuron> implements ILayer<N> {
     public int hashCode() {
         return Objects.hash(map, isProcessed, notProcessed, rules, layerId);
     }
+
+    @Override
+    public void processWeights() {
+        HashMap<Long, CopyOnWriteArrayList<ISignal>> input = inputResolver.getSignalPersistStorage().getLayerSignals(this.layerId);
+        if (input != null) {
+            INeuron neur;
+            ChangeNeuronRunnerService ns = ChangeNeuronRunnerService.getService();
+            notProcessed = ns.getNeuronQueue();
+            for (Long neuronId : map.keySet()) {
+                if (input.containsKey(neuronId)) {
+                    neur = map.get(neuronId);
+                    neur.setLayer(this);
+                    neur.setCyclingNeuronInputMapping(inputResolver.getCycleNeuronAddressMapping());
+                    neur.setSignalHistory(inputResolver.getSignalsHistoryStorage());
+                    neur.addSignals(input.get(neuronId));
+                    neur.setRun(inputResolver.getRun());
+                    neur.setCurrentLoop(inputResolver.getCurrentLoop());
+                    ns.addNeuron(neur);
+                }
+            }
+            ns.process(threads);
+        } else {
+            isProcessed = true;
+        }
+
+    }
+
 }

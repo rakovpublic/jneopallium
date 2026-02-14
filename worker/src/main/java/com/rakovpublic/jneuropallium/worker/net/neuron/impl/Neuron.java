@@ -416,4 +416,87 @@ public class Neuron implements INeuron {
     public void setActivationFunctions(HashMap<Class<? extends ISignal>, IActivationFunction> functions) {
         this.activationFunctions = functions;
     }
+
+    @Override
+    public void processWeightSignals() {
+        if (cyclingNeuronInputMapping == null) {
+            cyclingNeuronInputMapping = new HashMap<>();
+        }
+        try {
+            HashMap<Class<? extends ISignal>, List<ISignal>> signalsMap = new HashMap<>();
+
+            for (ISignal s : signals) {
+                if(s instanceof IChangingSignal){
+                    Class<? extends ISignal> cl = s.getClass();
+                    if (signalsMap.containsKey(cl)) {
+                        signalsMap.get(cl).add(s);
+                    } else {
+                        List<ISignal> ll = new ArrayList<>();
+                        ll.add(s);
+                        signalsMap.put(cl, ll);
+                    }
+                }
+            }
+            for (Class<? extends ISignal> cl : this.getSignalChain().getProcessingChain()) {
+
+                for (Class<? extends ISignal> cls : signalsMap.keySet()) {
+                    for (ISignal signal : signalsMap.get(cls)) {
+                        if (signal instanceof IChangingSignal) {
+                            IChangingSignal cs = (IChangingSignal) signal;
+                            if (cs.canProcess(this.getClass())) {
+                                cs.changeNeuron(this);
+                            }
+                        }
+                    }
+                    if (cl.equals(cls)) {
+                        ISignalMerger signalMerger = this.getMergerMap().get(cl);
+                        ISignalProcessor signalProcessor = this.getProcessorMap().get(cl);
+                        if (signalProcessor == null) {
+                            throw new CannotFindSignalProcessorException("Cannot find signal processor for signal class" + cl.getCanonicalName() + " in neuron id" + this.neuronId);
+                        }
+                        if (signalMerger != null && (signalProcessor.hasMerger() != null ? signalProcessor.hasMerger() : true)) {
+                            ISignal inS = signalMerger.mergeSignals(signalsMap.get(cl));
+                            result.addAll(signalProcessor.process(inS, this));
+                        } else if (signalProcessor.hasMerger() == null || !signalProcessor.hasMerger()) {
+                            for (ISignal s : signalsMap.get(cl)) {
+                                result.addAll(signalProcessor.process(s, this));
+                            }
+                        } else {
+                            throw new CannotFindSignalMergerException("Cannot find signal merger for signal class" + cl.getCanonicalName() + " in neuron id" + this.neuronId);
+                        }
+                    } else if (!this.getSignalChain().getProcessingChain().contains(cls)) {
+                        ISignal s = signalsMap.get(cls).get(0);
+                        Class<?> clst = cls;
+                        boolean done = true;
+                        while (clst.getSuperclass() != ISignal.class && clst.getSuperclass() != Object.class && s.canUseProcessorForParent() && done) {
+                            if (cl.equals(clst)) {
+                                ISignalMerger signalMerger = this.getMergerMap().get(cl);
+                                ISignalProcessor signalProcessor = this.getProcessorMap().get(cl);
+                                if (signalProcessor == null) {
+                                    throw new CannotFindSignalProcessorException("Cannot find signal processor for signal class" + cl.getCanonicalName() + " in neuron id" + this.neuronId);
+                                }
+                                if (signalMerger != null && (signalProcessor.hasMerger() != null ? signalProcessor.hasMerger() : true)) {
+                                    ISignal inS = signalMerger.mergeSignals(signalsMap.get(cl));
+                                    result.addAll(signalProcessor.process(inS, this));
+
+                                } else if (signalProcessor.hasMerger() == null || !signalProcessor.hasMerger()) {
+                                    for (ISignal st : signalsMap.get(cl)) {
+                                        result.addAll(signalProcessor.process(st, this));
+                                    }
+                                } else {
+                                    throw new CannotFindSignalMergerException("Cannot find signal merger for signal class" + cl.getCanonicalName() + " in neuron id" + this.neuronId);
+                                }
+                                done = false;
+                            }
+                            clst = clst.getSuperclass();
+                        }
+                    }
+
+                }
+            }
+        } catch (Exception e) {
+            Logger logger = LogManager.getLogger(Neuron.class);
+            logger.error("Error during neuron processing", e);
+        }
+    }
 }

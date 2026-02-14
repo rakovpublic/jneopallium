@@ -3,6 +3,7 @@ package com.rakovpublic.jneuropallium.worker.net.neuron;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.rakovpublic.jneuropallium.worker.net.layers.impl.LayerMove;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.Axon;
+import com.rakovpublic.jneuropallium.worker.net.signals.IChangingSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 import java.io.Serializable;
@@ -69,7 +70,7 @@ public interface IAxon extends Serializable {
      * @param neuronId neuron id
      * @param signal   change signal
      **/
-    void changeAllWeightsForNeuron(int layerId, Long neuronId, ISignal signal);
+    void changeAllWeightsForNeuron(int layerId, Long neuronId, IChangingSignal signal);
 
     /**
      * Change weight for signal class
@@ -79,14 +80,14 @@ public interface IAxon extends Serializable {
      * @param clazz    signal class for which should be changed weight
      * @param signal   change signal
      **/
-    void changeAllWeightsForNeuronAndSignal(int layerId, Long neuronId, Class<? extends ISignal> clazz, ISignal signal);
+    void changeAllWeightsForNeuronAndSignal(int layerId, Long neuronId, Class<? extends ISignal> clazz, IChangingSignal signal);
 
     /**
      * Change all weights
      *
      * @param signal change signal
      **/
-    void changeAllWeights(ISignal signal);
+    void changeAllWeights(IChangingSignal signal);
 
     /**
      * @return the connection list for each signal class
