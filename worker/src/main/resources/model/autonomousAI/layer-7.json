@@ -1,0 +1,200 @@
+{
+  "layerID": 7,
+  "layerSize": 8,
+  "neurons": [
+    {
+      "neuronId": 0,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron",
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.ai.signals.fast.ErrorSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.ai.processors.HebbianUpdateProcessor"
+        },
+        "com.rakovpublic.jneuropallium.ai.signals.slow.NeuromodulatorSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.ai.processors.HebbianUpdateProcessor"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "com.rakovpublic.jneuropallium.ai.signals.slow.StructuralPlasticitySignal": [
+            {"targetLayerId": 8, "sourceLayerId": 7, "targetNeuronId": 0, "sourceNeuronId": 0, "weight": {"value": 1.0}, "description": "plasticity->decision"},
+            {"targetLayerId": 12, "sourceLayerId": 7, "targetNeuronId": 0, "sourceNeuronId": 0, "weight": {"value": 0.9}, "description": "plasticity->consolidation"}
+          ]
+        },
+        "addressMap": {"8": {"0": []}, "12": {"0": []}},
+        "connectionsWrapped": false,
+        "defaultWeights": {"com.rakovpublic.jneuropallium.ai.signals.slow.StructuralPlasticitySignal": {"value": 1.0}}
+      },
+      "signalChain": {"clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain"},
+      "isProcessed": false, "changed": false, "onDelete": false, "run": 0
+    },
+    {
+      "neuronId": 1,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron",
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.ai.signals.fast.SpikeSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.ai.processors.STDPProcessor"
+        },
+        "com.rakovpublic.jneuropallium.ai.signals.slow.NeuromodulatorSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.ai.processors.STDPProcessor"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "com.rakovpublic.jneuropallium.ai.signals.slow.StructuralPlasticitySignal": [
+            {"targetLayerId": 8, "sourceLayerId": 7, "targetNeuronId": 1, "sourceNeuronId": 1, "weight": {"value": 1.0}, "description": "STDP->decision"}
+          ]
+        },
+        "addressMap": {"8": {"1": []}},
+        "connectionsWrapped": false,
+        "defaultWeights": {"com.rakovpublic.jneuropallium.ai.signals.slow.StructuralPlasticitySignal": {"value": 1.0}}
+      },
+      "signalChain": {"clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain"},
+      "isProcessed": false, "changed": false, "onDelete": false, "run": 0
+    },
+    {
+      "neuronId": 2,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron",
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.ai.signals.fast.ErrorSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.ai.processors.MetaplasticityProcessor"
+        },
+        "com.rakovpublic.jneuropallium.ai.signals.slow.HomeostasisSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.ai.processors.MetaplasticityProcessor"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "com.rakovpublic.jneuropallium.ai.signals.slow.HomeostasisSignal": [
+            {"targetLayerId": 0, "sourceLayerId": 7, "targetNeuronId": 0, "sourceNeuronId": 2, "weight": {"value": 0.5}, "description": "metaplasticity->sensory(homeostasis)"},
+            {"targetLayerId": 12, "sourceLayerId": 7, "targetNeuronId": 1, "sourceNeuronId": 2, "weight": {"value": 0.8}, "description": "metaplasticity->consolidation"}
+          ]
+        },
+        "addressMap": {"0": {"0": []}, "12": {"1": []}},
+        "connectionsWrapped": false,
+        "defaultWeights": {"com.rakovpublic.jneuropallium.ai.signals.slow.HomeostasisSignal": {"value": 1.0}}
+      },
+      "signalChain": {"clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain"},
+      "isProcessed": false, "changed": false, "onDelete": false, "run": 0
+    },
+    {
+      "neuronId": 3,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron",
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.ai.signals.fast.ErrorSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.ai.processors.HebbianUpdateProcessor"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "com.rakovpublic.jneuropallium.ai.signals.slow.StructuralPlasticitySignal": [
+            {"targetLayerId": 8, "sourceLayerId": 7, "targetNeuronId": 2, "sourceNeuronId": 3, "weight": {"value": 0.9}, "description": "hebbian->decision"}
+          ]
+        },
+        "addressMap": {"8": {"2": []}},
+        "connectionsWrapped": false,
+        "defaultWeights": {"com.rakovpublic.jneuropallium.ai.signals.slow.StructuralPlasticitySignal": {"value": 1.0}}
+      },
+      "signalChain": {"clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain"},
+      "isProcessed": false, "changed": false, "onDelete": false, "run": 0
+    },
+    {
+      "neuronId": 4,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron",
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.ai.signals.fast.SpikeSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.ai.processors.STDPProcessor"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "com.rakovpublic.jneuropallium.ai.signals.slow.StructuralPlasticitySignal": [
+            {"targetLayerId": 8, "sourceLayerId": 7, "targetNeuronId": 3, "sourceNeuronId": 4, "weight": {"value": 0.85}, "description": "STDP->decision"}
+          ]
+        },
+        "addressMap": {"8": {"3": []}},
+        "connectionsWrapped": false,
+        "defaultWeights": {"com.rakovpublic.jneuropallium.ai.signals.slow.StructuralPlasticitySignal": {"value": 1.0}}
+      },
+      "signalChain": {"clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain"},
+      "isProcessed": false, "changed": false, "onDelete": false, "run": 0
+    },
+    {
+      "neuronId": 5,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron",
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.ai.signals.slow.NeuromodulatorSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.ai.processors.HebbianUpdateProcessor"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "com.rakovpublic.jneuropallium.ai.signals.slow.StructuralPlasticitySignal": [
+            {"targetLayerId": 12, "sourceLayerId": 7, "targetNeuronId": 2, "sourceNeuronId": 5, "weight": {"value": 0.9}, "description": "ACh-hebbian->consolidation"}
+          ]
+        },
+        "addressMap": {"12": {"2": []}},
+        "connectionsWrapped": false,
+        "defaultWeights": {"com.rakovpublic.jneuropallium.ai.signals.slow.StructuralPlasticitySignal": {"value": 1.0}}
+      },
+      "signalChain": {"clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain"},
+      "isProcessed": false, "changed": false, "onDelete": false, "run": 0
+    },
+    {
+      "neuronId": 6,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron",
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.ai.signals.slow.HarmFeedbackSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.ai.processors.FeedbackLearningProcessor"
+        },
+        "com.rakovpublic.jneuropallium.ai.signals.slow.HarmModelUpdateSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.ai.processors.FeedbackLearningProcessor"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "com.rakovpublic.jneuropallium.ai.signals.slow.StructuralPlasticitySignal": [
+            {"targetLayerId": 9, "sourceLayerId": 7, "targetNeuronId": 0, "sourceNeuronId": 6, "weight": {"value": 0.95}, "description": "feedbackLearning->safety"}
+          ]
+        },
+        "addressMap": {"9": {"0": []}},
+        "connectionsWrapped": false,
+        "defaultWeights": {"com.rakovpublic.jneuropallium.ai.signals.slow.StructuralPlasticitySignal": {"value": 1.0}}
+      },
+      "signalChain": {"clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain"},
+      "isProcessed": false, "changed": false, "onDelete": false, "run": 0
+    },
+    {
+      "neuronId": 7,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron",
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.ai.signals.slow.HarmFeedbackSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.ai.processors.FeedbackLearningProcessor"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "com.rakovpublic.jneuropallium.ai.signals.slow.StructuralPlasticitySignal": [
+            {"targetLayerId": 9, "sourceLayerId": 7, "targetNeuronId": 1, "sourceNeuronId": 7, "weight": {"value": 0.9}, "description": "feedbackLearning->safety"}
+          ]
+        },
+        "addressMap": {"9": {"1": []}},
+        "connectionsWrapped": false,
+        "defaultWeights": {"com.rakovpublic.jneuropallium.ai.signals.slow.StructuralPlasticitySignal": {"value": 1.0}}
+      },
+      "signalChain": {"clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain"},
+      "isProcessed": false, "changed": false, "onDelete": false, "run": 0
+    }
+  ],
+  "metaParams": {
+    "layerType": {"param": "plasticityLearning", "paramClass": "java.lang.String"},
+    "description": {"param": "Hebbian/STDP weight updates, metaplasticity homeostasis, and harm-feedback learning", "paramClass": "java.lang.String"}
+  }
+}
