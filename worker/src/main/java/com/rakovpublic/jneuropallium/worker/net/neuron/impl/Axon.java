@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -196,10 +197,15 @@ public class Axon implements IAxon {
     public void destroyConnection(int layerId, Long neuronId, Class<? extends ISignal> clazz) {
         if (addressMap.containsKey(layerId) && addressMap.get(layerId).containsKey(neuronId)) {
             List<ISynapse> conns = addressMap.get(layerId).get(neuronId);
-            for (ISynapse c : conns) {
+            Iterator<ISynapse> it = conns.iterator();
+            while (it.hasNext()) {
+                ISynapse c = it.next();
                 if (c.getWeight().getSignalClass().equals(clazz)) {
-                    connectionMap.get(clazz).remove(c);
-                    conns.remove(c);
+                    List<ISynapse> classConns = connectionMap.get(clazz);
+                    if (classConns != null) {
+                        classConns.remove(c);
+                    }
+                    it.remove();
                     break;
                 }
             }

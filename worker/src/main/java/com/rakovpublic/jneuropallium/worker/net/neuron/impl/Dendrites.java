@@ -62,7 +62,7 @@ public class Dendrites implements IDendrites {
 
     @Override
     public List<ISignal> processSignalsWithDendrites(List<ISignal> signals) {
-        return signals.parallelStream().map(signal -> {
+        return signals.stream().map(signal -> {
             NeuronAddress neuronAddress = new NeuronAddress(signal.getSourceLayerId(), signal.getSourceNeuronId());
             if (weights.containsKey(neuronAddress)) {
                 for (IWeight w : weights.get(neuronAddress)) {
@@ -102,20 +102,12 @@ public class Dendrites implements IDendrites {
     @Override
     public void removeWeightForClass(NeuronAddress neuronAddress, Class<? extends ISignal> signalClass) {
         if (weights.containsKey(neuronAddress)) {
-            for (IWeight w : weights.get(neuronAddress)) {
-                if (w.getSignalClass() == signalClass) {
-                    weights.get(neuronAddress).remove(signalClass);
-                }
-            }
+            weights.get(neuronAddress).removeIf(w -> signalClass.equals(w.getSignalClass()));
         }
     }
 
     @Override
     public void moveConnection(LayerMove layerMove) {
-        for (NeuronAddress neuronAddress : weights.keySet()) {
-            if (neuronAddress.getLayerId().equals(layerMove.getLayerRemoved())) {
-                weights.remove(neuronAddress);
-            }
-        }
+        weights.keySet().removeIf(neuronAddress -> neuronAddress.getLayerId().equals(layerMove.getLayerRemoved()));
     }
 }
