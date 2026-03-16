@@ -102,7 +102,7 @@ public abstract class AbstractSignal<T> implements ISignal<T> {
 
     @Override
     public ISignal<T> prepareSignalToNextStep() {
-        if (timeAlive > 0) {
+        if (timeAlive != null && timeAlive > 0) {
             this.timeAlive -= 1;
         }
         return this;

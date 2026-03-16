@@ -17,6 +17,7 @@ import java.io.IOException;
 
 public class JSONMergerConverter extends StdDeserializer<ISignalMerger> {
     private static final Logger logger = LogManager.getLogger(JSONMergerConverter.class);
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     protected JSONMergerConverter(Class<?> vc) {
         super(vc);
@@ -38,12 +39,11 @@ public class JSONMergerConverter extends StdDeserializer<ISignalMerger> {
     @Override
     public ISignalMerger deserialize(com.fasterxml.jackson.core.JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         String s = jsonParser.getText();
-        JsonElement jelement = new JsonParser().parse(s);
+        JsonElement jelement = JsonParser.parseString(s);
         JsonObject jobject = jelement.getAsJsonObject();
         String cl = jobject.getAsJsonPrimitive("signalMergerClass").getAsString();
-        ObjectMapper mapper = new ObjectMapper();
         try {
-            return (ISignalMerger) mapper.readValue(s, Class.forName(cl));
+            return (ISignalMerger) MAPPER.readValue(s, Class.forName(cl));
         } catch (IOException e) {
             logger.error(e);
             throw new JSONParsingException(e.getMessage());

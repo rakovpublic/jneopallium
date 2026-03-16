@@ -14,8 +14,11 @@ public class JSONHelper implements IDeserializationHelper {
     public String extractField(String json, String fieldName) {
         JsonElement jelement = JsonParser.parseString(json);
         JsonObject jobject = jelement.getAsJsonObject();
-        return jobject.getAsJsonPrimitive(fieldName).getAsString();
-
+        JsonElement field = jobject.get(fieldName);
+        if (field == null || field.isJsonNull()) {
+            return null;
+        }
+        return field.getAsString();
     }
 
 
