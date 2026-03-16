@@ -41,22 +41,18 @@ public class Context implements IContext {
 
     @Override
     public void update(String path) {
-        try {
-            InputStream input = new FileInputStream(path);
+        try (InputStream input = new FileInputStream(path)) {
             prop = new Properties();
             prop.load(input);
-
         } catch (IOException ex) {
             logger.error("cannot read properties from path " + path, ex);
         }
     }
 
     private void init() {
-        try {
-            InputStream input = new FileInputStream(path);
+        try (InputStream input = new FileInputStream(path)) {
             prop = new Properties();
             prop.load(input);
-
         } catch (IOException ex) {
             logger.error("cannot read properties from path " + path, ex);
         }

@@ -32,16 +32,21 @@ public class InMemorySignalHistoryStorage implements ISignalHistoryStorage {
     @Override
     public List<ISignal> getSourceSignalsForRun(Integer loop, Long nRun, NeuronAddress forTarget) {
         if (history.containsKey(loop) && history.get(loop).containsKey(nRun)) {
-            return history.get(loop).get(nRun).get(forTarget.getLayerId()).get(forTarget.getNeuronId());
+            TreeMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> runHistory = history.get(loop).get(nRun);
+            if (runHistory != null && runHistory.containsKey(forTarget.getLayerId())) {
+                HashMap<Long, CopyOnWriteArrayList<ISignal>> layerHistory = runHistory.get(forTarget.getLayerId());
+                if (layerHistory != null) {
+                    return layerHistory.get(forTarget.getNeuronId());
+                }
+            }
         }
         return null;
-
     }
 
     @Override
     public void save(TreeMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> history, Long run, Integer loop) {
         if (this.history.size() >= loopsToStore) {
-            this.history.remove(history.firstKey());
+            this.history.remove(this.history.firstKey());
         }
         if (this.history.containsKey(loop) && this.history.get(loop).size() >= runsToStore) {
             this.history.get(loop).remove(this.history.get(loop).firstKey());

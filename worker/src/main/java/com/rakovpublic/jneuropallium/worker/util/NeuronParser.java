@@ -28,7 +28,7 @@ public class NeuronParser {
 
     public static List<INeuron> parseNeurons(String json) {
         List<INeuron> result = new ArrayList<>();
-        JsonElement jelement = new JsonParser().parse(json);
+        JsonElement jelement = JsonParser.parseString(json);
         JsonObject jobject = jelement.getAsJsonObject();
         JsonArray jarray = jobject.getAsJsonArray("neurons");
         ObjectMapper mapper = new ObjectMapper();
@@ -55,7 +55,7 @@ public class NeuronParser {
 
     public static List<IResultNeuron> parseResultNeurons(String json) {
         List<IResultNeuron> result = new ArrayList<>();
-        JsonElement jelement = new JsonParser().parse(json);
+        JsonElement jelement = JsonParser.parseString(json);
         JsonObject jobject = jelement.getAsJsonObject();
         JsonArray jarray = jobject.getAsJsonArray("neurons");
         ObjectMapper mapper = new ObjectMapper();
@@ -82,7 +82,7 @@ public class NeuronParser {
 
     public static INeuron parseNeuron(String json) {
         List<INeuron> result = new ArrayList<>();
-        JsonElement jelement = new JsonParser().parse(json);
+        JsonElement jelement = JsonParser.parseString(json);
         JsonObject jobject = jelement.getAsJsonObject();
         ObjectMapper mapper = new ObjectMapper();
 
