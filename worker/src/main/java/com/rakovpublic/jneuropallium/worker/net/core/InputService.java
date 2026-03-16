@@ -83,7 +83,11 @@ public class InputService implements IInputService {
 
     @Override
     public List<IResultNeuron> getResults(Integer loop, Long epoch) {
-        return results.get(epoch).get(loop);
+        HashMap<Integer, List<IResultNeuron>> epochResults = results.get(epoch);
+        if (epochResults == null) {
+            return null;
+        }
+        return epochResults.get(loop);
     }
 
     @Override

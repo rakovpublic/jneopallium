@@ -17,6 +17,7 @@ import java.io.IOException;
 
 public class JSONProcessorConverter extends StdDeserializer<ISignalProcessor> {
     private static final Logger logger = LogManager.getLogger(JSONProcessorConverter.class);
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     protected JSONProcessorConverter(Class<?> vc) {
         super(vc);
@@ -39,12 +40,11 @@ public class JSONProcessorConverter extends StdDeserializer<ISignalProcessor> {
     @Override
     public ISignalProcessor deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         String s = jsonParser.getText();
-        JsonElement jelement = new com.google.gson.JsonParser().parse(s);
+        JsonElement jelement = com.google.gson.JsonParser.parseString(s);
         JsonObject jobject = jelement.getAsJsonObject();
         String cl = jobject.getAsJsonPrimitive("signalProcessorClass").getAsString();
-        ObjectMapper mapper = new ObjectMapper();
         try {
-            return (ISignalProcessor) mapper.readValue(s, Class.forName(cl));
+            return (ISignalProcessor) MAPPER.readValue(s, Class.forName(cl));
         } catch (IOException e) {
             logger.error(e);
             throw new JSONParsingException(e.getMessage());

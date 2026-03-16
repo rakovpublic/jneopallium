@@ -38,7 +38,7 @@ public class SimpleResultResolver implements IResultResolver {
             lb.withLayer(met);
             lb.withInput(meta.getInputResolver());
             ILayer layer = lb.build(threads);
-            if (layer.validateGlobal() && layer.validateLocal()) {
+            if (!layer.validateGlobal() || !layer.validateLocal()) {
                 logger.error("Layer validation rules violation");
             }
             layer.process();
@@ -46,7 +46,9 @@ public class SimpleResultResolver implements IResultResolver {
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
-                    logger.error(e);
+                    Thread.currentThread().interrupt();
+                    logger.error("Interrupted while waiting for layer processing", e);
+                    break;
                 }
             }
             layer.dumpNeurons(met);

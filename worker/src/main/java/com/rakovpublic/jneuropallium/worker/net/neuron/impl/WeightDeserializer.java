@@ -17,6 +17,7 @@ import java.io.IOException;
 
 public class WeightDeserializer extends StdDeserializer<IWeight> {
     private static final Logger logger = LogManager.getLogger(WeightDeserializer.class);
+    private static final Gson GSON = new Gson();
 
     public WeightDeserializer() {
         this(null);
@@ -28,13 +29,11 @@ public class WeightDeserializer extends StdDeserializer<IWeight> {
 
     @Override
     public IWeight deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
-        Gson gson = new Gson();
-        ObjectMapper mapper = new ObjectMapper();
-        JsonElement jelement = new com.google.gson.JsonParser().parse(jsonParser.readValueAsTree().toString());
+        JsonElement jelement = com.google.gson.JsonParser.parseString(jsonParser.readValueAsTree().toString());
         JsonObject jobject = jelement.getAsJsonObject();
         try {
             //return (IWeight) mapper.readValue(jobject.toString(), Class.forName(jobject.getAsJsonPrimitive("weightClass").getAsString()));
-            return (IWeight) gson.fromJson(jobject.toString(), Class.forName(jobject.getAsJsonPrimitive("weightClass").getAsString()));
+            return (IWeight) GSON.fromJson(jobject.toString(), Class.forName(jobject.getAsJsonPrimitive("weightClass").getAsString()));
         } catch (ClassNotFoundException e) {
             logger.error("Cannot deserialize signalChain " + jobject.getAsJsonObject("weight").toString() + " for class " + jobject.getAsJsonPrimitive("weightClass").getAsString(), e);
             throw new JSONParsingException(e.getMessage());

@@ -16,11 +16,11 @@ public class SignalChainWrapper<K extends ISignalChain> implements ISignalChain 
 
     @Override
     public List<Class<? extends ISignal>> getProcessingChain() {
-        return null;
+        return signalChain.getProcessingChain();
     }
 
     @Override
     public String getDescription() {
-        return null;
+        return signalChain.getDescription();
     }
 }

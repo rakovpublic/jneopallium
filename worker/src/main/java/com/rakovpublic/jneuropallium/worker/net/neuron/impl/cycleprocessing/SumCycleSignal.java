@@ -21,6 +21,6 @@ public class SumCycleSignal extends AbstractSignal<Integer> implements ISignal<I
 
     @Override
     public SumCycleSignal copySignal() {
-        return new SumCycleSignal(value, this.getSourceLayerId(), this.getSourceNeuronId(), this.getTimeAlive(), getInputName(), isFromExternalNet(), getDescription());
+        return new SumCycleSignal(value, this.getSourceLayerId(), this.getSourceNeuronId(), this.getTimeAlive(), getDescription(), isFromExternalNet(), getInputName());
     }
 }
