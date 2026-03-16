@@ -7,6 +7,7 @@ package com.rakovpublic.jneuropallium.worker.net.signals.storage.inmemory;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignalsPersistStorage;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
@@ -46,16 +47,20 @@ public class InMemorySignalPersistStorage implements ISignalsPersistStorage {
     public void cleanOutdatedSignals() {
         for (Integer layerId : signals.keySet()) {
             for (Long neuron : signals.get(layerId).keySet()) {
-                List<ISignal> neuronSignal = signals.get(layerId).get(neuron);
+                CopyOnWriteArrayList<ISignal> neuronSignal = signals.get(layerId).get(neuron);
+                // Collect expired signals to remove, then advance surviving ones
+                List<ISignal> toRemove = new ArrayList<>();
                 for (ISignal signal : neuronSignal) {
-                    neuronSignal.remove(signal);
-                    if (signal.getTimeAlive() >= 1) {
-                        neuronSignal.add(signal.prepareSignalToNextStep());
+                    if (signal.getTimeAlive() < 1) {
+                        toRemove.add(signal);
                     }
+                }
+                neuronSignal.removeAll(toRemove);
+                for (ISignal signal : neuronSignal) {
+                    signal.prepareSignalToNextStep();
                 }
             }
         }
-
     }
 
     @Override
@@ -70,14 +75,9 @@ public class InMemorySignalPersistStorage implements ISignalsPersistStorage {
                 continue;
             }
             for (Long neuron : signals.get(layerId).keySet()) {
-                List<ISignal> neuronSignal = signals.get(layerId).get(neuron);
-                for (ISignal signal : neuronSignal) {
-                    if (signal.isNeedToRemoveDuringLearning() || signal.getTimeAlive() < 1) {
-                        neuronSignal.remove(signal);
-                    }
-                }
+                CopyOnWriteArrayList<ISignal> neuronSignal = signals.get(layerId).get(neuron);
+                neuronSignal.removeIf(signal -> signal.isNeedToRemoveDuringLearning() || signal.getTimeAlive() < 1);
             }
-
         }
     }
 

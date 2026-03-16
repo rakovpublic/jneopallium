@@ -12,7 +12,7 @@ import com.google.gson.JsonParser;
 public class JSONHelper implements IDeserializationHelper {
 
     public String extractField(String json, String fieldName) {
-        JsonElement jelement = new JsonParser().parse(json);
+        JsonElement jelement = JsonParser.parseString(json);
         JsonObject jobject = jelement.getAsJsonObject();
         return jobject.getAsJsonPrimitive(fieldName).getAsString();
 

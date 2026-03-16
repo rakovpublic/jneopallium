@@ -18,6 +18,8 @@ import java.util.stream.Collectors;
 
 
 public class Neuron implements INeuron {
+    private static final Logger logger = LogManager.getLogger(Neuron.class);
+
     @JsonIgnore
     public List<ISignal> signals;
     public Boolean isProcessed;
@@ -290,7 +292,6 @@ public class Neuron implements INeuron {
                 }
             }
         } catch (Exception e) {
-            Logger logger = LogManager.getLogger(Neuron.class);
             logger.error("Error during neuron processing", e);
         }
     }
@@ -362,7 +363,7 @@ public class Neuron implements INeuron {
             if (activationFunctions.containsKey(s.getCurrentSignalClass())) {
                 Optional<ISignal> sig = activationFunctions.get(s.getCurrentSignalClass()).activate(s);
                 if (sig.isPresent()) {
-                    newResult.add(s);
+                    newResult.add(sig.get());
                 }
             } else {
                 newResult.add(s);
@@ -495,7 +496,6 @@ public class Neuron implements INeuron {
                 }
             }
         } catch (Exception e) {
-            Logger logger = LogManager.getLogger(Neuron.class);
             logger.error("Error during neuron processing", e);
         }
     }

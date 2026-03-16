@@ -317,7 +317,7 @@ public class LocalApplication implements IApplication {
 
     private IInputLoadingStrategy getLoadingStrategy(String json) {
         ObjectMapper mapper = new ObjectMapper();
-        JsonElement jelement = new JsonParser().parse(json);
+        JsonElement jelement = JsonParser.parseString(json);
         JsonObject jobject = jelement.getAsJsonObject();
         IInputLoadingStrategy result = null;
         try {
@@ -330,7 +330,7 @@ public class LocalApplication implements IApplication {
 
     private InputInitStrategy getInputInitStrategy(String json) {
         ObjectMapper mapper = new ObjectMapper();
-        JsonElement jelement = new JsonParser().parse(json);
+        JsonElement jelement = JsonParser.parseString(json);
         JsonObject jobject = jelement.getAsJsonObject();
         InputInitStrategy result = null;
         try {
@@ -343,7 +343,7 @@ public class LocalApplication implements IApplication {
 
     private IStorage getStorage(String json) {
         ObjectMapper mapper = new ObjectMapper();
-        JsonElement jelement = new JsonParser().parse(json);
+        JsonElement jelement = JsonParser.parseString(json);
         JsonObject jobject = jelement.getAsJsonObject();
         IStorage result = null;
         try {
