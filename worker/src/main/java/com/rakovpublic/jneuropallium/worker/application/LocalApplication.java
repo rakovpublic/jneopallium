@@ -65,7 +65,6 @@ public class LocalApplication implements IApplication {
             }
         } catch (JsonProcessingException e) {
             logger.error("Cannot find parse " + context.getProperty("configuration.processing.frequency.map") + "  to processing frequency map", e);
-            e.printStackTrace();
         }
         IInputLoadingStrategy inputLoadingStrategyMain = new CycledInputLoadingStrategy(layersMeta, fastSlowRatio, processingFrequencyMap);
         IInputResolver inputResolver = new InMemoryInputResolver(new InMemorySignalPersistStorage(), new InMemorySignalHistoryStorage(historySlow, historyFast), inputLoadingStrategyMain);
@@ -192,7 +191,8 @@ public class LocalApplication implements IApplication {
                         Thread.sleep(10000);
                         meta.getInputResolver().populateInput();
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        Thread.currentThread().interrupt();
+                        logger.error("Interrupted while waiting for input", e);
                     }
                 }
             } else {
@@ -242,7 +242,8 @@ public class LocalApplication implements IApplication {
                             Thread.sleep(100);
                             meta.getInputResolver().populateInput();
                         } catch (InterruptedException e) {
-                            e.printStackTrace();
+                            Thread.currentThread().interrupt();
+                            logger.error("Interrupted while waiting for input", e);
                         }
                     }
                 }
@@ -361,7 +362,6 @@ public class LocalApplication implements IApplication {
         try {
             result = mapper.readValue(json, InputArray.class).getInputData();
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
             logger.error("Cannot parse json " + json, e);
         }
         return result;

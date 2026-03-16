@@ -24,7 +24,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class Layer<N extends INeuron> implements ILayer<N> {
     protected TreeMap<Long, INeuron> map;
-    private Boolean isProcessed;
+    private volatile boolean isProcessed;
     private final int layerId;
     private ConcurrentLinkedQueue<INeuron> notProcessed;
     private final List<IRule> rules;
@@ -271,14 +271,14 @@ public class Layer<N extends INeuron> implements ILayer<N> {
         Layer layer = (Layer) o;
         return layerId == layer.layerId &&
                 Objects.equals(map, layer.map) &&
-                Objects.equals(isProcessed, layer.isProcessed) &&
+                isProcessed == layer.isProcessed &&
                 Objects.equals(notProcessed, layer.notProcessed) &&
                 Objects.equals(rules, layer.rules);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(map, isProcessed, notProcessed, rules, layerId);
+        return Objects.hash(map, Boolean.valueOf(isProcessed), notProcessed, rules, layerId);
     }
 
     @Override

@@ -262,7 +262,11 @@ public class Neuron implements INeuron {
                             throw new CannotFindSignalMergerException("Cannot find signal merger for signal class" + cl.getCanonicalName() + " in neuron id" + this.neuronId);
                         }
                     } else if (!this.getSignalChain().getProcessingChain().contains(cls)) {
-                        ISignal s = signalsMap.get(cls).get(0);
+                        List<ISignal> clsList = signalsMap.get(cls);
+                        if (clsList == null || clsList.isEmpty()) {
+                            continue;
+                        }
+                        ISignal s = clsList.get(0);
                         Class<?> clst = cls;
                         boolean done = true;
                         while (clst.getSuperclass() != ISignal.class && clst.getSuperclass() != Object.class && s.canUseProcessorForParent() && done) {
@@ -466,7 +470,11 @@ public class Neuron implements INeuron {
                             throw new CannotFindSignalMergerException("Cannot find signal merger for signal class" + cl.getCanonicalName() + " in neuron id" + this.neuronId);
                         }
                     } else if (!this.getSignalChain().getProcessingChain().contains(cls)) {
-                        ISignal s = signalsMap.get(cls).get(0);
+                        List<ISignal> clsList = signalsMap.get(cls);
+                        if (clsList == null || clsList.isEmpty()) {
+                            continue;
+                        }
+                        ISignal s = clsList.get(0);
                         Class<?> clst = cls;
                         boolean done = true;
                         while (clst.getSuperclass() != ISignal.class && clst.getSuperclass() != Object.class && s.canUseProcessorForParent() && done) {

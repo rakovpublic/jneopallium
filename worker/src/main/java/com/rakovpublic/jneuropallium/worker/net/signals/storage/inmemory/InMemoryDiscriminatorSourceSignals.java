@@ -32,9 +32,22 @@ public class InMemoryDiscriminatorSourceSignals implements IInitInput {
     @Override
     public List<IInputSignal> readSignals() {
         List<IInputSignal> results = new LinkedList<>();
-        for (Long i = history.getEpoch() - amountOfEpoch > history.getInputHistory().firstKey() ? history.getEpoch() - amountOfEpoch : history.getInputHistory().firstKey(); i < history.getEpoch(); i++) {
-            for (Integer j = Math.max(history.getInputHistory().get(i).lastKey() - amountOfLoops, history.getInputHistory().get(i).firstKey()); j < history.getInputHistory().get(i).lastKey(); j++) {
-                results.addAll(history.getInputHistory().get(i).get(j));
+        if (history.getInputHistory() == null || history.getInputHistory().isEmpty()) {
+            return results;
+        }
+        Long startEpoch = history.getEpoch() - amountOfEpoch > history.getInputHistory().firstKey()
+                ? history.getEpoch() - amountOfEpoch
+                : history.getInputHistory().firstKey();
+        for (Long i = startEpoch; i < history.getEpoch(); i++) {
+            if (!history.getInputHistory().containsKey(i) || history.getInputHistory().get(i).isEmpty()) {
+                continue;
+            }
+            Integer loopFirst = history.getInputHistory().get(i).firstKey();
+            Integer loopLast = history.getInputHistory().get(i).lastKey();
+            for (Integer j = Math.max(loopLast - amountOfLoops, loopFirst); j < loopLast; j++) {
+                if (history.getInputHistory().get(i).containsKey(j)) {
+                    results.addAll(history.getInputHistory().get(i).get(j));
+                }
             }
         }
         return results;
