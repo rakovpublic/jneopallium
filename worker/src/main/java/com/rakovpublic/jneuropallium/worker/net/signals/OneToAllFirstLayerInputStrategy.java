@@ -25,7 +25,7 @@ public class OneToAllFirstLayerInputStrategy implements InputInitStrategy {
     @Override
     public HashMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> getInputs(ILayersMeta layersMeta, CopyOnWriteArrayList<ISignal> signals) {
         ILayerMeta layerMeta = layersMeta.getLayerByPosition(0);
-        if (layersMeta.getLayerByPosition(0).getNeurons().size() == 1) {
+        if (layersMeta.getLayerByPosition(0).getNeurons().size() == 1 && layersMeta.getLayers().size() > 1) {
             layerMeta = layersMeta.getLayerByPosition(1);
         }
         HashMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> result = new HashMap<>();
@@ -39,7 +39,7 @@ public class OneToAllFirstLayerInputStrategy implements InputInitStrategy {
             }
             layer.put(neuron.getId(), neuronSignals);
         }
-        result.put(0, layer);
+        result.put(layerMeta.getID(), layer);
         return result;
     }
 }
