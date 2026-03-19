@@ -24,6 +24,6 @@ public class CycleInputUpdateSignal extends AbstractSignal<CycleInputSignalUpdat
 
     @Override
     public CycleInputUpdateSignal copySignal() {
-        return new CycleInputUpdateSignal(value, this.getSourceLayerId(), this.getSourceNeuronId(), this.getTimeAlive(), getDescription(), isFromExternalNet(), getInputName(), this.isNeedToRemoveDuringLearning(), this.isNeedToProcessDuringLearning(), ProcessingFrequency.class.getName());
+        return new CycleInputUpdateSignal(value, this.getSourceLayerId(), this.getSourceNeuronId(), this.getTimeAlive(), getDescription(), isFromExternalNet(), getInputName(), this.isNeedToRemoveDuringLearning(), this.isNeedToProcessDuringLearning(), this.getName());
     }
 }
