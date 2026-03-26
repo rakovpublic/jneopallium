@@ -1,0 +1,152 @@
+{
+  "layerID": 9,
+  "layerSize": 6,
+  "neurons": [
+    {
+      "neuronId": 0,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron",
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.ai.signals.fast.MotorCommandSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.ai.processors.HarmInterceptionProcessor"
+        },
+        "com.rakovpublic.jneuropallium.ai.signals.fast.HarmAssessmentSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.ai.processors.HarmInterceptionProcessor"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "com.rakovpublic.jneuropallium.ai.signals.fast.HarmAssessmentSignal": [
+            {"targetLayerId": 10, "sourceLayerId": 9, "targetNeuronId": 0, "sourceNeuronId": 0, "weight": {"value": 1.0}, "description": "interception->constraints"},
+            {"targetLayerId": 10, "sourceLayerId": 9, "targetNeuronId": 1, "sourceNeuronId": 0, "weight": {"value": 1.0}, "description": "interception->activityMonitor"}
+          ]
+        },
+        "addressMap": {"10": {"0": [], "1": []}},
+        "connectionsWrapped": false,
+        "defaultWeights": {"com.rakovpublic.jneuropallium.ai.signals.fast.HarmAssessmentSignal": {"value": 1.0}}
+      },
+      "signalChain": {"clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain"},
+      "isProcessed": false, "changed": false, "onDelete": false, "run": 0
+    },
+    {
+      "neuronId": 1,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron",
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.ai.signals.fast.MotorCommandSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.ai.processors.HarmInterceptionProcessor"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "com.rakovpublic.jneuropallium.ai.signals.fast.HarmAssessmentSignal": [
+            {"targetLayerId": 10, "sourceLayerId": 9, "targetNeuronId": 0, "sourceNeuronId": 1, "weight": {"value": 1.0}, "description": "interception->constraints"}
+          ]
+        },
+        "addressMap": {"10": {"0": []}},
+        "connectionsWrapped": false,
+        "defaultWeights": {"com.rakovpublic.jneuropallium.ai.signals.fast.HarmAssessmentSignal": {"value": 1.0}}
+      },
+      "signalChain": {"clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain"},
+      "isProcessed": false, "changed": false, "onDelete": false, "run": 0
+    },
+    {
+      "neuronId": 2,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron",
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.ai.signals.fast.MotorCommandSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.ai.processors.ForwardSimulationProcessor"
+        },
+        "com.rakovpublic.jneuropallium.ai.signals.fast.ConsequenceQuerySignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.ai.processors.ForwardSimulationProcessor"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "com.rakovpublic.jneuropallium.ai.signals.fast.ConsequenceSimulationSignal": [
+            {"targetLayerId": 10, "sourceLayerId": 9, "targetNeuronId": 2, "sourceNeuronId": 2, "weight": {"value": 1.0}, "description": "forwardSim->aggregation"}
+          ]
+        },
+        "addressMap": {"10": {"2": []}},
+        "connectionsWrapped": false,
+        "defaultWeights": {"com.rakovpublic.jneuropallium.ai.signals.fast.ConsequenceSimulationSignal": {"value": 1.0}}
+      },
+      "signalChain": {"clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain"},
+      "isProcessed": false, "changed": false, "onDelete": false, "run": 0
+    },
+    {
+      "neuronId": 3,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron",
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.ai.signals.fast.MotorCommandSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.ai.processors.ForwardSimulationProcessor"
+        },
+        "com.rakovpublic.jneuropallium.ai.signals.fast.ConsequenceQuerySignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.ai.processors.ForwardSimulationProcessor"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "com.rakovpublic.jneuropallium.ai.signals.fast.ConsequenceSimulationSignal": [
+            {"targetLayerId": 10, "sourceLayerId": 9, "targetNeuronId": 2, "sourceNeuronId": 3, "weight": {"value": 1.0}, "description": "forwardSim->aggregation"}
+          ]
+        },
+        "addressMap": {"10": {"2": []}},
+        "connectionsWrapped": false,
+        "defaultWeights": {"com.rakovpublic.jneuropallium.ai.signals.fast.ConsequenceSimulationSignal": {"value": 1.0}}
+      },
+      "signalChain": {"clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain"},
+      "isProcessed": false, "changed": false, "onDelete": false, "run": 0
+    },
+    {
+      "neuronId": 4,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron",
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.ai.signals.fast.ConsequenceSimulationSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.ai.processors.SimulationAggregationProcessor"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "com.rakovpublic.jneuropallium.ai.signals.fast.HarmAssessmentSignal": [
+            {"targetLayerId": 10, "sourceLayerId": 9, "targetNeuronId": 0, "sourceNeuronId": 4, "weight": {"value": 1.0}, "description": "aggregation->constraints"}
+          ]
+        },
+        "addressMap": {"10": {"0": []}},
+        "connectionsWrapped": false,
+        "defaultWeights": {"com.rakovpublic.jneuropallium.ai.signals.fast.HarmAssessmentSignal": {"value": 1.0}}
+      },
+      "signalChain": {"clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain"},
+      "isProcessed": false, "changed": false, "onDelete": false, "run": 0
+    },
+    {
+      "neuronId": 5,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron",
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.ai.signals.fast.ConsequenceSimulationSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.ai.processors.SimulationAggregationProcessor"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "com.rakovpublic.jneuropallium.ai.signals.fast.HarmAssessmentSignal": [
+            {"targetLayerId": 10, "sourceLayerId": 9, "targetNeuronId": 3, "sourceNeuronId": 5, "weight": {"value": 1.0}, "description": "aggregation->harmResult"}
+          ]
+        },
+        "addressMap": {"10": {"3": []}},
+        "connectionsWrapped": false,
+        "defaultWeights": {"com.rakovpublic.jneuropallium.ai.signals.fast.HarmAssessmentSignal": {"value": 1.0}}
+      },
+      "signalChain": {"clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain"},
+      "isProcessed": false, "changed": false, "onDelete": false, "run": 0
+    }
+  ],
+  "metaParams": {
+    "layerType": {"param": "safetyAssessment", "paramClass": "java.lang.String"},
+    "description": {"param": "Motor command interception, forward simulation, and consequence aggregation", "paramClass": "java.lang.String"}
+  }
+}

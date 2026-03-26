@@ -1,0 +1,111 @@
+{
+  "layerID": 6,
+  "layerSize": 4,
+  "neurons": [
+    {
+      "neuronId": 0,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron",
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.ai.signals.fast.ErrorSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.ai.processors.NeuromodulatorBroadcastProcessor"
+        },
+        "com.rakovpublic.jneuropallium.ai.signals.slow.NeuromodulatorSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.ai.processors.NeuromodulatorBroadcastProcessor"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "com.rakovpublic.jneuropallium.ai.signals.slow.NeuromodulatorSignal": [
+            {"targetLayerId": 7, "sourceLayerId": 6, "targetNeuronId": 0, "sourceNeuronId": 0, "weight": {"value": 1.0}, "description": "neuromod->plasticity(dopamine)"},
+            {"targetLayerId": 7, "sourceLayerId": 6, "targetNeuronId": 1, "sourceNeuronId": 0, "weight": {"value": 1.0}, "description": "neuromod->plasticity(dopamine)"},
+            {"targetLayerId": 8, "sourceLayerId": 6, "targetNeuronId": 0, "sourceNeuronId": 0, "weight": {"value": 0.9}, "description": "neuromod->decision(dopamine)"},
+            {"targetLayerId": 9, "sourceLayerId": 6, "targetNeuronId": 0, "sourceNeuronId": 0, "weight": {"value": 0.8}, "description": "neuromod->safety(dopamine)"}
+          ]
+        },
+        "addressMap": {"7": {"0": [], "1": []}, "8": {"0": []}, "9": {"0": []}},
+        "connectionsWrapped": false,
+        "defaultWeights": {"com.rakovpublic.jneuropallium.ai.signals.slow.NeuromodulatorSignal": {"value": 1.0}}
+      },
+      "signalChain": {"clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain"},
+      "isProcessed": false, "changed": false, "onDelete": false, "run": 0
+    },
+    {
+      "neuronId": 1,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron",
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.ai.signals.fast.ErrorSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.ai.processors.NeuromodulatorBroadcastProcessor"
+        },
+        "com.rakovpublic.jneuropallium.ai.signals.slow.NeuromodulatorSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.ai.processors.NeuromodulatorBroadcastProcessor"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "com.rakovpublic.jneuropallium.ai.signals.slow.NeuromodulatorSignal": [
+            {"targetLayerId": 7, "sourceLayerId": 6, "targetNeuronId": 2, "sourceNeuronId": 1, "weight": {"value": 1.0}, "description": "neuromod->plasticity(serotonin)"},
+            {"targetLayerId": 7, "sourceLayerId": 6, "targetNeuronId": 3, "sourceNeuronId": 1, "weight": {"value": 0.9}, "description": "neuromod->plasticity(serotonin)"},
+            {"targetLayerId": 10, "sourceLayerId": 6, "targetNeuronId": 0, "sourceNeuronId": 1, "weight": {"value": 0.85}, "description": "neuromod->safety(serotonin)"}
+          ]
+        },
+        "addressMap": {"7": {"2": [], "3": []}, "10": {"0": []}},
+        "connectionsWrapped": false,
+        "defaultWeights": {"com.rakovpublic.jneuropallium.ai.signals.slow.NeuromodulatorSignal": {"value": 1.0}}
+      },
+      "signalChain": {"clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain"},
+      "isProcessed": false, "changed": false, "onDelete": false, "run": 0
+    },
+    {
+      "neuronId": 2,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron",
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.ai.signals.slow.NeuromodulatorSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.ai.processors.NeuromodulatorBroadcastProcessor"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "com.rakovpublic.jneuropallium.ai.signals.slow.NeuromodulatorSignal": [
+            {"targetLayerId": 7, "sourceLayerId": 6, "targetNeuronId": 4, "sourceNeuronId": 2, "weight": {"value": 1.0}, "description": "neuromod->plasticity(NE)"},
+            {"targetLayerId": 11, "sourceLayerId": 6, "targetNeuronId": 0, "sourceNeuronId": 2, "weight": {"value": 0.75}, "description": "neuromod->intervention(NE)"}
+          ]
+        },
+        "addressMap": {"7": {"4": []}, "11": {"0": []}},
+        "connectionsWrapped": false,
+        "defaultWeights": {"com.rakovpublic.jneuropallium.ai.signals.slow.NeuromodulatorSignal": {"value": 1.0}}
+      },
+      "signalChain": {"clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain"},
+      "isProcessed": false, "changed": false, "onDelete": false, "run": 0
+    },
+    {
+      "neuronId": 3,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron",
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.ai.signals.slow.NeuromodulatorSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.ai.processors.NeuromodulatorBroadcastProcessor"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "com.rakovpublic.jneuropallium.ai.signals.slow.NeuromodulatorSignal": [
+            {"targetLayerId": 7, "sourceLayerId": 6, "targetNeuronId": 5, "sourceNeuronId": 3, "weight": {"value": 1.0}, "description": "neuromod->plasticity(ACh)"},
+            {"targetLayerId": 12, "sourceLayerId": 6, "targetNeuronId": 0, "sourceNeuronId": 3, "weight": {"value": 0.8}, "description": "neuromod->consolidation(ACh)"}
+          ]
+        },
+        "addressMap": {"7": {"5": []}, "12": {"0": []}},
+        "connectionsWrapped": false,
+        "defaultWeights": {"com.rakovpublic.jneuropallium.ai.signals.slow.NeuromodulatorSignal": {"value": 1.0}}
+      },
+      "signalChain": {"clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain"},
+      "isProcessed": false, "changed": false, "onDelete": false, "run": 0
+    }
+  ],
+  "metaParams": {
+    "layerType": {"param": "neuromodulation", "paramClass": "java.lang.String"},
+    "description": {"param": "Dopamine/serotonin/NE/ACh broadcast modulating downstream plasticity and safety layers", "paramClass": "java.lang.String"}
+  }
+}

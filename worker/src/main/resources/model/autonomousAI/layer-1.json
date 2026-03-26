@@ -1,0 +1,317 @@
+{
+  "layerID": 1,
+  "layerSize": 12,
+  "neurons": [
+    {
+      "neuronId": 0,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron",
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.ai.signals.fast.SpikeSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.ai.processors.AdaptiveThresholdProcessor"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "com.rakovpublic.jneuropallium.ai.signals.fast.SpikeSignal": [
+            {"targetLayerId": 2, "sourceLayerId": 1, "targetNeuronId": 0, "sourceNeuronId": 0, "weight": {"value": 1.0}, "description": "feature->competition"},
+            {"targetLayerId": 2, "sourceLayerId": 1, "targetNeuronId": 1, "sourceNeuronId": 0, "weight": {"value": 0.7}, "description": "feature->competition"}
+          ]
+        },
+        "addressMap": {"2": {"0": [], "1": []}},
+        "connectionsWrapped": false,
+        "defaultWeights": {"com.rakovpublic.jneuropallium.ai.signals.fast.SpikeSignal": {"value": 1.0}}
+      },
+      "signalChain": {"clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain"},
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0
+    },
+    {
+      "neuronId": 1,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron",
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.ai.signals.fast.SpikeSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.ai.processors.AdaptiveThresholdProcessor"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "com.rakovpublic.jneuropallium.ai.signals.fast.SpikeSignal": [
+            {"targetLayerId": 2, "sourceLayerId": 1, "targetNeuronId": 1, "sourceNeuronId": 1, "weight": {"value": 1.0}, "description": "feature->competition"},
+            {"targetLayerId": 2, "sourceLayerId": 1, "targetNeuronId": 2, "sourceNeuronId": 1, "weight": {"value": 0.8}, "description": "feature->competition"}
+          ]
+        },
+        "addressMap": {"2": {"1": [], "2": []}},
+        "connectionsWrapped": false,
+        "defaultWeights": {"com.rakovpublic.jneuropallium.ai.signals.fast.SpikeSignal": {"value": 1.0}}
+      },
+      "signalChain": {"clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain"},
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0
+    },
+    {
+      "neuronId": 2,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron",
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.ai.signals.fast.SpikeSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.ai.processors.TemplateMatchProcessor"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "com.rakovpublic.jneuropallium.ai.signals.fast.ComparisonSignal": [
+            {"targetLayerId": 2, "sourceLayerId": 1, "targetNeuronId": 2, "sourceNeuronId": 2, "weight": {"value": 1.0}, "description": "template->competition"},
+            {"targetLayerId": 2, "sourceLayerId": 1, "targetNeuronId": 3, "sourceNeuronId": 2, "weight": {"value": 0.9}, "description": "template->competition"}
+          ]
+        },
+        "addressMap": {"2": {"2": [], "3": []}},
+        "connectionsWrapped": false,
+        "defaultWeights": {"com.rakovpublic.jneuropallium.ai.signals.fast.ComparisonSignal": {"value": 1.0}}
+      },
+      "signalChain": {"clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain"},
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0
+    },
+    {
+      "neuronId": 3,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron",
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.ai.signals.fast.SpikeSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.ai.processors.TemplateMatchProcessor"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "com.rakovpublic.jneuropallium.ai.signals.fast.ComparisonSignal": [
+            {"targetLayerId": 2, "sourceLayerId": 1, "targetNeuronId": 3, "sourceNeuronId": 3, "weight": {"value": 1.0}, "description": "template->competition"},
+            {"targetLayerId": 2, "sourceLayerId": 1, "targetNeuronId": 4, "sourceNeuronId": 3, "weight": {"value": 0.85}, "description": "template->competition"}
+          ]
+        },
+        "addressMap": {"2": {"3": [], "4": []}},
+        "connectionsWrapped": false,
+        "defaultWeights": {"com.rakovpublic.jneuropallium.ai.signals.fast.ComparisonSignal": {"value": 1.0}}
+      },
+      "signalChain": {"clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain"},
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0
+    },
+    {
+      "neuronId": 4,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron",
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.ai.signals.fast.SpikeSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.ai.processors.AdaptiveThresholdProcessor"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "com.rakovpublic.jneuropallium.ai.signals.fast.SpikeSignal": [
+            {"targetLayerId": 2, "sourceLayerId": 1, "targetNeuronId": 4, "sourceNeuronId": 4, "weight": {"value": 1.0}, "description": "feature->competition"},
+            {"targetLayerId": 2, "sourceLayerId": 1, "targetNeuronId": 5, "sourceNeuronId": 4, "weight": {"value": 0.75}, "description": "feature->competition"}
+          ]
+        },
+        "addressMap": {"2": {"4": [], "5": []}},
+        "connectionsWrapped": false,
+        "defaultWeights": {"com.rakovpublic.jneuropallium.ai.signals.fast.SpikeSignal": {"value": 1.0}}
+      },
+      "signalChain": {"clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain"},
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0
+    },
+    {
+      "neuronId": 5,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron",
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.ai.signals.fast.SpikeSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.ai.processors.AdaptiveThresholdProcessor"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "com.rakovpublic.jneuropallium.ai.signals.fast.SpikeSignal": [
+            {"targetLayerId": 2, "sourceLayerId": 1, "targetNeuronId": 5, "sourceNeuronId": 5, "weight": {"value": 1.0}, "description": "feature->competition"},
+            {"targetLayerId": 2, "sourceLayerId": 1, "targetNeuronId": 6, "sourceNeuronId": 5, "weight": {"value": 0.8}, "description": "feature->competition"}
+          ]
+        },
+        "addressMap": {"2": {"5": [], "6": []}},
+        "connectionsWrapped": false,
+        "defaultWeights": {"com.rakovpublic.jneuropallium.ai.signals.fast.SpikeSignal": {"value": 1.0}}
+      },
+      "signalChain": {"clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain"},
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0
+    },
+    {
+      "neuronId": 6,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron",
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.ai.signals.fast.SpikeSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.ai.processors.TemplateMatchProcessor"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "com.rakovpublic.jneuropallium.ai.signals.fast.ComparisonSignal": [
+            {"targetLayerId": 2, "sourceLayerId": 1, "targetNeuronId": 6, "sourceNeuronId": 6, "weight": {"value": 1.0}, "description": "template->competition"},
+            {"targetLayerId": 2, "sourceLayerId": 1, "targetNeuronId": 7, "sourceNeuronId": 6, "weight": {"value": 0.9}, "description": "template->competition"}
+          ]
+        },
+        "addressMap": {"2": {"6": [], "7": []}},
+        "connectionsWrapped": false,
+        "defaultWeights": {"com.rakovpublic.jneuropallium.ai.signals.fast.ComparisonSignal": {"value": 1.0}}
+      },
+      "signalChain": {"clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain"},
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0
+    },
+    {
+      "neuronId": 7,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron",
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.ai.signals.fast.SpikeSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.ai.processors.AdaptiveThresholdProcessor"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "com.rakovpublic.jneuropallium.ai.signals.fast.SpikeSignal": [
+            {"targetLayerId": 2, "sourceLayerId": 1, "targetNeuronId": 7, "sourceNeuronId": 7, "weight": {"value": 1.0}, "description": "feature->competition"}
+          ]
+        },
+        "addressMap": {"2": {"7": []}},
+        "connectionsWrapped": false,
+        "defaultWeights": {"com.rakovpublic.jneuropallium.ai.signals.fast.SpikeSignal": {"value": 1.0}}
+      },
+      "signalChain": {"clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain"},
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0
+    },
+    {
+      "neuronId": 8,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron",
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.ai.signals.fast.SpikeSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.ai.processors.TemplateMatchProcessor"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "com.rakovpublic.jneuropallium.ai.signals.fast.ComparisonSignal": [
+            {"targetLayerId": 2, "sourceLayerId": 1, "targetNeuronId": 0, "sourceNeuronId": 8, "weight": {"value": 0.9}, "description": "template->competition"}
+          ]
+        },
+        "addressMap": {"2": {"0": []}},
+        "connectionsWrapped": false,
+        "defaultWeights": {"com.rakovpublic.jneuropallium.ai.signals.fast.ComparisonSignal": {"value": 1.0}}
+      },
+      "signalChain": {"clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain"},
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0
+    },
+    {
+      "neuronId": 9,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron",
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.ai.signals.fast.SpikeSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.ai.processors.AdaptiveThresholdProcessor"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "com.rakovpublic.jneuropallium.ai.signals.fast.SpikeSignal": [
+            {"targetLayerId": 2, "sourceLayerId": 1, "targetNeuronId": 1, "sourceNeuronId": 9, "weight": {"value": 0.85}, "description": "feature->competition"}
+          ]
+        },
+        "addressMap": {"2": {"1": []}},
+        "connectionsWrapped": false,
+        "defaultWeights": {"com.rakovpublic.jneuropallium.ai.signals.fast.SpikeSignal": {"value": 1.0}}
+      },
+      "signalChain": {"clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain"},
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0
+    },
+    {
+      "neuronId": 10,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron",
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.ai.signals.fast.SpikeSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.ai.processors.AdaptiveThresholdProcessor"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "com.rakovpublic.jneuropallium.ai.signals.fast.SpikeSignal": [
+            {"targetLayerId": 2, "sourceLayerId": 1, "targetNeuronId": 2, "sourceNeuronId": 10, "weight": {"value": 0.8}, "description": "feature->competition"}
+          ]
+        },
+        "addressMap": {"2": {"2": []}},
+        "connectionsWrapped": false,
+        "defaultWeights": {"com.rakovpublic.jneuropallium.ai.signals.fast.SpikeSignal": {"value": 1.0}}
+      },
+      "signalChain": {"clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain"},
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0
+    },
+    {
+      "neuronId": 11,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron",
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.ai.signals.fast.SpikeSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.ai.processors.TemplateMatchProcessor"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "com.rakovpublic.jneuropallium.ai.signals.fast.ComparisonSignal": [
+            {"targetLayerId": 2, "sourceLayerId": 1, "targetNeuronId": 3, "sourceNeuronId": 11, "weight": {"value": 0.95}, "description": "template->competition"}
+          ]
+        },
+        "addressMap": {"2": {"3": []}},
+        "connectionsWrapped": false,
+        "defaultWeights": {"com.rakovpublic.jneuropallium.ai.signals.fast.ComparisonSignal": {"value": 1.0}}
+      },
+      "signalChain": {"clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain"},
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0
+    }
+  ],
+  "metaParams": {
+    "layerType": {"param": "featureExtraction", "paramClass": "java.lang.String"},
+    "description": {"param": "Adaptive threshold and template matching feature detectors", "paramClass": "java.lang.String"}
+  }
+}
