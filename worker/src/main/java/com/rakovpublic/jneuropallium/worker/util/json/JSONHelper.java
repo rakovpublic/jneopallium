@@ -16,7 +16,7 @@ public class JSONHelper implements IDeserializationHelper {
         JsonObject jobject = jelement.getAsJsonObject();
         JsonElement field = jobject.get(fieldName);
         if (field == null || field.isJsonNull()) {
-            return null;
+            throw new IllegalArgumentException("Field not found or null: " + fieldName);
         }
         return field.getAsString();
     }
