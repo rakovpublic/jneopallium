@@ -30,6 +30,6 @@ public class FeatureDetectorNeuron extends ModulatableNeuron {
     public double[] getWeightedTemplate() { return weightedTemplate; }
     public void setWeightedTemplate(double[] weightedTemplate) { this.weightedTemplate = weightedTemplate; }
 
-    public double getDetectionThreshold() { return detectionThreshold; }
-    public void setDetectionThreshold(double detectionThreshold) { this.detectionThreshold = detectionThreshold; }
+    public double getThreshold() { return detectionThreshold; }
+    public void setThreshold(double detectionThreshold) { this.detectionThreshold = detectionThreshold; }
 }

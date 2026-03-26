@@ -24,6 +24,14 @@ public class MotorCommandSignal extends BaseSignal {
     public String getActionPlanId() { return actionPlanId; }
     public void setActionPlanId(String actionPlanId) { this.actionPlanId = actionPlanId; }
 
+    /** Returns the L2 norm of params as a magnitude estimate for competitive selection. */
+    public double getMagnitudeEstimate() {
+        if (params == null || params.length == 0) return 0.0;
+        double sumSq = 0;
+        for (double p : params) sumSq += p * p;
+        return Math.sqrt(sumSq);
+    }
+
     @Override public Class<? extends ISignal<Void>> getCurrentSignalClass() { return MotorCommandSignal.class; }
     @Override public String getDescription() { return "MotorCommandSignal"; }
     @Override public <K extends ISignal<Void>> K copySignal() {

@@ -10,13 +10,13 @@ public class PredictionErrorNeuron extends ModulatableNeuron {
 
     private double thetaPositive;
     private double thetaNegative;
-    private Long planningNeuronId;
+    private String planningNeuronId;
 
     public PredictionErrorNeuron() {
         super();
         this.thetaPositive = 0.1;
         this.thetaNegative = -0.1;
-        this.planningNeuronId = 0L;
+        this.planningNeuronId = "0";
     }
 
     public PredictionErrorNeuron(Long neuronId,
@@ -24,7 +24,7 @@ public class PredictionErrorNeuron extends ModulatableNeuron {
                                  Long run,
                                  double thetaPositive,
                                  double thetaNegative,
-                                 Long planningNeuronId) {
+                                 String planningNeuronId) {
         super(neuronId, chain, run);
         this.thetaPositive = thetaPositive;
         this.thetaNegative = thetaNegative;
@@ -37,6 +37,6 @@ public class PredictionErrorNeuron extends ModulatableNeuron {
     public double getThetaNegative() { return thetaNegative; }
     public void setThetaNegative(double thetaNegative) { this.thetaNegative = thetaNegative; }
 
-    public Long getPlanningNeuronId() { return planningNeuronId; }
-    public void setPlanningNeuronId(Long planningNeuronId) { this.planningNeuronId = planningNeuronId; }
+    public String getPlanningNeuronId() { return planningNeuronId; }
+    public void setPlanningNeuronId(String planningNeuronId) { this.planningNeuronId = planningNeuronId; }
 }
