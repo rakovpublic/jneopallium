@@ -8,27 +8,27 @@ import com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron;
  */
 public class InhibitoryInterneuron extends ModulatableNeuron {
 
-    private int layerId;
+    private String layerId;
     private double inhibitionStrength;
 
     public InhibitoryInterneuron() {
         super();
-        this.layerId = 0;
+        this.layerId = "0";
         this.inhibitionStrength = 1.0;
     }
 
     public InhibitoryInterneuron(Long neuronId,
                                  com.rakovpublic.jneuropallium.worker.net.neuron.ISignalChain chain,
                                  Long run,
-                                 int layerId,
+                                 String layerId,
                                  double inhibitionStrength) {
         super(neuronId, chain, run);
         this.layerId = layerId;
         this.inhibitionStrength = inhibitionStrength;
     }
 
-    public int getLayerId() { return layerId; }
-    public void setLayerId(int layerId) { this.layerId = layerId; }
+    public String getLayerId() { return layerId; }
+    public void setLayerId(String layerId) { this.layerId = layerId; }
 
     public double getInhibitionStrength() { return inhibitionStrength; }
     public void setInhibitionStrength(double inhibitionStrength) { this.inhibitionStrength = inhibitionStrength; }

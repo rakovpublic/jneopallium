@@ -13,7 +13,7 @@ public class HebbianLearningNeuron extends ModulatableNeuron {
 
     private double achThreshold;
     private double learningRate;
-    private Map<Long, Double> synapticWeights;
+    private Map<String, Double> synapticWeights;
 
     public HebbianLearningNeuron() {
         super();
@@ -33,7 +33,7 @@ public class HebbianLearningNeuron extends ModulatableNeuron {
         this.synapticWeights = new HashMap<>();
     }
 
-    public void applyWeightDelta(Long targetNeuronId, double delta) {
+    public void applyWeightDelta(String targetNeuronId, double delta) {
         if (targetNeuronId == null) return;
         synapticWeights.merge(targetNeuronId, delta, Double::sum);
     }
@@ -44,6 +44,6 @@ public class HebbianLearningNeuron extends ModulatableNeuron {
     public double getLearningRate() { return learningRate; }
     public void setLearningRate(double learningRate) { this.learningRate = learningRate; }
 
-    public Map<Long, Double> getSynapticWeights() { return synapticWeights; }
-    public void setSynapticWeights(Map<Long, Double> synapticWeights) { this.synapticWeights = synapticWeights; }
+    public Map<String, Double> getSynapticWeights() { return synapticWeights; }
+    public void setSynapticWeights(Map<String, Double> synapticWeights) { this.synapticWeights = synapticWeights; }
 }

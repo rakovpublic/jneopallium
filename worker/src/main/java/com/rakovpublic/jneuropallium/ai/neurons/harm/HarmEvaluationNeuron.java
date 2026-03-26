@@ -2,8 +2,11 @@ package com.rakovpublic.jneuropallium.ai.neurons.harm;
 
 import com.rakovpublic.jneuropallium.ai.model.HarmThreshold;
 import com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron;
+import com.rakovpublic.jneuropallium.ai.signals.fast.ConsequenceSimulationSignal;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,11 +18,13 @@ public class HarmEvaluationNeuron extends ModulatableNeuron {
 
     private HarmThreshold threshold;
     private Map<String, HarmThreshold> dimensionThresholds;
+    private Map<String, List<ConsequenceSimulationSignal>> pendingSimulations;
 
     public HarmEvaluationNeuron() {
         super();
         this.threshold = new HarmThreshold();
         this.dimensionThresholds = new HashMap<>();
+        this.pendingSimulations = new HashMap<>();
         initDefaultDimensionThresholds();
     }
 
@@ -30,6 +35,7 @@ public class HarmEvaluationNeuron extends ModulatableNeuron {
         super(neuronId, chain, run);
         this.threshold = threshold;
         this.dimensionThresholds = new HashMap<>();
+        this.pendingSimulations = new HashMap<>();
         initDefaultDimensionThresholds();
     }
 
@@ -46,4 +52,7 @@ public class HarmEvaluationNeuron extends ModulatableNeuron {
 
     public Map<String, HarmThreshold> getDimensionThresholds() { return dimensionThresholds; }
     public void setDimensionThresholds(Map<String, HarmThreshold> dimensionThresholds) { this.dimensionThresholds = dimensionThresholds; }
+
+    public Map<String, List<ConsequenceSimulationSignal>> getPendingSimulations() { return pendingSimulations; }
+    public void setPendingSimulations(Map<String, List<ConsequenceSimulationSignal>> pendingSimulations) { this.pendingSimulations = pendingSimulations; }
 }
