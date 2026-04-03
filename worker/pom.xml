@@ -55,8 +55,55 @@
             <version>5.11.0</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>5.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>${protobuf.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-netty-shaded</artifactId>
+            <version>${grpc.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-protobuf</artifactId>
+            <version>${grpc.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-stub</artifactId>
+            <version>${grpc.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-clients</artifactId>
+            <version>3.7.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>4.34.0</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
     <build>
+        <extensions>
+            <!-- Required for ${os.detected.classifier} -->
+            <extension>
+                <groupId>kr.motd.maven</groupId>
+                <artifactId>os-maven-plugin</artifactId>
+                <version>1.7.1</version>
+            </extension>
+        </extensions>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -64,34 +111,45 @@
                 <version>3.8.0</version>
                 <configuration>
                     <release>11</release>
-                    <!-- Exclude infrastructure files that depend on optional backends
-                         (gRPC generated proto stubs, Redis/Jedis, Kafka) to allow
-                         core code and unit tests to compile without those services. -->
-                    <excludes>
-                        <!-- gRPC / protobuf - need generated proto stubs -->
-                        <exclude>com/rakovpublic/jneuropallium/worker/application/GRPCClient.java</exclude>
-                        <exclude>com/rakovpublic/jneuropallium/worker/application/GRPCServer.java</exclude>
-                        <exclude>com/rakovpublic/jneuropallium/worker/application/GRPCServerApplication.java</exclude>
-                        <exclude>com/rakovpublic/jneuropallium/worker/application/Runner.java</exclude>
-                        <!-- Redis (Jedis) backend -->
-                        <exclude>com/rakovpublic/jneuropallium/worker/util/RedisContext.java</exclude>
-                        <exclude>com/rakovpublic/jneuropallium/worker/net/layers/impl/redis/RedisLayerMeta.java</exclude>
-                        <exclude>com/rakovpublic/jneuropallium/worker/net/layers/impl/redis/RedisLayersMeta.java</exclude>
-                        <exclude>com/rakovpublic/jneuropallium/worker/net/layers/impl/redis/RedisResultLayerMeta.java</exclude>
-                        <exclude>com/rakovpublic/jneuropallium/worker/net/signals/storage/redis/RedisInitInput.java</exclude>
-                        <exclude>com/rakovpublic/jneuropallium/worker/net/signals/storage/redis/RedisSignalHistoryStorage.java</exclude>
-                        <exclude>com/rakovpublic/jneuropallium/worker/net/signals/storage/redis/RedisSignalStorage.java</exclude>
-                        <!-- Kafka backend -->
-                        <exclude>com/rakovpublic/jneuropallium/worker/net/signals/storage/kafka/KafkaInitInput.java</exclude>
-                        <!-- gRPC split input -->
-                        <exclude>com/rakovpublic/jneuropallium/worker/net/signals/storage/http/GRPCSplitInput.java</exclude>
-                    </excludes>
+
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.5</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.xolstice.maven.plugins</groupId>
+                <artifactId>protobuf-maven-plugin</artifactId>
+                <version>0.6.1</version>
+
+                <configuration>
+                    <protocExecutable>C:\Users\dmytr\Downloads\protoc-34.1-win64\bin\protoc.exe</protocExecutable>
+                    <!-- Protoc version (match your protobuf-java dependency) -->
+                    <protocArtifact>
+                        com.google.protobuf:protoc:3.25.8:exe:${os.detected.classifier}
+                    </protocArtifact>
+
+                    <!-- THIS IS THE KEY PART FOR SERVICES -->
+                    <pluginId>grpc-java</pluginId>
+                    <pluginArtifact>
+                        io.grpc:protoc-gen-grpc-java:1.80.0:exe:${os.detected.classifier}
+                    </pluginArtifact>
+
+                    <!-- Optional but recommended -->
+                    <clearOutputDirectory>false</clearOutputDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>compile-custom</goal>
+                            <goal>test-compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

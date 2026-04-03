@@ -11,6 +11,7 @@ import com.google.gson.JsonParser;
 import com.rakovpublic.jneuropallium.worker.*;
 import com.rakovpublic.jneuropallium.worker.exceptions.HttpClusterCommunicationException;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayersMeta;
+import com.rakovpublic.jneuropallium.worker.net.layers.impl.Result;
 import com.rakovpublic.jneuropallium.worker.net.neuron.IAxon;
 import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.NeuronRunnerService;
@@ -102,7 +103,7 @@ public class GRPCClient implements IApplication {
                     ResultDiscriminator resultDiscriminator = ResultDiscriminator.newBuilder().setNodeIdentifier(UUID).setDiscriminatorName(splitInput.getDiscriminatorName()).putAllResult(finalResult).build();
                     stub.saveDiscriminator(resultDiscriminator);
                 } else {
-                    Result resultResp = Result.newBuilder().setNodeIdentifier(UUID).putAllResult(finalResult).build();
+                    com.rakovpublic.jneuropallium.worker.Result resultResp = com.rakovpublic.jneuropallium.worker.Result.newBuilder().setNodeIdentifier(UUID).putAllResult(finalResult).build();
                     stub.save(resultResp);
                 }
             } catch (InterruptedException e) {
