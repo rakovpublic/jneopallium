@@ -228,11 +228,10 @@ class LLMIntegrationTest {
 
     @Test
     void fallbackNeuron_halfOpenSuccessTransitionsToClosed() {
+        // probe=0: getState() transitions OPEN → HALF_OPEN immediately on the first call
         LLMFallbackNeuron n = new LLMFallbackNeuron(1L, mockChain, 1L, 1, 0);
-        n.recordFailure(); // → OPEN
-        assertEquals(LLMFallbackNeuron.CircuitState.OPEN, n.getState());
-        // probe interval = 0 → immediately transitions to HALF_OPEN on next getState()
-        assertEquals(LLMFallbackNeuron.CircuitState.HALF_OPEN, n.getState());
+        n.recordFailure(); // CLOSED → OPEN
+        assertEquals(LLMFallbackNeuron.CircuitState.HALF_OPEN, n.getState()); // probe=0 → instant transition
         assertTrue(n.isLLMCallAllowed());
         n.recordSuccess(); // HALF_OPEN → CLOSED
         assertEquals(LLMFallbackNeuron.CircuitState.CLOSED, n.getState());
@@ -242,9 +241,12 @@ class LLMIntegrationTest {
     void fallbackNeuron_halfOpenFailureReopens() {
         LLMFallbackNeuron n = new LLMFallbackNeuron(1L, mockChain, 1L, 1, 0);
         n.recordFailure(); // CLOSED → OPEN
-        n.getState();      // OPEN → HALF_OPEN
+        n.getState();      // OPEN → HALF_OPEN (probe=0)
+        // Switch to a large probe so OPEN stays OPEN after the next failure
+        n.setHalfOpenProbeIntervalMs(Long.MAX_VALUE);
         n.recordFailure(); // HALF_OPEN → OPEN
-        assertEquals(LLMFallbackNeuron.CircuitState.OPEN, n.getState());
+        assertEquals(LLMFallbackNeuron.CircuitState.OPEN, n.getState()); // probe=MAX_VALUE → stays OPEN
+        assertFalse(n.isLLMCallAllowed());
     }
 
     @Test
