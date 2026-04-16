@@ -1,97 +1,222 @@
-#Project aim:
-Purpose of the project is to build a natural neuron net modeling tool that allows building a neuron net model based on receptor existence probability, distance deviation between neurons with the same receptors, and receptor functional role.
+# Jneopallium
 
-#Project outputs:
-Neuron net model sample.
-Neuron net modeling tool.
-Documentation for neuron net modeling tool.
-Documentation for modeling process. 
+A biologically-grounded Java framework for modeling natural neuron networks with customizable levels of detail.
 
-#Current progress:
-Neuron net modeling tool has passed pre-alpha test.
-Tool architecture is ready.
-Tool implementation is ready on 95%.
+[![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](LICENSE)
+[![Java](https://img.shields.io/badge/Java-11%2B-orange.svg)]()
+[![DOI](https://img.shields.io/badge/DOI-10.21275%2FSR24703042047-green.svg)](https://dx.doi.org/10.21275/SR24703042047)
 
-#Project impact
-The project could lead to new generation of artificial neuron nets algorithms, help to analyze drug impact on neuron nets, build autonomous AI systems for different purposes, build modular AI, etc.
+## Overview
 
+Jneopallium is a modular framework that separates neuron network processing logic from actual neuron and signal types — much like Java Collections separate storage logic from the objects they store — using generics and interfaces. It enables researchers and engineers to build neural models at any level of biological detail, from simple perceptron-like abstractions to complex multi-signal, multi-receptor architectures that mirror natural cognitive processes.
 
+The framework was published in the *International Journal of Science and Research (IJSR)*, Volume 13, Issue 7, July 2024.
 
-#Modeling process
+**Author:** Dmytro Rakovskyi — Jneopallium, Kharkiv, Ukraine
 
-1. Gather information about all neuron classes. Use the possibility of neurons to persist different types of information to separate and define neuron classes.
-2. Gather information about all neuromediators and signals, and define signal classes. 
-3. Investigate signal impact on neurons (receptors), and define processor classes.
-4. Define neuron appearance probability for each layer.
-5. Define receptor appearance probability for each neuron class.
-6. Add connection generator and constraint rules which checks that neuron can have such connections.
-7. Gather information about signal wide-spreading speed, and add to configuration (uses relative frequencies).
-8. Implement the result layer
-9. Add discriminators neuron nets
+## Key Features
 
+- **Typed signals** — Define arbitrary signal types (bioelectrical, biochemical, or custom) with independent propagation characteristics.
+- **Receptor heterogeneity** — Neurons can implement multiple interfaces, each handled by a distinct signal processor, enabling multi-receptor behavior via Java's multiple interface inheritance.
+- **Dual processing loops** — A fast loop (every tick) and a slow loop (every N fast ticks) model the speed difference between bioelectric spikes (~100 m/s) and neuromodulatory diffusion (100–1000× slower).
+- **Per-signal frequency control** — Each signal type specifies a `ProcessingFrequency(loop, epoch)`, creating a hierarchy of natural timescales within a single configuration.
+- **Statistical structure generation** — Define neuron distribution probabilities per layer and neighboring rules to generate network topologies.
+- **Dynamic layer sizing** — Create and delete neurons at runtime via `LayerManipulatingNeuron`.
+- **Multiple I/O sources** — Attach multiple input sources and output collectors, each with independent processing frequencies.
+- **Modular architecture** — Connect separate neuron networks via `INeuronNetInput` to build modular, composable models.
+- **Discriminator support** — Define any number of discriminators for GAN-style or safety-critical architectures.
+- **Deployment modes** — Run locally, in an HTTP cluster, or via gRPC (including FPGA targets).
 
-#Main features
+## Core Abstractions
 
-Neuron net can process different types of signals (which allows modeling neuromediators behavior).
-Different signals can be processed with different frequencies. It has 2 main frequency loops with an adjustable ratio like 1:n(which means that signals designed to process slowly will be processed once in n runs of fast processing signals). 
-Signals can be continuous and be processed n runs with value change or without.
-More over each signal type can be processed once in m runs of their loop.(it allows to model difference in signal widespreading)
-Also, the framework supports a modular approach  to neuron net modeling where the output of neuron net can be the input of one or few neuron nets. Framework allows sending signals from the top-level neuron layer to input neuron nets. 
- 
+| Abstraction | Role |
+|---|---|
+| `INeuron` | Base interface implemented by every neuron class |
+| `ISignalProcessor<S, N>` | Stateless processor parameterized on signal type `S` and neuron interface `N` |
+| `Neuron` | Base class providing `Axon` and `Dendrites` |
+| `Dendrites` | Encapsulates input addresses, signal types, and input weights |
+| `Axon` | Encapsulates output addresses, signal type, and output weight |
+| `ISignalChain` | Ordered processor pipeline invoked during `activate()` |
+| `CycleNeuron` | Controls the fast/slow loop ratio (layer id `−2147483648`, neuron id `0`) |
+| `LayerManipulatingNeuron` | Creates/deletes neurons dynamically (layer id `−9223372036854775808`) |
+| `IInitInput` | Defines an input source with a default processing frequency |
+| `InputInitStrategy` | Describes how input signals propagate to neurons |
+| `INeuronNetInput` | Input interface for connecting one neuron network's output to another |
+| `IOutputAggregator` | Defines an output destination |
+| `IConnectionGenerator` | Describes how to connect neurons during structure generation |
+| `NeighboringRules` | Constrains which neuron types may be adjacent (vertical structure) |
 
-#Intro
+## Getting Started
 
-I want to present to your attention my framework for neuron net building. The name of the framework is jneopallium (GitHub - rakovpublic/jneopallium: Tool for neuron net building.).
-I have chosen this name because it's designed to allow the processing of the output of neuron nets as input for other neuron nets (I think it can be useful for debugging AI and a modular approach for AI building). Furthermore, if the input source is a neuron net, it is possible to send learning signals (signals that change the weights of dendrites, axons, delete, create, or update neurons).
-The purpose of this framework is to give developers the ability to build object models of neuron structures.
-In order to achieve this goal, I have developed a specific approach to defining the neuron, layer and input.
+### Prerequisites
 
+- Java 11 or higher
+- Maven or Gradle
 
+### Building
 
+```bash
+git clone https://github.com/rakovpublic/jneopallium.git
+cd jneopallium
+# Build the framework
+mvn clean install
+```
 
-#Neuron.
+### Modeling Process
 
-In my framework, neurons have:
-1. dendrites—an object that encapsulates input addresses, input signal types (class <? extends Signal interface>), and weight (an object that transforms signals and is used for learning ).After input signals have been processed through the weights by the signal processors.
-2. signal processors are a specific class that has a method for processing specific input signals. processor has access to a neuron and can change it (for example, dendrites, axon or signal processor map). The output of signal processing is defined by the signal processing chain. The results of the signal processor are passed to the axon.
-3. An axon is an object that encapsulates the addresses of consumer neurons and weights for signal transformation.
-   Note: A signal can exist in more than one iteration of neuron net processing.
+Building a model involves three steps: defining functional logic, structural logic, and I/O logic.
 
-#Layer
+#### 1. Functional Logic — Signals, Neurons, and Processors
 
-A layer is a set of neurons. The maximum number of layers is Integer.MAX-1. 
-The client developer can delete, update, or add neurons to the layer.
-Delete and add neurons are accomplished by sending special signals (CreateNeuronSignal.class and DeleteNeuronSignal.class) to neurons (LayerManipulatingNeuron.class) on each layer with the id Long.MIN.
-The maximum number of neurons in the layer is Long.MAX-1.
-The service layer has an ID of Integer.MIN and is used to store information for cycling processing.
-Cycling processing means that a neuron net will have a specified number of runs before getting the next input signals (used to wait for studying signal processing).
+**Define signal types** — Create classes representing signals in your system and the weight object used for learning.
 
-#Input
+```java
+// Example: a signal carrying an integer value
+public class IntSignal implements ISignal {
+    private int value;
+    // ...
+}
+```
 
-Input is compound and can have different input sources. Each source has a value that shows how often input from an input source should be populated into the neuron net. It also has a callback in case the input source is another neuron net and it can get a study signal from upstream.
-The input strategy class defines how the input should be populated with neurons.
-   Input is compound and can have different input sources. Each source has a value that shows how often input from an input source should be populated into the neuron net. It also has a callback in case the input source is another neuron net and it can get a study signal from upstream.
-   The input strategy class defines how the input should be populated with neurons.
+**Define neuron interfaces** — Each processing mechanism gets a separate interface extending `INeuron`.
 
+```java
+public interface NeuronIntField extends INeuron {
+    int getInternalField();
+    void setInternalField(int value);
+}
+```
 
-#Phases:
-1. Make core. It will implement just core concepts without distributed mode and neuron nets synchronization.
-2. Add simple java http distributed part with neuron nets synchronization.
-3. Add grpc implementation for cluster mode
-4. add Kafka input source implementation
-5. Generate maven artifacts, host javadocs
-6. Add containers(docker/kubernetes) and infrastructure scripts python/shell.
-7. Add neuron net graphic designer which will collect data about implemented classes and will pass to graphic plugin for eclipse and (optional)idea.
-8. Add redis as meta storage(optional).
-9. Add aws lambda distributed mode(optional).
-10. Design and implement amazon cluster integration(optional).
+**Implement signal processors** — Each processor implements `ISignalProcessor<S, N>` for a specific signal–neuron pair.
 
-#articles
+```java
+public class IntProcessor implements ISignalProcessor<IntSignal, NeuronIntField> {
+    @Override
+    public void process(IntSignal signal, NeuronIntField neuron) {
+        // Processing logic
+    }
+}
+```
 
+**Implement neurons** — Extend `Neuron` and implement one or more neuron interfaces. A neuron implementing multiple interfaces has multiple receptors and can process different signal types.
 
- https://www.ijsr.net/getabstract.php?paperid=SR24703042047
- 
- https://dou.ua/forums/topic/49673/
+```java
+// Neuron processing both IntSignal and DoubleSignal
+public class NeuronA extends Neuron implements NeuronIntField, NeuronWithDoubleField {
+    // Two receptors — processes both signal types
+}
+```
 
-p.s. Fill free to contatct me. I am looking for contributors for this project.
-p.p.s. Great thanks to kafedra of Informatics in Kharkiv National University of Radio and Electronics, Eugen Putiatin, Helen Matat, Tatiana Sinelnikova and Volodymyr Brytik.
+#### 2. Structural Logic — Network Topology
+
+Use `NeuronNetStructureGenerator` with:
+- A `HashMap` of layer sizes.
+- A `HashMap` of statistical properties per neuron type (probability of appearance on each layer).
+- A list of `NeighboringRules` (vertical neuron ordering constraints).
+- An `IConnectionGenerator` implementation (connection strategy).
+
+#### 3. I/O Logic — Inputs and Outputs
+
+Implement `IInitInput` for each input source and `IOutputAggregator` for output destinations. Each input has a default processing frequency modifiable at runtime via `CycleNeuron`.
+
+### Running
+
+Launch jneopallium with paths to your user-defined code JAR, neuron network structure file, and configuration file. See the [configuration examples](https://github.com/rakovpublic/jneopallium/tree/test/alfaTestAndGettingStarted/worker/src/main/resources) for reference.
+
+## Signal Processing Frequency
+
+The framework provides fine-grained frequency control through two nested loops:
+
+- **Fast loop** — Processes every iteration. Suitable for bioelectric/sensorimotor signals.
+- **Slow loop** — Processes once every N fast-loop iterations (N is configurable via `CycleNeuron`).
+
+Each signal type and input source defines a `ProcessingFrequency` with an integer `loop` field and a long `epoch` field. A signal with `loop = 2` processes once every 2 fast-loop iterations; `epoch` applies the same logic to the slow loop.
+
+With a fast/slow ratio of N = 10, this creates timescales like:
+
+| Timescale | Frequency |
+|---|---|
+| Fast loop, epoch 1 | Every tick |
+| Fast loop, epoch 2 | Every 2 ticks |
+| Fast loop, epoch 3 | Every 3 ticks |
+| Slow loop, epoch 1 | Every 10 ticks |
+| Slow loop, epoch 3 | Every 30 ticks |
+| Slow loop, epoch 10 | Every 100 ticks |
+
+## Deployment Modes
+
+| Mode | Description |
+|---|---|
+| **Local** | Single-machine execution |
+| **Cluster HTTP** | Distributed execution over HTTP |
+| **Cluster gRPC** | Distributed execution over gRPC; supports FPGA deployment |
+
+## Example Code
+
+A complete working example with 4 signal types and 3 neuron types is available on the [test branch](https://github.com/rakovpublic/jneopallium/tree/test/alfaTestAndGettingStarted):
+
+- [Functional logic definitions](https://github.com/rakovpublic/jneopallium/tree/test/alfaTestAndGettingStarted/worker/src/main/java/com/rakovpublic/jneuropallium/worker/test/definitions)
+- [Structural logic definitions](https://github.com/rakovpublic/jneopallium/tree/test/alfaTestAndGettingStarted/worker/src/main/java/com/rakovpublic/jneuropallium/worker/test/definitions/structurallogic)
+- [I/O logic definitions](https://github.com/rakovpublic/jneopallium/tree/test/alfaTestAndGettingStarted/worker/src/main/java/com/rakovpublic/jneuropallium/worker/test/definitions/ioutils)
+- [Configuration files](https://github.com/rakovpublic/jneopallium/tree/test/alfaTestAndGettingStarted/worker/src/main/resources)
+
+## Autonomous AI Architecture
+
+A companion article derives a full autonomous AI architecture on top of jneopallium, featuring:
+
+- **16 signal types** spanning fast-loop bioelectric signals (SpikeSignal, MotorCommandSignal, ErrorSignal, etc.) and slow-loop neuromodulatory signals (Dopamine, Serotonin, Norepinephrine, Acetylcholine, GABA).
+- **28 neuron classes** organized across 8 layers: Input (Layer 0), Feature Detection (Layer 1), Attention & Working Memory (Layer 2), Memory & Prediction (Layer 3), Planning (Layer 4), Action Selection (Layer 5), Learning (Layer 6), and Homeostasis & Regulation (Layer 7).
+- **11 signal processors** covering spike encoding, lateral inhibition, salience computation, predictive coding, STDP, competitive action selection, and more.
+- **Loop prevention subsystem** with RegionMonitorNeuron, LoopDetectorNeuron, LoopCircuitBreakerNeuron, OscillationBoundaryNeuron, and ReentrantGuardNeuron — four graduated circuit-breaker strategies from weight dampening to connection breaking.
+- **Human-harm discriminator module** — A consequence model (not an output filter) that simulates projected actions, evaluates human welfare across five dimensions (physical safety, psychological wellbeing, autonomy, social harm, long-term consequences), and vetoes harmful actions before execution. Includes hard constraints that are structurally inviolable.
+
+## LLM Knowledge Base Integration
+
+An optional, non-blocking extension integrates Large Language Models as an external advisory knowledge base:
+
+- **4 new signal types:** LLMQuerySignal, LLMResponseSignal, LLMConfidenceSignal, LLMTimeoutSignal.
+- **3 new neuron classes:** LLMKnowledgeNeuron (query dispatch + caching), LLMVerificationNeuron (cross-validation against internal models), LLMFallbackNeuron (circuit breaker for graceful degradation).
+- **2 new signal processors:** LLMQueryProcessor, LLMResponseProcessor.
+
+Design principles: all LLM processing runs on the slow loop (never blocking real-time sensorimotor processing), LLM responses are always cross-validated against internal models before use, and the system operates at full capability when the LLM is unavailable. Supports local (Ollama), cloud (OpenAI, Anthropic), and disabled modes.
+
+## Applications
+
+- **Robotics** — Direct I/O with hardware controllers; model sensorimotor loops at biologically-relevant timescales.
+- **Autonomous mission control** — Decision-making under high latency and mission-flow uncertainty.
+- **Neuroscience research** — Model neural control structures and structural deviations at a chosen level of detail.
+- **Company management** — Model decision processes under signals and metrics with varying volatility.
+- **General AI research** — Build toward general intelligence using biologically-inspired architectures.
+
+## Competitors
+
+| Framework | Focus | Key Difference |
+|---|---|---|
+| [NEURON Simulator](https://github.com/neuronsimulator/nrn) | High-detail biophysical modeling | Fixed high detail; jneopallium lets you choose the detail level |
+| [CoreNeuron](https://github.com/BlueBrain/CoreNeuron) | Optimized simulation engine for NEURON | Same as above; focused on exact biological replication |
+
+Jneopallium's main purpose is to bridge neurobiology and computer science with user-defined abstraction depth. NEURON Simulator and CoreNeuron aim to build exact copies of natural neuron networks.
+
+## Repository
+
+- **GitHub:** [https://github.com/rakovpublic/jneopallium](https://github.com/rakovpublic/jneopallium)
+- **GitLab:** [https://gitlab.com/rakovpublic/jneopallium](https://gitlab.com/rakovpublic/jneopallium)
+
+## Citation
+
+```bibtex
+@article{rakovskyi2024jneopallium,
+  title   = {Framework for Natural Neuron Network Modeling: The Jneopallium Approach},
+  author  = {Rakovskyi, Dmytro},
+  journal = {International Journal of Science and Research (IJSR)},
+  volume  = {13},
+  number  = {7},
+  year    = {2024},
+  doi     = {10.21275/SR24703042047},
+  issn    = {2319-7064}
+}
+```
+
+## License
+
+BSD 3-Clause License. See [LICENSE](LICENSE) for details.
