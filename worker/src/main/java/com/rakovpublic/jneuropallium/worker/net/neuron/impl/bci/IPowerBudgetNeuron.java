@@ -9,7 +9,7 @@ public interface IPowerBudgetNeuron extends IModulatableNeuron {
     void setRemainingMAh(double r);
     void drain(double mAh);
     double stateOfChargeFrac();
-    PowerMode getMode();
+    PowerBudgetNeuron.PowerMode getMode();
     boolean stimAllowed();
     void setThresholds(double conserve, double emergency);
 }

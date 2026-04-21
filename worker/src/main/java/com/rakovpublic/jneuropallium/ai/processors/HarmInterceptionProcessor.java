@@ -41,7 +41,7 @@ public class HarmInterceptionProcessor implements ISignalProcessor<MotorCommandS
         return results;
     }
 
-    private <I extends ISignal> List<I> applyVerdict(HarmAssessmentSignal assessment, MotorCommandSignal input, HarmGateNeuron neuron) {
+    private <I extends ISignal> List<I> applyVerdict(HarmAssessmentSignal assessment, MotorCommandSignal input, IHarmGateNeuron neuron) {
         List<I> results = new ArrayList<>();
         TransparencyLogSignal log = new TransparencyLogSignal(assessment.getActionPlanId(),
             "cached_verdict:" + assessment.getVerdict(),

@@ -6,8 +6,8 @@ import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalChain;
 import java.util.List;
 
 public interface IContentSelectionNeuron extends IModulatableNeuron {
-    String select(List<ScoredItem> items);
-    String argmax(List<ScoredItem> items);
+    String select(List<ContentSelectionNeuron.ScoredItem> items);
+    String argmax(List<ContentSelectionNeuron.ScoredItem> items);
     void setBetaNovelty(double b);
     double getBetaNovelty();
     void setTemperature(double t);

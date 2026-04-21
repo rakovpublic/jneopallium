@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 public interface IZPDPlanningNeuron extends IModulatableNeuron {
-    ContentRecommendationSignal plan(List<Candidate> candidates);
+    ContentRecommendationSignal plan(List<ZPDPlanningNeuron.Candidate> candidates);
     void setTargetSuccessRate(double r);
     double getTargetSuccessRate();
 }

@@ -1,7 +1,7 @@
 package com.rakovpublic.jneuropallium.worker.net.neuron.impl.llm;
 
+import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalChain;
-import com.rakovpublic.jneuropallium.worker.net.neuron.impl.INeuron;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.Neuron;
 import java.net.URI;
 import java.net.http.HttpClient;

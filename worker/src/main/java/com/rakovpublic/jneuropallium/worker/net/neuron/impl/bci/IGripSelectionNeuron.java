@@ -5,6 +5,6 @@ import com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalChain;
 
 public interface IGripSelectionNeuron extends IModulatableNeuron {
-    GripType select(double sizeMeters, double elongation, boolean thin);
-    GripType getLastGrip();
+    GripSelectionNeuron.GripType select(double sizeMeters, double elongation, boolean thin);
+    GripSelectionNeuron.GripType getLastGrip();
 }

@@ -5,8 +5,8 @@ import com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalChain;
 
 public interface IUserStateNeuron extends IModulatableNeuron {
-    State classify(double fatigue, double confusion, double distress);
-    State getState();
+    UserStateNeuron.State classify(double fatigue, double confusion, double distress);
+    UserStateNeuron.State getState();
     void setFatigueThreshold(double v);
     void setConfusionThreshold(double v);
     void setDistressThreshold(double v);
