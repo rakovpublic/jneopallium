@@ -17,7 +17,7 @@ import com.rakovpublic.jneuropallium.worker.net.signals.impl.glia.Gliotransmitte
  * <p>Biological analogue: protoplasmic astrocyte at the tripartite
  * synapse (Volterra &amp; Meldolesi 2005).
  */
-public class AstrocyteNeuron extends ModulatableNeuron {
+public class AstrocyteNeuron extends ModulatableNeuron implements IAstrocyteNeuron {
 
     private final int regionId;
     private double integratedActivity;

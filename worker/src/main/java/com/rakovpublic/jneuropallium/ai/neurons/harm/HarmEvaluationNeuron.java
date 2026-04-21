@@ -14,7 +14,7 @@ import java.util.Map;
  * Aggregates multi-step consequence simulation results and classifies the overall harm verdict
  * using per-dimension thresholds.
  */
-public class HarmEvaluationNeuron extends ModulatableNeuron {
+public class HarmEvaluationNeuron extends ModulatableNeuron implements IHarmEvaluationNeuron {
 
     private HarmThreshold threshold;
     private Map<String, HarmThreshold> dimensionThresholds;

@@ -11,7 +11,7 @@ import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalChain;
  * based on item difficulty and observed flow state.
  * Loop=2 / Epoch=1.
  */
-public class PacingNeuron extends ModulatableNeuron {
+public class PacingNeuron extends ModulatableNeuron implements IPacingNeuron {
 
     private int fastSlowRatioMin = 5;
     private int fastSlowRatioMax = 20;

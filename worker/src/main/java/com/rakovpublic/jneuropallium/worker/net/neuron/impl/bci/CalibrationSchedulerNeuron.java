@@ -13,7 +13,7 @@ import com.rakovpublic.jneuropallium.worker.net.signals.impl.bci.CalibrationSign
  * Emits a {@link CalibrationSignal} with the chosen target.
  * Loop=2 / Epoch=3.
  */
-public class CalibrationSchedulerNeuron extends ModulatableNeuron {
+public class CalibrationSchedulerNeuron extends ModulatableNeuron implements ICalibrationSchedulerNeuron {
 
     private long lastCalibrationTick = 0L;
     private long minIntervalTicks = 24 * 60 * 60 * 1000L;  // ≈ 1 day @ 1 kHz

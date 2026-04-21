@@ -12,7 +12,7 @@ import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalChain;
  * here; production deployments swap in a full KF with matrix dynamics.
  * Loop=1 / Epoch=1.
  */
-public class KalmanDecoderNeuron extends ModulatableNeuron {
+public class KalmanDecoderNeuron extends ModulatableNeuron implements IKalmanDecoderNeuron {
 
     private double pos;
     private double vel;

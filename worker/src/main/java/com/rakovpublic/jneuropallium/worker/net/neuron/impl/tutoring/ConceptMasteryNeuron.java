@@ -13,7 +13,7 @@ import com.rakovpublic.jneuropallium.worker.net.signals.impl.tutoring.MasteryUpd
  * {@link MasteryUpdateSignal} whenever the estimate moves appreciably.
  * Loop=2 / Epoch=3.
  */
-public class ConceptMasteryNeuron extends ModulatableNeuron {
+public class ConceptMasteryNeuron extends ModulatableNeuron implements IConceptMasteryNeuron {
 
     private String conceptId;
     private double pKnow = 0.1;     // prior P(knows)

@@ -14,7 +14,7 @@ import java.util.Map;
  * over spike counts; rate reported in spikes / second.
  * Loop=1 / Epoch=1.
  */
-public class FiringRateEstimatorNeuron extends ModulatableNeuron {
+public class FiringRateEstimatorNeuron extends ModulatableNeuron implements IFiringRateEstimatorNeuron {
 
     private final Map<Integer, Double> rates = new HashMap<>();
     private double tauSeconds = 0.1;

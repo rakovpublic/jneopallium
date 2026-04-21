@@ -11,7 +11,7 @@ import java.util.Map;
  * Tracks per-region intervention counts and manages active interventions.
  * Escalates to more severe interventions when a region repeatedly triggers alerts.
  */
-public class LoopCircuitBreakerNeuron extends ModulatableNeuron {
+public class LoopCircuitBreakerNeuron extends ModulatableNeuron implements ILoopCircuitBreakerNeuron {
 
     private Map<String, Integer> interventionHistory;
     private Map<String, ActiveIntervention> activeInterventions;

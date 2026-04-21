@@ -13,7 +13,7 @@ import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalChain;
  * off when the user is out of nominal control.
  * Loop=1 / Epoch=3.
  */
-public class UserStateNeuron extends ModulatableNeuron {
+public class UserStateNeuron extends ModulatableNeuron implements IUserStateNeuron {
 
     public enum State { ALERT, FATIGUED, CONFUSED, DISTRESSED }
 

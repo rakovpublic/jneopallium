@@ -17,7 +17,7 @@ import java.util.List;
  * Layer 3, loop=2 / epoch=1.
  * <p>Biological analogue: hippocampal sharp-wave ripples (Buzsáki 2015).
  */
-public class SharpWaveRippleNeuron extends ModulatableNeuron {
+public class SharpWaveRippleNeuron extends ModulatableNeuron implements ISharpWaveRippleNeuron {
 
     private double minNrem3Depth = 0.6;
 

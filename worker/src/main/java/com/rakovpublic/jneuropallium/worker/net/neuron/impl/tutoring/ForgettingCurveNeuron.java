@@ -17,7 +17,7 @@ import java.util.Map;
  * the ZPD planner.
  * Loop=2 / Epoch=3.
  */
-public class ForgettingCurveNeuron extends ModulatableNeuron {
+public class ForgettingCurveNeuron extends ModulatableNeuron implements IForgettingCurveNeuron {
 
     private static final class State {
         double stability;       // days-equivalent of stable retention

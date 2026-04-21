@@ -13,7 +13,7 @@ import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalChain;
  * (Orsborn et al. 2014).
  * Loop=2 / Epoch=3.
  */
-public class DecoderWeightNeuron extends ModulatableNeuron {
+public class DecoderWeightNeuron extends ModulatableNeuron implements IDecoderWeightNeuron {
 
     private double[] weights;
     private double learningRate = 0.01;

@@ -16,7 +16,7 @@ import java.util.Map;
  * acoustic-to-phoneme model.
  * Loop=1 / Epoch=1.
  */
-public class SpeechPhonemeDecoderNeuron extends ModulatableNeuron {
+public class SpeechPhonemeDecoderNeuron extends ModulatableNeuron implements ISpeechPhonemeDecoderNeuron {
 
     private final Map<String, double[]> phonemeCentroids = new HashMap<>();
     private String lastPhoneme = "";

@@ -20,7 +20,7 @@ import java.util.Map;
  * <p>Biological analogue: dopaminergic reward-prediction-error scaling with
  * positive learning progress (Oudeyer &amp; Kaplan 2007).
  */
-public class LearningProgressNeuron extends ModulatableNeuron {
+public class LearningProgressNeuron extends ModulatableNeuron implements ILearningProgressNeuron {
 
     private final Map<String, Deque<Double>> errorsByDomain = new HashMap<>();
     private int windowTicks = 200;

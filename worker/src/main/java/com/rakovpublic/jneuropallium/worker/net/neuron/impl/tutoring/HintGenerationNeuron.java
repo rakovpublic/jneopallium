@@ -16,7 +16,7 @@ import java.util.Map;
  * META_COGNITIVE → CONCEPTUAL → WORKED_EXAMPLE.
  * Loop=1 / Epoch=2.
  */
-public class HintGenerationNeuron extends ModulatableNeuron {
+public class HintGenerationNeuron extends ModulatableNeuron implements IHintGenerationNeuron {
 
     private final Map<String, Integer> itemHintCount = new HashMap<>();
     private int maxLevels = 3;

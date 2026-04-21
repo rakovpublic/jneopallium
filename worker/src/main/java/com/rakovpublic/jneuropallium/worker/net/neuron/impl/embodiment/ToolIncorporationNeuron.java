@@ -18,7 +18,7 @@ import java.util.Set;
  * <p>Biological analogue: parieto-premotor tool incorporation
  * (Maravita &amp; Iriki 2004).
  */
-public class ToolIncorporationNeuron extends ModulatableNeuron {
+public class ToolIncorporationNeuron extends ModulatableNeuron implements IToolIncorporationNeuron {
 
     private final Map<Integer, EffectorCapability> priorSchema = new HashMap<>();
     private final Set<Integer> toolEffectors = new HashSet<>();

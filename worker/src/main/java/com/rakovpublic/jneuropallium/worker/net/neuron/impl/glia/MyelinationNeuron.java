@@ -19,7 +19,7 @@ import java.util.Map;
  * <p>Biological analogue: activity-dependent oligodendrocyte myelination
  * (Fields 2015; Gibson et al. 2014).
  */
-public class MyelinationNeuron extends ModulatableNeuron {
+public class MyelinationNeuron extends ModulatableNeuron implements IMyelinationNeuron {
 
     private final Map<Long, Integer> usageSinceLastWindow = new HashMap<>();
     private final Map<Long, Integer> currentDelay = new HashMap<>();

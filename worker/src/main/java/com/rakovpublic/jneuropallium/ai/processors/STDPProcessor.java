@@ -1,6 +1,7 @@
 package com.rakovpublic.jneuropallium.ai.processors;
 
 import com.rakovpublic.jneuropallium.ai.neurons.learning.STDPNeuron;
+import com.rakovpublic.jneuropallium.ai.neurons.learning.ISTDPNeuron;
 import com.rakovpublic.jneuropallium.ai.signals.fast.SpikeSignal;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
@@ -8,10 +9,10 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class STDPProcessor implements ISignalProcessor<SpikeSignal, STDPNeuron> {
+public class STDPProcessor implements ISignalProcessor<SpikeSignal, ISTDPNeuron> {
 
     @Override
-    public <I extends ISignal> List<I> process(SpikeSignal input, STDPNeuron neuron) {
+    public <I extends ISignal> List<I> process(SpikeSignal input, ISTDPNeuron neuron) {
         long now = System.currentTimeMillis();
         String sourceId = input.getSourceNeuronId() != null ? input.getSourceNeuronId().toString() : "unknown";
         neuron.getPreSpikeTimestamps().put(sourceId, now);
@@ -35,6 +36,6 @@ public class STDPProcessor implements ISignalProcessor<SpikeSignal, STDPNeuron> 
     @Override public String getDescription() { return "STDPProcessor"; }
     @Override public Boolean hasMerger() { return false; }
     @Override public Class<? extends ISignalProcessor> getSignalProcessorClass() { return STDPProcessor.class; }
-    @Override public Class<STDPNeuron> getNeuronClass() { return STDPNeuron.class; }
+    @Override public Class<ISTDPNeuron> getNeuronClass() { return ISTDPNeuron.class; }
     @Override public Class<SpikeSignal> getSignalClass() { return SpikeSignal.class; }
 }

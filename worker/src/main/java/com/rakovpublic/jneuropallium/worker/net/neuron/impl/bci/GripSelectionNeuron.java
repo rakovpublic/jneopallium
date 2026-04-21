@@ -12,7 +12,7 @@ import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalChain;
  * anterior intraparietal area (AIP) grip selection (Murata et al. 2000).
  * Loop=1 / Epoch=2.
  */
-public class GripSelectionNeuron extends ModulatableNeuron {
+public class GripSelectionNeuron extends ModulatableNeuron implements IGripSelectionNeuron {
 
     public enum GripType { POWER, PINCH, LATERAL, TRIPOD, NONE }
 

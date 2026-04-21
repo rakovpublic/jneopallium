@@ -17,7 +17,7 @@ import java.util.Map;
  * causing gradual signal loss over days/weeks (Perge et al. 2013).
  * Loop=2 / Epoch=5.
  */
-public class DriftTrackerNeuron extends ModulatableNeuron {
+public class DriftTrackerNeuron extends ModulatableNeuron implements IDriftTrackerNeuron {
 
     private final Map<Integer, Double> drift = new HashMap<>();
     private final Map<Integer, Double> snr = new HashMap<>();

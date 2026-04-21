@@ -12,7 +12,7 @@ import com.rakovpublic.jneuropallium.worker.net.signals.impl.tutoring.Interventi
  * emitting {@link InterventionSignal#type} = BREAK when saturated.
  * Loop=2 / Epoch=3.
  */
-public class FatigueNeuron extends ModulatableNeuron {
+public class FatigueNeuron extends ModulatableNeuron implements IFatigueNeuron {
 
     private long sessionStartTick;
     private long currentTick;

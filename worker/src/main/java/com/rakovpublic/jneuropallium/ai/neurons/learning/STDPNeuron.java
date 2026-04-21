@@ -9,7 +9,7 @@ import java.util.Map;
  * Spike-Timing Dependent Plasticity neuron used by STDPProcessor.
  * Adjusts synaptic weights based on relative timing of pre- and post-synaptic spikes.
  */
-public class STDPNeuron extends ModulatableNeuron {
+public class STDPNeuron extends ModulatableNeuron implements ISTDPNeuron {
 
     private Map<String, Long> preSpikeTimestamps;
     private Map<String, Double> weights;

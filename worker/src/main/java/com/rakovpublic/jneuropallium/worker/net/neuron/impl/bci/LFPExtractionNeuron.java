@@ -14,7 +14,7 @@ import com.rakovpublic.jneuropallium.worker.net.signals.impl.bci.LFPSignal;
  * subdurally / intracortically.
  * Loop=1 / Epoch=1.
  */
-public class LFPExtractionNeuron extends ModulatableNeuron {
+public class LFPExtractionNeuron extends ModulatableNeuron implements ILFPExtractionNeuron {
 
     public LFPExtractionNeuron() { super(); }
     public LFPExtractionNeuron(Long neuronId, ISignalChain chain, Long run) { super(neuronId, chain, run); }

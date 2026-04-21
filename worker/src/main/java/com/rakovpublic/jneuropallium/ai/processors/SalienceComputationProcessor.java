@@ -1,6 +1,7 @@
 package com.rakovpublic.jneuropallium.ai.processors;
 
 import com.rakovpublic.jneuropallium.ai.neurons.attention.AttentionNeuron;
+import com.rakovpublic.jneuropallium.ai.neurons.attention.IAttentionNeuron;
 import com.rakovpublic.jneuropallium.ai.signals.fast.AttentionGateSignal;
 import com.rakovpublic.jneuropallium.ai.signals.fast.SpikeSignal;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;
@@ -9,10 +10,10 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SalienceComputationProcessor implements ISignalProcessor<SpikeSignal, AttentionNeuron> {
+public class SalienceComputationProcessor implements ISignalProcessor<SpikeSignal, IAttentionNeuron> {
 
     @Override
-    public <I extends ISignal> List<I> process(SpikeSignal input, AttentionNeuron neuron) {
+    public <I extends ISignal> List<I> process(SpikeSignal input, IAttentionNeuron neuron) {
         List<I> results = new ArrayList<>();
         String sourceId = input.getSourceNeuronId() != null ? input.getSourceNeuronId().toString() : "unknown";
         double[] goalFeature = neuron.getActiveGoalFeature();
@@ -28,6 +29,6 @@ public class SalienceComputationProcessor implements ISignalProcessor<SpikeSigna
     @Override public String getDescription() { return "SalienceComputationProcessor"; }
     @Override public Boolean hasMerger() { return false; }
     @Override public Class<? extends ISignalProcessor> getSignalProcessorClass() { return SalienceComputationProcessor.class; }
-    @Override public Class<AttentionNeuron> getNeuronClass() { return AttentionNeuron.class; }
+    @Override public Class<IAttentionNeuron> getNeuronClass() { return IAttentionNeuron.class; }
     @Override public Class<SpikeSignal> getSignalClass() { return SpikeSignal.class; }
 }

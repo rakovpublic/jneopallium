@@ -16,7 +16,7 @@ import java.util.Set;
  * (extra-time, screen-reader, reduced-animation, etc.).
  * Loop=2 / Epoch=3.
  */
-public class FairnessNeuron extends ModulatableNeuron {
+public class FairnessNeuron extends ModulatableNeuron implements IFairnessNeuron {
 
     private final Set<String> accommodationFlags = new HashSet<>();
     private boolean responseTimePenalty = true;

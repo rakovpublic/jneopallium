@@ -5,6 +5,7 @@ import com.rakovpublic.jneuropallium.ai.enums.LoopType;
 import com.rakovpublic.jneuropallium.ai.enums.NeuromodulatorType;
 import com.rakovpublic.jneuropallium.ai.model.ActiveIntervention;
 import com.rakovpublic.jneuropallium.ai.neurons.loop.LoopCircuitBreakerNeuron;
+import com.rakovpublic.jneuropallium.ai.neurons.loop.ILoopCircuitBreakerNeuron;
 import com.rakovpublic.jneuropallium.ai.signals.fast.LoopAlertSignal;
 import com.rakovpublic.jneuropallium.ai.signals.fast.LoopInterventionSignal;
 import com.rakovpublic.jneuropallium.ai.signals.slow.LoopRecoverySignal;
@@ -16,10 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class InterventionDispatchProcessor implements ISignalProcessor<LoopAlertSignal, LoopCircuitBreakerNeuron> {
+public class InterventionDispatchProcessor implements ISignalProcessor<LoopAlertSignal, ILoopCircuitBreakerNeuron> {
 
     @Override
-    public <I extends ISignal> List<I> process(LoopAlertSignal input, LoopCircuitBreakerNeuron neuron) {
+    public <I extends ISignal> List<I> process(LoopAlertSignal input, ILoopCircuitBreakerNeuron neuron) {
         List<I> results = new ArrayList<>();
         double severity = input.getSeverity();
         String region = input.getRegionId();
@@ -78,6 +79,6 @@ public class InterventionDispatchProcessor implements ISignalProcessor<LoopAlert
     @Override public String getDescription() { return "InterventionDispatchProcessor"; }
     @Override public Boolean hasMerger() { return false; }
     @Override public Class<? extends ISignalProcessor> getSignalProcessorClass() { return InterventionDispatchProcessor.class; }
-    @Override public Class<LoopCircuitBreakerNeuron> getNeuronClass() { return LoopCircuitBreakerNeuron.class; }
+    @Override public Class<ILoopCircuitBreakerNeuron> getNeuronClass() { return ILoopCircuitBreakerNeuron.class; }
     @Override public Class<LoopAlertSignal> getSignalClass() { return LoopAlertSignal.class; }
 }

@@ -12,7 +12,7 @@ import com.rakovpublic.jneuropallium.worker.net.signals.impl.tutoring.ResponseSi
  * correctness spike and a continuous error delta.
  * Loop=1 / Epoch=1.
  */
-public class ResponseObserverNeuron extends ModulatableNeuron {
+public class ResponseObserverNeuron extends ModulatableNeuron implements IResponseObserverNeuron {
 
     private int totalResponses;
     private int totalCorrect;

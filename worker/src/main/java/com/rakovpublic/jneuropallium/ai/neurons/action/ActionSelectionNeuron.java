@@ -13,7 +13,7 @@ import java.util.Set;
  * Maintains a candidate action map and a set of vetoed plan IDs.
  * Softmax selection is dopamine-scaled; confidence threshold is NE-modulated.
  */
-public class ActionSelectionNeuron extends ModulatableNeuron {
+public class ActionSelectionNeuron extends ModulatableNeuron implements IActionSelectionNeuron {
 
     private Map<String, MotorCommandSignal> candidates;
     private Set<String> pendingVetoes;

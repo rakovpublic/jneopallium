@@ -11,7 +11,7 @@ import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalChain;
  * gates features (stim, high-rate decoding) as the budget drops.
  * Loop=2 / Epoch=1.
  */
-public class PowerBudgetNeuron extends ModulatableNeuron {
+public class PowerBudgetNeuron extends ModulatableNeuron implements IPowerBudgetNeuron {
 
     public enum PowerMode { NORMAL, CONSERVE, EMERGENCY }
 

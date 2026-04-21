@@ -10,7 +10,7 @@ import java.util.Map;
  * Working memory neuron used by WorkingMemoryWriteProcessor and WorkingMemoryReadProcessor.
  * Maintains a bounded map of named, timestamped memory slots.
  */
-public class WorkingMemoryNeuron extends ModulatableNeuron {
+public class WorkingMemoryNeuron extends ModulatableNeuron implements IWorkingMemoryNeuron {
 
     private Map<String, TimestampedSlot> slots;
     private int maxSlots;

@@ -7,7 +7,7 @@ import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInitInput;
 
 import java.util.HashMap;
 
-public class CycleNeuron extends Neuron {
+public class CycleNeuron extends Neuron implements ICycleNeuron {
     private int loopCount;
 
     private HashMap<Class<? extends ISignal>, ProcessingFrequency> signalProcessingFrequencyMap;

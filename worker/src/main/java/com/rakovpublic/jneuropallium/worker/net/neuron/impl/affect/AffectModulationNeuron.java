@@ -15,7 +15,7 @@ import com.rakovpublic.jneuropallium.worker.net.signals.impl.affect.AppraisalSig
  * <p>Biological analogue: brainstem/diencephalic neuromodulatory nuclei
  * (locus coeruleus, raphe nuclei, VTA) broadcasting global state.
  */
-public class AffectModulationNeuron extends ModulatableNeuron implements IAffectiveNeuron {
+public class AffectModulationNeuron extends ModulatableNeuron implements IAffectiveNeuron, IAffectModulationNeuron {
 
     private double valence;
     private double arousal;

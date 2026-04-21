@@ -13,7 +13,7 @@ import com.rakovpublic.jneuropallium.worker.net.signals.impl.bci.ThermalSignal;
  * 2°C triggers an emergency shutdown of all stimulation.
  * Loop=2 / Epoch=1.
  */
-public class ThermalMonitorNeuron extends ModulatableNeuron {
+public class ThermalMonitorNeuron extends ModulatableNeuron implements IThermalMonitorNeuron {
 
     private double coolDownDeltaC = 1.0;
     private double shutdownDeltaC = 2.0;

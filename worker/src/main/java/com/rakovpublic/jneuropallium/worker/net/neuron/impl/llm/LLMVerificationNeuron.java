@@ -27,7 +27,7 @@ import java.util.List;
  *
  * <p>Verified info enters WorkingMemory with a reduced TTL — never LongTermMemory directly.
  */
-public class LLMVerificationNeuron extends Neuron {
+public class LLMVerificationNeuron extends Neuron implements ILLMVerificationNeuron {
 
     private static final Logger logger = LogManager.getLogger(LLMVerificationNeuron.class);
 

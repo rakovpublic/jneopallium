@@ -9,7 +9,7 @@ import java.util.Map;
  * Metaplasticity neuron used by MetaplasticityProcessor.
  * Adjusts plasticity rates per region to maintain homeostatic activity levels.
  */
-public class MetaplasticityNeuron extends ModulatableNeuron {
+public class MetaplasticityNeuron extends ModulatableNeuron implements IMetaplasticityNeuron {
 
     private Map<String, Double> activityHistory;
     private Map<String, Double> plasticityRates;

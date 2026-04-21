@@ -10,7 +10,7 @@ import java.util.Deque;
  * Passively records spike magnitudes in a ring buffer and computes
  * mean, variance, and trend statistics for downstream loop detection.
  */
-public class RegionMonitorNeuron extends ModulatableNeuron {
+public class RegionMonitorNeuron extends ModulatableNeuron implements IRegionMonitorNeuron {
 
     private String monitoredRegion;
     private Deque<Double> firingHistory;

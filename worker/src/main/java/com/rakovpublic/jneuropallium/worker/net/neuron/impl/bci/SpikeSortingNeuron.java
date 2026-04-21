@@ -16,7 +16,7 @@ import java.util.List;
  * creates a new one).
  * Loop=1 / Epoch=1.
  */
-public class SpikeSortingNeuron extends ModulatableNeuron {
+public class SpikeSortingNeuron extends ModulatableNeuron implements ISpikeSortingNeuron {
 
     private final List<double[]> templates = new ArrayList<>();
     private double matchThreshold = 0.8;

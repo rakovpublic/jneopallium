@@ -16,7 +16,7 @@ import java.util.Map;
  * Biological analogue: idiosyncratic motor-schema learning in M1 / premotor.
  * Loop=2 / Epoch=1.
  */
-public class PersonalMotorLexiconNeuron extends ModulatableNeuron {
+public class PersonalMotorLexiconNeuron extends ModulatableNeuron implements IPersonalMotorLexiconNeuron {
 
     private final Map<String, double[]> lexicon = new HashMap<>();
     private double matchThreshold = 0.7;

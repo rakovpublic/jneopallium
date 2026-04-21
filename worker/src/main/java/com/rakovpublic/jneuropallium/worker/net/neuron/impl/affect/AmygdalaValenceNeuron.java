@@ -13,7 +13,7 @@ import com.rakovpublic.jneuropallium.worker.net.signals.impl.affect.AppraisalSig
  * <p>Biological analogue: basolateral &amp; central amygdala nuclei
  * (LeDoux 1998).
  */
-public class AmygdalaValenceNeuron extends ModulatableNeuron implements IAffectiveNeuron {
+public class AmygdalaValenceNeuron extends ModulatableNeuron implements IAffectiveNeuron, IAmygdalaValenceNeuron {
 
     private double valence;
     private double arousal;

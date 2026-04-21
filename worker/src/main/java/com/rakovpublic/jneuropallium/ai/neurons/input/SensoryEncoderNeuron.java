@@ -6,7 +6,7 @@ import com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron;
  * Sensory encoder neuron used by PopulationCodeProcessor.
  * Each neuron is tuned to a preferred stimulus value with a Gaussian receptive field.
  */
-public class SensoryEncoderNeuron extends ModulatableNeuron {
+public class SensoryEncoderNeuron extends ModulatableNeuron implements ISensoryEncoderNeuron {
 
     private double preferredValue;
     private double sigma;

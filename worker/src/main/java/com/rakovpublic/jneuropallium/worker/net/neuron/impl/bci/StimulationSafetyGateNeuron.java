@@ -18,7 +18,7 @@ import java.util.Map;
  * sit between {@code ProstheticPlanningNeuron} and any stim actuator.
  * Loop=1 / Epoch=1.
  */
-public class StimulationSafetyGateNeuron extends ModulatableNeuron {
+public class StimulationSafetyGateNeuron extends ModulatableNeuron implements IStimulationSafetyGateNeuron {
 
     /** Shannon criterion default (µC/cm² per phase). */
     private double maxChargeDensityUCcm2 = 0.5;

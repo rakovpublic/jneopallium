@@ -13,7 +13,7 @@ import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalChain;
  * Wise 2005).
  * Loop=1 / Epoch=3.
  */
-public class ProstheticPlanningNeuron extends ModulatableNeuron {
+public class ProstheticPlanningNeuron extends ModulatableNeuron implements IProstheticPlanningNeuron {
 
     private int dof = 7;
     private double[] jointMin;

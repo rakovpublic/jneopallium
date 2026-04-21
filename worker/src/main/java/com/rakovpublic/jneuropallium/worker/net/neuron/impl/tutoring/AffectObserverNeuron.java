@@ -13,7 +13,7 @@ import com.rakovpublic.jneuropallium.worker.net.signals.impl.tutoring.AffectObse
  * module; not a psychological diagnosis.
  * Loop=1 / Epoch=2.
  */
-public class AffectObserverNeuron extends ModulatableNeuron {
+public class AffectObserverNeuron extends ModulatableNeuron implements IAffectObserverNeuron {
 
     private double engagementEwma = 0.5;
     private double accuracyEwma = 0.5;

@@ -1,6 +1,7 @@
 package com.rakovpublic.jneuropallium.ai.processors;
 
 import com.rakovpublic.jneuropallium.ai.neurons.action.ActionSelectionNeuron;
+import com.rakovpublic.jneuropallium.ai.neurons.action.IActionSelectionNeuron;
 import com.rakovpublic.jneuropallium.ai.signals.fast.MotorCommandSignal;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
@@ -9,10 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class CompetitiveSelectionProcessor implements ISignalProcessor<MotorCommandSignal, ActionSelectionNeuron> {
+public class CompetitiveSelectionProcessor implements ISignalProcessor<MotorCommandSignal, IActionSelectionNeuron> {
 
     @Override
-    public <I extends ISignal> List<I> process(MotorCommandSignal input, ActionSelectionNeuron neuron) {
+    public <I extends ISignal> List<I> process(MotorCommandSignal input, IActionSelectionNeuron neuron) {
         List<I> results = new ArrayList<>();
         // Do not accept signals that are already vetoed
         if (input.getActionPlanId() != null && neuron.hasPendingVeto(input.getActionPlanId())) {
@@ -52,6 +53,6 @@ public class CompetitiveSelectionProcessor implements ISignalProcessor<MotorComm
     @Override public String getDescription() { return "CompetitiveSelectionProcessor"; }
     @Override public Boolean hasMerger() { return false; }
     @Override public Class<? extends ISignalProcessor> getSignalProcessorClass() { return CompetitiveSelectionProcessor.class; }
-    @Override public Class<ActionSelectionNeuron> getNeuronClass() { return ActionSelectionNeuron.class; }
+    @Override public Class<IActionSelectionNeuron> getNeuronClass() { return IActionSelectionNeuron.class; }
     @Override public Class<MotorCommandSignal> getSignalClass() { return MotorCommandSignal.class; }
 }

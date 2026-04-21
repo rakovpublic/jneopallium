@@ -13,7 +13,7 @@ import java.util.List;
  * combining ZPD fit and an intrinsic-curiosity novelty term.
  * Loop=1 / Epoch=1.
  */
-public class ContentSelectionNeuron extends ModulatableNeuron {
+public class ContentSelectionNeuron extends ModulatableNeuron implements IContentSelectionNeuron {
 
     public static final class ScoredItem {
         public final String itemId;

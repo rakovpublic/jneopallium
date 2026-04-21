@@ -11,7 +11,7 @@ import java.util.Map;
  * Maintains a world-state model and per-action effect weights for forward simulation.
  * The world model is always deep-cloned before simulation — the live model is never mutated.
  */
-public class ConsequenceModelNeuron extends ModulatableNeuron {
+public class ConsequenceModelNeuron extends ModulatableNeuron implements IConsequenceModelNeuron {
 
     private WorldStateModel worldModel;
     private Map<String, double[]> actionEffectWeights;

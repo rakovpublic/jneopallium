@@ -16,7 +16,7 @@ import com.rakovpublic.jneuropallium.worker.net.signals.impl.bci.SeizureRiskSign
  * gate (Worrell et al. 2008).
  * Loop=1 / Epoch=1.
  */
-public class SeizureWatchdogNeuron extends ModulatableNeuron {
+public class SeizureWatchdogNeuron extends ModulatableNeuron implements ISeizureWatchdogNeuron {
 
     private double riskThreshold = 0.8;
     private long lockoutDurationTicks = 60_000;   // ≈ 60s @ 1 kHz

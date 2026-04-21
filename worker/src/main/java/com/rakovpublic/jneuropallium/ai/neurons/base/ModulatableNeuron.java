@@ -6,7 +6,7 @@ import com.rakovpublic.jneuropallium.worker.net.neuron.impl.Neuron;
  * Base neuron class that holds neuromodulator state.
  * All neurons that respond to neuromodulator signals should extend this.
  */
-public abstract class ModulatableNeuron extends Neuron {
+public abstract class ModulatableNeuron extends Neuron implements IModulatableNeuron {
 
     protected double dopamineLevel = 1.0;
     protected double errorDampeningFactor = 0.0;

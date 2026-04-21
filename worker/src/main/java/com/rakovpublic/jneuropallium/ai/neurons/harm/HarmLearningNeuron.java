@@ -10,7 +10,7 @@ import java.util.Map;
  * Maintains a per-plan predicted-harm cache and applies asymmetric learning:
  * harm under-estimates are corrected faster than over-estimates (conservatism bias > 1.0).
  */
-public class HarmLearningNeuron extends ModulatableNeuron {
+public class HarmLearningNeuron extends ModulatableNeuron implements IHarmLearningNeuron {
 
     private double learningRate;
     private double conservatismBias;

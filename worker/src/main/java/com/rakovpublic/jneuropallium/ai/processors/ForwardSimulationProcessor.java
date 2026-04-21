@@ -2,6 +2,7 @@ package com.rakovpublic.jneuropallium.ai.processors;
 
 import com.rakovpublic.jneuropallium.ai.model.WorldStateModel;
 import com.rakovpublic.jneuropallium.ai.neurons.harm.ConsequenceModelNeuron;
+import com.rakovpublic.jneuropallium.ai.neurons.harm.IConsequenceModelNeuron;
 import com.rakovpublic.jneuropallium.ai.signals.fast.ConsequenceQuerySignal;
 import com.rakovpublic.jneuropallium.ai.signals.fast.ConsequenceSimulationSignal;
 import com.rakovpublic.jneuropallium.ai.signals.fast.MotorCommandSignal;
@@ -11,10 +12,10 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ForwardSimulationProcessor implements ISignalProcessor<ConsequenceQuerySignal, ConsequenceModelNeuron> {
+public class ForwardSimulationProcessor implements ISignalProcessor<ConsequenceQuerySignal, IConsequenceModelNeuron> {
 
     @Override
-    public <I extends ISignal> List<I> process(ConsequenceQuerySignal input, ConsequenceModelNeuron neuron) {
+    public <I extends ISignal> List<I> process(ConsequenceQuerySignal input, IConsequenceModelNeuron neuron) {
         List<I> results = new ArrayList<>();
         if (input.getCandidateActions() == null) return results;
 
@@ -48,6 +49,6 @@ public class ForwardSimulationProcessor implements ISignalProcessor<ConsequenceQ
     @Override public String getDescription() { return "ForwardSimulationProcessor"; }
     @Override public Boolean hasMerger() { return false; }
     @Override public Class<? extends ISignalProcessor> getSignalProcessorClass() { return ForwardSimulationProcessor.class; }
-    @Override public Class<ConsequenceModelNeuron> getNeuronClass() { return ConsequenceModelNeuron.class; }
+    @Override public Class<IConsequenceModelNeuron> getNeuronClass() { return IConsequenceModelNeuron.class; }
     @Override public Class<ConsequenceQuerySignal> getSignalClass() { return ConsequenceQuerySignal.class; }
 }

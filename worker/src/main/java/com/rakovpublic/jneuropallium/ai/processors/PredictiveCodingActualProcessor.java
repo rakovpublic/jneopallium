@@ -1,6 +1,7 @@
 package com.rakovpublic.jneuropallium.ai.processors;
 
 import com.rakovpublic.jneuropallium.ai.neurons.memory.PredictiveNeuron;
+import com.rakovpublic.jneuropallium.ai.neurons.memory.IPredictiveNeuron;
 import com.rakovpublic.jneuropallium.ai.signals.fast.ComparisonSignal;
 import com.rakovpublic.jneuropallium.ai.signals.fast.SensorySignal;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;
@@ -9,10 +10,10 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PredictiveCodingActualProcessor implements ISignalProcessor<SensorySignal, PredictiveNeuron> {
+public class PredictiveCodingActualProcessor implements ISignalProcessor<SensorySignal, IPredictiveNeuron> {
 
     @Override
-    public <I extends ISignal> List<I> process(SensorySignal input, PredictiveNeuron neuron) {
+    public <I extends ISignal> List<I> process(SensorySignal input, IPredictiveNeuron neuron) {
         List<I> results = new ArrayList<>();
         double actual = (input.getRawValues() != null && input.getRawValues().length > 0) ? input.getRawValues()[0] : 0.0;
         double predicted = (neuron.getLastPrediction() != null && neuron.getLastPrediction().length > 0)
@@ -26,6 +27,6 @@ public class PredictiveCodingActualProcessor implements ISignalProcessor<Sensory
     @Override public String getDescription() { return "PredictiveCodingActualProcessor"; }
     @Override public Boolean hasMerger() { return false; }
     @Override public Class<? extends ISignalProcessor> getSignalProcessorClass() { return PredictiveCodingActualProcessor.class; }
-    @Override public Class<PredictiveNeuron> getNeuronClass() { return PredictiveNeuron.class; }
+    @Override public Class<IPredictiveNeuron> getNeuronClass() { return IPredictiveNeuron.class; }
     @Override public Class<SensorySignal> getSignalClass() { return SensorySignal.class; }
 }

@@ -13,7 +13,7 @@ import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalChain;
  * stand-in; production deployments plug in a trained sequential VAE.
  * Loop=1 / Epoch=2.
  */
-public class LatentDynamicsNeuron extends ModulatableNeuron {
+public class LatentDynamicsNeuron extends ModulatableNeuron implements ILatentDynamicsNeuron {
 
     private double[] latent;
     private double leak = 0.9;

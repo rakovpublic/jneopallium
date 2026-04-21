@@ -13,7 +13,7 @@ import com.rakovpublic.jneuropallium.worker.net.signals.impl.tutoring.Interventi
  * ENCOURAGE → BREAK → REDIRECT → ESCALATE_TO_HUMAN.
  * Loop=1 / Epoch=1.
  */
-public class WellbeingGuardNeuron extends ModulatableNeuron {
+public class WellbeingGuardNeuron extends ModulatableNeuron implements IWellbeingGuardNeuron {
 
     private int consecutiveFrustrationTicks;
     private int consecutiveBoredomTicks;

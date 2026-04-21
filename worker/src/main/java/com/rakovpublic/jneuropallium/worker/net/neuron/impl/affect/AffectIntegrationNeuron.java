@@ -15,7 +15,7 @@ import com.rakovpublic.jneuropallium.worker.net.signals.impl.affect.AppraisalSig
  * <p>Biological analogue: ventromedial prefrontal / orbitofrontal integration
  * of cognitive appraisal and interoception.
  */
-public class AffectIntegrationNeuron extends ModulatableNeuron implements IAffectiveNeuron {
+public class AffectIntegrationNeuron extends ModulatableNeuron implements IAffectiveNeuron, IAffectIntegrationNeuron {
 
     private double valence;
     private double arousal;

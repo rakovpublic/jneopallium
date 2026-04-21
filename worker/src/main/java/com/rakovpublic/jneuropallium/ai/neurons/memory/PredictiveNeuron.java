@@ -7,7 +7,7 @@ import com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron;
  * Predictive neuron used by PredictiveCodingContextProcessor and PredictiveCodingActualProcessor.
  * Holds an internal forward model and caches the most recent prediction.
  */
-public class PredictiveNeuron extends ModulatableNeuron {
+public class PredictiveNeuron extends ModulatableNeuron implements IPredictiveNeuron {
 
     private InternalForwardModel model;
     private double[] lastPrediction;

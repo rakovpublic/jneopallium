@@ -29,7 +29,7 @@ import java.util.concurrent.atomic.AtomicLong;
  *
  * <p>In OPEN state all LLM signals are rerouted to fallback processing immediately.
  */
-public class LLMFallbackNeuron extends Neuron {
+public class LLMFallbackNeuron extends Neuron implements ILLMFallbackNeuron {
 
     private static final Logger logger = LogManager.getLogger(LLMFallbackNeuron.class);
 

@@ -1,6 +1,7 @@
 package com.rakovpublic.jneuropallium.ai.processors;
 
 import com.rakovpublic.jneuropallium.ai.neurons.harm.HarmLearningNeuron;
+import com.rakovpublic.jneuropallium.ai.neurons.harm.IHarmLearningNeuron;
 import com.rakovpublic.jneuropallium.ai.signals.slow.HarmFeedbackSignal;
 import com.rakovpublic.jneuropallium.ai.signals.slow.HarmModelUpdateSignal;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;
@@ -9,10 +10,10 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FeedbackLearningProcessor implements ISignalProcessor<HarmFeedbackSignal, HarmLearningNeuron> {
+public class FeedbackLearningProcessor implements ISignalProcessor<HarmFeedbackSignal, IHarmLearningNeuron> {
 
     @Override
-    public <I extends ISignal> List<I> process(HarmFeedbackSignal input, HarmLearningNeuron neuron) {
+    public <I extends ISignal> List<I> process(HarmFeedbackSignal input, IHarmLearningNeuron neuron) {
         List<I> results = new ArrayList<>();
         double lr = neuron.getLearningRate();
         double bias = neuron.getConservatismBias(); // always > 1.0
@@ -44,6 +45,6 @@ public class FeedbackLearningProcessor implements ISignalProcessor<HarmFeedbackS
     @Override public String getDescription() { return "FeedbackLearningProcessor"; }
     @Override public Boolean hasMerger() { return false; }
     @Override public Class<? extends ISignalProcessor> getSignalProcessorClass() { return FeedbackLearningProcessor.class; }
-    @Override public Class<HarmLearningNeuron> getNeuronClass() { return HarmLearningNeuron.class; }
+    @Override public Class<IHarmLearningNeuron> getNeuronClass() { return IHarmLearningNeuron.class; }
     @Override public Class<HarmFeedbackSignal> getSignalClass() { return HarmFeedbackSignal.class; }
 }

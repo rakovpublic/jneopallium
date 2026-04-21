@@ -13,7 +13,7 @@ import com.rakovpublic.jneuropallium.worker.net.signals.impl.affect.Interoceptiv
  * <p>Biological analogue: anterior insular cortex integrates
  * interoceptive signals into a unified body-state percept (Craig 2009).
  */
-public class AnteriorInsulaNeuron extends ModulatableNeuron implements IInteroceptive {
+public class AnteriorInsulaNeuron extends ModulatableNeuron implements IInteroceptive, IAnteriorInsulaNeuron {
 
     private double homeostaticError;
     private double energyBudget;

@@ -23,7 +23,7 @@ import java.util.Set;
  * <p>Biological analogue: prefrontal-cortex REM recombination
  * (Wamsley &amp; Stickgold 2011).
  */
-public class REMDreamingNeuron extends ModulatableNeuron {
+public class REMDreamingNeuron extends ModulatableNeuron implements IREMDreamingNeuron {
 
     private int recombinationCount = 5;
     private double maxNoveltyForPlanning = 0.7;

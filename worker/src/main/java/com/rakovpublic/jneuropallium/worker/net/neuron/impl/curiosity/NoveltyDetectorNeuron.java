@@ -19,7 +19,7 @@ import java.util.Map;
  * <p>Biological analogue: hippocampal CA1 novelty signal (Vinogradova 2001;
  * Lisman &amp; Grace 2005 SN/VTA loop).
  */
-public class NoveltyDetectorNeuron extends ModulatableNeuron {
+public class NoveltyDetectorNeuron extends ModulatableNeuron implements INoveltyDetectorNeuron {
 
     private final int bitCount;
     private final BitSet filter;

@@ -20,7 +20,7 @@ import java.util.Set;
  * prerequisites. Consulted by {@link ZPDPlanningNeuron}.
  * Loop=2 / Epoch=5.
  */
-public class PrerequisiteGraphNeuron extends ModulatableNeuron {
+public class PrerequisiteGraphNeuron extends ModulatableNeuron implements IPrerequisiteGraphNeuron {
 
     private final Map<String, Set<String>> prerequisites = new HashMap<>();
     private double masteryThreshold = 0.7;

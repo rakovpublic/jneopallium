@@ -9,7 +9,7 @@ import java.util.Map;
  * Attention neuron used by SalienceComputationProcessor and SalienceGoalProcessor.
  * Maintains a goal-feature map for top-down biasing and a salience map for bottom-up inputs.
  */
-public class AttentionNeuron extends ModulatableNeuron {
+public class AttentionNeuron extends ModulatableNeuron implements IAttentionNeuron {
 
     private Map<String, double[]> goalFeatureMap;
     private Map<String, Double> salienceMap;

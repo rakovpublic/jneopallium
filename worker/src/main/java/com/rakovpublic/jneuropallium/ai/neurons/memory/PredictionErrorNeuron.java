@@ -6,7 +6,7 @@ import com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron;
  * Reward prediction error neuron used by RewardPredictionErrorProcessor.
  * Emits dopamine on positive surprise and serotonin on negative surprise.
  */
-public class PredictionErrorNeuron extends ModulatableNeuron {
+public class PredictionErrorNeuron extends ModulatableNeuron implements IPredictionErrorNeuron {
 
     private double thetaPositive;
     private double thetaNegative;

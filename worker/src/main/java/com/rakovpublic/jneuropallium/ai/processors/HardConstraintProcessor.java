@@ -3,6 +3,7 @@ package com.rakovpublic.jneuropallium.ai.processors;
 import com.rakovpublic.jneuropallium.ai.enums.HarmVerdict;
 import com.rakovpublic.jneuropallium.ai.model.AbsoluteConstraint;
 import com.rakovpublic.jneuropallium.ai.neurons.harm.EthicalPriorityNeuron;
+import com.rakovpublic.jneuropallium.ai.neurons.harm.IEthicalPriorityNeuron;
 import com.rakovpublic.jneuropallium.ai.signals.fast.HarmAssessmentSignal;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
@@ -10,10 +11,10 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HardConstraintProcessor implements ISignalProcessor<HarmAssessmentSignal, EthicalPriorityNeuron> {
+public class HardConstraintProcessor implements ISignalProcessor<HarmAssessmentSignal, IEthicalPriorityNeuron> {
 
     @Override
-    public <I extends ISignal> List<I> process(HarmAssessmentSignal input, EthicalPriorityNeuron neuron) {
+    public <I extends ISignal> List<I> process(HarmAssessmentSignal input, IEthicalPriorityNeuron neuron) {
         List<I> results = new ArrayList<>();
         HarmVerdict verdict = input.getVerdict();
 
@@ -47,6 +48,6 @@ public class HardConstraintProcessor implements ISignalProcessor<HarmAssessmentS
     @Override public String getDescription() { return "HardConstraintProcessor"; }
     @Override public Boolean hasMerger() { return false; }
     @Override public Class<? extends ISignalProcessor> getSignalProcessorClass() { return HardConstraintProcessor.class; }
-    @Override public Class<EthicalPriorityNeuron> getNeuronClass() { return EthicalPriorityNeuron.class; }
+    @Override public Class<IEthicalPriorityNeuron> getNeuronClass() { return IEthicalPriorityNeuron.class; }
     @Override public Class<HarmAssessmentSignal> getSignalClass() { return HarmAssessmentSignal.class; }
 }

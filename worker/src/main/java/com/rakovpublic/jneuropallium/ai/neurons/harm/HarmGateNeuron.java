@@ -14,7 +14,7 @@ import java.util.Queue;
  * Acts as a safety checkpoint: caches verdicts, queues pending motor commands,
  * and applies the precautionary principle for uncertain assessments.
  */
-public class HarmGateNeuron extends ModulatableNeuron {
+public class HarmGateNeuron extends ModulatableNeuron implements IHarmGateNeuron {
 
     private Map<String, HarmAssessmentSignal> assessmentCache;
     private Queue<MotorCommandSignal> pendingQueue;

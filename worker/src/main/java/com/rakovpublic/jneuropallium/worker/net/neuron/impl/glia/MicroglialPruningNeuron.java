@@ -18,7 +18,7 @@ import java.util.Map;
  * <p>Biological analogue: microglial synaptic pruning
  * (Schafer et al. 2012).
  */
-public class MicroglialPruningNeuron extends ModulatableNeuron {
+public class MicroglialPruningNeuron extends ModulatableNeuron implements IMicroglialPruningNeuron {
 
     /** Connection key: encoded {@code (sourceId, targetId)}. */
     private static class Key {

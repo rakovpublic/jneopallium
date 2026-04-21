@@ -9,7 +9,7 @@ import java.util.List;
  * Long-term memory neuron used by ConsolidationProcessor.
  * Stores Hebbian pattern/value pairs and supports importance-gated writes with forgetting decay.
  */
-public class LongTermMemoryNeuron extends ModulatableNeuron {
+public class LongTermMemoryNeuron extends ModulatableNeuron implements ILongTermMemoryNeuron {
 
     private List<double[]> patterns;
     private List<double[]> values;

@@ -3,6 +3,7 @@ package com.rakovpublic.jneuropallium.ai.processors;
 import com.rakovpublic.jneuropallium.ai.enums.HarmVerdict;
 import com.rakovpublic.jneuropallium.ai.model.HarmThreshold;
 import com.rakovpublic.jneuropallium.ai.neurons.harm.HarmEvaluationNeuron;
+import com.rakovpublic.jneuropallium.ai.neurons.harm.IHarmEvaluationNeuron;
 import com.rakovpublic.jneuropallium.ai.signals.fast.ConsequenceSimulationSignal;
 import com.rakovpublic.jneuropallium.ai.signals.fast.HarmAssessmentSignal;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;
@@ -12,13 +13,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class SimulationAggregationProcessor implements ISignalProcessor<ConsequenceSimulationSignal, HarmEvaluationNeuron> {
+public class SimulationAggregationProcessor implements ISignalProcessor<ConsequenceSimulationSignal, IHarmEvaluationNeuron> {
 
     // Dimension names for threshold lookup
     private static final String[] DIM_NAMES = {"physicalIntegrity", "autonomy", "resource", "information", "emotional"};
 
     @Override
-    public <I extends ISignal> List<I> process(ConsequenceSimulationSignal input, HarmEvaluationNeuron neuron) {
+    public <I extends ISignal> List<I> process(ConsequenceSimulationSignal input, IHarmEvaluationNeuron neuron) {
         List<I> results = new ArrayList<>();
         String planId = input.getActionPlanId();
         neuron.getPendingSimulations().computeIfAbsent(planId, k -> new ArrayList<>()).add(input);
@@ -60,6 +61,6 @@ public class SimulationAggregationProcessor implements ISignalProcessor<Conseque
     @Override public String getDescription() { return "SimulationAggregationProcessor"; }
     @Override public Boolean hasMerger() { return false; }
     @Override public Class<? extends ISignalProcessor> getSignalProcessorClass() { return SimulationAggregationProcessor.class; }
-    @Override public Class<HarmEvaluationNeuron> getNeuronClass() { return HarmEvaluationNeuron.class; }
+    @Override public Class<IHarmEvaluationNeuron> getNeuronClass() { return IHarmEvaluationNeuron.class; }
     @Override public Class<ConsequenceSimulationSignal> getSignalClass() { return ConsequenceSimulationSignal.class; }
 }

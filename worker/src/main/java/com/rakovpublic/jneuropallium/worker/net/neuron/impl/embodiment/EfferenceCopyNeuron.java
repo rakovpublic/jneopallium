@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicLong;
  * <p>Biological analogue: the classic branch-point of a descending motor
  * command to the cerebellar forward model (Wolpert 1998).
  */
-public class EfferenceCopyNeuron extends ModulatableNeuron implements IEfferenceCopyProducer {
+public class EfferenceCopyNeuron extends ModulatableNeuron implements IEfferenceCopyProducer, IEfferenceCopyNeuron {
 
     private static final AtomicLong COMMAND_COUNTER = new AtomicLong(0);
 

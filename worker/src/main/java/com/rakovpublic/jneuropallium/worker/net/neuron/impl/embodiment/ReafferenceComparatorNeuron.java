@@ -19,7 +19,7 @@ import java.util.Map;
  * Layer 1, loop=1 / epoch=1.
  * <p>Biological analogue: cerebellar Purkinje-cell comparator.
  */
-public class ReafferenceComparatorNeuron extends ModulatableNeuron implements IEmbodied {
+public class ReafferenceComparatorNeuron extends ModulatableNeuron implements IEmbodied, IReafferenceComparatorNeuron {
 
     private final Map<Integer, EfferenceCopySignal> pendingByEffector = new HashMap<>();
     private BodySchema schema = new BodySchema();

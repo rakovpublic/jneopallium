@@ -20,7 +20,7 @@ import java.util.Set;
  * <p>Biological analogue: prefrontal computation of controllability,
  * aligned with Klyubin et al. (2005) "empowerment" measure.
  */
-public class EmpowermentNeuron extends ModulatableNeuron {
+public class EmpowermentNeuron extends ModulatableNeuron implements IEmpowermentNeuron {
 
     private int horizon = 3;
     private int nActionSamples = 8;

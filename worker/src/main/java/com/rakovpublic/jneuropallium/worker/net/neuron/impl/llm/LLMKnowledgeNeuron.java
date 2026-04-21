@@ -31,7 +31,7 @@ import java.util.concurrent.CompletableFuture;
  *   <li>Integration is disabled by default; enable via LLMConfig.</li>
  * </ul>
  */
-public class LLMKnowledgeNeuron extends Neuron implements ILLMCapable {
+public class LLMKnowledgeNeuron extends Neuron implements ILLMCapable, ILLMKnowledgeNeuron {
 
     private static final Logger logger = LogManager.getLogger(LLMKnowledgeNeuron.class);
     private static final int MAX_CACHE_SIZE = 256;

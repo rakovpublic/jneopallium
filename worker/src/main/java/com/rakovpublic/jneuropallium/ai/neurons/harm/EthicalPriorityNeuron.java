@@ -12,7 +12,7 @@ import java.util.List;
  * Holds a list of absolute (monotonically-escalating) safety constraints.
  * A constraint can only raise a harm verdict — it can never lower it.
  */
-public class EthicalPriorityNeuron extends ModulatableNeuron {
+public class EthicalPriorityNeuron extends ModulatableNeuron implements IEthicalPriorityNeuron {
 
     private List<AbsoluteConstraint> hardConstraints;
 

@@ -13,7 +13,7 @@ import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalChain;
  * classes.
  * Loop=2 / Epoch=1.
  */
-public class FlowStateNeuron extends ModulatableNeuron {
+public class FlowStateNeuron extends ModulatableNeuron implements IFlowStateNeuron {
 
     private FlowStateKind currentState = FlowStateKind.NEUTRAL;
     private double lastEngagement;

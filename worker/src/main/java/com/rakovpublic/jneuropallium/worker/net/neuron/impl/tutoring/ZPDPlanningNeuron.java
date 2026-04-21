@@ -17,7 +17,7 @@ import java.util.List;
  * target success rate (default 0.75) — not-too-easy, not-too-hard.
  * Loop=1 / Epoch=3.
  */
-public class ZPDPlanningNeuron extends ModulatableNeuron {
+public class ZPDPlanningNeuron extends ModulatableNeuron implements IZPDPlanningNeuron {
 
     public static final class Candidate {
         public final String itemId;

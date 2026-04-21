@@ -14,7 +14,7 @@ import com.rakovpublic.jneuropallium.worker.net.signals.impl.bci.NeuralSpikeSign
  * hardware-specific adapter; the signal boundary stays the same.
  * Loop=1 / Epoch=1.
  */
-public class SpikeRecordingNeuron extends ModulatableNeuron {
+public class SpikeRecordingNeuron extends ModulatableNeuron implements ISpikeRecordingNeuron {
 
     private double thresholdUV = 80.0;
     private int channelId;

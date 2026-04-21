@@ -21,7 +21,7 @@ import java.util.Random;
  * <p>Biological analogue: CA1 place-cell sequence reactivation during
  * rest (Wilson &amp; McNaughton 1994; Foster &amp; Wilson 2006).
  */
-public class HippocampalReplayNeuron extends ModulatableNeuron {
+public class HippocampalReplayNeuron extends ModulatableNeuron implements IHippocampalReplayNeuron {
 
     private final LinkedHashMap<String, Episode> buffer = new LinkedHashMap<>();
     private int topK = 20;

@@ -13,7 +13,7 @@ import com.rakovpublic.jneuropallium.worker.net.signals.impl.bci.StimulationComm
  * command to the stim driver, and records the dispatch for transparency logs.
  * Loop=1 / Epoch=1.
  */
-public class ActuatorNeuron extends ModulatableNeuron {
+public class ActuatorNeuron extends ModulatableNeuron implements IActuatorNeuron {
 
     private long dispatched;
     private long lastDispatchTick;

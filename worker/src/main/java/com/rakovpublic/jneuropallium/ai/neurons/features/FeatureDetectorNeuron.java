@@ -6,7 +6,7 @@ import com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron;
  * Feature detector neuron used by TemplateMatchProcessor.
  * Holds a weighted template (receptive-field weight vector) and a detection threshold.
  */
-public class FeatureDetectorNeuron extends ModulatableNeuron {
+public class FeatureDetectorNeuron extends ModulatableNeuron implements IFeatureDetectorNeuron {
 
     private double[] weightedTemplate;
     private double detectionThreshold;

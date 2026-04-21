@@ -1,6 +1,7 @@
 package com.rakovpublic.jneuropallium.ai.processors;
 
 import com.rakovpublic.jneuropallium.ai.neurons.loop.RegionMonitorNeuron;
+import com.rakovpublic.jneuropallium.ai.neurons.loop.IRegionMonitorNeuron;
 import com.rakovpublic.jneuropallium.ai.signals.fast.ActivityMeasurementSignal;
 import com.rakovpublic.jneuropallium.ai.signals.fast.SpikeSignal;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;
@@ -10,10 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /** Counts only — never modifies signals. */
-public class PassiveCountingProcessor implements ISignalProcessor<SpikeSignal, RegionMonitorNeuron> {
+public class PassiveCountingProcessor implements ISignalProcessor<SpikeSignal, IRegionMonitorNeuron> {
 
     @Override
-    public <I extends ISignal> List<I> process(SpikeSignal input, RegionMonitorNeuron neuron) {
+    public <I extends ISignal> List<I> process(SpikeSignal input, IRegionMonitorNeuron neuron) {
         List<I> results = new ArrayList<>();
         if (!input.isFired()) return results;
         // Record in history ring buffer
@@ -32,6 +33,6 @@ public class PassiveCountingProcessor implements ISignalProcessor<SpikeSignal, R
     @Override public String getDescription() { return "PassiveCountingProcessor"; }
     @Override public Boolean hasMerger() { return false; }
     @Override public Class<? extends ISignalProcessor> getSignalProcessorClass() { return PassiveCountingProcessor.class; }
-    @Override public Class<RegionMonitorNeuron> getNeuronClass() { return RegionMonitorNeuron.class; }
+    @Override public Class<IRegionMonitorNeuron> getNeuronClass() { return IRegionMonitorNeuron.class; }
     @Override public Class<SpikeSignal> getSignalClass() { return SpikeSignal.class; }
 }

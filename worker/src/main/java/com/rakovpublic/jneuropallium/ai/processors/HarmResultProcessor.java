@@ -4,6 +4,7 @@ import com.rakovpublic.jneuropallium.ai.enums.HarmVerdict;
 import com.rakovpublic.jneuropallium.ai.enums.NeuromodulatorType;
 import com.rakovpublic.jneuropallium.ai.model.AlternativeAction;
 import com.rakovpublic.jneuropallium.ai.neurons.harm.HarmGateNeuron;
+import com.rakovpublic.jneuropallium.ai.neurons.harm.IHarmGateNeuron;
 import com.rakovpublic.jneuropallium.ai.signals.fast.*;
 import com.rakovpublic.jneuropallium.ai.signals.slow.NeuromodulatorSignal;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;
@@ -13,10 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 
-public class HarmResultProcessor implements ISignalProcessor<HarmAssessmentSignal, HarmGateNeuron> {
+public class HarmResultProcessor implements ISignalProcessor<HarmAssessmentSignal, IHarmGateNeuron> {
 
     @Override
-    public <I extends ISignal> List<I> process(HarmAssessmentSignal input, HarmGateNeuron neuron) {
+    public <I extends ISignal> List<I> process(HarmAssessmentSignal input, IHarmGateNeuron neuron) {
         List<I> results = new ArrayList<>();
         String planId = input.getActionPlanId();
         // Cache the assessment
@@ -82,6 +83,6 @@ public class HarmResultProcessor implements ISignalProcessor<HarmAssessmentSigna
     @Override public String getDescription() { return "HarmResultProcessor"; }
     @Override public Boolean hasMerger() { return false; }
     @Override public Class<? extends ISignalProcessor> getSignalProcessorClass() { return HarmResultProcessor.class; }
-    @Override public Class<HarmGateNeuron> getNeuronClass() { return HarmGateNeuron.class; }
+    @Override public Class<IHarmGateNeuron> getNeuronClass() { return IHarmGateNeuron.class; }
     @Override public Class<HarmAssessmentSignal> getSignalClass() { return HarmAssessmentSignal.class; }
 }

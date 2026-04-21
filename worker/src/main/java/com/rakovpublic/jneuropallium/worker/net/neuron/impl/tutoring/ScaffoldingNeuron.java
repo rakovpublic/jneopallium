@@ -13,7 +13,7 @@ import com.rakovpublic.jneuropallium.worker.net.signals.impl.tutoring.Scaffoldin
  * current context. Based on Wood, Bruner, Ross 1976.
  * Loop=1 / Epoch=2.
  */
-public class ScaffoldingNeuron extends ModulatableNeuron {
+public class ScaffoldingNeuron extends ModulatableNeuron implements IScaffoldingNeuron {
 
     public ScaffoldingNeuron() { super(); }
     public ScaffoldingNeuron(Long neuronId, ISignalChain chain, Long run) { super(neuronId, chain, run); }

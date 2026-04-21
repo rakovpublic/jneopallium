@@ -13,7 +13,7 @@ import com.rakovpublic.jneuropallium.worker.net.signals.impl.tutoring.Engagement
  * Biological analogue: pulvinar / brainstem arousal gating.
  * Loop=1 / Epoch=2.
  */
-public class EngagementSensorNeuron extends ModulatableNeuron {
+public class EngagementSensorNeuron extends ModulatableNeuron implements IEngagementSensorNeuron {
 
     private double clickRateScore;
     private double dwellTimeScore;

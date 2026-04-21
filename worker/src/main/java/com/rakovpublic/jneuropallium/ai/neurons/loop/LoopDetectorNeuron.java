@@ -13,7 +13,7 @@ import java.util.Map;
  * Maintains a sliding-window history of activity measurements per region
  * to detect positive and negative runaway loops.
  */
-public class LoopDetectorNeuron extends ModulatableNeuron {
+public class LoopDetectorNeuron extends ModulatableNeuron implements ILoopDetectorNeuron {
 
     private Map<String, List<ActivityMeasurementSignal>> regionHistory;
     private Map<String, Double> baselineRates;

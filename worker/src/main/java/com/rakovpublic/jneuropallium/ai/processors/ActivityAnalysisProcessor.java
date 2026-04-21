@@ -2,6 +2,7 @@ package com.rakovpublic.jneuropallium.ai.processors;
 
 import com.rakovpublic.jneuropallium.ai.enums.LoopType;
 import com.rakovpublic.jneuropallium.ai.neurons.loop.LoopDetectorNeuron;
+import com.rakovpublic.jneuropallium.ai.neurons.loop.ILoopDetectorNeuron;
 import com.rakovpublic.jneuropallium.ai.signals.fast.ActivityMeasurementSignal;
 import com.rakovpublic.jneuropallium.ai.signals.fast.LoopAlertSignal;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;
@@ -10,14 +11,14 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActivityAnalysisProcessor implements ISignalProcessor<ActivityMeasurementSignal, LoopDetectorNeuron> {
+public class ActivityAnalysisProcessor implements ISignalProcessor<ActivityMeasurementSignal, ILoopDetectorNeuron> {
 
     private static final double POSITIVE_THRESHOLD = 0.15;
     private static final double NEGATIVE_THRESHOLD = 0.10;
     private static final double MAX_THEORETICAL_RATE = 100.0;
 
     @Override
-    public <I extends ISignal> List<I> process(ActivityMeasurementSignal input, LoopDetectorNeuron neuron) {
+    public <I extends ISignal> List<I> process(ActivityMeasurementSignal input, ILoopDetectorNeuron neuron) {
         List<I> results = new ArrayList<>();
         String region = input.getRegionId();
         List<ActivityMeasurementSignal> history = neuron.getRegionHistory()
@@ -55,6 +56,6 @@ public class ActivityAnalysisProcessor implements ISignalProcessor<ActivityMeasu
     @Override public String getDescription() { return "ActivityAnalysisProcessor"; }
     @Override public Boolean hasMerger() { return false; }
     @Override public Class<? extends ISignalProcessor> getSignalProcessorClass() { return ActivityAnalysisProcessor.class; }
-    @Override public Class<LoopDetectorNeuron> getNeuronClass() { return LoopDetectorNeuron.class; }
+    @Override public Class<ILoopDetectorNeuron> getNeuronClass() { return ILoopDetectorNeuron.class; }
     @Override public Class<ActivityMeasurementSignal> getSignalClass() { return ActivityMeasurementSignal.class; }
 }

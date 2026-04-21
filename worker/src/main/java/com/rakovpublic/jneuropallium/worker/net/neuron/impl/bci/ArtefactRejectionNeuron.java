@@ -14,7 +14,7 @@ import java.util.Set;
  * blacklists affected channels for a configurable window.
  * Loop=1 / Epoch=1.
  */
-public class ArtefactRejectionNeuron extends ModulatableNeuron {
+public class ArtefactRejectionNeuron extends ModulatableNeuron implements IArtefactRejectionNeuron {
 
     private double absAmplitudeLimitUV = 500.0;
     private final Set<Integer> maskedChannels = new HashSet<>();

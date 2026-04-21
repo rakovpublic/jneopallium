@@ -13,7 +13,7 @@ import com.rakovpublic.jneuropallium.worker.net.signals.impl.embodiment.Proprioc
  * Layer 2, loop=2 / epoch=3.
  * <p>Biological analogue: posterior parietal cortex body schema neurons.
  */
-public class BodySchemaNeuron extends ModulatableNeuron implements IEmbodied {
+public class BodySchemaNeuron extends ModulatableNeuron implements IEmbodied, IBodySchemaNeuron {
 
     private BodySchema schema;
 

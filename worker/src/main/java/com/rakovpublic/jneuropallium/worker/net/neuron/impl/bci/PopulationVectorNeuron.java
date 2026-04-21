@@ -15,7 +15,7 @@ import java.util.Map;
  * rate-weighted sum of preferred directions.
  * Loop=1 / Epoch=1.
  */
-public class PopulationVectorNeuron extends ModulatableNeuron {
+public class PopulationVectorNeuron extends ModulatableNeuron implements IPopulationVectorNeuron {
 
     private final Map<Integer, double[]> preferredDirections = new HashMap<>();
 

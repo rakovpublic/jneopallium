@@ -15,7 +15,7 @@ import com.rakovpublic.jneuropallium.worker.net.signals.impl.sleep.SleepStateSig
  * <p>Biological analogue: suprachiasmatic-nucleus + brainstem sleep-wake
  * control (Saper et al. 2005).
  */
-public class SleepControllerNeuron extends ModulatableNeuron {
+public class SleepControllerNeuron extends ModulatableNeuron implements ISleepControllerNeuron {
 
     private int cycleTicks = 10000;
     private double nremFraction = 0.6;

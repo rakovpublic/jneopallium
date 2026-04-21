@@ -1,6 +1,7 @@
 package com.rakovpublic.jneuropallium.ai.processors;
 
 import com.rakovpublic.jneuropallium.ai.neurons.memory.LongTermMemoryNeuron;
+import com.rakovpublic.jneuropallium.ai.neurons.memory.ILongTermMemoryNeuron;
 import com.rakovpublic.jneuropallium.ai.signals.slow.ConsolidationSignal;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
@@ -9,10 +10,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ConsolidationProcessor implements ISignalProcessor<ConsolidationSignal, LongTermMemoryNeuron> {
+public class ConsolidationProcessor implements ISignalProcessor<ConsolidationSignal, ILongTermMemoryNeuron> {
 
     @Override
-    public <I extends ISignal> List<I> process(ConsolidationSignal input, LongTermMemoryNeuron neuron) {
+    public <I extends ISignal> List<I> process(ConsolidationSignal input, ILongTermMemoryNeuron neuron) {
         if (input.isPromote() && input.getImportance() > neuron.getImportanceThreshold()) {
             // Hebbian write: add a new pattern
             double[] pattern = new double[]{input.getImportance()};
@@ -39,6 +40,6 @@ public class ConsolidationProcessor implements ISignalProcessor<ConsolidationSig
     @Override public String getDescription() { return "ConsolidationProcessor"; }
     @Override public Boolean hasMerger() { return false; }
     @Override public Class<? extends ISignalProcessor> getSignalProcessorClass() { return ConsolidationProcessor.class; }
-    @Override public Class<LongTermMemoryNeuron> getNeuronClass() { return LongTermMemoryNeuron.class; }
+    @Override public Class<ILongTermMemoryNeuron> getNeuronClass() { return ILongTermMemoryNeuron.class; }
     @Override public Class<ConsolidationSignal> getSignalClass() { return ConsolidationSignal.class; }
 }

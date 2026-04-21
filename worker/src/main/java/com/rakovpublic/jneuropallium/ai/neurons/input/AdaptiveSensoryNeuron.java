@@ -6,7 +6,7 @@ import com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron;
  * Sensory neuron with an adaptive firing threshold used by AdaptiveThresholdProcessor.
  * The threshold decays over time and rises after each spike (spike-frequency adaptation).
  */
-public class AdaptiveSensoryNeuron extends ModulatableNeuron {
+public class AdaptiveSensoryNeuron extends ModulatableNeuron implements IAdaptiveSensoryNeuron {
 
     private double threshold;
     private double decayRate;

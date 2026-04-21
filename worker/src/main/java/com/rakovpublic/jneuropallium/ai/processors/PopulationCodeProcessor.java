@@ -1,6 +1,7 @@
 package com.rakovpublic.jneuropallium.ai.processors;
 
 import com.rakovpublic.jneuropallium.ai.neurons.input.SensoryEncoderNeuron;
+import com.rakovpublic.jneuropallium.ai.neurons.input.ISensoryEncoderNeuron;
 import com.rakovpublic.jneuropallium.ai.signals.fast.SensorySignal;
 import com.rakovpublic.jneuropallium.ai.signals.fast.SpikeSignal;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;
@@ -9,10 +10,10 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PopulationCodeProcessor implements ISignalProcessor<SensorySignal, SensoryEncoderNeuron> {
+public class PopulationCodeProcessor implements ISignalProcessor<SensorySignal, ISensoryEncoderNeuron> {
 
     @Override
-    public <I extends ISignal> List<I> process(SensorySignal input, SensoryEncoderNeuron neuron) {
+    public <I extends ISignal> List<I> process(SensorySignal input, ISensoryEncoderNeuron neuron) {
         List<I> results = new ArrayList<>();
         if (input.getRawValues() == null || input.getRawValues().length == 0) return results;
         double inputVal = input.getRawValues()[0];
@@ -31,6 +32,6 @@ public class PopulationCodeProcessor implements ISignalProcessor<SensorySignal, 
     @Override public String getDescription() { return "PopulationCodeProcessor"; }
     @Override public Boolean hasMerger() { return false; }
     @Override public Class<? extends ISignalProcessor> getSignalProcessorClass() { return PopulationCodeProcessor.class; }
-    @Override public Class<SensoryEncoderNeuron> getNeuronClass() { return SensoryEncoderNeuron.class; }
+    @Override public Class<ISensoryEncoderNeuron> getNeuronClass() { return ISensoryEncoderNeuron.class; }
     @Override public Class<SensorySignal> getSignalClass() { return SensorySignal.class; }
 }

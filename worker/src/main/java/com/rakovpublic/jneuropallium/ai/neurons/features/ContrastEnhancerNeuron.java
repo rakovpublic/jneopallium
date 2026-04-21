@@ -6,7 +6,7 @@ import com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron;
  * Contrast-enhancer neuron used by ContrastProcessor.
  * Applies centre-surround contrast: output = input * excitatory - inhibitory.
  */
-public class ContrastEnhancerNeuron extends ModulatableNeuron {
+public class ContrastEnhancerNeuron extends ModulatableNeuron implements IContrastEnhancerNeuron {
 
     private double excitatory;
     private double inhibitory;

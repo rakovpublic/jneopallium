@@ -6,7 +6,7 @@ import com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron;
  * Inhibitory interneuron used by LateralInhibitionProcessor.
  * Suppresses neighbouring neurons in the same layer when strongly activated.
  */
-public class InhibitoryInterneuron extends ModulatableNeuron {
+public class InhibitoryInterneuron extends ModulatableNeuron implements IInhibitoryInterneuron{
 
     private String layerId;
     private double inhibitionStrength;

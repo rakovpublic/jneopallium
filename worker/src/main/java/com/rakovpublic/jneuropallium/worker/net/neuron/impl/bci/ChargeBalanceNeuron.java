@@ -18,7 +18,7 @@ import java.util.Map;
  * that exceed the configured DC tolerance (default ± 1 nC).
  * Loop=1 / Epoch=1.
  */
-public class ChargeBalanceNeuron extends ModulatableNeuron {
+public class ChargeBalanceNeuron extends ModulatableNeuron implements IChargeBalanceNeuron {
 
     private final Map<Integer, Double> netChargeUC = new HashMap<>();
     private double dcToleranceUC = 1e-3;  // 1 nC = 1e-3 µC

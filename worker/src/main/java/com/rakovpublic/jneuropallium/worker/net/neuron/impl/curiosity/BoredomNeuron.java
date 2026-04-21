@@ -19,7 +19,7 @@ import java.util.Map;
  * <p>Biological analogue: habituation in inferior-temporal cortex driving
  * inhibition-of-return in superior colliculus (Itti &amp; Koch 2001).
  */
-public class BoredomNeuron extends ModulatableNeuron {
+public class BoredomNeuron extends ModulatableNeuron implements IBoredomNeuron {
 
     private final Map<String, Integer> visitCount = new HashMap<>();
     private double familiarityThreshold = 0.7;

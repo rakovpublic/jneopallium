@@ -9,7 +9,7 @@ import java.util.Map;
  * Hebbian learning neuron used by HebbianUpdateProcessor.
  * ACh-gated: weight updates are only applied when ACh level exceeds the threshold.
  */
-public class HebbianLearningNeuron extends ModulatableNeuron {
+public class HebbianLearningNeuron extends ModulatableNeuron implements IHebbianLearningNeuron {
 
     private double achThreshold;
     private double learningRate;
