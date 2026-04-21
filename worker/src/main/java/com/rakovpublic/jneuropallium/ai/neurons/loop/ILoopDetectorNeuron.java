@@ -1,10 +1,8 @@
 package com.rakovpublic.jneuropallium.ai.neurons.loop;
 
 import com.rakovpublic.jneuropallium.ai.neurons.base.IModulatableNeuron;
-import com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron;
 import com.rakovpublic.jneuropallium.ai.signals.fast.ActivityMeasurementSignal;
-import java.util.ArrayList;
-import java.util.HashMap;
+
 import java.util.List;
 import java.util.Map;
 

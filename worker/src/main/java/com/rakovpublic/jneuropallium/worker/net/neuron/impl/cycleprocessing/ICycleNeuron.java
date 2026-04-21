@@ -1,10 +1,9 @@
 package com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing;
 
 import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
-import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalChain;
-import com.rakovpublic.jneuropallium.worker.net.neuron.impl.Neuron;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInitInput;
+
 import java.util.HashMap;
 
 public interface ICycleNeuron extends INeuron {

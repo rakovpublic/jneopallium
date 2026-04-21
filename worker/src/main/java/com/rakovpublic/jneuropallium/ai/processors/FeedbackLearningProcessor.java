@@ -1,6 +1,5 @@
 package com.rakovpublic.jneuropallium.ai.processors;
 
-import com.rakovpublic.jneuropallium.ai.neurons.harm.HarmLearningNeuron;
 import com.rakovpublic.jneuropallium.ai.neurons.harm.IHarmLearningNeuron;
 import com.rakovpublic.jneuropallium.ai.signals.slow.HarmFeedbackSignal;
 import com.rakovpublic.jneuropallium.ai.signals.slow.HarmModelUpdateSignal;

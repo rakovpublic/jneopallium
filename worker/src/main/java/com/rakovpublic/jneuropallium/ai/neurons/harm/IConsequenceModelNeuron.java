@@ -2,8 +2,7 @@ package com.rakovpublic.jneuropallium.ai.neurons.harm;
 
 import com.rakovpublic.jneuropallium.ai.model.WorldStateModel;
 import com.rakovpublic.jneuropallium.ai.neurons.base.IModulatableNeuron;
-import com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron;
-import java.util.HashMap;
+
 import java.util.Map;
 
 public interface IConsequenceModelNeuron extends IModulatableNeuron {

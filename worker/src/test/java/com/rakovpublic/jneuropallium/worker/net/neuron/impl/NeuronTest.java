@@ -1,7 +1,6 @@
 package com.rakovpublic.jneuropallium.worker.net.neuron.impl;
 
 import com.rakovpublic.jneuropallium.worker.net.neuron.IActivationFunction;
-import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.storage.inmemory.TestSignal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class NeuronTest {

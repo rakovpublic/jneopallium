@@ -2,8 +2,7 @@ package com.rakovpublic.jneuropallium.ai.neurons.loop;
 
 import com.rakovpublic.jneuropallium.ai.model.ActiveIntervention;
 import com.rakovpublic.jneuropallium.ai.neurons.base.IModulatableNeuron;
-import com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron;
-import java.util.HashMap;
+
 import java.util.Map;
 
 public interface ILoopCircuitBreakerNeuron extends IModulatableNeuron {

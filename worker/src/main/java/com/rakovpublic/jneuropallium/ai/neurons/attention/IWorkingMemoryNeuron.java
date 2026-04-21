@@ -2,8 +2,7 @@ package com.rakovpublic.jneuropallium.ai.neurons.attention;
 
 import com.rakovpublic.jneuropallium.ai.model.TimestampedSlot;
 import com.rakovpublic.jneuropallium.ai.neurons.base.IModulatableNeuron;
-import com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron;
-import java.util.LinkedHashMap;
+
 import java.util.Map;
 
 public interface IWorkingMemoryNeuron extends IModulatableNeuron {

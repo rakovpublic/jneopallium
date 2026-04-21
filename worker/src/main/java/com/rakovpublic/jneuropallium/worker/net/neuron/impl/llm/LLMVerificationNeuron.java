@@ -6,7 +6,6 @@ package com.rakovpublic.jneuropallium.worker.net.neuron.impl.llm;
 
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalChain;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.Neuron;
-import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

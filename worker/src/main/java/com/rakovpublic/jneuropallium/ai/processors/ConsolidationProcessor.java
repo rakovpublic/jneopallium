@@ -1,13 +1,11 @@
 package com.rakovpublic.jneuropallium.ai.processors;
 
-import com.rakovpublic.jneuropallium.ai.neurons.memory.LongTermMemoryNeuron;
 import com.rakovpublic.jneuropallium.ai.neurons.memory.ILongTermMemoryNeuron;
 import com.rakovpublic.jneuropallium.ai.signals.slow.ConsolidationSignal;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ConsolidationProcessor implements ISignalProcessor<ConsolidationSignal, ILongTermMemoryNeuron> {

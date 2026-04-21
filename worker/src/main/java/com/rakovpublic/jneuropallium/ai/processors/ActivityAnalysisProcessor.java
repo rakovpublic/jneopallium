@@ -1,7 +1,6 @@
 package com.rakovpublic.jneuropallium.ai.processors;
 
 import com.rakovpublic.jneuropallium.ai.enums.LoopType;
-import com.rakovpublic.jneuropallium.ai.neurons.loop.LoopDetectorNeuron;
 import com.rakovpublic.jneuropallium.ai.neurons.loop.ILoopDetectorNeuron;
 import com.rakovpublic.jneuropallium.ai.signals.fast.ActivityMeasurementSignal;
 import com.rakovpublic.jneuropallium.ai.signals.fast.LoopAlertSignal;

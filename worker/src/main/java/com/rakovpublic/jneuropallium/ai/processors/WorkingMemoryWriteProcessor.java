@@ -1,7 +1,6 @@
 package com.rakovpublic.jneuropallium.ai.processors;
 
 import com.rakovpublic.jneuropallium.ai.model.TimestampedSlot;
-import com.rakovpublic.jneuropallium.ai.neurons.attention.WorkingMemoryNeuron;
 import com.rakovpublic.jneuropallium.ai.neurons.attention.IWorkingMemoryNeuron;
 import com.rakovpublic.jneuropallium.ai.signals.fast.WorkingMemoryWriteSignal;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;

@@ -1,7 +1,6 @@
 package com.rakovpublic.jneuropallium.ai.processors;
 
 import com.rakovpublic.jneuropallium.ai.model.WorldStateModel;
-import com.rakovpublic.jneuropallium.ai.neurons.harm.ConsequenceModelNeuron;
 import com.rakovpublic.jneuropallium.ai.neurons.harm.IConsequenceModelNeuron;
 import com.rakovpublic.jneuropallium.ai.signals.fast.ConsequenceQuerySignal;
 import com.rakovpublic.jneuropallium.ai.signals.fast.ConsequenceSimulationSignal;

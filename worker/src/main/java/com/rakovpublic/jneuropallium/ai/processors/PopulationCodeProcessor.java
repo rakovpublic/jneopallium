@@ -1,6 +1,5 @@
 package com.rakovpublic.jneuropallium.ai.processors;
 
-import com.rakovpublic.jneuropallium.ai.neurons.input.SensoryEncoderNeuron;
 import com.rakovpublic.jneuropallium.ai.neurons.input.ISensoryEncoderNeuron;
 import com.rakovpublic.jneuropallium.ai.signals.fast.SensorySignal;
 import com.rakovpublic.jneuropallium.ai.signals.fast.SpikeSignal;

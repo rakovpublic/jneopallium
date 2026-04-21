@@ -3,16 +3,7 @@
  */
 package com.rakovpublic.jneuropallium.worker.net.neuron.impl.tutoring;
 
-import com.rakovpublic.jneuropallium.worker.net.signals.impl.tutoring.AffectObservationSignal;
-import com.rakovpublic.jneuropallium.worker.net.signals.impl.tutoring.ContentRecommendationSignal;
-import com.rakovpublic.jneuropallium.worker.net.signals.impl.tutoring.EngagementSignal;
-import com.rakovpublic.jneuropallium.worker.net.signals.impl.tutoring.HintSignal;
-import com.rakovpublic.jneuropallium.worker.net.signals.impl.tutoring.InterventionSignal;
-import com.rakovpublic.jneuropallium.worker.net.signals.impl.tutoring.ItemPresentationSignal;
-import com.rakovpublic.jneuropallium.worker.net.signals.impl.tutoring.MasteryUpdateSignal;
-import com.rakovpublic.jneuropallium.worker.net.signals.impl.tutoring.ResponseSignal;
-import com.rakovpublic.jneuropallium.worker.net.signals.impl.tutoring.ReviewScheduleSignal;
-import com.rakovpublic.jneuropallium.worker.net.signals.impl.tutoring.ScaffoldingSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.impl.tutoring.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

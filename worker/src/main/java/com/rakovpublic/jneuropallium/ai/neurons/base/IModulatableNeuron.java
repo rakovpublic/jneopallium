@@ -1,7 +1,6 @@
 package com.rakovpublic.jneuropallium.ai.neurons.base;
 
 import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
-import com.rakovpublic.jneuropallium.worker.net.neuron.impl.Neuron;
 
 public interface IModulatableNeuron extends INeuron {
     double getDopamineLevel();

@@ -1,6 +1,5 @@
 package com.rakovpublic.jneuropallium.ai.processors;
 
-import com.rakovpublic.jneuropallium.ai.neurons.learning.MetaplasticityNeuron;
 import com.rakovpublic.jneuropallium.ai.neurons.learning.IMetaplasticityNeuron;
 import com.rakovpublic.jneuropallium.ai.signals.fast.ActivityMeasurementSignal;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;

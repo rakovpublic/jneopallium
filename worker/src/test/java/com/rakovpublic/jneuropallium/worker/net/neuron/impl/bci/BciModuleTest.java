@@ -3,17 +3,7 @@
  */
 package com.rakovpublic.jneuropallium.worker.net.neuron.impl.bci;
 
-import com.rakovpublic.jneuropallium.worker.net.signals.impl.bci.AgencyLossSignal;
-import com.rakovpublic.jneuropallium.worker.net.signals.impl.bci.CalibrationSignal;
-import com.rakovpublic.jneuropallium.worker.net.signals.impl.bci.ChargeAccumulationSignal;
-import com.rakovpublic.jneuropallium.worker.net.signals.impl.bci.DriftEstimateSignal;
-import com.rakovpublic.jneuropallium.worker.net.signals.impl.bci.IntentSignal;
-import com.rakovpublic.jneuropallium.worker.net.signals.impl.bci.LFPSignal;
-import com.rakovpublic.jneuropallium.worker.net.signals.impl.bci.NeuralSpikeSignal;
-import com.rakovpublic.jneuropallium.worker.net.signals.impl.bci.SeizureRiskSignal;
-import com.rakovpublic.jneuropallium.worker.net.signals.impl.bci.SensoryFeedbackSignal;
-import com.rakovpublic.jneuropallium.worker.net.signals.impl.bci.StimulationCommandSignal;
-import com.rakovpublic.jneuropallium.worker.net.signals.impl.bci.ThermalSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.impl.bci.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;

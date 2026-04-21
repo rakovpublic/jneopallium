@@ -1,6 +1,5 @@
 package com.rakovpublic.jneuropallium.ai.processors;
 
-import com.rakovpublic.jneuropallium.ai.neurons.attention.AttentionNeuron;
 import com.rakovpublic.jneuropallium.ai.neurons.attention.IAttentionNeuron;
 import com.rakovpublic.jneuropallium.ai.signals.fast.AttentionGateSignal;
 import com.rakovpublic.jneuropallium.ai.signals.fast.SpikeSignal;

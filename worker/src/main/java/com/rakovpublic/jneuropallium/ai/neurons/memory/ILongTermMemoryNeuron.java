@@ -1,8 +1,7 @@
 package com.rakovpublic.jneuropallium.ai.neurons.memory;
 
 import com.rakovpublic.jneuropallium.ai.neurons.base.IModulatableNeuron;
-import com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron;
-import java.util.ArrayList;
+
 import java.util.List;
 
 public interface ILongTermMemoryNeuron extends IModulatableNeuron {

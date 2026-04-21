@@ -1,8 +1,7 @@
 package com.rakovpublic.jneuropallium.ai.neurons.learning;
 
 import com.rakovpublic.jneuropallium.ai.neurons.base.IModulatableNeuron;
-import com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron;
-import java.util.HashMap;
+
 import java.util.Map;
 
 public interface IMetaplasticityNeuron extends IModulatableNeuron {

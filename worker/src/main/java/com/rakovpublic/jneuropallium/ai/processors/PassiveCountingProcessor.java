@@ -1,6 +1,5 @@
 package com.rakovpublic.jneuropallium.ai.processors;
 
-import com.rakovpublic.jneuropallium.ai.neurons.loop.RegionMonitorNeuron;
 import com.rakovpublic.jneuropallium.ai.neurons.loop.IRegionMonitorNeuron;
 import com.rakovpublic.jneuropallium.ai.signals.fast.ActivityMeasurementSignal;
 import com.rakovpublic.jneuropallium.ai.signals.fast.SpikeSignal;

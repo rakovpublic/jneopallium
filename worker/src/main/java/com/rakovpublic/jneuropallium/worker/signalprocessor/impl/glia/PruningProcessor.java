@@ -4,7 +4,6 @@
 package com.rakovpublic.jneuropallium.worker.signalprocessor.impl.glia;
 
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;
-import com.rakovpublic.jneuropallium.worker.net.neuron.impl.glia.MicroglialPruningNeuron;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.glia.IMicroglialPruningNeuron;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.impl.glia.PruningSignal;

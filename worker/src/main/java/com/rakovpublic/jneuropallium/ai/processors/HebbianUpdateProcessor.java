@@ -1,6 +1,5 @@
 package com.rakovpublic.jneuropallium.ai.processors;
 
-import com.rakovpublic.jneuropallium.ai.neurons.learning.HebbianLearningNeuron;
 import com.rakovpublic.jneuropallium.ai.neurons.learning.IHebbianLearningNeuron;
 import com.rakovpublic.jneuropallium.ai.signals.fast.ErrorSignal;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;

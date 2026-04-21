@@ -1,7 +1,6 @@
 package com.rakovpublic.jneuropallium.ai.processors;
 
 import com.rakovpublic.jneuropallium.ai.neurons.features.IInhibitoryInterneuron;
-import com.rakovpublic.jneuropallium.ai.neurons.features.InhibitoryInterneuron;
 import com.rakovpublic.jneuropallium.ai.signals.fast.AttentionGateSignal;
 import com.rakovpublic.jneuropallium.ai.signals.fast.SpikeSignal;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;

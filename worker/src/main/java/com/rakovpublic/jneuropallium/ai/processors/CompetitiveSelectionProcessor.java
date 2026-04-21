@@ -1,6 +1,5 @@
 package com.rakovpublic.jneuropallium.ai.processors;
 
-import com.rakovpublic.jneuropallium.ai.neurons.action.ActionSelectionNeuron;
 import com.rakovpublic.jneuropallium.ai.neurons.action.IActionSelectionNeuron;
 import com.rakovpublic.jneuropallium.ai.signals.fast.MotorCommandSignal;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;

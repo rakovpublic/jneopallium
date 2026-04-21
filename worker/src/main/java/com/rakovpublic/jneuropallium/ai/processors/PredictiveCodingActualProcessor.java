@@ -1,6 +1,5 @@
 package com.rakovpublic.jneuropallium.ai.processors;
 
-import com.rakovpublic.jneuropallium.ai.neurons.memory.PredictiveNeuron;
 import com.rakovpublic.jneuropallium.ai.neurons.memory.IPredictiveNeuron;
 import com.rakovpublic.jneuropallium.ai.signals.fast.ComparisonSignal;
 import com.rakovpublic.jneuropallium.ai.signals.fast.SensorySignal;

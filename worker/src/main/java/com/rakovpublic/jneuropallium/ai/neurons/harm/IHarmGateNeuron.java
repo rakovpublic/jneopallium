@@ -1,11 +1,9 @@
 package com.rakovpublic.jneuropallium.ai.neurons.harm;
 
 import com.rakovpublic.jneuropallium.ai.neurons.base.IModulatableNeuron;
-import com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron;
 import com.rakovpublic.jneuropallium.ai.signals.fast.HarmAssessmentSignal;
 import com.rakovpublic.jneuropallium.ai.signals.fast.MotorCommandSignal;
-import java.util.HashMap;
-import java.util.LinkedList;
+
 import java.util.Map;
 import java.util.Queue;
 

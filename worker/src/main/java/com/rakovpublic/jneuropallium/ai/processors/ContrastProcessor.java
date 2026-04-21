@@ -1,6 +1,5 @@
 package com.rakovpublic.jneuropallium.ai.processors;
 
-import com.rakovpublic.jneuropallium.ai.neurons.features.ContrastEnhancerNeuron;
 import com.rakovpublic.jneuropallium.ai.neurons.features.IContrastEnhancerNeuron;
 import com.rakovpublic.jneuropallium.ai.signals.fast.SpikeSignal;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;

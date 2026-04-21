@@ -1,6 +1,5 @@
 package com.rakovpublic.jneuropallium.ai.processors;
 
-import com.rakovpublic.jneuropallium.ai.neurons.features.FeatureDetectorNeuron;
 import com.rakovpublic.jneuropallium.ai.neurons.features.IFeatureDetectorNeuron;
 import com.rakovpublic.jneuropallium.ai.signals.fast.SpikeSignal;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;

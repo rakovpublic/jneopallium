@@ -1,9 +1,6 @@
 package com.rakovpublic.jneuropallium.ai.model;
 
 import com.rakovpublic.jneuropallium.ai.enums.HarmVerdict;
-import com.rakovpublic.jneuropallium.ai.signals.fast.HarmAssessmentSignal;
-
-import java.util.function.Predicate;
 
 /**
  * Factory accessible only by EthicalPriorityNeuron to create AbsoluteConstraint instances.

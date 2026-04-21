@@ -4,7 +4,6 @@
 package com.rakovpublic.jneuropallium.worker.signalprocessor.impl.curiosity;
 
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;
-import com.rakovpublic.jneuropallium.worker.net.neuron.impl.curiosity.LearningProgressNeuron;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.curiosity.ILearningProgressNeuron;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.impl.curiosity.LearningProgressSignal;

@@ -4,7 +4,6 @@ import com.rakovpublic.jneuropallium.ai.enums.InterventionType;
 import com.rakovpublic.jneuropallium.ai.enums.LoopType;
 import com.rakovpublic.jneuropallium.ai.enums.NeuromodulatorType;
 import com.rakovpublic.jneuropallium.ai.model.ActiveIntervention;
-import com.rakovpublic.jneuropallium.ai.neurons.loop.LoopCircuitBreakerNeuron;
 import com.rakovpublic.jneuropallium.ai.neurons.loop.ILoopCircuitBreakerNeuron;
 import com.rakovpublic.jneuropallium.ai.signals.fast.LoopAlertSignal;
 import com.rakovpublic.jneuropallium.ai.signals.fast.LoopInterventionSignal;

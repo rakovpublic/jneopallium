@@ -1,8 +1,7 @@
 package com.rakovpublic.jneuropallium.ai.neurons.loop;
 
 import com.rakovpublic.jneuropallium.ai.neurons.base.IModulatableNeuron;
-import com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron;
-import java.util.ArrayDeque;
+
 import java.util.Deque;
 
 public interface IRegionMonitorNeuron extends IModulatableNeuron {

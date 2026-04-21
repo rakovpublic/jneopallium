@@ -1,9 +1,7 @@
 package com.rakovpublic.jneuropallium.worker.net.neuron.impl;
 
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;

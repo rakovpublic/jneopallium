@@ -2,7 +2,6 @@ package com.rakovpublic.jneuropallium.ai.processors;
 
 import com.rakovpublic.jneuropallium.ai.enums.HarmVerdict;
 import com.rakovpublic.jneuropallium.ai.model.HarmThreshold;
-import com.rakovpublic.jneuropallium.ai.neurons.harm.HarmEvaluationNeuron;
 import com.rakovpublic.jneuropallium.ai.neurons.harm.IHarmEvaluationNeuron;
 import com.rakovpublic.jneuropallium.ai.signals.fast.ConsequenceSimulationSignal;
 import com.rakovpublic.jneuropallium.ai.signals.fast.HarmAssessmentSignal;
@@ -10,7 +9,6 @@ import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class SimulationAggregationProcessor implements ISignalProcessor<ConsequenceSimulationSignal, IHarmEvaluationNeuron> {

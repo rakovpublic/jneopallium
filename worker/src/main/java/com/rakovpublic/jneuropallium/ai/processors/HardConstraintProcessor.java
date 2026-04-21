@@ -2,7 +2,6 @@ package com.rakovpublic.jneuropallium.ai.processors;
 
 import com.rakovpublic.jneuropallium.ai.enums.HarmVerdict;
 import com.rakovpublic.jneuropallium.ai.model.AbsoluteConstraint;
-import com.rakovpublic.jneuropallium.ai.neurons.harm.EthicalPriorityNeuron;
 import com.rakovpublic.jneuropallium.ai.neurons.harm.IEthicalPriorityNeuron;
 import com.rakovpublic.jneuropallium.ai.signals.fast.HarmAssessmentSignal;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;

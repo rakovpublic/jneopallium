@@ -7,12 +7,7 @@ import com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalChain;
 import com.rakovpublic.jneuropallium.worker.net.signals.impl.sleep.ReplaySignal;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Selects high-salience recent episodes and emits compressed replays in

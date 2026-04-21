@@ -1,7 +1,6 @@
 package com.rakovpublic.jneuropallium.ai.processors;
 
 import com.rakovpublic.jneuropallium.ai.enums.NeuromodulatorType;
-import com.rakovpublic.jneuropallium.ai.neurons.memory.PredictionErrorNeuron;
 import com.rakovpublic.jneuropallium.ai.neurons.memory.IPredictionErrorNeuron;
 import com.rakovpublic.jneuropallium.ai.signals.fast.ComparisonSignal;
 import com.rakovpublic.jneuropallium.ai.signals.fast.ErrorSignal;

@@ -1,7 +1,6 @@
 package com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing;
 
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalChain;
-import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.storage.IInitInput;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,7 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class CycleProcessingTest {
 

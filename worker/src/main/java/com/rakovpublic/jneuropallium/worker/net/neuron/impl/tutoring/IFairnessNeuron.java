@@ -1,10 +1,7 @@
 package com.rakovpublic.jneuropallium.worker.net.neuron.impl.tutoring;
 
 import com.rakovpublic.jneuropallium.ai.neurons.base.IModulatableNeuron;
-import com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron;
-import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalChain;
-import java.util.Collections;
-import java.util.HashSet;
+
 import java.util.Set;
 
 public interface IFairnessNeuron extends IModulatableNeuron {

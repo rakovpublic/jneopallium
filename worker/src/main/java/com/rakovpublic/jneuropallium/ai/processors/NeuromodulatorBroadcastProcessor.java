@@ -1,6 +1,5 @@
 package com.rakovpublic.jneuropallium.ai.processors;
 
-import com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron;
 import com.rakovpublic.jneuropallium.ai.neurons.base.IModulatableNeuron;
 import com.rakovpublic.jneuropallium.ai.signals.slow.NeuromodulatorSignal;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;

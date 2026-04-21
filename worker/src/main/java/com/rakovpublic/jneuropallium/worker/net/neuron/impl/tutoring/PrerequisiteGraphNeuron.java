@@ -6,13 +6,7 @@ package com.rakovpublic.jneuropallium.worker.net.neuron.impl.tutoring;
 import com.rakovpublic.jneuropallium.ai.neurons.base.ModulatableNeuron;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalChain;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Layer 3 curriculum prerequisite DAG. Holds per-concept dependencies and

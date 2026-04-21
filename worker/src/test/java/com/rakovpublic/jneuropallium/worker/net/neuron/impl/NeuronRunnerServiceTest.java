@@ -1,15 +1,11 @@
 package com.rakovpublic.jneuropallium.worker.net.neuron.impl;
 
-import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
-import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
-import com.rakovpublic.jneuropallium.worker.net.signals.storage.inmemory.TestSignal;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Verifies that NeuronRunnerService.process() blocks until all neuron processing

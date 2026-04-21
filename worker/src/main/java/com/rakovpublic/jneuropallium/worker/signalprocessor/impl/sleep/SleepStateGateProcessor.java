@@ -4,7 +4,6 @@
 package com.rakovpublic.jneuropallium.worker.signalprocessor.impl.sleep;
 
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;
-import com.rakovpublic.jneuropallium.worker.net.neuron.impl.sleep.SleepControllerNeuron;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.sleep.ISleepControllerNeuron;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.impl.sleep.SleepStateSignal;

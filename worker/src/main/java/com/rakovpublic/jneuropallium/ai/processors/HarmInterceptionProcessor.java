@@ -1,9 +1,11 @@
 package com.rakovpublic.jneuropallium.ai.processors;
 
 import com.rakovpublic.jneuropallium.ai.enums.HarmVerdict;
-import com.rakovpublic.jneuropallium.ai.neurons.harm.HarmGateNeuron;
 import com.rakovpublic.jneuropallium.ai.neurons.harm.IHarmGateNeuron;
-import com.rakovpublic.jneuropallium.ai.signals.fast.*;
+import com.rakovpublic.jneuropallium.ai.signals.fast.ConsequenceQuerySignal;
+import com.rakovpublic.jneuropallium.ai.signals.fast.HarmAssessmentSignal;
+import com.rakovpublic.jneuropallium.ai.signals.fast.MotorCommandSignal;
+import com.rakovpublic.jneuropallium.ai.signals.fast.TransparencyLogSignal;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
