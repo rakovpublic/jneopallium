@@ -10,4 +10,10 @@ public interface IWellbeingGuardNeuron extends IModulatableNeuron {
     int getConsecutiveBoredomTicks();
     void setMaxFrustrationTicks(int n);
     void setMaxBoredomTicks(int n);
+
+    /**
+     * Observation channel: an externally-triggered intervention is
+     * recorded for audit. Default no-op.
+     */
+    default void observe(InterventionSignal s) { /* no-op by default */ }
 }

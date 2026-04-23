@@ -1,6 +1,7 @@
 package com.rakovpublic.jneuropallium.worker.net.neuron.impl.tutoring;
 
 import com.rakovpublic.jneuropallium.ai.neurons.base.IModulatableNeuron;
+import com.rakovpublic.jneuropallium.worker.net.signals.impl.tutoring.MasteryUpdateSignal;
 
 import java.util.List;
 import java.util.Map;
@@ -14,4 +15,12 @@ public interface IPrerequisiteGraphNeuron extends IModulatableNeuron {
     void setMasteryThreshold(double t);
     double getMasteryThreshold();
     int size();
+
+    /**
+     * Observation channel: ensure the graph knows about any concept
+     * for which mastery is reported. Default registers the concept.
+     */
+    default void observe(MasteryUpdateSignal s) {
+        if (s != null && s.getConceptId() != null) addConcept(s.getConceptId());
+    }
 }

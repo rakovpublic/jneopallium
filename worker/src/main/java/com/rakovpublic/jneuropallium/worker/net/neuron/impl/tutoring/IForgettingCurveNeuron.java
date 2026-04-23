@@ -12,4 +12,10 @@ public interface IForgettingCurveNeuron extends IModulatableNeuron {
     int trackedConcepts();
     long intervalFor(String conceptId);
     int repetitionsFor(String conceptId);
+
+    /**
+     * Observation channel: align target retention with an
+     * externally-scheduled review so both agents agree. Default no-op.
+     */
+    default void observe(ReviewScheduleSignal s) { /* no-op by default */ }
 }
