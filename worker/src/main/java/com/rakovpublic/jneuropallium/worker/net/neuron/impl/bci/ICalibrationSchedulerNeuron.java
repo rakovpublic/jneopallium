@@ -11,4 +11,12 @@ public interface ICalibrationSchedulerNeuron extends IModulatableNeuron {
     void setErrorTrigger(double t);
     long getLastCalibrationTick();
     long getSessionCount();
+
+    /**
+     * Observation channel: an external calibration report (e.g. from a
+     * technician) can update the scheduler's bookkeeping so the next
+     * evaluation respects the minimum-interval rule. Default is a
+     * no-op.
+     */
+    default void observeCalibration(CalibrationSignal s) { /* no-op by default */ }
 }

@@ -9,4 +9,11 @@ public interface IHintGenerationNeuron extends IModulatableNeuron {
     void reset(String itemId);
     void setMaxLevels(int n);
     int getMaxLevels();
+
+    /**
+     * Observation channel: an externally-issued hint can be recorded
+     * so the generator's escalation counter stays in sync. Default
+     * no-op.
+     */
+    default void observe(HintSignal s) { /* no-op by default */ }
 }

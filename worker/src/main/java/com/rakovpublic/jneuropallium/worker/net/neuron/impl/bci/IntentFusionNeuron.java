@@ -14,10 +14,11 @@ import com.rakovpublic.jneuropallium.worker.net.signals.impl.bci.IntentSignal;
  * cortical streams (Andersen & Buneo 2002).
  * Loop=1 / Epoch=2.
  */
-public class IntentFusionNeuron extends ModulatableNeuron {
+public class IntentFusionNeuron extends ModulatableNeuron implements IIntentFusionNeuron {
 
     private double spikeWeight = 0.65;
     private double lfpWeight = 0.35;
+    private IntentSignal pending;
 
     public IntentFusionNeuron() { super(); }
     public IntentFusionNeuron(Long neuronId, ISignalChain chain, Long run) { super(neuronId, chain, run); }
@@ -56,4 +57,17 @@ public class IntentFusionNeuron extends ModulatableNeuron {
     public void setLfpWeight(double w) { this.lfpWeight = Math.max(0, w); }
     public double getSpikeWeight() { return spikeWeight; }
     public double getLfpWeight() { return lfpWeight; }
+
+    /**
+     * Buffer one intent stream and fuse with the next. Returns a fused
+     * signal when the second stream arrives, otherwise null.
+     */
+    @Override
+    public IntentSignal observe(IntentSignal s) {
+        if (s == null) return null;
+        if (pending == null) { pending = s; return null; }
+        IntentSignal fused = fuse(pending, s);
+        pending = null;
+        return fused;
+    }
 }
