@@ -38,7 +38,7 @@ The framework was published in the *International Journal of Science and Researc
 | `Axon` | Encapsulates output addresses, signal type, and output weight |
 | `ISignalChain` | Ordered processor pipeline invoked during `activate()` |
 | `CycleNeuron` | Controls the fast/slow loop ratio (layer id `−2147483648`, neuron id `0`) |
-| `LayerManipulatingNeuron` | Creates/deletes neurons dynamically (layer id `−9223372036854775808`) |
+| `LayerManipulatingNeuron` | Creates/deletes neurons dynamically (neuron id `−9223372036854775808` at each layer) |
 | `IInitInput` | Defines an input source with a default processing frequency |
 | `InputInitStrategy` | Describes how input signals propagate to neurons |
 | `INeuronNetInput` | Input interface for connecting one neuron network's output to another |
