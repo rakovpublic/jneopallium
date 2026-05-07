@@ -180,8 +180,22 @@ An optional, non-blocking extension integrates Large Language Models as an exter
 
 Design principles: all LLM processing runs on the slow loop (never blocking real-time sensorimotor processing), LLM responses are always cross-validated against internal models before use, and the system operates at full capability when the LLM is unavailable. Supports local (Ollama), cloud (OpenAI, Anthropic), and disabled modes.
 
+## OPC UA bridge
+
+Jneopallium can act as a biologically-inspired, safety-gated
+cognitive-control layer for OPC UA industrial systems via Eclipse Milo.
+The bridge subscribes to PLC / SCADA / simulator nodes, emits typed
+`MeasurementSignal` / `AlarmSignal` instances into the neuron network,
+and writes neuron-derived `SetpointSignal` / `ActuatorCommandSignal`
+decisions back to the field — only after passing the harm gate,
+honouring operator override, respecting per-loop SHADOW / ADVISORY /
+AUTONOMOUS mode, and emitting an audit record for every proposed action
+whether applied, clamped, or rejected. See
+[`docs/opcua-bridge-architecture.md`](docs/opcua-bridge-architecture.md).
+
 ## Applications
 
+- **Industrial process control** — Connect to any OPC UA PLC/SCADA via the Eclipse Milo bridge and run neuron-derived setpoints through the safety/interlock chain.
 - **Robotics** — Direct I/O with hardware controllers; model sensorimotor loops at biologically-relevant timescales.
 - **Autonomous mission control** — Decision-making under high latency and mission-flow uncertainty.
 - **Neuroscience research** — Model neural control structures and structural deviations at a chosen level of detail.

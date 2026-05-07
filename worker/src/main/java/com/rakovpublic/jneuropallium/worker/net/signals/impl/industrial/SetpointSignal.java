@@ -5,13 +5,17 @@ package com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial;
 
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.ProcessingFrequency;
 import com.rakovpublic.jneuropallium.worker.net.signals.AbstractSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 /**
  * Setpoint update for a control loop with an optional ramp rate.
  * ProcessingFrequency: loop=1, epoch=2.
  */
-public class SetpointSignal extends AbstractSignal<Void> implements ISignal<Void> {
+public class SetpointSignal extends AbstractSignal<Void> implements ISignal<Void>, IResultSignal<Void> {
+
+    @Override public Void getResultObject() { return null; }
+    @Override public Class<Void> getResultObjectClass() { return Void.class; }
 
     public static final ProcessingFrequency PROCESSING_FREQUENCY = new ProcessingFrequency(2L, 1);
 

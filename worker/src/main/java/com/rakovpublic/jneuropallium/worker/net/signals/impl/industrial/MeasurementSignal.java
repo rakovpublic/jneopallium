@@ -6,6 +6,7 @@ package com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.ProcessingFrequency;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.Quality;
 import com.rakovpublic.jneuropallium.worker.net.signals.AbstractSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.IInputSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 /**
@@ -15,7 +16,7 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
  * addition to the jneopallium tick.
  * ProcessingFrequency: loop=1, epoch=1.
  */
-public class MeasurementSignal extends AbstractSignal<Void> implements ISignal<Void> {
+public class MeasurementSignal extends AbstractSignal<Void> implements ISignal<Void>, IInputSignal<Void> {
 
     public static final ProcessingFrequency PROCESSING_FREQUENCY = new ProcessingFrequency(1L, 1);
 

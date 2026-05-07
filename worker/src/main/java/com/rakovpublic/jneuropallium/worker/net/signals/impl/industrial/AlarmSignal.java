@@ -6,13 +6,14 @@ package com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.ProcessingFrequency;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.AlarmPriority;
 import com.rakovpublic.jneuropallium.worker.net.signals.AbstractSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.IInputSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 /**
  * ISA-18.2 alarm with a priority and a condition code.
  * ProcessingFrequency: loop=1, epoch=1.
  */
-public class AlarmSignal extends AbstractSignal<Void> implements ISignal<Void> {
+public class AlarmSignal extends AbstractSignal<Void> implements ISignal<Void>, IInputSignal<Void> {
 
     public static final ProcessingFrequency PROCESSING_FREQUENCY = new ProcessingFrequency(1L, 1);
 
