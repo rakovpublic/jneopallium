@@ -1,0 +1,51 @@
+connection:
+  endpointUrl: "opc.tcp://milo.digitalpetri.com:62541/milo"
+  applicationName: "Jneopallium-OPCUA-Bridge"
+  applicationUri: "urn:rakovpublic:jneopallium:bridge:dev01"
+  requestTimeout: "PT5S"
+  sessionTimeout: "PT2M"
+  keepAliveFailuresAllowed: 3
+
+security:
+  policy: BASIC256SHA256
+  mode: SIGN_AND_ENCRYPT
+  pkiDir: "/var/lib/jneopallium/opcua-pki"
+  certAlias: "bridge-cert"
+  certPassword: "${OPCUA_CERT_PASSWORD}"
+  auth:
+    type: "UsernamePassword"
+    username: "User"
+    passwordEnv: "OPCUA_USER_PASSWORD"
+
+reads:
+  - loopId: "TIC-101"
+    nodeId: "ns=2;s=Plant.Temperature"
+    signalTag: "PLANT.TIC101.PV"
+    direction: READ
+
+writes:
+  - loopId: "FIC-101"
+    nodeId: "ns=2;s=Plant.TargetMotorSpeed"
+    signalTag: "PLANT.FIC101.SP"
+    direction: WRITE
+    failSafeValue: 0.0
+    rampRateMaxPerSec: 5.0
+    minClampValue: 0.0
+    maxClampValue: 100.0
+
+alarms:
+  - loopId: "PLANT-ALARMS"
+    nodeId: "ns=2;s=Plant.Alarm"
+    signalTag: "PLANT.ALARM"
+    direction: READ
+
+audit:
+  localAuditFile: "/var/log/jneopallium/opcua-audit.jsonl"
+  opcUaAuditNodeId: "ns=2;s=Plant.JneopalliumAuditLog"
+  writeRejectedToAudit: true
+
+perLoopSafetyMode:
+  TIC-101: SHADOW
+  FIC-101: ADVISORY
+
+tickInterval: "PT0.25S"

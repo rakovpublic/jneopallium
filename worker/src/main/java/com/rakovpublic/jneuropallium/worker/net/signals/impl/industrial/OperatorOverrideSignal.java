@@ -6,6 +6,7 @@ package com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.ProcessingFrequency;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.OverrideKind;
 import com.rakovpublic.jneuropallium.worker.net.signals.AbstractSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 /**
@@ -13,7 +14,10 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
  * regulatory control; it does not affect interlocks. ProcessingFrequency:
  * loop=1, epoch=1.
  */
-public class OperatorOverrideSignal extends AbstractSignal<Void> implements ISignal<Void> {
+public class OperatorOverrideSignal extends AbstractSignal<Void> implements ISignal<Void>, IResultSignal<Void> {
+
+    @Override public Void getResultObject() { return null; }
+    @Override public Class<Void> getResultObjectClass() { return Void.class; }
 
     public static final ProcessingFrequency PROCESSING_FREQUENCY = new ProcessingFrequency(1L, 1);
 
