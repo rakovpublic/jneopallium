@@ -180,7 +180,42 @@ An optional, non-blocking extension integrates Large Language Models as an exter
 
 Design principles: all LLM processing runs on the slow loop (never blocking real-time sensorimotor processing), LLM responses are always cross-validated against internal models before use, and the system operates at full capability when the LLM is unavailable. Supports local (Ollama), cloud (OpenAI, Anthropic), and disabled modes.
 
-## OPC UA bridge
+## Bridge framework
+
+Every adapter between an external real-world system and the Jneopallium
+signal pipeline is a "bridge". The shared contract — six ground rules,
+universal write algorithm, audit schema, acceptance scenarios, and
+phase progression — is specified in [`00-FRAMEWORK.md`](00-FRAMEWORK.md);
+the per-protocol specs (`01-PLC4X.md` … `14-LTI-XAPI.md`) reference it
+instead of restating it. The shared scaffolding lives at
+`worker/src/main/java/com/rakovpublic/jneuropallium/worker/bridge/common/`:
+`AbstractBridgeOutputAggregator` (template-method enforcement of the
+§2.2 algorithm), `OverrideRegistry`, `AbstractBridgeAuditOutput`,
+`BridgeReconnectPolicy`, `BridgeAuditRecord`, and `BridgeBindingDirection`.
+New bridges go in `worker.bridge.<bridge-id>/` and start in `SHADOW` for
+every loop.
+
+### Bridge index
+
+| ID | Bridge | Domain | Status | Safety ceiling |
+|----|--------|--------|--------|----------------|
+| (existing) | OPC UA | industrial | shipped | AUTONOMOUS (per-loop) |
+| 01 | Apache PLC4X | legacy PLC | spec | AUTONOMOUS (per-loop) |
+| 02 | MQTT + Sparkplug | IIoT | spec | ADVISORY |
+| 03 | FMI / FMU | simulation | spec | AUTONOMOUS (sim only) |
+| 04 | ROS 2 / DDS | robotics | spec | ADVISORY initially |
+| 05 | Lab Streaming Layer | BCI | spec | ADVISORY (read-mostly) |
+| 06 | HL7 FHIR | clinical | spec | ADVISORY (regulatory ceiling) |
+| 07 | DICOM | medical imaging | spec | READ-ONLY (context bridge) |
+| 08 | Apache Kafka | enterprise/cyber | spec | ADVISORY |
+| 09 | OpenTelemetry | observability | spec | EXPORT-ONLY (no writeback) |
+| 10 | Eclipse Ditto | digital twins | spec | ADVISORY |
+| 11 | IEC 61850 | power grid | spec | READ-ONLY initially |
+| 12 | MAVLink | drones | spec | SIM-ONLY initially |
+| 13 | CANopen | embedded | spec | ADVISORY |
+| 14 | LTI / xAPI | adaptive tutoring | spec | ADVISORY |
+
+### OPC UA bridge
 
 Jneopallium can act as a biologically-inspired, safety-gated
 cognitive-control layer for OPC UA industrial systems via Eclipse Milo.
