@@ -6,6 +6,7 @@ package com.rakovpublic.jneuropallium.worker.net.signals.impl.security;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.ProcessingFrequency;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.security.Severity;
 import com.rakovpublic.jneuropallium.worker.net.signals.AbstractSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 import java.util.ArrayList;
@@ -16,7 +17,11 @@ import java.util.List;
  * SOC-facing incident summary aggregating the evidence and response
  * actions taken. ProcessingFrequency: loop=2, epoch=1.
  */
-public class IncidentReportSignal extends AbstractSignal<Void> implements ISignal<Void> {
+public class IncidentReportSignal extends AbstractSignal<Void> implements ISignal<Void>, IResultSignal<Void> {
+
+    @Override public Void getResultObject() { return null; }
+    @Override public Class<Void> getResultObjectClass() { return Void.class; }
+
 
     public static final ProcessingFrequency PROCESSING_FREQUENCY = new ProcessingFrequency(1L, 2);
 

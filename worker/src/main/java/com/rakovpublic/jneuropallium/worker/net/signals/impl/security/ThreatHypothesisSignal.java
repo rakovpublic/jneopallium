@@ -6,6 +6,8 @@ package com.rakovpublic.jneuropallium.worker.net.signals.impl.security;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.ProcessingFrequency;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.security.ThreatCategory;
 import com.rakovpublic.jneuropallium.worker.net.signals.AbstractSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.IInputSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 import java.util.ArrayList;
@@ -17,7 +19,12 @@ import java.util.List;
  * posterior and the evidence ids that support it.
  * ProcessingFrequency: loop=2, epoch=1.
  */
-public class ThreatHypothesisSignal extends AbstractSignal<Void> implements ISignal<Void> {
+public class ThreatHypothesisSignal extends AbstractSignal<Void>
+        implements ISignal<Void>, IInputSignal<Void>, IResultSignal<Void> {
+
+    @Override public Void getResultObject() { return null; }
+    @Override public Class<Void> getResultObjectClass() { return Void.class; }
+
 
     public static final ProcessingFrequency PROCESSING_FREQUENCY = new ProcessingFrequency(1L, 2);
 
