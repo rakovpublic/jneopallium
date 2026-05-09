@@ -1,0 +1,36 @@
+fmu:
+  path: "./src/test/resources/fmu/tank_temperature.fmu"
+  loggingOn: false
+  toleranceDefined: true
+  tolerance: 1.0E-6
+
+clock:
+  mode: "AS_FAST_AS_POSSIBLE"
+  startTime: 0.0
+  stepSize: 0.25
+
+reads:
+  - bindingId: "TANK-TEMP"
+    fmuVariable: "tank.T"
+    signalTag: "PLANT.TANK01.TEMP"
+
+writes:
+  - bindingId: "HEATER-Q"
+    fmuVariable: "heater.Q"
+    signalTag: "PLANT.HEATER01.SP"
+    failSafeValue: 0.0
+    minClampValue: 0.0
+    maxClampValue: 50000.0
+
+events:
+  - bindingId: "OVERTEMP"
+    fmuVariable: "alarm.over_temperature"
+    signalTag: "PLANT.TANK01.OVERTEMP"
+    severity: "CRITICAL"
+
+audit:
+  localAuditFile: "./target/test-audit/fmu-audit.jsonl"
+  writeRejectedToAudit: true
+
+perTagSafetyMode:
+  HEATER-Q: "AUTONOMOUS"
