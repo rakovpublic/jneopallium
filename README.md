@@ -209,7 +209,7 @@ every loop.
 | 07 | DICOM | medical imaging | spec | READ-ONLY (context bridge) |
 | 08 | Apache Kafka | enterprise/cyber | spec | ADVISORY |
 | 09 | OpenTelemetry | observability | spec | EXPORT-ONLY (no writeback) |
-| 10 | Eclipse Ditto | digital twins | spec | ADVISORY |
+| 10 | Eclipse Ditto | digital twins | shipped | ADVISORY |
 | 11 | IEC 61850 | power grid | spec | READ-ONLY initially |
 | 12 | MAVLink | drones | spec | SIM-ONLY initially |
 | 13 | CANopen | embedded | spec | ADVISORY |
@@ -252,6 +252,18 @@ decisions to a configurable advisory namespace consumed by the operator HMI
 `AUTONOMOUS` per-tag promotion is rejected by the config validator. See
 [`docs/mqtt-bridge.md`](docs/mqtt-bridge.md) and
 [`02-MQTT-SPARKPLUG.md`](02-MQTT-SPARKPLUG.md).
+
+### Eclipse Ditto bridge
+
+For digital-twin / device-fleet use cases the Ditto bridge subscribes to
+twin events over WebSocket, emits typed `MeasurementSignal` /
+`AlarmSignal(TWIN_OFFLINE)` instances per configured feature property, and
+writes neuron-derived advisory setpoints back via Ditto's REST API to
+features whose name starts with `recommended_` or `advisory_` — never to
+the actual control feature. The advisory-prefix rule is enforced both at
+config load and at runtime; `AUTONOMOUS` per-tag promotion is rejected by
+the config validator. See [`docs/ditto-bridge.md`](docs/ditto-bridge.md)
+and [`10-DITTO.md`](10-DITTO.md).
 
 ## Applications
 
