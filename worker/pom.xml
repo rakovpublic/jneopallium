@@ -95,6 +95,32 @@
             <version>${grpc.version}</version>
         </dependency>
 
+        <!-- ============== OpenTelemetry (Bridge 09) ==============
+             Versions are pulled from the opentelemetry-bom imported in the
+             parent. Export-only — no input/aggregator surface. -->
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-sdk</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-exporter-otlp</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-sdk-extension-autoconfigure</artifactId>
+        </dependency>
+        <!-- In-memory exporters used by the unit tests for traces/metrics/logs. -->
+        <dependency>
+            <groupId>io.opentelemetry</groupId>
+            <artifactId>opentelemetry-sdk-testing</artifactId>
+            <scope>test</scope>
+        </dependency>
+
         <!-- ============== OPC UA (Phase 2) ============== -->
         <!-- Versions come from the milo-bom imported in the parent. -->
         <dependency>
