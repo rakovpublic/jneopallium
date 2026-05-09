@@ -121,6 +121,19 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- ============== MQTT + Sparkplug B (Bridge 02) ==============
+             Versions are managed in the parent BOM (02-MQTT-SPARKPLUG.md §2).
+             HiveMQ provides the MQTT client (production wiring); Tahu carries
+             the Sparkplug B payload encoder/decoder. -->
+        <dependency>
+            <groupId>com.hivemq</groupId>
+            <artifactId>hivemq-mqtt-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.tahu</groupId>
+            <artifactId>tahu-core</artifactId>
+        </dependency>
+
         <!-- ============== OPC UA (Phase 2) ============== -->
         <!-- Versions come from the milo-bom imported in the parent. -->
         <dependency>

@@ -201,7 +201,7 @@ every loop.
 |----|--------|--------|--------|----------------|
 | (existing) | OPC UA | industrial | shipped | AUTONOMOUS (per-loop) |
 | 01 | Apache PLC4X | legacy PLC | shipped | AUTONOMOUS (per-loop) |
-| 02 | MQTT + Sparkplug | IIoT | spec | ADVISORY |
+| 02 | MQTT + Sparkplug | IIoT | shipped | ADVISORY |
 | 03 | FMI / FMU | simulation | shipped | AUTONOMOUS (sim only) |
 | 04 | ROS 2 / DDS | robotics | spec | ADVISORY initially |
 | 05 | Lab Streaming Layer | BCI | spec | ADVISORY (read-mostly) |
@@ -240,6 +240,18 @@ same role as the OPC UA bridge: protocol-native field reads become typed
 validation fails fast at startup. See
 [`docs/plc4x-bridge.md`](docs/plc4x-bridge.md) and
 [`01-PLC4X.md`](01-PLC4X.md).
+
+### MQTT + Sparkplug B bridge
+
+For unified-namespace IIoT deployments the MQTT bridge subscribes to
+Sparkplug B (and plain MQTT) topics, emits typed
+`MeasurementSignal` / `AlarmSignal` instances on `DDATA` / `DDEATH`, and
+publishes neuron-derived `SetpointSignal` / `ActuatorCommandSignal`
+decisions to a configurable advisory namespace consumed by the operator HMI
+— never to a field-actuating `DCMD`. The structural ceiling is **ADVISORY**;
+`AUTONOMOUS` per-tag promotion is rejected by the config validator. See
+[`docs/mqtt-bridge.md`](docs/mqtt-bridge.md) and
+[`02-MQTT-SPARKPLUG.md`](02-MQTT-SPARKPLUG.md).
 
 ## Applications
 
