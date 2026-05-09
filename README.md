@@ -200,9 +200,9 @@ every loop.
 | ID | Bridge | Domain | Status | Safety ceiling |
 |----|--------|--------|--------|----------------|
 | (existing) | OPC UA | industrial | shipped | AUTONOMOUS (per-loop) |
-| 01 | Apache PLC4X | legacy PLC | spec | AUTONOMOUS (per-loop) |
+| 01 | Apache PLC4X | legacy PLC | shipped | AUTONOMOUS (per-loop) |
 | 02 | MQTT + Sparkplug | IIoT | spec | ADVISORY |
-| 03 | FMI / FMU | simulation | spec | AUTONOMOUS (sim only) |
+| 03 | FMI / FMU | simulation | shipped | AUTONOMOUS (sim only) |
 | 04 | ROS 2 / DDS | robotics | spec | ADVISORY initially |
 | 05 | Lab Streaming Layer | BCI | spec | ADVISORY (read-mostly) |
 | 06 | HL7 FHIR | clinical | spec | ADVISORY (regulatory ceiling) |
@@ -227,6 +227,19 @@ honouring operator override, respecting per-loop SHADOW / ADVISORY /
 AUTONOMOUS mode, and emitting an audit record for every proposed action
 whether applied, clamped, or rejected. See
 [`docs/opcua-bridge-architecture.md`](docs/opcua-bridge-architecture.md).
+
+### PLC4X bridge
+
+For the long tail of legacy fieldbus controllers (Siemens S7, Modbus TCP,
+EtherNet/IP, Beckhoff ADS, Allen-Bradley, …) the PLC4X bridge plays the
+same role as the OPC UA bridge: protocol-native field reads become typed
+`MeasurementSignal` / `AlarmSignal` instances; safety-gated
+`ActuatorCommandSignal` writes go back through the universal
+`AbstractBridgeOutputAggregator` algorithm (interlock → override → clamp
+→ rate-limit → diff-suppress → audit). Polling is per-binding; address
+validation fails fast at startup. See
+[`docs/plc4x-bridge.md`](docs/plc4x-bridge.md) and
+[`01-PLC4X.md`](01-PLC4X.md).
 
 ## Applications
 
