@@ -134,6 +134,15 @@
             <artifactId>tahu-core</artifactId>
         </dependency>
 
+        <!-- ============== MAVLink (Bridge 12) ==============
+             dronefleet/mavlink Java library — pure Java, supports MAVLink 1
+             + 2, covers common.xml and ardupilotmega.xml. Version pinned in
+             the parent BOM (12-MAVLINK.md §2). -->
+        <dependency>
+            <groupId>io.dronefleet.mavlink</groupId>
+            <artifactId>mavlink</artifactId>
+        </dependency>
+
         <!-- ============== OPC UA (Phase 2) ============== -->
         <!-- Versions come from the milo-bom imported in the parent. -->
         <dependency>
