@@ -6,6 +6,7 @@ package com.rakovpublic.jneuropallium.worker.net.signals.impl.bci;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.bci.CalibrationTarget;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.ProcessingFrequency;
 import com.rakovpublic.jneuropallium.worker.net.signals.AbstractSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.IInputSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 /**
@@ -13,7 +14,7 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
  * record what was tuned and how well it performed.
  * ProcessingFrequency: loop=2, epoch=3.
  */
-public class CalibrationSignal extends AbstractSignal<Void> implements ISignal<Void> {
+public class CalibrationSignal extends AbstractSignal<Void> implements ISignal<Void>, IInputSignal<Void> {
 
     public static final ProcessingFrequency PROCESSING_FREQUENCY = new ProcessingFrequency(3L, 2);
 

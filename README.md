@@ -322,6 +322,30 @@ cross-platform escape hatch (CANable / Korlan / PCAN). See
 [`docs/canopen-bridge.md`](docs/canopen-bridge.md) and
 [`13-CANOPEN.md`](13-CANOPEN.md).
 
+### Lab Streaming Layer (LSL) bridge
+
+For BCI and physiology research, the LSL bridge resolves
+[Lab Streaming Layer](https://labstreaminglayer.org/) inlets (EEG, ECoG,
+Spikes, EMG, HRV, GSR, Eye, Temperature, Markers) discovered over mDNS
+and emits per-channel typed signals: `EEG` → `LFPSignal`, `Spikes` →
+`NeuralSpikeSignal`, `ECoG` → `ECoGSignal`, `EMG` → `ProprioceptiveSignal`,
+`HRV` / `GSR` → `InteroceptiveSignal`, `Eye` → `AppraisalSignal`,
+`Temperature` → `ThermalSignal`, calibration cues → `CalibrationSignal`
+(subject identifiers pseudonymised at the mapper). Stream resolution
+fails fast on missing `expectedStreams` or unknown channel labels; per-
+stream ring buffers drop oldest-on-overflow with an audit entry.
+
+Egress is **read-mostly / advisory** — the bridge writes only to outlet
+topics consumed by separately certified stimulator-driver software (no
+direct path to electrodes). Every `StimulationCommandSignal` is routed
+through the existing `StimulationSafetyGateNeuron` (Shannon criterion,
+charge balance, frequency / pulse-width SOA, seizure / thermal lockout);
+a non-null veto is recorded with `verdict=REJECTED reason=GATE_VETO:<cause>`
+and the outlet is not written. The structural ceiling rejects
+`AUTONOMOUS` for any LSL write at config load. See
+[`docs/lsl-bridge.md`](docs/lsl-bridge.md) and
+[`05-LSL.md`](05-LSL.md).
+
 ## Applications
 
 - **Industrial process control** — Connect to any OPC UA PLC/SCADA via the Eclipse Milo bridge and run neuron-derived setpoints through the safety/interlock chain.

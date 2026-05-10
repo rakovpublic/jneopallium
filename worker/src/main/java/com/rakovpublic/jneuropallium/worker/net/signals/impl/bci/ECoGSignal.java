@@ -5,13 +5,14 @@ package com.rakovpublic.jneuropallium.worker.net.signals.impl.bci;
 
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.ProcessingFrequency;
 import com.rakovpublic.jneuropallium.worker.net.signals.AbstractSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.IInputSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 /**
  * Electrocorticography sample from a subdural or epidural contact.
  * ProcessingFrequency: loop=1, epoch=1.
  */
-public class ECoGSignal extends AbstractSignal<Void> implements ISignal<Void> {
+public class ECoGSignal extends AbstractSignal<Void> implements ISignal<Void>, IInputSignal<Void> {
 
     public static final ProcessingFrequency PROCESSING_FREQUENCY = new ProcessingFrequency(1L, 1);
 
