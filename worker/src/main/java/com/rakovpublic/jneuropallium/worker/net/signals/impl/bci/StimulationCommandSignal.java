@@ -6,6 +6,7 @@ package com.rakovpublic.jneuropallium.worker.net.signals.impl.bci;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.bci.PolarityPattern;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.ProcessingFrequency;
 import com.rakovpublic.jneuropallium.worker.net.signals.AbstractSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 /**
@@ -14,7 +15,10 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
  * reaching the hardware.
  * ProcessingFrequency: loop=1, epoch=1.
  */
-public class StimulationCommandSignal extends AbstractSignal<Void> implements ISignal<Void> {
+public class StimulationCommandSignal extends AbstractSignal<Void> implements ISignal<Void>, IResultSignal<Void> {
+
+    @Override public Void getResultObject() { return null; }
+    @Override public Class<Void> getResultObjectClass() { return Void.class; }
 
     public static final ProcessingFrequency PROCESSING_FREQUENCY = new ProcessingFrequency(1L, 1);
 

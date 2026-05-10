@@ -5,6 +5,7 @@ package com.rakovpublic.jneuropallium.worker.net.signals.impl.bci;
 
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.ProcessingFrequency;
 import com.rakovpublic.jneuropallium.worker.net.signals.AbstractSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.IInputSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 /**
@@ -12,7 +13,7 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
  * &gt; 2 °C triggers shutdown.
  * ProcessingFrequency: loop=2, epoch=1.
  */
-public class ThermalSignal extends AbstractSignal<Void> implements ISignal<Void> {
+public class ThermalSignal extends AbstractSignal<Void> implements ISignal<Void>, IInputSignal<Void> {
 
     public static final ProcessingFrequency PROCESSING_FREQUENCY = new ProcessingFrequency(1L, 2);
 

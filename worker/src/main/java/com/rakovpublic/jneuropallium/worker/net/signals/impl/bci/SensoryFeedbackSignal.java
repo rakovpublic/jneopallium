@@ -6,6 +6,7 @@ package com.rakovpublic.jneuropallium.worker.net.signals.impl.bci;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.bci.FeedbackModality;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.ProcessingFrequency;
 import com.rakovpublic.jneuropallium.worker.net.signals.AbstractSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.IInputSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 /**
@@ -13,7 +14,7 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
  * contact. Delivered to restore tactile or proprioceptive perception.
  * ProcessingFrequency: loop=1, epoch=1.
  */
-public class SensoryFeedbackSignal extends AbstractSignal<Void> implements ISignal<Void> {
+public class SensoryFeedbackSignal extends AbstractSignal<Void> implements ISignal<Void>, IInputSignal<Void> {
 
     public static final ProcessingFrequency PROCESSING_FREQUENCY = new ProcessingFrequency(1L, 1);
 
