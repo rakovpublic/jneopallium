@@ -1,9 +1,10 @@
 package com.rakovpublic.jneuropallium.ai.signals;
 
 import com.rakovpublic.jneuropallium.worker.net.signals.AbstractSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
-public abstract class BaseSignal extends AbstractSignal<Void> {
+public abstract class BaseSignal extends AbstractSignal<Void> implements IResultSignal<Void> {
 
     public BaseSignal() {
         super();
@@ -17,6 +18,12 @@ public abstract class BaseSignal extends AbstractSignal<Void> {
 
     @Override
     public Class<Void> getParamClass() { return Void.class; }
+
+    @Override
+    public Void getResultObject() { return null; }
+
+    @Override
+    public Class<Void> getResultObjectClass() { return Void.class; }
 
     @Override
     public String toJSON() { return "{}"; }

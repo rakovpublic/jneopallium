@@ -203,7 +203,7 @@ every loop.
 | 01 | Apache PLC4X | legacy PLC | shipped | AUTONOMOUS (per-loop) |
 | 02 | MQTT + Sparkplug | IIoT | shipped | ADVISORY |
 | 03 | FMI / FMU | simulation | shipped | AUTONOMOUS (sim only) |
-| 04 | ROS 2 / DDS | robotics | spec | ADVISORY initially |
+| 04 | ROS 2 / DDS | robotics | shipped | ADVISORY initially |
 | 05 | Lab Streaming Layer | BCI | spec | ADVISORY (read-mostly) |
 | 06 | HL7 FHIR | clinical | spec | ADVISORY (regulatory ceiling) |
 | 07 | DICOM | medical imaging | spec | READ-ONLY (context bridge) |
@@ -252,6 +252,23 @@ decisions to a configurable advisory namespace consumed by the operator HMI
 `AUTONOMOUS` per-tag promotion is rejected by the config validator. See
 [`docs/mqtt-bridge.md`](docs/mqtt-bridge.md) and
 [`02-MQTT-SPARKPLUG.md`](02-MQTT-SPARKPLUG.md).
+
+### ROS 2 / DDS bridge
+
+For robotics and swarm deployments the ROS 2 bridge subscribes to
+`rosbridge_suite` over WebSocket and emits typed
+`SensorySignal` / `ProprioceptiveSignal` / `EfficiencySignal` /
+`PeerObservationSignal` instances per configured topic binding. The
+egress side publishes neuron-derived
+`MotorCommandSignal` / `FormationSignal` / `HarmVetoSignal` decisions to
+a configurable advisory namespace that an external autonomy supervisor
+consumes — never directly to `/cmd_vel`, `/joint_trajectory`, or
+`/joint_command` in production. The forbidden-topic rule is enforced
+both at config load and at runtime; per-tag `AUTONOMOUS` promotion is
+rejected unless `simulatorOnly: true` is set, which models the
+simulator-with-watchdog escape from the spec's §3. See
+[`docs/ros2-bridge.md`](docs/ros2-bridge.md) and
+[`04-ROS2-DDS.md`](04-ROS2-DDS.md).
 
 ### Eclipse Ditto bridge
 

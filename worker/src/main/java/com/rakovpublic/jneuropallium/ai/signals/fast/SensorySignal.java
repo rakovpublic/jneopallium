@@ -1,9 +1,10 @@
 package com.rakovpublic.jneuropallium.ai.signals.fast;
 
 import com.rakovpublic.jneuropallium.ai.signals.BaseSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.IInputSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
-public class SensorySignal extends BaseSignal {
+public class SensorySignal extends BaseSignal implements IInputSignal<Void> {
     private double[] rawValues;
     private String sensorId;
     private long timestamp;

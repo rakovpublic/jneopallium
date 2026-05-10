@@ -5,13 +5,14 @@ package com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial;
 
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.ProcessingFrequency;
 import com.rakovpublic.jneuropallium.worker.net.signals.AbstractSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.IInputSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 /**
  * Per-unit efficiency measurement with its baseline.
  * ProcessingFrequency: loop=2, epoch=1.
  */
-public class EfficiencySignal extends AbstractSignal<Void> implements ISignal<Void> {
+public class EfficiencySignal extends AbstractSignal<Void> implements ISignal<Void>, IInputSignal<Void> {
 
     public static final ProcessingFrequency PROCESSING_FREQUENCY = new ProcessingFrequency(1L, 2);
 
