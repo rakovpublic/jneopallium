@@ -211,7 +211,7 @@ every loop.
 | 09 | OpenTelemetry | observability | spec | EXPORT-ONLY (no writeback) |
 | 10 | Eclipse Ditto | digital twins | shipped | ADVISORY |
 | 11 | IEC 61850 | power grid | spec | READ-ONLY initially |
-| 12 | MAVLink | drones | spec | SIM-ONLY initially |
+| 12 | MAVLink | drones | shipped | SIM-ONLY initially |
 | 13 | CANopen | embedded | spec | ADVISORY |
 | 14 | LTI / xAPI | adaptive tutoring | spec | ADVISORY |
 
@@ -281,6 +281,26 @@ the actual control feature. The advisory-prefix rule is enforced both at
 config load and at runtime; `AUTONOMOUS` per-tag promotion is rejected by
 the config validator. See [`docs/ditto-bridge.md`](docs/ditto-bridge.md)
 and [`10-DITTO.md`](10-DITTO.md).
+
+### MAVLink bridge
+
+For drones and small autonomous vehicles the MAVLink bridge wraps the
+`dronefleet/mavlink` Java codec and routes messages from one or more SITL
+or hardware MAVLink connections (UDP / TCP) onto the Jneopallium signal
+bus: `GLOBAL_POSITION_INT` / `ATTITUDE` → `ProprioceptiveSignal`,
+peer `GLOBAL_POSITION_INT` → `PeerObservationSignal`, `BATTERY_STATUS` →
+`EfficiencySignal`, `STATUSTEXT` / `SYS_STATUS` → `AlarmSignal`,
+`RADIO_STATUS` → `AnomalyScoreSignal`, missed `HEARTBEAT` → `PEER_OFFLINE`
+alarm. Egress is restricted to advisory message types (`STATUSTEXT`,
+`NAMED_VALUE_FLOAT`, custom `JNEO_*` dialect) consumed by an external
+supervisor or ground station — never `COMMAND_LONG`, `SET_MODE`,
+`MISSION_*`, `MANUAL_CONTROL`, `RC_CHANNELS_OVERRIDE` directly to a flying
+autopilot. The forbidden-message-type rule and the `expectedSystems`
+whitelist are enforced both at config load and at runtime; per-tag
+`AUTONOMOUS` promotion is rejected unless `simulatorOnly: true` is set,
+which models the simulator-with-watchdog escape. See
+[`docs/mavlink-bridge.md`](docs/mavlink-bridge.md) and
+[`12-MAVLINK.md`](12-MAVLINK.md).
 
 ## Applications
 

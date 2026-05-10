@@ -38,6 +38,7 @@
         <opentelemetry-instrumentation.version>2.9.0</opentelemetry-instrumentation.version>
         <hivemq-mqtt-client.version>1.3.3</hivemq-mqtt-client.version>
         <tahu.version>1.0.7</tahu.version>
+        <dronefleet-mavlink.version>1.1.11</dronefleet-mavlink.version>
 
         <!-- Plugin versions -->
         <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
@@ -98,6 +99,14 @@
                 <groupId>org.eclipse.tahu</groupId>
                 <artifactId>tahu-core</artifactId>
                 <version>${tahu.version}</version>
+            </dependency>
+            <!-- MAVLink (Bridge 12 — 12-MAVLINK.md §2). dronefleet/mavlink is
+                 a pure-Java codec for MAVLink 1 + 2 covering common.xml and
+                 ardupilotmega.xml. -->
+            <dependency>
+                <groupId>io.dronefleet.mavlink</groupId>
+                <artifactId>mavlink</artifactId>
+                <version>${dronefleet-mavlink.version}</version>
             </dependency>
             <!-- Spring Boot 3 BOM -->
             <dependency>
