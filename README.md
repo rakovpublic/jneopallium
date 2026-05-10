@@ -212,7 +212,7 @@ every loop.
 | 10 | Eclipse Ditto | digital twins | shipped | ADVISORY |
 | 11 | IEC 61850 | power grid | spec | READ-ONLY initially |
 | 12 | MAVLink | drones | shipped | SIM-ONLY initially |
-| 13 | CANopen | embedded | spec | ADVISORY |
+| 13 | CANopen | embedded | shipped | ADVISORY |
 | 14 | LTI / xAPI | adaptive tutoring | spec | ADVISORY |
 
 ### OPC UA bridge
@@ -301,6 +301,26 @@ whitelist are enforced both at config load and at runtime; per-tag
 which models the simulator-with-watchdog escape. See
 [`docs/mavlink-bridge.md`](docs/mavlink-bridge.md) and
 [`12-MAVLINK.md`](12-MAVLINK.md).
+
+### CANopen bridge
+
+For embedded networks (mobile robots, AGVs, industrial drives, BMS packs)
+the CANopen bridge surfaces TPDO scalar payloads, EMCY emergency frames,
+and per-node heartbeat liveness onto the Jneopallium signal bus:
+CiA-402 `position_actual` → `ProprioceptiveSignal`, CiA-401 sensor PDO →
+`MeasurementSignal`, CiA-418 SoC → `EfficiencySignal`, EMCY frame →
+`AlarmSignal` (with the standard CiA-301 §7.2.1 description), missed
+heartbeat → `NODE_OFFLINE` alarm. Subsequent reads from a node past the
+heartbeat timeout carry `Quality.UNCERTAIN`. Egress is restricted to
+**non-actuating** OD indices: writes to `controlword` (`0x6040`) are
+rejected at config load unconditionally, and every other write must
+appear on the per-node `writeIndexAllowList` to be loaded — both gates
+are re-checked at runtime by the platform service. The Linux SocketCAN
+backend (`SocketCanClientService`) is the production target; the
+Lawicel-style USB-CAN backend (`UsbCanClientService`) is the
+cross-platform escape hatch (CANable / Korlan / PCAN). See
+[`docs/canopen-bridge.md`](docs/canopen-bridge.md) and
+[`13-CANOPEN.md`](13-CANOPEN.md).
 
 ## Applications
 
