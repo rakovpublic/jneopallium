@@ -6,6 +6,7 @@ package com.rakovpublic.jneuropallium.worker.net.signals.impl.clinical;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.ProcessingFrequency;
 import com.rakovpublic.jneuropallium.worker.net.signals.AbstractSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
 
 /**
  * An advisory treatment proposal. NEVER emitted with execute=true; the
@@ -13,7 +14,7 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
  * short human-readable rationale.
  * ProcessingFrequency: loop=1, epoch=3.
  */
-public class TreatmentProposalSignal extends AbstractSignal<Void> implements ISignal<Void> {
+public class TreatmentProposalSignal extends AbstractSignal<Void> implements ISignal<Void>, IResultSignal<Void> {
 
     public static final ProcessingFrequency PROCESSING_FREQUENCY = new ProcessingFrequency(3L, 1);
 
@@ -53,6 +54,8 @@ public class TreatmentProposalSignal extends AbstractSignal<Void> implements ISi
 
     @Override public Void getValue() { return null; }
     @Override public Class<Void> getParamClass() { return Void.class; }
+    @Override public Void getResultObject() { return null; }
+    @Override public Class<Void> getResultObjectClass() { return Void.class; }
     @Override public Class<? extends ISignal<Void>> getCurrentSignalClass() { return TreatmentProposalSignal.class; }
     @Override public String getDescription() { return "TreatmentProposalSignal"; }
 

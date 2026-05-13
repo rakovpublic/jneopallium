@@ -6,14 +6,16 @@ package com.rakovpublic.jneuropallium.worker.net.signals.impl.clinical;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.clinical.AlertSeverity;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.ProcessingFrequency;
 import com.rakovpublic.jneuropallium.worker.net.signals.AbstractSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.IInputSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
 
 /**
  * Real-time alert for an observed adverse event (guardrail excursion,
  * arrhythmia, critical lab value, early-warning score crossing).
  * ProcessingFrequency: loop=1, epoch=1.
  */
-public class AdverseEventAlertSignal extends AbstractSignal<Void> implements ISignal<Void> {
+public class AdverseEventAlertSignal extends AbstractSignal<Void> implements ISignal<Void>, IInputSignal<Void>, IResultSignal<Void> {
 
     public static final ProcessingFrequency PROCESSING_FREQUENCY = new ProcessingFrequency(1L, 1);
 
@@ -48,6 +50,8 @@ public class AdverseEventAlertSignal extends AbstractSignal<Void> implements ISi
 
     @Override public Void getValue() { return null; }
     @Override public Class<Void> getParamClass() { return Void.class; }
+    @Override public Void getResultObject() { return null; }
+    @Override public Class<Void> getResultObjectClass() { return Void.class; }
     @Override public Class<? extends ISignal<Void>> getCurrentSignalClass() { return AdverseEventAlertSignal.class; }
     @Override public String getDescription() { return "AdverseEventAlertSignal"; }
 

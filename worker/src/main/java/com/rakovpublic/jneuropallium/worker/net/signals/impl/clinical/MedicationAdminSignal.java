@@ -5,13 +5,14 @@ package com.rakovpublic.jneuropallium.worker.net.signals.impl.clinical;
 
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.ProcessingFrequency;
 import com.rakovpublic.jneuropallium.worker.net.signals.AbstractSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.IInputSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 /**
  * Record of an administered medication (for context, not orders).
  * ProcessingFrequency: loop=2, epoch=2.
  */
-public class MedicationAdminSignal extends AbstractSignal<Void> implements ISignal<Void> {
+public class MedicationAdminSignal extends AbstractSignal<Void> implements ISignal<Void>, IInputSignal<Void> {
 
     public static final ProcessingFrequency PROCESSING_FREQUENCY = new ProcessingFrequency(2L, 2);
 

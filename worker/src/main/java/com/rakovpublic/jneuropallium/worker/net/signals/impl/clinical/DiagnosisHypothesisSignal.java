@@ -5,6 +5,7 @@ package com.rakovpublic.jneuropallium.worker.net.signals.impl.clinical;
 
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.ProcessingFrequency;
 import com.rakovpublic.jneuropallium.worker.net.signals.AbstractSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.IInputSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import java.util.List;
  * identifiers. Used by the differential-diagnosis neuron.
  * ProcessingFrequency: loop=1, epoch=2.
  */
-public class DiagnosisHypothesisSignal extends AbstractSignal<Void> implements ISignal<Void> {
+public class DiagnosisHypothesisSignal extends AbstractSignal<Void> implements ISignal<Void>, IInputSignal<Void> {
 
     public static final ProcessingFrequency PROCESSING_FREQUENCY = new ProcessingFrequency(2L, 1);
 
