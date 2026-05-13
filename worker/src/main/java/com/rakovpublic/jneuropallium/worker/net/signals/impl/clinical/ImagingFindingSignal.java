@@ -6,13 +6,18 @@ package com.rakovpublic.jneuropallium.worker.net.signals.impl.clinical;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.clinical.FindingCategory;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.ProcessingFrequency;
 import com.rakovpublic.jneuropallium.worker.net.signals.AbstractSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.IInputSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 /**
  * A radiologist- or model-reported imaging finding.
  * ProcessingFrequency: loop=2, epoch=5.
+ *
+ * <p>Also implements {@link IInputSignal} so the DICOM bridge
+ * (07-DICOM.md) can drain finding signals through the universal
+ * {@code IInitInput} adapter shared with the FHIR bridge.
  */
-public class ImagingFindingSignal extends AbstractSignal<Void> implements ISignal<Void> {
+public class ImagingFindingSignal extends AbstractSignal<Void> implements ISignal<Void>, IInputSignal<Void> {
 
     public static final ProcessingFrequency PROCESSING_FREQUENCY = new ProcessingFrequency(5L, 2);
 
