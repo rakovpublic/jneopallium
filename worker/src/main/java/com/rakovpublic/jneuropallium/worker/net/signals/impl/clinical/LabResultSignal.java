@@ -5,13 +5,14 @@ package com.rakovpublic.jneuropallium.worker.net.signals.impl.clinical;
 
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.ProcessingFrequency;
 import com.rakovpublic.jneuropallium.worker.net.signals.AbstractSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.IInputSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 /**
  * A single lab analyte result (LOINC coded) with its reference range.
  * ProcessingFrequency: loop=2, epoch=3.
  */
-public class LabResultSignal extends AbstractSignal<Void> implements ISignal<Void> {
+public class LabResultSignal extends AbstractSignal<Void> implements ISignal<Void>, IInputSignal<Void> {
 
     public static final ProcessingFrequency PROCESSING_FREQUENCY = new ProcessingFrequency(3L, 2);
 

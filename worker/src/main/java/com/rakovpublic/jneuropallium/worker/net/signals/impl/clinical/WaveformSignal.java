@@ -6,13 +6,14 @@ package com.rakovpublic.jneuropallium.worker.net.signals.impl.clinical;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.clinical.WaveformType;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.ProcessingFrequency;
 import com.rakovpublic.jneuropallium.worker.net.signals.AbstractSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.IInputSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 /**
  * A continuous physiological waveform window (ECG / PPG / EEG).
  * ProcessingFrequency: loop=1, epoch=1.
  */
-public class WaveformSignal extends AbstractSignal<Void> implements ISignal<Void> {
+public class WaveformSignal extends AbstractSignal<Void> implements ISignal<Void>, IInputSignal<Void> {
 
     public static final ProcessingFrequency PROCESSING_FREQUENCY = new ProcessingFrequency(1L, 1);
 

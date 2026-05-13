@@ -6,6 +6,7 @@ package com.rakovpublic.jneuropallium.worker.net.signals.impl.clinical;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.clinical.Sex;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.ProcessingFrequency;
 import com.rakovpublic.jneuropallium.worker.net.signals.AbstractSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.IInputSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import java.util.List;
  * Slow-changing patient demographics and history.
  * ProcessingFrequency: loop=2, epoch=10.
  */
-public class DemographicSignal extends AbstractSignal<Void> implements ISignal<Void> {
+public class DemographicSignal extends AbstractSignal<Void> implements ISignal<Void>, IInputSignal<Void> {
 
     public static final ProcessingFrequency PROCESSING_FREQUENCY = new ProcessingFrequency(10L, 2);
 
