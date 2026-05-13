@@ -210,7 +210,7 @@ every loop.
 | 08 | Apache Kafka | enterprise/cyber | spec | ADVISORY |
 | 09 | OpenTelemetry | observability | spec | EXPORT-ONLY (no writeback) |
 | 10 | Eclipse Ditto | digital twins | shipped | ADVISORY |
-| 11 | IEC 61850 | power grid | spec | READ-ONLY initially |
+| 11 | IEC 61850 | power grid | shipped | READ-ONLY initially |
 | 12 | MAVLink | drones | shipped | SIM-ONLY initially |
 | 13 | CANopen | embedded | shipped | ADVISORY |
 | 14 | LTI / xAPI | adaptive tutoring | spec | ADVISORY |
@@ -321,6 +321,30 @@ Lawicel-style USB-CAN backend (`UsbCanClientService`) is the
 cross-platform escape hatch (CANable / Korlan / PCAN). See
 [`docs/canopen-bridge.md`](docs/canopen-bridge.md) and
 [`13-CANOPEN.md`](13-CANOPEN.md).
+
+### IEC 61850 bridge
+
+For electrical substations and power-utility automation the IEC 61850
+bridge reads measurements (`MMXU` voltages / currents / power), status
+(`XCBR` / `XSWI` breaker and isolator positions) and protection events
+(`PIOC` / `PTOC` / `PTUV` operate signals from buffered or unbuffered
+Report Control Blocks) and emits typed `MeasurementSignal` /
+`AlarmSignal` instances per binding. Quality from the IEC 61850 `q`
+attribute propagates unmodified into `Quality.GOOD/BAD/UNCERTAIN`;
+source-system timestamps from the `t` attribute always win over the
+JVM clock.
+
+The ceiling is structurally **READ-ONLY**. The bridge package contains
+no aggregator or output class, the `Iec61850MmsClient` transport seam
+exposes no method that writes a Data Attribute or issues a
+select-before-operate, and a `writes:` block in YAML is rejected at
+config-load with a message pointing to the separate
+`iec61850-control` bridge that would need its own SIL certification.
+SCL (`.icd` / `.cid` / `.scd`) is the ground-truth data model: the
+bridge fails fast at startup if any IED's SCL file is missing or
+malformed. Sampled Values (PTP / IRIG-B) are deferred to v2. See
+[`docs/iec61850-bridge.md`](docs/iec61850-bridge.md) and
+[`11-IEC61850.md`](11-IEC61850.md).
 
 ### Lab Streaming Layer (LSL) bridge
 
