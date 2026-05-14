@@ -5,6 +5,7 @@ package com.rakovpublic.jneuropallium.worker.net.signals.impl.tutoring;
 
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.ProcessingFrequency;
 import com.rakovpublic.jneuropallium.worker.net.signals.AbstractSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 /**
@@ -12,7 +13,8 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
  * development fit (Vygotsky 1978).
  * ProcessingFrequency: loop=1, epoch=3.
  */
-public class ContentRecommendationSignal extends AbstractSignal<Void> implements ISignal<Void> {
+public class ContentRecommendationSignal extends AbstractSignal<Void>
+        implements ISignal<Void>, IResultSignal<Void> {
 
     public static final ProcessingFrequency PROCESSING_FREQUENCY = new ProcessingFrequency(3L, 1);
 
@@ -45,6 +47,8 @@ public class ContentRecommendationSignal extends AbstractSignal<Void> implements
     @Override public Class<Void> getParamClass() { return Void.class; }
     @Override public Class<? extends ISignal<Void>> getCurrentSignalClass() { return ContentRecommendationSignal.class; }
     @Override public String getDescription() { return "ContentRecommendationSignal"; }
+    @Override public Void getResultObject() { return null; }
+    @Override public Class<Void> getResultObjectClass() { return Void.class; }
 
     @Override
     @SuppressWarnings("unchecked")

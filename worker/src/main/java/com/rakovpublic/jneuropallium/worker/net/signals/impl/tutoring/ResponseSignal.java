@@ -5,13 +5,15 @@ package com.rakovpublic.jneuropallium.worker.net.signals.impl.tutoring;
 
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.ProcessingFrequency;
 import com.rakovpublic.jneuropallium.worker.net.signals.AbstractSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.IInputSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 /**
  * Carries a learner response to a presented item.
  * ProcessingFrequency: loop=1, epoch=1.
  */
-public class ResponseSignal extends AbstractSignal<Void> implements ISignal<Void> {
+public class ResponseSignal extends AbstractSignal<Void>
+        implements ISignal<Void>, IInputSignal<Void> {
 
     public static final ProcessingFrequency PROCESSING_FREQUENCY = new ProcessingFrequency(1L, 1);
 

@@ -5,13 +5,16 @@ package com.rakovpublic.jneuropallium.worker.net.signals.impl.tutoring;
 
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.ProcessingFrequency;
 import com.rakovpublic.jneuropallium.worker.net.signals.AbstractSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.IInputSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 /**
  * Emitted when a concept's BKT mastery estimate is updated.
  * ProcessingFrequency: loop=2, epoch=3.
  */
-public class MasteryUpdateSignal extends AbstractSignal<Void> implements ISignal<Void> {
+public class MasteryUpdateSignal extends AbstractSignal<Void>
+        implements ISignal<Void>, IInputSignal<Void>, IResultSignal<Void> {
 
     public static final ProcessingFrequency PROCESSING_FREQUENCY = new ProcessingFrequency(3L, 2);
 
@@ -42,6 +45,8 @@ public class MasteryUpdateSignal extends AbstractSignal<Void> implements ISignal
     @Override public Class<Void> getParamClass() { return Void.class; }
     @Override public Class<? extends ISignal<Void>> getCurrentSignalClass() { return MasteryUpdateSignal.class; }
     @Override public String getDescription() { return "MasteryUpdateSignal"; }
+    @Override public Void getResultObject() { return null; }
+    @Override public Class<Void> getResultObjectClass() { return Void.class; }
 
     @Override
     @SuppressWarnings("unchecked")

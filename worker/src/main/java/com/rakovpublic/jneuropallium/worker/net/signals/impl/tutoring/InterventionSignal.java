@@ -6,6 +6,7 @@ package com.rakovpublic.jneuropallium.worker.net.signals.impl.tutoring;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.ProcessingFrequency;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.tutoring.InterventionType;
 import com.rakovpublic.jneuropallium.worker.net.signals.AbstractSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 /**
@@ -13,7 +14,8 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
  * escalate to a human).
  * ProcessingFrequency: loop=2, epoch=1.
  */
-public class InterventionSignal extends AbstractSignal<Void> implements ISignal<Void> {
+public class InterventionSignal extends AbstractSignal<Void>
+        implements ISignal<Void>, IResultSignal<Void> {
 
     public static final ProcessingFrequency PROCESSING_FREQUENCY = new ProcessingFrequency(1L, 2);
 
@@ -43,6 +45,8 @@ public class InterventionSignal extends AbstractSignal<Void> implements ISignal<
     @Override public Class<Void> getParamClass() { return Void.class; }
     @Override public Class<? extends ISignal<Void>> getCurrentSignalClass() { return InterventionSignal.class; }
     @Override public String getDescription() { return "InterventionSignal"; }
+    @Override public Void getResultObject() { return null; }
+    @Override public Class<Void> getResultObjectClass() { return Void.class; }
 
     @Override
     @SuppressWarnings("unchecked")

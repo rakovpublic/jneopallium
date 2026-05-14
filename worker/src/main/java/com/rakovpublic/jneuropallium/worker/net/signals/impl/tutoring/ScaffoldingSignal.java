@@ -6,6 +6,7 @@ package com.rakovpublic.jneuropallium.worker.net.signals.impl.tutoring;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.ProcessingFrequency;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.tutoring.ScaffoldType;
 import com.rakovpublic.jneuropallium.worker.net.signals.AbstractSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 /**
@@ -13,7 +14,8 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
  * when the learner shows signs of overload.
  * ProcessingFrequency: loop=1, epoch=2.
  */
-public class ScaffoldingSignal extends AbstractSignal<Void> implements ISignal<Void> {
+public class ScaffoldingSignal extends AbstractSignal<Void>
+        implements ISignal<Void>, IResultSignal<Void> {
 
     public static final ProcessingFrequency PROCESSING_FREQUENCY = new ProcessingFrequency(2L, 1);
 
@@ -43,6 +45,8 @@ public class ScaffoldingSignal extends AbstractSignal<Void> implements ISignal<V
     @Override public Class<Void> getParamClass() { return Void.class; }
     @Override public Class<? extends ISignal<Void>> getCurrentSignalClass() { return ScaffoldingSignal.class; }
     @Override public String getDescription() { return "ScaffoldingSignal"; }
+    @Override public Void getResultObject() { return null; }
+    @Override public Class<Void> getResultObjectClass() { return Void.class; }
 
     @Override
     @SuppressWarnings("unchecked")
