@@ -5,6 +5,7 @@ package com.rakovpublic.jneuropallium.worker.net.signals.impl.tutoring;
 
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.ProcessingFrequency;
 import com.rakovpublic.jneuropallium.worker.net.signals.AbstractSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.IInputSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 
 /**
@@ -12,7 +13,8 @@ import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
  * (engagement trajectory + response accuracy). Feeds the affect module.
  * ProcessingFrequency: loop=1, epoch=2.
  */
-public class AffectObservationSignal extends AbstractSignal<Void> implements ISignal<Void> {
+public class AffectObservationSignal extends AbstractSignal<Void>
+        implements ISignal<Void>, IInputSignal<Void> {
 
     public static final ProcessingFrequency PROCESSING_FREQUENCY = new ProcessingFrequency(2L, 1);
 
