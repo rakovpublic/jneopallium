@@ -149,7 +149,16 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
                         List<IInputSignal> signalsHistory = new LinkedList<>();
                         for (IInputSignal signal : iii.readSignals()) {
                             ProcessingFrequency pf = frequencyHashMap.get(signal.getCurrentSignalClass());
-                            if (loop % pf.getLoop() == 0 && epoch % pf.getEpoch() == 0) {
+                            if (pf.getLoop()==null){
+                                if(loop==0&&epoch % pf.getEpoch() == 0){
+                                    signal.setInnerLoop(defaultLoopsCount);
+                                signal.setEpoch(epoch);
+                                signal.setLoop(loop);
+                                signalsHistory.add((IInputSignal) signal.copySignal());
+                                signals.add(signal);
+                                }
+                            }
+                            else if (loop % pf.getLoop() == 0 && (epoch % pf.getEpoch() == 0 || pf.getEpoch() == null)) {
                                 signal.setInnerLoop(defaultLoopsCount);
                                 signal.setEpoch(epoch);
                                 signal.setLoop(loop);
