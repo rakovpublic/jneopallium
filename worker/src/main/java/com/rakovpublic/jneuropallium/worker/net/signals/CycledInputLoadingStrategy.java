@@ -194,6 +194,54 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
                 }
 
             } else {
+                for (IInitInput iii : inputStatuses.keySet()) {
+                    ProcessingFrequency ipf = null;
+                    if (inputProcessingFrequencyHashMap.containsKey(iii)) {
+                        ipf = inputProcessingFrequencyHashMap.get(iii);
+                    }
+                    if (inputStatuses.get(iii).getCurrentRuns() %
+                            cl.getLoopCount() == 0 && (ipf != null && (ipf.getLoop() != null && loop % ipf.getLoop() == 0) || (ipf.getEpoch() != null && epoch % ipf.getEpoch() == 0))) {
+                        CopyOnWriteArrayList<ISignal> signals = new CopyOnWriteArrayList<>();
+                        List<IInputSignal> signalsHistory = new LinkedList<>();
+                        for (IInputSignal signal : iii.readSignals()) {
+                            ProcessingFrequency pf = frequencyHashMap.get(signal.getCurrentSignalClass());
+                            if (pf.getLoop()==null){
+                                if(loop==0&&epoch % pf.getEpoch() == 0){
+                                    signal.setInnerLoop(defaultLoopsCount);
+                                signal.setEpoch(epoch);
+                                signal.setLoop(loop);
+                                signalsHistory.add((IInputSignal) signal.copySignal());
+                                signals.add(signal);
+                                }
+                            }
+                            else if (loop % pf.getLoop() == 0 && (epoch % pf.getEpoch() == 0 || pf.getEpoch() == null)) {
+                                signal.setInnerLoop(defaultLoopsCount);
+                                signal.setEpoch(epoch);
+                                signal.setLoop(loop);
+                                signalsHistory.add((IInputSignal) signal.copySignal());
+                                signals.add(signal);
+                            }
+                        }
+                        signalsPersistStorage.putSignals(externalInputs.get(iii).getInputs(layersMeta, signals));
+                        inputStatuses.get(iii).setCurrentRuns(0);
+                        inputStatuses.get(iii).setBeenUsed(true);
+                        if (inputHistory.containsKey(epoch)) {
+                            if (inputHistory.get(epoch).containsKey(loop)) {
+                                inputHistory.get(epoch).get(loop).addAll(signalsHistory);
+                            } else {
+                                TreeMap<Integer, List<IInputSignal>> history = new TreeMap<>();
+                                history.put(loop, signalsHistory);
+                                inputHistory.put(epoch, history);
+                            }
+                        } else {
+                            TreeMap<Integer, List<IInputSignal>> history = new TreeMap<>();
+                            history.put(loop, signalsHistory);
+                            inputHistory.put(epoch, history);
+                        }
+                    } else {
+                        inputStatuses.get(iii).setCurrentRuns(inputStatuses.get(iii).getCurrentRuns() + 1);
+                    }
+                }
                 loop += 1;
             }
         }
