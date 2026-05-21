@@ -1,84 +1,199 @@
 # Jneopallium
 
-A biologically-grounded Java framework for modeling natural neuron networks with customizable levels of detail.
+> A biologically-grounded Java framework for modelling natural neuron networks at any chosen level of detail.
 
-[![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](LICENSE)
-[![Java](https://img.shields.io/badge/Java-11%2B-orange.svg)]()
+[![License: BSD-3-Clause](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](LICENSE.MD)
+[![Java 17+](https://img.shields.io/badge/Java-17%2B-orange.svg)](https://openjdk.org/)
+[![Build: Maven](https://img.shields.io/badge/build-Maven-C71A36.svg)](pom.xml)
 [![DOI](https://img.shields.io/badge/DOI-10.21275%2FSR24703042047-green.svg)](https://dx.doi.org/10.21275/SR24703042047)
+[![Topic: neural-networks](https://img.shields.io/badge/topic-neural--networks-blueviolet.svg)](https://github.com/topics/neural-networks)
 
-## Overview
+Jneopallium decouples neuron-network processing logic from the actual neuron and signal types — the same way `java.util.Collections` decouples container algorithms from the elements they hold — via generics and interfaces. The result is a framework where you can model anything from a textbook perceptron to a multi-receptor, multi-timescale, neuromodulator-aware network that mirrors natural cognitive processes.
 
-Jneopallium is a modular framework that separates neuron network processing logic from actual neuron and signal types — much like Java Collections separate storage logic from the objects they store — using generics and interfaces. It enables researchers and engineers to build neural models at any level of biological detail, from simple perceptron-like abstractions to complex multi-signal, multi-receptor architectures that mirror natural cognitive processes.
+Published in the *International Journal of Science and Research (IJSR)*, Vol. 13, Issue 7, July 2024.
+**Author:** Dmytro Rakovskyi — Kharkiv, Ukraine.
 
-The framework was published in the *International Journal of Science and Research (IJSR)*, Volume 13, Issue 7, July 2024.
+---
 
-**Author:** Dmytro Rakovskyi — Jneopallium, Kharkiv, Ukraine
+## Table of Contents
+
+1. [Why Jneopallium](#why-jneopallium)
+2. [Key Features](#key-features)
+3. [Project Layout](#project-layout)
+4. [Core Abstractions](#core-abstractions)
+5. [Getting Started](#getting-started)
+   - [Prerequisites](#prerequisites)
+   - [Build Requirements](#build-requirements)
+   - [Clone & Build](#clone--build)
+   - [Using as a Dependency](#using-as-a-dependency)
+   - [Running](#running)
+6. [Modelling Process](#modelling-process)
+7. [Signal Processing Frequency](#signal-processing-frequency)
+8. [Deployment Modes](#deployment-modes)
+9. [Bridge Framework](#bridge-framework)
+10. [Autonomous AI Architecture](#autonomous-ai-architecture)
+11. [LLM Knowledge-Base Integration](#llm-knowledge-base-integration)
+12. [Applications](#applications)
+13. [Comparison with Other Frameworks](#comparison-with-other-frameworks)
+14. [Roadmap](#roadmap)
+15. [Contributing](#contributing)
+16. [Citation](#citation)
+17. [License](#license)
+18. [Contact & Acknowledgements](#contact--acknowledgements)
+
+---
+
+## Why Jneopallium
+
+Most neural-network libraries are built around a fixed mathematical abstraction (matrix multiplications, fixed activation functions, one signal type). Jneopallium is built around a *programmable* abstraction: you define what a signal is, what a neuron is, and how the two interact, then let the framework run the topology and scheduling.
+
+This makes the framework well-suited to:
+
+- modelling neuromodulator behaviour (multiple signal classes with different propagation speeds);
+- composing modular neuron networks where one net's output is another net's input;
+- experimenting with non-uniform topologies (probabilistic neuron placement, neighbour constraints);
+- safety-gated control of real-world systems (see [Bridge Framework](#bridge-framework)).
 
 ## Key Features
 
-- **Typed signals** — Define arbitrary signal types (bioelectrical, biochemical, or custom) with independent propagation characteristics.
-- **Receptor heterogeneity** — Neurons can implement multiple interfaces, each handled by a distinct signal processor, enabling multi-receptor behavior via Java's multiple interface inheritance.
-- **Dual processing loops** — A fast loop (every tick) and a slow loop (every N fast ticks) model the speed difference between bioelectric spikes (~100 m/s) and neuromodulatory diffusion (100–1000× slower).
-- **Per-signal frequency control** — Each signal type specifies a `ProcessingFrequency(loop, epoch)`, creating a hierarchy of natural timescales within a single configuration.
-- **Statistical structure generation** — Define neuron distribution probabilities per layer and neighboring rules to generate network topologies.
+- **Typed signals** — Define arbitrary signal types (bioelectric, biochemical, custom) with independent propagation characteristics.
+- **Receptor heterogeneity** — A neuron may implement multiple interfaces, each handled by a distinct signal processor — multi-receptor behaviour through Java's multiple-interface inheritance.
+- **Dual processing loops** — A *fast* loop (every tick) and a *slow* loop (every N ticks) model the speed gap between bioelectric spikes (~100 m/s) and neuromodulatory diffusion (100–1000× slower).
+- **Per-signal frequency control** — Each signal type carries a `ProcessingFrequency(loop, epoch)`, producing a hierarchy of natural timescales in a single configuration.
+- **Statistical structure generation** — Define per-layer neuron probabilities and neighbouring rules to generate topologies.
 - **Dynamic layer sizing** — Create and delete neurons at runtime via `LayerManipulatingNeuron`.
-- **Multiple I/O sources** — Attach multiple input sources and output collectors, each with independent processing frequencies.
-- **Modular architecture** — Connect separate neuron networks via `INeuronNetInput` to build modular, composable models.
+- **Multiple I/O sources** — Attach multiple input sources and output collectors, each with its own processing frequency.
+- **Modular composition** — Connect separate neuron networks via `INeuronNetInput`.
 - **Discriminator support** — Define any number of discriminators for GAN-style or safety-critical architectures.
-- **Deployment modes** — Run locally, in an HTTP cluster, or via gRPC (including FPGA targets).
+- **Deployment modes** — Local, HTTP cluster, or gRPC (FPGA-capable).
+
+## Project Layout
+
+The build is a multi-module Maven project (`com.rakovpublic.jneopallium:wrapper:1.0`).
+
+```
+jneopallium/
+├── master/         # Cluster master node — coordinates workers, holds shared state
+├── worker/         # Worker node — runs neurons, processors, signal chains, bridges
+├── doc/            # Design notes, diagrams, architecture documents
+├── .github/        # Workflows, issue/PR templates
+├── pom.xml         # Aggregator POM (packaging=pom)
+├── LICENSE.MD      # BSD 3-Clause
+├── CODE_OF_CONDUCT.md
+├── CONTRIBUTING.md
+├── SECURITY.md
+├── TestPlanPhase1.md / TestPlanPhase2*.md   # Phase test plans
+└── WorkDiary.md    # Running design log
+```
+
+All bridge adapters live under `worker/src/main/java/com/rakovpublic/jneuropallium/worker/bridge/`.
 
 ## Core Abstractions
 
-| Abstraction | Role |
-|---|---|
-| `INeuron` | Base interface implemented by every neuron class |
-| `ISignalProcessor<S, N>` | Stateless processor parameterized on signal type `S` and neuron interface `N` |
-| `Neuron` | Base class providing `Axon` and `Dendrites` |
-| `Dendrites` | Encapsulates input addresses, signal types, and input weights |
-| `Axon` | Encapsulates output addresses, signal type, and output weight |
-| `ISignalChain` | Ordered processor pipeline invoked during `activate()` |
-| `CycleNeuron` | Controls the fast/slow loop ratio (layer id `−2147483648`, neuron id `0`) |
-| `LayerManipulatingNeuron` | Creates/deletes neurons dynamically (neuron id `−9223372036854775808` at each layer) |
-| `IInitInput` | Defines an input source with a default processing frequency |
-| `InputInitStrategy` | Describes how input signals propagate to neurons |
-| `INeuronNetInput` | Input interface for connecting one neuron network's output to another |
-| `IOutputAggregator` | Defines an output destination |
-| `IConnectionGenerator` | Describes how to connect neurons during structure generation |
-| `NeighboringRules` | Constrains which neuron types may be adjacent (vertical structure) |
+| Abstraction               | Role                                                                                       |
+| ------------------------- | ------------------------------------------------------------------------------------------ |
+| `INeuron`                 | Base interface implemented by every neuron class                                           |
+| `ISignalProcessor<S, N>`  | Stateless processor parameterised on signal type `S` and neuron interface `N`              |
+| `Neuron`                  | Base implementation providing `Axon` and `Dendrites`                                       |
+| `Dendrites`               | Input addresses, accepted signal types, input weights                                      |
+| `Axon`                    | Output addresses, signal type, output weight                                               |
+| `ISignalChain`            | Ordered processor pipeline invoked during `activate()`                                     |
+| `CycleNeuron`             | Controls the fast/slow loop ratio (layer id `Integer.MIN_VALUE`, neuron id `0`)            |
+| `LayerManipulatingNeuron` | Creates/deletes neurons dynamically (neuron id `Long.MIN_VALUE` on each layer)             |
+| `IInitInput`              | Input source with a default processing frequency                                           |
+| `InputInitStrategy`       | Describes how input signals are populated into neurons                                     |
+| `INeuronNetInput`         | Wires one neuron network's output as another's input                                       |
+| `IOutputAggregator`       | Output destination                                                                         |
+| `IConnectionGenerator`    | Strategy for connecting neurons during topology generation                                 |
+| `NeighboringRules`        | Constraints on which neuron types may be vertically adjacent                               |
 
 ## Getting Started
 
 ### Prerequisites
 
-- Java 11 or higher
-- Maven or Gradle
+- **Java 17+** (LTS; the framework targets the baseline `java.net.http.HttpClient` API set)
+- **Maven 3.9+**
+- Optional: Docker (for the planned containerised distributed mode)
 
-### Building
+### Build Requirements
+
+When extending or forking the project, keep the build-plugin floor consistent with Java 17 support — older versions silently misbehave on JDK 17:
+
+| Plugin                     | Minimum   | Recommended | Notes                                                              |
+| -------------------------- | --------- | ----------- | ------------------------------------------------------------------ |
+| `maven-compiler-plugin`    | 3.10.1    | **3.13.0**  | Use `<release>17</release>` rather than `<source>/<target>`        |
+| `maven-surefire-plugin`    | 3.2.5     | 3.5.x       | Earlier 3.x versions hit module-path / illegal-reflection warnings |
+| `maven-jar-plugin`         | 3.3.0     | 3.4.x       | Multi-release JAR handling on 17                                   |
+| `maven-javadoc-plugin`     | 3.6.0     | 3.10.x      | Stable Javadoc generation on 17                                    |
+
+Recommended compiler configuration:
+
+```xml
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-compiler-plugin</artifactId>
+    <version>3.13.0</version>
+    <configuration>
+        <release>17</release>
+    </configuration>
+</plugin>
+```
+
+`<release>` is preferred over `<source>` + `<target>` because it also constrains the bootclasspath to the target JDK's API — preventing accidental use of newer (e.g. Java 21) methods in Java 17 bytecode.
+
+### Clone & Build
 
 ```bash
 git clone https://github.com/rakovpublic/jneopallium.git
 cd jneopallium
-# Build the framework
 mvn clean install
 ```
 
-### Modeling Process
+This builds both `master` and `worker` modules and installs the artifacts to your local Maven repository under `com.rakovpublic.jneopallium`.
 
-Building a model involves three steps: defining functional logic, structural logic, and I/O logic.
+### Using as a Dependency
 
-#### 1. Functional Logic — Signals, Neurons, and Processors
+Add the worker module to your own project once the artifacts are published (currently install locally, see [Roadmap](#roadmap) for Maven Central plans):
 
-**Define signal types** — Create classes representing signals in your system and the weight object used for learning.
+```xml
+<dependency>
+    <groupId>com.rakovpublic.jneopallium</groupId>
+    <artifactId>worker</artifactId>
+    <version>1.0</version>
+</dependency>
+```
+
+### Running
+
+Launch jneopallium pointing it at:
+
+1. a JAR containing your user-defined signals, neurons, and processors;
+2. a neuron-network structure file;
+3. a configuration file.
+
+A complete walkthrough — 4 signal types, 3 neuron types, full config — lives on the [`test/alfaTestAndGettingStarted`](https://github.com/rakovpublic/jneopallium/tree/test/alfaTestAndGettingStarted) branch:
+
+- [Functional logic](https://github.com/rakovpublic/jneopallium/tree/test/alfaTestAndGettingStarted/worker/src/main/java/com/rakovpublic/jneuropallium/worker/test/definitions)
+- [Structural logic](https://github.com/rakovpublic/jneopallium/tree/test/alfaTestAndGettingStarted/worker/src/main/java/com/rakovpublic/jneuropallium/worker/test/definitions/structurallogic)
+- [I/O logic](https://github.com/rakovpublic/jneopallium/tree/test/alfaTestAndGettingStarted/worker/src/main/java/com/rakovpublic/jneuropallium/worker/test/definitions/ioutils)
+- [Configuration files](https://github.com/rakovpublic/jneopallium/tree/test/alfaTestAndGettingStarted/worker/src/main/resources)
+
+## Modelling Process
+
+Building a model means defining three layers of logic: **functional**, **structural**, and **I/O**.
+
+### 1. Functional Logic — Signals, Neurons, Processors
+
+Define a signal type:
 
 ```java
-// Example: a signal carrying an integer value
 public class IntSignal implements ISignal {
     private int value;
-    // ...
+    // getters / setters / weight handling
 }
 ```
 
-**Define neuron interfaces** — Each processing mechanism gets a separate interface extending `INeuron`.
+Define a neuron interface for one receptor:
 
 ```java
 public interface NeuronIntField extends INeuron {
@@ -87,313 +202,167 @@ public interface NeuronIntField extends INeuron {
 }
 ```
 
-**Implement signal processors** — Each processor implements `ISignalProcessor<S, N>` for a specific signal–neuron pair.
+Implement the matching signal processor:
 
 ```java
 public class IntProcessor implements ISignalProcessor<IntSignal, NeuronIntField> {
     @Override
     public void process(IntSignal signal, NeuronIntField neuron) {
-        // Processing logic
+        neuron.setInternalField(neuron.getInternalField() + signal.getValue());
     }
 }
 ```
 
-**Implement neurons** — Extend `Neuron` and implement one or more neuron interfaces. A neuron implementing multiple interfaces has multiple receptors and can process different signal types.
+Implement a neuron — implementing more than one neuron interface gives it more than one receptor:
 
 ```java
-// Neuron processing both IntSignal and DoubleSignal
 public class NeuronA extends Neuron implements NeuronIntField, NeuronWithDoubleField {
-    // Two receptors — processes both signal types
+    // Two receptors: processes both IntSignal and DoubleSignal
 }
 ```
 
-#### 2. Structural Logic — Network Topology
+### 2. Structural Logic — Network Topology
 
 Use `NeuronNetStructureGenerator` with:
-- A `HashMap` of layer sizes.
-- A `HashMap` of statistical properties per neuron type (probability of appearance on each layer).
-- A list of `NeighboringRules` (vertical neuron ordering constraints).
-- An `IConnectionGenerator` implementation (connection strategy).
 
-#### 3. I/O Logic — Inputs and Outputs
+- a `HashMap<Integer, Long>` of layer sizes;
+- a `HashMap` of per-neuron-class appearance probabilities per layer;
+- a list of `NeighboringRules` (vertical ordering constraints);
+- an `IConnectionGenerator` implementation.
 
-Implement `IInitInput` for each input source and `IOutputAggregator` for output destinations. Each input has a default processing frequency modifiable at runtime via `CycleNeuron`.
+### 3. I/O Logic — Inputs and Outputs
 
-### Running
-
-Launch jneopallium with paths to your user-defined code JAR, neuron network structure file, and configuration file. See the [configuration examples](https://github.com/rakovpublic/jneopallium/tree/test/alfaTestAndGettingStarted/worker/src/main/resources) for reference.
+Implement `IInitInput` for each input source and `IOutputAggregator` for each output sink. Each input declares a default processing frequency that can be reconfigured at runtime via `CycleNeuron`.
 
 ## Signal Processing Frequency
 
-The framework provides fine-grained frequency control through two nested loops:
+Two nested loops give fine-grained scheduling control:
 
-- **Fast loop** — Processes every iteration. Suitable for bioelectric/sensorimotor signals.
-- **Slow loop** — Processes once every N fast-loop iterations (N is configurable via `CycleNeuron`).
+- **Fast loop** — every iteration; bioelectric / sensorimotor signals.
+- **Slow loop** — every *N* fast iterations; *N* is set via `CycleNeuron`.
 
-Each signal type and input source defines a `ProcessingFrequency` with an integer `loop` field and a long `epoch` field. A signal with `loop = 2` processes once every 2 fast-loop iterations; `epoch` applies the same logic to the slow loop.
+Each signal and input source declares a `ProcessingFrequency` with an `int loop` and a `long epoch`. A signal with `loop = 2` is processed every other fast iteration; `epoch` applies the same divisor inside the slow loop.
 
-With a fast/slow ratio of N = 10, this creates timescales like:
+With a fast/slow ratio of *N* = 10:
 
-| Timescale | Frequency |
-|---|---|
-| Fast loop, epoch 1 | Every tick |
-| Fast loop, epoch 2 | Every 2 ticks |
-| Fast loop, epoch 3 | Every 3 ticks |
-| Slow loop, epoch 1 | Every 10 ticks |
-| Slow loop, epoch 3 | Every 30 ticks |
-| Slow loop, epoch 10 | Every 100 ticks |
+| Timescale            | Effective Frequency  |
+| -------------------- | -------------------- |
+| Fast loop, epoch 1   | every tick           |
+| Fast loop, epoch 2   | every 2 ticks        |
+| Fast loop, epoch 3   | every 3 ticks        |
+| Slow loop, epoch 1   | every 10 ticks       |
+| Slow loop, epoch 3   | every 30 ticks       |
+| Slow loop, epoch 10  | every 100 ticks      |
 
 ## Deployment Modes
 
-| Mode | Description |
-|---|---|
-| **Local** | Single-machine execution |
-| **Cluster HTTP** | Distributed execution over HTTP |
-| **Cluster gRPC** | Distributed execution over gRPC; supports FPGA deployment |
+| Mode             | Description                                                          |
+| ---------------- | -------------------------------------------------------------------- |
+| **Local**        | Single-JVM execution                                                 |
+| **Cluster HTTP** | Distributed execution over plain HTTP                                |
+| **Cluster gRPC** | Distributed execution over gRPC; FPGA targets supported              |
 
-## Example Code
+## Bridge Framework
 
-A complete working example with 4 signal types and 3 neuron types is available on the [test branch](https://github.com/rakovpublic/jneopallium/tree/test/alfaTestAndGettingStarted):
+Every adapter between an external real-world system and the Jneopallium signal pipeline is a **bridge**. The shared contract — six ground rules, universal write algorithm, audit schema, acceptance scenarios, phase progression — is specified once in [`00-FRAMEWORK.md`](00-FRAMEWORK.md); per-protocol specs (`01-PLC4X.md` … `14-LTI-XAPI.md`) reference it instead of restating it.
 
-- [Functional logic definitions](https://github.com/rakovpublic/jneopallium/tree/test/alfaTestAndGettingStarted/worker/src/main/java/com/rakovpublic/jneuropallium/worker/test/definitions)
-- [Structural logic definitions](https://github.com/rakovpublic/jneopallium/tree/test/alfaTestAndGettingStarted/worker/src/main/java/com/rakovpublic/jneuropallium/worker/test/definitions/structurallogic)
-- [I/O logic definitions](https://github.com/rakovpublic/jneopallium/tree/test/alfaTestAndGettingStarted/worker/src/main/java/com/rakovpublic/jneuropallium/worker/test/definitions/ioutils)
-- [Configuration files](https://github.com/rakovpublic/jneopallium/tree/test/alfaTestAndGettingStarted/worker/src/main/resources)
+Shared scaffolding under `worker/src/main/java/com/rakovpublic/jneuropallium/worker/bridge/common/`:
 
-## Autonomous AI Architecture
+- `AbstractBridgeOutputAggregator` — template-method enforcement of the universal §2.2 write algorithm (interlock → override → clamp → rate-limit → diff-suppress → audit);
+- `OverrideRegistry`, `AbstractBridgeAuditOutput`, `BridgeReconnectPolicy`, `BridgeAuditRecord`, `BridgeBindingDirection`.
 
-A companion article derives a full autonomous AI architecture on top of jneopallium, featuring:
-
-- **16 signal types** spanning fast-loop bioelectric signals (SpikeSignal, MotorCommandSignal, ErrorSignal, etc.) and slow-loop neuromodulatory signals (Dopamine, Serotonin, Norepinephrine, Acetylcholine, GABA).
-- **28 neuron classes** organized across 8 layers: Input (Layer 0), Feature Detection (Layer 1), Attention & Working Memory (Layer 2), Memory & Prediction (Layer 3), Planning (Layer 4), Action Selection (Layer 5), Learning (Layer 6), and Homeostasis & Regulation (Layer 7).
-- **11 signal processors** covering spike encoding, lateral inhibition, salience computation, predictive coding, STDP, competitive action selection, and more.
-- **Loop prevention subsystem** with RegionMonitorNeuron, LoopDetectorNeuron, LoopCircuitBreakerNeuron, OscillationBoundaryNeuron, and ReentrantGuardNeuron — four graduated circuit-breaker strategies from weight dampening to connection breaking.
-- **Human-harm discriminator module** — A consequence model (not an output filter) that simulates projected actions, evaluates human welfare across five dimensions (physical safety, psychological wellbeing, autonomy, social harm, long-term consequences), and vetoes harmful actions before execution. Includes hard constraints that are structurally inviolable.
-
-## LLM Knowledge Base Integration
-
-An optional, non-blocking extension integrates Large Language Models as an external advisory knowledge base:
-
-- **4 new signal types:** LLMQuerySignal, LLMResponseSignal, LLMConfidenceSignal, LLMTimeoutSignal.
-- **3 new neuron classes:** LLMKnowledgeNeuron (query dispatch + caching), LLMVerificationNeuron (cross-validation against internal models), LLMFallbackNeuron (circuit breaker for graceful degradation).
-- **2 new signal processors:** LLMQueryProcessor, LLMResponseProcessor.
-
-Design principles: all LLM processing runs on the slow loop (never blocking real-time sensorimotor processing), LLM responses are always cross-validated against internal models before use, and the system operates at full capability when the LLM is unavailable. Supports local (Ollama), cloud (OpenAI, Anthropic), and disabled modes.
-
-## Bridge framework
-
-Every adapter between an external real-world system and the Jneopallium
-signal pipeline is a "bridge". The shared contract — six ground rules,
-universal write algorithm, audit schema, acceptance scenarios, and
-phase progression — is specified in [`00-FRAMEWORK.md`](00-FRAMEWORK.md);
-the per-protocol specs (`01-PLC4X.md` … `14-LTI-XAPI.md`) reference it
-instead of restating it. The shared scaffolding lives at
-`worker/src/main/java/com/rakovpublic/jneuropallium/worker/bridge/common/`:
-`AbstractBridgeOutputAggregator` (template-method enforcement of the
-§2.2 algorithm), `OverrideRegistry`, `AbstractBridgeAuditOutput`,
-`BridgeReconnectPolicy`, `BridgeAuditRecord`, and `BridgeBindingDirection`.
-New bridges go in `worker.bridge.<bridge-id>/` and start in `SHADOW` for
-every loop.
+New bridges go in `worker.bridge.<bridge-id>/` and start every loop in `SHADOW` mode.
 
 ### Bridge index
 
-| ID | Bridge | Domain | Status | Safety ceiling |
-|----|--------|--------|--------|----------------|
-| (existing) | OPC UA | industrial | shipped | AUTONOMOUS (per-loop) |
-| 01 | Apache PLC4X | legacy PLC | shipped | AUTONOMOUS (per-loop) |
-| 02 | MQTT + Sparkplug | IIoT | shipped | ADVISORY |
-| 03 | FMI / FMU | simulation | shipped | AUTONOMOUS (sim only) |
-| 04 | ROS 2 / DDS | robotics | shipped | ADVISORY initially |
-| 05 | Lab Streaming Layer | BCI | spec | ADVISORY (read-mostly) |
-| 06 | HL7 FHIR | clinical | spec | ADVISORY (regulatory ceiling) |
-| 07 | DICOM | medical imaging | spec | READ-ONLY (context bridge) |
-| 08 | Apache Kafka | enterprise/cyber | spec | ADVISORY |
-| 09 | OpenTelemetry | observability | spec | EXPORT-ONLY (no writeback) |
-| 10 | Eclipse Ditto | digital twins | shipped | ADVISORY |
-| 11 | IEC 61850 | power grid | shipped | READ-ONLY initially |
-| 12 | MAVLink | drones | shipped | SIM-ONLY initially |
-| 13 | CANopen | embedded | shipped | ADVISORY |
-| 14 | LTI / xAPI | adaptive tutoring | spec | ADVISORY |
+| ID   | Bridge              | Domain            | Status  | Safety ceiling                |
+| ---- | ------------------- | ----------------- | ------- | ----------------------------- |
+| —    | OPC UA              | industrial        | shipped | AUTONOMOUS (per-loop)         |
+| 01   | Apache PLC4X        | legacy PLC        | shipped | AUTONOMOUS (per-loop)         |
+| 02   | MQTT + Sparkplug B  | IIoT              | shipped | ADVISORY                      |
+| 03   | FMI / FMU           | simulation        | shipped | AUTONOMOUS (sim only)         |
+| 04   | ROS 2 / DDS         | robotics          | shipped | ADVISORY initially            |
+| 05   | Lab Streaming Layer | BCI / physiology  | spec    | ADVISORY (read-mostly)        |
+| 06   | HL7 FHIR            | clinical          | spec    | ADVISORY (regulatory ceiling) |
+| 07   | DICOM               | medical imaging   | spec    | READ-ONLY                     |
+| 08   | Apache Kafka        | enterprise/cyber  | spec    | ADVISORY                      |
+| 09   | OpenTelemetry       | observability     | spec    | EXPORT-ONLY                   |
+| 10   | Eclipse Ditto       | digital twins     | shipped | ADVISORY                      |
+| 11   | IEC 61850           | power grid        | shipped | READ-ONLY initially           |
+| 12   | MAVLink             | drones            | shipped | SIM-ONLY initially            |
+| 13   | CANopen             | embedded          | shipped | ADVISORY                      |
+| 14   | LTI / xAPI          | adaptive tutoring | spec    | ADVISORY                      |
 
-### OPC UA bridge
+Common pattern for every bridge: protocol-native reads become typed `MeasurementSignal` / `AlarmSignal` (or domain-specific variants); writes flow back through the universal `AbstractBridgeOutputAggregator` algorithm, are vetoed by the harm gate, and emit an audit record whether applied, clamped, or rejected. Per-protocol nuances (forbidden topics, advisory prefixes, write-index allowlists, structural READ-ONLY ceilings) are enforced both at config load and at runtime. See the per-protocol docs in [`doc/`](doc) for details.
 
-Jneopallium can act as a biologically-inspired, safety-gated
-cognitive-control layer for OPC UA industrial systems via Eclipse Milo.
-The bridge subscribes to PLC / SCADA / simulator nodes, emits typed
-`MeasurementSignal` / `AlarmSignal` instances into the neuron network,
-and writes neuron-derived `SetpointSignal` / `ActuatorCommandSignal`
-decisions back to the field — only after passing the harm gate,
-honouring operator override, respecting per-loop SHADOW / ADVISORY /
-AUTONOMOUS mode, and emitting an audit record for every proposed action
-whether applied, clamped, or rejected. See
-[`docs/opcua-bridge-architecture.md`](docs/opcua-bridge-architecture.md).
+## Autonomous AI Architecture
 
-### PLC4X bridge
+A companion design derives a full autonomous AI architecture on top of jneopallium:
 
-For the long tail of legacy fieldbus controllers (Siemens S7, Modbus TCP,
-EtherNet/IP, Beckhoff ADS, Allen-Bradley, …) the PLC4X bridge plays the
-same role as the OPC UA bridge: protocol-native field reads become typed
-`MeasurementSignal` / `AlarmSignal` instances; safety-gated
-`ActuatorCommandSignal` writes go back through the universal
-`AbstractBridgeOutputAggregator` algorithm (interlock → override → clamp
-→ rate-limit → diff-suppress → audit). Polling is per-binding; address
-validation fails fast at startup. See
-[`docs/plc4x-bridge.md`](docs/plc4x-bridge.md) and
-[`01-PLC4X.md`](01-PLC4X.md).
+- **16 signal types** — fast-loop bioelectric signals (`SpikeSignal`, `MotorCommandSignal`, `ErrorSignal`, …) and slow-loop neuromodulators (Dopamine, Serotonin, Norepinephrine, Acetylcholine, GABA).
+- **28 neuron classes** across 8 layers: Input (0), Feature Detection (1), Attention & Working Memory (2), Memory & Prediction (3), Planning (4), Action Selection (5), Learning (6), Homeostasis & Regulation (7).
+- **11 signal processors** — spike encoding, lateral inhibition, salience computation, predictive coding, STDP, competitive action selection, …
+- **Loop-prevention subsystem** — `RegionMonitorNeuron`, `LoopDetectorNeuron`, `LoopCircuitBreakerNeuron`, `OscillationBoundaryNeuron`, `ReentrantGuardNeuron`: four graduated circuit-breaker strategies from weight dampening to connection breaking.
+- **Human-harm discriminator** — a consequence model (not an output filter) that simulates projected actions, evaluates them across five welfare dimensions (physical safety, psychological wellbeing, autonomy, social harm, long-term consequences), and vetoes harmful actions before execution. Includes structurally inviolable hard constraints.
 
-### MQTT + Sparkplug B bridge
+## LLM Knowledge-Base Integration
 
-For unified-namespace IIoT deployments the MQTT bridge subscribes to
-Sparkplug B (and plain MQTT) topics, emits typed
-`MeasurementSignal` / `AlarmSignal` instances on `DDATA` / `DDEATH`, and
-publishes neuron-derived `SetpointSignal` / `ActuatorCommandSignal`
-decisions to a configurable advisory namespace consumed by the operator HMI
-— never to a field-actuating `DCMD`. The structural ceiling is **ADVISORY**;
-`AUTONOMOUS` per-tag promotion is rejected by the config validator. See
-[`docs/mqtt-bridge.md`](docs/mqtt-bridge.md) and
-[`02-MQTT-SPARKPLUG.md`](02-MQTT-SPARKPLUG.md).
+An optional, non-blocking extension lets the network consult a Large Language Model as an external advisory knowledge base:
 
-### ROS 2 / DDS bridge
+- **4 signal types:** `LLMQuerySignal`, `LLMResponseSignal`, `LLMConfidenceSignal`, `LLMTimeoutSignal`.
+- **3 neuron classes:** `LLMKnowledgeNeuron` (dispatch + caching), `LLMVerificationNeuron` (cross-validation against internal models), `LLMFallbackNeuron` (circuit breaker for graceful degradation).
+- **2 signal processors:** `LLMQueryProcessor`, `LLMResponseProcessor`.
 
-For robotics and swarm deployments the ROS 2 bridge subscribes to
-`rosbridge_suite` over WebSocket and emits typed
-`SensorySignal` / `ProprioceptiveSignal` / `EfficiencySignal` /
-`PeerObservationSignal` instances per configured topic binding. The
-egress side publishes neuron-derived
-`MotorCommandSignal` / `FormationSignal` / `HarmVetoSignal` decisions to
-a configurable advisory namespace that an external autonomy supervisor
-consumes — never directly to `/cmd_vel`, `/joint_trajectory`, or
-`/joint_command` in production. The forbidden-topic rule is enforced
-both at config load and at runtime; per-tag `AUTONOMOUS` promotion is
-rejected unless `simulatorOnly: true` is set, which models the
-simulator-with-watchdog escape from the spec's §3. See
-[`docs/ros2-bridge.md`](docs/ros2-bridge.md) and
-[`04-ROS2-DDS.md`](04-ROS2-DDS.md).
-
-### Eclipse Ditto bridge
-
-For digital-twin / device-fleet use cases the Ditto bridge subscribes to
-twin events over WebSocket, emits typed `MeasurementSignal` /
-`AlarmSignal(TWIN_OFFLINE)` instances per configured feature property, and
-writes neuron-derived advisory setpoints back via Ditto's REST API to
-features whose name starts with `recommended_` or `advisory_` — never to
-the actual control feature. The advisory-prefix rule is enforced both at
-config load and at runtime; `AUTONOMOUS` per-tag promotion is rejected by
-the config validator. See [`docs/ditto-bridge.md`](docs/ditto-bridge.md)
-and [`10-DITTO.md`](10-DITTO.md).
-
-### MAVLink bridge
-
-For drones and small autonomous vehicles the MAVLink bridge wraps the
-`dronefleet/mavlink` Java codec and routes messages from one or more SITL
-or hardware MAVLink connections (UDP / TCP) onto the Jneopallium signal
-bus: `GLOBAL_POSITION_INT` / `ATTITUDE` → `ProprioceptiveSignal`,
-peer `GLOBAL_POSITION_INT` → `PeerObservationSignal`, `BATTERY_STATUS` →
-`EfficiencySignal`, `STATUSTEXT` / `SYS_STATUS` → `AlarmSignal`,
-`RADIO_STATUS` → `AnomalyScoreSignal`, missed `HEARTBEAT` → `PEER_OFFLINE`
-alarm. Egress is restricted to advisory message types (`STATUSTEXT`,
-`NAMED_VALUE_FLOAT`, custom `JNEO_*` dialect) consumed by an external
-supervisor or ground station — never `COMMAND_LONG`, `SET_MODE`,
-`MISSION_*`, `MANUAL_CONTROL`, `RC_CHANNELS_OVERRIDE` directly to a flying
-autopilot. The forbidden-message-type rule and the `expectedSystems`
-whitelist are enforced both at config load and at runtime; per-tag
-`AUTONOMOUS` promotion is rejected unless `simulatorOnly: true` is set,
-which models the simulator-with-watchdog escape. See
-[`docs/mavlink-bridge.md`](docs/mavlink-bridge.md) and
-[`12-MAVLINK.md`](12-MAVLINK.md).
-
-### CANopen bridge
-
-For embedded networks (mobile robots, AGVs, industrial drives, BMS packs)
-the CANopen bridge surfaces TPDO scalar payloads, EMCY emergency frames,
-and per-node heartbeat liveness onto the Jneopallium signal bus:
-CiA-402 `position_actual` → `ProprioceptiveSignal`, CiA-401 sensor PDO →
-`MeasurementSignal`, CiA-418 SoC → `EfficiencySignal`, EMCY frame →
-`AlarmSignal` (with the standard CiA-301 §7.2.1 description), missed
-heartbeat → `NODE_OFFLINE` alarm. Subsequent reads from a node past the
-heartbeat timeout carry `Quality.UNCERTAIN`. Egress is restricted to
-**non-actuating** OD indices: writes to `controlword` (`0x6040`) are
-rejected at config load unconditionally, and every other write must
-appear on the per-node `writeIndexAllowList` to be loaded — both gates
-are re-checked at runtime by the platform service. The Linux SocketCAN
-backend (`SocketCanClientService`) is the production target; the
-Lawicel-style USB-CAN backend (`UsbCanClientService`) is the
-cross-platform escape hatch (CANable / Korlan / PCAN). See
-[`docs/canopen-bridge.md`](docs/canopen-bridge.md) and
-[`13-CANOPEN.md`](13-CANOPEN.md).
-
-### IEC 61850 bridge
-
-For electrical substations and power-utility automation the IEC 61850
-bridge reads measurements (`MMXU` voltages / currents / power), status
-(`XCBR` / `XSWI` breaker and isolator positions) and protection events
-(`PIOC` / `PTOC` / `PTUV` operate signals from buffered or unbuffered
-Report Control Blocks) and emits typed `MeasurementSignal` /
-`AlarmSignal` instances per binding. Quality from the IEC 61850 `q`
-attribute propagates unmodified into `Quality.GOOD/BAD/UNCERTAIN`;
-source-system timestamps from the `t` attribute always win over the
-JVM clock.
-
-The ceiling is structurally **READ-ONLY**. The bridge package contains
-no aggregator or output class, the `Iec61850MmsClient` transport seam
-exposes no method that writes a Data Attribute or issues a
-select-before-operate, and a `writes:` block in YAML is rejected at
-config-load with a message pointing to the separate
-`iec61850-control` bridge that would need its own SIL certification.
-SCL (`.icd` / `.cid` / `.scd`) is the ground-truth data model: the
-bridge fails fast at startup if any IED's SCL file is missing or
-malformed. Sampled Values (PTP / IRIG-B) are deferred to v2. See
-[`docs/iec61850-bridge.md`](docs/iec61850-bridge.md) and
-[`11-IEC61850.md`](11-IEC61850.md).
-
-### Lab Streaming Layer (LSL) bridge
-
-For BCI and physiology research, the LSL bridge resolves
-[Lab Streaming Layer](https://labstreaminglayer.org/) inlets (EEG, ECoG,
-Spikes, EMG, HRV, GSR, Eye, Temperature, Markers) discovered over mDNS
-and emits per-channel typed signals: `EEG` → `LFPSignal`, `Spikes` →
-`NeuralSpikeSignal`, `ECoG` → `ECoGSignal`, `EMG` → `ProprioceptiveSignal`,
-`HRV` / `GSR` → `InteroceptiveSignal`, `Eye` → `AppraisalSignal`,
-`Temperature` → `ThermalSignal`, calibration cues → `CalibrationSignal`
-(subject identifiers pseudonymised at the mapper). Stream resolution
-fails fast on missing `expectedStreams` or unknown channel labels; per-
-stream ring buffers drop oldest-on-overflow with an audit entry.
-
-Egress is **read-mostly / advisory** — the bridge writes only to outlet
-topics consumed by separately certified stimulator-driver software (no
-direct path to electrodes). Every `StimulationCommandSignal` is routed
-through the existing `StimulationSafetyGateNeuron` (Shannon criterion,
-charge balance, frequency / pulse-width SOA, seizure / thermal lockout);
-a non-null veto is recorded with `verdict=REJECTED reason=GATE_VETO:<cause>`
-and the outlet is not written. The structural ceiling rejects
-`AUTONOMOUS` for any LSL write at config load. See
-[`docs/lsl-bridge.md`](docs/lsl-bridge.md) and
-[`05-LSL.md`](05-LSL.md).
+Design constraints: LLM processing runs exclusively on the slow loop (never blocks real-time sensorimotor processing), LLM responses are cross-validated against internal models before use, and the system operates at full capability when the LLM is unavailable. Local (Ollama), cloud (OpenAI, Anthropic), and disabled modes are all supported.
 
 ## Applications
 
-- **Industrial process control** — Connect to any OPC UA PLC/SCADA via the Eclipse Milo bridge and run neuron-derived setpoints through the safety/interlock chain.
-- **Robotics** — Direct I/O with hardware controllers; model sensorimotor loops at biologically-relevant timescales.
-- **Autonomous mission control** — Decision-making under high latency and mission-flow uncertainty.
-- **Neuroscience research** — Model neural control structures and structural deviations at a chosen level of detail.
-- **Company management** — Model decision processes under signals and metrics with varying volatility.
-- **General AI research** — Build toward general intelligence using biologically-inspired architectures.
+- **Industrial process control** — drive any OPC UA PLC/SCADA via the Eclipse Milo bridge; neuron-derived setpoints flow through the safety/interlock chain.
+- **Robotics** — direct I/O with hardware controllers; sensorimotor loops at biologically-relevant timescales.
+- **Autonomous mission control** — decision-making under high latency and mission-flow uncertainty.
+- **Neuroscience research** — model neural control structures and structural deviations at a chosen level of detail.
+- **Decision modelling** — model organisational decision processes under signals with varying volatility.
+- **General AI research** — biologically-inspired architectures aimed at general intelligence.
 
-## Competitors
+## Comparison with Other Frameworks
 
-| Framework | Focus | Key Difference |
-|---|---|---|
-| [NEURON Simulator](https://github.com/neuronsimulator/nrn) | High-detail biophysical modeling | Fixed high detail; jneopallium lets you choose the detail level |
-| [CoreNeuron](https://github.com/BlueBrain/CoreNeuron) | Optimized simulation engine for NEURON | Same as above; focused on exact biological replication |
+| Framework                                                  | Focus                                  | Key Difference                                                       |
+| ---------------------------------------------------------- | -------------------------------------- | -------------------------------------------------------------------- |
+| [NEURON Simulator](https://github.com/neuronsimulator/nrn) | High-detail biophysical modelling      | Fixed high detail; jneopallium lets you pick the abstraction level   |
+| [CoreNeuron](https://github.com/BlueBrain/CoreNeuron)      | Optimised simulation engine for NEURON | Focused on exact biological replication                              |
 
-Jneopallium's main purpose is to bridge neurobiology and computer science with user-defined abstraction depth. NEURON Simulator and CoreNeuron aim to build exact copies of natural neuron networks.
+Jneopallium's purpose is to bridge neurobiology and computer science with **user-defined abstraction depth**. NEURON and CoreNeuron aim to build exact copies of natural neuron networks; jneopallium aims to let you choose how much biology you want.
 
-## Repository
+## Roadmap
 
-- **GitHub:** [https://github.com/rakovpublic/jneopallium](https://github.com/rakovpublic/jneopallium)
-- **GitLab:** [https://gitlab.com/rakovpublic/jneopallium](https://gitlab.com/rakovpublic/jneopallium)
+| #  | Phase                                                                                         | Status      |
+| -- | --------------------------------------------------------------------------------------------- | ----------- |
+| 1  | Core framework (no distribution, no synchronisation)                                          | done        |
+| 2  | Java HTTP distributed mode with neuron-network synchronisation                                | done        |
+| 3  | gRPC implementation for cluster mode                                                          | in progress |
+| 4  | Kafka input-source implementation                                                             | planned     |
+| 5  | Maven Central artifacts and hosted Javadoc                                                    | planned     |
+| 6  | Docker / Kubernetes containers and Python/shell infra scripts                                 | planned     |
+| 7  | Neuron-net graphic designer (Eclipse plugin first; IDEA optional)                             | planned     |
+| 8  | Redis as meta storage *(optional)*                                                            | optional    |
+| 9  | AWS Lambda distributed mode *(optional)*                                                      | optional    |
+| 10 | Amazon-cluster integration *(optional)*                                                       | optional    |
+
+Tool architecture is complete; implementation is ~95% done and has passed pre-alpha. Phase test plans live in [`TestPlanPhase1.md`](TestPlanPhase1.md), [`TestPlanPhase2.md`](TestPlanPhase2.md), and [`TestPlanPhase2Optional.md`](TestPlanPhase2Optional.md). The running design log is [`WorkDiary.md`](WorkDiary.md).
+
+## Contributing
+
+Contributors are welcome — the project is actively looking for them. Start with:
+
+- [`CONTRIBUTING.md`](CONTRIBUTING.md) — how to set up, where to file issues, branch conventions.
+- [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) — community standards.
+- [`SECURITY.md`](SECURITY.md) — responsible-disclosure policy.
+
+For bridge work in particular, every new bridge must comply with the §2.2 universal write algorithm and ship with audit + override hooks.
 
 ## Citation
+
+If you use jneopallium in research, please cite:
 
 ```bibtex
 @article{rakovskyi2024jneopallium,
@@ -408,6 +377,20 @@ Jneopallium's main purpose is to bridge neurobiology and computer science with u
 }
 ```
 
+Further reading:
+
+- [IJSR paper](https://www.ijsr.net/getabstract.php?paperid=SR24703042047)
+- [DOU forum thread](https://dou.ua/forums/topic/49673/)
+
 ## License
 
-BSD 3-Clause License. See [LICENSE](LICENSE) for details.
+BSD 3-Clause License. See [`LICENSE.MD`](LICENSE.MD) for the full text.
+
+## Contact & Acknowledgements
+
+- **GitHub:** <https://github.com/rakovpublic/jneopallium>
+- **GitLab mirror:** <https://gitlab.com/rakovpublic/jneopallium>
+
+Feel free to reach out — the project is actively looking for contributors.
+
+Special thanks to the Department of Informatics at Kharkiv National University of Radio and Electronics, and to Eugen Putiatin, Helen Matat, Tatiana Sinelnikova, and Volodymyr Brytik.
