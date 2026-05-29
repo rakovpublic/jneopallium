@@ -1,0 +1,51 @@
+# demo-01 reactor jacket-temperature cascade control
+# Canonical, loader-parseable form of /tmp/demo01-reactor.yaml from
+# demo-01-reactor-cascade-control.md. Loaded via OpcUaBridgeConfigLoader,
+# which enforces FAIL_ON_UNKNOWN_PROPERTIES.
+connection:
+  endpointUrl: "opc.tcp://localhost:4840/jneopallium/reactor"
+  applicationName: "Jneopallium-Reactor-Demo"
+  applicationUri: "urn:rakovpublic:jneopallium:demo01"
+  requestTimeout: "PT5S"
+  sessionTimeout: "PT2M"
+  keepAliveFailuresAllowed: 3
+
+security:
+  policy: NONE
+  mode: NONE
+  auth: { type: "Anonymous" }
+
+reads:
+  - loopId: "TIC-101"
+    nodeId: "ns=2;s=Reactor.TIC101.PV"
+    signalTag: "PLANT.TIC101.PV"
+    direction: READ
+  - loopId: "FIC-101"
+    nodeId: "ns=2;s=Reactor.FIC101.PV"
+    signalTag: "PLANT.FIC101.PV"
+    direction: READ
+
+writes:
+  - loopId: "FIC-101"
+    nodeId: "ns=2;s=Reactor.FIC101.OUT"
+    signalTag: "PLANT.FIC101.OUT"
+    direction: WRITE
+    minClampValue: 0.0
+    maxClampValue: 100.0
+    rampRateMaxPerSec: 25.0           # %/s — protects the valve actuator
+    failSafeValue: 100.0              # jacket valve fully open on interlock trip
+
+alarms:
+  - loopId: "HI_TEMP_ILK"
+    nodeId: "ns=2;s=Reactor.HiTempInterlock"
+    signalTag: "PLANT.TIC101.HI_ILK"
+    direction: READ
+
+audit:
+  localAuditFile: "/tmp/jneopallium-demo01-audit.jsonl"
+  writeRejectedToAudit: true
+
+perLoopSafetyMode:
+  FIC-101: SHADOW                     # promote per the run procedure
+
+tickInterval: "PT0.1S"
