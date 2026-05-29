@@ -1,0 +1,50 @@
+# demo-02 pump-fleet predictive maintenance (MQTT + Sparkplug B, ADVISORY)
+# Canonical, loader-parseable form of /tmp/demo02-pumps.yaml from
+# demo-02-pump-fleet-predictive-maintenance.md. Loaded via
+# MqttBridgeConfigLoader (FAIL_ON_UNKNOWN_PROPERTIES).
+#
+# This file demonstrates a representative slice — vibration + bearing-temp
+# read bindings for one pump (P01) and its maintenance-window advisory
+# write binding — proving the loader contract and the ADVISORY ceiling.
+# Demo02Config.build() generates the full 20-pump fleet programmatically.
+connection:
+  brokerUrl: "tcp://localhost:1883"
+  clientId: "jneopallium-pump-fleet"
+  cleanSession: false
+  keepAlive: "PT30S"
+  advisoryQueueSize: 10000
+
+sparkplug:
+  enabled: true
+  groupId: "Plant1"
+  edgeNodeId: "Jneopallium-Reliability"
+  advisoryNamespace: "advisory"
+
+reads:
+  - bindingId: "PUMP-VIB-P01"
+    sparkplugMetric: "Plant1/Edge-Pump/P01/vibration_rms"
+    signalTag: "PLANT.PUMP.P01.VIB"
+  - bindingId: "PUMP-TEMP-P01"
+    sparkplugMetric: "Plant1/Edge-Pump/P01/bearing_temp"
+    signalTag: "PLANT.PUMP.P01.BTEMP"
+
+writes:
+  - bindingId: "PUMP-MAINT-ADV-P01"
+    advisoryTopic: "spBv1.0/Plant1/DCMD/Edge-Pump/P01/advisory/maint_window"
+    signalTag: "PLANT.PUMP.P01.MAINT_WINDOW"
+    minClampValue: 0.0
+    maxClampValue: 8760.0          # hours-ahead horizon, sanity clamp
+    qos: 1
+
+severityMap:
+  HIGH_VIB: HIGH
+
+perTagSafetyMode:
+  PUMP-MAINT-ADV-P01: ADVISORY     # AUTONOMOUS here is rejected at load time
+
+audit:
+  localAuditFile: "/tmp/jneopallium-demo02-audit.jsonl"
+  mqttAuditTopic: "spBv1.0/Plant1/DCMD/Edge-Pump/Jneopallium-Reliability/audit"
+  mqttAuditQos: 1
+
+tickInterval: "PT1S"
