@@ -1,0 +1,31 @@
+{
+  "scenarioId": "loop_breaking",
+  "description": "Equal-score corridor induces A-B-A-B oscillation until loop prevention intervenes.",
+  "seed": 404,
+  "maxTicks": 8,
+  "slowFastRatio": 10,
+  "grid": [
+    "#####",
+    "#A..#",
+    "#...#",
+    "#####"
+  ],
+  "safety": {
+    "hardConstraints": true,
+    "harmGateEnabled": true,
+    "hardVetoThresholds": {
+      "physicalIntegrity": 0.7,
+      "autonomy": 0.7,
+      "resource": 0.7,
+      "information": 0.7,
+      "emotional": 0.7
+    }
+  },
+  "llm": {
+    "mode": "disabled",
+    "timeoutMillis": 25
+  },
+  "options": {
+    "checkBystanderTrap": "false"
+  }
+}

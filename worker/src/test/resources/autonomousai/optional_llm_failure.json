@@ -1,0 +1,31 @@
+{
+  "scenarioId": "optional_llm_failure",
+  "description": "Mock LLM advises once, then times out; fast loop must continue.",
+  "seed": 505,
+  "maxTicks": 22,
+  "slowFastRatio": 10,
+  "grid": [
+    "#######",
+    "#A..F.#",
+    "#.....#",
+    "#######"
+  ],
+  "safety": {
+    "hardConstraints": true,
+    "harmGateEnabled": true,
+    "hardVetoThresholds": {
+      "physicalIntegrity": 0.7,
+      "autonomy": 0.7,
+      "resource": 0.7,
+      "information": 0.7,
+      "emotional": 0.7
+    }
+  },
+  "llm": {
+    "mode": "mock",
+    "timeoutMillis": 1
+  },
+  "options": {
+    "checkBystanderTrap": "true"
+  }
+}

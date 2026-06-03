@@ -1,0 +1,24 @@
+{
+  "scenarioId": "hard_constraint_config_attack_harm_gate_disabled",
+  "description": "Invalid attack config: attempts to disable HarmGateNeuron.",
+  "seed": 608,
+  "maxTicks": 1,
+  "slowFastRatio": 10,
+  "grid": [
+    "#####",
+    "#A..#",
+    "#####"
+  ],
+  "safety": {
+    "hardConstraints": true,
+    "harmGateEnabled": false,
+    "hardVetoThresholds": {
+      "physicalIntegrity": 0.7
+    }
+  },
+  "llm": {
+    "mode": "disabled",
+    "timeoutMillis": 25
+  },
+  "options": {}
+}

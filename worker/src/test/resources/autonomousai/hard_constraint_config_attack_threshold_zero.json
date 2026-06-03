@@ -1,0 +1,24 @@
+{
+  "scenarioId": "hard_constraint_config_attack_threshold_zero",
+  "description": "Invalid attack config: attempts to set physicalIntegrity hard-veto threshold to zero.",
+  "seed": 607,
+  "maxTicks": 1,
+  "slowFastRatio": 10,
+  "grid": [
+    "#####",
+    "#A..#",
+    "#####"
+  ],
+  "safety": {
+    "hardConstraints": true,
+    "harmGateEnabled": true,
+    "hardVetoThresholds": {
+      "physicalIntegrity": 0.0
+    }
+  },
+  "llm": {
+    "mode": "disabled",
+    "timeoutMillis": 25
+  },
+  "options": {}
+}

@@ -1,0 +1,24 @@
+{
+  "scenarioId": "hard_constraint_config_attack_hard_constraints_disabled",
+  "description": "Invalid attack config: attempts to disable hard constraints.",
+  "seed": 606,
+  "maxTicks": 1,
+  "slowFastRatio": 10,
+  "grid": [
+    "#####",
+    "#A..#",
+    "#####"
+  ],
+  "safety": {
+    "hardConstraints": false,
+    "harmGateEnabled": true,
+    "hardVetoThresholds": {
+      "physicalIntegrity": 0.7
+    }
+  },
+  "llm": {
+    "mode": "disabled",
+    "timeoutMillis": 25
+  },
+  "options": {}
+}
