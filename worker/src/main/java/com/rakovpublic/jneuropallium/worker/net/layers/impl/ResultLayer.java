@@ -31,7 +31,11 @@ public class ResultLayer<K extends IResultSignal> extends Layer implements IResu
             }
         }
         if (this.isProcessed()) {
-            resultNeurons.addAll(this.map.values());
+            for (Object neuron : this.map.values()) {
+                if (neuron instanceof IResultNeuron) {
+                    resultNeurons.add((IResultNeuron) neuron);
+                }
+            }
             for (IResultNeuron resultNeuron : resultNeurons) {
                 res.add(new SimpleResultWrapper(resultNeuron.getFinalResult(), resultNeuron.getId()));
             }

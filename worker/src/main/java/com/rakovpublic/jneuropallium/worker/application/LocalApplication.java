@@ -72,6 +72,7 @@ public class LocalApplication implements IApplication {
         for (InputData inputData : this.getInputs(inputs)) {
             inputResolver.registerInput(inputData.getiInputSource().getInitInput(), inputData.isMandatory(), inputData.getInitStrategy().getiNeuronNetInput());
         }
+        inputResolver.populateInput();
         structBuilder.withHiddenInputMeta(inputResolver);
         structBuilder.withLayersMeta(layersMeta);
         StructMeta meta = structBuilder.build();
@@ -96,11 +97,13 @@ public class LocalApplication implements IApplication {
                 if (meta.getInputResolver().getSignalPersistStorage().hasSignalsToProcess()) {
                     IResultComparingStrategy resultComparingStrategy = null;
                     String resultComparingStrategyClass = context.getProperty("configuration.resultComparingStrategyClass");
-                    try {
-                        resultComparingStrategy = (IResultComparingStrategy) Class.forName(resultComparingStrategyClass).getDeclaredConstructor().newInstance();
-                    } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException |
-                            InstantiationException | IllegalAccessException e) {
-                        logger.error("cannot create result comparing strategy object", e);
+                    if (resultComparingStrategyClass != null && !resultComparingStrategyClass.isBlank()) {
+                        try {
+                            resultComparingStrategy = (IResultComparingStrategy) Class.forName(resultComparingStrategyClass).getDeclaredConstructor().newInstance();
+                        } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException |
+                                InstantiationException | IllegalAccessException e) {
+                            logger.error("cannot create result comparing strategy object", e);
+                        }
                     }
                     String algoType = context.getProperty("configuration.studyingalgotype");
                     ObjectMapper mapper = new ObjectMapper();

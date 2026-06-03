@@ -159,6 +159,7 @@ public class Layer<N extends INeuron> implements ILayer<N> {
                 }
             }
             ns.process(threads);
+            isProcessed = true;
         } else {
             isProcessed = true;
         }
@@ -207,6 +208,9 @@ public class Layer<N extends INeuron> implements ILayer<N> {
     public void dumpNeurons(ILayerMeta layerMeta) {
         List<INeuron> neurons = new LinkedList<>();
         for (INeuron n : map.values()) {
+            if (n.getId() != null && n.getId().equals(Long.MIN_VALUE)) {
+                continue;
+            }
             neurons.add(n);
         }
         layerMeta.saveNeurons(neurons);
@@ -221,6 +225,9 @@ public class Layer<N extends INeuron> implements ILayer<N> {
         for (Long neurId : map.keySet()) {
             INeuron neur = map.get(neurId);
             IAxon axon = neur.getAxon();
+            if (axon == null) {
+                continue;
+            }
             HashMap<ISignal, List<ISynapse>> tMap = axon.processSignals(neur.getResult());
             for (ISignal signal : tMap.keySet()) {
                 signal.setSourceLayerId(this.layerId);
@@ -301,6 +308,7 @@ public class Layer<N extends INeuron> implements ILayer<N> {
                 }
             }
             ns.process(threads);
+            isProcessed = true;
         } else {
             isProcessed = true;
         }

@@ -19,7 +19,6 @@ public class InMemoryInputResolver implements IInputResolver {
     private final HashMap<IInitInput, InputInitStrategy> inputs;
     private final ISignalsPersistStorage signalsPersistStorage;
     private final ISignalHistoryStorage signalHistoryStorage;
-    private final Long epoch;
     private final IInputLoadingStrategy inputLoadingStrategy;
     private final HashMap<String, IInitInput> initInput;
 
@@ -27,7 +26,6 @@ public class InMemoryInputResolver implements IInputResolver {
         this.signalsPersistStorage = signalsPersistStorage;
         this.signalHistoryStorage = signalHistoryStorage;
         this.inputLoadingStrategy = inputLoadingStrategy;
-        epoch = 0l;
         inputStatuses = new HashMap<>();
         inputs = new HashMap<>();
         initInput = new HashMap<>();
@@ -67,12 +65,12 @@ public class InMemoryInputResolver implements IInputResolver {
 
     @Override
     public Long getRun() {
-        return epoch;
+        return inputLoadingStrategy.getEpoch();
     }
 
     @Override
     public void saveHistory() {
-        signalHistoryStorage.save(signalsPersistStorage.getAllSignals(), epoch, inputLoadingStrategy.getCurrentLoopCount());
+        signalHistoryStorage.save(signalsPersistStorage.getAllSignals(), getRun(), inputLoadingStrategy.getCurrentLoopCount());
     }
 
     @Override

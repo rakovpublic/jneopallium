@@ -9,6 +9,8 @@ import org.apache.logging.log4j.Logger;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class Runner implements IRunner {
 
@@ -22,7 +24,7 @@ public class Runner implements IRunner {
         ObjectMapper mapper = new ObjectMapper();
         try {
             if (contextJson != null) {
-                context = (IContext) mapper.readValue(contextJson, Class.forName(contextClass));
+                context = (IContext) mapper.readValue(resolveContextJson(contextJson), Class.forName(contextClass));
             } else {
                 context = (IContext) Class.forName(contextClass).newInstance();
             }
@@ -56,5 +58,21 @@ public class Runner implements IRunner {
             logger.error(e);
         }
 
+    }
+
+    private String resolveContextJson(String contextJson) {
+        String trimmed = contextJson.trim();
+        if (trimmed.startsWith("{") || trimmed.startsWith("[")) {
+            return contextJson;
+        }
+        try {
+            Path path = Path.of(contextJson);
+            if (Files.exists(path)) {
+                return Files.readString(path);
+            }
+        } catch (Exception e) {
+            logger.warn("Cannot resolve context json argument as a file path: " + contextJson, e);
+        }
+        return contextJson;
     }
 }
