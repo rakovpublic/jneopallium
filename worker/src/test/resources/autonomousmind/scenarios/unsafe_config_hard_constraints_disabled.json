@@ -1,0 +1,15 @@
+{
+  "scenarioId": "unsafe_config_hard_constraints_disabled",
+  "description": "Invalid config: hard constraints disabled.",
+  "seed": 1305,
+  "maxTicks": 1,
+  "config": {
+    "safetyGateEnabled": true,
+    "hardSafetyConstraints": false
+  },
+  "map": [
+    "###",
+    "#A#",
+    "###"
+  ]
+}

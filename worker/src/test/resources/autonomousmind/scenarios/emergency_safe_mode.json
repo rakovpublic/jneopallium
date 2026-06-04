@@ -1,0 +1,31 @@
+{
+  "scenarioId": "emergency_safe_mode",
+  "description": "A critical diagnostic fault forces emergency safe mode and task preservation.",
+  "seed": 1203,
+  "maxTicks": 5,
+  "initialEnergy": 7.0,
+  "emergencyFault": true,
+  "map": [
+    "##########",
+    "#A....C..#",
+    "#..#..?.H#",
+    "#....T.QS#",
+    "#........#",
+    "##########"
+  ],
+  "ownerTask": {
+    "taskId": "inspect-before-fault",
+    "ownerId": "operator-1",
+    "goal": "inspect zone A unless critical diagnostics require emergency safe mode",
+    "priority": 8,
+    "allowedActions": ["EMERGENCY_STOP", "DOCK_CHARGER", "WAIT"],
+    "forbiddenActions": ["MOVE_WHILE_CRITICAL_FAULT"],
+    "requiredSensors": ["SELF_DIAGNOSTICS", "ENERGY"],
+    "targetZone": "A",
+    "successCriteria": {
+      "emergencyHandled": true
+    },
+    "reportingRequirements": ["emergency", "taskState"],
+    "maxRiskLevel": "LOW"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "scenarioId": "owner_task_inspection",
+  "description": "Owner-defined inspection task for zone A using required sensors.",
+  "seed": 101,
+  "maxTicks": 10,
+  "initialEnergy": 82.0,
+  "map": [
+    "##########",
+    "#A..O..C.#",
+    "#..#..?.H#",
+    "#....T.QS#",
+    "#........#",
+    "##########"
+  ],
+  "ownerTask": {
+    "taskId": "inspect-zone-a",
+    "ownerId": "operator-1",
+    "goal": "inspect zone A for radiation, obstacles, heat anomalies, and radio/sound sources",
+    "priority": 8,
+    "deadlineTicks": 20,
+    "allowedActions": ["MOVE", "SCAN_VISIBLE", "SCAN_LIDAR", "SCAN_IR", "SCAN_RADIATION", "SCAN_RADIO", "LISTEN", "REPORT", "DOCK_CHARGER"],
+    "forbiddenActions": ["TOUCH_OBJECT", "OPEN_DOOR", "ENTER_FORBIDDEN_ZONE"],
+    "requiredSensors": ["LIDAR", "IR", "RADIATION", "RADIO", "SOUND"],
+    "targetZone": "A",
+    "successCriteria": {
+      "coverage": 0.95,
+      "radiationMapComplete": true,
+      "obstacleMapComplete": true,
+      "reportGenerated": true
+    },
+    "reportingRequirements": ["hazards", "anomalies", "coverage", "confidence"],
+    "maxRiskLevel": "LOW",
+    "energyPolicy": "PAUSE_AND_CHARGE_IF_NEEDED",
+    "clarificationPolicy": "ASK_OWNER_IF_AMBIGUOUS"
+  }
+}

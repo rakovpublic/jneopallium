@@ -1,0 +1,15 @@
+{
+  "scenarioId": "free_investigation_no_task",
+  "description": "No owner task exists, so the agent safely investigates unknown regions.",
+  "seed": 303,
+  "maxTicks": 8,
+  "initialEnergy": 78.0,
+  "map": [
+    "##########",
+    "#A..??C..#",
+    "#..#..?.H#",
+    "#....T.QS#",
+    "#........#",
+    "##########"
+  ]
+}

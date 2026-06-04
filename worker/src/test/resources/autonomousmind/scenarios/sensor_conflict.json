@@ -1,0 +1,32 @@
+{
+  "scenarioId": "sensor_conflict",
+  "description": "Visible camera and lidar disagree; the agent lowers confidence and asks for more information.",
+  "seed": 606,
+  "maxTicks": 7,
+  "initialEnergy": 76.0,
+  "sensorConflict": true,
+  "map": [
+    "##########",
+    "#A....C..#",
+    "#..#..?.H#",
+    "#....T.QS#",
+    "#........#",
+    "##########"
+  ],
+  "ownerTask": {
+    "taskId": "resolve-conflict-zone-a",
+    "ownerId": "operator-1",
+    "goal": "inspect zone A but do not overcommit if sensors disagree",
+    "priority": 7,
+    "allowedActions": ["SCAN_VISIBLE", "SCAN_LIDAR", "SCAN_DEPTH", "SCAN_RADAR", "WAIT", "REPORT"],
+    "forbiddenActions": ["ENTER_FORBIDDEN_ZONE"],
+    "requiredSensors": ["VISIBLE", "LIDAR"],
+    "targetZone": "A",
+    "successCriteria": {
+      "confidenceResolved": true
+    },
+    "reportingRequirements": ["confidence", "contradictions"],
+    "maxRiskLevel": "LOW",
+    "clarificationPolicy": "ASK_OWNER_IF_AMBIGUOUS"
+  }
+}

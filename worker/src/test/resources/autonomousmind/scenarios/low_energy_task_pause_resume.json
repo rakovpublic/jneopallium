@@ -1,0 +1,33 @@
+{
+  "scenarioId": "low_energy_task_pause_resume",
+  "description": "Inspection task pauses for charging, sleeps while charging, then resumes.",
+  "seed": 202,
+  "maxTicks": 9,
+  "initialEnergy": 26.0,
+  "map": [
+    "##########",
+    "#A....C..#",
+    "#..#..?.H#",
+    "#....T.QS#",
+    "#........#",
+    "##########"
+  ],
+  "ownerTask": {
+    "taskId": "inspect-zone-a-low-energy",
+    "ownerId": "operator-1",
+    "goal": "inspect zone A but pause and charge if energy prediction is insufficient",
+    "priority": 9,
+    "allowedActions": ["MOVE", "SCAN_LIDAR", "SCAN_RADIATION", "REPORT", "DOCK_CHARGER", "RESUME_TASK", "ENTER_SLEEP_OPTIMIZATION"],
+    "forbiddenActions": ["ENTER_FORBIDDEN_ZONE"],
+    "requiredSensors": ["LIDAR", "RADIATION", "RADIO", "SOUND"],
+    "targetZone": "A",
+    "successCriteria": {
+      "coverage": 0.8,
+      "reportGenerated": true
+    },
+    "reportingRequirements": ["hazards", "coverage", "confidence"],
+    "maxRiskLevel": "LOW",
+    "energyPolicy": "PAUSE_AND_CHARGE_IF_NEEDED",
+    "clarificationPolicy": "ASK_OWNER_IF_AMBIGUOUS"
+  }
+}

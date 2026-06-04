@@ -1,0 +1,16 @@
+{
+  "scenarioId": "idle_learning_from_logs",
+  "description": "No task is pending; stored observations drive idle learning and calibration.",
+  "seed": 404,
+  "maxTicks": 7,
+  "initialEnergy": 64.0,
+  "storedObservations": true,
+  "map": [
+    "##########",
+    "#A....C..#",
+    "#..#..?.H#",
+    "#....T.QS#",
+    "#........#",
+    "##########"
+  ]
+}

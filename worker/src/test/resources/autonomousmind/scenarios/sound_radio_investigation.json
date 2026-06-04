@@ -1,0 +1,32 @@
+{
+  "scenarioId": "sound_radio_investigation",
+  "description": "Passive sound and radio triangulation updates a source hypothesis.",
+  "seed": 808,
+  "maxTicks": 8,
+  "initialEnergy": 79.0,
+  "soundRadioAnomaly": true,
+  "map": [
+    "##########",
+    "#A....C..#",
+    "#..#..?.H#",
+    "#....T.QS#",
+    "#........#",
+    "##########"
+  ],
+  "ownerTask": {
+    "taskId": "passive-source-estimate",
+    "ownerId": "operator-1",
+    "goal": "triangulate passive sound and radio source without entering risky regions",
+    "priority": 6,
+    "allowedActions": ["SCAN_RADIO", "LISTEN", "REPORT", "WAIT"],
+    "forbiddenActions": ["ENTER_FORBIDDEN_ZONE"],
+    "requiredSensors": ["RADIO", "SOUND"],
+    "targetZone": "A",
+    "successCriteria": {
+      "sourceEstimate": true,
+      "reportGenerated": true
+    },
+    "reportingRequirements": ["sourceEstimate", "confidence"],
+    "maxRiskLevel": "LOW"
+  }
+}

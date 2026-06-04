@@ -1,0 +1,29 @@
+{
+  "scenarioId": "ambiguous_task",
+  "description": "The owner command lacks target zone and safe scope; the agent asks clarification.",
+  "seed": 1001,
+  "maxTicks": 6,
+  "initialEnergy": 80.0,
+  "ambiguousTask": true,
+  "map": [
+    "##########",
+    "#A....C..#",
+    "#..#..?.H#",
+    "#....T.QS#",
+    "#........#",
+    "##########"
+  ],
+  "ownerTask": {
+    "taskId": "inspect-something",
+    "ownerId": "operator-1",
+    "goal": "go check that thing over there",
+    "priority": 5,
+    "allowedActions": ["ASK_OWNER", "WAIT"],
+    "forbiddenActions": ["ENTER_FORBIDDEN_ZONE"],
+    "requiredSensors": [],
+    "successCriteria": {},
+    "reportingRequirements": ["missingFields"],
+    "maxRiskLevel": "LOW",
+    "clarificationPolicy": "ASK_OWNER_IF_AMBIGUOUS"
+  }
+}

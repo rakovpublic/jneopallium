@@ -1,0 +1,15 @@
+{
+  "scenarioId": "unsafe_config_gate_disabled",
+  "description": "Invalid config: safety gate disabled.",
+  "seed": 1304,
+  "maxTicks": 1,
+  "config": {
+    "safetyGateEnabled": false,
+    "hardSafetyConstraints": true
+  },
+  "map": [
+    "###",
+    "#A#",
+    "###"
+  ]
+}

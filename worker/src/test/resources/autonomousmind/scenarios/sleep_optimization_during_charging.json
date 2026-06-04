@@ -1,0 +1,16 @@
+{
+  "scenarioId": "sleep_optimization_during_charging",
+  "description": "Charging is active; the agent performs internal model organization only.",
+  "seed": 505,
+  "maxTicks": 6,
+  "initialEnergy": 44.0,
+  "initiallyCharging": true,
+  "map": [
+    "##########",
+    "#A....C..#",
+    "#..#..?.H#",
+    "#....T.QS#",
+    "#........#",
+    "##########"
+  ]
+}
