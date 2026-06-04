@@ -1,0 +1,33 @@
+{
+  "scenarioId": "llm_advisory_failure_mock",
+  "description": "Mock LLM advisory succeeds once and then times out; fast loop and harm gate continue.",
+  "seed": 2808,
+  "maxTicks": 8,
+  "initialEnergy": 89.0,
+  "config": {
+    "slowFastRatio": 2,
+    "safetyGateEnabled": true,
+    "hardSafetyConstraints": true,
+    "harmHardConstraints": true,
+    "harmGateNeuronPresent": true,
+    "hardVetoThresholds": {
+      "physicalIntegrity": 0.8,
+      "autonomy": 0.7,
+      "resource": 0.6,
+      "information": 0.6,
+      "emotional": 0.5,
+      "longTermRisk": 0.65,
+      "selfPreservation": 0.8
+    }
+  },
+  "map": [
+    "########",
+    "#A.F..G#",
+    "#......#",
+    "#...B..#",
+    "########"
+  ],
+  "options": {
+    "activeGoal": "continue safely if advisory fails"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "scenarioId": "prediction_error_world_change",
+  "description": "A world change invalidates the transition model and forces adaptation.",
+  "seed": 2707,
+  "maxTicks": 7,
+  "initialEnergy": 90.0,
+  "map": [
+    "########",
+    "#A.F..G#",
+    "#..M...#",
+    "#...B..#",
+    "########"
+  ],
+  "options": {
+    "activeGoal": "adapt world model after prediction error"
+  }
+}

@@ -13,8 +13,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class AutonomousMindFullRunSmokeTest {
     @Test
-    void runsOwnerTaskInspectionThroughEntryLocalMode() throws Exception {
-        AutonomousMindManifest manifest = AutonomousMindDemoTestSupport.manifest("owner_task_inspection");
+    void runsBaselineForagingThroughEntryLocalMode() throws Exception {
+        AutonomousMindManifest manifest = AutonomousMindDemoTestSupport.entryManifest("baseline_foraging");
 
         assertEquals("PASS", manifest.status);
         assertEquals("local", manifest.mode);
@@ -25,7 +25,7 @@ class AutonomousMindFullRunSmokeTest {
         assertTrue(Files.exists(Path.of(manifest.contextJsonPath)));
         assertTrue(Files.exists(Path.of(manifest.layerMetadataPath)));
         assertFalse(AutonomousMindDemoTestSupport.results(manifest).isEmpty());
-        assertFalse(AutonomousMindDemoTestSupport.trace(manifest, "perception_trace.jsonl").isEmpty());
-        assertFalse(AutonomousMindDemoTestSupport.trace(manifest, "safety_trace.jsonl").isEmpty());
+        assertFalse(AutonomousMindDemoTestSupport.trace(manifest, "transparency.jsonl").isEmpty());
+        assertTrue(Files.exists(Path.of(manifest.resultPaths.get("safety_summary.json"))));
     }
 }

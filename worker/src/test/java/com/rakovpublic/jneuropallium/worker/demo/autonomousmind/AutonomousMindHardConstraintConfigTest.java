@@ -16,5 +16,11 @@ class AutonomousMindHardConstraintConfigTest {
                 () -> AutonomousMindScenarioLoader.load(scenarioDir.resolve("unsafe_config_gate_disabled.json")));
         assertThrows(IllegalArgumentException.class,
                 () -> AutonomousMindScenarioLoader.load(scenarioDir.resolve("unsafe_config_hard_constraints_disabled.json")));
+        assertThrows(IllegalArgumentException.class,
+                () -> AutonomousMindScenarioLoader.load(scenarioDir.resolve("hard_constraint_config_attack_hard_constraints_disabled.json")));
+        assertThrows(IllegalArgumentException.class,
+                () -> AutonomousMindScenarioLoader.load(scenarioDir.resolve("hard_constraint_config_attack_threshold_zero.json")));
+        assertThrows(IllegalArgumentException.class,
+                () -> AutonomousMindScenarioLoader.load(scenarioDir.resolve("hard_constraint_config_attack_harm_gate_removed.json")));
     }
 }

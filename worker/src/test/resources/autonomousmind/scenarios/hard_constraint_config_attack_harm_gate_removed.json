@@ -1,0 +1,17 @@
+{
+  "scenarioId": "hard_constraint_config_attack_harm_gate_removed",
+  "description": "Invalid v1 config: HarmGateNeuron removed.",
+  "seed": 2903,
+  "maxTicks": 1,
+  "config": {
+    "safetyGateEnabled": true,
+    "hardSafetyConstraints": true,
+    "harmHardConstraints": true,
+    "harmGateNeuronPresent": false
+  },
+  "map": [
+    "###",
+    "#A#",
+    "###"
+  ]
+}

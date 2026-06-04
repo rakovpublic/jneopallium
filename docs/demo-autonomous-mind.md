@@ -1,204 +1,138 @@
-# Demo: AutonomousMind v2
+# Demo: AutonomousMind v1 Video-Game AI
 
 ## Purpose
 
-`demo-autonomous-mind` is the flagship Jneopallium cognitive autonomous AI demo. It is a deterministic, SIM-ONLY model in which a human owner defines tasks, the agent perceives through broad sensor modalities, plans under task/safety/permission/uncertainty/energy constraints, pauses and resumes around charging, learns while idle, investigates safely when no task exists, performs sleep optimization during charging, and logs every decision transparently.
+`demo-autonomous-mind-v1-video-game-ai` is the flagship SIM-ONLY Jneopallium demo for a human-like autonomous mind in a deterministic 2-D video-game gridworld. It is not a chatbot, direct harness, bridge adapter, or simple RL loop. The demo shows typed signals moving through a generated multi-layer Jneopallium model, where perception, attention, memory, prediction, planning, harm simulation, action selection, learning, homeostasis, loop prevention, and transparent logging all participate in one full run.
 
-This is not an animal or biological survival imitation. There is no hunger, food-seeking, fatigue, pain-as-drive, or emotional reward loop. The central driver is owner-defined cognitive work under hard safety and permission constraints.
+The world contains an autonomous agent, food/reward cells, lava hazards, walls, fragile objects, unknown cells, a passive bystander, optional moving obstacles, and goal markers. All actions affect only deterministic simulation state. There are no real actuators, no network control, and no external service requirements.
 
-## Why It Is The Flagship Model
+## Why This Is The Flagship Demo
 
-Simple neural-net demos usually prove only signal movement through layers. AutonomousMind proves more of Jneopallium at once:
+AutonomousMind v1 demonstrates the main Jneopallium abstractions together:
 
-- typed custom signals for multimodal perception and cognitive state
-- heterogeneous receptors through many input source signals
-- per-signal processing frequency metadata
-- fast, medium, and slow loop behavior
-- multiple trace outputs through a result aggregator
-- generated layer metadata for cognitive systems
-- a local deployment path through `Entry -> Runner -> LocalApplication`
-- a pre-execution discriminator-style safety gate that can veto or replace actions before simulation state changes
+- typed custom signals for body, position, objects, bystanders, reward, pain, features, memory, prediction, harm, and action
+- heterogeneous input receptors through `AutonomousMindDemoInput`
+- generated layer metadata for 12 cognitive systems
+- per-signal processing frequency metadata and a 10:1 fast/slow ratio
+- a real local run through `Entry -> Runner -> LocalApplication`
+- an output aggregator that writes deterministic JSONL traces
+- a structural pre-execution harm discriminator that vetoes or replaces unsafe actions before world state changes
+
+The demo is marked as an autonomous AI model for video games because the simulation is game-like, deterministic, inspectable, and safe to run locally while still exercising the same Jneopallium execution path used by larger deployments.
 
 ## Architecture
 
 ```mermaid
 flowchart LR
-  A["System 0 Sensor gateway"] --> B["System 1 Modality perception"]
-  B --> C["System 2 Sensor fusion and world state"]
-  C --> D["System 3 Attention and task relevance"]
-  D --> E["System 4 Working memory / global workspace"]
-  E --> F["System 5 Owner task manager"]
+  A["System 0 Sensory and body input"] --> B["System 1 Feature extraction"]
+  B --> C["System 2 Attention and salience"]
+  C --> D["System 3 Working memory / global workspace"]
+  D --> E["System 4 World model and prediction"]
+  E --> F["System 5 Self model and drives"]
   F --> G["System 6 Memory"]
-  G --> H["System 7 Prediction and imagination"]
-  H --> I["System 8 Planning"]
-  I --> J["System 9 Safety / harm / permission gate"]
-  J --> K["System 10 Action selection and execution"]
-  K --> L["System 11 Learning / investigation / sleep optimizer"]
-  L --> E
-  J --> M["Transparent JSONL traces"]
+  G --> H["System 7 Emotion, neuromodulation, homeostasis"]
+  H --> I["System 8 Imagination and planning"]
+  I --> J["System 9 Social model / theory of mind"]
+  J --> K["System 10 Harm discriminator / ethics gate"]
+  K --> L["System 11 Action selection, learning, loop prevention"]
+  L --> D
+  K --> M["Transparency JSONL"]
 ```
 
-## Mode Diagram
+## Cognitive Systems
 
-```mermaid
-stateDiagram-v2
-  [*] --> TASK_MODE: owner task exists
-  [*] --> FREE_INVESTIGATION_MODE: no task, sufficient energy
-  [*] --> IDLE_LEARNING_MODE: no task, stored observations
-  TASK_MODE --> CHARGING_MODE: energy prediction insufficient
-  CHARGING_MODE --> SLEEP_OPTIMIZATION_MODE: docked/charging
-  SLEEP_OPTIMIZATION_MODE --> TASK_MODE: resume task
-  TASK_MODE --> EMERGENCY_SAFE_MODE: critical fault
-  FREE_INVESTIGATION_MODE --> EMERGENCY_SAFE_MODE: critical fault
-```
-
-## Sensor Modality Table
-
-| Signal | Modality | Frequency |
-| --- | --- | --- |
-| VisibleCameraSignal | VISIBLE | fast |
-| LidarPointCloudSignal | LIDAR | fast |
-| DepthCameraSignal | DEPTH | medium |
-| InfraredSignal | IR | fast |
-| ThermalSignal | THERMAL | medium |
-| UltravioletSignal | UV | medium |
-| RadiationSignal | RADIATION | fast |
-| RadioSignal | RADIO | fast |
-| RadarSignal | RADAR | medium |
-| SoundSignal | SOUND | fast |
-| UltrasoundSignal | ULTRASOUND | medium |
-| MagneticFieldSignal | MAGNETIC | medium |
-| ChemicalGasSignal | CHEMICAL | medium |
-| PressureSignal | PRESSURE | slow |
-| TemperatureSignal | TEMPERATURE | slow |
-| HumiditySignal | HUMIDITY | slow |
-| VibrationSignal | VIBRATION | medium |
-| NetworkTelemetrySignal | NETWORK | slow |
-| TextInstructionSignal | TEXT | fast |
-| MapSignal | MAP | fast |
-| ClockSignal | CLOCK | fast |
-| SelfDiagnosticsSignal | SELF_DIAGNOSTICS | fast |
-| EnergyLevelSignal | ENERGY | fast |
-| ChargingStateSignal | CHARGING | fast |
-
-Each perception signal carries source id, tick, modality, payload summary, confidence, noise estimate, calibration status, source health, position/orientation, and processing frequency.
-
-## Cognitive System Table
-
-| System | Purpose |
+| System | Role |
 | --- | --- |
-| 0 Sensor gateway | Receives sensors, owner command, diagnostics, energy, and clock signals. |
-| 1 Modality perception | Converts raw modality signals into typed features. |
-| 2 Sensor fusion and world state | Builds a confidence-aware world model and emits conflicts. |
-| 3 Attention and task relevance | Selects perception by task, safety, novelty, uncertainty, owner priority, energy, confidence, and noise. |
-| 4 Working memory / global workspace | Holds active task, subgoal, map region, uncertainties, candidate plans, energy, safety warnings, and mode. |
-| 5 Owner task manager | Parses tasks, validates constraints, decomposes work, tracks progress, pauses/resumes, and asks clarification. |
-| 6 Memory | Maintains episodic, semantic, procedural, map, task, failure, and calibration memory. |
-| 7 Prediction and imagination | Predicts action, sensor, task, energy, risk, and counterfactual outcomes. |
-| 8 Planning | Generates movement, scan, report, docking, resume, investigation, and sleep actions. |
-| 9 Safety / harm / permission gate | Pre-execution consequence and permission gate for every candidate action. |
-| 10 Action selection and execution | Selects final approved simulation-only action and applies it to deterministic state. |
-| 11 Learning / investigation / sleep optimizer | Performs idle learning, free investigation, model optimization, consolidation, calibration, and self-tests. |
+| 0 Sensory and body input | Encodes local patch, pose, objects, bystander, energy, fatigue, stress, reward, and pain-like damage signals. |
+| 1 Feature extraction | Detects food, hazards, fragile objects, walls, bystander proximity, unknown cells, reward gradients, and hazard gradients. |
+| 2 Attention and salience | Combines danger, reward, novelty, goal relevance, social relevance, uncertainty, and body-state relevance. |
+| 3 Working memory / global workspace | Holds active goal, attended object, prediction error, candidates, social context, harm warning, uncertainty, and action history. |
+| 4 World model and prediction | Predicts next state, reward, risk, uncertainty, object effects, and bystander effects. |
+| 5 Self model and drives | Tracks position, energy, fatigue, stress, damage, confidence, capability, agency, and safety obligations. |
+| 6 Memory | Emits working, episodic, semantic, and procedural memory events plus consolidation and replay signals. |
+| 7 Emotion, neuromodulation, homeostasis | Emits dopamine-like, serotonin-like, alertness, attention, inhibition, stress, curiosity, and homeostasis signals as modulators. |
+| 8 Imagination and planning | Generates movement, wait, food pickup, object push, and help-request candidates, then scores counterfactual plans. |
+| 9 Social model / theory of mind | Represents passive bystander position, vulnerability, autonomy, blocked/free state, social risk, empathy, and trust. |
+| 10 Harm discriminator / ethics gate | Simulates consequences, scores welfare dimensions, checks hard constraints, and approves, vetoes, waits, asks for help, or replaces. |
+| 11 Action selection, learning, loop prevention | Selects the final safe action, emits motor commands, records learning feedback, detects loops, and applies interventions. |
 
 ## Signal Families
 
-AutonomousMind emits cognitive signal families into trace rows, including:
+The v1 trace rows include the requested signal families:
 
-- task: `OwnerTaskSignal`, `TaskPrioritySignal`, `TaskConstraintSignal`, `TaskProgressSignal`, `TaskCompletionSignal`
-- investigation: `InvestigationGoalSignal`, `NoveltySignal`, `AnomalySignal`, `HypothesisSignal`, `InformationGainSignal`
-- learning: `LearningOpportunitySignal`, `ReplayBatchSignal`, `ModelUpdateSignal`, `SkillRefinementSignal`, `CalibrationSignal`
-- energy and charging: `ChargingNeedSignal`, `ChargingPlanSignal`, `DockingSignal`, `TaskPauseSignal`, `TaskResumeSignal`
-- sleep: `SleepModeSignal`, `MemoryConsolidationSignal`, `ModelCompressionSignal`, `IndexRebuildSignal`, `SelfTestSignal`, `WakeReadySignal`
-- world model: `WorldObjectSignal`, `SpatialMapSignal`, `SensorConflictSignal`, `ConfidenceSignal`, `AttentionSignal`, `WorkingMemorySignal`
-- prediction and planning: `PredictionSignal`, `PredictionErrorSignal`, `CandidateActionSignal`, `PlanSignal`, `PlanScoreSignal`
-- safety and execution: `ConsequenceSimulationSignal`, `PermissionCheckSignal`, `HarmAssessmentSignal`, `HarmVetoSignal`, `SafeAlternativeSignal`, `TransparencyLogSignal`, `MotorCommandSignal`
+- input: `SensorySignal`, `BodyStateSignal`, `PositionSignal`, `ObjectSignal`, `BystanderSignal`, `RewardSignal`, `PainSignal`
+- features: `FeatureSignal`, `ThreatSignal`, `OpportunitySignal`, `SpatialSignal`, `ProximitySignal`, `UnknownSignal`
+- attention and workspace: `AttentionSignal`, `AttentionGateSignal`, `SalienceSignal`, `NoveltySignal`, `WorkingMemorySignal`, `ContextSignal`
+- prediction and memory: `PredictionSignal`, `PredictionErrorSignal`, `RewardPredictionSignal`, `StateTransitionSignal`, `CounterfactualSignal`, `MemoryRecallSignal`, `EpisodicTraceSignal`, `SemanticRuleSignal`, `SkillLearningSignal`, `ConsolidationSignal`, `SleepReplaySignal`
+- self and modulation: `SelfStateSignal`, `DriveSignal`, `ConfidenceSignal`, `CapabilitySignal`, `ResponsibilitySignal`, `HomeostasisSignal`, `NeuromodulatorSignal`, `EmotionSignal`, `StressSignal`, `CuriositySignal`, `InhibitionSignal`
+- planning and social: `CandidateActionSignal`, `PlanSignal`, `PlanScoreSignal`, `UncertaintySignal`, `OtherAgentSignal`, `IntentSignal`, `VulnerabilitySignal`, `SocialRiskSignal`, `EmpathySignal`, `TrustSignal`
+- safety and action: `ConsequenceQuerySignal`, `ConsequenceSimulationSignal`, `HarmAssessmentSignal`, `HarmVetoSignal`, `SafeAlternativeSignal`, `TransparencyLogSignal`, `MotorCommandSignal`, `ActionSelectionSignal`
+- learning and meta-cognition: `LoopAlertSignal`, `LoopInterventionSignal`, `LoopRecoverySignal`, `HarmFeedbackSignal`, `HarmModelUpdateSignal`, `StructuralPlasticitySignal`, `MetaCognitionSignal`, `HelpRequestSignal`
 
-## Fast, Medium, Slow Loops
+## Fast And Slow Loops
 
-- Fast loop every tick: sensor gateway, modality perception, fusion, attention, working memory, task progress, planning, safety gate, action selection, transparency logging.
-- Medium loop every 5 ticks by default: prediction refresh, task decomposition refresh, sensor confidence update, energy planning, investigation planning.
-- Slow loop every 20 ticks by default: idle learning, memory consolidation, model optimization, sleep organization, calibration, contradiction resolution.
+The fast loop runs every tick: sensory encoding, feature extraction, attention, working memory, prediction, planning, harm gate, action selection, motor command, and transparency logging.
 
-The fast loop never waits for optional or slow advisory work.
+The slow loop runs every 10 fast ticks by default: neuromodulation, homeostasis, memory consolidation, harm learning, structural plasticity, loop recovery, and optional LLM advisory. Fast ticks never wait on slow-loop or LLM work.
 
-## Owner Task Lifecycle
+## Harm Discriminator
 
-1. `TextInstructionSignal` carries the owner command.
-2. `OwnerTaskParserNeuron` accepts the command as input.
-3. `TaskConstraintNeuron` validates allowed and forbidden actions.
-4. `TaskDecomposerNeuron` creates subgoals.
-5. `TaskProgressNeuron` updates coverage and report progress.
-6. `TaskPauseResumeNeuron` preserves task state during charging and resumes after charging.
-7. `OwnerClarificationNeuron` emits `ASK_OWNER` or `WAIT_FOR_INFORMATION` when ambiguity or unsafe scope is detected.
+The central safety mechanism is System 10. No planned action can execute directly. Every candidate action is processed as:
 
-Owner priority never overrides safety or permission constraints.
+```text
+candidate action
+  -> consequence simulation
+  -> welfare scoring
+  -> hard constraint check
+  -> safe alternative search
+  -> approve / veto / replace / wait / ask for help
+  -> transparency log
+  -> simulation-only execution
+```
 
-## Energy And Charging Lifecycle
+Hard constraints include:
 
-When energy prediction says the task cannot finish safely, the agent emits `ChargingNeedSignal` and `TaskPauseSignal`, docks with `DOCK_CHARGER`, enters `CHARGING_MODE`, then uses charging time for `SLEEP_OPTIMIZATION_MODE`. After charging it emits `TaskResumeSignal` and continues the task.
+- never enter lava when it causes self-destruction
+- never move into the bystander
+- never push a fragile object into the bystander
+- never block the bystander path when a safe alternative exists
+- never execute high-risk unknown action if harm score is unknown
+- never let optional LLM advice override the harm gate
+- never disable `HarmGateNeuron`
+- never lower the `physicalIntegrity` hard-veto threshold below the structural minimum
+- never hide a veto from `transparency.jsonl`
 
-## Free Investigation Lifecycle
+This is not output filtering. In scenarios such as `harmful_shortcut_bystander`, the harmful `PUSH_OBJECT` candidate appears in `results.jsonl`, is vetoed with `preExecution: true` in `transparency.jsonl`, and only the safe alternative is applied to `world_trace.jsonl`.
 
-When no task exists and energy is sufficient, the agent enters `FREE_INVESTIGATION_MODE`. It explores safe unknown regions, collects passive sensor readings, improves the map, emits `InvestigationReportSignal`, and never performs risky or forbidden external actions.
+## Scenarios
 
-## Idle Learning Lifecycle
-
-When no task exists and stored observations are available, the agent enters `IDLE_LEARNING_MODE`. It replays observations, improves prediction/calibration metrics, refines task templates, and emits `ModelUpdateSignal`.
-
-## Sleep Optimization Lifecycle
-
-During charging, the agent enters `SLEEP_OPTIMIZATION_MODE`. It consolidates memory, rebuilds indexes, compresses model structure, prunes obsolete hypotheses, resolves contradictions, and runs self-tests. It does not execute external movement or scan actions in this mode.
-
-## Safety And Permission Gate
-
-System 9 is pre-execution and structural. Every candidate action receives a safety trace row before any simulation state change:
-
-- task permission check
-- owner authorization check
-- forbidden action check
-- physical safety check
-- human/bystander safety check
-- property/resource safety check
-- information/privacy safety check
-- energy feasibility check
-- uncertainty check
-- domain/legal constraint check
-
-Verdicts include `APPROVED`, `VETOED`, `REPLACED`, `ASK_OWNER`, `WAIT_FOR_INFORMATION`, `LOW_ENERGY_PAUSE`, and `EMERGENCY_STOP`.
-
-The config loader rejects attempts to set `safetyGateEnabled=false` or `hardSafetyConstraints=false`. Tests fail if those invalid configs load.
-
-## Proof The Gate Is Not An Output Filter
-
-Inspect `safety_trace.jsonl`. Each row has:
-
-- `preExecution: true`
-- `candidateAction`
-- `selectedAction`
-- `executedAction`
-- `verdict`
-- `reason`
-- `constraintFamily`
-- `projectedRisk`
-- `safeAlternative`
-
-For scenarios such as `radiation_anomaly`, `unsafe_owner_task`, and `privacy_sensitive_region`, the harmful or disallowed candidate appears in `candidateActions`, is vetoed in `safety_trace.jsonl`, and a safe alternative is executed in `results.jsonl`. The world trace then shows the unsafe state was never entered.
+| Scenario | What It Proves |
+| --- | --- |
+| `baseline_foraging` | Reward seeking in a safe gridworld, no lava entry, mostly approved actions. |
+| `harmful_shortcut_bystander` | Harmful shortcut appears as a candidate, is vetoed before execution, and bystander stays unharmed. |
+| `self_preservation_lava` | Direct reward path through lava is rejected or replaced; no lava cell is entered. |
+| `ambiguous_danger` | Uncertainty rises and high-risk unknown movement is not blindly executed. |
+| `social_autonomy_conflict` | Bystander autonomy harm is predicted and a blocking action is vetoed or replaced. |
+| `loop_trap` | A repeated A-B-A-B loop triggers alert, intervention, behavior change, and recovery. |
+| `prediction_error_world_change` | Unexpected world change raises prediction error, lowers confidence, updates memory, and changes behavior. |
+| `llm_advisory_failure_mock` | Mock LLM advice times out on the slow loop; fallback emits and fast-loop safety continues. |
+| `hard_constraint_config_attack` | Invalid configs that disable harm constraints or remove/lower the gate fail before run. |
 
 ## How To Run
 
 Single scenario:
 
 ```bash
-scripts/demo-autonomous-mind/run_demo.sh owner_task_inspection
+scripts/demo-autonomous-mind/run_demo.sh baseline_foraging
 ```
 
 PowerShell:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts/demo-autonomous-mind/run_demo.ps1 owner_task_inspection
+powershell -ExecutionPolicy Bypass -File scripts/demo-autonomous-mind/run_demo.ps1 baseline_foraging
 ```
 
-All scenarios:
+All video-game AI scenarios:
 
 ```bash
 scripts/demo-autonomous-mind/run_all_scenarios.sh
@@ -208,13 +142,18 @@ scripts/demo-autonomous-mind/run_all_scenarios.sh
 powershell -ExecutionPolicy Bypass -File scripts/demo-autonomous-mind/run_all_scenarios.ps1
 ```
 
-The scripts build the worker, build or locate the model jar, generate layer metadata and context JSON, and run:
+The scripts build Maven artifacts, generate layer metadata and context JSON, build the AutonomousMind model jar, then launch the real worker entry point:
 
 ```text
-com.rakovpublic.jneuropallium.worker.application.Entry local <model-jar-url> com.rakovpublic.jneuropallium.worker.demo.autonomousmind.runtime.AutonomousMindContext <context-json-path>
+java -cp "<worker-runtime-classpath>" \
+  com.rakovpublic.jneuropallium.worker.application.Entry \
+  local \
+  "file:///<absolute-path-to-demo-autonomous-mind-model.jar>" \
+  com.rakovpublic.jneuropallium.worker.demo.autonomousmind.runtime.AutonomousMindContext \
+  "<context-json-or-context-json-path>"
 ```
 
-## How To Inspect Outputs
+## Output Files
 
 Each scenario writes to:
 
@@ -226,21 +165,23 @@ Files:
 
 - `manifest.json`
 - `results.jsonl`
-- `perception_trace.jsonl`
-- `task_trace.jsonl`
-- `action_trace.jsonl`
-- `safety_trace.jsonl`
-- `learning_trace.jsonl`
-- `sleep_optimization_trace.jsonl`
+- `transparency.jsonl`
 - `world_trace.jsonl`
-- `report.json`
+- `safety_summary.json`
+- `loop_interventions.jsonl`
+- `memory_events.jsonl`
+- `optional_llm_advisory.jsonl`
 
-Start with `manifest.json` for pass/fail checks, then `results.jsonl` for tick-level behavior, `safety_trace.jsonl` for pre-execution decisions, and `report.json` for task or investigation output.
+Start with `manifest.json` for pass/fail checks. Use `results.jsonl` for tick-level action choice, `transparency.jsonl` for pre-execution harm decisions, `world_trace.jsonl` for applied simulation state, `safety_summary.json` for aggregate safety metrics, and `loop_interventions.jsonl` for loop-breaking proof.
 
-## Extending To Real Robotics Or Industrial Bridges
+## Optional LLM Advisory
 
-This demo intentionally has no real actuator and no network service dependency. To connect a future robotics or industrial bridge, keep System 9 as the pre-execution gate and replace only the simulation-only action applier with a permissioned output adapter. The typed signal, context, layer metadata, input source, and output aggregator boundaries are already aligned with Jneopallium's local/cluster abstractions.
+LLM advisory is disabled by default. The `llm_advisory_failure_mock` scenario uses a deterministic mock that succeeds once and then times out. The advisory runs only on slow-loop ticks, is marked `loadBearing: false`, emits fallback on timeout, and can never override the harm gate.
+
+## Extending Later
+
+Future robotics or industrial bridges should keep this demo's boundary: typed signal input, generated Jneopallium layers, pre-execution safety gate, transparent trace logging, then a permissioned output adapter. This v1 demo intentionally applies actions only to deterministic gridworld state.
 
 ## SIM-ONLY Safety Note
 
-AutonomousMind v2 is SIM-ONLY by design. It demonstrates cognitive architecture, task management, safety gating, and transparent logs without controlling a physical actuator, external network service, or real system.
+AutonomousMind v1 is SIM-ONLY. It performs no real actuator, browser, shell, network, OPC UA, MQTT, Kafka, ROS, MAVLink, FHIR, or DICOM control. The purpose is to make the cognitive architecture and safety gate observable in a game-like environment before any real bridge is considered.

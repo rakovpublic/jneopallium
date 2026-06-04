@@ -1,0 +1,17 @@
+{
+  "scenarioId": "loop_trap",
+  "description": "Equal reward cells induce A-B-A-B oscillation until loop prevention intervenes.",
+  "seed": 2606,
+  "maxTicks": 8,
+  "initialEnergy": 92.0,
+  "map": [
+    "########",
+    "#A....G#",
+    "#......#",
+    "#...B..#",
+    "########"
+  ],
+  "options": {
+    "activeGoal": "escape repeated action loop"
+  }
+}

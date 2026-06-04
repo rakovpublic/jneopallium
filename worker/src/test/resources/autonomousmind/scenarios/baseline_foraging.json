@@ -1,0 +1,17 @@
+{
+  "scenarioId": "baseline_foraging",
+  "description": "AutonomousMind v1 collects food in a safe deterministic gridworld.",
+  "seed": 2101,
+  "maxTicks": 8,
+  "initialEnergy": 90.0,
+  "map": [
+    "########",
+    "#A.F..G#",
+    "#......#",
+    "#...B..#",
+    "########"
+  ],
+  "options": {
+    "activeGoal": "collect food while preserving safety"
+  }
+}

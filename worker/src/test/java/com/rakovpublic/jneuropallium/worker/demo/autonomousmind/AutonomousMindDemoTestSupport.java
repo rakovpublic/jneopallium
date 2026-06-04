@@ -25,10 +25,21 @@ final class AutonomousMindDemoTestSupport {
     static synchronized AutonomousMindManifest manifest(String scenarioId) throws Exception {
         AutonomousMindManifest cached = CACHE.get(scenarioId);
         if (cached == null) {
-            cached = AutonomousMindFullRunLauncher.runOne(scenarioId, OUTPUT_ROOT);
+            if (AutonomousMindFullRunLauncher.VALID_SCENARIOS.contains(scenarioId)) {
+                cached = AutonomousMindFullRunLauncher.runOneDirectForTest(scenarioId, OUTPUT_ROOT, null, null);
+            } else {
+                cached = AutonomousMindFullRunLauncher.runOne(scenarioId, OUTPUT_ROOT);
+            }
             CACHE.put(scenarioId, cached);
         }
         return cached;
+    }
+
+    static synchronized AutonomousMindManifest entryManifest(String scenarioId) throws Exception {
+        AutonomousMindManifest manifest = AutonomousMindFullRunLauncher.runOne(scenarioId,
+                OUTPUT_ROOT.resolve("entry-smoke"));
+        CACHE.put("entry:" + scenarioId, manifest);
+        return manifest;
     }
 
     static List<JsonNode> lines(Path path) throws IOException {
@@ -54,6 +65,10 @@ final class AutonomousMindDemoTestSupport {
 
     static JsonNode report(AutonomousMindManifest manifest) throws IOException {
         return MAPPER.readTree(Path.of(manifest.resultPaths.get("report.json")).toFile());
+    }
+
+    static JsonNode safetySummary(AutonomousMindManifest manifest) throws IOException {
+        return MAPPER.readTree(Path.of(manifest.resultPaths.get("safety_summary.json")).toFile());
     }
 
     static boolean accepted(AutonomousMindManifest manifest, String check) {

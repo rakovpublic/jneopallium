@@ -1,5 +1,5 @@
 param(
-    [string]$ScenarioId = "owner_task_inspection",
+    [string]$ScenarioId = "baseline_foraging",
     [string]$OutputDir
 )
 
@@ -25,7 +25,7 @@ try {
 
     & java -cp $Classpath $Launcher $ScenarioId --output $OutputDir
     Write-Host "AutonomousMind manifest: $(Join-Path (Join-Path $OutputDir $ScenarioId) 'manifest.json')"
-    Write-Host "AutonomousMind report:   $(Join-Path (Join-Path $OutputDir $ScenarioId) 'report.json')"
+    Write-Host "AutonomousMind safety:   $(Join-Path (Join-Path $OutputDir $ScenarioId) 'safety_summary.json')"
 }
 finally {
     Pop-Location

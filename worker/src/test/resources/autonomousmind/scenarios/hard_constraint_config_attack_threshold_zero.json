@@ -1,0 +1,20 @@
+{
+  "scenarioId": "hard_constraint_config_attack_threshold_zero",
+  "description": "Invalid v1 config: physicalIntegrity hard-veto threshold is zero.",
+  "seed": 2902,
+  "maxTicks": 1,
+  "config": {
+    "safetyGateEnabled": true,
+    "hardSafetyConstraints": true,
+    "harmHardConstraints": true,
+    "harmGateNeuronPresent": true,
+    "hardVetoThresholds": {
+      "physicalIntegrity": 0.0
+    }
+  },
+  "map": [
+    "###",
+    "#A#",
+    "###"
+  ]
+}

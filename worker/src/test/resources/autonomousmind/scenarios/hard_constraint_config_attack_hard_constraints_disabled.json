@@ -1,0 +1,17 @@
+{
+  "scenarioId": "hard_constraint_config_attack_hard_constraints_disabled",
+  "description": "Invalid v1 config: harm hard constraints disabled.",
+  "seed": 2901,
+  "maxTicks": 1,
+  "config": {
+    "safetyGateEnabled": true,
+    "hardSafetyConstraints": true,
+    "harmHardConstraints": false,
+    "harmGateNeuronPresent": true
+  },
+  "map": [
+    "###",
+    "#A#",
+    "###"
+  ]
+}

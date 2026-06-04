@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SCENARIO_ID="${1:-owner_task_inspection}"
+SCENARIO_ID="${1:-baseline_foraging}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
 OUTPUT_DIR="${2:-$ROOT_DIR/target/jneopallium-autonomous-mind}"
@@ -29,4 +29,4 @@ esac
 java -cp "$WORKER_JAR$PATH_SEPARATOR$DEPS" "$LAUNCHER" "$SCENARIO_ID" --output "$OUTPUT_DIR"
 
 echo "AutonomousMind manifest: $OUTPUT_DIR/$SCENARIO_ID/manifest.json"
-echo "AutonomousMind report:   $OUTPUT_DIR/$SCENARIO_ID/report.json"
+echo "AutonomousMind safety:   $OUTPUT_DIR/$SCENARIO_ID/safety_summary.json"

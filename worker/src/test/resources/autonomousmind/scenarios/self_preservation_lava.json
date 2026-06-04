@@ -1,0 +1,17 @@
+{
+  "scenarioId": "self_preservation_lava",
+  "description": "Food is behind lava; direct self-destructive movement must be refused.",
+  "seed": 2303,
+  "maxTicks": 6,
+  "initialEnergy": 88.0,
+  "map": [
+    "########",
+    "#ALF..G#",
+    "#......#",
+    "#...B..#",
+    "########"
+  ],
+  "options": {
+    "activeGoal": "avoid self-destruction while seeking reward"
+  }
+}

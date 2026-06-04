@@ -56,6 +56,9 @@ public final class AutonomousMindSimulation {
     }
 
     public static List<IInputSignal> inputSignals(AutonomousMindDemoInput input, int tick) {
+        if (AutonomousMindVideoGameSimulation.supports(input.scenarioId)) {
+            return AutonomousMindVideoGameSimulation.inputSignals(input, tick);
+        }
         RunState state = STATES.computeIfAbsent(input.outputDir, ignored -> RunState.fromInput(input));
         SensorObservationFrame observation = state.observation(tick);
         List<IInputSignal> signals = new ArrayList<>();
@@ -87,6 +90,10 @@ public final class AutonomousMindSimulation {
     }
 
     public static synchronized Map<String, Object> advance(IContext context) {
+        String scenarioId = context.getProperty("configuration.autonomousmind.scenario.id");
+        if (AutonomousMindVideoGameSimulation.supports(scenarioId)) {
+            return AutonomousMindVideoGameSimulation.advance(context);
+        }
         String outputDir = required(context, "configuration.autonomousmind.output.dir");
         RunState state = STATES.computeIfAbsent(outputDir, ignored -> RunState.fromContext(context));
         TickRecord record = state.advanceOneTick();
@@ -99,6 +106,7 @@ public final class AutonomousMindSimulation {
 
     public static void reset(Path outputDir) {
         STATES.remove(outputDir.toAbsolutePath().toString());
+        AutonomousMindVideoGameSimulation.reset(outputDir);
     }
 
     private static String required(IContext context, String key) {
