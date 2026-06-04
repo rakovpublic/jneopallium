@@ -27,19 +27,20 @@ Published in the *International Journal of Science and Research (IJSR)*, Vol. 13
    - [Clone & Build](#clone--build)
    - [Using as a Dependency](#using-as-a-dependency)
    - [Running](#running)
-6. [Modelling Process](#modelling-process)
-7. [Signal Processing Frequency](#signal-processing-frequency)
-8. [Deployment Modes](#deployment-modes)
-9. [Bridge Framework](#bridge-framework)
-10. [Autonomous AI Architecture](#autonomous-ai-architecture)
-11. [LLM Knowledge-Base Integration](#llm-knowledge-base-integration)
-12. [Applications](#applications)
-13. [Comparison with Other Frameworks](#comparison-with-other-frameworks)
-14. [Roadmap](#roadmap)
-15. [Contributing](#contributing)
-16. [Citation](#citation)
-17. [License](#license)
-18. [Contact & Acknowledgements](#contact--acknowledgements)
+6. [Demos](#demos)
+7. [Modelling Process](#modelling-process)
+8. [Signal Processing Frequency](#signal-processing-frequency)
+9. [Deployment Modes](#deployment-modes)
+10. [Bridge Framework](#bridge-framework)
+11. [Autonomous AI Architecture](#autonomous-ai-architecture)
+12. [LLM Knowledge-Base Integration](#llm-knowledge-base-integration)
+13. [Applications](#applications)
+14. [Comparison with Other Frameworks](#comparison-with-other-frameworks)
+15. [Roadmap](#roadmap)
+16. [Contributing](#contributing)
+17. [Citation](#citation)
+18. [License](#license)
+19. [Contact & Acknowledgements](#contact--acknowledgements)
 
 ---
 
@@ -177,6 +178,38 @@ A complete walkthrough — 4 signal types, 3 neuron types, full config — lives
 - [Structural logic](https://github.com/rakovpublic/jneopallium/tree/test/alfaTestAndGettingStarted/worker/src/main/java/com/rakovpublic/jneuropallium/worker/test/definitions/structurallogic)
 - [I/O logic](https://github.com/rakovpublic/jneopallium/tree/test/alfaTestAndGettingStarted/worker/src/main/java/com/rakovpublic/jneuropallium/worker/test/definitions/ioutils)
 - [Configuration files](https://github.com/rakovpublic/jneopallium/tree/test/alfaTestAndGettingStarted/worker/src/main/resources)
+
+## Demos
+
+Runnable demos live under `scripts/` and write generated evidence under `target/`. The full-run demos launch through the real worker entrypoint:
+
+```text
+com.rakovpublic.jneuropallium.worker.application.Entry local <model-jar-url> <context-class> <context-json-or-path>
+```
+
+| Demo | What it shows | Run |
+| ---- | ------------- | --- |
+| [AutonomousMind v1 Video-Game AI](docs/demo-autonomous-mind.md) | Flagship SIM-ONLY autonomous cognitive agent in a deterministic gridworld. Demonstrates typed sensory/body signals, feature extraction, attention, working memory, prediction, self model, memory, neuromodulation, planning, social/bystander reasoning, pre-execution harm veto, action selection, loop prevention, mock LLM fallback, deterministic traces, and transparent JSONL logs. | `scripts/demo-autonomous-mind/run_demo.sh baseline_foraging` or `scripts/demo-autonomous-mind/run_demo.ps1 baseline_foraging` |
+| [Autonomous AI Gridworld](docs/demo-autonomous-ai-gridworld.md) | SIM-ONLY autonomous gridworld agent focused on perception, planning, competitive action selection, harm discrimination, learning, loop prevention, and safety summaries. | `scripts/demo-autonomous-ai/run_demo.sh baseline_foraging` or `scripts/demo-autonomous-ai/run_demo.ps1 baseline_foraging` |
+| [Full-Run Demo Suite](docs/demo-fullrun/README.md) | Nine application-style local demos for industrial control, pump maintenance, drone mission guard, clinical FHIR advisory, DICOM context, cybersecurity triage, observability export, adaptive tutoring, and Nengo interoperability. | `scripts/demo-fullrun/run_all_fullrun_demos.sh` or `scripts/demo-fullrun/run_all_fullrun_demos.ps1` |
+
+AutonomousMind v1 is the current flagship demo. To run every AutonomousMind scenario:
+
+```bash
+scripts/demo-autonomous-mind/run_all_scenarios.sh
+```
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/demo-autonomous-mind/run_all_scenarios.ps1
+```
+
+Outputs for AutonomousMind are written to:
+
+```text
+target/jneopallium-autonomous-mind/<scenario>/
+```
+
+Start with `manifest.json`, then inspect `results.jsonl`, `transparency.jsonl`, `world_trace.jsonl`, `safety_summary.json`, `loop_interventions.jsonl`, `memory_events.jsonl`, and `optional_llm_advisory.jsonl`. A focused implementation report is available at [docs/demo-autonomous-mind-report.md](docs/demo-autonomous-mind-report.md).
 
 ## Modelling Process
 
