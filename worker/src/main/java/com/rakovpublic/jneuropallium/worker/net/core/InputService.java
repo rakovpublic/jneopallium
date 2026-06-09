@@ -52,9 +52,10 @@ public class InputService implements IInputService {
     private final HashMap<Long, HashMap<Integer, List<IResultNeuron>>> results;
     private Long nodeTimeOut;
     private final ResultLayerHolder resultLayerHolder;
+    private Long runOnceIn = 0l;
 
 
-    public InputService(ISignalsPersistStorage signalsPersist, ILayersMeta layersMeta, ISplitInput splitInput, Integer partitions, IInputLoadingStrategy runningStrategy, ISignalHistoryStorage signalHistoryStorage, IResultLayerRunner resultLayerRunner, HashMap<String, IInputLoadingStrategy> discriminatorsLoadingStrategies, HashMap<String, ISignalsPersistStorage> discriminatorsSignalStorage, HashMap<String, ISignalHistoryStorage> discriminatorsSignalStorageHistory, HashMap<String, HashMap<IInitInput, InputStatusMeta>> inputDiscriminatorStatuses, ISplitInput discriminatorSplitInput, Long nodeTimeOut, ResultLayerHolder resultLayerHolder) {
+    public InputService(Long runOnceIn, ISignalsPersistStorage signalsPersist, ILayersMeta layersMeta, ISplitInput splitInput, Integer partitions, IInputLoadingStrategy runningStrategy, ISignalHistoryStorage signalHistoryStorage, IResultLayerRunner resultLayerRunner, HashMap<String, IInputLoadingStrategy> discriminatorsLoadingStrategies, HashMap<String, ISignalsPersistStorage> discriminatorsSignalStorage, HashMap<String, ISignalHistoryStorage> discriminatorsSignalStorageHistory, HashMap<String, HashMap<IInitInput, InputStatusMeta>> inputDiscriminatorStatuses, ISplitInput discriminatorSplitInput, Long nodeTimeOut, ResultLayerHolder resultLayerHolder) {
         this.signalsPersist = signalsPersist;
         this.layersMeta = layersMeta;
         this.inputDiscriminatorStatuses = inputDiscriminatorStatuses;
@@ -78,6 +79,7 @@ public class InputService implements IInputService {
         this.discriminatorsSignalStorageHistory = discriminatorsSignalStorageHistory;
         this.results = new HashMap<>();
         this.resultLayerHolder = resultLayerHolder;
+        this.runOnceIn =runOnceIn;
     }
 
 
@@ -185,6 +187,13 @@ public class InputService implements IInputService {
             nodeMetas.get(name).setStatus(false);
             nodeMetas.get(name).setTimestamp(System.currentTimeMillis());
         } else {
+            if(runOnceIn > 0){
+                try {
+                    Thread.sleep(runOnceIn);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
             prepareInputs();
             if (preparedInputs.size() > 0) {
                 res = preparedInputs.get(0);

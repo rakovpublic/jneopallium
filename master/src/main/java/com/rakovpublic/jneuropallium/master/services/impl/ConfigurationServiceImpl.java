@@ -261,7 +261,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
         } catch (NullPointerException e) {
             logger.error("Wrong configuration for ISplitInput " + configuration.toString());
         }
-        inputService = new InputService(signalsPersist, layersMeta, splitInput, partitions, runningStrategy, signalHistoryStorage, resultLayerRunner, discriminatorsLoadingStrategies, discriminatorsSignalStorage, discriminatorsSignalStorageHistory, inputDiscriminatorStatuses, discriminatorSplitInput, configuration.getNodeTimeout(), resultLayerHolder);
+        inputService = new InputService(configuration.getRunOnceIn(),signalsPersist, layersMeta, splitInput, partitions, runningStrategy, signalHistoryStorage, resultLayerRunner, discriminatorsLoadingStrategies, discriminatorsSignalStorage, discriminatorsSignalStorageHistory, inputDiscriminatorStatuses, discriminatorSplitInput, configuration.getNodeTimeout(), resultLayerHolder);
         inputService.updateDiscriminators(discriminatorsLayers);
     }
 

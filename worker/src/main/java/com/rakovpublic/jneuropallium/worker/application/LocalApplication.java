@@ -54,6 +54,7 @@ public class LocalApplication implements IApplication {
         Integer historySlow = Integer.parseInt(context.getProperty("configuration.history.slow.runs"));
         Long historyFast = Long.parseLong(context.getProperty("configuration.history.fast.runs"));
         Integer fastSlowRatio = Integer.parseInt(context.getProperty("configuration.slowfast.ratio"));
+        Long runOnceIn = Long.parseLong(context.getProperty("configuration.runoncein")!=null?context.getProperty("configuration.runoncein"):"0");
         ILayersMeta layersMeta = new FileLayersMeta<>(fs.getItem(layerPath), fs);
         HashMap<String, LinkedHashMap<String, String>> processingFrequencyJSONMap = new HashMap<>();
         HashMap<String, ProcessingFrequency> processingFrequencyMap = new HashMap<>();
@@ -91,6 +92,13 @@ public class LocalApplication implements IApplication {
             logger.error("cannot create output aggregator object", e);
         }
         for (; currentRun < maxRun || isInfinite; currentRun++) {
+            if(runOnceIn>0l){
+                try {
+                    Thread.sleep(runOnceIn);
+                } catch (InterruptedException e) {
+                    logger.error("thread error", e);
+                }
+            }
 
             HashMap<String, List<IResultSignal>> desiredResult = inputResolver.getDesiredResult();
             if (isTeacherStudying && desiredResult != null) {

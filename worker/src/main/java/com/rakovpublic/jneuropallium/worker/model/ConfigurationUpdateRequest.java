@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ConfigurationUpdateRequest {
+    private Long runOnceIn =0l;
     private String layersMetaJson;
     private String layersMetaClass;
     private String splitInputClass;
@@ -37,7 +38,7 @@ public class ConfigurationUpdateRequest {
     private HashMap<String, ConfigurationRecord> discriminatorsInitStrategyInputsCallback;
 
 
-    public ConfigurationUpdateRequest(String layersMetaJson, String layersMetaClass, String splitInputClass, String splitInputJson, String inputLoadingStrategyClass, String inputLoadingStrategyJson, Integer partitions, Integer defaultLoopsCount, String signalsPersistClass, String signalsPersistJson, String historyClass, String historyJson, Long iterationsToStore, Integer loopsToStore, String resultRunnerClass, String resultRunnerJson, String reconnectStrategyClass, String reconnectStrategyJson, String resultInterpreterClass, String resultInterpreterJson, List<String> discriminators, HashMap<String, ConfigurationRecord> discriminatorsLoadingStrategies, HashMap<String, ConfigurationRecord> discriminatorsSignalStorage, HashMap<String, ConfigurationRecord> discriminatorsSignalStorageHistory, HashMap<String, ConfigurationRecord> inputDiscriminatorStatuses, HashMap<String, ConfigurationRecord> discriminatorsLayers, String discriminatorSplitInput, String discriminatorSplitInputJson, HashMap<String, ConfigurationRecord> discriminatorsInitStrategySource, HashMap<String, ConfigurationRecord> discriminatorsInitStrategyInputs, HashMap<String, ConfigurationRecord> discriminatorsInitStrategyInputsCallback, String layersMetaPath, Long nodeTimeout) {
+    public ConfigurationUpdateRequest(Long runOnceIn ,String layersMetaJson, String layersMetaClass, String splitInputClass, String splitInputJson, String inputLoadingStrategyClass, String inputLoadingStrategyJson, Integer partitions, Integer defaultLoopsCount, String signalsPersistClass, String signalsPersistJson, String historyClass, String historyJson, Long iterationsToStore, Integer loopsToStore, String resultRunnerClass, String resultRunnerJson, String reconnectStrategyClass, String reconnectStrategyJson, String resultInterpreterClass, String resultInterpreterJson, List<String> discriminators, HashMap<String, ConfigurationRecord> discriminatorsLoadingStrategies, HashMap<String, ConfigurationRecord> discriminatorsSignalStorage, HashMap<String, ConfigurationRecord> discriminatorsSignalStorageHistory, HashMap<String, ConfigurationRecord> inputDiscriminatorStatuses, HashMap<String, ConfigurationRecord> discriminatorsLayers, String discriminatorSplitInput, String discriminatorSplitInputJson, HashMap<String, ConfigurationRecord> discriminatorsInitStrategySource, HashMap<String, ConfigurationRecord> discriminatorsInitStrategyInputs, HashMap<String, ConfigurationRecord> discriminatorsInitStrategyInputsCallback, String layersMetaPath, Long nodeTimeout) {
         this.layersMetaJson = layersMetaJson;
         this.layersMetaClass = layersMetaClass;
         this.splitInputClass = splitInputClass;
@@ -71,6 +72,15 @@ public class ConfigurationUpdateRequest {
         this.discriminatorsInitStrategyInputsCallback = discriminatorsInitStrategyInputsCallback;
         this.layersMetaPath = layersMetaPath;
         this.nodeTimeout = nodeTimeout;
+        this.runOnceIn = runOnceIn;
+    }
+
+    public Long getRunOnceIn() {
+        return runOnceIn;
+    }
+
+    public void setRunOnceIn(Long runOnceIn) {
+        this.runOnceIn = runOnceIn;
     }
 
     public String getResultInterpreterClass() {

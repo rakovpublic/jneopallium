@@ -282,8 +282,8 @@ public class GRPCServerApplication implements IApplication {
         } catch (NullPointerException e) {
             logger.error("Wrong configuration for ISplitInput ");
         }
-        inputService = new InputService(signalsPersist, layersMeta, splitInput, partitions, runningStrategy, signalHistoryStorage, resultLayerRunner, discriminatorsLoadingStrategies, discriminatorsSignalStorage, discriminatorsSignalStorageHistory, inputDiscriminatorStatuses, discriminatorSplitInput, Long.parseLong(context.getProperty("nodeTimeout")), resultLayerHolder);
-        inputService.updateDiscriminators(discriminatorsLayers);
+        Long runOnceIn = Long.parseLong(context.getProperty("configuration.runoncein")!=null?context.getProperty("configuration.runoncein"):"0");
+        inputService = new InputService(runOnceIn,signalsPersist, layersMeta, splitInput, partitions, runningStrategy, signalHistoryStorage, resultLayerRunner, discriminatorsLoadingStrategies, discriminatorsSignalStorage, discriminatorsSignalStorageHistory, inputDiscriminatorStatuses, discriminatorSplitInput, Long.parseLong(context.getProperty("nodeTimeout")), resultLayerHolder);
         return inputService;
     }
 
