@@ -1,0 +1,13 @@
+name: "pump-wear"
+durationSeconds: 140
+controllerMode: "AUTONOMOUS"
+initial:
+  processLoadFlow: 0.45
+  faultPumpWear: 0.05
+events:
+  - at: 50
+    set:
+      faultPumpWear: 0.45
+  - at: 95
+    set:
+      faultPumpWear: 0.75

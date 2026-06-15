@@ -1,0 +1,10 @@
+name: "load-disturbance"
+durationSeconds: 180
+controllerMode: "AUTONOMOUS"
+initial:
+  processLoadFlow: 0.35
+  ambientTemperature: 23.0
+events:
+  - at: 70
+    set:
+      processLoadFlow: 0.85

@@ -1,0 +1,14 @@
+name: "operator-override"
+durationSeconds: 120
+controllerMode: "AUTONOMOUS"
+initial:
+  processLoadFlow: 0.45
+events:
+  - at: 45
+    opcua:
+      Skid.Operator.ManualMode: true
+      Skid.Operator.ManualValveCommand: 40.0
+      Skid.Operator.ManualPumpCommand: 50.0
+  - at: 85
+    opcua:
+      Skid.Operator.ManualMode: false

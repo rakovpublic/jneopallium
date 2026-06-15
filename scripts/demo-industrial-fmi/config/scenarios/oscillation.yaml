@@ -1,0 +1,12 @@
+name: "oscillation"
+durationSeconds: 160
+controllerMode: "AUTONOMOUS"
+initial:
+  processLoadFlow: 0.45
+events:
+  - at: 60
+    set:
+      processLoadFlow: 0.95
+  - at: 110
+    set:
+      processLoadFlow: 0.45

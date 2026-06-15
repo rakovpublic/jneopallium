@@ -1,0 +1,100 @@
+connection:
+  endpointUrl: "opc.tcp://127.0.0.1:4840/jneopallium/skid/"
+  applicationName: "Jneopallium-Industrial-FMI-Demo"
+  applicationUri: "urn:jneopallium:industrial-fmi-demo"
+  requestTimeout: "PT5S"
+  sessionTimeout: "PT2M"
+  keepAliveFailuresAllowed: 3
+security:
+  policy: "NONE"
+  mode: "NONE"
+  auth:
+    type: "Anonymous"
+reads:
+  - loopId: "TIC-101"
+    nodeId: "ns=2;s=Skid.TIC101.PV"
+    signalTag: "SKID.TIC101.PV"
+    direction: "READ"
+  - loopId: "TIC-101"
+    nodeId: "ns=2;s=Skid.TIC101.SP"
+    signalTag: "SKID.TIC101.SP"
+    direction: "READ"
+  - loopId: "FIC-101"
+    nodeId: "ns=2;s=Skid.FIC101.PV"
+    signalTag: "SKID.FIC101.PV"
+    direction: "READ"
+  - loopId: "FIC-101"
+    nodeId: "ns=2;s=Skid.P101.SpeedPV"
+    signalTag: "SKID.P101.SPEED.PV"
+    direction: "READ"
+  - loopId: "TIC-101-COOLING"
+    nodeId: "ns=2;s=Skid.CV101.PositionPV"
+    signalTag: "SKID.CV101.POSITION.PV"
+    direction: "READ"
+  - loopId: "TIC-101-HEATER"
+    nodeId: "ns=2;s=Skid.HTR101.PowerPV"
+    signalTag: "SKID.HTR101.POWER.PV"
+    direction: "READ"
+  - loopId: "SKID-SUCTION"
+    nodeId: "ns=2;s=Skid.SuctionPressure"
+    signalTag: "SKID.SUCTION.PRESSURE"
+    direction: "READ"
+  - loopId: "SKID-INTERLOCK"
+    nodeId: "ns=2;s=Skid.Interlock.HighTemperature"
+    signalTag: "SKID.INTERLOCK.HIGH_TEMP"
+    direction: "READ"
+  - loopId: "SKID-INTERLOCK"
+    nodeId: "ns=2;s=Skid.Interlock.LowFlow"
+    signalTag: "SKID.INTERLOCK.LOW_FLOW"
+    direction: "READ"
+  - loopId: "SKID-INTERLOCK"
+    nodeId: "ns=2;s=Skid.Interlock.LowSuctionPressure"
+    signalTag: "SKID.INTERLOCK.LOW_SUCTION"
+    direction: "READ"
+  - loopId: "SKID-OPERATOR"
+    nodeId: "ns=2;s=Skid.Operator.ManualMode"
+    signalTag: "SKID.OPERATOR.MANUAL_MODE"
+    direction: "READ"
+  - loopId: "SKID-OPERATOR"
+    nodeId: "ns=2;s=Skid.Operator.ManualValveCommand"
+    signalTag: "SKID.OPERATOR.MANUAL_VALVE"
+    direction: "READ"
+  - loopId: "SKID-OPERATOR"
+    nodeId: "ns=2;s=Skid.Operator.ManualPumpCommand"
+    signalTag: "SKID.OPERATOR.MANUAL_PUMP"
+    direction: "READ"
+writes:
+  - loopId: "TIC-101-COOLING"
+    nodeId: "ns=2;s=Skid.CV101.PositionCMD"
+    signalTag: "SKID.CV101.CMD"
+    direction: "WRITE"
+    minClampValue: 0.0
+    maxClampValue: 100.0
+    rampRateMaxPerSec: 15.0
+    failSafeValue: 100.0
+  - loopId: "FIC-101-PUMP"
+    nodeId: "ns=2;s=Skid.P101.SpeedSP"
+    signalTag: "SKID.P101.SPEED.SP"
+    direction: "WRITE"
+    minClampValue: 20.0
+    maxClampValue: 100.0
+    rampRateMaxPerSec: 10.0
+    failSafeValue: 30.0
+  - loopId: "TIC-101-HEATER"
+    nodeId: "ns=2;s=Skid.HTR101.PowerCMD"
+    signalTag: "SKID.HTR101.POWER.CMD"
+    direction: "WRITE"
+    minClampValue: 0.0
+    maxClampValue: 100.0
+    rampRateMaxPerSec: 20.0
+    failSafeValue: 0.0
+alarms: []
+audit:
+  localAuditFile: "target/jneopallium-industrial-fmi/opcua_audit.jsonl"
+  opcUaAuditNodeId:
+  writeRejectedToAudit: true
+perLoopSafetyMode:
+  TIC-101-COOLING: "SHADOW"
+  FIC-101-PUMP: "SHADOW"
+  TIC-101-HEATER: "SHADOW"
+tickInterval: "PT0.1S"

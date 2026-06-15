@@ -1,0 +1,12 @@
+name: "normal"
+durationSeconds: 180
+controllerMode: "AUTONOMOUS"
+initial:
+  coolingValveCmd: 35.0
+  pumpSpeedCmd: 45.0
+  heaterPowerCmd: 35.0
+  processLoadFlow: 0.45
+  ambientTemperature: 23.0
+  faultPumpWear: 0.0
+  faultTempSensorDrift: 0.0
+events: []

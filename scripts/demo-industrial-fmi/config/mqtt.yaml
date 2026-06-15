@@ -1,0 +1,65 @@
+connection:
+  brokerUrl: "mqtt://127.0.0.1:1883"
+  clientId: "jneopallium-industrial-fmi"
+  cleanSession: true
+  keepAlive: "PT30S"
+  advisoryQueueSize: 1000
+security:
+  type: "None"
+sparkplug:
+  enabled: false
+  groupId: "Jneopallium"
+  edgeNodeId: "industrial-fmi"
+  advisoryNamespace: "advisory"
+reads:
+  - bindingId: "P101-VIBRATION"
+    plainMqttTopic: "jneopallium/demo/skid/P101/vibration"
+    jsonPath: "$.value"
+    signalTag: "SKID.P101.VIBRATION"
+    signalKind: "MEASUREMENT"
+  - bindingId: "P101-BEARING-TEMP"
+    plainMqttTopic: "jneopallium/demo/skid/P101/bearing-temperature"
+    jsonPath: "$.value"
+    signalTag: "SKID.P101.BEARING_TEMP"
+    signalKind: "MEASUREMENT"
+  - bindingId: "P101-POWER-KW"
+    plainMqttTopic: "jneopallium/demo/skid/P101/power-kw"
+    jsonPath: "$.value"
+    signalTag: "SKID.P101.POWER_KW"
+    signalKind: "MEASUREMENT"
+writes:
+  - bindingId: "ADVISORY-PUMP-SPEED"
+    advisoryTopic: "jneopallium/demo/skid/advisory/recommended-pump-speed"
+    signalTag: "SKID.ADVISORY.PUMP_SPEED"
+    minClampValue: 20.0
+    maxClampValue: 100.0
+    qos: 1
+  - bindingId: "ADVISORY-MAINTENANCE"
+    advisoryTopic: "jneopallium/demo/skid/advisory/maintenance-priority"
+    signalTag: "SKID.ADVISORY.MAINTENANCE_PRIORITY"
+    minClampValue: 0.0
+    maxClampValue: 100.0
+    qos: 1
+  - bindingId: "ADVISORY-BEARING-RISK"
+    advisoryTopic: "jneopallium/demo/skid/advisory/predicted-bearing-risk"
+    signalTag: "SKID.ADVISORY.BEARING_RISK"
+    minClampValue: 0.0
+    maxClampValue: 1.0
+    qos: 1
+  - bindingId: "ADVISORY-ENERGY-MODE"
+    advisoryTopic: "jneopallium/demo/skid/advisory/energy-mode"
+    signalTag: "SKID.ADVISORY.ENERGY_MODE"
+    minClampValue: 0.0
+    maxClampValue: 1.0
+    qos: 1
+audit:
+  localAuditFile: "target/jneopallium-industrial-fmi/mqtt_audit.jsonl"
+  mqttAuditTopic: "jneopallium/demo/skid/audit"
+  mqttAuditQos: 1
+perTagSafetyMode:
+  ADVISORY-PUMP-SPEED: "ADVISORY"
+  ADVISORY-MAINTENANCE: "ADVISORY"
+  ADVISORY-BEARING-RISK: "ADVISORY"
+  ADVISORY-ENERGY-MODE: "ADVISORY"
+severityMap: {}
+tickInterval: "PT1S"

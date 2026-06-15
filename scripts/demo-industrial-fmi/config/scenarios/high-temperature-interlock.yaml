@@ -1,0 +1,20 @@
+name: "high-temperature-interlock"
+durationSeconds: 50
+controllerMode: "AUTONOMOUS"
+initial:
+  processLoadFlow: 0.9
+  heaterPowerCmd: 100.0
+  faultThermalRunawayKw: 0.0
+events:
+  - at: 12
+    set:
+      processLoadFlow: 1.0
+      ambientTemperature: 40.0
+      faultThermalRunawayKw: 600.0
+  - at: 18
+    opcua:
+      Skid.Operator.ManualMode: true
+      Skid.Operator.ManualValveCommand: 5.0
+  - at: 22
+    set:
+      faultThermalRunawayKw: 0.0

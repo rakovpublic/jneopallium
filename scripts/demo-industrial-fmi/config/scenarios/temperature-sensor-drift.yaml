@@ -1,0 +1,13 @@
+name: "temperature-sensor-drift"
+durationSeconds: 140
+controllerMode: "AUTONOMOUS"
+initial:
+  processLoadFlow: 0.45
+  faultTempSensorDrift: 0.0
+events:
+  - at: 50
+    set:
+      faultTempSensorDrift: 2.0
+  - at: 95
+    set:
+      faultTempSensorDrift: 7.0

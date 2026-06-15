@@ -1,0 +1,17 @@
+temperatureSetpoint: 70.0
+minimumFlow: 0.42
+highTemperatureTrip: 92.0
+lowFlowTrip: 0.23
+lowSuctionTrip: 0.42
+coolingBase: 35.0
+coolingKp: 3.3
+coolingKi: 0.18
+pumpBase: 45.0
+pumpKp: 95.0
+heaterBase: 32.0
+heaterKp: 4.0
+oscillationSeverityThreshold: 0.62
+oscillationGainScale: 0.55
+slowLoopPumpAdjustmentLimit: 8.0
+fastLoopSeconds: 0.1
+slowLoopSeconds: 1.0

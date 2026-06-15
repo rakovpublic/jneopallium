@@ -1,0 +1,10 @@
+name: "mqtt-outage"
+durationSeconds: 120
+controllerMode: "AUTONOMOUS"
+initial:
+  processLoadFlow: 0.45
+events:
+  - at: 45
+    mqttAvailable: false
+  - at: 85
+    mqttAvailable: true
