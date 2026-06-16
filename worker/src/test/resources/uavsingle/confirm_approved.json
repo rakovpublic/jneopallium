@@ -1,0 +1,25 @@
+{
+  "scenarioId": "confirm_approved",
+  "mode": "TARGET_CONFIRM",
+  "seed": 24703042047,
+  "initialPose": { "x": 0.0, "y": 0.0, "altitudeMeters": 35.0, "yawDegrees": 0.0, "batteryFraction": 0.9, "localizationConfidence": 0.95 },
+  "initialTargets": [
+    {
+      "targetId": "target-confirm",
+      "classification": "COMMUNICATION_TOWER",
+      "x": 110.0,
+      "y": 10.0,
+      "missionRelevance": 0.9,
+      "confidence": 0.88,
+      "urgency": 0.70,
+      "informationValue": 0.86,
+      "communicationValue": 0.91,
+      "safetyRisk": 0.11,
+      "visibility": 0.9
+    }
+  ],
+  "confirmationEvents": [
+    { "tick": 5, "decision": "APPROVE" }
+  ]
+}
+

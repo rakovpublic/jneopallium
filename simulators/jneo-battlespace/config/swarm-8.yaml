@@ -1,0 +1,17 @@
+scenarioId: live_swarm_relay_failure
+world: swarm-relay.sdf
+vehicles:
+  count: 8
+  roles:
+    uav-1: SCOUT
+    uav-2: RETRANSLATOR
+    uav-3: BATTLE_PHOTOGRAPHER
+    uav-4: RETRANSLATOR
+    uav-5: RETRANSLATOR
+    uav-6: OBSERVER
+    uav-7: OBSERVER
+    uav-8: OBSERVER
+radio:
+  relayFailure: true
+  replacementRelayRequired: true
+

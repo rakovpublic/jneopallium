@@ -2,6 +2,17 @@
 target/
 **/target/
 
+# JNeoBattlespace generated outputs
+simulators/jneo-battlespace/build/
+simulators/jneo-battlespace/logs/
+simulators/jneo-battlespace/.cache/
+simulators/jneo-battlespace/**/*.bag
+simulators/jneo-battlespace/**/*.bag2
+simulators/jneo-battlespace/**/*.mp4
+simulators/jneo-battlespace/**/*.mkv
+__pycache__/
+*.pyc
+
 # IDE files
 .idea/
 *.iml

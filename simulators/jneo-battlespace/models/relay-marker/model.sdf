@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<sdf version="1.10">
+  <model name="relay-marker">
+    <static>true</static>
+    <link name="marker">
+      <visual name="marker_visual">
+        <geometry>
+          <cylinder>
+            <radius>0.6</radius>
+            <length>0.05</length>
+          </cylinder>
+        </geometry>
+        <material>
+          <ambient>0.1 0.35 0.95 1</ambient>
+          <diffuse>0.1 0.35 0.95 1</diffuse>
+        </material>
+      </visual>
+    </link>
+  </model>
+</sdf>
+

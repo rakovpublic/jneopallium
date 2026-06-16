@@ -1,0 +1,27 @@
+{
+  "scenarioId": "duplicate_confirmation",
+  "mode": "TARGET_CONFIRM",
+  "seed": 24703042047,
+  "initialPose": { "x": 0.0, "y": 0.0, "altitudeMeters": 35.0, "yawDegrees": 0.0, "batteryFraction": 0.9, "localizationConfidence": 0.95 },
+  "initialTargets": [
+    {
+      "targetId": "target-duplicate-confirm",
+      "classification": "OPERATOR_POINT",
+      "x": 110.0,
+      "y": 5.0,
+      "missionRelevance": 0.88,
+      "confidence": 0.84,
+      "urgency": 0.72,
+      "informationValue": 0.76,
+      "communicationValue": 0.66,
+      "safetyRisk": 0.1,
+      "visibility": 0.9
+    }
+  ],
+  "confirmationEvents": [
+    { "tick": 5, "decision": "APPROVE" },
+    { "tick": 6, "decision": "APPROVE" }
+  ],
+  "faults": { "duplicateConfirmation": true }
+}
+

@@ -1,0 +1,23 @@
+{
+  "scenarioId": "low_battery_rth",
+  "mode": "FULLY_AUTONOMOUS",
+  "seed": 24703042047,
+  "initialPose": { "x": 0.0, "y": 0.0, "altitudeMeters": 35.0, "yawDegrees": 0.0, "batteryFraction": 0.17, "localizationConfidence": 0.95 },
+  "initialTargets": [
+    {
+      "targetId": "target-low-battery",
+      "classification": "DAMAGED_INFRASTRUCTURE",
+      "x": 90.0,
+      "y": 10.0,
+      "missionRelevance": 0.9,
+      "confidence": 0.86,
+      "urgency": 0.8,
+      "informationValue": 0.8,
+      "communicationValue": 0.6,
+      "safetyRisk": 0.1,
+      "visibility": 0.9
+    }
+  ],
+  "faults": { "lowBattery": true }
+}
+

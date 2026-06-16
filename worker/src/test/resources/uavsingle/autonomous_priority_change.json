@@ -1,0 +1,39 @@
+{
+  "scenarioId": "autonomous_priority_change",
+  "mode": "FULLY_AUTONOMOUS",
+  "seed": 24703042047,
+  "initialPose": { "x": 0.0, "y": 0.0, "altitudeMeters": 35.0, "yawDegrees": 0.0, "batteryFraction": 0.91, "localizationConfidence": 0.95 },
+  "initialTargets": [
+    {
+      "targetId": "target-initial",
+      "classification": "UNKNOWN_OBJECT",
+      "x": 80.0,
+      "y": 12.0,
+      "missionRelevance": 0.62,
+      "confidence": 0.75,
+      "urgency": 0.48,
+      "informationValue": 0.55,
+      "communicationValue": 0.42,
+      "safetyRisk": 0.10,
+      "visibility": 0.87
+    }
+  ],
+  "targetEvents": [
+    {
+      "tick": 3,
+      "target": {
+        "targetId": "target-new-priority",
+        "classification": "WILDFIRE_HOTSPOT",
+        "x": 130.0,
+        "y": -15.0,
+        "missionRelevance": 1.0,
+        "confidence": 0.92,
+        "urgency": 0.96,
+        "informationValue": 0.89,
+        "communicationValue": 0.82,
+        "safetyRisk": 0.12,
+        "visibility": 0.89
+      }
+    }
+  ]
+}

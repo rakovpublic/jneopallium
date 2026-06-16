@@ -1,0 +1,15 @@
+scenarioId: live_swarm_three_uav
+world: swarm-relay.sdf
+vehicles:
+  count: 3
+  roles:
+    uav-1: SCOUT
+    uav-2: RETRANSLATOR
+    uav-3: BATTLE_PHOTOGRAPHER
+radio:
+  rangeMeters: 260.0
+  packetLoss: scenario-controlled
+  directScoutToPhotographer: false
+relayPaths:
+  - [uav-1, uav-2, uav-3]
+

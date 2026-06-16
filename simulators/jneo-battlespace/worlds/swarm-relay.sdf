@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<sdf version="1.10">
+  <world name="jneo_swarm_relay">
+    <gravity>0 0 -9.80665</gravity>
+    <scene>
+      <ambient>0.42 0.43 0.44 1</ambient>
+      <background>0.70 0.76 0.82 1</background>
+      <shadows>true</shadows>
+    </scene>
+    <wind>
+      <linear_velocity>1.5 0.2 0</linear_velocity>
+    </wind>
+    <model name="terrain">
+      <static>true</static>
+      <link name="ground">
+        <collision name="collision"><geometry><plane><normal>0 0 1</normal><size>800 240</size></plane></geometry></collision>
+        <visual name="visual"><geometry><plane><normal>0 0 1</normal><size>800 240</size></plane></geometry></visual>
+      </link>
+    </model>
+    <model name="relay_occluder">
+      <pose>260 0 18 0 0 0</pose>
+      <static>true</static>
+      <link name="ridge">
+        <collision name="collision"><geometry><box><size>24 120 36</size></box></geometry></collision>
+        <visual name="visual"><geometry><box><size>24 120 36</size></box></geometry></visual>
+      </link>
+    </model>
+    <include><name>uav_1</name><pose>0 0 0.15 0 0 0</pose><uri>model://jneo-fpv-copter</uri></include>
+    <include><name>uav_2</name><pose>180 0 0.15 0 0 0</pose><uri>model://jneo-fpv-copter</uri></include>
+    <include><name>uav_3</name><pose>360 0 0.15 0 0 0</pose><uri>model://jneo-fpv-copter</uri></include>
+    <include><name>target_1</name><pose>430 12 1.0 0 0 3.14159</pose><uri>model://virtual-observation-target</uri></include>
+    <include><name>relay_marker_1</name><pose>180 0 0.03 0 0 0</pose><uri>model://relay-marker</uri></include>
+    <!-- Evaluator-only metadata: target reports must traverse radio events, not ROS/DDS global state. -->
+  </world>
+</sdf>
+

@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<sdf version="1.10">
+  <world name="jneo_urban_observation">
+    <gravity>0 0 -9.80665</gravity>
+    <scene>
+      <ambient>0.38 0.40 0.42 1</ambient>
+      <background>0.68 0.72 0.76 1</background>
+      <shadows>true</shadows>
+    </scene>
+    <physics name="urban_physics" type="ode">
+      <max_step_size>0.004</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+    </physics>
+    <light name="sun_low" type="directional">
+      <diffuse>0.8 0.76 0.65 1</diffuse>
+      <direction>-0.65 0.1 -1</direction>
+    </light>
+    <model name="ground">
+      <static>true</static>
+      <link name="ground_link">
+        <collision name="collision">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>260 260</size>
+            </plane>
+          </geometry>
+        </collision>
+        <visual name="visual">
+          <geometry>
+            <plane>
+              <normal>0 0 1</normal>
+              <size>260 260</size>
+            </plane>
+          </geometry>
+        </visual>
+      </link>
+    </model>
+    <model name="building_block_a">
+      <pose>24 4 5 0 0 0</pose>
+      <static>true</static>
+      <link name="block">
+        <collision name="collision">
+          <geometry><box><size>8 12 10</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>8 12 10</size></box></geometry>
+          <material><ambient>0.36 0.38 0.40 1</ambient><diffuse>0.36 0.38 0.40 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+    <model name="building_block_b">
+      <pose>44 -8 7 0 0 0</pose>
+      <static>true</static>
+      <link name="block">
+        <collision name="collision">
+          <geometry><box><size>10 10 14</size></box></geometry>
+        </collision>
+        <visual name="visual">
+          <geometry><box><size>10 10 14</size></box></geometry>
+          <material><ambient>0.42 0.42 0.39 1</ambient><diffuse>0.42 0.42 0.39 1</diffuse></material>
+        </visual>
+      </link>
+    </model>
+    <include><name>uav_1</name><pose>0 -8 0.15 0 0 0</pose><uri>model://jneo-fpv-copter</uri></include>
+    <include><name>target_1</name><pose>52 8 1.0 0 0 3.14159</pose><uri>model://virtual-observation-target</uri></include>
+    <include><name>decoy_1</name><pose>42 -15 1.0 0 0 3.14159</pose><uri>model://visual-decoy</uri></include>
+    <!-- Evaluator-only metadata: building_block_a occludes target_1 until UAV moves laterally. -->
+  </world>
+</sdf>

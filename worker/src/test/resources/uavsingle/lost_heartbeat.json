@@ -1,0 +1,23 @@
+{
+  "scenarioId": "lost_heartbeat",
+  "mode": "FULLY_AUTONOMOUS",
+  "seed": 24703042047,
+  "initialPose": { "x": 0.0, "y": 0.0, "altitudeMeters": 35.0, "yawDegrees": 0.0, "batteryFraction": 0.9, "localizationConfidence": 0.95 },
+  "initialTargets": [
+    {
+      "targetId": "target-heartbeat",
+      "classification": "EMERGENCY_MARKER",
+      "x": 95.0,
+      "y": 8.0,
+      "missionRelevance": 0.93,
+      "confidence": 0.86,
+      "urgency": 0.84,
+      "informationValue": 0.78,
+      "communicationValue": 0.64,
+      "safetyRisk": 0.1,
+      "visibility": 0.9
+    }
+  ],
+  "faults": { "lostHeartbeat": true }
+}
+

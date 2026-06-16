@@ -1,0 +1,2 @@
+"""JNeoBattlespace evaluator package."""
+

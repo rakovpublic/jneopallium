@@ -1,0 +1,23 @@
+{
+  "scenarioId": "poor_visibility",
+  "mode": "FULLY_AUTONOMOUS",
+  "seed": 24703042047,
+  "initialPose": { "x": 0.0, "y": 0.0, "altitudeMeters": 35.0, "yawDegrees": 0.0, "batteryFraction": 0.9, "localizationConfidence": 0.95 },
+  "initialTargets": [
+    {
+      "targetId": "target-poor-visibility",
+      "classification": "WILDFIRE_HOTSPOT",
+      "x": 115.0,
+      "y": -5.0,
+      "missionRelevance": 0.93,
+      "confidence": 0.86,
+      "urgency": 0.92,
+      "informationValue": 0.82,
+      "communicationValue": 0.66,
+      "safetyRisk": 0.12,
+      "visibility": 0.35
+    }
+  ],
+  "faults": { "poorVisibility": true }
+}
+

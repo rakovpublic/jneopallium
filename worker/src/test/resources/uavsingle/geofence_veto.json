@@ -1,0 +1,57 @@
+{
+  "scenarioId": "geofence_veto",
+  "mode": "FULLY_AUTONOMOUS",
+  "seed": 24703042047,
+  "config": {
+    "schemaVersion": 1,
+    "mode": "FULLY_AUTONOMOUS",
+    "simulatorOnly": true,
+    "missionId": "mission-uav-single",
+    "uavId": "uav-1",
+    "vehicleSystemId": 1,
+    "vehicleAllowlist": [1],
+    "mavlinkEndpoint": "udp://127.0.0.1:14550",
+    "ros2Endpoint": "rosbridge://127.0.0.1:9090",
+    "targetObservationDistanceMeters": 35.0,
+    "prohibitedMinimumTargetDistanceMeters": 20.0,
+    "maximumAltitudeMeters": 120.0,
+    "maximumSpeedMetersPerSecond": 12.0,
+    "batteryReserveFraction": 0.2,
+    "confirmationTimeoutTicks": 4,
+    "photographRetryLimit": 2,
+    "deterministicSeed": 24703042047,
+    "geofence": { "minX": -100.0, "maxX": 100.0, "minY": -100.0, "maxY": 100.0 },
+    "noGoZones": [
+      { "zoneId": "operator-no-go-route", "minX": 140.0, "maxX": 160.0, "minY": -20.0, "maxY": 20.0 }
+    ],
+    "priorityWeights": {
+      "missionRelevance": 0.25,
+      "confidence": 0.2,
+      "urgency": 0.15,
+      "informationValue": 0.1,
+      "proximityBenefit": 0.1,
+      "routeEfficiency": 0.1,
+      "communicationValue": 0.1,
+      "safetyRisk": -0.2,
+      "energyCost": -0.15,
+      "duplicationPenalty": -0.1
+    }
+  },
+  "initialPose": { "x": 0.0, "y": 0.0, "altitudeMeters": 35.0, "yawDegrees": 0.0, "batteryFraction": 0.9, "localizationConfidence": 0.95 },
+  "initialTargets": [
+    {
+      "targetId": "target-outside-geofence",
+      "classification": "BLOCKED_ROAD",
+      "x": 180.0,
+      "y": 0.0,
+      "missionRelevance": 0.95,
+      "confidence": 0.9,
+      "urgency": 0.85,
+      "informationValue": 0.8,
+      "communicationValue": 0.6,
+      "safetyRisk": 0.1,
+      "visibility": 0.9
+    }
+  ],
+  "faults": { "geofenceVeto": true }
+}

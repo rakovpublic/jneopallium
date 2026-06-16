@@ -1,0 +1,2 @@
+"""JNeoBattlespace simulated communication package."""
+

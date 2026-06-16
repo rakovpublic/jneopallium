@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<sdf version="1.10">
+  <model name="jneo-fpv-copter">
+    <pose>0 0 0.15 0 0 0</pose>
+    <link name="base_link">
+      <inertial>
+        <mass>1.45</mass>
+        <inertia>
+          <ixx>0.029</ixx>
+          <iyy>0.029</iyy>
+          <izz>0.055</izz>
+        </inertia>
+      </inertial>
+      <collision name="body_collision">
+        <geometry>
+          <box>
+            <size>0.35 0.22 0.08</size>
+          </box>
+        </geometry>
+      </collision>
+      <visual name="body_visual">
+        <geometry>
+          <box>
+            <size>0.35 0.22 0.08</size>
+          </box>
+        </geometry>
+        <material>
+          <ambient>0.05 0.08 0.10 1</ambient>
+          <diffuse>0.05 0.08 0.10 1</diffuse>
+        </material>
+      </visual>
+      <sensor name="fpv_camera" type="camera">
+        <pose>0.22 0 0.03 0 0 0</pose>
+        <camera>
+          <horizontal_fov>1.22173</horizontal_fov>
+          <image>
+            <width>960</width>
+            <height>540</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.05</near>
+            <far>500</far>
+          </clip>
+        </camera>
+        <always_on>true</always_on>
+        <update_rate>30</update_rate>
+        <topic>fpv/image</topic>
+      </sensor>
+      <sensor name="imu" type="imu">
+        <always_on>true</always_on>
+        <update_rate>200</update_rate>
+        <topic>imu</topic>
+      </sensor>
+      <sensor name="range" type="gpu_lidar">
+        <pose>0.18 0 -0.02 0 0 0</pose>
+        <topic>range/scan</topic>
+        <update_rate>15</update_rate>
+        <lidar>
+          <scan>
+            <horizontal>
+              <samples>64</samples>
+              <min_angle>-0.6</min_angle>
+              <max_angle>0.6</max_angle>
+            </horizontal>
+          </scan>
+          <range>
+            <min>0.2</min>
+            <max>30.0</max>
+          </range>
+        </lidar>
+      </sensor>
+    </link>
+    <plugin filename="ArduPilotPlugin" name="ardupilot_gazebo::ArduPilotPlugin">
+      <fdm_addr>127.0.0.1</fdm_addr>
+      <fdm_port_in>9002</fdm_port_in>
+      <fdm_port_out>9003</fdm_port_out>
+      <modelXYZToAirplaneXForwardZDown>0 0 0 3.141593 0 0</modelXYZToAirplaneXForwardZDown>
+      <gazeboXYZToNED>0 0 0 3.141593 0 1.570796</gazeboXYZToNED>
+    </plugin>
+  </model>
+</sdf>
+

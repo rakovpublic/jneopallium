@@ -1,0 +1,45 @@
+backend:
+  deterministic: IN_MEMORY
+  live: JNEO_BATTLESPACE
+supportedPlatform:
+  live: Linux
+  deterministic:
+    - Linux
+    - Windows
+artifacts:
+  root: target/jneo-battlespace
+  protectedEvaluatorSubdir: protected-evaluator
+vehicleDefaults:
+  mavlinkBasePort: 14550
+  mavlinkPortStride: 10
+  rosNamespacePattern: /uav_${index}
+  cameraTopicPattern: /uav_${index}/fpv/image
+  systemIdStart: 1
+missionSupervisor:
+  simulatorOnlyRequiredForCommandExecution: true
+  maxAltitudeMeters: 120.0
+  maxSpeedMetersPerSecond: 15.0
+  maxAccelerationMetersPerSecond2: 6.0
+  batteryReserveFraction: 0.20
+perception:
+  interface: FpvPerceptionAdapter
+  deterministicAdapter: DeterministicSyntheticPerceptionAdapter
+  liveAdapter: GazeboFramePerceptionAdapter
+groundTruthFirewall:
+  agentPublicTopics:
+    - /clock
+    - /uav_*/fpv/image
+    - /uav_*/fpv/camera_info
+    - /uav_*/imu
+    - /uav_*/range
+    - /uav_*/odometry
+    - /uav_*/battery
+    - /uav_*/radio_status
+  hiddenTopics:
+    - /evaluator/targets
+    - /evaluator/scoring
+    - /world/*/pose/info
+    - /gazebo/entity_state
+    - /segmentation/ground_truth
+    - /target/lifecycle
+

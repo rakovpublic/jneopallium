@@ -1,0 +1,35 @@
+{
+  "scenarioId": "autonomous_success",
+  "mode": "FULLY_AUTONOMOUS",
+  "seed": 24703042047,
+  "initialPose": { "x": 0.0, "y": 0.0, "altitudeMeters": 35.0, "yawDegrees": 0.0, "batteryFraction": 0.92, "localizationConfidence": 0.96 },
+  "initialTargets": [
+    {
+      "targetId": "target-alpha",
+      "classification": "BLOCKED_ROAD",
+      "x": 90.0,
+      "y": -10.0,
+      "missionRelevance": 0.65,
+      "confidence": 0.74,
+      "urgency": 0.55,
+      "informationValue": 0.56,
+      "communicationValue": 0.40,
+      "safetyRisk": 0.12,
+      "visibility": 0.88
+    },
+    {
+      "targetId": "target-beta",
+      "classification": "DAMAGED_INFRASTRUCTURE",
+      "x": 120.0,
+      "y": 18.0,
+      "missionRelevance": 0.94,
+      "confidence": 0.88,
+      "urgency": 0.80,
+      "informationValue": 0.82,
+      "communicationValue": 0.70,
+      "safetyRisk": 0.16,
+      "visibility": 0.90
+    }
+  ]
+}
+
