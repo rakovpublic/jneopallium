@@ -1,0 +1,65 @@
+{
+  "layerID": 6,
+  "layerName": "Recognition Result Output",
+  "layerType": "result",
+  "isResultLayer": true,
+  "layerSize": 1,
+  "neurons": [
+    {
+      "neuronId": 0,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.ImageRecognitionNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.demo.uavsingle.RecognitionResultSignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.demo.uavsingle.CameraFrameSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.ConvolutionalRecognitionProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.IRecognitionNetworkNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {},
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {},
+        "defaultDendritesWeights": {}
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.demo.uavsingle.CameraFrameSignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.demo.uavsingle.IRecognitionNetworkNeuron"
+      ],
+      "sharedState": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.ConvolutionalRecognitionNetwork",
+      "childNeuronsEmbedded": false,
+      "outputSelection": {
+        "classifierScoreInputs": 1800,
+        "targetClasses": 10,
+        "confidenceThreshold": 0.25,
+        "missionAcceptanceThreshold": 0.45
+      },
+      "quantitative": {
+        "classifierScoresConsumedPerFrame": 1800,
+        "classAggregatesProduced": 10,
+        "outputRecognitionResultsPerFrame": 1
+      }
+    }
+  ],
+  "quantitative": {
+    "neurons": 1,
+    "classifierScoresConsumedPerFrame": 1800,
+    "classAggregatesProduced": 10,
+    "outputRecognitionResultsPerFrame": 1
+  }
+}

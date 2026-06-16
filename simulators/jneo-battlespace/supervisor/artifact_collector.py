@@ -30,6 +30,7 @@ class ArtifactCollector:
         "command-audit.jsonl",
         "photograph-submissions.jsonl",
         "photograph-results.jsonl",
+        "top-down-events.jsonl",
         "virtual-eliminations.jsonl",
     }
 
@@ -85,4 +86,3 @@ class ArtifactCollector:
     @staticmethod
     def utc_now() -> str:
         return datetime.now(timezone.utc).isoformat()
-

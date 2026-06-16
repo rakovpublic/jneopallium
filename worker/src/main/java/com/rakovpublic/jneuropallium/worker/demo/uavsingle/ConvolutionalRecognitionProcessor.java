@@ -12,32 +12,34 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ConvolutionalRecognitionProcessor implements ISignalProcessor<CameraFrameSignal, ImageRecognitionNeuron> {
+public class ConvolutionalRecognitionProcessor implements ISignalProcessor<CameraFrameSignal, IRecognitionNetworkNeuron> {
     private static final int TEMPLATE_SIZE = 6;
     private static final Map<TargetClassification, int[][]> TEMPLATES = templates();
 
     @Override
     @SuppressWarnings("unchecked")
-    public <I extends ISignal> List<I> process(CameraFrameSignal input, ImageRecognitionNeuron neuron) {
+    public <I extends ISignal> List<I> process(CameraFrameSignal input, IRecognitionNetworkNeuron neuron) {
         List<I> result = new ArrayList<>();
         result.add((I) recognize(input, neuron));
         return result;
     }
 
-    public RecognitionResultSignal recognize(CameraFrameSignal frame, ImageRecognitionNeuron neuron) {
-        ensureClassifierNeurons(neuron);
-        Extraction extraction = extract(frame, neuron, true);
+    public RecognitionResultSignal recognize(CameraFrameSignal frame, IRecognitionNetworkNeuron neuron) {
+        ConvolutionalRecognitionNetwork network = neuron.getNetwork();
+        ensureClassifierNeurons(network);
+        Extraction extraction = extract(frame, network, true);
         FeatureVectorSignal vector = new FeatureVectorSignal();
         vector.setMissionId(frame.getMissionId());
         vector.setUavId(frame.getUavId());
         vector.setTick(frame.getTick());
         vector.setFrameId(frame.getFrameId());
         vector.setFeatures(extraction.features);
+        network.remember(vector);
 
         ClassificationScoreSignal best = null;
         ClassificationScoreSignal runnerUp = null;
         Map<String, Double> scores = new LinkedHashMap<>();
-        for (ClassificationNeuron classifier : neuron.getClassifierNeurons().values()) {
+        for (ClassificationNeuron classifier : network.getClassifierNeurons().values()) {
             ClassificationScoreSignal score = classifier.score(vector);
             scores.put(score.getClassification().name(), score.getScore());
             if (best == null || score.getScore() > best.getScore()) {
@@ -75,7 +77,8 @@ public class ConvolutionalRecognitionProcessor implements ISignalProcessor<Camer
         result.setImageFeatures(features);
         result.attribute("pixelHash", pixelHash(frame.getPixels()));
         result.attribute("source", "CONVOLUTIONAL_PERCEPTRON_NETWORK");
-        result.attribute("architecture", "3x3 pixel patches -> conv1 perceptrons -> conv2 perceptrons -> pooling -> classifier neurons");
+        result.attribute("architecture", "CameraFramePatchInitInput -> 3x3 PixelPatchSignal -> conv1 perceptrons -> conv2 perceptrons -> pooling -> classifier neurons");
+        result.attribute("networkConfig", network.getConfig().asArtifactMap());
         result.attribute("pixelPatchSignals", extraction.pixelPatchSignals);
         result.attribute("conv1FeatureSignals", extraction.conv1Signals);
         result.attribute("conv2FeatureSignals", extraction.conv2Signals);
@@ -156,8 +159,8 @@ public class ConvolutionalRecognitionProcessor implements ISignalProcessor<Camer
         }
     }
 
-    private static void ensureClassifierNeurons(ImageRecognitionNeuron neuron) {
-        if (!neuron.getClassifierNeurons().isEmpty()) {
+    private static void ensureClassifierNeurons(ConvolutionalRecognitionNetwork network) {
+        if (!network.getClassifierNeurons().isEmpty()) {
             return;
         }
         Map<TargetClassification, ClassificationNeuron> classifiers = new EnumMap<>(TargetClassification.class);
@@ -169,30 +172,32 @@ public class ConvolutionalRecognitionProcessor implements ISignalProcessor<Camer
             frame.setFrameId("prototype-" + entry.getKey().name());
             frame.setTrackId(entry.getKey().name());
             frame.setPixels(entry.getValue());
-            Extraction prototype = extract(frame, neuron, false);
+            Extraction prototype = extract(frame, network, false);
             classifiers.put(entry.getKey(), new ClassificationNeuron(entry.getKey(), prototype.features));
         }
-        neuron.setClassifierNeurons(classifiers);
+        network.setClassifierNeurons(classifiers);
     }
 
-    private static Extraction extract(CameraFrameSignal frame, ImageRecognitionNeuron neuron, boolean countSignals) {
-        double[][] normalized = normalize(frame.getPixels());
-        int height = normalized.length;
-        int width = height == 0 ? 0 : normalized[0].length;
-        List<PixelPatchSignal> pixelPatches = pixelPatches(frame, normalized);
+    private static Extraction extract(CameraFrameSignal frame, ConvolutionalRecognitionNetwork network, boolean countSignals) {
+        int[][] pixels = frame.getPixels();
+        int height = pixels == null ? 0 : pixels.length;
+        int width = height == 0 || pixels[0] == null ? 0 : pixels[0].length;
+        List<PixelPatchSignal> pixelPatches = pixelPatches(frame, network.getConfig());
         List<ConvolutionFeatureSignal> conv1 = new ArrayList<>();
         PixelPatchConvolutionProcessor pixelProcessor = new PixelPatchConvolutionProcessor();
         for (PixelPatchSignal patch : pixelPatches) {
-            for (ConvolutionalPerceptronNeuron convNeuron : neuron.getFirstLayerNeurons()) {
+            for (ConvolutionalPerceptronNeuron convNeuron : network.getFirstLayerNeurons()) {
                 conv1.add((ConvolutionFeatureSignal) pixelProcessor.process(patch, convNeuron).get(0));
             }
         }
-        Map<String, double[][]> conv1Maps = maps(conv1, Math.max(0, height - 2), Math.max(0, width - 2));
+        Map<String, double[][]> conv1Maps = maps(conv1,
+                network.getConfig().patchRows(height),
+                network.getConfig().patchColumns(width));
         List<FeaturePatchSignal> featurePatches = featurePatches(frame, conv1Maps);
         List<ConvolutionFeatureSignal> conv2 = new ArrayList<>();
         FeaturePatchConvolutionProcessor featureProcessor = new FeaturePatchConvolutionProcessor();
         for (FeaturePatchSignal patch : featurePatches) {
-            for (ConvolutionalPerceptronNeuron convNeuron : neuron.getSecondLayerNeurons()) {
+            for (ConvolutionalPerceptronNeuron convNeuron : network.getSecondLayerNeurons()) {
                 ConvolutionFeatureSignal signal = (ConvolutionFeatureSignal) featureProcessor.process(patch, convNeuron).get(0);
                 signal.setFilterName(patch.getSourceFeatureName() + "." + signal.getFilterName());
                 conv2.add(signal);
@@ -215,15 +220,11 @@ public class ConvolutionalRecognitionProcessor implements ISignalProcessor<Camer
                 countSignals ? pooled.size() : 0);
     }
 
-    private static List<PixelPatchSignal> pixelPatches(CameraFrameSignal frame, double[][] normalized) {
+    private static List<PixelPatchSignal> pixelPatches(CameraFrameSignal frame, RecognitionNetworkConfig config) {
         List<PixelPatchSignal> patches = new ArrayList<>();
-        int height = normalized.length;
-        int width = height == 0 ? 0 : normalized[0].length;
-        for (int y = 0; y <= height - 3; y++) {
-            for (int x = 0; x <= width - 3; x++) {
-                patches.add(new PixelPatchSignal(frame.getMissionId(), frame.getUavId(), frame.getTick(),
-                        frame.getFrameId(), "conv1", x, y, patch(normalized, x, y)));
-            }
+        CameraFramePatchInitInput initInput = new CameraFramePatchInitInput("uav-fpv-3x3-patches", frame, config);
+        for (com.rakovpublic.jneuropallium.worker.net.signals.IInputSignal signal : initInput.readSignals()) {
+            patches.add((PixelPatchSignal) signal);
         }
         return patches;
     }
@@ -289,19 +290,6 @@ public class ConvolutionalRecognitionProcessor implements ISignalProcessor<Camer
             }
         }
         return patch;
-    }
-
-    private static double[][] normalize(int[][] pixels) {
-        if (pixels == null || pixels.length == 0 || pixels[0].length == 0) {
-            return new double[0][0];
-        }
-        double[][] normalized = new double[pixels.length][pixels[0].length];
-        for (int y = 0; y < pixels.length; y++) {
-            for (int x = 0; x < pixels[y].length; x++) {
-                normalized[y][x] = clampPixel(pixels[y][x]) / 255.0;
-            }
-        }
-        return normalized;
     }
 
     private static double meanIntensity(int[][] pixels) {
@@ -384,6 +372,13 @@ public class ConvolutionalRecognitionProcessor implements ISignalProcessor<Camer
                 "210 210 210 210 210 210",
                 " 35  35  35  35  35  35",
                 " 35  35  35  35  35  35"));
+        templates.put(TargetClassification.INFANTRY, matrix(
+                " 40  40 220 220  40  40",
+                " 40  40 220 220  40  40",
+                " 40 170 230 230 170  40",
+                " 40  40 230 230  40  40",
+                " 40 170  40  40 170  40",
+                "170  40  40  40  40 170"));
         templates.put(TargetClassification.WILDFIRE_HOTSPOT, matrix(
                 "240 220 200 180 200 220",
                 "220 250 230 210 230 200",
@@ -450,7 +445,7 @@ public class ConvolutionalRecognitionProcessor implements ISignalProcessor<Camer
     @Override public String getDescription() { return "convolutional UAV image recognition processor"; }
     @Override public Boolean hasMerger() { return false; }
     @Override public Class<? extends ISignalProcessor> getSignalProcessorClass() { return ConvolutionalRecognitionProcessor.class; }
-    @Override public Class<ImageRecognitionNeuron> getNeuronClass() { return ImageRecognitionNeuron.class; }
+    @Override public Class<IRecognitionNetworkNeuron> getNeuronClass() { return IRecognitionNetworkNeuron.class; }
     @Override public Class<CameraFrameSignal> getSignalClass() { return CameraFrameSignal.class; }
 
     private record Extraction(Map<String, Double> features, int pixelPatchSignals, int conv1Signals,

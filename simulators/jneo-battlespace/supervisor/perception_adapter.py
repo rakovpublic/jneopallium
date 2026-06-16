@@ -38,6 +38,26 @@ class DeterministicSyntheticPerceptionAdapter:
                     source="deterministic-pixels",
                 )
             ]
+        if "INFANTRY_VISIBLE" in text:
+            return [
+                FpvDetection(
+                    trackId=f"track-infantry-{digest}",
+                    confidence=0.88,
+                    bbox=[0.43, 0.28, 0.12, 0.30],
+                    classLabel="infantry",
+                    source="deterministic-pixels",
+                )
+            ]
+        if "VEHICLE_VISIBLE" in text:
+            return [
+                FpvDetection(
+                    trackId=f"track-vehicle-{digest}",
+                    confidence=0.90,
+                    bbox=[0.31, 0.39, 0.38, 0.18],
+                    classLabel="vehicle",
+                    source="deterministic-pixels",
+                )
+            ]
         if "DECOY_VISIBLE" in text:
             return [
                 FpvDetection(
@@ -86,4 +106,3 @@ class GazeboFramePerceptionAdapter:
         lo = sum(1 for value in sample if value < 32)
         hi = sum(1 for value in sample if value > 224)
         return min(lo, hi) / max(1, len(sample))
-

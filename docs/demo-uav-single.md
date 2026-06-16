@@ -51,16 +51,23 @@ The gateway emits `MotorCommandSignal` only with `execute=false`, records `bridg
 
 `SearchArea` defines a rectangular search sector with altitude, grid spacing, and detection radius. `SearchCoverageNeuron` produces a deterministic serpentine grid, `NavigationSearchNeuron` emits `SearchWaypointSignal`, and every waypoint is validated by `SimUavMissionSupervisor` as `SEARCH_ROUTE`.
 
-Targets are not handed directly to target evaluation. The simulator generates `CameraFrameSignal` values with an `int[][] pixels` matrix. `ImageRecognitionNeuron` now runs a Jneopallium-style convolutional recognizer instead of exact pixel matching:
+Targets are not handed directly to target evaluation. The simulator generates `CameraFrameSignal` values with an `int[][] pixels` matrix. `CameraFramePatchInitInput` performs the input-stage split into 3x3 matrices before the convolution layer runs, so convolution neurons receive only `PixelPatchSignal` values containing nine normalized pixels. `ImageRecognitionNeuron` now runs a Jneopallium-style convolutional recognizer instead of exact pixel matching:
 
 - `PixelPatchSignal` carries each normalized 3x3 pixel window.
 - `ConvolutionalPerceptronNeuron` consumes exactly nine values per firing and emits `ConvolutionFeatureSignal`.
+- `PixelPatchConvolutionProcessor`, `FeaturePatchConvolutionProcessor`, `ClassificationProcessor`, and `RecognitionLearningProcessor` are typed to neuron capability interfaces, so heterogeneous neurons expose the interfaces for the processors they support.
 - The first feature layer scans pixel patches for edges, center-surround energy, and bright mass.
 - `FeaturePatchSignal` carries 3x3 windows of first-layer activations into a second feature layer.
 - `PooledFeatureSignal` and `FeatureVectorSignal` summarize the feature maps.
 - `ClassificationNeuron` emits `ClassificationScoreSignal` values and selects the target class from pooled features.
 
-Class templates are used only to initialize deterministic feature prototypes for tests and replay. Runtime recognition compares learned-style feature vectors, so noisy non-exact pixel matrices can still classify correctly. The result records image features, feature-layer signal counts, classifier scores, and a pixel hash before emitting `RecognitionResultSignal`. Only recognized observations become `ObservationTarget` candidates for priority scoring.
+`RecognitionNetworkConfig.fpv1080p()` describes the default FPV camera layout as 1920x1080 with 3x3 stride-1 coverage. That is 2,067,604 first-layer patch positions before filters. The small simulator frames use the same input splitter on smaller matrices for deterministic tests.
+
+The generated full model resource lives at `worker/src/main/resources/model/uav-single-fpv/`. It contains a 10,000-neuron configuration: 4,096 Conv1 neurons, 4,096 Conv2 neurons, 1,800 classifier neurons, 7 learning neurons, and 1 result neuron. The classifier layer covers ten target classes, including `INFANTRY` and `VEHICLE_TO_INSPECT`, with 180 classifier neurons per class.
+
+Class templates are used only to initialize deterministic feature prototypes for tests and replay. Runtime recognition compares learned-style feature vectors, so noisy non-exact pixel matrices can still classify correctly. The result records image features, feature-layer signal counts, classifier scores, network config, and a pixel hash before emitting `RecognitionResultSignal`. Only recognized observations become `ObservationTarget` candidates for priority scoring.
+
+Simulator feedback is sent back into the model as `RecognitionFeedbackSignal`. Wrong classifications, low-confidence missed targets, photo rejection, accepted photos, and photo/class mismatches are handled by `RecognitionLearningNeuron`, which updates classifier prototype matrices and marks the model changed. These updates are recorded in `learning-events.jsonl`. Scenarios can set `maxObservationTargetsPerMission` so the UAV continues search and photography after the first accepted observation; `battle_area_infantry_vehicle` uses this to photograph one infantry target and one vehicle target in a single autonomous run.
 
 ## Safety Boundary
 
@@ -157,6 +164,8 @@ Scenario files support `APPROVE`, `DENY`, `TIMEOUT`, `APPROVE_TOO_LATE`, `WRONG_
 - `lost_heartbeat`
 - `poor_visibility`
 - `duplicate_confirmation`
+- `battle_area_infantry_vehicle`
+- `large_area_infantry_vehicle_search`
 - `all`
 
 ## How To Run
@@ -191,13 +200,14 @@ Files:
 - `search-events.jsonl`
 - `target-events.jsonl`
 - `recognition-events.jsonl`
+- `learning-events.jsonl`
 - `confirmation-events.jsonl`
 - `photograph-events.jsonl`
 - `supervisor-audit.jsonl`
 - `transparency.jsonl`
 - `safety-summary.json`
 
-`summary.json` also reports `searchAreaId`, `searchWaypointsPlanned`, `searchWaypointsVisited`, `cameraFramesProcessed`, and `recognitionsProduced` so the run can prove that target candidates came from autonomous search and image recognition.
+`summary.json` also reports `searchAreaId`, `searchWaypointsPlanned`, `searchWaypointsVisited`, `cameraFramesProcessed`, `recognitionsProduced`, `recognitionLearningFeedbacks`, `recognitionWeightUpdates`, and `recognitionNetworkConfig` so the run can prove that target candidates came from autonomous search, image recognition, and simulator feedback.
 
 ## Simulator Integration
 

@@ -1,0 +1,73 @@
+{
+  "cameraFramesProcessed": 2,
+  "failureRecoveryTriggered": false,
+  "modelId": "uav-single-fpv-recognition-1080p-10000-v2",
+  "photographsAccepted": 2,
+  "recognitionNetworkConfig": {
+    "cameraHeight": 1080,
+    "cameraWidth": 1920,
+    "firstLayerPatchColumns": 1918,
+    "firstLayerPatchCount": 2067604,
+    "firstLayerPatchRows": 1078,
+    "firstLayerSignalCapacity": 12405624,
+    "learningRate": 0.08,
+    "patchSize": 3,
+    "patchStride": 1,
+    "secondLayerSignalCapacity": 49478784
+  },
+  "recognitions": [
+    {
+      "classification": "INFANTRY",
+      "confidence": 0.7659468260697861,
+      "conv1FeatureSignals": 96,
+      "conv2FeatureSignals": 96,
+      "frameId": "frame-mission-uav-single-1-large-area-infantry-1",
+      "pixelPatchSignals": 16,
+      "targetId": "large-area-infantry-1"
+    },
+    {
+      "classification": "VEHICLE_TO_INSPECT",
+      "confidence": 0.8226338010453722,
+      "conv1FeatureSignals": 96,
+      "conv2FeatureSignals": 96,
+      "frameId": "frame-mission-uav-single-2-large-area-vehicle-1",
+      "pixelPatchSignals": 16,
+      "targetId": "large-area-vehicle-1"
+    }
+  ],
+  "recognitionsProduced": 2,
+  "reinforcementUpdatesApplied": 2,
+  "searchWaypointsVisited": 63,
+  "sourceRunDir": "F:\\git\\jneopallium\\target\\jneopallium-uav-large-area\\large_area_infantry_vehicle_search",
+  "sourceScenario": "large_area_infantry_vehicle_search",
+  "status": "PASS",
+  "trainedSnapshotVersion": "1.2.1-large-area-search",
+  "trainingPolicy": "Apply simulator feedback after every photo. Accepted photos reinforce the expected class; wrong/missed/rejected photos would move prototypes toward expected evidence and away from incorrect predictions.",
+  "updatedAtUtc": "2026-06-16T17:46:36.093026+00:00",
+  "updates": [
+    {
+      "expectedClassification": "VEHICLE_TO_INSPECT",
+      "frameId": "frame-mission-uav-single-2-large-area-vehicle-1",
+      "matrixUpdates": {
+        "toward": "VEHICLE_TO_INSPECT"
+      },
+      "outcome": "PHOTO_ACCEPTED",
+      "predictedClassification": "VEHICLE_TO_INSPECT",
+      "reward": 1.0,
+      "targetId": "large-area-vehicle-1",
+      "updatedMatrices": 1
+    },
+    {
+      "expectedClassification": "INFANTRY",
+      "frameId": "frame-mission-uav-single-1-large-area-infantry-1",
+      "matrixUpdates": {
+        "toward": "INFANTRY"
+      },
+      "outcome": "PHOTO_ACCEPTED",
+      "predictedClassification": "INFANTRY",
+      "reward": 1.0,
+      "targetId": "large-area-infantry-1",
+      "updatedMatrices": 1
+    }
+  ]
+}

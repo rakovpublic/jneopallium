@@ -1,0 +1,357 @@
+{
+  "layerID": 5,
+  "layerName": "Recognition Reinforcement Learning Ensemble",
+  "layerType": "learning",
+  "layerSize": 7,
+  "neurons": [
+    {
+      "neuronId": 0,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.RecognitionLearningNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.demo.uavsingle.RecognitionLearningResultSignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.demo.uavsingle.RecognitionFeedbackSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.RecognitionLearningProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.IRecognitionLearningNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {},
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {},
+        "defaultDendritesWeights": {}
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.demo.uavsingle.RecognitionFeedbackSignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.demo.uavsingle.IRecognitionLearningNeuron"
+      ],
+      "feedbackOutcome": "PHOTO_ACCEPTED",
+      "sharedState": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.ConvolutionalRecognitionNetwork",
+      "learningRate": 0.08,
+      "updateRule": {
+        "towardExpectedClass": "prototype += learningRate * rewardMagnitude * (observedFeature - prototype)",
+        "repelWrongPrediction": "prototype -= 0.5 * learningRate * rewardMagnitude * (observedFeature - prototype)"
+      },
+      "quantitative": {
+        "mutableClassifierMatrices": 1800,
+        "mutableScalarsPerClassifier": 92,
+        "mutableScalarsTotal": 165600
+      }
+    },
+    {
+      "neuronId": 1,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.RecognitionLearningNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.demo.uavsingle.RecognitionLearningResultSignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.demo.uavsingle.RecognitionFeedbackSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.RecognitionLearningProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.IRecognitionLearningNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {},
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {},
+        "defaultDendritesWeights": {}
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.demo.uavsingle.RecognitionFeedbackSignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.demo.uavsingle.IRecognitionLearningNeuron"
+      ],
+      "feedbackOutcome": "PHOTO_REJECTED",
+      "sharedState": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.ConvolutionalRecognitionNetwork",
+      "learningRate": 0.08,
+      "updateRule": {
+        "towardExpectedClass": "prototype += learningRate * rewardMagnitude * (observedFeature - prototype)",
+        "repelWrongPrediction": "prototype -= 0.5 * learningRate * rewardMagnitude * (observedFeature - prototype)"
+      },
+      "quantitative": {
+        "mutableClassifierMatrices": 1800,
+        "mutableScalarsPerClassifier": 92,
+        "mutableScalarsTotal": 165600
+      }
+    },
+    {
+      "neuronId": 2,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.RecognitionLearningNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.demo.uavsingle.RecognitionLearningResultSignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.demo.uavsingle.RecognitionFeedbackSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.RecognitionLearningProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.IRecognitionLearningNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {},
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {},
+        "defaultDendritesWeights": {}
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.demo.uavsingle.RecognitionFeedbackSignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.demo.uavsingle.IRecognitionLearningNeuron"
+      ],
+      "feedbackOutcome": "MISSED_TARGET",
+      "sharedState": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.ConvolutionalRecognitionNetwork",
+      "learningRate": 0.08,
+      "updateRule": {
+        "towardExpectedClass": "prototype += learningRate * rewardMagnitude * (observedFeature - prototype)",
+        "repelWrongPrediction": "prototype -= 0.5 * learningRate * rewardMagnitude * (observedFeature - prototype)"
+      },
+      "quantitative": {
+        "mutableClassifierMatrices": 1800,
+        "mutableScalarsPerClassifier": 92,
+        "mutableScalarsTotal": 165600
+      }
+    },
+    {
+      "neuronId": 3,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.RecognitionLearningNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.demo.uavsingle.RecognitionLearningResultSignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.demo.uavsingle.RecognitionFeedbackSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.RecognitionLearningProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.IRecognitionLearningNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {},
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {},
+        "defaultDendritesWeights": {}
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.demo.uavsingle.RecognitionFeedbackSignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.demo.uavsingle.IRecognitionLearningNeuron"
+      ],
+      "feedbackOutcome": "WRONG_TARGET",
+      "sharedState": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.ConvolutionalRecognitionNetwork",
+      "learningRate": 0.08,
+      "updateRule": {
+        "towardExpectedClass": "prototype += learningRate * rewardMagnitude * (observedFeature - prototype)",
+        "repelWrongPrediction": "prototype -= 0.5 * learningRate * rewardMagnitude * (observedFeature - prototype)"
+      },
+      "quantitative": {
+        "mutableClassifierMatrices": 1800,
+        "mutableScalarsPerClassifier": 92,
+        "mutableScalarsTotal": 165600
+      }
+    },
+    {
+      "neuronId": 4,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.RecognitionLearningNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.demo.uavsingle.RecognitionLearningResultSignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.demo.uavsingle.RecognitionFeedbackSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.RecognitionLearningProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.IRecognitionLearningNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {},
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {},
+        "defaultDendritesWeights": {}
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.demo.uavsingle.RecognitionFeedbackSignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.demo.uavsingle.IRecognitionLearningNeuron"
+      ],
+      "feedbackOutcome": "PHOTO_WRONG_TARGET",
+      "sharedState": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.ConvolutionalRecognitionNetwork",
+      "learningRate": 0.08,
+      "updateRule": {
+        "towardExpectedClass": "prototype += learningRate * rewardMagnitude * (observedFeature - prototype)",
+        "repelWrongPrediction": "prototype -= 0.5 * learningRate * rewardMagnitude * (observedFeature - prototype)"
+      },
+      "quantitative": {
+        "mutableClassifierMatrices": 1800,
+        "mutableScalarsPerClassifier": 92,
+        "mutableScalarsTotal": 165600
+      }
+    },
+    {
+      "neuronId": 5,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.RecognitionLearningNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.demo.uavsingle.RecognitionLearningResultSignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.demo.uavsingle.RecognitionFeedbackSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.RecognitionLearningProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.IRecognitionLearningNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {},
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {},
+        "defaultDendritesWeights": {}
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.demo.uavsingle.RecognitionFeedbackSignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.demo.uavsingle.IRecognitionLearningNeuron"
+      ],
+      "feedbackOutcome": "FALSE_POSITIVE",
+      "sharedState": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.ConvolutionalRecognitionNetwork",
+      "learningRate": 0.08,
+      "updateRule": {
+        "towardExpectedClass": "prototype += learningRate * rewardMagnitude * (observedFeature - prototype)",
+        "repelWrongPrediction": "prototype -= 0.5 * learningRate * rewardMagnitude * (observedFeature - prototype)"
+      },
+      "quantitative": {
+        "mutableClassifierMatrices": 1800,
+        "mutableScalarsPerClassifier": 92,
+        "mutableScalarsTotal": 165600
+      }
+    },
+    {
+      "neuronId": 6,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.RecognitionLearningNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.demo.uavsingle.RecognitionLearningResultSignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.demo.uavsingle.RecognitionFeedbackSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.RecognitionLearningProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.IRecognitionLearningNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {},
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {},
+        "defaultDendritesWeights": {}
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.demo.uavsingle.RecognitionFeedbackSignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.demo.uavsingle.IRecognitionLearningNeuron"
+      ],
+      "feedbackOutcome": "CONFIDENCE_CALIBRATION",
+      "sharedState": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.ConvolutionalRecognitionNetwork",
+      "learningRate": 0.08,
+      "updateRule": {
+        "towardExpectedClass": "prototype += learningRate * rewardMagnitude * (observedFeature - prototype)",
+        "repelWrongPrediction": "prototype -= 0.5 * learningRate * rewardMagnitude * (observedFeature - prototype)"
+      },
+      "quantitative": {
+        "mutableClassifierMatrices": 1800,
+        "mutableScalarsPerClassifier": 92,
+        "mutableScalarsTotal": 165600
+      }
+    }
+  ],
+  "quantitative": {
+    "neurons": 7,
+    "mutableClassifierMatrices": 1800,
+    "mutableScalarsPerClassifier": 92,
+    "mutableScalarsTotal": 165600
+  }
+}

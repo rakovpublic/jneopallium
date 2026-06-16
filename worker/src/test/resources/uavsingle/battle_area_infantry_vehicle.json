@@ -1,0 +1,54 @@
+{
+  "scenarioId": "battle_area_infantry_vehicle",
+  "mode": "FULLY_AUTONOMOUS",
+  "seed": 24703042047,
+  "config": {
+    "maxObservationTargetsPerMission": 2
+  },
+  "searchArea": {
+    "areaId": "battle-observation-sector",
+    "minX": 0.0,
+    "maxX": 180.0,
+    "minY": -70.0,
+    "maxY": 70.0,
+    "altitudeMeters": 35.0,
+    "spacingMeters": 80.0,
+    "detectionRadiusMeters": 110.0
+  },
+  "initialPose": {
+    "x": 0.0,
+    "y": 0.0,
+    "altitudeMeters": 35.0,
+    "yawDegrees": 0.0,
+    "batteryFraction": 0.94,
+    "localizationConfidence": 0.96
+  },
+  "initialTargets": [
+    {
+      "targetId": "target-infantry",
+      "classification": "INFANTRY",
+      "x": 85.0,
+      "y": -18.0,
+      "missionRelevance": 0.92,
+      "confidence": 0.84,
+      "urgency": 0.72,
+      "informationValue": 0.82,
+      "communicationValue": 0.62,
+      "safetyRisk": 0.10,
+      "visibility": 0.88
+    },
+    {
+      "targetId": "target-vehicle",
+      "classification": "VEHICLE_TO_INSPECT",
+      "x": 138.0,
+      "y": 28.0,
+      "missionRelevance": 0.90,
+      "confidence": 0.86,
+      "urgency": 0.70,
+      "informationValue": 0.80,
+      "communicationValue": 0.64,
+      "safetyRisk": 0.12,
+      "visibility": 0.90
+    }
+  ]
+}

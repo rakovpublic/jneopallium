@@ -1,0 +1,20 @@
+{
+  "layerID": 3,
+  "layerName": "Pooling And Feature Vector Assembly",
+  "layerType": "derivedFeatureVector",
+  "layerSize": 0,
+  "neurons": [],
+  "derivedSignals": [
+    "com.rakovpublic.jneuropallium.worker.demo.uavsingle.PooledFeatureSignal",
+    "com.rakovpublic.jneuropallium.worker.demo.uavsingle.FeatureVectorSignal"
+  ],
+  "implementation": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.ConvolutionalRecognitionProcessor",
+  "note": "Explicit pooled signal boundary; no extra neuron object.",
+  "quantitative": {
+    "neurons": 0,
+    "pooledFeatureSignalsPerFrame": 8192,
+    "pooledStatsPerFeatureMap": 3,
+    "imageScalarFeatures": 2,
+    "featureVectorScalarCount": 92
+  }
+}

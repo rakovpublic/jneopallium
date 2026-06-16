@@ -1,0 +1,223 @@
+{
+  "modelId": "uav-single-fpv-recognition-1080p-10000-v2",
+  "modelName": "Simulation-Only Single UAV FPV 1080p Recognition Network - 10000 Neurons",
+  "description": "Jneopallium-style 3x3 patch convolutional recognizer with 10000 explicit neuron entries, 1080p FPV coverage, infantry/vehicle classes, interface-bound heterogeneous processors, and simulator reinforcement feedback.",
+  "version": "1.2.0",
+  "latestTrainedSnapshot": "trained-model-update.json",
+  "generatedFrom": {
+    "codePackage": "com.rakovpublic.jneuropallium.worker.demo.uavsingle",
+    "generator": "Codex generated resource model config",
+    "sourceRuntimeClasses": [
+      "com.rakovpublic.jneuropallium.worker.demo.uavsingle.CameraFramePatchInitInput",
+      "com.rakovpublic.jneuropallium.worker.demo.uavsingle.ConvolutionalPerceptronNeuron",
+      "com.rakovpublic.jneuropallium.worker.demo.uavsingle.ClassificationNeuron",
+      "com.rakovpublic.jneuropallium.worker.demo.uavsingle.ImageRecognitionNeuron",
+      "com.rakovpublic.jneuropallium.worker.demo.uavsingle.RecognitionLearningNeuron"
+    ]
+  },
+  "networkConfig": {
+    "cameraWidth": 1920,
+    "cameraHeight": 1080,
+    "patchSize": 3,
+    "patchStride": 1,
+    "firstLayerPatchColumns": 1918,
+    "firstLayerPatchRows": 1078,
+    "firstLayerPatchCount": 2067604,
+    "conv1NeuronCount": 4096,
+    "conv1SignalsPerFrame": 8468905984,
+    "conv1FeatureMapSize": {
+      "width": 1918,
+      "height": 1078
+    },
+    "conv2NeuronCount": 4096,
+    "conv2AssignedSourceMapsPerNeuron": 1,
+    "conv2PatchColumnsPerAssignedMap": 1916,
+    "conv2PatchRowsPerAssignedMap": 1076,
+    "conv2PatchesPerAssignedFeatureMap": 2061616,
+    "conv2SignalsPerFrame": 8444379136,
+    "pooledFeatureSignalCount": 8192,
+    "featureVectorScalarCount": 92,
+    "classifierNeuronCount": 1800,
+    "classifierScoresPerFrame": 1800,
+    "targetClasses": 10
+  },
+  "layers": [
+    {
+      "layerID": 0,
+      "file": "layer-0.json",
+      "name": "FPV 1080p Camera And Search Init Inputs",
+      "type": "initInput",
+      "size": 0,
+      "quantitative": {
+        "neurons": 0,
+        "pixelPatchSignalsPer1080pFrame": 2067604,
+        "valuesPerPixelPatchSignal": 9
+      }
+    },
+    {
+      "layerID": 1,
+      "file": "layer-1.json",
+      "name": "Conv1 1080p Pixel Patch Perceptron Bank",
+      "type": "convolutionFeatureLayer",
+      "size": 4096,
+      "quantitative": {
+        "neurons": 4096,
+        "weightsPerNeuron": 9,
+        "parametersPerNeuron": 10,
+        "totalWeights": 36864,
+        "totalBiases": 4096,
+        "totalParameters": 40960,
+        "firingsPer1080pFrame": 8468905984,
+        "featureMapsPerFrame": 4096,
+        "featureMapSize": {
+          "width": 1918,
+          "height": 1078
+        }
+      }
+    },
+    {
+      "layerID": 2,
+      "file": "layer-2.json",
+      "name": "Conv2 1080p Feature Patch Perceptron Bank",
+      "type": "convolutionFeatureLayer",
+      "size": 4096,
+      "quantitative": {
+        "neurons": 4096,
+        "weightsPerNeuron": 9,
+        "parametersPerNeuron": 10,
+        "totalWeights": 36864,
+        "totalBiases": 4096,
+        "totalParameters": 40960,
+        "assignedSourceFeatureMapsPerNeuron": 1,
+        "firingsPer1080pFrame": 8444379136,
+        "featureMapsPerFrame": 4096,
+        "featureMapSize": {
+          "width": 1916,
+          "height": 1076
+        }
+      }
+    },
+    {
+      "layerID": 3,
+      "file": "layer-3.json",
+      "name": "Pooling And Feature Vector Assembly",
+      "type": "derivedFeatureVector",
+      "size": 0,
+      "quantitative": {
+        "neurons": 0,
+        "pooledFeatureSignalsPerFrame": 8192,
+        "pooledStatsPerFeatureMap": 3,
+        "imageScalarFeatures": 2,
+        "featureVectorScalarCount": 92
+      }
+    },
+    {
+      "layerID": 4,
+      "file": "layer-4.json",
+      "name": "Classification Prototype Ensemble",
+      "type": "classification",
+      "size": 1800,
+      "quantitative": {
+        "neurons": 1800,
+        "targetClasses": 10,
+        "neuronsPerClass": 180,
+        "prototypeScalarsPerNeuron": 92,
+        "totalPrototypeScalars": 165600,
+        "scoresPerFrame": 1800,
+        "neuronsPerTargetClass": 180,
+        "classes": [
+          "DAMAGED_INFRASTRUCTURE",
+          "VEHICLE_TO_INSPECT",
+          "INFANTRY",
+          "WILDFIRE_HOTSPOT",
+          "MISSING_PERSON_MARKER",
+          "BLOCKED_ROAD",
+          "UNKNOWN_OBJECT",
+          "COMMUNICATION_TOWER",
+          "EMERGENCY_MARKER",
+          "OPERATOR_POINT"
+        ]
+      }
+    },
+    {
+      "layerID": 5,
+      "file": "layer-5.json",
+      "name": "Recognition Reinforcement Learning Ensemble",
+      "type": "learning",
+      "size": 7,
+      "quantitative": {
+        "neurons": 7,
+        "mutableClassifierMatrices": 1800,
+        "mutableScalarsPerClassifier": 92,
+        "mutableScalarsTotal": 165600
+      }
+    },
+    {
+      "layerID": 6,
+      "file": "result-layer.json",
+      "name": "Recognition Result Output",
+      "type": "result",
+      "size": 1,
+      "quantitative": {
+        "neurons": 1,
+        "classifierScoresConsumedPerFrame": 1800,
+        "classAggregatesProduced": 10,
+        "outputRecognitionResultsPerFrame": 1
+      }
+    }
+  ],
+  "signalFrequencyMap": {
+    "com.rakovpublic.jneuropallium.worker.demo.uavsingle.CameraFrameSignal": {
+      "epoch": "1",
+      "loop": "1"
+    },
+    "com.rakovpublic.jneuropallium.worker.demo.uavsingle.PixelPatchSignal": {
+      "epoch": "1",
+      "loop": "1"
+    },
+    "com.rakovpublic.jneuropallium.worker.demo.uavsingle.FeaturePatchSignal": {
+      "epoch": "1",
+      "loop": "1"
+    },
+    "com.rakovpublic.jneuropallium.worker.demo.uavsingle.ConvolutionFeatureSignal": {
+      "epoch": "1",
+      "loop": "1"
+    },
+    "com.rakovpublic.jneuropallium.worker.demo.uavsingle.PooledFeatureSignal": {
+      "epoch": "1",
+      "loop": "1"
+    },
+    "com.rakovpublic.jneuropallium.worker.demo.uavsingle.FeatureVectorSignal": {
+      "epoch": "1",
+      "loop": "1"
+    },
+    "com.rakovpublic.jneuropallium.worker.demo.uavsingle.ClassificationScoreSignal": {
+      "epoch": "1",
+      "loop": "1"
+    },
+    "com.rakovpublic.jneuropallium.worker.demo.uavsingle.RecognitionResultSignal": {
+      "epoch": "1",
+      "loop": "1"
+    },
+    "com.rakovpublic.jneuropallium.worker.demo.uavsingle.RecognitionFeedbackSignal": {
+      "epoch": "1",
+      "loop": "5"
+    },
+    "com.rakovpublic.jneuropallium.worker.demo.uavsingle.RecognitionLearningResultSignal": {
+      "epoch": "1",
+      "loop": "5"
+    }
+  },
+  "totalLayers": 7,
+  "totalRealNeurons": 10000,
+  "totalTrainableWeightScalars": 73728,
+  "totalTrainableBiasScalars": 8192,
+  "totalClassifierPrototypeScalars": 165600,
+  "totalMutableLearningScalars": 165600,
+  "notes": [
+    "Layer 0 and layer 3 are explicit signal boundaries with no neuron objects.",
+    "ConvolutionalPerceptronNeuron implements both pixel-patch and feature-patch interfaces, but each listed neuron is a single neuron object.",
+    "Classifier prototypes are materialized from deterministic template feature vectors and ensemble variants; simulator feedback updates these matrices.",
+    "This is a simulator/model configuration, not a real-world detection performance guarantee."
+  ]
+}

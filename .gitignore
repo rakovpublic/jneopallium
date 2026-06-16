@@ -1,6 +1,7 @@
 # Maven build output
 target/
 **/target/
+.codex-tools/
 
 # JNeoBattlespace generated outputs
 simulators/jneo-battlespace/build/

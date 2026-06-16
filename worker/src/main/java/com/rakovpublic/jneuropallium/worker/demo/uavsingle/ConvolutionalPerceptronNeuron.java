@@ -4,7 +4,8 @@ import com.rakovpublic.jneuropallium.worker.net.neuron.impl.Neuron;
 
 import java.util.Arrays;
 
-public class ConvolutionalPerceptronNeuron extends Neuron {
+public class ConvolutionalPerceptronNeuron extends Neuron
+        implements IPixelPatchConvolutionNeuron, IFeaturePatchConvolutionNeuron {
     private String layerName;
     private String filterName;
     private double[] weights = new double[9];

@@ -35,6 +35,16 @@ Artifacts are written under:
 target/jneo-battlespace/in_memory/<scenario>/
 ```
 
+The `live_single_infantry_vehicle` scenario is included in `all`; it feeds
+separate infantry and vehicle camera frames through the perception adapter,
+photo validator, and virtual-elimination artifact path.
+
+The `live_single_large_area_search` scenario performs a broad serpentine search,
+records simulator bridge intents and top-down pose events, validates infantry and
+vehicle photos through the same evaluator path, and emits `camera-video.*` plus
+`top-down-video.*` from the run artifacts. Install optional recording
+dependencies with `python -m pip install -r simulators/jneo-battlespace/requirements.txt`.
+
 ## Live Backend Gate
 
 ```bash
@@ -57,6 +67,7 @@ Each scenario run emits the public files required by the integration guide:
 - `scenario-config.json`
 - `sensor-topic-health.json`
 - `per-uav-camera-events.jsonl`
+- `top-down-events.jsonl`
 - `mavlink-events.jsonl`
 - `communication-events.jsonl`
 - `flight-intents.jsonl`
@@ -68,7 +79,8 @@ Each scenario run emits the public files required by the integration guide:
 - `safety-summary.json`
 - `ground-truth-firewall-report.json`
 - `summary.json`
+- `camera-video.gif` / `camera-video.mp4` for scenarios that enable recording
+- `top-down-video.gif` / `top-down-video.mp4` for scenarios that enable recording
 
 Evaluator-only evidence is written under `protected-evaluator/` and is not
 mirrored into agent-facing ROS, MAVLink, or swarm-message artifacts.
-

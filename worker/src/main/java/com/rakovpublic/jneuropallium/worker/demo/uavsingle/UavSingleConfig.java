@@ -22,6 +22,7 @@ public class UavSingleConfig {
     public double batteryReserveFraction = 0.20;
     public long confirmationTimeoutTicks = 4L;
     public int photographRetryLimit = 2;
+    public int maxObservationTargetsPerMission = 1;
     public long deterministicSeed = 24703042047L;
     public Geofence geofence = new Geofence();
     public List<NoGoZone> noGoZones = new ArrayList<>();
@@ -73,6 +74,9 @@ public class UavSingleConfig {
         if (photographRetryLimit < 0) {
             throw new IllegalArgumentException("photographRetryLimit must be non-negative");
         }
+        if (maxObservationTargetsPerMission <= 0) {
+            throw new IllegalArgumentException("maxObservationTargetsPerMission must be positive");
+        }
         if (priorityWeights == null) {
             priorityWeights = defaultPriorityWeights();
         }
@@ -89,4 +93,3 @@ public class UavSingleConfig {
         }
     }
 }
-

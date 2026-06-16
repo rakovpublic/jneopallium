@@ -48,10 +48,10 @@ class PhotoValidator:
             return self._public_result(submission, "REJECTED", "FRAME_DIGEST_MISMATCH")
         if "DECOY_VISIBLE" in token:
             return self._public_result(submission, "DECOY", "NO_ACTIVE_TARGET_VALIDATED")
-        if "TARGET_VISIBLE" not in token:
+        if not self._frame_contains_known_target(token, scenario_private):
             return self._public_result(submission, "REJECTED", "TARGET_NOT_VISIBLE")
 
-        target_id = scenario_private.get("primaryTargetId", "target-1")
+        target_id = self._target_id_for_frame(token, scenario_private)
         eliminated, detail = self.ledger.eliminate_once(target_id, submission.submissionId, submission.simulationTime)
         if eliminated:
             public = self._public_result(submission, "ELIMINATED", "PHOTO_VALIDATED")
@@ -82,3 +82,18 @@ class PhotoValidator:
             "reason": reason,
         }
 
+    @staticmethod
+    def _target_id_for_frame(token: str, scenario_private: dict) -> str:
+        for target in scenario_private.get("targets", []):
+            visual_token = target.get("visualToken")
+            if visual_token and visual_token in token:
+                return target.get("targetId", scenario_private.get("primaryTargetId", "target-1"))
+        return scenario_private.get("primaryTargetId", "target-1")
+
+    @staticmethod
+    def _frame_contains_known_target(token: str, scenario_private: dict) -> bool:
+        for target in scenario_private.get("targets", []):
+            visual_token = target.get("visualToken")
+            if visual_token and visual_token in token:
+                return True
+        return "TARGET_VISIBLE" in token

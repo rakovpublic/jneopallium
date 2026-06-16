@@ -22,7 +22,9 @@ public final class UavSingleDemoLauncher {
             "geofence_veto",
             "lost_heartbeat",
             "poor_visibility",
-            "duplicate_confirmation");
+            "duplicate_confirmation",
+            "battle_area_infantry_vehicle",
+            "large_area_infantry_vehicle_search");
     public static final Path DEFAULT_OUTPUT_DIR = Path.of("target", "jneopallium-uav-single");
 
     private UavSingleDemoLauncher() {
@@ -111,4 +113,3 @@ public final class UavSingleDemoLauncher {
         }
     }
 }
-

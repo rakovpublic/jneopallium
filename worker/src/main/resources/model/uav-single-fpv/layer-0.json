@@ -1,0 +1,41 @@
+{
+  "layerID": 0,
+  "layerName": "FPV 1080p Camera And Search Init Inputs",
+  "layerType": "initInput",
+  "layerSize": 0,
+  "neurons": [],
+  "initInputs": [
+    {
+      "name": "uav-fpv-1080p-3x3-patches",
+      "inputClass": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.CameraFramePatchInitInput",
+      "sourceSignal": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.CameraFrameSignal",
+      "outputSignal": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.PixelPatchSignal",
+      "camera": {
+        "width": 1920,
+        "height": 1080
+      },
+      "patch": {
+        "rows": 3,
+        "columns": 3,
+        "valuesPerSignal": 9,
+        "stride": 1
+      },
+      "quantitative": {
+        "patchColumns": 1918,
+        "patchRows": 1078,
+        "patchSignalsPerFrame": 2067604
+      }
+    },
+    {
+      "name": "uav-search-area",
+      "sourceSignal": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.SearchAreaSignal",
+      "outputSignal": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.SearchWaypointSignal",
+      "note": "NavigationSearchNeuron consumes configured SearchArea in the simulator route planner."
+    }
+  ],
+  "quantitative": {
+    "neurons": 0,
+    "pixelPatchSignalsPer1080pFrame": 2067604,
+    "valuesPerPixelPatchSignal": 9
+  }
+}

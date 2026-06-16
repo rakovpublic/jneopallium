@@ -5,7 +5,7 @@ import com.rakovpublic.jneuropallium.worker.net.neuron.impl.Neuron;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class ClassificationNeuron extends Neuron {
+public class ClassificationNeuron extends Neuron implements IFeatureClassificationNeuron {
     private TargetClassification classification;
     private Map<String, Double> prototype = new LinkedHashMap<>();
 
@@ -42,6 +42,28 @@ public class ClassificationNeuron extends Neuron {
         signal.setScore(TargetPriorityProcessor.clamp(score));
         signal.setSourceNeuronId(getId() == null ? -1L : getId());
         return signal;
+    }
+
+    public void adjustPrototype(Map<String, Double> observed, double learningRate) {
+        adaptPrototype(observed, Math.max(0.0, learningRate), false);
+    }
+
+    public void repelPrototype(Map<String, Double> observed, double learningRate) {
+        adaptPrototype(observed, Math.max(0.0, learningRate), true);
+    }
+
+    private void adaptPrototype(Map<String, Double> observed, double learningRate, boolean repel) {
+        if (observed == null || observed.isEmpty() || learningRate == 0.0) {
+            return;
+        }
+        Map<String, Double> updated = new LinkedHashMap<>(prototype);
+        for (Map.Entry<String, Double> entry : observed.entrySet()) {
+            double current = updated.getOrDefault(entry.getKey(), 0.0);
+            double delta = learningRate * (entry.getValue() - current);
+            updated.put(entry.getKey(), repel ? current - delta : current + delta);
+        }
+        prototype = updated;
+        setChanged(true);
     }
 
     private static double featureDistance(Map<String, Double> actual, Map<String, Double> expected) {

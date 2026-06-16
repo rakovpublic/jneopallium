@@ -29,7 +29,10 @@ public class UavSingleSimulation {
     private final UavMissionProcessor missionProcessor = new UavMissionProcessor();
     private final SimUavCommandGateway commandGateway = new SimUavCommandGateway(new SimUavMissionSupervisor());
     private final NavigationSearchNeuron navigationSearchNeuron = new NavigationSearchNeuron();
-    private final ImageRecognitionNeuron imageRecognitionNeuron = new ImageRecognitionNeuron();
+    private final ConvolutionalRecognitionNetwork recognitionNetwork =
+            new ConvolutionalRecognitionNetwork(RecognitionNetworkConfig.fpv1080p());
+    private final ImageRecognitionNeuron imageRecognitionNeuron = new ImageRecognitionNeuron(recognitionNetwork);
+    private final RecognitionLearningNeuron recognitionLearningNeuron = new RecognitionLearningNeuron(recognitionNetwork);
 
     private final List<ObservationTarget> worldTargets = new ArrayList<>();
     private final List<ObservationTarget> targets = new ArrayList<>();
@@ -65,31 +68,40 @@ public class UavSingleSimulation {
             return finish("PASS", true);
         }
 
-        TargetPriority selected = detectEvaluateAndSelect();
-        if (selected == null) {
-            return finish("FAIL", false);
-        }
-        ObservationTarget target = targetById(selected.targetId).orElseThrow();
-        if (scenario.mode == UavOperatingMode.TARGET_CONFIRM) {
-            ConfirmationEvaluation confirmation = requestConfirmation(target);
-            if (confirmation.status == ConfirmationStatus.DENIED
-                    || confirmation.status == ConfirmationStatus.TIMEOUT
-                    || confirmation.status == ConfirmationStatus.REJECTED) {
-                if (confirmation.status == ConfirmationStatus.DENIED) {
-                    transition(UavMissionState.DENIED, confirmation.reason);
-                } else if (confirmation.status == ConfirmationStatus.TIMEOUT) {
-                    transition(UavMissionState.CONFIRMATION_TIMEOUT, confirmation.reason);
+        int observedTargets = 0;
+        while (observedTargets < scenario.config.maxObservationTargetsPerMission) {
+            TargetPriority selected = detectEvaluateAndSelect();
+            if (selected == null) {
+                return finish(observedTargets == 0 ? "FAIL" : "PASS", observedTargets > 0);
+            }
+            ObservationTarget target = targetById(selected.targetId).orElseThrow();
+            if (scenario.mode == UavOperatingMode.TARGET_CONFIRM) {
+                ConfirmationEvaluation confirmation = requestConfirmation(target);
+                if (confirmation.status == ConfirmationStatus.DENIED
+                        || confirmation.status == ConfirmationStatus.TIMEOUT
+                        || confirmation.status == ConfirmationStatus.REJECTED) {
+                    if (confirmation.status == ConfirmationStatus.DENIED) {
+                        transition(UavMissionState.DENIED, confirmation.reason);
+                    } else if (confirmation.status == ConfirmationStatus.TIMEOUT) {
+                        transition(UavMissionState.CONFIRMATION_TIMEOUT, confirmation.reason);
+                    }
+                    returnHome("confirmation-not-valid");
+                    return finish("PASS", true);
                 }
-                returnHome("confirmation-not-valid");
+                transition(UavMissionState.CONFIRMED, confirmation.reason);
+            }
+
+            if (!approachAndObserve(target)) {
                 return finish("PASS", true);
             }
-            transition(UavMissionState.CONFIRMED, confirmation.reason);
+            photograph(target);
+            target.active = false;
+            observedTargets++;
+            if (activeTargets().isEmpty()) {
+                break;
+            }
+            transition(UavMissionState.SEARCHING, "continue-observation-cycle");
         }
-
-        if (!approachAndObserve(target)) {
-            return finish("PASS", true);
-        }
-        photograph(target);
         returnHome("mission-cycle-complete");
         return finish("PASS", true);
     }
@@ -181,6 +193,7 @@ public class UavSingleSimulation {
         recognitionRow.put("pixelHash", result.getAttributes().get("pixelHash"));
         recognitionRow.put("source", result.getAttributes().get("source"));
         recognitionRow.put("architecture", result.getAttributes().get("architecture"));
+        recognitionRow.put("networkConfig", result.getAttributes().get("networkConfig"));
         recognitionRow.put("pixelPatchSignals", result.getAttributes().get("pixelPatchSignals"));
         recognitionRow.put("conv1FeatureSignals", result.getAttributes().get("conv1FeatureSignals"));
         recognitionRow.put("conv2FeatureSignals", result.getAttributes().get("conv2FeatureSignals"));
@@ -188,6 +201,15 @@ public class UavSingleSimulation {
         recognitionRow.put("classifierScores", result.getAttributes().get("classifierScores"));
         recognitionRow.put("signalClass", result.getClass().getSimpleName());
         append("recognition-events.jsonl", row("IMAGE_RECOGNITION_RESULT", recognitionRow));
+        if (result.getClassification() != worldTarget.classification) {
+            applyRecognitionFeedback(RecognitionFeedbackOutcome.WRONG_TARGET, worldTarget.targetId,
+                    result.getFrameId(), result.getClassification(), worldTarget.classification,
+                    -1.0, "EXPECTED_CLASSIFICATION_MISMATCH", result.getImageFeatures());
+        } else if (result.getConfidence() < 0.45) {
+            applyRecognitionFeedback(RecognitionFeedbackOutcome.MISSED_TARGET, worldTarget.targetId,
+                    result.getFrameId(), result.getClassification(), worldTarget.classification,
+                    -0.8, "CONFIDENCE_BELOW_TARGET_THRESHOLD", result.getImageFeatures());
+        }
         if (result.getConfidence() >= 0.45) {
             ObservationTarget recognized = recognizedTarget(worldTarget, result);
             targets.add(recognized);
@@ -414,6 +436,19 @@ public class UavSingleSimulation {
             photoRow.put("accepted", result.isAccepted());
             append("photograph-events.jsonl", row(result.isAccepted() ? "PHOTOGRAPH_ACCEPTED" : "PHOTOGRAPH_REJECTED",
                     photoRow));
+            RecognitionFeedbackOutcome feedbackOutcome = result.isAccepted()
+                    ? RecognitionFeedbackOutcome.PHOTO_ACCEPTED
+                    : RecognitionFeedbackOutcome.PHOTO_REJECTED;
+            double reward = result.isAccepted() ? 1.0 : -0.35;
+            String feedbackReason = result.getReason();
+            if (target.expectedClassification != null && target.expectedClassification != target.classification) {
+                feedbackOutcome = RecognitionFeedbackOutcome.PHOTO_WRONG_TARGET;
+                reward = -1.0;
+                feedbackReason = "PHOTO_CLASSIFICATION_MISMATCH";
+            }
+            applyRecognitionFeedback(feedbackOutcome, target.targetId, target.recognitionFrameId,
+                    target.classification, target.expectedClassification, reward, feedbackReason,
+                    target.recognitionFeatures);
             accepted = result.isAccepted();
             if (accepted) {
                 summary.put("photographsAccepted", ((Number) summary.get("photographsAccepted")).intValue() + 1);
@@ -424,6 +459,42 @@ public class UavSingleSimulation {
             }
         }
         transition(UavMissionState.VERIFYING_PHOTO, accepted ? "photo-accepted" : "photo-not-accepted");
+    }
+
+    private void applyRecognitionFeedback(RecognitionFeedbackOutcome outcome, String targetId, String frameId,
+                                          TargetClassification predicted, TargetClassification expected,
+                                          double reward, String reason,
+                                          Map<String, Double> features) throws IOException {
+        RecognitionFeedbackSignal feedback = new RecognitionFeedbackSignal();
+        feedback.setMissionId(scenario.config.missionId);
+        feedback.setUavId(scenario.config.uavId);
+        feedback.setTick(tick);
+        feedback.setTargetId(targetId);
+        feedback.setFrameId(frameId);
+        feedback.setPredictedClassification(predicted);
+        feedback.setExpectedClassification(expected);
+        feedback.setOutcome(outcome);
+        feedback.setReward(reward);
+        feedback.setReason(reason);
+        feedback.setLearningRate(recognitionNetwork.getConfig().getLearningRate());
+        feedback.setImageFeatures(features);
+        RecognitionLearningResultSignal learning = recognitionLearningNeuron.learn(feedback);
+        summary.put("recognitionLearningFeedbacks",
+                ((Number) summary.get("recognitionLearningFeedbacks")).intValue() + 1);
+        summary.put("recognitionWeightUpdates",
+                ((Number) summary.get("recognitionWeightUpdates")).intValue() + learning.getUpdatedMatrices());
+        Map<String, Object> learningRow = new LinkedHashMap<>();
+        learningRow.put("targetId", targetId);
+        learningRow.put("frameId", frameId);
+        learningRow.put("outcome", outcome);
+        learningRow.put("predictedClassification", predicted);
+        learningRow.put("expectedClassification", expected);
+        learningRow.put("reward", reward);
+        learningRow.put("reason", reason);
+        learningRow.put("updatedMatrices", learning.getUpdatedMatrices());
+        learningRow.put("learningReason", learning.getReason());
+        learningRow.put("learningAttributes", learning.getAttributes());
+        append("learning-events.jsonl", row("RECOGNITION_LEARNING_FEEDBACK", learningRow));
     }
 
     private UavPose safeObservationPose(ObservationTarget target) {
@@ -551,6 +622,19 @@ public class UavSingleSimulation {
                 a.put("secondConfirmationRejected", lineContains(outputDir.resolve("confirmation-events.jsonl"), "DUPLICATE_CONFIRMATION"));
                 a.put("singleValidConfirmation", ((Number) summary.get("validConfirmations")).intValue() == 1);
             }
+            case "battle_area_infantry_vehicle" -> {
+                a.put("infantryRecognized", lineContains(outputDir.resolve("recognition-events.jsonl"), "\"classification\":\"INFANTRY\""));
+                a.put("vehicleRecognized", lineContains(outputDir.resolve("recognition-events.jsonl"), "\"classification\":\"VEHICLE_TO_INSPECT\""));
+                a.put("twoPhotosAccepted", ((Number) summary.get("photographsAccepted")).intValue() == 2);
+                a.put("twoLearningUpdates", ((Number) summary.get("recognitionWeightUpdates")).intValue() >= 2);
+            }
+            case "large_area_infantry_vehicle_search" -> {
+                a.put("largeAreaCovered", ((Number) summary.get("searchWaypointsVisited")).intValue() >= 20);
+                a.put("infantryRecognized", lineContains(outputDir.resolve("recognition-events.jsonl"), "\"classification\":\"INFANTRY\""));
+                a.put("vehicleRecognized", lineContains(outputDir.resolve("recognition-events.jsonl"), "\"classification\":\"VEHICLE_TO_INSPECT\""));
+                a.put("twoPhotosAccepted", ((Number) summary.get("photographsAccepted")).intValue() == 2);
+                a.put("learningUpdatedModel", ((Number) summary.get("recognitionWeightUpdates")).intValue() >= 2);
+            }
             default -> a.put("knownScenario", false);
         }
         manifest.status = a.values().stream().allMatch(Boolean::booleanValue) ? manifest.status : "FAIL";
@@ -578,6 +662,7 @@ public class UavSingleSimulation {
     private static ObservationTarget recognizedTarget(ObservationTarget worldTarget, RecognitionResultSignal result) {
         ObservationTarget target = new ObservationTarget(result.getTargetId(), result.getClassification(),
                 result.getX(), result.getY());
+        target.expectedClassification = worldTarget.classification;
         target.missionRelevance = worldTarget.missionRelevance;
         target.confidence = result.getConfidence();
         target.urgency = worldTarget.urgency;
@@ -588,6 +673,8 @@ public class UavSingleSimulation {
         target.inFieldOfView = worldTarget.inFieldOfView;
         target.motionBlurEstimate = worldTarget.motionBlurEstimate;
         target.active = worldTarget.active;
+        target.recognitionFrameId = result.getFrameId();
+        target.recognitionFeatures = new LinkedHashMap<>(result.getImageFeatures());
         return target;
     }
 
@@ -627,6 +714,9 @@ public class UavSingleSimulation {
         summary.put("searchWaypointsVisited", 0);
         summary.put("cameraFramesProcessed", 0);
         summary.put("recognitionsProduced", 0);
+        summary.put("recognitionLearningFeedbacks", 0);
+        summary.put("recognitionWeightUpdates", 0);
+        summary.put("recognitionNetworkConfig", recognitionNetwork.getConfig().asArtifactMap());
     }
 
     private void writeManifestSkeleton() throws IOException {
@@ -672,6 +762,7 @@ public class UavSingleSimulation {
                 "search-events.jsonl",
                 "target-events.jsonl",
                 "recognition-events.jsonl",
+                "learning-events.jsonl",
                 "confirmation-events.jsonl",
                 "photograph-events.jsonl",
                 "supervisor-audit.jsonl",

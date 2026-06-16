@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import math
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -13,6 +14,7 @@ from evaluator.virtual_elimination import VirtualEliminationLedger, VirtualTarge
 from supervisor.artifact_collector import ArtifactCollector
 from supervisor.ground_truth_firewall import GroundTruthFirewall, default_agent_mappings
 from supervisor.mission_supervisor import Backend, IntentType, JNeoBattlespaceMissionSupervisor, MissionIntent
+from supervisor.mission_video_renderer import render_large_area_recordings
 from supervisor.perception_adapter import DeterministicSyntheticPerceptionAdapter, FpvDetection
 from supervisor.simulation_clock import SimulationClock
 
@@ -41,6 +43,13 @@ SCENARIOS: dict[str, ScenarioDefinition] = {
     ),
     "live_single_sensor_loss": ScenarioDefinition(
         "live_single_sensor_loss", "single", 1, "gps-denied.sdf", "Stale sensor path enters safety hold."
+    ),
+    "live_single_infantry_vehicle": ScenarioDefinition(
+        "live_single_infantry_vehicle", "single", 1, "fpv-training.sdf", "Single UAV photographs infantry and vehicle."
+    ),
+    "live_single_large_area_search": ScenarioDefinition(
+        "live_single_large_area_search", "single", 1, "urban-observation.sdf",
+        "Single UAV searches a large area, finds infantry and vehicle, and records camera/top-down video."
     ),
     "live_swarm_three_uav": ScenarioDefinition(
         "live_swarm_three_uav", "swarm", 3, "swarm-relay.sdf", "Scout, relay, photographer."
@@ -84,12 +93,14 @@ class ScenarioController:
         self.vehicle_map = vehicle_map
         self.headless = headless
         self.perception = DeterministicSyntheticPerceptionAdapter()
-        self.ledger = VirtualEliminationLedger([VirtualTarget("target-1", "TARGET_VISIBLE")])
+        self.ledger = VirtualEliminationLedger(self._virtual_targets_for_definition(definition))
         self.validator = PhotoValidator(self.ledger, collector)
         self.scoreboard = ScoreBoard()
         self.checks: dict[str, bool] = {}
         self.frame_counter = 0
         self.intent_counter = 0
+        self.top_down_sequence = 0
+        self.recordings: dict[str, str] = {}
         vehicle_ids = {vehicle["uavId"] for vehicle in vehicle_map["vehicles"]}
         self.command_supervisor = JNeoBattlespaceMissionSupervisor(
             backend=backend,
@@ -98,7 +109,15 @@ class ScenarioController:
         )
         self.private_context = {
             "primaryTargetId": "target-1",
-            "targets": [{"targetId": "target-1", "active": True, "hiddenEntityId": "gz-entity-793"}],
+            "targets": [
+                {
+                    "targetId": target.targetId,
+                    "active": target.active,
+                    "visualToken": target.visualToken,
+                    "hiddenEntityId": f"gz-entity-{793 + index}",
+                }
+                for index, target in enumerate(self._virtual_targets_for_definition(definition))
+            ],
             "visibility": "deterministic",
             "occlusion": "scenario-controlled",
             "cameraPoseByUav": {
@@ -182,6 +201,128 @@ class ScenarioController:
         self.checks["staleCameraNoDetection"] = not frame["detections"]
         self.checks["safetyHoldEntered"] = True
         self.checks["noPhotoWithoutFreshSensor"] = self.scoreboard.virtualEliminations == 0
+
+    def _run_live_single_infantry_vehicle(self) -> None:
+        infantry = self._camera_frame("uav-1", "INFANTRY_VISIBLE")
+        infantry_result = self._submit_photo("uav-1", infantry, infantry["detections"][0])
+        vehicle = self._camera_frame("uav-1", "VEHICLE_VISIBLE")
+        vehicle_result = self._submit_photo("uav-1", vehicle, vehicle["detections"][0])
+        labels = [detection.classLabel for frame in [infantry, vehicle] for detection in frame["detections"]]
+        self.checks["infantryDetectedFromCamera"] = "infantry" in labels
+        self.checks["vehicleDetectedFromCamera"] = "vehicle" in labels
+        self.checks["infantryPhotoAccepted"] = infantry_result["status"] == "ELIMINATED"
+        self.checks["vehiclePhotoAccepted"] = vehicle_result["status"] == "ELIMINATED"
+        self.checks["twoVirtualEliminationsCreated"] = self.scoreboard.virtualEliminations == 2
+
+    def _run_live_single_large_area_search(self) -> None:
+        search_area = {
+            "areaId": "large-jneo-battlespace-grid",
+            "minX": -720.0,
+            "maxX": 720.0,
+            "minY": -480.0,
+            "maxY": 480.0,
+            "altitudeMeters": 72.0,
+            "spacingMeters": 180.0,
+            "detectionRadiusMeters": 165.0,
+        }
+        targets = [
+            {
+                "targetId": "large-infantry-1",
+                "visualToken": "INFANTRY_VISIBLE",
+                "classLabel": "infantry",
+                "x": -260.0,
+                "y": -290.0,
+                "active": True,
+                "model": {"detail": "helmet, torso, backpack, limbs", "bbox": [0.43, 0.26, 0.14, 0.34]},
+            },
+            {
+                "targetId": "large-vehicle-1",
+                "visualToken": "VEHICLE_VISIBLE",
+                "classLabel": "vehicle",
+                "x": 430.0,
+                "y": 330.0,
+                "active": True,
+                "model": {"detail": "body, cabin, wheels, windows", "bbox": [0.30, 0.38, 0.42, 0.20]},
+            },
+        ]
+        self._write_large_area_config(search_area, targets)
+        pose = {"x": 0.0, "y": 0.0, "z": search_area["altitudeMeters"], "yaw": 0.0}
+        self._update_camera_pose("uav-1", pose)
+        self._record_top_down("MISSION_START", pose, search_area, targets)
+        self._record_intent("uav-1", IntentType.ARM, {"speedMetersPerSecond": 0.0})
+        self._record_intent("uav-1", IntentType.TAKE_OFF, {
+            "altitudeMeters": search_area["altitudeMeters"],
+            "speedMetersPerSecond": 3.0,
+        })
+
+        waypoints = self._large_area_waypoints(search_area)
+        labels: list[str] = []
+        photos: list[dict] = []
+        sweep_frames = 0
+        visited = 0
+        for index, waypoint in enumerate(waypoints):
+            visited += 1
+            pose = {"x": waypoint["x"], "y": waypoint["y"], "z": search_area["altitudeMeters"], "yaw": waypoint["yaw"]}
+            self._move_to_waypoint("uav-1", pose, index, search_area, targets)
+            visible = [target for target in targets if target["active"]
+                       and self._distance(pose, target) <= search_area["detectionRadiusMeters"]]
+            if not visible:
+                sweep_frames += 1
+                self._camera_frame("uav-1", "SEARCH_SWEEP", {
+                    "frameKind": "SEARCH_SWEEP",
+                    "uavPose": pose,
+                    "searchArea": search_area,
+                })
+                continue
+
+            for target in visible:
+                frame = self._camera_frame("uav-1", target["visualToken"], {
+                    "frameKind": "TARGET_OBSERVATION",
+                    "uavPose": pose,
+                    "targetModel": target["model"] | {
+                        "targetId": target["targetId"],
+                        "classLabel": target["classLabel"],
+                        "x": target["x"],
+                        "y": target["y"],
+                    },
+                    "searchArea": search_area,
+                })
+                if not frame["detections"]:
+                    continue
+                detection = frame["detections"][0]
+                labels.append(detection.classLabel)
+                self._record_intent("uav-1", IntentType.FRAME_TARGET, {
+                    "targetId": target["targetId"],
+                    "speedMetersPerSecond": 2.0,
+                    "bbox": detection.bbox,
+                })
+                photo_result = self._submit_photo("uav-1", frame, detection)
+                photos.append(photo_result)
+                target["active"] = photo_result["status"] != "ELIMINATED"
+                self._sync_private_target_state(target["targetId"], target["active"])
+                self._record_top_down("TARGET_PHOTOGRAPHED", pose, search_area, targets,
+                                      waypoint_index=index, target_id=target["targetId"])
+            if all(not target["active"] for target in targets):
+                break
+
+        self._record_intent("uav-1", IntentType.RETURN_HOME, {"speedMetersPerSecond": 5.0})
+        home = {"x": 0.0, "y": 0.0, "z": search_area["altitudeMeters"], "yaw": 180.0}
+        self._update_camera_pose("uav-1", home)
+        self._record_top_down("RETURN_HOME", home, search_area, targets)
+        self._record_intent("uav-1", IntentType.LAND, {"speedMetersPerSecond": 0.0, "altitudeMeters": 0.0})
+        landed = {"x": 0.0, "y": 0.0, "z": 0.0, "yaw": 180.0}
+        self._update_camera_pose("uav-1", landed)
+        self._record_top_down("LANDED", landed, search_area, targets)
+        self.recordings = render_large_area_recordings(self.collector.run_dir)
+
+        self.checks["largeAreaWaypointsVisited"] = visited >= 20
+        self.checks["searchSweepFramesRecorded"] = sweep_frames >= 8
+        self.checks["infantryDetectedFromCamera"] = "infantry" in labels
+        self.checks["vehicleDetectedFromCamera"] = "vehicle" in labels
+        self.checks["bothPhotosAccepted"] = sum(1 for result in photos if result["status"] == "ELIMINATED") == 2
+        self.checks["bridgeIntentsAudited"] = self.intent_counter >= visited + 5
+        self.checks["cameraVideoRecorded"] = Path(self.recordings["cameraVideoMp4"]).exists()
+        self.checks["topDownVideoRecorded"] = Path(self.recordings["topDownVideoMp4"]).exists()
 
     def _run_live_swarm_three_uav(self) -> None:
         scout_frame = self._camera_frame("uav-1", "TARGET_VISIBLE")
@@ -312,7 +453,7 @@ class ScenarioController:
             self.collector.append_jsonl("communication-events.jsonl", event)
         return route
 
-    def _camera_frame(self, uav_id: str, token: str) -> dict[str, Any]:
+    def _camera_frame(self, uav_id: str, token: str, extra: dict[str, Any] | None = None) -> dict[str, Any]:
         self.clock.advance()
         self.frame_counter += 1
         frame_id = f"{uav_id}-frame-{self.frame_counter}"
@@ -330,7 +471,10 @@ class ScenarioController:
             "imageDigest": digest,
             "adapter": self.perception.__class__.__name__,
             "detections": [detection.public_dict() for detection in detections],
+            "visualToken": token,
         }
+        if extra:
+            event.update(extra)
         self.collector.append_jsonl("per-uav-camera-events.jsonl", event)
         return {
             "uavId": uav_id,
@@ -366,6 +510,7 @@ class ScenarioController:
         params: dict[str, Any],
         extra_rejections: list[str] | None = None,
     ) -> dict:
+        self.command_supervisor.heartbeat(uav_id, self.clock.sim_time_seconds)
         self.intent_counter += 1
         intent = MissionIntent(
             intentId=f"intent-{self.intent_counter}",
@@ -382,6 +527,126 @@ class ScenarioController:
         self.collector.append_jsonl("flight-intents.jsonl", audit["intent"])
         self.collector.append_jsonl("command-audit.jsonl", audit)
         return audit
+
+    def _move_to_waypoint(self, uav_id: str, pose: dict[str, float], waypoint_index: int,
+                          search_area: dict[str, float], targets: list[dict[str, Any]]) -> None:
+        self.clock.advance()
+        self._update_camera_pose(uav_id, pose)
+        self._record_intent(uav_id, IntentType.SENSOR_WAYPOINT, {
+            "x": pose["x"],
+            "y": pose["y"],
+            "altitudeMeters": pose["z"],
+            "speedMetersPerSecond": 6.0,
+            "waypointIndex": waypoint_index,
+        })
+        self.collector.append_jsonl(
+            "mavlink-events.jsonl",
+            self.clock.stamp() | {
+                "uavId": uav_id,
+                "event": "LOCAL_POSITION_NED",
+                "x": pose["x"],
+                "y": pose["y"],
+                "z": -pose["z"],
+                "source": "deterministic-sitl-surrogate",
+            },
+        )
+        self._record_top_down("WAYPOINT_VISITED", pose, search_area, targets, waypoint_index=waypoint_index)
+
+    def _record_top_down(self, event: str, pose: dict[str, float], search_area: dict[str, float],
+                         targets: list[dict[str, Any]], waypoint_index: int | None = None,
+                         target_id: str | None = None) -> None:
+        self.top_down_sequence += 1
+        payload = self.clock.stamp() | {
+            "sequence": self.top_down_sequence,
+            "event": event,
+            "uavId": "uav-1",
+            "uavPose": pose,
+            "searchAreaId": search_area["areaId"],
+            "detectionRadiusMeters": search_area["detectionRadiusMeters"],
+            "targets": [
+                {
+                    "targetId": target["targetId"],
+                    "classLabel": target["classLabel"],
+                    "x": target["x"],
+                    "y": target["y"],
+                    "active": target["active"],
+                }
+                for target in targets
+            ],
+        }
+        if waypoint_index is not None:
+            payload["waypointIndex"] = waypoint_index
+        if target_id is not None:
+            payload["targetId"] = target_id
+        self.collector.append_jsonl("top-down-events.jsonl", payload)
+
+    def _write_large_area_config(self, search_area: dict[str, float], targets: list[dict[str, Any]]) -> None:
+        self.private_context["primaryTargetId"] = targets[0]["targetId"]
+        self.private_context["targets"] = [
+            {
+                "targetId": target["targetId"],
+                "active": target["active"],
+                "visualToken": target["visualToken"],
+                "hiddenEntityId": f"gz-large-entity-{index + 1}",
+                "x": target["x"],
+                "y": target["y"],
+                "classLabel": target["classLabel"],
+            }
+            for index, target in enumerate(targets)
+        ]
+        self.collector.write_json(
+            "scenario-config.json",
+            {
+                "scenarioId": self.definition.scenarioId,
+                "kind": self.definition.kind,
+                "world": self.definition.world,
+                "vehicleCount": self.definition.vehicleCount,
+                "headless": self.headless,
+                "backend": self.backend.value,
+                "searchArea": search_area,
+                "detailedVisualModels": [
+                    {
+                        "targetId": target["targetId"],
+                        "classLabel": target["classLabel"],
+                        "visualToken": target["visualToken"],
+                        "model": target["model"],
+                        "position": {"x": target["x"], "y": target["y"]},
+                    }
+                    for target in targets
+                ],
+            },
+        )
+
+    def _sync_private_target_state(self, target_id: str, active: bool) -> None:
+        for target in self.private_context.get("targets", []):
+            if target.get("targetId") == target_id:
+                target["active"] = active
+
+    def _update_camera_pose(self, uav_id: str, pose: dict[str, float]) -> None:
+        self.private_context.setdefault("cameraPoseByUav", {})[uav_id] = {
+            "x": pose["x"],
+            "y": pose["y"],
+            "z": pose["z"],
+            "yaw": pose["yaw"],
+        }
+
+    @staticmethod
+    def _large_area_waypoints(search_area: dict[str, float]) -> list[dict[str, float]]:
+        waypoints: list[dict[str, float]] = []
+        rows = int(math.ceil((search_area["maxY"] - search_area["minY"]) / search_area["spacingMeters"])) + 1
+        columns = int(math.ceil((search_area["maxX"] - search_area["minX"]) / search_area["spacingMeters"])) + 1
+        for row in range(rows):
+            y = min(search_area["maxY"], search_area["minY"] + row * search_area["spacingMeters"])
+            reverse = row % 2 == 1
+            for column in range(columns):
+                effective = columns - 1 - column if reverse else column
+                x = min(search_area["maxX"], search_area["minX"] + effective * search_area["spacingMeters"])
+                waypoints.append({"x": x, "y": y, "yaw": 90.0 if reverse else 0.0})
+        return waypoints
+
+    @staticmethod
+    def _distance(pose: dict[str, float], target: dict[str, Any]) -> float:
+        return math.hypot(pose["x"] - target["x"], pose["y"] - target["y"])
 
     def _write_static_artifacts(self) -> None:
         self.collector.write_json(
@@ -444,6 +709,7 @@ class ScenarioController:
             "headless": self.headless,
             "checks": self.checks,
             "score": self.scoreboard.to_dict(),
+            "recordings": self.recordings,
             "runDir": str(self.collector.run_dir),
         }
 
@@ -456,6 +722,20 @@ class ScenarioController:
             if vehicle["uavId"] == uav_id:
                 return vehicle
         raise KeyError(uav_id)
+
+    @staticmethod
+    def _virtual_targets_for_definition(definition: ScenarioDefinition) -> list[VirtualTarget]:
+        if definition.scenarioId == "live_single_infantry_vehicle":
+            return [
+                VirtualTarget("infantry-1", "INFANTRY_VISIBLE"),
+                VirtualTarget("vehicle-1", "VEHICLE_VISIBLE"),
+            ]
+        if definition.scenarioId == "live_single_large_area_search":
+            return [
+                VirtualTarget("large-infantry-1", "INFANTRY_VISIBLE"),
+                VirtualTarget("large-vehicle-1", "VEHICLE_VISIBLE"),
+            ]
+        return [VirtualTarget("target-1", "TARGET_VISIBLE")]
 
 
 def definition_for(scenario_id: str) -> ScenarioDefinition:

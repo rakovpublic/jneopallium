@@ -1,8 +1,12 @@
 package com.rakovpublic.jneuropallium.worker.demo.uavsingle;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 public class ObservationTarget {
     public String targetId;
     public TargetClassification classification = TargetClassification.UNKNOWN_OBJECT;
+    public TargetClassification expectedClassification = TargetClassification.UNKNOWN_OBJECT;
     public double x;
     public double y;
     public double missionRelevance = 0.5;
@@ -15,6 +19,8 @@ public class ObservationTarget {
     public boolean inFieldOfView = true;
     public double motionBlurEstimate = 0.1;
     public boolean active = true;
+    public String recognitionFrameId;
+    public Map<String, Double> recognitionFeatures = new LinkedHashMap<>();
 
     public ObservationTarget() {
     }
@@ -22,8 +28,8 @@ public class ObservationTarget {
     public ObservationTarget(String targetId, TargetClassification classification, double x, double y) {
         this.targetId = targetId;
         this.classification = classification == null ? TargetClassification.UNKNOWN_OBJECT : classification;
+        this.expectedClassification = this.classification;
         this.x = x;
         this.y = y;
     }
 }
-
