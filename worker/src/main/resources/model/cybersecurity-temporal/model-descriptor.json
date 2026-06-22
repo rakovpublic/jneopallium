@@ -1,0 +1,88 @@
+{
+  "modelId": "cybersecurity-temporal-threat-correlator",
+  "title": "Temporal Cybersecurity Threat Correlation",
+  "version": "1.0.0-reference-temporal",
+  "artifact": "trained-temporal-threat-model.json",
+  "featureCount": 34,
+  "dataSources": [
+    "LANL",
+    "ToN_IoT",
+    "OpTC",
+    "CIC-IDS2017",
+    "CSE-CIC-IDS2018",
+    "UNSW-NB15",
+    "CALDERA"
+  ],
+  "safetyMode": "ADVISORY",
+  "threshold": 0.2,
+  "metrics": {
+    "train": {
+      "count": 10,
+      "truePositive": 7,
+      "falsePositive": 0,
+      "trueNegative": 3,
+      "falseNegative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "accuracy": 1.0,
+      "falsePositiveRate": 0.0,
+      "meanTimeToDetectionTicks": 0.0
+    },
+    "validation": {
+      "count": 6,
+      "truePositive": 4,
+      "falsePositive": 0,
+      "trueNegative": 2,
+      "falseNegative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "accuracy": 1.0,
+      "falsePositiveRate": 0.0,
+      "meanTimeToDetectionTicks": 0.0
+    },
+    "test": {
+      "count": 5,
+      "truePositive": 3,
+      "falsePositive": 0,
+      "trueNegative": 2,
+      "falseNegative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "accuracy": 1.0,
+      "falsePositiveRate": 0.0,
+      "meanTimeToDetectionTicks": 0.0
+    },
+    "overall": {
+      "count": 21,
+      "truePositive": 14,
+      "falsePositive": 0,
+      "trueNegative": 7,
+      "falseNegative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "accuracy": 1.0,
+      "falsePositiveRate": 0.0,
+      "meanTimeToDetectionTicks": 0.0
+    },
+    "calibration": [
+      {
+        "low": 0.0,
+        "high": 0.1,
+        "count": 7,
+        "positiveRate": 0.0,
+        "meanScore": 0.004391489680872425
+      },
+      {
+        "low": 0.9,
+        "high": 1.0,
+        "count": 14,
+        "positiveRate": 1.0,
+        "meanScore": 0.9951009828356349
+      }
+    ]
+  }
+}

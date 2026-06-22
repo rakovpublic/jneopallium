@@ -3,6 +3,8 @@
  */
 package com.rakovpublic.jneuropallium.worker.net.neuron.impl.security;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rakovpublic.jneuropallium.worker.net.neuron.ISignalProcessor;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.impl.security.AnomalyScoreSignal;
@@ -33,12 +35,14 @@ import com.rakovpublic.jneuropallium.worker.signalprocessor.impl.security.Signat
 import com.rakovpublic.jneuropallium.worker.signalprocessor.impl.security.SyscallBehaviourProcessor;
 import org.junit.jupiter.api.Test;
 
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class SecurityModuleTest {
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     // ---------- enum cardinalities ----------
 
@@ -218,6 +222,65 @@ class SecurityModuleTest {
         h.seed("noise", ThreatCategory.UNKNOWN);
         h.updateFromSignature(new SignatureMatchSignal("s1", "apt-a", 0.9, "ioc-1"), "apt-a");
         assertTrue(h.posteriorOf("apt-a") > h.posteriorOf("noise"));
+    }
+
+    @Test
+    void temporalThreatCorrelation_ordersFastEvidenceAndFreezesBaseline() {
+        TemporalThreatCorrelationNeuron n = new TemporalThreatCorrelationNeuron();
+        n.seed("svc-compromise", ThreatCategory.LATERAL_MOVEMENT);
+        n.setAssetCriticality(1.0);
+        n.setThreatIntelConfidence(0.7);
+
+        n.observeEvidence("AUTHENTICATION", "svc-backup", 100L, 0.72,
+                "windows-auth", "UNUSUAL_LOGIN");
+        n.updateFromTemporalSignature(new SignatureMatchSignal("sig-powershell", "execution", 0.86, "encoded"),
+                "svc-compromise", "svc-backup", 104L, "EXECUTION");
+        ThreatHypothesisSignal h = n.updateFromTemporalAnomaly(
+                new AnomalyScoreSignal("svc-backup", 0.88, List.of("remote-service-fanout")),
+                "svc-compromise", 109L, "LATERAL_MOVEMENT");
+
+        assertNotNull(h);
+        assertTrue(h.getPosterior() > 0.70);
+        assertTrue(n.getFastThreatActivation() > 0.0);
+        assertTrue(n.isBaselineFrozen());
+        assertTrue(n.getImpactScore() >= n.getThreatPosterior());
+        assertTrue(n.getLastTechniqueTicks().containsKey("LATERAL_MOVEMENT"));
+    }
+
+    @Test
+    void temporalThreatCorrelation_maintenanceSoftGateDoesNotEraseEvidence() {
+        TemporalThreatCorrelationNeuron n = new TemporalThreatCorrelationNeuron();
+        n.setMaintenanceActive(true);
+        n.observeEvidence("ANOMALY", "deploy-svc", 200L, 0.8,
+                "windows-event", "BENIGN_CONTEXT");
+
+        assertTrue(n.getThreatPosterior() < 0.30);
+        assertFalse(n.getEvidenceWindow().isEmpty());
+    }
+
+    @Test
+    void temporalThreatModelArtifact_coversAllSourcesAndHeldOutMetrics() throws Exception {
+        try (InputStream in = getClass().getClassLoader().getResourceAsStream(
+                "model/cybersecurity-temporal/trained-temporal-threat-model.json")) {
+            assertNotNull(in);
+            JsonNode model = MAPPER.readTree(in);
+            assertEquals("cybersecurity-temporal-threat-correlator", model.path("modelId").asText());
+            assertEquals("bundled-reference-corpus", model.path("trainingMode").asText());
+            assertTrue(model.path("featureNames").size() >= 30);
+            assertTrue(model.path("decisionThreshold").asDouble() > 0.0);
+            assertTrue(model.path("splitPolicy").path("neverRandomRowSplit").asBoolean());
+            String sources = model.path("dataSources").toString();
+            assertTrue(sources.contains("LANL"));
+            assertTrue(sources.contains("ToN_IoT"));
+            assertTrue(sources.contains("OpTC"));
+            assertTrue(sources.contains("CIC-IDS2017"));
+            assertTrue(sources.contains("CSE-CIC-IDS2018"));
+            assertTrue(sources.contains("UNSW-NB15"));
+            assertTrue(sources.contains("CALDERA"));
+            JsonNode test = model.path("metrics").path("test");
+            assertTrue(test.path("f1").asDouble() >= 0.85);
+            assertEquals(0.0, test.path("falsePositiveRate").asDouble(), 1e-9);
+        }
     }
 
     // ---------- response ----------

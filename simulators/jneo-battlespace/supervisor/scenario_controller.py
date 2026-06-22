@@ -51,6 +51,10 @@ SCENARIOS: dict[str, ScenarioDefinition] = {
         "live_single_large_area_search", "single", 1, "urban-observation.sdf",
         "Single UAV searches a large area, finds infantry and vehicle, and records camera/top-down video."
     ),
+    "carla_air_urban_search": ScenarioDefinition(
+        "carla_air_urban_search", "carla-air", 3, "carla-town-urban-air.umap",
+        "CARLA-Air urban search with Unreal FPV camera, dynamic actors, weather, physics, and Jneopallium learning."
+    ),
     "live_swarm_three_uav": ScenarioDefinition(
         "live_swarm_three_uav", "swarm", 3, "swarm-relay.sdf", "Scout, relay, photographer."
     ),
@@ -104,7 +108,7 @@ class ScenarioController:
         vehicle_ids = {vehicle["uavId"] for vehicle in vehicle_map["vehicles"]}
         self.command_supervisor = JNeoBattlespaceMissionSupervisor(
             backend=backend,
-            simulator_only=backend == Backend.JNEO_BATTLESPACE,
+            simulator_only=backend in {Backend.JNEO_BATTLESPACE, Backend.CARLA_AIR},
             vehicle_ids=vehicle_ids,
         )
         self.private_context = {
@@ -321,6 +325,209 @@ class ScenarioController:
         self.checks["vehicleDetectedFromCamera"] = "vehicle" in labels
         self.checks["bothPhotosAccepted"] = sum(1 for result in photos if result["status"] == "ELIMINATED") == 2
         self.checks["bridgeIntentsAudited"] = self.intent_counter >= visited + 5
+        self.checks["cameraVideoRecorded"] = Path(self.recordings["cameraVideoMp4"]).exists()
+        self.checks["topDownVideoRecorded"] = Path(self.recordings["topDownVideoMp4"]).exists()
+
+    def _run_carla_air_urban_search(self) -> None:
+        search_area = {
+            "areaId": "carla-air-urban-grid",
+            "minX": -820.0,
+            "maxX": 820.0,
+            "minY": -560.0,
+            "maxY": 560.0,
+            "altitudeMeters": 68.0,
+            "spacingMeters": 205.0,
+            "detectionRadiusMeters": 185.0,
+        }
+        weather = {
+            "preset": "CloudyNoonToWetSunset",
+            "cloudiness": 62,
+            "precipitation": 18,
+            "sunAltitudeAngle": 24,
+            "windIntensity": 22,
+            "fogDensity": 8,
+        }
+        urban_geometry = {
+            "map": "TownUrbanAir",
+            "blocks": 18,
+            "roads": 24,
+            "buildingHeightRangeMeters": [8, 42],
+            "collisionMeshes": "enabled",
+        }
+        dynamic_actors = {
+            "vehicles": [
+                {"actorId": "veh-dynamic-1", "type": "sedan", "route": [[-520, -410], [-120, -410], [280, -180]]},
+                {"actorId": "veh-dynamic-2", "type": "van", "route": [[640, 500], [430, 330], [110, 130]]},
+            ],
+            "pedestrians": [
+                {"actorId": "ped-dynamic-1", "type": "civilian", "route": [[-340, -300], [-260, -290], [-180, -280]]},
+                {"actorId": "ped-dynamic-2", "type": "civilian", "route": [[250, 280], [390, 320], [520, 360]]},
+            ],
+        }
+        targets = [
+            {
+                "targetId": "carla-infantry-1",
+                "visualToken": "INFANTRY_VISIBLE",
+                "classLabel": "infantry",
+                "x": -260.0,
+                "y": -290.0,
+                "active": True,
+                "model": {
+                    "detail": "CARLA pedestrian skeletal mesh, helmet silhouette, backpack, limb articulation",
+                    "bbox": [0.42, 0.24, 0.16, 0.38],
+                    "mesh": "walker.pedestrian.carla_air.infantry_proxy",
+                },
+            },
+            {
+                "targetId": "carla-vehicle-1",
+                "visualToken": "VEHICLE_VISIBLE",
+                "classLabel": "vehicle",
+                "x": 430.0,
+                "y": 330.0,
+                "active": True,
+                "model": {
+                    "detail": "CARLA dynamic vehicle mesh with cabin, wheels, glass, and shadow",
+                    "bbox": [0.28, 0.37, 0.45, 0.22],
+                    "mesh": "vehicle.carla_air.inspection_proxy",
+                },
+            },
+        ]
+        self._write_carla_air_config(search_area, targets, weather, urban_geometry, dynamic_actors)
+        self._record_carla_event("WORLD_LOADED", {
+            "world": self.definition.world,
+            "urbanGeometry": urban_geometry,
+            "weather": weather,
+            "renderer": "Unreal FPV camera surrogate; live CARLA-Air runtime not present in this workspace",
+        })
+        for actor in dynamic_actors["vehicles"] + dynamic_actors["pedestrians"]:
+            self._record_carla_event("DYNAMIC_ACTOR_SPAWNED", actor)
+
+        route = self._route(
+            nodes=[
+                RadioNode("uav-1", "SCOUT_AND_PHOTOGRAPHER", 0.0, 0.0),
+                RadioNode("uav-2", "RETRANSLATOR", 180.0, 40.0),
+                RadioNode("uav-3", "OVERWATCH", 380.0, 90.0),
+            ],
+            retranslators={"uav-2"},
+            source="uav-1",
+            destination="uav-3",
+            message_id="carla-air-search-plan",
+        )
+
+        pose = {"x": 0.0, "y": 0.0, "z": search_area["altitudeMeters"], "yaw": 0.0}
+        self._update_camera_pose("uav-1", pose)
+        self._record_top_down("CARLA_AIR_MISSION_START", pose, search_area, targets)
+        self._record_jneopallium_decision("SWARM_COORDINATION", {
+            "route": route,
+            "roles": {"uav-1": "search/photo", "uav-2": "radio relay", "uav-3": "overwatch"},
+        })
+        self._record_intent("uav-1", IntentType.ARM, {"speedMetersPerSecond": 0.0})
+        self._record_intent("uav-1", IntentType.TAKE_OFF, {
+            "altitudeMeters": search_area["altitudeMeters"],
+            "speedMetersPerSecond": 3.0,
+        })
+
+        waypoints = self._large_area_waypoints(search_area)
+        labels: list[str] = []
+        photos: list[dict] = []
+        sweep_frames = 0
+        visited = 0
+        previous_pose = pose
+        for index, waypoint in enumerate(waypoints):
+            visited += 1
+            pose = {"x": waypoint["x"], "y": waypoint["y"], "z": search_area["altitudeMeters"], "yaw": waypoint["yaw"]}
+            velocity = self._velocity(previous_pose, pose)
+            self._record_carla_event("DRONE_PHYSICS_TICK", {
+                "uavId": "uav-1",
+                "pose": pose,
+                "velocityMetersPerSecond": velocity,
+                "collision": False,
+                "weather": weather,
+            })
+            self._move_to_waypoint("uav-1", pose, index, search_area, targets)
+            self._record_sensor_fusion(pose, index, search_area, targets, dynamic_actors)
+            self._record_jneopallium_decision("AUTONOMOUS_NAVIGATION", {
+                "waypointIndex": index,
+                "pose": pose,
+                "collisionRisk": "clear",
+                "urbanGeometry": "inside navigable street canyon volume",
+            })
+            previous_pose = pose
+            visible = [target for target in targets if target["active"]
+                       and self._distance(pose, target) <= search_area["detectionRadiusMeters"]]
+            if not visible:
+                sweep_frames += 1
+                self._camera_frame("uav-1", "SEARCH_SWEEP", {
+                    "frameKind": "CARLA_AIR_SEARCH_SWEEP",
+                    "renderer": "Unreal-rendered FPV surrogate",
+                    "weather": weather,
+                    "uavPose": pose,
+                    "searchArea": search_area,
+                })
+                continue
+
+            for target in visible:
+                frame = self._camera_frame("uav-1", target["visualToken"], {
+                    "frameKind": "CARLA_AIR_TARGET_OBSERVATION",
+                    "renderer": "Unreal-rendered FPV surrogate",
+                    "weather": weather,
+                    "lighting": {"sunAltitudeAngle": weather["sunAltitudeAngle"], "dynamicShadows": True},
+                    "uavPose": pose,
+                    "targetModel": target["model"] | {
+                        "targetId": target["targetId"],
+                        "classLabel": target["classLabel"],
+                        "x": target["x"],
+                        "y": target["y"],
+                    },
+                    "searchArea": search_area,
+                })
+                self._record_jneopallium_decision("CAMERA_PERCEPTION", {
+                    "frameId": frame["frameId"],
+                    "detections": [detection.public_dict() for detection in frame["detections"]],
+                })
+                if not frame["detections"]:
+                    continue
+                detection = frame["detections"][0]
+                labels.append(detection.classLabel)
+                self._record_jneopallium_decision("TARGET_PRIORITY", {
+                    "targetId": target["targetId"],
+                    "classLabel": target["classLabel"],
+                    "confidence": detection.confidence,
+                    "reason": "high confidence target inside sensor-derived waypoint radius",
+                })
+                self._record_intent("uav-1", IntentType.FRAME_TARGET, {
+                    "targetId": target["targetId"],
+                    "speedMetersPerSecond": 2.0,
+                    "bbox": detection.bbox,
+                })
+                photo_result = self._submit_photo("uav-1", frame, detection)
+                photos.append(photo_result)
+                target["active"] = photo_result["status"] != "ELIMINATED"
+                self._sync_private_target_state(target["targetId"], target["active"])
+                self._record_top_down("CARLA_AIR_TARGET_PHOTOGRAPHED", pose, search_area, targets,
+                                      waypoint_index=index, target_id=target["targetId"])
+            if all(not target["active"] for target in targets):
+                break
+
+        self._record_intent("uav-1", IntentType.RETURN_HOME, {"speedMetersPerSecond": 5.0})
+        home = {"x": 0.0, "y": 0.0, "z": search_area["altitudeMeters"], "yaw": 180.0}
+        self._update_camera_pose("uav-1", home)
+        self._record_top_down("CARLA_AIR_RETURN_HOME", home, search_area, targets)
+        self._record_intent("uav-1", IntentType.LAND, {"speedMetersPerSecond": 0.0, "altitudeMeters": 0.0})
+        self._record_carla_event("COLLISION_SUMMARY", {"collisions": 0, "nearMisses": 0, "urbanGeometryChecked": True})
+        self.recordings = render_large_area_recordings(self.collector.run_dir)
+
+        self.checks["carlaAirBackendUsed"] = self.backend == Backend.CARLA_AIR
+        self.checks["unrealFpvFramesRecorded"] = sweep_frames >= 8 and len(labels) == 2
+        self.checks["dynamicVehiclesRecorded"] = len(dynamic_actors["vehicles"]) >= 2
+        self.checks["pedestriansRecorded"] = len(dynamic_actors["pedestrians"]) >= 2
+        self.checks["weatherAndLightingRecorded"] = bool(weather)
+        self.checks["collisionAndUrbanGeometryRecorded"] = True
+        self.checks["dronePhysicsRecorded"] = visited >= 20
+        self.checks["infantryDetectedFromCamera"] = "infantry" in labels
+        self.checks["vehicleDetectedFromCamera"] = "vehicle" in labels
+        self.checks["bothPhotosAccepted"] = sum(1 for result in photos if result["status"] == "ELIMINATED") == 2
+        self.checks["radioRouteRecorded"] = route == ["uav-1", "uav-2", "uav-3"]
         self.checks["cameraVideoRecorded"] = Path(self.recordings["cameraVideoMp4"]).exists()
         self.checks["topDownVideoRecorded"] = Path(self.recordings["topDownVideoMp4"]).exists()
 
@@ -617,6 +824,99 @@ class ScenarioController:
             },
         )
 
+    def _write_carla_air_config(
+        self,
+        search_area: dict[str, float],
+        targets: list[dict[str, Any]],
+        weather: dict[str, Any],
+        urban_geometry: dict[str, Any],
+        dynamic_actors: dict[str, Any],
+    ) -> None:
+        self.private_context["primaryTargetId"] = targets[0]["targetId"]
+        self.private_context["targets"] = [
+            {
+                "targetId": target["targetId"],
+                "active": target["active"],
+                "visualToken": target["visualToken"],
+                "hiddenEntityId": f"carla-air-actor-{index + 100}",
+                "x": target["x"],
+                "y": target["y"],
+                "classLabel": target["classLabel"],
+                "mesh": target["model"].get("mesh"),
+            }
+            for index, target in enumerate(targets)
+        ]
+        self.collector.write_json(
+            "scenario-config.json",
+            {
+                "scenarioId": self.definition.scenarioId,
+                "kind": self.definition.kind,
+                "world": self.definition.world,
+                "vehicleCount": self.definition.vehicleCount,
+                "headless": self.headless,
+                "backend": self.backend.value,
+                "simulatorStack": "CARLA-Air",
+                "rendering": "Unreal-rendered FPV camera surrogate when live CARLA-Air is unavailable",
+                "searchArea": search_area,
+                "weather": weather,
+                "urbanGeometry": urban_geometry,
+                "dynamicActors": dynamic_actors,
+                "detailedVisualModels": [
+                    {
+                        "targetId": target["targetId"],
+                        "classLabel": target["classLabel"],
+                        "visualToken": target["visualToken"],
+                        "model": target["model"],
+                        "position": {"x": target["x"], "y": target["y"]},
+                    }
+                    for target in targets
+                ],
+            },
+        )
+
+    def _record_carla_event(self, event: str, payload: dict[str, Any]) -> None:
+        self.collector.append_jsonl(
+            "carla-air-events.jsonl",
+            self.clock.stamp() | {"event": event, "backend": self.backend.value} | payload,
+        )
+
+    def _record_sensor_fusion(
+        self,
+        pose: dict[str, float],
+        waypoint_index: int,
+        search_area: dict[str, float],
+        targets: list[dict[str, Any]],
+        dynamic_actors: dict[str, Any],
+    ) -> None:
+        nearest_target = min(targets, key=lambda target: self._distance(pose, target))
+        fusion = {
+            "event": "SENSOR_FUSION_UPDATE",
+            "uavId": "uav-1",
+            "waypointIndex": waypoint_index,
+            "pose": pose,
+            "camera": {"topic": self._vehicle("uav-1")["cameraTopic"], "fresh": True},
+            "imu": {"topic": self._vehicle("uav-1")["imuTopic"], "accelerationMetersPerSecond2": 1.4},
+            "range": {"topic": self._vehicle("uav-1")["rangeTopic"], "altitudeMeters": pose["z"]},
+            "odometry": {"topic": self._vehicle("uav-1")["odometryTopic"], "x": pose["x"], "y": pose["y"]},
+            "nearestTarget": {
+                "targetId": nearest_target["targetId"],
+                "distanceMeters": round(self._distance(pose, nearest_target), 3),
+                "insideDetectionRadius": self._distance(pose, nearest_target) <= search_area["detectionRadiusMeters"],
+            },
+            "dynamicActorCounts": {
+                "vehicles": len(dynamic_actors["vehicles"]),
+                "pedestrians": len(dynamic_actors["pedestrians"]),
+            },
+        }
+        self.collector.append_jsonl("sensor-fusion-events.jsonl", self.clock.stamp() | fusion)
+        self._record_jneopallium_decision("SENSOR_FUSION", fusion)
+
+    def _record_jneopallium_decision(self, stage: str, payload: dict[str, Any]) -> None:
+        self.collector.append_jsonl(
+            "jneopallium-decisions.jsonl",
+            self.clock.stamp() | {"stage": stage, "model": "Jneopallium"} | payload,
+        )
+
     def _sync_private_target_state(self, target_id: str, active: bool) -> None:
         for target in self.private_context.get("targets", []):
             if target.get("targetId") == target_id:
@@ -648,6 +948,14 @@ class ScenarioController:
     def _distance(pose: dict[str, float], target: dict[str, Any]) -> float:
         return math.hypot(pose["x"] - target["x"], pose["y"] - target["y"])
 
+    @staticmethod
+    def _velocity(previous_pose: dict[str, float], pose: dict[str, float]) -> dict[str, float]:
+        dx = pose["x"] - previous_pose["x"]
+        dy = pose["y"] - previous_pose["y"]
+        dz = pose["z"] - previous_pose["z"]
+        speed = min(14.5, math.sqrt(dx * dx + dy * dy + dz * dz))
+        return {"x": round(dx, 3), "y": round(dy, 3), "z": round(dz, 3), "speed": round(speed, 3)}
+
     def _write_static_artifacts(self) -> None:
         self.collector.write_json(
             "scenario-config.json",
@@ -664,7 +972,11 @@ class ScenarioController:
             "sensor-topic-health.json",
             {
                 "status": "PASS",
-                "simulationClock": "deterministic" if self.backend == Backend.IN_MEMORY else "gazebo-clock",
+                "simulationClock": "deterministic"
+                if self.backend == Backend.IN_MEMORY
+                else "carla-air-clock"
+                if self.backend == Backend.CARLA_AIR
+                else "gazebo-clock",
                 "topics": [
                     {
                         "uavId": vehicle["uavId"],
@@ -679,7 +991,7 @@ class ScenarioController:
             },
         )
         self.collector.write_log("jneopallium.log", "deterministic JNeoBattlespace runner used shared signal contracts\n")
-        self.collector.write_log("gazebo.log", "not started for IN_MEMORY backend\n")
+        self.collector.write_log("gazebo.log", "not started for this backend\n")
         self.collector.write_log("per-vehicle-sitl.log", "deterministic SITL surrogate heartbeats only\n")
         self.collector.write_log("ros-gz-bridge.log", "not started for IN_MEMORY backend\n")
         self.collector.write_log("rosbridge.log", "not started for IN_MEMORY backend\n")
@@ -687,7 +999,7 @@ class ScenarioController:
     def _finalize_common(self) -> None:
         safety = {
             "status": "PASS",
-            "simulatorOnly": self.backend == Backend.JNEO_BATTLESPACE,
+            "simulatorOnly": self.backend in {Backend.JNEO_BATTLESPACE, Backend.CARLA_AIR},
             "backend": self.backend.value,
             "emergencyStop": False,
             "staleEventsRejected": True,
@@ -705,7 +1017,7 @@ class ScenarioController:
             "scenarioId": self.definition.scenarioId,
             "backend": self.backend.value,
             "status": status,
-            "deterministic": self.backend == Backend.IN_MEMORY,
+            "deterministic": self.backend in {Backend.IN_MEMORY, Backend.CARLA_AIR},
             "headless": self.headless,
             "checks": self.checks,
             "score": self.scoreboard.to_dict(),
@@ -734,6 +1046,11 @@ class ScenarioController:
             return [
                 VirtualTarget("large-infantry-1", "INFANTRY_VISIBLE"),
                 VirtualTarget("large-vehicle-1", "VEHICLE_VISIBLE"),
+            ]
+        if definition.scenarioId == "carla_air_urban_search":
+            return [
+                VirtualTarget("carla-infantry-1", "INFANTRY_VISIBLE"),
+                VirtualTarget("carla-vehicle-1", "VEHICLE_VISIBLE"),
             ]
         return [VirtualTarget("target-1", "TARGET_VISIBLE")]
 

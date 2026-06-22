@@ -45,11 +45,12 @@ public final class DemoCatalog {
                 List.of(3, 2, 2),
                 "DicomContextDemoInput", "DicomContextNeuron", "DicomContextResultNeuron", "DicomContextProcessor"));
 
-        add(def("demo-06-cybersecurity-kafka-triage", "demo06", "Cybersecurity Kafka event triage", "ADVISORY", 120,
-                List.of("SecurityEventSignal", "ThreatHypothesisSignal", "RiskScoreSignal", "SecurityAdvisorySignal"),
+        add(def("demo-06-cybersecurity-kafka-triage", "demo06", "Temporal cybersecurity threat correlation", "ADVISORY", 120,
+                List.of("AuthenticationEventSignal", "ProcessEventSignal", "DnsLookupSignal", "NetworkFlowSignal",
+                        "ThreatIntelContextSignal", "AssetContextSignal", "MaintenanceWindowSignal"),
                 List.of("RiskScoreSignal", "ThreatHypothesisSignal", "SecurityAdvisorySignal", "SecurityAdvisorySignal"),
-                List.of("security-feature", "hypothesis", "investigation-action", "result-conversion"),
-                List.of(4, 3, 2, 2),
+                List.of("telemetry-normalize", "temporal-correlation", "investigation-action", "result-conversion"),
+                List.of(7, 4, 3, 2),
                 "SecurityTriageDemoInput", "SecurityTriageNeuron", "SecurityTriageResultNeuron", "SecurityTriageProcessor"));
 
         add(def("demo-07-observability-otel-export", "demo07", "OpenTelemetry export-only anomaly summarizer", "EXPORT-ONLY", 90,

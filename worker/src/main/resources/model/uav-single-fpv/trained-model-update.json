@@ -1,73 +1,658 @@
 {
-  "cameraFramesProcessed": 2,
-  "failureRecoveryTriggered": false,
-  "modelId": "uav-single-fpv-recognition-1080p-10000-v2",
-  "photographsAccepted": 2,
+  "cameraFramesProcessed": 0,
+  "classPrototypeDendrites": {
+    "INFANTRY": {
+      "weights": [
+        0.274747,
+        0.273477,
+        0.271442,
+        0.305299,
+        0.440377,
+        0.277343,
+        0.296695,
+        0.27311,
+        0.254874
+      ],
+      "weightsPerNeuron": 9
+    },
+    "VEHICLE_TO_INSPECT": {
+      "weights": [
+        0.32226,
+        0.414659,
+        0.343803,
+        0.318371,
+        0.442615,
+        0.357825,
+        0.298004,
+        0.426381,
+        0.329202
+      ],
+      "weightsPerNeuron": 9
+    }
+  },
+  "humanPersonnelAssetSource": "metahuman-ready-city-sample-crowd-fallback-to-carla-walker",
+  "humanPersonnelVisualScale": 2.0,
+  "labelAliases": {
+    "INFANTRY": [
+      "INFANTRY"
+    ]
+  },
+  "labelSchemaVersion": "human-personnel-sim-v1",
+  "lineOfSightRequired": true,
+  "modelId": "uav-single-fpv-recognition-1080p-10000-v3-carla-air-live",
+  "occlusionToleranceMeters": 2.5,
+  "photoBoundingBoxesEnabled": true,
+  "pretraining": {
+    "accepted": [
+      {
+        "attempt": 1,
+        "bbox": [
+          925,
+          468,
+          994,
+          611
+        ],
+        "classLabel": "VEHICLE_TO_INSPECT",
+        "confidence": 0.8658,
+        "distanceMeters": 18.232,
+        "hiddenPhotoEvaluator": {
+          "accepted": true,
+          "bboxHeight": 143,
+          "bboxWidth": 69,
+          "distanceMeters": 18.232,
+          "edgeMarginPixels": {
+            "x": 67,
+            "y": 37
+          },
+          "lineOfSight": {
+            "checkedRays": 1,
+            "firstHitDistanceMeters": 16.685,
+            "reason": "TARGET_SURFACE_FIRST",
+            "targetDistanceMeters": 17.45,
+            "visible": true
+          },
+          "reason": "TARGET_VISIBLE_AND_CENTERED"
+        },
+        "photo": "F:\\git\\jneopallium\\target\\carla-air-live-search-autonomous-neurons-run2\\pretrain-pictures\\carla-air-vehicle-1.jpg",
+        "targetId": "carla-air-vehicle-1",
+        "visualScale": 1.0
+      },
+      {
+        "attempt": 1,
+        "bbox": [
+          940,
+          520,
+          979,
+          559
+        ],
+        "classLabel": "INFANTRY",
+        "confidence": 0.7967,
+        "distanceMeters": 18.0,
+        "hiddenPhotoEvaluator": {
+          "accepted": true,
+          "bboxHeight": 39,
+          "bboxWidth": 39,
+          "distanceMeters": 18.0,
+          "edgeMarginPixels": {
+            "x": 67,
+            "y": 37
+          },
+          "lineOfSight": {
+            "checkedRays": 1,
+            "firstHitDistanceMeters": 17.024,
+            "reason": "TARGET_SURFACE_FIRST",
+            "targetDistanceMeters": 18.0,
+            "visible": true
+          },
+          "reason": "TARGET_VISIBLE_AND_CENTERED"
+        },
+        "photo": "F:\\git\\jneopallium\\target\\carla-air-live-search-autonomous-neurons-run2\\pretrain-pictures\\carla-air-human-personnel-1.jpg",
+        "targetId": "carla-air-human-personnel-1",
+        "visualScale": 2.0
+      },
+      {
+        "attempt": 1,
+        "bbox": [
+          921,
+          458,
+          998,
+          621
+        ],
+        "classLabel": "VEHICLE_TO_INSPECT",
+        "confidence": 0.8886,
+        "distanceMeters": 18.0,
+        "hiddenPhotoEvaluator": {
+          "accepted": true,
+          "bboxHeight": 163,
+          "bboxWidth": 77,
+          "distanceMeters": 18.0,
+          "edgeMarginPixels": {
+            "x": 67,
+            "y": 37
+          },
+          "lineOfSight": {
+            "checkedRays": 1,
+            "firstHitDistanceMeters": 16.621,
+            "reason": "TARGET_SURFACE_FIRST",
+            "targetDistanceMeters": 17.307,
+            "visible": true
+          },
+          "reason": "TARGET_VISIBLE_AND_CENTERED"
+        },
+        "photo": "F:\\git\\jneopallium\\target\\carla-air-live-search-autonomous-neurons-run2\\pretrain-pictures\\carla-air-vehicle-2.jpg",
+        "targetId": "carla-air-vehicle-2",
+        "visualScale": 1.0
+      },
+      {
+        "attempt": 1,
+        "bbox": [
+          935,
+          521,
+          984,
+          558
+        ],
+        "classLabel": "INFANTRY",
+        "confidence": 0.7991,
+        "distanceMeters": 18.0,
+        "hiddenPhotoEvaluator": {
+          "accepted": true,
+          "bboxHeight": 37,
+          "bboxWidth": 49,
+          "distanceMeters": 18.0,
+          "edgeMarginPixels": {
+            "x": 67,
+            "y": 37
+          },
+          "lineOfSight": {
+            "checkedRays": 1,
+            "firstHitDistanceMeters": 17.044,
+            "reason": "TARGET_SURFACE_FIRST",
+            "targetDistanceMeters": 18.0,
+            "visible": true
+          },
+          "reason": "TARGET_VISIBLE_AND_CENTERED"
+        },
+        "photo": "F:\\git\\jneopallium\\target\\carla-air-live-search-autonomous-neurons-run2\\pretrain-pictures\\carla-air-human-personnel-2.jpg",
+        "targetId": "carla-air-human-personnel-2",
+        "visualScale": 2.0
+      },
+      {
+        "attempt": 1,
+        "bbox": [
+          915,
+          448,
+          1004,
+          631
+        ],
+        "classLabel": "VEHICLE_TO_INSPECT",
+        "confidence": 0.9197,
+        "distanceMeters": 18.0,
+        "hiddenPhotoEvaluator": {
+          "accepted": true,
+          "bboxHeight": 183,
+          "bboxWidth": 89,
+          "distanceMeters": 18.0,
+          "edgeMarginPixels": {
+            "x": 67,
+            "y": 37
+          },
+          "lineOfSight": {
+            "checkedRays": 1,
+            "firstHitDistanceMeters": 16.405,
+            "reason": "TARGET_SURFACE_FIRST",
+            "targetDistanceMeters": 17.235,
+            "visible": true
+          },
+          "reason": "TARGET_VISIBLE_AND_CENTERED"
+        },
+        "photo": "F:\\git\\jneopallium\\target\\carla-air-live-search-autonomous-neurons-run2\\pretrain-pictures\\carla-air-vehicle-3.jpg",
+        "targetId": "carla-air-vehicle-3",
+        "visualScale": 1.0
+      },
+      {
+        "attempt": 1,
+        "bbox": [
+          945,
+          512,
+          974,
+          567
+        ],
+        "classLabel": "INFANTRY",
+        "confidence": 0.7973,
+        "distanceMeters": 18.0,
+        "hiddenPhotoEvaluator": {
+          "accepted": true,
+          "bboxHeight": 55,
+          "bboxWidth": 29,
+          "distanceMeters": 18.0,
+          "edgeMarginPixels": {
+            "x": 67,
+            "y": 37
+          },
+          "lineOfSight": {
+            "checkedRays": 1,
+            "firstHitDistanceMeters": 17.044,
+            "reason": "TARGET_SURFACE_FIRST",
+            "targetDistanceMeters": 18.0,
+            "visible": true
+          },
+          "reason": "TARGET_VISIBLE_AND_CENTERED"
+        },
+        "photo": "F:\\git\\jneopallium\\target\\carla-air-live-search-autonomous-neurons-run2\\pretrain-pictures\\carla-air-human-personnel-3.jpg",
+        "targetId": "carla-air-human-personnel-3",
+        "visualScale": 2.0
+      },
+      {
+        "attempt": 1,
+        "bbox": [
+          923,
+          444,
+          996,
+          636
+        ],
+        "classLabel": "VEHICLE_TO_INSPECT",
+        "confidence": 0.9008,
+        "distanceMeters": 18.0,
+        "hiddenPhotoEvaluator": {
+          "accepted": true,
+          "bboxHeight": 192,
+          "bboxWidth": 73,
+          "distanceMeters": 18.0,
+          "edgeMarginPixels": {
+            "x": 67,
+            "y": 37
+          },
+          "lineOfSight": {
+            "checkedRays": 1,
+            "firstHitDistanceMeters": 16.495,
+            "reason": "TARGET_SURFACE_FIRST",
+            "targetDistanceMeters": 17.251,
+            "visible": true
+          },
+          "reason": "TARGET_VISIBLE_AND_CENTERED"
+        },
+        "photo": "F:\\git\\jneopallium\\target\\carla-air-live-search-autonomous-neurons-run2\\pretrain-pictures\\carla-air-vehicle-4.jpg",
+        "targetId": "carla-air-vehicle-4",
+        "visualScale": 1.0
+      },
+      {
+        "attempt": 1,
+        "bbox": [
+          932,
+          525,
+          987,
+          554
+        ],
+        "classLabel": "INFANTRY",
+        "confidence": 0.7973,
+        "distanceMeters": 18.0,
+        "hiddenPhotoEvaluator": {
+          "accepted": true,
+          "bboxHeight": 29,
+          "bboxWidth": 55,
+          "distanceMeters": 18.0,
+          "edgeMarginPixels": {
+            "x": 67,
+            "y": 37
+          },
+          "lineOfSight": {
+            "checkedRays": 1,
+            "firstHitDistanceMeters": 17.044,
+            "reason": "TARGET_SURFACE_FIRST",
+            "targetDistanceMeters": 18.0,
+            "visible": true
+          },
+          "reason": "TARGET_VISIBLE_AND_CENTERED"
+        },
+        "photo": "F:\\git\\jneopallium\\target\\carla-air-live-search-autonomous-neurons-run2\\pretrain-pictures\\carla-air-human-personnel-4.jpg",
+        "targetId": "carla-air-human-personnel-4",
+        "visualScale": 2.0
+      }
+    ],
+    "humanPersonnelVisualScale": 2.0,
+    "picturesAccepted": 8,
+    "picturesDir": "F:\\git\\jneopallium\\target\\carla-air-live-search-autonomous-neurons-run2\\pretrain-pictures",
+    "picturesRejected": 0,
+    "rejected": [],
+    "status": "PRETRAINED"
+  },
   "recognitionNetworkConfig": {
     "cameraHeight": 1080,
     "cameraWidth": 1920,
     "firstLayerPatchColumns": 1918,
     "firstLayerPatchCount": 2067604,
     "firstLayerPatchRows": 1078,
-    "firstLayerSignalCapacity": 12405624,
-    "learningRate": 0.08,
+    "learningRate": 0.12,
     "patchSize": 3,
-    "patchStride": 1,
-    "secondLayerSignalCapacity": 49478784
+    "patchStride": 1
   },
-  "recognitions": [
-    {
-      "classification": "INFANTRY",
-      "confidence": 0.7659468260697861,
-      "conv1FeatureSignals": 96,
-      "conv2FeatureSignals": 96,
-      "frameId": "frame-mission-uav-single-1-large-area-infantry-1",
-      "pixelPatchSignals": 16,
-      "targetId": "large-area-infantry-1"
-    },
-    {
-      "classification": "VEHICLE_TO_INSPECT",
-      "confidence": 0.8226338010453722,
-      "conv1FeatureSignals": 96,
-      "conv2FeatureSignals": 96,
-      "frameId": "frame-mission-uav-single-2-large-area-vehicle-1",
-      "pixelPatchSignals": 16,
-      "targetId": "large-area-vehicle-1"
-    }
-  ],
-  "recognitionsProduced": 2,
-  "reinforcementUpdatesApplied": 2,
-  "searchWaypointsVisited": 63,
-  "sourceRunDir": "F:\\git\\jneopallium\\target\\jneopallium-uav-large-area\\large_area_infantry_vehicle_search",
-  "sourceScenario": "large_area_infantry_vehicle_search",
-  "status": "PASS",
-  "trainedSnapshotVersion": "1.2.1-large-area-search",
-  "trainingPolicy": "Apply simulator feedback after every photo. Accepted photos reinforce the expected class; wrong/missed/rejected photos would move prototypes toward expected evidence and away from incorrect predictions.",
-  "updatedAtUtc": "2026-06-16T17:46:36.093026+00:00",
+  "sourceRunDir": "F:\\git\\jneopallium\\target\\carla-air-live-search-autonomous-neurons-run2",
+  "sourceScenario": "carla_air_picture_pretrain_before_search",
+  "status": "PRETRAINED",
+  "trainedSnapshotVersion": "1.3.0-picture-pretrain",
+  "trainingPolicy": "Close CARLA-Air human personnel and vehicle pictures initialize class prototype dendrites before the search run. Only pictures accepted by the hidden photo evaluator update the model resource.",
+  "updatedAtUtc": "2026-06-17T12:45:01.098707+00:00",
   "updates": [
     {
       "expectedClassification": "VEHICLE_TO_INSPECT",
-      "frameId": "frame-mission-uav-single-2-large-area-vehicle-1",
-      "matrixUpdates": {
-        "toward": "VEHICLE_TO_INSPECT"
+      "hiddenPhotoEvaluator": {
+        "accepted": true,
+        "bboxHeight": 143,
+        "bboxWidth": 69,
+        "distanceMeters": 18.232,
+        "edgeMarginPixels": {
+          "x": 67,
+          "y": 37
+        },
+        "lineOfSight": {
+          "checkedRays": 1,
+          "firstHitDistanceMeters": 16.685,
+          "reason": "TARGET_SURFACE_FIRST",
+          "targetDistanceMeters": 17.45,
+          "visible": true
+        },
+        "reason": "TARGET_VISIBLE_AND_CENTERED"
       },
-      "outcome": "PHOTO_ACCEPTED",
+      "learningReason": "PRETRAIN_FROM_CLOSE_CARLA_TARGET_PICTURE",
+      "outcome": "PICTURE_PRETRAIN_ACCEPTED",
+      "photo": "F:\\git\\jneopallium\\target\\carla-air-live-search-autonomous-neurons-run2\\pretrain-pictures\\carla-air-vehicle-1.jpg",
       "predictedClassification": "VEHICLE_TO_INSPECT",
-      "reward": 1.0,
-      "targetId": "large-area-vehicle-1",
-      "updatedMatrices": 1
+      "prototypeDendrites": [
+        0.32703,
+        0.440943,
+        0.355817,
+        0.335486,
+        0.475712,
+        0.388274,
+        0.300471,
+        0.454925,
+        0.342226
+      ],
+      "reward": 0.7,
+      "targetId": "carla-air-vehicle-1",
+      "updatedMatrices": 1,
+      "visualScale": 1.0
     },
     {
       "expectedClassification": "INFANTRY",
-      "frameId": "frame-mission-uav-single-1-large-area-infantry-1",
-      "matrixUpdates": {
-        "toward": "INFANTRY"
+      "hiddenPhotoEvaluator": {
+        "accepted": true,
+        "bboxHeight": 39,
+        "bboxWidth": 39,
+        "distanceMeters": 18.0,
+        "edgeMarginPixels": {
+          "x": 67,
+          "y": 37
+        },
+        "lineOfSight": {
+          "checkedRays": 1,
+          "firstHitDistanceMeters": 17.024,
+          "reason": "TARGET_SURFACE_FIRST",
+          "targetDistanceMeters": 18.0,
+          "visible": true
+        },
+        "reason": "TARGET_VISIBLE_AND_CENTERED"
       },
-      "outcome": "PHOTO_ACCEPTED",
+      "learningReason": "PRETRAIN_FROM_CLOSE_CARLA_TARGET_PICTURE",
+      "outcome": "PICTURE_PRETRAIN_ACCEPTED",
+      "photo": "F:\\git\\jneopallium\\target\\carla-air-live-search-autonomous-neurons-run2\\pretrain-pictures\\carla-air-human-personnel-1.jpg",
       "predictedClassification": "INFANTRY",
-      "reward": 1.0,
-      "targetId": "large-area-infantry-1",
-      "updatedMatrices": 1
+      "prototypeDendrites": [
+        0.241502,
+        0.242724,
+        0.264407,
+        0.28135,
+        0.430327,
+        0.276394,
+        0.286148,
+        0.266502,
+        0.248932
+      ],
+      "reward": 0.7,
+      "targetId": "carla-air-human-personnel-1",
+      "updatedMatrices": 1,
+      "visualScale": 2.0
+    },
+    {
+      "expectedClassification": "VEHICLE_TO_INSPECT",
+      "hiddenPhotoEvaluator": {
+        "accepted": true,
+        "bboxHeight": 163,
+        "bboxWidth": 77,
+        "distanceMeters": 18.0,
+        "edgeMarginPixels": {
+          "x": 67,
+          "y": 37
+        },
+        "lineOfSight": {
+          "checkedRays": 1,
+          "firstHitDistanceMeters": 16.621,
+          "reason": "TARGET_SURFACE_FIRST",
+          "targetDistanceMeters": 17.307,
+          "visible": true
+        },
+        "reason": "TARGET_VISIBLE_AND_CENTERED"
+      },
+      "learningReason": "PRETRAIN_FROM_CLOSE_CARLA_TARGET_PICTURE",
+      "outcome": "PICTURE_PRETRAIN_ACCEPTED",
+      "photo": "F:\\git\\jneopallium\\target\\carla-air-live-search-autonomous-neurons-run2\\pretrain-pictures\\carla-air-vehicle-2.jpg",
+      "predictedClassification": "VEHICLE_TO_INSPECT",
+      "prototypeDendrites": [
+        0.323961,
+        0.435564,
+        0.350383,
+        0.324307,
+        0.465007,
+        0.37134,
+        0.29246,
+        0.436625,
+        0.330076
+      ],
+      "reward": 0.7,
+      "targetId": "carla-air-vehicle-2",
+      "updatedMatrices": 1,
+      "visualScale": 1.0
+    },
+    {
+      "expectedClassification": "INFANTRY",
+      "hiddenPhotoEvaluator": {
+        "accepted": true,
+        "bboxHeight": 37,
+        "bboxWidth": 49,
+        "distanceMeters": 18.0,
+        "edgeMarginPixels": {
+          "x": 67,
+          "y": 37
+        },
+        "lineOfSight": {
+          "checkedRays": 1,
+          "firstHitDistanceMeters": 17.044,
+          "reason": "TARGET_SURFACE_FIRST",
+          "targetDistanceMeters": 18.0,
+          "visible": true
+        },
+        "reason": "TARGET_VISIBLE_AND_CENTERED"
+      },
+      "learningReason": "PRETRAIN_FROM_CLOSE_CARLA_TARGET_PICTURE",
+      "outcome": "PICTURE_PRETRAIN_ACCEPTED",
+      "photo": "F:\\git\\jneopallium\\target\\carla-air-live-search-autonomous-neurons-run2\\pretrain-pictures\\carla-air-human-personnel-2.jpg",
+      "predictedClassification": "INFANTRY",
+      "prototypeDendrites": [
+        0.276645,
+        0.268443,
+        0.272216,
+        0.309057,
+        0.438417,
+        0.279515,
+        0.305542,
+        0.277411,
+        0.254675
+      ],
+      "reward": 0.7,
+      "targetId": "carla-air-human-personnel-2",
+      "updatedMatrices": 1,
+      "visualScale": 2.0
+    },
+    {
+      "expectedClassification": "VEHICLE_TO_INSPECT",
+      "hiddenPhotoEvaluator": {
+        "accepted": true,
+        "bboxHeight": 183,
+        "bboxWidth": 89,
+        "distanceMeters": 18.0,
+        "edgeMarginPixels": {
+          "x": 67,
+          "y": 37
+        },
+        "lineOfSight": {
+          "checkedRays": 1,
+          "firstHitDistanceMeters": 16.405,
+          "reason": "TARGET_SURFACE_FIRST",
+          "targetDistanceMeters": 17.235,
+          "visible": true
+        },
+        "reason": "TARGET_VISIBLE_AND_CENTERED"
+      },
+      "learningReason": "PRETRAIN_FROM_CLOSE_CARLA_TARGET_PICTURE",
+      "outcome": "PICTURE_PRETRAIN_ACCEPTED",
+      "photo": "F:\\git\\jneopallium\\target\\carla-air-live-search-autonomous-neurons-run2\\pretrain-pictures\\carla-air-vehicle-3.jpg",
+      "predictedClassification": "VEHICLE_TO_INSPECT",
+      "prototypeDendrites": [
+        0.332884,
+        0.434398,
+        0.357823,
+        0.328581,
+        0.460598,
+        0.373489,
+        0.301532,
+        0.441966,
+        0.338964
+      ],
+      "reward": 0.7,
+      "targetId": "carla-air-vehicle-3",
+      "updatedMatrices": 1,
+      "visualScale": 1.0
+    },
+    {
+      "expectedClassification": "INFANTRY",
+      "hiddenPhotoEvaluator": {
+        "accepted": true,
+        "bboxHeight": 55,
+        "bboxWidth": 29,
+        "distanceMeters": 18.0,
+        "edgeMarginPixels": {
+          "x": 67,
+          "y": 37
+        },
+        "lineOfSight": {
+          "checkedRays": 1,
+          "firstHitDistanceMeters": 17.044,
+          "reason": "TARGET_SURFACE_FIRST",
+          "targetDistanceMeters": 18.0,
+          "visible": true
+        },
+        "reason": "TARGET_VISIBLE_AND_CENTERED"
+      },
+      "learningReason": "PRETRAIN_FROM_CLOSE_CARLA_TARGET_PICTURE",
+      "outcome": "PICTURE_PRETRAIN_ACCEPTED",
+      "photo": "F:\\git\\jneopallium\\target\\carla-air-live-search-autonomous-neurons-run2\\pretrain-pictures\\carla-air-human-personnel-3.jpg",
+      "predictedClassification": "INFANTRY",
+      "prototypeDendrites": [
+        0.27798,
+        0.272823,
+        0.274575,
+        0.311964,
+        0.435668,
+        0.282365,
+        0.304775,
+        0.278134,
+        0.258451
+      ],
+      "reward": 0.7,
+      "targetId": "carla-air-human-personnel-3",
+      "updatedMatrices": 1,
+      "visualScale": 2.0
+    },
+    {
+      "expectedClassification": "VEHICLE_TO_INSPECT",
+      "hiddenPhotoEvaluator": {
+        "accepted": true,
+        "bboxHeight": 192,
+        "bboxWidth": 73,
+        "distanceMeters": 18.0,
+        "edgeMarginPixels": {
+          "x": 67,
+          "y": 37
+        },
+        "lineOfSight": {
+          "checkedRays": 1,
+          "firstHitDistanceMeters": 16.495,
+          "reason": "TARGET_SURFACE_FIRST",
+          "targetDistanceMeters": 17.251,
+          "visible": true
+        },
+        "reason": "TARGET_VISIBLE_AND_CENTERED"
+      },
+      "learningReason": "PRETRAIN_FROM_CLOSE_CARLA_TARGET_PICTURE",
+      "outcome": "PICTURE_PRETRAIN_ACCEPTED",
+      "photo": "F:\\git\\jneopallium\\target\\carla-air-live-search-autonomous-neurons-run2\\pretrain-pictures\\carla-air-vehicle-4.jpg",
+      "predictedClassification": "VEHICLE_TO_INSPECT",
+      "prototypeDendrites": [
+        0.32226,
+        0.414659,
+        0.343803,
+        0.318371,
+        0.442615,
+        0.357825,
+        0.298004,
+        0.426381,
+        0.329202
+      ],
+      "reward": 0.7,
+      "targetId": "carla-air-vehicle-4",
+      "updatedMatrices": 1,
+      "visualScale": 1.0
+    },
+    {
+      "expectedClassification": "INFANTRY",
+      "hiddenPhotoEvaluator": {
+        "accepted": true,
+        "bboxHeight": 29,
+        "bboxWidth": 55,
+        "distanceMeters": 18.0,
+        "edgeMarginPixels": {
+          "x": 67,
+          "y": 37
+        },
+        "lineOfSight": {
+          "checkedRays": 1,
+          "firstHitDistanceMeters": 17.044,
+          "reason": "TARGET_SURFACE_FIRST",
+          "targetDistanceMeters": 18.0,
+          "visible": true
+        },
+        "reason": "TARGET_VISIBLE_AND_CENTERED"
+      },
+      "learningReason": "PRETRAIN_FROM_CLOSE_CARLA_TARGET_PICTURE",
+      "outcome": "PICTURE_PRETRAIN_ACCEPTED",
+      "photo": "F:\\git\\jneopallium\\target\\carla-air-live-search-autonomous-neurons-run2\\pretrain-pictures\\carla-air-human-personnel-4.jpg",
+      "predictedClassification": "INFANTRY",
+      "prototypeDendrites": [
+        0.274747,
+        0.273477,
+        0.271442,
+        0.305299,
+        0.440377,
+        0.277343,
+        0.296695,
+        0.27311,
+        0.254874
+      ],
+      "reward": 0.7,
+      "targetId": "carla-air-human-personnel-4",
+      "updatedMatrices": 1,
+      "visualScale": 2.0
     }
-  ]
+  ],
+  "videoFramesEncoded": 0
 }

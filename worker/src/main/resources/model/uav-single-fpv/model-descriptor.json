@@ -1,9 +1,17 @@
 {
   "modelId": "uav-single-fpv-recognition-1080p-10000-v2",
   "modelName": "Simulation-Only Single UAV FPV 1080p Recognition Network - 10000 Neurons",
-  "description": "Jneopallium-style 3x3 patch convolutional recognizer with 10000 explicit neuron entries, 1080p FPV coverage, infantry/vehicle classes, interface-bound heterogeneous processors, and simulator reinforcement feedback.",
+  "description": "Jneopallium-style 3x3 patch convolutional recognizer with 10000 explicit neuron entries, 1080p FPV coverage, human personnel/vehicle classes, interface-bound heterogeneous processors, and simulator reinforcement feedback. Extended with an autonomous movement policy head: interface-bound navigation processors feed a bank of discrete-action movement neurons that decide direction/speed/altitude, avoid obstacles, and reposition for better target visibility, reinforced online from photo, coverage, occlusion, and area-compliance reward.",
   "version": "1.2.0",
   "latestTrainedSnapshot": "trained-model-update.json",
+  "latestTrainedMovementPolicy": "trained-movement-policy.json",
+  "latestTrainedMovementPolicyEvidence": {
+    "trainingSummary": "F:\\git\\jneopallium\\target\\codex-evidence40-loop-success-export-converged-policy\\coverage-training-summary.json",
+    "frozenEvaluationSummary": "F:\\git\\jneopallium\\target\\codex-evidence41-converged-policy-true-frozen-eval\\coverage-training-summary.json",
+    "areaMeters": "500 x 500",
+    "cameraFootprintMeters": 100,
+    "lidarTrainingObstacles": 3
+  },
   "generatedFrom": {
     "codePackage": "com.rakovpublic.jneuropallium.worker.demo.uavsingle",
     "generator": "Codex generated resource model config",
@@ -12,7 +20,13 @@
       "com.rakovpublic.jneuropallium.worker.demo.uavsingle.ConvolutionalPerceptronNeuron",
       "com.rakovpublic.jneuropallium.worker.demo.uavsingle.ClassificationNeuron",
       "com.rakovpublic.jneuropallium.worker.demo.uavsingle.ImageRecognitionNeuron",
-      "com.rakovpublic.jneuropallium.worker.demo.uavsingle.RecognitionLearningNeuron"
+      "com.rakovpublic.jneuropallium.worker.demo.uavsingle.RecognitionLearningNeuron",
+      "com.rakovpublic.jneuropallium.worker.demo.uavsingle.movement.MovementDecisionNeuron",
+      "com.rakovpublic.jneuropallium.worker.demo.uavsingle.movement.MovementActionNeuron",
+      "com.rakovpublic.jneuropallium.worker.demo.uavsingle.movement.MovementLearningNeuron",
+      "com.rakovpublic.jneuropallium.worker.demo.uavsingle.movement.MovementPolicyProcessor",
+      "com.rakovpublic.jneuropallium.worker.demo.uavsingle.movement.MovementLearningProcessor",
+      "com.rakovpublic.jneuropallium.worker.demo.uavsingle.movement.MovementSignalProcessors"
     ]
   },
   "networkConfig": {
@@ -164,6 +178,70 @@
         "classAggregatesProduced": 10,
         "outputRecognitionResultsPerFrame": 1
       }
+    },
+    {
+      "layerID": 7,
+      "file": "layer-7-movement-policy.json",
+      "name": "Autonomous Movement Policy Bank",
+      "type": "movementPolicy",
+      "size": 20,
+      "parallelControlHead": true,
+      "consumes": [
+        "com.rakovpublic.jneuropallium.worker.demo.uavsingle.movement.MovementObservationSignal"
+      ],
+      "produces": [
+        "com.rakovpublic.jneuropallium.worker.demo.uavsingle.movement.MovementDecisionSignal",
+        "com.rakovpublic.jneuropallium.ai.signals.fast.MotorCommandSignal"
+      ],
+      "quantitative": {
+        "neurons": 20,
+        "decisionNeurons": 1,
+        "actionNeurons": 20,
+        "discreteActions": 20,
+        "heterogeneousProcessorsPerNeuron": 10,
+        "navigationInterfaces": 8,
+        "dendriteWeightsPerNeuron": 10,
+        "biasesPerNeuron": 1,
+        "totalMovementWeightScalars": 200,
+        "totalMovementBiasScalars": 20,
+        "navigationInterfaceList": [
+          "INavigationCoverageSignal",
+          "ITargetViewSignal",
+          "IOcclusionAvoidanceSignal",
+          "IObstacleAvoidanceSignal",
+          "IAreaBoundarySignal",
+          "IAltitudeControlSignal",
+          "ISearchProgressSignal",
+          "IMovementEnergySignal"
+        ]
+      }
+    },
+    {
+      "layerID": 8,
+      "file": "layer-8-movement-learning.json",
+      "name": "Autonomous Movement Reinforcement Learning",
+      "type": "learning",
+      "size": 1,
+      "consumes": [
+        "com.rakovpublic.jneuropallium.worker.demo.uavsingle.movement.MovementReinforcementSignal"
+      ],
+      "produces": [
+        "com.rakovpublic.jneuropallium.worker.demo.uavsingle.movement.MovementLearningResultSignal"
+      ],
+      "quantitative": {
+        "neurons": 1,
+        "mutableMovementWeightScalars": 200,
+        "mutableMovementBiasScalars": 20,
+        "rewardSources": [
+          "newPhotographedTargets",
+          "newCoverageCells",
+          "distanceClosedToTarget",
+          "areaCompliance",
+          "occlusionPenalty",
+          "missedTargetPenalty",
+          "movementActivity"
+        ]
+      }
     }
   ],
   "signalFrequencyMap": {
@@ -206,18 +284,41 @@
     "com.rakovpublic.jneuropallium.worker.demo.uavsingle.RecognitionLearningResultSignal": {
       "epoch": "1",
       "loop": "5"
+    },
+    "com.rakovpublic.jneuropallium.worker.demo.uavsingle.movement.MovementObservationSignal": {
+      "epoch": "1",
+      "loop": "1"
+    },
+    "com.rakovpublic.jneuropallium.worker.demo.uavsingle.movement.MovementDecisionSignal": {
+      "epoch": "1",
+      "loop": "1"
+    },
+    "com.rakovpublic.jneuropallium.ai.signals.fast.MotorCommandSignal": {
+      "epoch": "1",
+      "loop": "1"
+    },
+    "com.rakovpublic.jneuropallium.worker.demo.uavsingle.movement.MovementReinforcementSignal": {
+      "epoch": "1",
+      "loop": "1"
+    },
+    "com.rakovpublic.jneuropallium.worker.demo.uavsingle.movement.MovementLearningResultSignal": {
+      "epoch": "1",
+      "loop": "1"
     }
   },
-  "totalLayers": 7,
-  "totalRealNeurons": 10000,
-  "totalTrainableWeightScalars": 73728,
-  "totalTrainableBiasScalars": 8192,
+  "totalLayers": 9,
+  "totalRealNeurons": 10022,
+  "totalTrainableWeightScalars": 73928,
+  "totalTrainableBiasScalars": 8212,
   "totalClassifierPrototypeScalars": 165600,
   "totalMutableLearningScalars": 165600,
   "notes": [
     "Layer 0 and layer 3 are explicit signal boundaries with no neuron objects.",
     "ConvolutionalPerceptronNeuron implements both pixel-patch and feature-patch interfaces, but each listed neuron is a single neuron object.",
     "Classifier prototypes are materialized from deterministic template feature vectors and ensemble variants; simulator feedback updates these matrices.",
+    "Layers 7 and 8 form a parallel autonomous-movement control head (not downstream of the recognition result layer). The MovementDecisionNeuron owns the 20 action neurons; the MovementLearningNeuron shares that same policy network and applies reward.",
+    "Movement action neurons score interface-bound processor features (coverage, target view, occlusion escape, obstacle clearance, area compliance, center pull, altitude window, search progress, movement energy, stuck escape) and the argmax action emits a MotorCommandSignal (velocityX, velocityY, targetAltitude, yaw).",
+    "Trained movement dendrite weights and biases are emitted into trained-model-update.json under layers.movementPolicy; layer-7-movement-policy.json holds the structural definition and initial weights.",
     "This is a simulator/model configuration, not a real-world detection performance guarantee."
   ]
 }

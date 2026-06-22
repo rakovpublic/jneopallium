@@ -1,0 +1,37 @@
+{
+  "layerID": 8,
+  "name": "Autonomous Movement Reinforcement Learning",
+  "type": "learning",
+  "learningNeuron": {
+    "neuronClass": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.movement.MovementLearningNeuron",
+    "interface": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.movement.IMovementLearningNeuron",
+    "processor": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.movement.MovementLearningProcessor",
+    "consumesSignal": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.movement.MovementReinforcementSignal",
+    "producesSignal": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.movement.MovementLearningResultSignal",
+    "sharesPolicyNetworkWith": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.movement.MovementDecisionNeuron"
+  },
+  "updateRule": {
+    "type": "REINFORCE-style policy gradient on the last-fired action neuron",
+    "perDendriteDelta": "learningRate * reward * featureValue",
+    "biasDelta": "learningRate * reward * 0.08",
+    "weightBounds": {"min": -6.0, "max": 6.0},
+    "biasBounds": {"min": -3.0, "max": 3.0}
+  },
+  "rewardShaping": {
+    "newPhotographedTargets": 1.7,
+    "newCoverageCells": 0.16,
+    "distanceClosedToTarget": "clamp((prevNearest - curNearest) / 70, -0.3, 0.45)",
+    "insideAreaPenalty": "-0.55 when predicted/actual position leaves the search area, else 0",
+    "movementActivity": "+0.08 when displacement >= minimumActiveDisplacement, else -0.22",
+    "occlusionPenalty": "-0.15 per recent occlusion rejection",
+    "missedTargetPenalty": -0.6,
+    "autoReinforcementReason": "SIMULATOR_REWARD_TO_JNEOPALLIUM_MOVEMENT_LAYER",
+    "eventReinforcementReasons": ["MOVEMENT_POLICY_MISSED_TARGET", "MOVEMENT_OCCLUSION_REJECTION"]
+  },
+  "mutableMovementWeightScalars": 200,
+  "mutableMovementBiasScalars": 20,
+  "notes": [
+    "The movement learning neuron does not own separate weights: it reinforces the dendrites of the action neuron that produced the most recent MotorCommandSignal, which live in layer 7.",
+    "Reward arrives both as per-tick auto-reinforcement (derived from the next MovementObservationSignal) and as discrete event reinforcement (missed target, occlusion rejection, accepted photo)."
+  ]
+}

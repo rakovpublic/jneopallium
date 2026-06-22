@@ -1,0 +1,54 @@
+{
+  "sources": {
+    "LANL": [
+      "AuthenticationEventSignal",
+      "ProcessEventSignal",
+      "DnsLookupSignal",
+      "NetworkFlowSignal"
+    ],
+    "ToN_IoT": [
+      "AuthenticationEventSignal",
+      "ProcessEventSignal",
+      "DnsLookupSignal",
+      "NetworkFlowSignal"
+    ],
+    "OpTC": [
+      "ProcessEventSignal",
+      "DnsLookupSignal",
+      "NetworkFlowSignal"
+    ],
+    "CIC-IDS2017": [
+      "NetworkFlowSignal"
+    ],
+    "CSE-CIC-IDS2018": [
+      "NetworkFlowSignal"
+    ],
+    "UNSW-NB15": [
+      "NetworkFlowSignal"
+    ],
+    "CALDERA": [
+      "AuthenticationEventSignal",
+      "ProcessEventSignal",
+      "DnsLookupSignal",
+      "NetworkFlowSignal"
+    ]
+  },
+  "canonicalEventFields": [
+    "dataset",
+    "source_kind",
+    "entity_id",
+    "event_tick",
+    "source",
+    "event_type",
+    "technique",
+    "evidence_confidence",
+    "threat_intel_confidence",
+    "asset_criticality",
+    "maintenance_active",
+    "malicious",
+    "campaign_id",
+    "host_group",
+    "attack_type",
+    "split"
+  ]
+}

@@ -135,17 +135,71 @@ public final class DemoScenarioEngine {
     }
 
     private static List<IInputSignal> securityInputs(String demoId, long tick) {
-        double attackFailures = tick >= 5 && tick <= 15 ? 38.0 : 3.0;
-        Map<String, String> attack = attrs("scenario", "attack-like", "authFailures", attackFailures,
-                "sourceReputation", 0.12, "endpointCriticality", 0.9, "eventType", "auth-failure-burst",
-                "serviceAccount", false);
-        Map<String, String> benign = attrs("scenario", "benign", "authFailures", 18.0,
-                "sourceReputation", 0.85, "endpointCriticality", 0.35, "eventType", "service-retry",
-                "serviceAccount", true);
-        return List.of(
-                signal(demoId, tick, "endpoint-attack", "SecurityEventSignal", attackFailures, attack),
-                signal(demoId, tick, "svc-backup", "SecurityEventSignal", 18.0, benign)
-        );
+        List<IInputSignal> signals = new ArrayList<>();
+        String attackEntity = "user:backup-service@workstation-17";
+        String benignEntity = "svc:deployment-agent@web-tier";
+        String slowEntity = "host:finance-file-01";
+
+        if (tick >= 12 && tick <= 18 && tick % 3 == 0) {
+            signals.add(signal(demoId, tick, slowEntity, "NetworkFlowSignal", 0.48,
+                    securityAttrs("slow-exfiltration", "flow", tick, "low-and-slow-egress", "EXFILTRATION", 0.48,
+                            0.66, 0.80, false, "LANL,ToN_IoT,OpTC,CIC-IDS2017,UNSW-NB15,CALDERA",
+                            "small repeated outbound transfers to a rare storage destination")));
+        }
+        signals.add(signal(demoId, tick, attackEntity, "AssetContextSignal", 0.92,
+                securityAttrs("attack-chain", "asset", tick, "asset-context", "NONE", 0.05,
+                        0.0, 0.92, false, "LANL,ToN_IoT,OpTC,CIC-IDS2017,UNSW-NB15,CALDERA",
+                        "critical workstation touches domain-controller tier")));
+        signals.add(signal(demoId, tick, benignEntity, "MaintenanceWindowSignal", 0.78,
+                securityAttrs("benign-maintenance", "maintenance", tick, "maintenance-window", "BENIGN_CONTEXT", 0.02,
+                        0.0, 0.45, true, "ToN_IoT,CALDERA",
+                        "signed change ticket for deployment fanout")));
+        signals.add(signal(demoId, tick, slowEntity, "ThreatIntelContextSignal", 0.66,
+                securityAttrs("slow-exfiltration", "threat-intel", tick, "threat-intel", "COMMAND_AND_CONTROL", 0.34,
+                        0.66, 0.80, false, "LANL,OpTC,CALDERA",
+                        "newly seen storage domain with moderate campaign similarity")));
+
+        if (tick >= 2 && tick <= 4) {
+            signals.add(signal(demoId, tick, attackEntity, "AuthenticationEventSignal", 0.72,
+                    securityAttrs("attack-chain", "auth", tick, "unusual-login", "UNUSUAL_LOGIN", 0.72,
+                            0.0, 0.92, false, "LANL,ToN_IoT,CALDERA",
+                            "failed-login burst followed by success from unfamiliar host")));
+        }
+        if (tick >= 5 && tick <= 7) {
+            signals.add(signal(demoId, tick, attackEntity, "ProcessEventSignal", 0.82,
+                    securityAttrs("attack-chain", "process", tick, "encoded-powershell", "EXECUTION", 0.82,
+                            0.0, 0.92, false, "LANL,OpTC,CALDERA",
+                            "encoded PowerShell spawned after unusual authentication")));
+        }
+        if (tick >= 8 && tick <= 10) {
+            signals.add(signal(demoId, tick, attackEntity, "AuthenticationEventSignal", 0.88,
+                    securityAttrs("attack-chain", "auth", tick, "remote-service-fanout", "LATERAL_MOVEMENT", 0.88,
+                            0.0, 0.92, false, "LANL,OpTC,CALDERA",
+                            "remote authentication fanout followed process execution")));
+        }
+        if (tick >= 11 && tick <= 14) {
+            signals.add(signal(demoId, tick, attackEntity, "DnsLookupSignal", 0.76,
+                    securityAttrs("attack-chain", "dns", tick, "rare-domain", "COMMAND_AND_CONTROL", 0.76,
+                            0.82, 0.92, false, "LANL,OpTC,CALDERA",
+                            "rare DNS lookup to infrastructure with high reputation risk")));
+            signals.add(signal(demoId, tick, attackEntity, "NetworkFlowSignal", 0.79,
+                    securityAttrs("attack-chain", "flow", tick, "periodic-c2-flow", "COMMAND_AND_CONTROL", 0.79,
+                            0.82, 0.92, false, "LANL,OpTC,CIC-IDS2017,CALDERA",
+                            "periodic TLS flow after lateral movement")));
+        }
+
+        signals.add(signal(demoId, tick, benignEntity, "AuthenticationEventSignal", 0.20,
+                securityAttrs("benign-maintenance", "auth", tick, "service-retry", "BENIGN_CONTEXT", 0.20,
+                        0.0, 0.45, true, "LANL,ToN_IoT,CALDERA",
+                        "known deployment account retries during approved maintenance")));
+        if (tick % 4 == 0) {
+            signals.add(signal(demoId, tick, benignEntity, "ProcessEventSignal", 0.24,
+                    securityAttrs("benign-maintenance", "process", tick, "signed-deployment-script", "BENIGN_CONTEXT", 0.24,
+                            0.0, 0.45, true, "ToN_IoT,CALDERA",
+                            "signed deployment script matches maintenance ticket")));
+        }
+
+        return signals;
     }
 
     private static List<IInputSignal> observabilityInputs(String demoId, long tick) {
@@ -290,23 +344,58 @@ public final class DemoScenarioEngine {
     }
 
     private static void securityStage(DemoSignal input, DemoSignal output) {
-        double failures = dbl(input, "authFailures");
-        double reputation = dbl(input, "sourceReputation");
-        boolean serviceAccount = bool(input, "serviceAccount");
-        double score = serviceAccount ? failures * 0.01 : failures * (1.0 - reputation) / 40.0;
-        output.withAttribute("score", score);
-        if (score > 0.6) {
-            output.setResultType("SECURITY_ADVISORY");
-            output.setDecision("INVESTIGATE_BRUTE_FORCE");
-            output.setReason("failed login burst with low source reputation raised attack hypothesis");
-            output.setNumericValue(score);
-            output.setConfidence(0.95);
+        String scenario = input.getAttributes().getOrDefault("scenario", "unknown");
+        String source = input.getAttributes().getOrDefault("source", "unknown");
+        String technique = input.getAttributes().getOrDefault("technique", "UNKNOWN");
+        double evidence = dbl(input, "evidenceConfidence");
+        double threatIntel = dbl(input, "threatIntelConfidence");
+        double criticality = dbl(input, "assetCriticality");
+        boolean maintenance = bool(input, "maintenanceActive");
+        double sequence = sequenceConfidence(scenario, technique, input.getTick());
+        double maintenanceGate = maintenance ? 0.25 : 1.0;
+        double threatIntelGate = 1.0 + threatIntel;
+        double rawPosterior = (evidence * 0.45 + sequence * 0.35 + threatIntel * 0.20) * maintenanceGate;
+        double posterior = clamp(rawPosterior, 0.0, 0.98);
+        double impact = clamp(posterior * (0.5 + criticality), 0.0, 1.0);
+        boolean baselineFrozen = posterior >= 0.30 || evidence >= 0.80 || "attack-chain".equals(scenario);
+        boolean attackChain = "attack-chain".equals(scenario) && posterior >= 0.55;
+        boolean slowExfiltration = "slow-exfiltration".equals(scenario) && input.getTick() >= 12 && posterior >= 0.35;
+
+        output.withAttribute("score", posterior);
+        output.withAttribute("posterior", posterior);
+        output.withAttribute("impact", impact);
+        output.withAttribute("sequenceConfidence", sequence);
+        output.withAttribute("maintenanceGate", maintenanceGate);
+        output.withAttribute("threatIntelGate", threatIntelGate);
+        output.withAttribute("baselineFrozen", baselineFrozen);
+        output.withAttribute("trainingSources", input.getAttributes().get("trainingSources"));
+        output.withAttribute("source", source);
+        output.withAttribute("technique", technique);
+
+        if (attackChain) {
+            output.setResultType("TEMPORAL_THREAT_ADVISORY");
+            output.setDecision(impact >= 0.85 ? "URGENT_INVESTIGATION" : "INVESTIGATE_ATTACK_CHAIN");
+            output.setReason("ordered auth, process, DNS and flow evidence raised a temporal threat hypothesis");
+            output.setNumericValue(posterior);
+            output.setConfidence(0.96);
+        } else if (slowExfiltration) {
+            output.setResultType("LOW_AND_SLOW_CORRELATION");
+            output.setDecision("INVESTIGATE_EXFILTRATION_SEQUENCE");
+            output.setReason("weak outbound flow evidence accumulated with threat-intelligence context");
+            output.setNumericValue(posterior);
+            output.setConfidence(0.91);
+        } else if (maintenance) {
+            output.setResultType("CONTEXT_SUPPRESSED_OBSERVATION");
+            output.setDecision("ADVISORY_DAMPEN_MAINTENANCE_PATTERN");
+            output.setReason("maintenance context reduced but did not erase service-account evidence");
+            output.setNumericValue(posterior);
+            output.setConfidence(0.88);
         } else {
-            output.setResultType("DAMPENED_BENIGN_PATTERN");
-            output.setDecision("ADVISORY_DAMPEN_FALSE_POSITIVE");
-            output.setReason("service-account retry pattern dampened as advisory-only false-positive control");
-            output.setNumericValue(score);
-            output.setConfidence(0.87);
+            output.setResultType("SECURITY_OBSERVATION");
+            output.setDecision("CONTINUE_CORRELATION");
+            output.setReason("single evidence source retained for temporal correlation");
+            output.setNumericValue(posterior);
+            output.setConfidence(0.84);
         }
     }
 
@@ -397,6 +486,34 @@ public final class DemoScenarioEngine {
             result.put(String.valueOf(keyValues[i]), String.valueOf(keyValues[i + 1]));
         }
         return result;
+    }
+
+    private static Map<String, String> securityAttrs(String scenario, String source, long eventTick, String eventType,
+                                                     String technique, double evidenceConfidence,
+                                                     double threatIntelConfidence, double assetCriticality,
+                                                     boolean maintenanceActive, String trainingSources,
+                                                     String evidenceSummary) {
+        return attrs("scenario", scenario, "source", source, "eventTick", eventTick, "eventType", eventType,
+                "technique", technique, "evidenceConfidence", evidenceConfidence,
+                "threatIntelConfidence", threatIntelConfidence, "assetCriticality", assetCriticality,
+                "maintenanceActive", maintenanceActive, "trainingSources", trainingSources,
+                "evidenceSummary", evidenceSummary);
+    }
+
+    private static double sequenceConfidence(String scenario, String technique, long tick) {
+        if ("attack-chain".equals(scenario)) {
+            return switch (technique) {
+                case "UNUSUAL_LOGIN" -> 0.35;
+                case "EXECUTION" -> tick >= 5 ? 0.62 : 0.30;
+                case "LATERAL_MOVEMENT" -> tick >= 8 ? 0.84 : 0.40;
+                case "COMMAND_AND_CONTROL" -> tick >= 11 ? 0.88 : 0.45;
+                default -> 0.20;
+            };
+        }
+        if ("slow-exfiltration".equals(scenario)) {
+            return tick >= 12 ? 0.52 : 0.26;
+        }
+        return 0.08;
     }
 
     private static double dbl(DemoSignal signal, String key) {

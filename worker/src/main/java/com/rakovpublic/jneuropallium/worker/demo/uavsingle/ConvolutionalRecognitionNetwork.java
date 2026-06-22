@@ -93,7 +93,9 @@ public class ConvolutionalRecognitionNetwork {
         Map<String, Object> matrices = new LinkedHashMap<>();
 
         if (expected != null && classifierNeurons.containsKey(expected)) {
-            classifierNeurons.get(expected).adjustPrototype(features, rate);
+            ClassificationNeuron expectedNeuron = classifierNeurons.get(expected);
+            expectedNeuron.adjustPrototype(features, rate);
+            expectedNeuron.addExemplar(features, 256);
             matrices.put("toward", expected.name());
             updates++;
         }

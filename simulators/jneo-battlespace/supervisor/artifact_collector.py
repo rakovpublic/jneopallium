@@ -24,6 +24,9 @@ class ArtifactCollector:
 
     PUBLIC_JSONL = {
         "per-uav-camera-events.jsonl",
+        "carla-air-events.jsonl",
+        "sensor-fusion-events.jsonl",
+        "jneopallium-decisions.jsonl",
         "mavlink-events.jsonl",
         "communication-events.jsonl",
         "flight-intents.jsonl",

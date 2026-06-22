@@ -1,0 +1,45 @@
+demo: demo-06-cybersecurity-kafka-triage
+objective: temporal threat-correlation training and validation
+sources:
+  - id: LANL
+    role: primary enterprise temporal validation
+    streams: [authentication, process, dns, network_flow, red_team_ground_truth]
+    trains: [entity_baselines, unusual_login, lateral_movement, temporal_correlation]
+  - id: ToN_IoT
+    role: first complete multi-source implementation set
+    streams: [windows_events, linux_events, network_flow, zeek, ground_truth]
+    trains: [host_event_detector, network_detector, temporal_pipeline]
+  - id: OpTC
+    role: advanced endpoint and APT provenance validation
+    streams: [ecar_process, file, network, host, red_team_ground_truth]
+    trains: [process_network_provenance, delayed_evidence, long_attack_chains]
+  - id: CIC-IDS2017
+    role: fast network receptor pretraining
+    streams: [pcap, labelled_flow_csv]
+    trains: [network_anomaly_detector, attack_family_features]
+  - id: UNSW-NB15
+    role: quick network classifier and throughput validation
+    streams: [labelled_network_features]
+    trains: [network_anomaly_detector, multiclass_attack_family_classifier]
+  - id: CALDERA
+    role: exact controlled labels for attack-chain scenarios
+    streams: [sysmon, auditd, zeek, suricata, kafka_jsonl, caldera_ground_truth]
+    trains: [sequence_gates, response_thresholds, false_positive_suppression]
+split_policy:
+  never_random_row_split: true
+  axes: [time_period, campaign, host_group, attack_type]
+windows:
+  fast: 1-10s
+  behavior: 1-5m
+  incident: 30-120m
+  baseline: hours-to-days
+metrics:
+  - true_positive_rate
+  - false_positive_rate
+  - mean_time_to_detection
+  - mean_time_to_containment_recommendation
+  - attack_chain_completion_before_detection
+  - baseline_poisoning_after_replay
+  - alerts_per_incident
+  - processor_calls_per_second
+  - incorrect_quarantine_recommendations

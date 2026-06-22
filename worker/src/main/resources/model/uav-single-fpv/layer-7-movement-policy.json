@@ -1,0 +1,132 @@
+{
+  "layerID": 7,
+  "name": "Temporal Autonomous Movement Neuron Layer",
+  "type": "movementPolicy",
+  "policyVersion": "movement-temporal-action-neurons-v2",
+  "processorContract": "heterogeneous processors consume typed navigation interfaces; lower harm neurons convert lidar/obstacle/boundary signals into fast veto inputs; temporal action neurons own action value, eligibility, ACh/DA gates and movement selection",
+  "decisionNeuron": {
+    "neuronClass": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.movement.MovementDecisionNeuron",
+    "interface": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.movement.IMovementPolicyNeuron",
+    "consumesSignal": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.movement.MovementObservationSignal",
+    "selection": "processor features -> movement harm-gate neuron -> temporal action-selection neurons; argmax over neuron activation, where fast harm veto overrides reward and dopamine"
+  },
+  "harmGateNeuron": {
+    "neuronId": "movement-harm-gate-lidar-fast-loop",
+    "neuronClass": "com.rakovpublic.jneuropallium.worker.demo.uavsingle.movement.MovementHarmGateNeuron",
+    "loop": 1,
+    "consumesInterfaces": [
+      "ILidarObstacleSignal",
+      "IObstacleAvoidanceSignal",
+      "IAreaBoundarySignal",
+      "IAltitudeControlSignal"
+    ],
+    "output": "MovementHarmAssessment per action; vetoed actions receive negative activation before dopamine/vigor can affect selection",
+    "collisionPolicy": "lidar and obstacle risks are fast harm signals; emergency hold-climb can remain viable when horizontal movement is vetoed"
+  },
+  "processors": [
+    {"processorId": "movement-proc-coverage", "interface": "INavigationCoverageSignal", "feature": "coverage_unvisited", "description": "prefers unvisited coverage-grid cells inside the search area"},
+    {"processorId": "movement-proc-coverage-frontier", "interface": "INavigationCoverageSignal", "feature": "coverage_frontier_alignment", "description": "aligns movement with the nearest still-uncovered camera-footprint cell"},
+    {"processorId": "movement-proc-sweep-coverage", "interface": "INavigationCoverageSignal", "feature": "sweep_alignment", "description": "encourages boundary-to-boundary lawn-mower coverage of the specified area"},
+    {"processorId": "movement-proc-target-view", "interface": "ITargetViewSignal", "feature": "target_view_alignment", "description": "aligns heading with the nearest unphotographed target and rewards close inspection"},
+    {"processorId": "movement-proc-occlusion", "interface": "IOcclusionAvoidanceSignal", "feature": "occlusion_escape", "description": "side-steps or climbs to clear an occluded target after a line-of-sight rejection"},
+    {"processorId": "movement-proc-obstacle", "interface": "IObstacleAvoidanceSignal", "feature": "obstacle_clearance", "description": "avoids moving into geometry using per-action obstacle ray-cast risk"},
+    {"processorId": "movement-proc-lidar-corridor", "interface": "ILidarObstacleSignal", "feature": "lidar_corridor_clearance", "description": "fast LiDAR corridor clearance for the candidate action"},
+    {"processorId": "movement-proc-lidar-escape", "interface": "ILidarObstacleSignal", "feature": "lidar_escape_route", "description": "biases actions toward LiDAR-cleared escape directions"},
+    {"processorId": "movement-proc-boundary", "interface": "IAreaBoundarySignal", "feature": "area_compliance", "description": "keeps the predicted position inside the configured search area"},
+    {"processorId": "movement-proc-center-pull", "interface": "IAreaBoundarySignal", "feature": "center_pull", "description": "pulls back toward the area center near or outside a boundary"},
+    {"processorId": "movement-proc-altitude", "interface": "IAltitudeControlSignal", "feature": "altitude_window", "description": "keeps altitude inside the band and biases climbs for occlusion, descents for inspection"},
+    {"processorId": "movement-proc-progress", "interface": "ISearchProgressSignal", "feature": "search_progress", "description": "balances fast survey speed with slow close inspection near a target"},
+    {"processorId": "movement-proc-energy", "interface": "IMovementEnergySignal", "feature": "movement_energy", "description": "rewards using the available speed envelope to cover ground"},
+    {"processorId": "movement-proc-stuck-escape", "interface": "IMovementEnergySignal", "feature": "stuck_escape", "description": "favours faster actions when recent displacement stalls"}
+  ],
+  "initialDendriteWeights": {
+    "base": {
+      "coverage_unvisited": 0.9,
+      "coverage_frontier_alignment": 2.4,
+      "sweep_alignment": 1.05,
+      "target_view_alignment": 0.75,
+      "occlusion_escape": 0.5,
+      "obstacle_clearance": 1.15,
+      "lidar_corridor_clearance": 1.4,
+      "lidar_escape_route": 1.2,
+      "area_compliance": 1.35,
+      "center_pull": 0.45,
+      "altitude_window": 0.5,
+      "search_progress": 0.45,
+      "movement_energy": 0.3,
+      "stuck_escape": 0.3
+    },
+    "adjustments": {
+      "behaviorReturnCenter": {"area_compliance": 2.1, "center_pull": 1.6, "coverage_frontier_alignment": 0.2, "target_view_alignment": 0.2, "sweep_alignment": 0.1, "lidar_escape_route": 1.6},
+      "altitudeDeltaPositive": {"occlusion_escape": 1.15, "altitude_window": 0.85, "lidar_escape_route": 1.5},
+      "altitudeDeltaNegative": {"target_view_alignment": 0.95, "search_progress": 0.7},
+      "speedMultiplierZero": {"coverage_unvisited": 0.1, "coverage_frontier_alignment": -0.1, "sweep_alignment": 0.0, "search_progress": 0.1, "movement_energy": 0.05}
+    },
+    "biasRule": "-0.12 when speedMultiplier==0 and altitudeDeltaMeters==0 (hover-scan), else 0.0",
+    "weightBounds": {"min": -6.0, "max": 6.0},
+    "biasBounds": {"min": -3.0, "max": 3.0},
+    "temporalState": {
+      "eligibilityTrace": "decays inside each action neuron and is increased only when that neuron fires",
+      "learnedActionValue": "updated by phasic dopamine through ACh-gated learning",
+      "vigorGate": "ACh burst coincident with dopamine gives transient action vigor without forcing long-term weight change",
+      "harmGate": "fast LiDAR/obstacle/boundary veto suppresses the action before reward modulation"
+    }
+  },
+  "actionNeurons": [
+    {"neuronId": "movement-neuron-survey-east", "actionId": "survey-east", "label": "survey east", "directionX": 1.0, "directionY": 0.0, "altitudeDeltaMeters": 0.0, "speedMultiplier": 1.0, "behavior": "fixed"},
+    {"neuronId": "movement-neuron-survey-west", "actionId": "survey-west", "label": "survey west", "directionX": -1.0, "directionY": 0.0, "altitudeDeltaMeters": 0.0, "speedMultiplier": 1.0, "behavior": "fixed"},
+    {"neuronId": "movement-neuron-survey-north", "actionId": "survey-north", "label": "survey north", "directionX": 0.0, "directionY": 1.0, "altitudeDeltaMeters": 0.0, "speedMultiplier": 1.0, "behavior": "fixed"},
+    {"neuronId": "movement-neuron-survey-south", "actionId": "survey-south", "label": "survey south", "directionX": 0.0, "directionY": -1.0, "altitudeDeltaMeters": 0.0, "speedMultiplier": 1.0, "behavior": "fixed"},
+    {"neuronId": "movement-neuron-survey-north-east", "actionId": "survey-north-east", "label": "survey north east", "directionX": 0.707, "directionY": 0.707, "altitudeDeltaMeters": 0.0, "speedMultiplier": 1.0, "behavior": "fixed"},
+    {"neuronId": "movement-neuron-survey-north-west", "actionId": "survey-north-west", "label": "survey north west", "directionX": -0.707, "directionY": 0.707, "altitudeDeltaMeters": 0.0, "speedMultiplier": 1.0, "behavior": "fixed"},
+    {"neuronId": "movement-neuron-survey-south-east", "actionId": "survey-south-east", "label": "survey south east", "directionX": 0.707, "directionY": -0.707, "altitudeDeltaMeters": 0.0, "speedMultiplier": 1.0, "behavior": "fixed"},
+    {"neuronId": "movement-neuron-survey-south-west", "actionId": "survey-south-west", "label": "survey south west", "directionX": -0.707, "directionY": -0.707, "altitudeDeltaMeters": 0.0, "speedMultiplier": 1.0, "behavior": "fixed"},
+    {"neuronId": "movement-neuron-inspect-east", "actionId": "inspect-east", "label": "slow inspect east", "directionX": 1.0, "directionY": 0.0, "altitudeDeltaMeters": -1.6, "speedMultiplier": 0.55, "behavior": "fixed"},
+    {"neuronId": "movement-neuron-inspect-west", "actionId": "inspect-west", "label": "slow inspect west", "directionX": -1.0, "directionY": 0.0, "altitudeDeltaMeters": -1.6, "speedMultiplier": 0.55, "behavior": "fixed"},
+    {"neuronId": "movement-neuron-inspect-north", "actionId": "inspect-north", "label": "slow inspect north", "directionX": 0.0, "directionY": 1.0, "altitudeDeltaMeters": -1.6, "speedMultiplier": 0.55, "behavior": "fixed"},
+    {"neuronId": "movement-neuron-inspect-south", "actionId": "inspect-south", "label": "slow inspect south", "directionX": 0.0, "directionY": -1.0, "altitudeDeltaMeters": -1.6, "speedMultiplier": 0.55, "behavior": "fixed"},
+    {"neuronId": "movement-neuron-climb-east", "actionId": "climb-east", "label": "climb east", "directionX": 1.0, "directionY": 0.0, "altitudeDeltaMeters": 2.4, "speedMultiplier": 0.7, "behavior": "fixed"},
+    {"neuronId": "movement-neuron-climb-west", "actionId": "climb-west", "label": "climb west", "directionX": -1.0, "directionY": 0.0, "altitudeDeltaMeters": 2.4, "speedMultiplier": 0.7, "behavior": "fixed"},
+    {"neuronId": "movement-neuron-climb-north", "actionId": "climb-north", "label": "climb north", "directionX": 0.0, "directionY": 1.0, "altitudeDeltaMeters": 2.4, "speedMultiplier": 0.7, "behavior": "fixed"},
+    {"neuronId": "movement-neuron-climb-south", "actionId": "climb-south", "label": "climb south", "directionX": 0.0, "directionY": -1.0, "altitudeDeltaMeters": 2.4, "speedMultiplier": 0.7, "behavior": "fixed"},
+    {"neuronId": "movement-neuron-return-to-area", "actionId": "return-to-area", "label": "return to search area", "directionX": 0.0, "directionY": 0.0, "altitudeDeltaMeters": 0.0, "speedMultiplier": 0.85, "behavior": "return_center"},
+    {"neuronId": "movement-neuron-hold-climb", "actionId": "hold-climb", "label": "hold and climb", "directionX": 0.0, "directionY": 0.0, "altitudeDeltaMeters": 3.0, "speedMultiplier": 0.0, "behavior": "fixed"},
+    {"neuronId": "movement-neuron-hold-descend", "actionId": "hold-descend", "label": "hold and descend", "directionX": 0.0, "directionY": 0.0, "altitudeDeltaMeters": -2.5, "speedMultiplier": 0.0, "behavior": "fixed"},
+    {"neuronId": "movement-neuron-hover-scan", "actionId": "hover-scan", "label": "hover scan", "directionX": 0.0, "directionY": 0.0, "altitudeDeltaMeters": 0.0, "speedMultiplier": 0.0, "behavior": "fixed"}
+  ],
+  "runtimeDefaults": {
+    "learningRate": 0.07,
+    "explorationSigma": 0.03,
+    "commandHoldSeconds": 3.0,
+    "minSpeedMetersPerSecond": 8.0,
+    "maxSpeedMetersPerSecond": 24.0,
+    "minAltitudeMeters": 16.0,
+    "maxAltitudeMeters": 48.0,
+    "coverageGridSizeMeters": 30.0,
+    "boundaryMarginMeters": 10.0,
+    "decisionHorizonSeconds": 3.0,
+    "initialAltitudeMeters": 24.0,
+    "minimumActiveDisplacementMeters": 1.0,
+    "obstacleRayMeters": 35.0,
+    "deterministicSeed": 17
+  },
+  "runtimeCarlaAirLive": {
+    "commandHoldSeconds": 0.6,
+    "decisionHorizonSeconds": 0.6,
+    "minSpeedMetersPerSecond": 6.0,
+    "maxSpeedMetersPerSecond": 18.0,
+    "minAltitudeMeters": 28.0,
+    "maxAltitudeMeters": 90.0,
+    "coverageGridSizeMeters": 35.0,
+    "boundaryMarginMeters": 8.0,
+    "initialAltitudeMeters": 70.0,
+    "learningRate": 0.025,
+    "explorationSigma": 0.05,
+    "obstacleRayMeters": 70.0,
+    "minimumActiveDisplacementMeters": 0.25
+  },
+  "notes": [
+    "This file is the structural + initial definition of the movement policy. Full per-neuron trained dendrite weights and biases are emitted at runtime into trained-model-update.json under layers.movementPolicy.neurons[].dendrites.weights.",
+    "Per-action initial weights are base ⊕ adjustments: return_center, altitude up (climb / hold-climb), altitude down (inspect / hold-descend), and zero-speed (hover/hold) each override the listed keys."
+  ]
+}

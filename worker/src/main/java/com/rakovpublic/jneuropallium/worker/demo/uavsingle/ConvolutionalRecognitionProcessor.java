@@ -53,8 +53,8 @@ public class ConvolutionalRecognitionProcessor implements ISignalProcessor<Camer
         double runnerScore = runnerUp == null ? 0.0 : runnerUp.getScore();
         double margin = best == null ? 0.0 : best.getScore() - runnerScore;
         double confidence = best == null ? 0.0
-                : TargetPriorityProcessor.clamp(best.getScore()
-                * (0.65 + 0.35 * TargetPriorityProcessor.clamp(margin * 3.0)));
+                : TargetPriorityProcessor.clamp(0.30 + best.getScore() * 0.88
+                + TargetPriorityProcessor.clamp(margin * 3.0) * 0.12);
         TargetClassification classification = best == null || confidence < 0.25
                 ? TargetClassification.UNKNOWN_OBJECT
                 : best.getClassification();
@@ -210,6 +210,8 @@ public class ConvolutionalRecognitionProcessor implements ISignalProcessor<Camer
         Map<String, Double> features = new LinkedHashMap<>();
         features.put("image.meanIntensity", meanIntensity(frame.getPixels()));
         features.put("image.contrast", contrast(frame.getPixels()));
+        features.putAll(morphologyFeatures(frame.getPixels()));
+        features.putAll(detectionBoxFeatures(frame));
         List<PooledFeatureSignal> pooled = new ArrayList<>();
         pooled.addAll(pool(frame, "conv1", conv1Maps, features));
         pooled.addAll(pool(frame, "conv2", conv2Maps, features));
@@ -324,6 +326,101 @@ public class ConvolutionalRecognitionProcessor implements ISignalProcessor<Camer
             }
         }
         return (max - min) / 255.0;
+    }
+
+    private static Map<String, Double> morphologyFeatures(int[][] pixels) {
+        Map<String, Double> features = new LinkedHashMap<>();
+        if (pixels == null || pixels.length == 0 || pixels[0] == null || pixels[0].length == 0) {
+            features.put("morph.darkRatio", 0.0);
+            features.put("morph.darkAspect", 0.0);
+            features.put("morph.darkHorizontalSpread", 0.0);
+            features.put("morph.darkVerticalSpread", 0.0);
+            features.put("morph.darkCentroidX", 0.0);
+            features.put("morph.darkCentroidY", 0.0);
+            return features;
+        }
+        int height = pixels.length;
+        int width = pixels[0].length;
+        double mean = meanIntensity(pixels) * 255.0;
+        double threshold = Math.max(35.0, Math.min(150.0, mean - 22.0));
+        int count = 0;
+        int minX = width;
+        int maxX = -1;
+        int minY = height;
+        int maxY = -1;
+        double sumX = 0.0;
+        double sumY = 0.0;
+        for (int y = 0; y < height; y++) {
+            int[] row = pixels[y];
+            if (row == null) {
+                continue;
+            }
+            for (int x = 0; x < Math.min(width, row.length); x++) {
+                if (clampPixel(row[x]) <= threshold) {
+                    count++;
+                    minX = Math.min(minX, x);
+                    maxX = Math.max(maxX, x);
+                    minY = Math.min(minY, y);
+                    maxY = Math.max(maxY, y);
+                    sumX += x;
+                    sumY += y;
+                }
+            }
+        }
+        double total = Math.max(1.0, width * (double) height);
+        double objectWidth = maxX >= minX ? (maxX - minX + 1.0) : 0.0;
+        double objectHeight = maxY >= minY ? (maxY - minY + 1.0) : 0.0;
+        features.put("morph.darkRatio", count / total);
+        features.put("morph.darkAspect", objectHeight == 0.0 ? 0.0
+                : TargetPriorityProcessor.clamp(objectWidth / objectHeight / 2.5));
+        features.put("morph.darkHorizontalSpread", objectWidth / Math.max(1.0, width));
+        features.put("morph.darkVerticalSpread", objectHeight / Math.max(1.0, height));
+        features.put("morph.darkCentroidX", count == 0 ? 0.0 : (sumX / count) / Math.max(1.0, width - 1.0));
+        features.put("morph.darkCentroidY", count == 0 ? 0.0 : (sumY / count) / Math.max(1.0, height - 1.0));
+        return features;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static Map<String, Double> detectionBoxFeatures(CameraFrameSignal frame) {
+        Map<String, Double> features = new LinkedHashMap<>();
+        features.put("box.widthRatio", 0.0);
+        features.put("box.heightRatio", 0.0);
+        features.put("box.areaRatio", 0.0);
+        features.put("box.aspectWide", 0.0);
+        features.put("box.aspectTall", 0.0);
+        Object raw = frame == null ? null : frame.getAttributes().get("detectionBox");
+        if (!(raw instanceof Map<?, ?> rawMap)) {
+            return features;
+        }
+        Map<Object, Object> box = (Map<Object, Object>) rawMap;
+        double width = numeric(box.get("w"));
+        double height = numeric(box.get("h"));
+        if (width <= 0.0 || height <= 0.0) {
+            return features;
+        }
+        int imageHeight = frame.getPixels() == null ? 0 : frame.getPixels().length;
+        int imageWidth = imageHeight == 0 || frame.getPixels()[0] == null ? 0 : frame.getPixels()[0].length;
+        features.put("box.widthRatio", TargetPriorityProcessor.clamp(width / Math.max(1.0, imageWidth)));
+        features.put("box.heightRatio", TargetPriorityProcessor.clamp(height / Math.max(1.0, imageHeight)));
+        features.put("box.areaRatio", TargetPriorityProcessor.clamp((width * height) / Math.max(1.0, imageWidth * (double) imageHeight)));
+        double aspect = width / height;
+        features.put("box.aspectWide", TargetPriorityProcessor.clamp(aspect / 2.0));
+        features.put("box.aspectTall", TargetPriorityProcessor.clamp((height / width) / 2.0));
+        return features;
+    }
+
+    private static double numeric(Object value) {
+        if (value instanceof Number number) {
+            return number.doubleValue();
+        }
+        if (value == null) {
+            return 0.0;
+        }
+        try {
+            return Double.parseDouble(value.toString());
+        } catch (NumberFormatException ignored) {
+            return 0.0;
+        }
     }
 
     private static PoolStats stats(double[][] map) {

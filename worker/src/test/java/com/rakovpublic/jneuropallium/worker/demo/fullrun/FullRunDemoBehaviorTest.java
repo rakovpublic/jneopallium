@@ -77,6 +77,10 @@ class FullRunDemoBehaviorTest {
 
         assertTrue(FullRunDemoTestSupport.manifest("demo-06-cybersecurity-kafka-triage")
                 .behaviorAssertions.get("attackScoreGreaterThanBenign"));
+        assertTrue(FullRunDemoTestSupport.manifest("demo-06-cybersecurity-kafka-triage")
+                .behaviorAssertions.get("temporalAttackChainDetected"));
+        assertTrue(FullRunDemoTestSupport.manifest("demo-06-cybersecurity-kafka-triage")
+                .behaviorAssertions.get("maintenanceContextSuppressed"));
         assertTrue(FullRunDemoTestSupport.manifest("demo-08-adaptive-tutoring-lti")
                 .behaviorAssertions.get("strugglingLearnerHint"));
         assertTrue(FullRunDemoTestSupport.manifest("demo-08-adaptive-tutoring-lti")

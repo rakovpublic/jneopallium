@@ -1,0 +1,40 @@
+{
+  "requireAllSources": false,
+  "sources": [
+    {
+      "id": "LANL",
+      "kind": "canonical",
+      "paths": ["external/lanl/canonical-events.jsonl.gz"]
+    },
+    {
+      "id": "ToN_IoT",
+      "kind": "canonical",
+      "paths": ["external/toniot/canonical-events.jsonl.gz"]
+    },
+    {
+      "id": "OpTC",
+      "kind": "canonical",
+      "paths": ["external/optc/canonical-events.jsonl.gz"]
+    },
+    {
+      "id": "CIC-IDS2017",
+      "kind": "canonical",
+      "paths": ["external/cic-ids2017/canonical-flows.csv.gz"]
+    },
+    {
+      "id": "CSE-CIC-IDS2018",
+      "kind": "canonical",
+      "paths": ["external/cse-cic-ids2018/canonical-flows.csv.gz"]
+    },
+    {
+      "id": "UNSW-NB15",
+      "kind": "canonical",
+      "paths": ["external/unsw-nb15/canonical-flows.csv.gz"]
+    },
+    {
+      "id": "CALDERA",
+      "kind": "canonical",
+      "paths": ["external/caldera/canonical-events.jsonl.gz"]
+    }
+  ]
+}

@@ -394,12 +394,29 @@ public final class DemoFullRunLauncher {
 
     private static void validateSecurity(List<JsonNode> lines, DemoRunManifest manifest) {
         List<JsonNode> results = flatten(lines);
-        double attack = maxAttribute(results, "endpoint-attack", "score");
-        double benign = maxAttribute(results, "svc-backup", "score");
+        double attack = maxAttribute(results, "user:backup-service@workstation-17", "posterior");
+        double benign = maxAttribute(results, "svc:deployment-agent@web-tier", "posterior");
+        double slow = maxAttribute(results, "host:finance-file-01", "posterior");
         manifest.metrics.put("attackScore", attack);
         manifest.metrics.put("benignScore", benign);
+        manifest.metrics.put("slowExfiltrationScore", slow);
         manifest.behaviorAssertions.put("attackScoreGreaterThanBenign", attack > benign);
-        manifest.behaviorAssertions.put("attackAdvisoryEmitted", count(results, "endpoint-attack", "SECURITY_ADVISORY") > 0);
+        manifest.behaviorAssertions.put("temporalAttackChainDetected",
+                count(results, "user:backup-service@workstation-17", "TEMPORAL_THREAT_ADVISORY") > 0);
+        manifest.behaviorAssertions.put("maintenanceContextSuppressed",
+                count(results, "svc:deployment-agent@web-tier", "CONTEXT_SUPPRESSED_OBSERVATION") > 0);
+        manifest.behaviorAssertions.put("lowAndSlowCorrelation",
+                count(results, "host:finance-file-01", "LOW_AND_SLOW_CORRELATION") > 0);
+        manifest.behaviorAssertions.put("baselineFrozenDuringAttack", results.stream().anyMatch(node ->
+                "user:backup-service@workstation-17".equals(node.path("entityId").asText())
+                        && node.path("attributes").path("baselineFrozen").asBoolean(false)));
+        manifest.behaviorAssertions.put("allTrainingSourcesReferenced", results.stream().anyMatch(node ->
+                node.path("attributes").path("trainingSources").asText("").contains("LANL")
+                        && node.path("attributes").path("trainingSources").asText("").contains("ToN_IoT")
+                        && node.path("attributes").path("trainingSources").asText("").contains("OpTC")
+                        && node.path("attributes").path("trainingSources").asText("").contains("CIC-IDS2017")
+                        && node.path("attributes").path("trainingSources").asText("").contains("UNSW-NB15")
+                        && node.path("attributes").path("trainingSources").asText("").contains("CALDERA")));
         manifest.behaviorAssertions.put("advisoryOnly", noResultTypeContains(results, "BLOCK"));
     }
 

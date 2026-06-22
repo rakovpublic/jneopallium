@@ -56,6 +56,24 @@ def main(argv: list[str] | None = None) -> int:
                 file=sys.stderr,
             )
             return 3
+    carla_check = None
+    if backend == Backend.CARLA_AIR:
+        carla_check = DependencyChecker().check_carla_air(preview_enabled=True)
+        if args.require_live_carla and not carla_check["ok"]:
+            summaries = [
+                write_skipped_dependency_artifacts(
+                    output_root=output_root,
+                    backend=backend,
+                    scenario_id=scenario_id,
+                    dependency_check=carla_check,
+                    headless=args.headless,
+                    seed=args.seed,
+                )
+                for scenario_id in selected
+            ]
+            write_suite_summary(output_root, backend, summaries)
+            print(json.dumps({"status": "SKIPPED_DEPENDENCY", "missing": carla_check["missing"]}, indent=2))
+            return 2
 
     summaries: list[dict] = []
     for scenario_id in selected:
@@ -77,6 +95,12 @@ def main(argv: list[str] | None = None) -> int:
             },
         )
         collector.write_json("versions.json", in_memory_versions(backend))
+        if backend == Backend.CARLA_AIR and carla_check is not None:
+            versions = in_memory_versions(backend)
+            versions["carlaAirDependencyCheck"] = carla_check
+            versions["liveCarlaRuntimeAvailable"] = carla_check["ok"]
+            versions["surrogateMode"] = not carla_check["ok"]
+            collector.write_json("versions.json", versions)
         collector.write_json(
             "process-manifest.json",
             {
@@ -85,6 +109,8 @@ def main(argv: list[str] | None = None) -> int:
                 "childProcessesStarted": False,
                 "reason": "IN_MEMORY backend uses no external simulator processes."
                 if backend == Backend.IN_MEMORY
+                else "CARLA-Air deterministic surrogate used; live Unreal runtime unavailable or not requested."
+                if backend == Backend.CARLA_AIR and (carla_check is None or not carla_check["ok"] or not args.allow_live_processes)
                 else "Live process start is delegated to guarded orchestration.",
             },
         )
@@ -134,13 +160,7 @@ def write_skipped_dependency_artifacts(
         "process-manifest.json",
         {
             "backend": backend.value,
-            "components": [
-                "Gazebo Harmonic",
-                "ArduPilot SITL",
-                "ros_gz_bridge",
-                "rosbridge_suite",
-                "Jneopallium",
-            ],
+            "components": skipped_dependency_components(backend),
             "childProcessesStarted": False,
             "reason": "SKIPPED_DEPENDENCY",
         },
@@ -205,13 +225,32 @@ def write_suite_summary(output_root: Path, backend: Backend, summaries: list[dic
     (suite_dir / "summary.json").write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
+def skipped_dependency_components(backend: Backend) -> list[str]:
+    if backend == Backend.CARLA_AIR:
+        return [
+            "CARLA Python API",
+            "CARLA-Air Unreal runtime",
+            "Jneopallium",
+            "JNeoBattlespace",
+        ]
+    return [
+        "Gazebo Harmonic",
+        "ArduPilot SITL",
+        "ros_gz_bridge",
+        "rosbridge_suite",
+        "Jneopallium",
+    ]
+
+
 def in_memory_versions(backend: Backend) -> dict:
     return {
         "backend": backend.value,
         "platform": platform.platform(),
         "python": platform.python_version(),
-        "liveDependenciesRequired": backend == Backend.JNEO_BATTLESPACE,
-        "note": "IN_MEMORY backend intentionally avoids Gazebo, ArduPilot SITL, ROS 2, and GStreamer.",
+        "liveDependenciesRequired": backend in {Backend.JNEO_BATTLESPACE, Backend.CARLA_AIR},
+        "note": "IN_MEMORY backend intentionally avoids external simulator processes."
+        if backend == Backend.IN_MEMORY
+        else "CARLA_AIR backend can use a live Unreal runtime when installed; this run may use deterministic CARLA-Air surrogate artifacts.",
     }
 
 
@@ -221,16 +260,20 @@ def normalize_backend(value: str) -> Backend:
         return Backend.IN_MEMORY
     if normalized in {"JNEO_BATTLESPACE", "JNEOBATTLESPACE", "BATTLESPACE"}:
         return Backend.JNEO_BATTLESPACE
+    if normalized in {"CARLA_AIR", "CARLAAIR", "CARLA"}:
+        return Backend.CARLA_AIR
     raise ValueError(f"unknown backend: {value}")
 
 
 def parse_args(argv: list[str] | None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Run JNeoBattlespace scenarios.")
     parser.add_argument("scenario", nargs="?", default="live_single_autonomous", help="'all' or a scenario id")
-    parser.add_argument("--backend", default="IN_MEMORY", help="IN_MEMORY or JNEO_BATTLESPACE")
+    parser.add_argument("--backend", default="IN_MEMORY", help="IN_MEMORY, JNEO_BATTLESPACE, or CARLA_AIR")
     parser.add_argument("--headless", action="store_true", help="Run without GUI components.")
     parser.add_argument("--preview", action="store_true", help="Require GStreamer preview dependencies.")
     parser.add_argument("--allow-live-processes", action="store_true", help="Allow live Gazebo/SITL child process start.")
+    parser.add_argument("--require-live-carla", action="store_true",
+                        help="Require a live CARLA-Air/Unreal runtime instead of deterministic CARLA-Air surrogate mode.")
     parser.add_argument("--seed", type=int, default=24703042047, help="Deterministic seed.")
     parser.add_argument("--output", type=Path, default=None, help="Output root. Defaults to target/jneo-battlespace.")
     args = parser.parse_args(argv)
@@ -241,4 +284,3 @@ def parse_args(argv: list[str] | None) -> argparse.Namespace:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

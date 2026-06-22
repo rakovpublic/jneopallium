@@ -99,7 +99,7 @@ target/jneopallium-fullrun-demos/
 
 `demo-05-dicom-readonly-context` is `READ-ONLY`: image metadata and routing/QC advisory, no pixel diagnosis and no writeback.
 
-`demo-06-cybersecurity-kafka-triage` is `ADVISORY`: event stream triage and investigation recommendations, no blocking action.
+`demo-06-cybersecurity-kafka-triage` is `ADVISORY`: temporal threat correlation across authentication, process, DNS, network-flow, threat-intelligence, asset, and maintenance streams; it emits investigation recommendations and no blocking action.
 
 `demo-07-observability-otel-export` is `EXPORT-ONLY`: anomaly summaries and root-cause candidates exported as JSONL/OTel-like records.
 

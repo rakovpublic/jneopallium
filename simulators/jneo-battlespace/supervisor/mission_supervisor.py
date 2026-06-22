@@ -8,6 +8,7 @@ from typing import Any
 class Backend(str, Enum):
     IN_MEMORY = "IN_MEMORY"
     JNEO_BATTLESPACE = "JNEO_BATTLESPACE"
+    CARLA_AIR = "CARLA_AIR"
 
 
 class IntentType(str, Enum):
@@ -64,8 +65,8 @@ class JNeoBattlespaceMissionSupervisor:
             reasons.append("STALE_HEARTBEAT")
         if not self._within_limits(intent):
             reasons.append("SAFETY_LIMIT_EXCEEDED")
-        if execute and (self.backend != Backend.JNEO_BATTLESPACE or not self.simulator_only):
-            reasons.append("COMMAND_EXECUTION_REQUIRES_JNEO_BATTLESPACE_SIMULATOR_ONLY")
+        if execute and (self.backend not in {Backend.JNEO_BATTLESPACE, Backend.CARLA_AIR} or not self.simulator_only):
+            reasons.append("COMMAND_EXECUTION_REQUIRES_SIMULATOR_ONLY_BACKEND")
 
         return {
             "intent": {

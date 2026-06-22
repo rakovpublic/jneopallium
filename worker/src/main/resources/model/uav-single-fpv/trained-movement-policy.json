@@ -1,0 +1,1845 @@
+{
+  "policyVersion" : "movement-policy-neurons-v1",
+  "processorContract" : "heterogeneous processors consume typed navigation interfaces; action neurons only receive processor-produced features, never the raw observation",
+  "runtime" : {
+    "learningRate" : 0.0015,
+    "explorationSigma" : 0.017298063558811697,
+    "commandHoldSeconds" : 0.6,
+    "minSpeedMetersPerSecond" : 8.0,
+    "maxSpeedMetersPerSecond" : 24.0,
+    "minAltitudeMeters" : 28.0,
+    "maxAltitudeMeters" : 110.0,
+    "coverageGridSizeMeters" : 50.0,
+    "boundaryMarginMeters" : 8.0,
+    "decisionHorizonSeconds" : 0.6,
+    "initialAltitudeMeters" : 100.0,
+    "minimumActiveDisplacementMeters" : 0.25,
+    "obstacleRayMeters" : 70.0,
+    "deterministicSeed" : 17
+  },
+  "layers" : {
+    "movementPolicy" : {
+      "neurons" : [ {
+        "neuronId" : "movement-neuron-survey-east",
+        "actionId" : "survey-east",
+        "actionLabel" : "survey east",
+        "movementAction" : {
+          "actionId" : "survey-east",
+          "label" : "survey east",
+          "directionX" : 1.0,
+          "directionY" : 0.0,
+          "altitudeDeltaMeters" : 0.0,
+          "speedMultiplier" : 1.0,
+          "behavior" : "fixed"
+        },
+        "interfaces" : [ "INavigationCoverageSignal", "ITargetViewSignal", "IOcclusionAvoidanceSignal", "IObstacleAvoidanceSignal", "ILidarObstacleSignal", "IAreaBoundarySignal", "IAltitudeControlSignal", "ISearchProgressSignal", "IMovementEnergySignal" ],
+        "processors" : [ {
+          "processorId" : "movement-proc-coverage",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "coverage_unvisited"
+        }, {
+          "processorId" : "movement-proc-coverage-frontier",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "coverage_frontier_alignment"
+        }, {
+          "processorId" : "movement-proc-sweep-coverage",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "sweep_alignment"
+        }, {
+          "processorId" : "movement-proc-target-view",
+          "interface" : "ITargetViewSignal",
+          "feature" : "target_view_alignment"
+        }, {
+          "processorId" : "movement-proc-occlusion",
+          "interface" : "IOcclusionAvoidanceSignal",
+          "feature" : "occlusion_escape"
+        }, {
+          "processorId" : "movement-proc-obstacle",
+          "interface" : "IObstacleAvoidanceSignal",
+          "feature" : "obstacle_clearance"
+        }, {
+          "processorId" : "movement-proc-lidar-corridor",
+          "interface" : "ILidarObstacleSignal",
+          "feature" : "lidar_corridor_clearance"
+        }, {
+          "processorId" : "movement-proc-lidar-escape-route",
+          "interface" : "ILidarObstacleSignal",
+          "feature" : "lidar_escape_route"
+        }, {
+          "processorId" : "movement-proc-boundary",
+          "interface" : "IAreaBoundarySignal",
+          "feature" : "area_compliance"
+        }, {
+          "processorId" : "movement-proc-center-pull",
+          "interface" : "IAreaBoundarySignal",
+          "feature" : "center_pull"
+        }, {
+          "processorId" : "movement-proc-altitude",
+          "interface" : "IAltitudeControlSignal",
+          "feature" : "altitude_window"
+        }, {
+          "processorId" : "movement-proc-progress",
+          "interface" : "ISearchProgressSignal",
+          "feature" : "search_progress"
+        }, {
+          "processorId" : "movement-proc-energy",
+          "interface" : "IMovementEnergySignal",
+          "feature" : "movement_energy"
+        }, {
+          "processorId" : "movement-proc-stuck-escape",
+          "interface" : "IMovementEnergySignal",
+          "feature" : "stuck_escape"
+        } ],
+        "dendrites" : {
+          "weights" : {
+            "coverage_unvisited" : 2.961891,
+            "coverage_frontier_alignment" : 5.995244,
+            "sweep_alignment" : 4.704088,
+            "target_view_alignment" : 3.625097,
+            "occlusion_escape" : 0.0,
+            "obstacle_clearance" : 2.106512,
+            "lidar_corridor_clearance" : 2.156512,
+            "lidar_escape_route" : 2.282122,
+            "area_compliance" : 1.36461,
+            "center_pull" : 0.312359,
+            "altitude_window" : 0.685372,
+            "search_progress" : 0.3,
+            "movement_energy" : 2.113831,
+            "stuck_escape" : 0.5
+          }
+        },
+        "bias" : 0.005123,
+        "reinforcementUpdates" : 21812
+      }, {
+        "neuronId" : "movement-neuron-survey-west",
+        "actionId" : "survey-west",
+        "actionLabel" : "survey west",
+        "movementAction" : {
+          "actionId" : "survey-west",
+          "label" : "survey west",
+          "directionX" : -1.0,
+          "directionY" : 0.0,
+          "altitudeDeltaMeters" : 0.0,
+          "speedMultiplier" : 1.0,
+          "behavior" : "fixed"
+        },
+        "interfaces" : [ "INavigationCoverageSignal", "ITargetViewSignal", "IOcclusionAvoidanceSignal", "IObstacleAvoidanceSignal", "ILidarObstacleSignal", "IAreaBoundarySignal", "IAltitudeControlSignal", "ISearchProgressSignal", "IMovementEnergySignal" ],
+        "processors" : [ {
+          "processorId" : "movement-proc-coverage",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "coverage_unvisited"
+        }, {
+          "processorId" : "movement-proc-coverage-frontier",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "coverage_frontier_alignment"
+        }, {
+          "processorId" : "movement-proc-sweep-coverage",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "sweep_alignment"
+        }, {
+          "processorId" : "movement-proc-target-view",
+          "interface" : "ITargetViewSignal",
+          "feature" : "target_view_alignment"
+        }, {
+          "processorId" : "movement-proc-occlusion",
+          "interface" : "IOcclusionAvoidanceSignal",
+          "feature" : "occlusion_escape"
+        }, {
+          "processorId" : "movement-proc-obstacle",
+          "interface" : "IObstacleAvoidanceSignal",
+          "feature" : "obstacle_clearance"
+        }, {
+          "processorId" : "movement-proc-lidar-corridor",
+          "interface" : "ILidarObstacleSignal",
+          "feature" : "lidar_corridor_clearance"
+        }, {
+          "processorId" : "movement-proc-lidar-escape-route",
+          "interface" : "ILidarObstacleSignal",
+          "feature" : "lidar_escape_route"
+        }, {
+          "processorId" : "movement-proc-boundary",
+          "interface" : "IAreaBoundarySignal",
+          "feature" : "area_compliance"
+        }, {
+          "processorId" : "movement-proc-center-pull",
+          "interface" : "IAreaBoundarySignal",
+          "feature" : "center_pull"
+        }, {
+          "processorId" : "movement-proc-altitude",
+          "interface" : "IAltitudeControlSignal",
+          "feature" : "altitude_window"
+        }, {
+          "processorId" : "movement-proc-progress",
+          "interface" : "ISearchProgressSignal",
+          "feature" : "search_progress"
+        }, {
+          "processorId" : "movement-proc-energy",
+          "interface" : "IMovementEnergySignal",
+          "feature" : "movement_energy"
+        }, {
+          "processorId" : "movement-proc-stuck-escape",
+          "interface" : "IMovementEnergySignal",
+          "feature" : "stuck_escape"
+        } ],
+        "dendrites" : {
+          "weights" : {
+            "coverage_unvisited" : 3.200281,
+            "coverage_frontier_alignment" : 5.890892,
+            "sweep_alignment" : 5.375688,
+            "target_view_alignment" : 1.208675,
+            "occlusion_escape" : 0.0,
+            "obstacle_clearance" : 1.809689,
+            "lidar_corridor_clearance" : 1.859689,
+            "lidar_escape_route" : 4.215752,
+            "area_compliance" : 1.334083,
+            "center_pull" : 0.485006,
+            "altitude_window" : 0.315089,
+            "search_progress" : 0.3,
+            "movement_energy" : 1.620117,
+            "stuck_escape" : 0.5
+          }
+        },
+        "bias" : 0.019808,
+        "reinforcementUpdates" : 12336
+      }, {
+        "neuronId" : "movement-neuron-survey-north",
+        "actionId" : "survey-north",
+        "actionLabel" : "survey north",
+        "movementAction" : {
+          "actionId" : "survey-north",
+          "label" : "survey north",
+          "directionX" : 0.0,
+          "directionY" : 1.0,
+          "altitudeDeltaMeters" : 0.0,
+          "speedMultiplier" : 1.0,
+          "behavior" : "fixed"
+        },
+        "interfaces" : [ "INavigationCoverageSignal", "ITargetViewSignal", "IOcclusionAvoidanceSignal", "IObstacleAvoidanceSignal", "ILidarObstacleSignal", "IAreaBoundarySignal", "IAltitudeControlSignal", "ISearchProgressSignal", "IMovementEnergySignal" ],
+        "processors" : [ {
+          "processorId" : "movement-proc-coverage",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "coverage_unvisited"
+        }, {
+          "processorId" : "movement-proc-coverage-frontier",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "coverage_frontier_alignment"
+        }, {
+          "processorId" : "movement-proc-sweep-coverage",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "sweep_alignment"
+        }, {
+          "processorId" : "movement-proc-target-view",
+          "interface" : "ITargetViewSignal",
+          "feature" : "target_view_alignment"
+        }, {
+          "processorId" : "movement-proc-occlusion",
+          "interface" : "IOcclusionAvoidanceSignal",
+          "feature" : "occlusion_escape"
+        }, {
+          "processorId" : "movement-proc-obstacle",
+          "interface" : "IObstacleAvoidanceSignal",
+          "feature" : "obstacle_clearance"
+        }, {
+          "processorId" : "movement-proc-lidar-corridor",
+          "interface" : "ILidarObstacleSignal",
+          "feature" : "lidar_corridor_clearance"
+        }, {
+          "processorId" : "movement-proc-lidar-escape-route",
+          "interface" : "ILidarObstacleSignal",
+          "feature" : "lidar_escape_route"
+        }, {
+          "processorId" : "movement-proc-boundary",
+          "interface" : "IAreaBoundarySignal",
+          "feature" : "area_compliance"
+        }, {
+          "processorId" : "movement-proc-center-pull",
+          "interface" : "IAreaBoundarySignal",
+          "feature" : "center_pull"
+        }, {
+          "processorId" : "movement-proc-altitude",
+          "interface" : "IAltitudeControlSignal",
+          "feature" : "altitude_window"
+        }, {
+          "processorId" : "movement-proc-progress",
+          "interface" : "ISearchProgressSignal",
+          "feature" : "search_progress"
+        }, {
+          "processorId" : "movement-proc-energy",
+          "interface" : "IMovementEnergySignal",
+          "feature" : "movement_energy"
+        }, {
+          "processorId" : "movement-proc-stuck-escape",
+          "interface" : "IMovementEnergySignal",
+          "feature" : "stuck_escape"
+        } ],
+        "dendrites" : {
+          "weights" : {
+            "coverage_unvisited" : 4.208034,
+            "coverage_frontier_alignment" : 5.992768,
+            "sweep_alignment" : 4.613513,
+            "target_view_alignment" : 1.725127,
+            "occlusion_escape" : 0.0,
+            "obstacle_clearance" : 0.969886,
+            "lidar_corridor_clearance" : 1.019886,
+            "lidar_escape_route" : 2.923766,
+            "area_compliance" : 1.350244,
+            "center_pull" : 0.411514,
+            "altitude_window" : -0.143904,
+            "search_progress" : 0.3,
+            "movement_energy" : 1.008128,
+            "stuck_escape" : 0.5
+          }
+        },
+        "bias" : 0.006049,
+        "reinforcementUpdates" : 17355
+      }, {
+        "neuronId" : "movement-neuron-survey-south",
+        "actionId" : "survey-south",
+        "actionLabel" : "survey south",
+        "movementAction" : {
+          "actionId" : "survey-south",
+          "label" : "survey south",
+          "directionX" : 0.0,
+          "directionY" : -1.0,
+          "altitudeDeltaMeters" : 0.0,
+          "speedMultiplier" : 1.0,
+          "behavior" : "fixed"
+        },
+        "interfaces" : [ "INavigationCoverageSignal", "ITargetViewSignal", "IOcclusionAvoidanceSignal", "IObstacleAvoidanceSignal", "ILidarObstacleSignal", "IAreaBoundarySignal", "IAltitudeControlSignal", "ISearchProgressSignal", "IMovementEnergySignal" ],
+        "processors" : [ {
+          "processorId" : "movement-proc-coverage",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "coverage_unvisited"
+        }, {
+          "processorId" : "movement-proc-coverage-frontier",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "coverage_frontier_alignment"
+        }, {
+          "processorId" : "movement-proc-sweep-coverage",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "sweep_alignment"
+        }, {
+          "processorId" : "movement-proc-target-view",
+          "interface" : "ITargetViewSignal",
+          "feature" : "target_view_alignment"
+        }, {
+          "processorId" : "movement-proc-occlusion",
+          "interface" : "IOcclusionAvoidanceSignal",
+          "feature" : "occlusion_escape"
+        }, {
+          "processorId" : "movement-proc-obstacle",
+          "interface" : "IObstacleAvoidanceSignal",
+          "feature" : "obstacle_clearance"
+        }, {
+          "processorId" : "movement-proc-lidar-corridor",
+          "interface" : "ILidarObstacleSignal",
+          "feature" : "lidar_corridor_clearance"
+        }, {
+          "processorId" : "movement-proc-lidar-escape-route",
+          "interface" : "ILidarObstacleSignal",
+          "feature" : "lidar_escape_route"
+        }, {
+          "processorId" : "movement-proc-boundary",
+          "interface" : "IAreaBoundarySignal",
+          "feature" : "area_compliance"
+        }, {
+          "processorId" : "movement-proc-center-pull",
+          "interface" : "IAreaBoundarySignal",
+          "feature" : "center_pull"
+        }, {
+          "processorId" : "movement-proc-altitude",
+          "interface" : "IAltitudeControlSignal",
+          "feature" : "altitude_window"
+        }, {
+          "processorId" : "movement-proc-progress",
+          "interface" : "ISearchProgressSignal",
+          "feature" : "search_progress"
+        }, {
+          "processorId" : "movement-proc-energy",
+          "interface" : "IMovementEnergySignal",
+          "feature" : "movement_energy"
+        }, {
+          "processorId" : "movement-proc-stuck-escape",
+          "interface" : "IMovementEnergySignal",
+          "feature" : "stuck_escape"
+        } ],
+        "dendrites" : {
+          "weights" : {
+            "coverage_unvisited" : 1.843324,
+            "coverage_frontier_alignment" : 4.891434,
+            "sweep_alignment" : 3.2104,
+            "target_view_alignment" : 0.699439,
+            "occlusion_escape" : 0.0,
+            "obstacle_clearance" : 0.488199,
+            "lidar_corridor_clearance" : 0.538199,
+            "lidar_escape_route" : 2.627997,
+            "area_compliance" : 1.350309,
+            "center_pull" : 0.448114,
+            "altitude_window" : -0.496351,
+            "search_progress" : 0.3,
+            "movement_energy" : 0.538199,
+            "stuck_escape" : 0.5
+          }
+        },
+        "bias" : -0.013753,
+        "reinforcementUpdates" : 2978
+      }, {
+        "neuronId" : "movement-neuron-survey-north-east",
+        "actionId" : "survey-north-east",
+        "actionLabel" : "survey north east",
+        "movementAction" : {
+          "actionId" : "survey-north-east",
+          "label" : "survey north east",
+          "directionX" : 0.707,
+          "directionY" : 0.707,
+          "altitudeDeltaMeters" : 0.0,
+          "speedMultiplier" : 1.0,
+          "behavior" : "fixed"
+        },
+        "interfaces" : [ "INavigationCoverageSignal", "ITargetViewSignal", "IOcclusionAvoidanceSignal", "IObstacleAvoidanceSignal", "ILidarObstacleSignal", "IAreaBoundarySignal", "IAltitudeControlSignal", "ISearchProgressSignal", "IMovementEnergySignal" ],
+        "processors" : [ {
+          "processorId" : "movement-proc-coverage",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "coverage_unvisited"
+        }, {
+          "processorId" : "movement-proc-coverage-frontier",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "coverage_frontier_alignment"
+        }, {
+          "processorId" : "movement-proc-sweep-coverage",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "sweep_alignment"
+        }, {
+          "processorId" : "movement-proc-target-view",
+          "interface" : "ITargetViewSignal",
+          "feature" : "target_view_alignment"
+        }, {
+          "processorId" : "movement-proc-occlusion",
+          "interface" : "IOcclusionAvoidanceSignal",
+          "feature" : "occlusion_escape"
+        }, {
+          "processorId" : "movement-proc-obstacle",
+          "interface" : "IObstacleAvoidanceSignal",
+          "feature" : "obstacle_clearance"
+        }, {
+          "processorId" : "movement-proc-lidar-corridor",
+          "interface" : "ILidarObstacleSignal",
+          "feature" : "lidar_corridor_clearance"
+        }, {
+          "processorId" : "movement-proc-lidar-escape-route",
+          "interface" : "ILidarObstacleSignal",
+          "feature" : "lidar_escape_route"
+        }, {
+          "processorId" : "movement-proc-boundary",
+          "interface" : "IAreaBoundarySignal",
+          "feature" : "area_compliance"
+        }, {
+          "processorId" : "movement-proc-center-pull",
+          "interface" : "IAreaBoundarySignal",
+          "feature" : "center_pull"
+        }, {
+          "processorId" : "movement-proc-altitude",
+          "interface" : "IAltitudeControlSignal",
+          "feature" : "altitude_window"
+        }, {
+          "processorId" : "movement-proc-progress",
+          "interface" : "ISearchProgressSignal",
+          "feature" : "search_progress"
+        }, {
+          "processorId" : "movement-proc-energy",
+          "interface" : "IMovementEnergySignal",
+          "feature" : "movement_energy"
+        }, {
+          "processorId" : "movement-proc-stuck-escape",
+          "interface" : "IMovementEnergySignal",
+          "feature" : "stuck_escape"
+        } ],
+        "dendrites" : {
+          "weights" : {
+            "coverage_unvisited" : 2.331485,
+            "coverage_frontier_alignment" : 5.517952,
+            "sweep_alignment" : 2.79268,
+            "target_view_alignment" : 1.015753,
+            "occlusion_escape" : 0.0,
+            "obstacle_clearance" : 1.338774,
+            "lidar_corridor_clearance" : 1.388774,
+            "lidar_escape_route" : 3.112196,
+            "area_compliance" : 1.350054,
+            "center_pull" : 0.390801,
+            "altitude_window" : 0.074911,
+            "search_progress" : 0.3,
+            "movement_energy" : 1.29988,
+            "stuck_escape" : 0.5
+          }
+        },
+        "bias" : 0.005613,
+        "reinforcementUpdates" : 2475
+      }, {
+        "neuronId" : "movement-neuron-survey-north-west",
+        "actionId" : "survey-north-west",
+        "actionLabel" : "survey north west",
+        "movementAction" : {
+          "actionId" : "survey-north-west",
+          "label" : "survey north west",
+          "directionX" : -0.707,
+          "directionY" : 0.707,
+          "altitudeDeltaMeters" : 0.0,
+          "speedMultiplier" : 1.0,
+          "behavior" : "fixed"
+        },
+        "interfaces" : [ "INavigationCoverageSignal", "ITargetViewSignal", "IOcclusionAvoidanceSignal", "IObstacleAvoidanceSignal", "ILidarObstacleSignal", "IAreaBoundarySignal", "IAltitudeControlSignal", "ISearchProgressSignal", "IMovementEnergySignal" ],
+        "processors" : [ {
+          "processorId" : "movement-proc-coverage",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "coverage_unvisited"
+        }, {
+          "processorId" : "movement-proc-coverage-frontier",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "coverage_frontier_alignment"
+        }, {
+          "processorId" : "movement-proc-sweep-coverage",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "sweep_alignment"
+        }, {
+          "processorId" : "movement-proc-target-view",
+          "interface" : "ITargetViewSignal",
+          "feature" : "target_view_alignment"
+        }, {
+          "processorId" : "movement-proc-occlusion",
+          "interface" : "IOcclusionAvoidanceSignal",
+          "feature" : "occlusion_escape"
+        }, {
+          "processorId" : "movement-proc-obstacle",
+          "interface" : "IObstacleAvoidanceSignal",
+          "feature" : "obstacle_clearance"
+        }, {
+          "processorId" : "movement-proc-lidar-corridor",
+          "interface" : "ILidarObstacleSignal",
+          "feature" : "lidar_corridor_clearance"
+        }, {
+          "processorId" : "movement-proc-lidar-escape-route",
+          "interface" : "ILidarObstacleSignal",
+          "feature" : "lidar_escape_route"
+        }, {
+          "processorId" : "movement-proc-boundary",
+          "interface" : "IAreaBoundarySignal",
+          "feature" : "area_compliance"
+        }, {
+          "processorId" : "movement-proc-center-pull",
+          "interface" : "IAreaBoundarySignal",
+          "feature" : "center_pull"
+        }, {
+          "processorId" : "movement-proc-altitude",
+          "interface" : "IAltitudeControlSignal",
+          "feature" : "altitude_window"
+        }, {
+          "processorId" : "movement-proc-progress",
+          "interface" : "ISearchProgressSignal",
+          "feature" : "search_progress"
+        }, {
+          "processorId" : "movement-proc-energy",
+          "interface" : "IMovementEnergySignal",
+          "feature" : "movement_energy"
+        }, {
+          "processorId" : "movement-proc-stuck-escape",
+          "interface" : "IMovementEnergySignal",
+          "feature" : "stuck_escape"
+        } ],
+        "dendrites" : {
+          "weights" : {
+            "coverage_unvisited" : 1.506674,
+            "coverage_frontier_alignment" : 4.204663,
+            "sweep_alignment" : 3.3527,
+            "target_view_alignment" : 0.353899,
+            "occlusion_escape" : 0.0,
+            "obstacle_clearance" : 1.095298,
+            "lidar_corridor_clearance" : 1.145298,
+            "lidar_escape_route" : 3.225128,
+            "area_compliance" : 1.352696,
+            "center_pull" : 0.4567,
+            "altitude_window" : -0.107821,
+            "search_progress" : 0.3,
+            "movement_energy" : 1.056238,
+            "stuck_escape" : 0.5
+          }
+        },
+        "bias" : 0.001407,
+        "reinforcementUpdates" : 588
+      }, {
+        "neuronId" : "movement-neuron-survey-south-east",
+        "actionId" : "survey-south-east",
+        "actionLabel" : "survey south east",
+        "movementAction" : {
+          "actionId" : "survey-south-east",
+          "label" : "survey south east",
+          "directionX" : 0.707,
+          "directionY" : -0.707,
+          "altitudeDeltaMeters" : 0.0,
+          "speedMultiplier" : 1.0,
+          "behavior" : "fixed"
+        },
+        "interfaces" : [ "INavigationCoverageSignal", "ITargetViewSignal", "IOcclusionAvoidanceSignal", "IObstacleAvoidanceSignal", "ILidarObstacleSignal", "IAreaBoundarySignal", "IAltitudeControlSignal", "ISearchProgressSignal", "IMovementEnergySignal" ],
+        "processors" : [ {
+          "processorId" : "movement-proc-coverage",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "coverage_unvisited"
+        }, {
+          "processorId" : "movement-proc-coverage-frontier",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "coverage_frontier_alignment"
+        }, {
+          "processorId" : "movement-proc-sweep-coverage",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "sweep_alignment"
+        }, {
+          "processorId" : "movement-proc-target-view",
+          "interface" : "ITargetViewSignal",
+          "feature" : "target_view_alignment"
+        }, {
+          "processorId" : "movement-proc-occlusion",
+          "interface" : "IOcclusionAvoidanceSignal",
+          "feature" : "occlusion_escape"
+        }, {
+          "processorId" : "movement-proc-obstacle",
+          "interface" : "IObstacleAvoidanceSignal",
+          "feature" : "obstacle_clearance"
+        }, {
+          "processorId" : "movement-proc-lidar-corridor",
+          "interface" : "ILidarObstacleSignal",
+          "feature" : "lidar_corridor_clearance"
+        }, {
+          "processorId" : "movement-proc-lidar-escape-route",
+          "interface" : "ILidarObstacleSignal",
+          "feature" : "lidar_escape_route"
+        }, {
+          "processorId" : "movement-proc-boundary",
+          "interface" : "IAreaBoundarySignal",
+          "feature" : "area_compliance"
+        }, {
+          "processorId" : "movement-proc-center-pull",
+          "interface" : "IAreaBoundarySignal",
+          "feature" : "center_pull"
+        }, {
+          "processorId" : "movement-proc-altitude",
+          "interface" : "IAltitudeControlSignal",
+          "feature" : "altitude_window"
+        }, {
+          "processorId" : "movement-proc-progress",
+          "interface" : "ISearchProgressSignal",
+          "feature" : "search_progress"
+        }, {
+          "processorId" : "movement-proc-energy",
+          "interface" : "IMovementEnergySignal",
+          "feature" : "movement_energy"
+        }, {
+          "processorId" : "movement-proc-stuck-escape",
+          "interface" : "IMovementEnergySignal",
+          "feature" : "stuck_escape"
+        } ],
+        "dendrites" : {
+          "weights" : {
+            "coverage_unvisited" : 2.079374,
+            "coverage_frontier_alignment" : 5.635649,
+            "sweep_alignment" : 2.928881,
+            "target_view_alignment" : 1.075983,
+            "occlusion_escape" : 0.0,
+            "obstacle_clearance" : 1.778807,
+            "lidar_corridor_clearance" : 1.828807,
+            "lidar_escape_route" : 3.456159,
+            "area_compliance" : 1.353745,
+            "center_pull" : 0.464597,
+            "altitude_window" : 0.439462,
+            "search_progress" : 0.3,
+            "movement_energy" : 1.78595,
+            "stuck_escape" : 0.5
+          }
+        },
+        "bias" : 0.020425,
+        "reinforcementUpdates" : 4600
+      }, {
+        "neuronId" : "movement-neuron-survey-south-west",
+        "actionId" : "survey-south-west",
+        "actionLabel" : "survey south west",
+        "movementAction" : {
+          "actionId" : "survey-south-west",
+          "label" : "survey south west",
+          "directionX" : -0.707,
+          "directionY" : -0.707,
+          "altitudeDeltaMeters" : 0.0,
+          "speedMultiplier" : 1.0,
+          "behavior" : "fixed"
+        },
+        "interfaces" : [ "INavigationCoverageSignal", "ITargetViewSignal", "IOcclusionAvoidanceSignal", "IObstacleAvoidanceSignal", "ILidarObstacleSignal", "IAreaBoundarySignal", "IAltitudeControlSignal", "ISearchProgressSignal", "IMovementEnergySignal" ],
+        "processors" : [ {
+          "processorId" : "movement-proc-coverage",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "coverage_unvisited"
+        }, {
+          "processorId" : "movement-proc-coverage-frontier",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "coverage_frontier_alignment"
+        }, {
+          "processorId" : "movement-proc-sweep-coverage",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "sweep_alignment"
+        }, {
+          "processorId" : "movement-proc-target-view",
+          "interface" : "ITargetViewSignal",
+          "feature" : "target_view_alignment"
+        }, {
+          "processorId" : "movement-proc-occlusion",
+          "interface" : "IOcclusionAvoidanceSignal",
+          "feature" : "occlusion_escape"
+        }, {
+          "processorId" : "movement-proc-obstacle",
+          "interface" : "IObstacleAvoidanceSignal",
+          "feature" : "obstacle_clearance"
+        }, {
+          "processorId" : "movement-proc-lidar-corridor",
+          "interface" : "ILidarObstacleSignal",
+          "feature" : "lidar_corridor_clearance"
+        }, {
+          "processorId" : "movement-proc-lidar-escape-route",
+          "interface" : "ILidarObstacleSignal",
+          "feature" : "lidar_escape_route"
+        }, {
+          "processorId" : "movement-proc-boundary",
+          "interface" : "IAreaBoundarySignal",
+          "feature" : "area_compliance"
+        }, {
+          "processorId" : "movement-proc-center-pull",
+          "interface" : "IAreaBoundarySignal",
+          "feature" : "center_pull"
+        }, {
+          "processorId" : "movement-proc-altitude",
+          "interface" : "IAltitudeControlSignal",
+          "feature" : "altitude_window"
+        }, {
+          "processorId" : "movement-proc-progress",
+          "interface" : "ISearchProgressSignal",
+          "feature" : "search_progress"
+        }, {
+          "processorId" : "movement-proc-energy",
+          "interface" : "IMovementEnergySignal",
+          "feature" : "movement_energy"
+        }, {
+          "processorId" : "movement-proc-stuck-escape",
+          "interface" : "IMovementEnergySignal",
+          "feature" : "stuck_escape"
+        } ],
+        "dendrites" : {
+          "weights" : {
+            "coverage_unvisited" : 3.322604,
+            "coverage_frontier_alignment" : 5.994648,
+            "sweep_alignment" : 6.0,
+            "target_view_alignment" : 1.693727,
+            "occlusion_escape" : 0.0,
+            "obstacle_clearance" : 2.873304,
+            "lidar_corridor_clearance" : 2.923304,
+            "lidar_escape_route" : 4.407654,
+            "area_compliance" : 1.396764,
+            "center_pull" : 0.364324,
+            "altitude_window" : 0.637971,
+            "search_progress" : 0.3,
+            "movement_energy" : 2.050626,
+            "stuck_escape" : 0.5
+          }
+        },
+        "bias" : 0.003294,
+        "reinforcementUpdates" : 17198
+      }, {
+        "neuronId" : "movement-neuron-inspect-east",
+        "actionId" : "inspect-east",
+        "actionLabel" : "slow inspect east",
+        "movementAction" : {
+          "actionId" : "inspect-east",
+          "label" : "slow inspect east",
+          "directionX" : 1.0,
+          "directionY" : 0.0,
+          "altitudeDeltaMeters" : -1.6,
+          "speedMultiplier" : 0.55,
+          "behavior" : "fixed"
+        },
+        "interfaces" : [ "INavigationCoverageSignal", "ITargetViewSignal", "IOcclusionAvoidanceSignal", "IObstacleAvoidanceSignal", "ILidarObstacleSignal", "IAreaBoundarySignal", "IAltitudeControlSignal", "ISearchProgressSignal", "IMovementEnergySignal" ],
+        "processors" : [ {
+          "processorId" : "movement-proc-coverage",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "coverage_unvisited"
+        }, {
+          "processorId" : "movement-proc-coverage-frontier",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "coverage_frontier_alignment"
+        }, {
+          "processorId" : "movement-proc-sweep-coverage",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "sweep_alignment"
+        }, {
+          "processorId" : "movement-proc-target-view",
+          "interface" : "ITargetViewSignal",
+          "feature" : "target_view_alignment"
+        }, {
+          "processorId" : "movement-proc-occlusion",
+          "interface" : "IOcclusionAvoidanceSignal",
+          "feature" : "occlusion_escape"
+        }, {
+          "processorId" : "movement-proc-obstacle",
+          "interface" : "IObstacleAvoidanceSignal",
+          "feature" : "obstacle_clearance"
+        }, {
+          "processorId" : "movement-proc-lidar-corridor",
+          "interface" : "ILidarObstacleSignal",
+          "feature" : "lidar_corridor_clearance"
+        }, {
+          "processorId" : "movement-proc-lidar-escape-route",
+          "interface" : "ILidarObstacleSignal",
+          "feature" : "lidar_escape_route"
+        }, {
+          "processorId" : "movement-proc-boundary",
+          "interface" : "IAreaBoundarySignal",
+          "feature" : "area_compliance"
+        }, {
+          "processorId" : "movement-proc-center-pull",
+          "interface" : "IAreaBoundarySignal",
+          "feature" : "center_pull"
+        }, {
+          "processorId" : "movement-proc-altitude",
+          "interface" : "IAltitudeControlSignal",
+          "feature" : "altitude_window"
+        }, {
+          "processorId" : "movement-proc-progress",
+          "interface" : "ISearchProgressSignal",
+          "feature" : "search_progress"
+        }, {
+          "processorId" : "movement-proc-energy",
+          "interface" : "IMovementEnergySignal",
+          "feature" : "movement_energy"
+        }, {
+          "processorId" : "movement-proc-stuck-escape",
+          "interface" : "IMovementEnergySignal",
+          "feature" : "stuck_escape"
+        } ],
+        "dendrites" : {
+          "weights" : {
+            "coverage_unvisited" : 1.506492,
+            "coverage_frontier_alignment" : 4.209117,
+            "sweep_alignment" : 3.209377,
+            "target_view_alignment" : 0.354603,
+            "occlusion_escape" : 0.0,
+            "obstacle_clearance" : 1.159377,
+            "lidar_corridor_clearance" : 1.209377,
+            "lidar_escape_route" : 3.0,
+            "area_compliance" : 1.35,
+            "center_pull" : 0.45,
+            "altitude_window" : 0.007783,
+            "search_progress" : 0.3,
+            "movement_energy" : 1.205157,
+            "stuck_escape" : 0.5
+          }
+        },
+        "bias" : 0.0,
+        "reinforcementUpdates" : 0
+      }, {
+        "neuronId" : "movement-neuron-inspect-west",
+        "actionId" : "inspect-west",
+        "actionLabel" : "slow inspect west",
+        "movementAction" : {
+          "actionId" : "inspect-west",
+          "label" : "slow inspect west",
+          "directionX" : -1.0,
+          "directionY" : 0.0,
+          "altitudeDeltaMeters" : -1.6,
+          "speedMultiplier" : 0.55,
+          "behavior" : "fixed"
+        },
+        "interfaces" : [ "INavigationCoverageSignal", "ITargetViewSignal", "IOcclusionAvoidanceSignal", "IObstacleAvoidanceSignal", "ILidarObstacleSignal", "IAreaBoundarySignal", "IAltitudeControlSignal", "ISearchProgressSignal", "IMovementEnergySignal" ],
+        "processors" : [ {
+          "processorId" : "movement-proc-coverage",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "coverage_unvisited"
+        }, {
+          "processorId" : "movement-proc-coverage-frontier",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "coverage_frontier_alignment"
+        }, {
+          "processorId" : "movement-proc-sweep-coverage",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "sweep_alignment"
+        }, {
+          "processorId" : "movement-proc-target-view",
+          "interface" : "ITargetViewSignal",
+          "feature" : "target_view_alignment"
+        }, {
+          "processorId" : "movement-proc-occlusion",
+          "interface" : "IOcclusionAvoidanceSignal",
+          "feature" : "occlusion_escape"
+        }, {
+          "processorId" : "movement-proc-obstacle",
+          "interface" : "IObstacleAvoidanceSignal",
+          "feature" : "obstacle_clearance"
+        }, {
+          "processorId" : "movement-proc-lidar-corridor",
+          "interface" : "ILidarObstacleSignal",
+          "feature" : "lidar_corridor_clearance"
+        }, {
+          "processorId" : "movement-proc-lidar-escape-route",
+          "interface" : "ILidarObstacleSignal",
+          "feature" : "lidar_escape_route"
+        }, {
+          "processorId" : "movement-proc-boundary",
+          "interface" : "IAreaBoundarySignal",
+          "feature" : "area_compliance"
+        }, {
+          "processorId" : "movement-proc-center-pull",
+          "interface" : "IAreaBoundarySignal",
+          "feature" : "center_pull"
+        }, {
+          "processorId" : "movement-proc-altitude",
+          "interface" : "IAltitudeControlSignal",
+          "feature" : "altitude_window"
+        }, {
+          "processorId" : "movement-proc-progress",
+          "interface" : "ISearchProgressSignal",
+          "feature" : "search_progress"
+        }, {
+          "processorId" : "movement-proc-energy",
+          "interface" : "IMovementEnergySignal",
+          "feature" : "movement_energy"
+        }, {
+          "processorId" : "movement-proc-stuck-escape",
+          "interface" : "IMovementEnergySignal",
+          "feature" : "stuck_escape"
+        } ],
+        "dendrites" : {
+          "weights" : {
+            "coverage_unvisited" : 1.510475,
+            "coverage_frontier_alignment" : 4.21038,
+            "sweep_alignment" : 3.186532,
+            "target_view_alignment" : 0.355255,
+            "occlusion_escape" : 0.0,
+            "obstacle_clearance" : 1.160115,
+            "lidar_corridor_clearance" : 1.210115,
+            "lidar_escape_route" : 3.0,
+            "area_compliance" : 1.35,
+            "center_pull" : 0.451385,
+            "altitude_window" : 0.008395,
+            "search_progress" : 0.3,
+            "movement_energy" : 1.205563,
+            "stuck_escape" : 0.5
+          }
+        },
+        "bias" : 0.0,
+        "reinforcementUpdates" : 0
+      }, {
+        "neuronId" : "movement-neuron-inspect-north",
+        "actionId" : "inspect-north",
+        "actionLabel" : "slow inspect north",
+        "movementAction" : {
+          "actionId" : "inspect-north",
+          "label" : "slow inspect north",
+          "directionX" : 0.0,
+          "directionY" : 1.0,
+          "altitudeDeltaMeters" : -1.6,
+          "speedMultiplier" : 0.55,
+          "behavior" : "fixed"
+        },
+        "interfaces" : [ "INavigationCoverageSignal", "ITargetViewSignal", "IOcclusionAvoidanceSignal", "IObstacleAvoidanceSignal", "ILidarObstacleSignal", "IAreaBoundarySignal", "IAltitudeControlSignal", "ISearchProgressSignal", "IMovementEnergySignal" ],
+        "processors" : [ {
+          "processorId" : "movement-proc-coverage",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "coverage_unvisited"
+        }, {
+          "processorId" : "movement-proc-coverage-frontier",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "coverage_frontier_alignment"
+        }, {
+          "processorId" : "movement-proc-sweep-coverage",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "sweep_alignment"
+        }, {
+          "processorId" : "movement-proc-target-view",
+          "interface" : "ITargetViewSignal",
+          "feature" : "target_view_alignment"
+        }, {
+          "processorId" : "movement-proc-occlusion",
+          "interface" : "IOcclusionAvoidanceSignal",
+          "feature" : "occlusion_escape"
+        }, {
+          "processorId" : "movement-proc-obstacle",
+          "interface" : "IObstacleAvoidanceSignal",
+          "feature" : "obstacle_clearance"
+        }, {
+          "processorId" : "movement-proc-lidar-corridor",
+          "interface" : "ILidarObstacleSignal",
+          "feature" : "lidar_corridor_clearance"
+        }, {
+          "processorId" : "movement-proc-lidar-escape-route",
+          "interface" : "ILidarObstacleSignal",
+          "feature" : "lidar_escape_route"
+        }, {
+          "processorId" : "movement-proc-boundary",
+          "interface" : "IAreaBoundarySignal",
+          "feature" : "area_compliance"
+        }, {
+          "processorId" : "movement-proc-center-pull",
+          "interface" : "IAreaBoundarySignal",
+          "feature" : "center_pull"
+        }, {
+          "processorId" : "movement-proc-altitude",
+          "interface" : "IAltitudeControlSignal",
+          "feature" : "altitude_window"
+        }, {
+          "processorId" : "movement-proc-progress",
+          "interface" : "ISearchProgressSignal",
+          "feature" : "search_progress"
+        }, {
+          "processorId" : "movement-proc-energy",
+          "interface" : "IMovementEnergySignal",
+          "feature" : "movement_energy"
+        }, {
+          "processorId" : "movement-proc-stuck-escape",
+          "interface" : "IMovementEnergySignal",
+          "feature" : "stuck_escape"
+        } ],
+        "dendrites" : {
+          "weights" : {
+            "coverage_unvisited" : 1.484803,
+            "coverage_frontier_alignment" : 4.179267,
+            "sweep_alignment" : 3.197195,
+            "target_view_alignment" : 0.339563,
+            "occlusion_escape" : 0.0,
+            "obstacle_clearance" : 0.887958,
+            "lidar_corridor_clearance" : 0.937958,
+            "lidar_escape_route" : 2.846503,
+            "area_compliance" : 1.35,
+            "center_pull" : 0.45,
+            "altitude_window" : -0.217494,
+            "search_progress" : 0.3,
+            "movement_energy" : 1.055878,
+            "stuck_escape" : 0.5
+          }
+        },
+        "bias" : -0.004283,
+        "reinforcementUpdates" : 616
+      }, {
+        "neuronId" : "movement-neuron-inspect-south",
+        "actionId" : "inspect-south",
+        "actionLabel" : "slow inspect south",
+        "movementAction" : {
+          "actionId" : "inspect-south",
+          "label" : "slow inspect south",
+          "directionX" : 0.0,
+          "directionY" : -1.0,
+          "altitudeDeltaMeters" : -1.6,
+          "speedMultiplier" : 0.55,
+          "behavior" : "fixed"
+        },
+        "interfaces" : [ "INavigationCoverageSignal", "ITargetViewSignal", "IOcclusionAvoidanceSignal", "IObstacleAvoidanceSignal", "ILidarObstacleSignal", "IAreaBoundarySignal", "IAltitudeControlSignal", "ISearchProgressSignal", "IMovementEnergySignal" ],
+        "processors" : [ {
+          "processorId" : "movement-proc-coverage",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "coverage_unvisited"
+        }, {
+          "processorId" : "movement-proc-coverage-frontier",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "coverage_frontier_alignment"
+        }, {
+          "processorId" : "movement-proc-sweep-coverage",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "sweep_alignment"
+        }, {
+          "processorId" : "movement-proc-target-view",
+          "interface" : "ITargetViewSignal",
+          "feature" : "target_view_alignment"
+        }, {
+          "processorId" : "movement-proc-occlusion",
+          "interface" : "IOcclusionAvoidanceSignal",
+          "feature" : "occlusion_escape"
+        }, {
+          "processorId" : "movement-proc-obstacle",
+          "interface" : "IObstacleAvoidanceSignal",
+          "feature" : "obstacle_clearance"
+        }, {
+          "processorId" : "movement-proc-lidar-corridor",
+          "interface" : "ILidarObstacleSignal",
+          "feature" : "lidar_corridor_clearance"
+        }, {
+          "processorId" : "movement-proc-lidar-escape-route",
+          "interface" : "ILidarObstacleSignal",
+          "feature" : "lidar_escape_route"
+        }, {
+          "processorId" : "movement-proc-boundary",
+          "interface" : "IAreaBoundarySignal",
+          "feature" : "area_compliance"
+        }, {
+          "processorId" : "movement-proc-center-pull",
+          "interface" : "IAreaBoundarySignal",
+          "feature" : "center_pull"
+        }, {
+          "processorId" : "movement-proc-altitude",
+          "interface" : "IAltitudeControlSignal",
+          "feature" : "altitude_window"
+        }, {
+          "processorId" : "movement-proc-progress",
+          "interface" : "ISearchProgressSignal",
+          "feature" : "search_progress"
+        }, {
+          "processorId" : "movement-proc-energy",
+          "interface" : "IMovementEnergySignal",
+          "feature" : "movement_energy"
+        }, {
+          "processorId" : "movement-proc-stuck-escape",
+          "interface" : "IMovementEnergySignal",
+          "feature" : "stuck_escape"
+        } ],
+        "dendrites" : {
+          "weights" : {
+            "coverage_unvisited" : 1.406706,
+            "coverage_frontier_alignment" : 4.141387,
+            "sweep_alignment" : 3.2,
+            "target_view_alignment" : 0.320444,
+            "occlusion_escape" : 0.0,
+            "obstacle_clearance" : 0.592038,
+            "lidar_corridor_clearance" : 0.642038,
+            "lidar_escape_route" : 2.648316,
+            "area_compliance" : 1.35,
+            "center_pull" : 0.45,
+            "altitude_window" : -0.463109,
+            "search_progress" : 0.3,
+            "movement_energy" : 0.893121,
+            "stuck_escape" : 0.5
+          }
+        },
+        "bias" : -0.014912,
+        "reinforcementUpdates" : 1882
+      }, {
+        "neuronId" : "movement-neuron-climb-east",
+        "actionId" : "climb-east",
+        "actionLabel" : "climb east",
+        "movementAction" : {
+          "actionId" : "climb-east",
+          "label" : "climb east",
+          "directionX" : 1.0,
+          "directionY" : 0.0,
+          "altitudeDeltaMeters" : 2.4,
+          "speedMultiplier" : 0.7,
+          "behavior" : "fixed"
+        },
+        "interfaces" : [ "INavigationCoverageSignal", "ITargetViewSignal", "IOcclusionAvoidanceSignal", "IObstacleAvoidanceSignal", "ILidarObstacleSignal", "IAreaBoundarySignal", "IAltitudeControlSignal", "ISearchProgressSignal", "IMovementEnergySignal" ],
+        "processors" : [ {
+          "processorId" : "movement-proc-coverage",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "coverage_unvisited"
+        }, {
+          "processorId" : "movement-proc-coverage-frontier",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "coverage_frontier_alignment"
+        }, {
+          "processorId" : "movement-proc-sweep-coverage",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "sweep_alignment"
+        }, {
+          "processorId" : "movement-proc-target-view",
+          "interface" : "ITargetViewSignal",
+          "feature" : "target_view_alignment"
+        }, {
+          "processorId" : "movement-proc-occlusion",
+          "interface" : "IOcclusionAvoidanceSignal",
+          "feature" : "occlusion_escape"
+        }, {
+          "processorId" : "movement-proc-obstacle",
+          "interface" : "IObstacleAvoidanceSignal",
+          "feature" : "obstacle_clearance"
+        }, {
+          "processorId" : "movement-proc-lidar-corridor",
+          "interface" : "ILidarObstacleSignal",
+          "feature" : "lidar_corridor_clearance"
+        }, {
+          "processorId" : "movement-proc-lidar-escape-route",
+          "interface" : "ILidarObstacleSignal",
+          "feature" : "lidar_escape_route"
+        }, {
+          "processorId" : "movement-proc-boundary",
+          "interface" : "IAreaBoundarySignal",
+          "feature" : "area_compliance"
+        }, {
+          "processorId" : "movement-proc-center-pull",
+          "interface" : "IAreaBoundarySignal",
+          "feature" : "center_pull"
+        }, {
+          "processorId" : "movement-proc-altitude",
+          "interface" : "IAltitudeControlSignal",
+          "feature" : "altitude_window"
+        }, {
+          "processorId" : "movement-proc-progress",
+          "interface" : "ISearchProgressSignal",
+          "feature" : "search_progress"
+        }, {
+          "processorId" : "movement-proc-energy",
+          "interface" : "IMovementEnergySignal",
+          "feature" : "movement_energy"
+        }, {
+          "processorId" : "movement-proc-stuck-escape",
+          "interface" : "IMovementEnergySignal",
+          "feature" : "stuck_escape"
+        } ],
+        "dendrites" : {
+          "weights" : {
+            "coverage_unvisited" : 1.5,
+            "coverage_frontier_alignment" : 4.2,
+            "sweep_alignment" : 3.2,
+            "target_view_alignment" : 0.35,
+            "occlusion_escape" : 0.0,
+            "obstacle_clearance" : 1.15,
+            "lidar_corridor_clearance" : 1.2,
+            "lidar_escape_route" : 3.0,
+            "area_compliance" : 1.35,
+            "center_pull" : 0.45,
+            "altitude_window" : 0.0,
+            "search_progress" : 0.3,
+            "movement_energy" : 1.2,
+            "stuck_escape" : 0.5
+          }
+        },
+        "bias" : 0.0,
+        "reinforcementUpdates" : 0
+      }, {
+        "neuronId" : "movement-neuron-climb-west",
+        "actionId" : "climb-west",
+        "actionLabel" : "climb west",
+        "movementAction" : {
+          "actionId" : "climb-west",
+          "label" : "climb west",
+          "directionX" : -1.0,
+          "directionY" : 0.0,
+          "altitudeDeltaMeters" : 2.4,
+          "speedMultiplier" : 0.7,
+          "behavior" : "fixed"
+        },
+        "interfaces" : [ "INavigationCoverageSignal", "ITargetViewSignal", "IOcclusionAvoidanceSignal", "IObstacleAvoidanceSignal", "ILidarObstacleSignal", "IAreaBoundarySignal", "IAltitudeControlSignal", "ISearchProgressSignal", "IMovementEnergySignal" ],
+        "processors" : [ {
+          "processorId" : "movement-proc-coverage",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "coverage_unvisited"
+        }, {
+          "processorId" : "movement-proc-coverage-frontier",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "coverage_frontier_alignment"
+        }, {
+          "processorId" : "movement-proc-sweep-coverage",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "sweep_alignment"
+        }, {
+          "processorId" : "movement-proc-target-view",
+          "interface" : "ITargetViewSignal",
+          "feature" : "target_view_alignment"
+        }, {
+          "processorId" : "movement-proc-occlusion",
+          "interface" : "IOcclusionAvoidanceSignal",
+          "feature" : "occlusion_escape"
+        }, {
+          "processorId" : "movement-proc-obstacle",
+          "interface" : "IObstacleAvoidanceSignal",
+          "feature" : "obstacle_clearance"
+        }, {
+          "processorId" : "movement-proc-lidar-corridor",
+          "interface" : "ILidarObstacleSignal",
+          "feature" : "lidar_corridor_clearance"
+        }, {
+          "processorId" : "movement-proc-lidar-escape-route",
+          "interface" : "ILidarObstacleSignal",
+          "feature" : "lidar_escape_route"
+        }, {
+          "processorId" : "movement-proc-boundary",
+          "interface" : "IAreaBoundarySignal",
+          "feature" : "area_compliance"
+        }, {
+          "processorId" : "movement-proc-center-pull",
+          "interface" : "IAreaBoundarySignal",
+          "feature" : "center_pull"
+        }, {
+          "processorId" : "movement-proc-altitude",
+          "interface" : "IAltitudeControlSignal",
+          "feature" : "altitude_window"
+        }, {
+          "processorId" : "movement-proc-progress",
+          "interface" : "ISearchProgressSignal",
+          "feature" : "search_progress"
+        }, {
+          "processorId" : "movement-proc-energy",
+          "interface" : "IMovementEnergySignal",
+          "feature" : "movement_energy"
+        }, {
+          "processorId" : "movement-proc-stuck-escape",
+          "interface" : "IMovementEnergySignal",
+          "feature" : "stuck_escape"
+        } ],
+        "dendrites" : {
+          "weights" : {
+            "coverage_unvisited" : 1.496961,
+            "coverage_frontier_alignment" : 4.178605,
+            "sweep_alignment" : 3.197824,
+            "target_view_alignment" : 0.339251,
+            "occlusion_escape" : 0.0,
+            "obstacle_clearance" : 1.126816,
+            "lidar_corridor_clearance" : 1.176816,
+            "lidar_escape_route" : 2.999168,
+            "area_compliance" : 1.350055,
+            "center_pull" : 0.450592,
+            "altitude_window" : -0.017389,
+            "search_progress" : 0.3,
+            "movement_energy" : 1.183771,
+            "stuck_escape" : 0.5
+          }
+        },
+        "bias" : 0.0,
+        "reinforcementUpdates" : 0
+      }, {
+        "neuronId" : "movement-neuron-climb-north",
+        "actionId" : "climb-north",
+        "actionLabel" : "climb north",
+        "movementAction" : {
+          "actionId" : "climb-north",
+          "label" : "climb north",
+          "directionX" : 0.0,
+          "directionY" : 1.0,
+          "altitudeDeltaMeters" : 2.4,
+          "speedMultiplier" : 0.7,
+          "behavior" : "fixed"
+        },
+        "interfaces" : [ "INavigationCoverageSignal", "ITargetViewSignal", "IOcclusionAvoidanceSignal", "IObstacleAvoidanceSignal", "ILidarObstacleSignal", "IAreaBoundarySignal", "IAltitudeControlSignal", "ISearchProgressSignal", "IMovementEnergySignal" ],
+        "processors" : [ {
+          "processorId" : "movement-proc-coverage",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "coverage_unvisited"
+        }, {
+          "processorId" : "movement-proc-coverage-frontier",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "coverage_frontier_alignment"
+        }, {
+          "processorId" : "movement-proc-sweep-coverage",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "sweep_alignment"
+        }, {
+          "processorId" : "movement-proc-target-view",
+          "interface" : "ITargetViewSignal",
+          "feature" : "target_view_alignment"
+        }, {
+          "processorId" : "movement-proc-occlusion",
+          "interface" : "IOcclusionAvoidanceSignal",
+          "feature" : "occlusion_escape"
+        }, {
+          "processorId" : "movement-proc-obstacle",
+          "interface" : "IObstacleAvoidanceSignal",
+          "feature" : "obstacle_clearance"
+        }, {
+          "processorId" : "movement-proc-lidar-corridor",
+          "interface" : "ILidarObstacleSignal",
+          "feature" : "lidar_corridor_clearance"
+        }, {
+          "processorId" : "movement-proc-lidar-escape-route",
+          "interface" : "ILidarObstacleSignal",
+          "feature" : "lidar_escape_route"
+        }, {
+          "processorId" : "movement-proc-boundary",
+          "interface" : "IAreaBoundarySignal",
+          "feature" : "area_compliance"
+        }, {
+          "processorId" : "movement-proc-center-pull",
+          "interface" : "IAreaBoundarySignal",
+          "feature" : "center_pull"
+        }, {
+          "processorId" : "movement-proc-altitude",
+          "interface" : "IAltitudeControlSignal",
+          "feature" : "altitude_window"
+        }, {
+          "processorId" : "movement-proc-progress",
+          "interface" : "ISearchProgressSignal",
+          "feature" : "search_progress"
+        }, {
+          "processorId" : "movement-proc-energy",
+          "interface" : "IMovementEnergySignal",
+          "feature" : "movement_energy"
+        }, {
+          "processorId" : "movement-proc-stuck-escape",
+          "interface" : "IMovementEnergySignal",
+          "feature" : "stuck_escape"
+        } ],
+        "dendrites" : {
+          "weights" : {
+            "coverage_unvisited" : 1.478101,
+            "coverage_frontier_alignment" : 4.162737,
+            "sweep_alignment" : 3.192109,
+            "target_view_alignment" : 0.331247,
+            "occlusion_escape" : 0.0,
+            "obstacle_clearance" : 0.838729,
+            "lidar_corridor_clearance" : 0.888729,
+            "lidar_escape_route" : 2.821987,
+            "area_compliance" : 1.35,
+            "center_pull" : 0.45,
+            "altitude_window" : -0.233453,
+            "search_progress" : 0.3,
+            "movement_energy" : 0.98211,
+            "stuck_escape" : 0.5
+          }
+        },
+        "bias" : -0.004304,
+        "reinforcementUpdates" : 583
+      }, {
+        "neuronId" : "movement-neuron-climb-south",
+        "actionId" : "climb-south",
+        "actionLabel" : "climb south",
+        "movementAction" : {
+          "actionId" : "climb-south",
+          "label" : "climb south",
+          "directionX" : 0.0,
+          "directionY" : -1.0,
+          "altitudeDeltaMeters" : 2.4,
+          "speedMultiplier" : 0.7,
+          "behavior" : "fixed"
+        },
+        "interfaces" : [ "INavigationCoverageSignal", "ITargetViewSignal", "IOcclusionAvoidanceSignal", "IObstacleAvoidanceSignal", "ILidarObstacleSignal", "IAreaBoundarySignal", "IAltitudeControlSignal", "ISearchProgressSignal", "IMovementEnergySignal" ],
+        "processors" : [ {
+          "processorId" : "movement-proc-coverage",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "coverage_unvisited"
+        }, {
+          "processorId" : "movement-proc-coverage-frontier",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "coverage_frontier_alignment"
+        }, {
+          "processorId" : "movement-proc-sweep-coverage",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "sweep_alignment"
+        }, {
+          "processorId" : "movement-proc-target-view",
+          "interface" : "ITargetViewSignal",
+          "feature" : "target_view_alignment"
+        }, {
+          "processorId" : "movement-proc-occlusion",
+          "interface" : "IOcclusionAvoidanceSignal",
+          "feature" : "occlusion_escape"
+        }, {
+          "processorId" : "movement-proc-obstacle",
+          "interface" : "IObstacleAvoidanceSignal",
+          "feature" : "obstacle_clearance"
+        }, {
+          "processorId" : "movement-proc-lidar-corridor",
+          "interface" : "ILidarObstacleSignal",
+          "feature" : "lidar_corridor_clearance"
+        }, {
+          "processorId" : "movement-proc-lidar-escape-route",
+          "interface" : "ILidarObstacleSignal",
+          "feature" : "lidar_escape_route"
+        }, {
+          "processorId" : "movement-proc-boundary",
+          "interface" : "IAreaBoundarySignal",
+          "feature" : "area_compliance"
+        }, {
+          "processorId" : "movement-proc-center-pull",
+          "interface" : "IAreaBoundarySignal",
+          "feature" : "center_pull"
+        }, {
+          "processorId" : "movement-proc-altitude",
+          "interface" : "IAltitudeControlSignal",
+          "feature" : "altitude_window"
+        }, {
+          "processorId" : "movement-proc-progress",
+          "interface" : "ISearchProgressSignal",
+          "feature" : "search_progress"
+        }, {
+          "processorId" : "movement-proc-energy",
+          "interface" : "IMovementEnergySignal",
+          "feature" : "movement_energy"
+        }, {
+          "processorId" : "movement-proc-stuck-escape",
+          "interface" : "IMovementEnergySignal",
+          "feature" : "stuck_escape"
+        } ],
+        "dendrites" : {
+          "weights" : {
+            "coverage_unvisited" : 1.404985,
+            "coverage_frontier_alignment" : 4.142558,
+            "sweep_alignment" : 3.191431,
+            "target_view_alignment" : 0.32105,
+            "occlusion_escape" : 0.0,
+            "obstacle_clearance" : 0.547556,
+            "lidar_corridor_clearance" : 0.597556,
+            "lidar_escape_route" : 2.623737,
+            "area_compliance" : 1.35,
+            "center_pull" : 0.447645,
+            "altitude_window" : -0.451834,
+            "search_progress" : 0.3,
+            "movement_energy" : 0.77829,
+            "stuck_escape" : 0.5
+          }
+        },
+        "bias" : -0.01476,
+        "reinforcementUpdates" : 1929
+      }, {
+        "neuronId" : "movement-neuron-return-to-area",
+        "actionId" : "return-to-area",
+        "actionLabel" : "return to search area",
+        "movementAction" : {
+          "actionId" : "return-to-area",
+          "label" : "return to search area",
+          "directionX" : 0.0,
+          "directionY" : 0.0,
+          "altitudeDeltaMeters" : 0.0,
+          "speedMultiplier" : 0.85,
+          "behavior" : "return_center"
+        },
+        "interfaces" : [ "INavigationCoverageSignal", "ITargetViewSignal", "IOcclusionAvoidanceSignal", "IObstacleAvoidanceSignal", "ILidarObstacleSignal", "IAreaBoundarySignal", "IAltitudeControlSignal", "ISearchProgressSignal", "IMovementEnergySignal" ],
+        "processors" : [ {
+          "processorId" : "movement-proc-coverage",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "coverage_unvisited"
+        }, {
+          "processorId" : "movement-proc-coverage-frontier",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "coverage_frontier_alignment"
+        }, {
+          "processorId" : "movement-proc-sweep-coverage",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "sweep_alignment"
+        }, {
+          "processorId" : "movement-proc-target-view",
+          "interface" : "ITargetViewSignal",
+          "feature" : "target_view_alignment"
+        }, {
+          "processorId" : "movement-proc-occlusion",
+          "interface" : "IOcclusionAvoidanceSignal",
+          "feature" : "occlusion_escape"
+        }, {
+          "processorId" : "movement-proc-obstacle",
+          "interface" : "IObstacleAvoidanceSignal",
+          "feature" : "obstacle_clearance"
+        }, {
+          "processorId" : "movement-proc-lidar-corridor",
+          "interface" : "ILidarObstacleSignal",
+          "feature" : "lidar_corridor_clearance"
+        }, {
+          "processorId" : "movement-proc-lidar-escape-route",
+          "interface" : "ILidarObstacleSignal",
+          "feature" : "lidar_escape_route"
+        }, {
+          "processorId" : "movement-proc-boundary",
+          "interface" : "IAreaBoundarySignal",
+          "feature" : "area_compliance"
+        }, {
+          "processorId" : "movement-proc-center-pull",
+          "interface" : "IAreaBoundarySignal",
+          "feature" : "center_pull"
+        }, {
+          "processorId" : "movement-proc-altitude",
+          "interface" : "IAltitudeControlSignal",
+          "feature" : "altitude_window"
+        }, {
+          "processorId" : "movement-proc-progress",
+          "interface" : "ISearchProgressSignal",
+          "feature" : "search_progress"
+        }, {
+          "processorId" : "movement-proc-energy",
+          "interface" : "IMovementEnergySignal",
+          "feature" : "movement_energy"
+        }, {
+          "processorId" : "movement-proc-stuck-escape",
+          "interface" : "IMovementEnergySignal",
+          "feature" : "stuck_escape"
+        } ],
+        "dendrites" : {
+          "weights" : {
+            "coverage_unvisited" : 2.1172,
+            "coverage_frontier_alignment" : 4.609256,
+            "sweep_alignment" : 3.604002,
+            "target_view_alignment" : 0.558255,
+            "occlusion_escape" : 0.0,
+            "obstacle_clearance" : 1.26274,
+            "lidar_corridor_clearance" : 1.31274,
+            "lidar_escape_route" : 3.12897,
+            "area_compliance" : 2.1,
+            "center_pull" : 1.253529,
+            "altitude_window" : 0.056948,
+            "search_progress" : 0.3,
+            "movement_energy" : 1.26454,
+            "stuck_escape" : 0.5
+          }
+        },
+        "bias" : 5.21E-4,
+        "reinforcementUpdates" : 2779
+      }, {
+        "neuronId" : "movement-neuron-hold-climb",
+        "actionId" : "hold-climb",
+        "actionLabel" : "hold and climb",
+        "movementAction" : {
+          "actionId" : "hold-climb",
+          "label" : "hold and climb",
+          "directionX" : 0.0,
+          "directionY" : 0.0,
+          "altitudeDeltaMeters" : 3.0,
+          "speedMultiplier" : 0.0,
+          "behavior" : "fixed"
+        },
+        "interfaces" : [ "INavigationCoverageSignal", "ITargetViewSignal", "IOcclusionAvoidanceSignal", "IObstacleAvoidanceSignal", "ILidarObstacleSignal", "IAreaBoundarySignal", "IAltitudeControlSignal", "ISearchProgressSignal", "IMovementEnergySignal" ],
+        "processors" : [ {
+          "processorId" : "movement-proc-coverage",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "coverage_unvisited"
+        }, {
+          "processorId" : "movement-proc-coverage-frontier",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "coverage_frontier_alignment"
+        }, {
+          "processorId" : "movement-proc-sweep-coverage",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "sweep_alignment"
+        }, {
+          "processorId" : "movement-proc-target-view",
+          "interface" : "ITargetViewSignal",
+          "feature" : "target_view_alignment"
+        }, {
+          "processorId" : "movement-proc-occlusion",
+          "interface" : "IOcclusionAvoidanceSignal",
+          "feature" : "occlusion_escape"
+        }, {
+          "processorId" : "movement-proc-obstacle",
+          "interface" : "IObstacleAvoidanceSignal",
+          "feature" : "obstacle_clearance"
+        }, {
+          "processorId" : "movement-proc-lidar-corridor",
+          "interface" : "ILidarObstacleSignal",
+          "feature" : "lidar_corridor_clearance"
+        }, {
+          "processorId" : "movement-proc-lidar-escape-route",
+          "interface" : "ILidarObstacleSignal",
+          "feature" : "lidar_escape_route"
+        }, {
+          "processorId" : "movement-proc-boundary",
+          "interface" : "IAreaBoundarySignal",
+          "feature" : "area_compliance"
+        }, {
+          "processorId" : "movement-proc-center-pull",
+          "interface" : "IAreaBoundarySignal",
+          "feature" : "center_pull"
+        }, {
+          "processorId" : "movement-proc-altitude",
+          "interface" : "IAltitudeControlSignal",
+          "feature" : "altitude_window"
+        }, {
+          "processorId" : "movement-proc-progress",
+          "interface" : "ISearchProgressSignal",
+          "feature" : "search_progress"
+        }, {
+          "processorId" : "movement-proc-energy",
+          "interface" : "IMovementEnergySignal",
+          "feature" : "movement_energy"
+        }, {
+          "processorId" : "movement-proc-stuck-escape",
+          "interface" : "IMovementEnergySignal",
+          "feature" : "stuck_escape"
+        } ],
+        "dendrites" : {
+          "weights" : {
+            "coverage_unvisited" : 1.498531,
+            "coverage_frontier_alignment" : 4.233984,
+            "sweep_alignment" : 3.233984,
+            "target_view_alignment" : 0.35,
+            "occlusion_escape" : 0.0,
+            "obstacle_clearance" : 0.98008,
+            "lidar_corridor_clearance" : 1.03008,
+            "lidar_escape_route" : 2.837437,
+            "area_compliance" : 1.35,
+            "center_pull" : 0.45,
+            "altitude_window" : -0.12744,
+            "search_progress" : 0.3,
+            "movement_energy" : 1.14336,
+            "stuck_escape" : 0.5
+          }
+        },
+        "bias" : -0.010034,
+        "reinforcementUpdates" : 1128
+      }, {
+        "neuronId" : "movement-neuron-hold-descend",
+        "actionId" : "hold-descend",
+        "actionLabel" : "hold and descend",
+        "movementAction" : {
+          "actionId" : "hold-descend",
+          "label" : "hold and descend",
+          "directionX" : 0.0,
+          "directionY" : 0.0,
+          "altitudeDeltaMeters" : -2.5,
+          "speedMultiplier" : 0.0,
+          "behavior" : "fixed"
+        },
+        "interfaces" : [ "INavigationCoverageSignal", "ITargetViewSignal", "IOcclusionAvoidanceSignal", "IObstacleAvoidanceSignal", "ILidarObstacleSignal", "IAreaBoundarySignal", "IAltitudeControlSignal", "ISearchProgressSignal", "IMovementEnergySignal" ],
+        "processors" : [ {
+          "processorId" : "movement-proc-coverage",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "coverage_unvisited"
+        }, {
+          "processorId" : "movement-proc-coverage-frontier",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "coverage_frontier_alignment"
+        }, {
+          "processorId" : "movement-proc-sweep-coverage",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "sweep_alignment"
+        }, {
+          "processorId" : "movement-proc-target-view",
+          "interface" : "ITargetViewSignal",
+          "feature" : "target_view_alignment"
+        }, {
+          "processorId" : "movement-proc-occlusion",
+          "interface" : "IOcclusionAvoidanceSignal",
+          "feature" : "occlusion_escape"
+        }, {
+          "processorId" : "movement-proc-obstacle",
+          "interface" : "IObstacleAvoidanceSignal",
+          "feature" : "obstacle_clearance"
+        }, {
+          "processorId" : "movement-proc-lidar-corridor",
+          "interface" : "ILidarObstacleSignal",
+          "feature" : "lidar_corridor_clearance"
+        }, {
+          "processorId" : "movement-proc-lidar-escape-route",
+          "interface" : "ILidarObstacleSignal",
+          "feature" : "lidar_escape_route"
+        }, {
+          "processorId" : "movement-proc-boundary",
+          "interface" : "IAreaBoundarySignal",
+          "feature" : "area_compliance"
+        }, {
+          "processorId" : "movement-proc-center-pull",
+          "interface" : "IAreaBoundarySignal",
+          "feature" : "center_pull"
+        }, {
+          "processorId" : "movement-proc-altitude",
+          "interface" : "IAltitudeControlSignal",
+          "feature" : "altitude_window"
+        }, {
+          "processorId" : "movement-proc-progress",
+          "interface" : "ISearchProgressSignal",
+          "feature" : "search_progress"
+        }, {
+          "processorId" : "movement-proc-energy",
+          "interface" : "IMovementEnergySignal",
+          "feature" : "movement_energy"
+        }, {
+          "processorId" : "movement-proc-stuck-escape",
+          "interface" : "IMovementEnergySignal",
+          "feature" : "stuck_escape"
+        } ],
+        "dendrites" : {
+          "weights" : {
+            "coverage_unvisited" : 1.5,
+            "coverage_frontier_alignment" : 4.2,
+            "sweep_alignment" : 3.2,
+            "target_view_alignment" : 0.35,
+            "occlusion_escape" : 0.0,
+            "obstacle_clearance" : 1.15,
+            "lidar_corridor_clearance" : 1.2,
+            "lidar_escape_route" : 3.0,
+            "area_compliance" : 1.35,
+            "center_pull" : 0.45,
+            "altitude_window" : 0.0,
+            "search_progress" : 0.3,
+            "movement_energy" : 1.2,
+            "stuck_escape" : 0.5
+          }
+        },
+        "bias" : 0.0,
+        "reinforcementUpdates" : 0
+      }, {
+        "neuronId" : "movement-neuron-hover-scan",
+        "actionId" : "hover-scan",
+        "actionLabel" : "hover scan",
+        "movementAction" : {
+          "actionId" : "hover-scan",
+          "label" : "hover scan",
+          "directionX" : 0.0,
+          "directionY" : 0.0,
+          "altitudeDeltaMeters" : 0.0,
+          "speedMultiplier" : 0.0,
+          "behavior" : "fixed"
+        },
+        "interfaces" : [ "INavigationCoverageSignal", "ITargetViewSignal", "IOcclusionAvoidanceSignal", "IObstacleAvoidanceSignal", "ILidarObstacleSignal", "IAreaBoundarySignal", "IAltitudeControlSignal", "ISearchProgressSignal", "IMovementEnergySignal" ],
+        "processors" : [ {
+          "processorId" : "movement-proc-coverage",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "coverage_unvisited"
+        }, {
+          "processorId" : "movement-proc-coverage-frontier",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "coverage_frontier_alignment"
+        }, {
+          "processorId" : "movement-proc-sweep-coverage",
+          "interface" : "INavigationCoverageSignal",
+          "feature" : "sweep_alignment"
+        }, {
+          "processorId" : "movement-proc-target-view",
+          "interface" : "ITargetViewSignal",
+          "feature" : "target_view_alignment"
+        }, {
+          "processorId" : "movement-proc-occlusion",
+          "interface" : "IOcclusionAvoidanceSignal",
+          "feature" : "occlusion_escape"
+        }, {
+          "processorId" : "movement-proc-obstacle",
+          "interface" : "IObstacleAvoidanceSignal",
+          "feature" : "obstacle_clearance"
+        }, {
+          "processorId" : "movement-proc-lidar-corridor",
+          "interface" : "ILidarObstacleSignal",
+          "feature" : "lidar_corridor_clearance"
+        }, {
+          "processorId" : "movement-proc-lidar-escape-route",
+          "interface" : "ILidarObstacleSignal",
+          "feature" : "lidar_escape_route"
+        }, {
+          "processorId" : "movement-proc-boundary",
+          "interface" : "IAreaBoundarySignal",
+          "feature" : "area_compliance"
+        }, {
+          "processorId" : "movement-proc-center-pull",
+          "interface" : "IAreaBoundarySignal",
+          "feature" : "center_pull"
+        }, {
+          "processorId" : "movement-proc-altitude",
+          "interface" : "IAltitudeControlSignal",
+          "feature" : "altitude_window"
+        }, {
+          "processorId" : "movement-proc-progress",
+          "interface" : "ISearchProgressSignal",
+          "feature" : "search_progress"
+        }, {
+          "processorId" : "movement-proc-energy",
+          "interface" : "IMovementEnergySignal",
+          "feature" : "movement_energy"
+        }, {
+          "processorId" : "movement-proc-stuck-escape",
+          "interface" : "IMovementEnergySignal",
+          "feature" : "stuck_escape"
+        } ],
+        "dendrites" : {
+          "weights" : {
+            "coverage_unvisited" : 1.5,
+            "coverage_frontier_alignment" : 4.2,
+            "sweep_alignment" : 3.2,
+            "target_view_alignment" : 0.35,
+            "occlusion_escape" : 0.0,
+            "obstacle_clearance" : 1.15,
+            "lidar_corridor_clearance" : 1.2,
+            "lidar_escape_route" : 3.0,
+            "area_compliance" : 1.35,
+            "center_pull" : 0.45,
+            "altitude_window" : 0.0,
+            "search_progress" : 0.3,
+            "movement_energy" : 1.2,
+            "stuck_escape" : 0.5
+          }
+        },
+        "bias" : -0.12,
+        "reinforcementUpdates" : 0
+      } ]
+    }
+  }
+}

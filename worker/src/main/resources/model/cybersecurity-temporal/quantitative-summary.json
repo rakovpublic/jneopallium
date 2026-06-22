@@ -1,0 +1,156 @@
+{
+  "modelId": "cybersecurity-temporal-threat-correlator",
+  "trainingSummary": {
+    "eventCount": 96,
+    "windowCount": 21,
+    "positiveWindows": 14,
+    "negativeWindows": 7,
+    "sourceEventCounts": {
+      "LANL": 21,
+      "ToN_IoT": 12,
+      "OpTC": 31,
+      "CIC-IDS2017": 3,
+      "CSE-CIC-IDS2018": 3,
+      "UNSW-NB15": 6,
+      "CALDERA": 20
+    }
+  },
+  "metrics": {
+    "train": {
+      "count": 10,
+      "truePositive": 7,
+      "falsePositive": 0,
+      "trueNegative": 3,
+      "falseNegative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "accuracy": 1.0,
+      "falsePositiveRate": 0.0,
+      "meanTimeToDetectionTicks": 0.0
+    },
+    "validation": {
+      "count": 6,
+      "truePositive": 4,
+      "falsePositive": 0,
+      "trueNegative": 2,
+      "falseNegative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "accuracy": 1.0,
+      "falsePositiveRate": 0.0,
+      "meanTimeToDetectionTicks": 0.0
+    },
+    "test": {
+      "count": 5,
+      "truePositive": 3,
+      "falsePositive": 0,
+      "trueNegative": 2,
+      "falseNegative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "accuracy": 1.0,
+      "falsePositiveRate": 0.0,
+      "meanTimeToDetectionTicks": 0.0
+    },
+    "overall": {
+      "count": 21,
+      "truePositive": 14,
+      "falsePositive": 0,
+      "trueNegative": 7,
+      "falseNegative": 0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0,
+      "accuracy": 1.0,
+      "falsePositiveRate": 0.0,
+      "meanTimeToDetectionTicks": 0.0
+    },
+    "calibration": [
+      {
+        "low": 0.0,
+        "high": 0.1,
+        "count": 7,
+        "positiveRate": 0.0,
+        "meanScore": 0.004391489680872425
+      },
+      {
+        "low": 0.9,
+        "high": 1.0,
+        "count": 14,
+        "positiveRate": 1.0,
+        "meanScore": 0.9951009828356349
+      }
+    ]
+  },
+  "topPositiveWeights": [
+    {
+      "feature": "technique_command_and_control",
+      "weight": 0.4260761728160053
+    },
+    {
+      "feature": "network_receptor_score",
+      "weight": 0.42418840786190404
+    },
+    {
+      "feature": "max_threat_intel",
+      "weight": 0.41599115304863077
+    },
+    {
+      "feature": "slow_context_score",
+      "weight": 0.3960982148872187
+    },
+    {
+      "feature": "max_evidence",
+      "weight": 0.39210816792771375
+    },
+    {
+      "feature": "mean_evidence",
+      "weight": 0.38944709876071754
+    },
+    {
+      "feature": "mean_asset_criticality",
+      "weight": 0.350048783461509
+    },
+    {
+      "feature": "technique_network_attack",
+      "weight": 0.30717876032521996
+    }
+  ],
+  "topNegativeWeights": [
+    {
+      "feature": "maintenance_ratio",
+      "weight": -0.44970234439413787
+    },
+    {
+      "feature": "benign_context_ratio",
+      "weight": -0.3835364503356276
+    },
+    {
+      "feature": "technique_benign_context",
+      "weight": -0.3835364503356276
+    },
+    {
+      "feature": "technique_unusual_login",
+      "weight": -0.26606015259021026
+    },
+    {
+      "feature": "technique_execution",
+      "weight": -0.26606015259021026
+    },
+    {
+      "feature": "source_diversity",
+      "weight": -0.17757611427624997
+    },
+    {
+      "feature": "ordered_login_to_execution",
+      "weight": -0.1447735578647211
+    },
+    {
+      "feature": "source_optc",
+      "weight": -0.14324673325046966
+    }
+  ]
+}
