@@ -1,0 +1,121 @@
+{
+  "file": "layer-6-response-gate.json",
+  "layerID": 6,
+  "layerName": "Advisory Response Gate",
+  "layerType": "responseGate",
+  "layerSize": 1,
+  "commercialSupervisoryFunctions": [
+    "advisory triage",
+    "analyst review routing",
+    "automatic-action safety gating"
+  ],
+  "neurons": [
+    {
+      "neuronId": 600,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.FraudResponseGateNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudDecisionSignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudHypothesisSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.adfraud.FraudResponseGateProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.IAdFraudScoringNeuron"
+        },
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.AnalystFeedbackSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.adfraud.FraudResponseGateProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.IAdFraudScoringNeuron"
+        },
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.BillingSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.adfraud.FraudResponseGateProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.IAdFraudScoringNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "600": [
+            "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudDecisionSignal"
+          ]
+        },
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {
+          "integrity_risk": 1.0,
+          "bot_risk": 1.0,
+          "graph_risk": 1.0,
+          "quality_risk": 1.0,
+          "unknown_risk": 1.0
+        },
+        "defaultDendritesWeights": {},
+        "decisionThreshold": 0.6
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudHypothesisSignal",
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.AnalystFeedbackSignal",
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.BillingSignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.IAdFraudScoringNeuron"
+      ],
+      "runtimeMode": "ADVISORY",
+      "logicalNeuronRole": "AdvisoryResponseGate",
+      "ownedReasoning": "neuron owns the evidence transform and emits advisory fraud evidence; replay code only materializes auditable output",
+      "featureGate": [
+        "bot_risk",
+        "graph_risk",
+        "integrity_risk",
+        "quality_risk",
+        "unknown_risk"
+      ],
+      "automaticActionAllowed": false,
+      "candidateActions": [
+        "ALLOW",
+        "LOG",
+        "REVIEW",
+        "RATE_LIMIT_CANDIDATE",
+        "HOLD_PAYOUT_CANDIDATE",
+        "DISCOUNT_TRAFFIC_CANDIDATE",
+        "ESCALATE_TO_ANALYST"
+      ],
+      "responseBands": {
+        "log": [
+          0.0,
+          0.3
+        ],
+        "review": [
+          0.3,
+          0.6
+        ],
+        "rateLimitCandidate": [
+          0.6,
+          0.75
+        ],
+        "holdPayoutCandidate": [
+          0.75,
+          0.9
+        ],
+        "escalateToAnalyst": [
+          0.9,
+          1.0
+        ]
+      },
+      "blockedActionsWithoutHumanReview": [
+        "billing rejection",
+        "payout withholding",
+        "account blocking",
+        "accusation of intentional fraud"
+      ],
+      "requiresFirstPartyValidation": true
+    }
+  ]
+}

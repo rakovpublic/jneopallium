@@ -1,0 +1,14 @@
+{
+  "thresholds": {
+    "bot": 0.1,
+    "incentivized": 0.3,
+    "clickFarm": 0.45,
+    "eventSpoofing": 0.3,
+    "clickSpam": 0.3,
+    "clickInjection": 0.05,
+    "attributionHijack": 0.2,
+    "inventorySpoofing": 0.05,
+    "accidentalOrLowValue": 0.15,
+    "unknownSuspicious": 0.2
+  }
+}

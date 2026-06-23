@@ -1,0 +1,766 @@
+{
+  "file": "layer-4-feature-interaction.json",
+  "layerID": 4,
+  "layerName": "Non-Linear Feature Interaction",
+  "layerType": "featureInteraction",
+  "layerSize": 8,
+  "activation": "tanh",
+  "commercialSupervisoryFunctions": [
+    "non-linear evidence combination",
+    "label-separating interaction features"
+  ],
+  "neurons": [
+    {
+      "neuronId": 400,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.FeatureInteractionNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudEvidenceSignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudEvidenceSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.adfraud.FraudCorrelationProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.IAdFraudScoringNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "400": [
+            "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudEvidenceSignal"
+          ]
+        },
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {
+          "integrity_risk": -1.303279,
+          "bot_risk": -0.128674,
+          "sequence_risk": -0.458124,
+          "attribution_risk": -0.559524,
+          "supply_chain_risk": -1.260864,
+          "graph_risk": -0.474351,
+          "quality_risk": -1.090443,
+          "unknown_risk": 0.637183,
+          "click_volume_risk": 0.752119,
+          "conversion_timing_risk": 1.320291,
+          "incentive_risk": -0.752851,
+          "retention_risk": -1.37118,
+          "accidental_risk": 1.431581
+        },
+        "defaultDendritesWeights": {},
+        "decisionThreshold": null
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudEvidenceSignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.IAdFraudScoringNeuron"
+      ],
+      "runtimeMode": "ADVISORY",
+      "logicalNeuronRole": "NonLinearFeatureInteractionUnit0",
+      "ownedReasoning": "neuron owns the evidence transform and emits advisory fraud evidence; replay code only materializes auditable output",
+      "featureGate": [
+        "accidental_risk",
+        "attribution_risk",
+        "bot_risk",
+        "click_volume_risk",
+        "conversion_timing_risk",
+        "graph_risk",
+        "incentive_risk",
+        "integrity_risk",
+        "quality_risk",
+        "retention_risk",
+        "sequence_risk",
+        "supply_chain_risk",
+        "unknown_risk"
+      ],
+      "hiddenUnit": {
+        "output": "interaction_0",
+        "activation": "tanh",
+        "bias": -0.327307,
+        "inputNames": [
+          "integrity_risk",
+          "bot_risk",
+          "sequence_risk",
+          "attribution_risk",
+          "supply_chain_risk",
+          "graph_risk",
+          "quality_risk",
+          "unknown_risk",
+          "click_volume_risk",
+          "conversion_timing_risk",
+          "incentive_risk",
+          "retention_risk",
+          "accidental_risk"
+        ]
+      }
+    },
+    {
+      "neuronId": 401,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.FeatureInteractionNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudEvidenceSignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudEvidenceSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.adfraud.FraudCorrelationProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.IAdFraudScoringNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "401": [
+            "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudEvidenceSignal"
+          ]
+        },
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {
+          "integrity_risk": 1.452876,
+          "bot_risk": 1.095265,
+          "sequence_risk": 0.0311,
+          "attribution_risk": -0.2788,
+          "supply_chain_risk": -0.442008,
+          "graph_risk": -1.534133,
+          "quality_risk": -1.569067,
+          "unknown_risk": -1.586126,
+          "click_volume_risk": 0.825072,
+          "conversion_timing_risk": 1.364954,
+          "incentive_risk": -0.101067,
+          "retention_risk": -1.198613,
+          "accidental_risk": 0.938995
+        },
+        "defaultDendritesWeights": {},
+        "decisionThreshold": null
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudEvidenceSignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.IAdFraudScoringNeuron"
+      ],
+      "runtimeMode": "ADVISORY",
+      "logicalNeuronRole": "NonLinearFeatureInteractionUnit1",
+      "ownedReasoning": "neuron owns the evidence transform and emits advisory fraud evidence; replay code only materializes auditable output",
+      "featureGate": [
+        "accidental_risk",
+        "attribution_risk",
+        "bot_risk",
+        "click_volume_risk",
+        "conversion_timing_risk",
+        "graph_risk",
+        "incentive_risk",
+        "integrity_risk",
+        "quality_risk",
+        "retention_risk",
+        "sequence_risk",
+        "supply_chain_risk",
+        "unknown_risk"
+      ],
+      "hiddenUnit": {
+        "output": "interaction_1",
+        "activation": "tanh",
+        "bias": 0.345524,
+        "inputNames": [
+          "integrity_risk",
+          "bot_risk",
+          "sequence_risk",
+          "attribution_risk",
+          "supply_chain_risk",
+          "graph_risk",
+          "quality_risk",
+          "unknown_risk",
+          "click_volume_risk",
+          "conversion_timing_risk",
+          "incentive_risk",
+          "retention_risk",
+          "accidental_risk"
+        ]
+      }
+    },
+    {
+      "neuronId": 402,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.FeatureInteractionNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudEvidenceSignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudEvidenceSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.adfraud.FraudCorrelationProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.IAdFraudScoringNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "402": [
+            "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudEvidenceSignal"
+          ]
+        },
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {
+          "integrity_risk": -0.268592,
+          "bot_risk": -0.442583,
+          "sequence_risk": 1.23267,
+          "attribution_risk": 0.327344,
+          "supply_chain_risk": -1.248048,
+          "graph_risk": 0.152693,
+          "quality_risk": -0.765318,
+          "unknown_risk": -1.164298,
+          "click_volume_risk": 1.274936,
+          "conversion_timing_risk": 0.214472,
+          "incentive_risk": 0.390862,
+          "retention_risk": 0.280953,
+          "accidental_risk": 1.471887
+        },
+        "defaultDendritesWeights": {},
+        "decisionThreshold": null
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudEvidenceSignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.IAdFraudScoringNeuron"
+      ],
+      "runtimeMode": "ADVISORY",
+      "logicalNeuronRole": "NonLinearFeatureInteractionUnit2",
+      "ownedReasoning": "neuron owns the evidence transform and emits advisory fraud evidence; replay code only materializes auditable output",
+      "featureGate": [
+        "accidental_risk",
+        "attribution_risk",
+        "bot_risk",
+        "click_volume_risk",
+        "conversion_timing_risk",
+        "graph_risk",
+        "incentive_risk",
+        "integrity_risk",
+        "quality_risk",
+        "retention_risk",
+        "sequence_risk",
+        "supply_chain_risk",
+        "unknown_risk"
+      ],
+      "hiddenUnit": {
+        "output": "interaction_2",
+        "activation": "tanh",
+        "bias": -0.133428,
+        "inputNames": [
+          "integrity_risk",
+          "bot_risk",
+          "sequence_risk",
+          "attribution_risk",
+          "supply_chain_risk",
+          "graph_risk",
+          "quality_risk",
+          "unknown_risk",
+          "click_volume_risk",
+          "conversion_timing_risk",
+          "incentive_risk",
+          "retention_risk",
+          "accidental_risk"
+        ]
+      }
+    },
+    {
+      "neuronId": 403,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.FeatureInteractionNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudEvidenceSignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudEvidenceSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.adfraud.FraudCorrelationProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.IAdFraudScoringNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "403": [
+            "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudEvidenceSignal"
+          ]
+        },
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {
+          "integrity_risk": -1.526692,
+          "bot_risk": -1.246922,
+          "sequence_risk": 0.913254,
+          "attribution_risk": 0.035168,
+          "supply_chain_risk": -0.24241,
+          "graph_risk": 0.476768,
+          "quality_risk": -0.035561,
+          "unknown_risk": -0.529452,
+          "click_volume_risk": -0.989625,
+          "conversion_timing_risk": 1.398563,
+          "incentive_risk": 0.00157,
+          "retention_risk": -1.500791,
+          "accidental_risk": 0.19786
+        },
+        "defaultDendritesWeights": {},
+        "decisionThreshold": null
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudEvidenceSignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.IAdFraudScoringNeuron"
+      ],
+      "runtimeMode": "ADVISORY",
+      "logicalNeuronRole": "NonLinearFeatureInteractionUnit3",
+      "ownedReasoning": "neuron owns the evidence transform and emits advisory fraud evidence; replay code only materializes auditable output",
+      "featureGate": [
+        "accidental_risk",
+        "attribution_risk",
+        "bot_risk",
+        "click_volume_risk",
+        "conversion_timing_risk",
+        "graph_risk",
+        "incentive_risk",
+        "integrity_risk",
+        "quality_risk",
+        "retention_risk",
+        "sequence_risk",
+        "supply_chain_risk",
+        "unknown_risk"
+      ],
+      "hiddenUnit": {
+        "output": "interaction_3",
+        "activation": "tanh",
+        "bias": -0.47987,
+        "inputNames": [
+          "integrity_risk",
+          "bot_risk",
+          "sequence_risk",
+          "attribution_risk",
+          "supply_chain_risk",
+          "graph_risk",
+          "quality_risk",
+          "unknown_risk",
+          "click_volume_risk",
+          "conversion_timing_risk",
+          "incentive_risk",
+          "retention_risk",
+          "accidental_risk"
+        ]
+      }
+    },
+    {
+      "neuronId": 404,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.FeatureInteractionNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudEvidenceSignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudEvidenceSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.adfraud.FraudCorrelationProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.IAdFraudScoringNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "404": [
+            "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudEvidenceSignal"
+          ]
+        },
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {
+          "integrity_risk": -0.219243,
+          "bot_risk": -0.408784,
+          "sequence_risk": -0.479444,
+          "attribution_risk": -0.557816,
+          "supply_chain_risk": 1.335999,
+          "graph_risk": -0.388137,
+          "quality_risk": 1.293838,
+          "unknown_risk": -0.794328,
+          "click_volume_risk": 1.162475,
+          "conversion_timing_risk": -0.00431,
+          "incentive_risk": -0.288709,
+          "retention_risk": 0.518584,
+          "accidental_risk": 1.491677
+        },
+        "defaultDendritesWeights": {},
+        "decisionThreshold": null
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudEvidenceSignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.IAdFraudScoringNeuron"
+      ],
+      "runtimeMode": "ADVISORY",
+      "logicalNeuronRole": "NonLinearFeatureInteractionUnit4",
+      "ownedReasoning": "neuron owns the evidence transform and emits advisory fraud evidence; replay code only materializes auditable output",
+      "featureGate": [
+        "accidental_risk",
+        "attribution_risk",
+        "bot_risk",
+        "click_volume_risk",
+        "conversion_timing_risk",
+        "graph_risk",
+        "incentive_risk",
+        "integrity_risk",
+        "quality_risk",
+        "retention_risk",
+        "sequence_risk",
+        "supply_chain_risk",
+        "unknown_risk"
+      ],
+      "hiddenUnit": {
+        "output": "interaction_4",
+        "activation": "tanh",
+        "bias": -0.122396,
+        "inputNames": [
+          "integrity_risk",
+          "bot_risk",
+          "sequence_risk",
+          "attribution_risk",
+          "supply_chain_risk",
+          "graph_risk",
+          "quality_risk",
+          "unknown_risk",
+          "click_volume_risk",
+          "conversion_timing_risk",
+          "incentive_risk",
+          "retention_risk",
+          "accidental_risk"
+        ]
+      }
+    },
+    {
+      "neuronId": 405,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.FeatureInteractionNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudEvidenceSignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudEvidenceSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.adfraud.FraudCorrelationProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.IAdFraudScoringNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "405": [
+            "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudEvidenceSignal"
+          ]
+        },
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {
+          "integrity_risk": 0.036773,
+          "bot_risk": 0.670855,
+          "sequence_risk": -0.280862,
+          "attribution_risk": -1.180106,
+          "supply_chain_risk": 0.041224,
+          "graph_risk": -1.152627,
+          "quality_risk": -0.628882,
+          "unknown_risk": -1.250105,
+          "click_volume_risk": -0.810337,
+          "conversion_timing_risk": -0.818863,
+          "incentive_risk": 0.132824,
+          "retention_risk": -1.583214,
+          "accidental_risk": 0.519273
+        },
+        "defaultDendritesWeights": {},
+        "decisionThreshold": null
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudEvidenceSignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.IAdFraudScoringNeuron"
+      ],
+      "runtimeMode": "ADVISORY",
+      "logicalNeuronRole": "NonLinearFeatureInteractionUnit5",
+      "ownedReasoning": "neuron owns the evidence transform and emits advisory fraud evidence; replay code only materializes auditable output",
+      "featureGate": [
+        "accidental_risk",
+        "attribution_risk",
+        "bot_risk",
+        "click_volume_risk",
+        "conversion_timing_risk",
+        "graph_risk",
+        "incentive_risk",
+        "integrity_risk",
+        "quality_risk",
+        "retention_risk",
+        "sequence_risk",
+        "supply_chain_risk",
+        "unknown_risk"
+      ],
+      "hiddenUnit": {
+        "output": "interaction_5",
+        "activation": "tanh",
+        "bias": 0.189105,
+        "inputNames": [
+          "integrity_risk",
+          "bot_risk",
+          "sequence_risk",
+          "attribution_risk",
+          "supply_chain_risk",
+          "graph_risk",
+          "quality_risk",
+          "unknown_risk",
+          "click_volume_risk",
+          "conversion_timing_risk",
+          "incentive_risk",
+          "retention_risk",
+          "accidental_risk"
+        ]
+      }
+    },
+    {
+      "neuronId": 406,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.FeatureInteractionNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudEvidenceSignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudEvidenceSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.adfraud.FraudCorrelationProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.IAdFraudScoringNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "406": [
+            "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudEvidenceSignal"
+          ]
+        },
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {
+          "integrity_risk": 0.279128,
+          "bot_risk": -0.154995,
+          "sequence_risk": 0.924359,
+          "attribution_risk": 0.118203,
+          "supply_chain_risk": 0.935897,
+          "graph_risk": -0.257011,
+          "quality_risk": 0.75971,
+          "unknown_risk": -0.806642,
+          "click_volume_risk": -1.302261,
+          "conversion_timing_risk": -1.324712,
+          "incentive_risk": 0.893123,
+          "retention_risk": -0.539089,
+          "accidental_risk": -1.02555
+        },
+        "defaultDendritesWeights": {},
+        "decisionThreshold": null
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudEvidenceSignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.IAdFraudScoringNeuron"
+      ],
+      "runtimeMode": "ADVISORY",
+      "logicalNeuronRole": "NonLinearFeatureInteractionUnit6",
+      "ownedReasoning": "neuron owns the evidence transform and emits advisory fraud evidence; replay code only materializes auditable output",
+      "featureGate": [
+        "accidental_risk",
+        "attribution_risk",
+        "bot_risk",
+        "click_volume_risk",
+        "conversion_timing_risk",
+        "graph_risk",
+        "incentive_risk",
+        "integrity_risk",
+        "quality_risk",
+        "retention_risk",
+        "sequence_risk",
+        "supply_chain_risk",
+        "unknown_risk"
+      ],
+      "hiddenUnit": {
+        "output": "interaction_6",
+        "activation": "tanh",
+        "bias": 0.130329,
+        "inputNames": [
+          "integrity_risk",
+          "bot_risk",
+          "sequence_risk",
+          "attribution_risk",
+          "supply_chain_risk",
+          "graph_risk",
+          "quality_risk",
+          "unknown_risk",
+          "click_volume_risk",
+          "conversion_timing_risk",
+          "incentive_risk",
+          "retention_risk",
+          "accidental_risk"
+        ]
+      }
+    },
+    {
+      "neuronId": 407,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.FeatureInteractionNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudEvidenceSignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudEvidenceSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.adfraud.FraudCorrelationProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.IAdFraudScoringNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "407": [
+            "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudEvidenceSignal"
+          ]
+        },
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {
+          "integrity_risk": 0.920736,
+          "bot_risk": -0.258703,
+          "sequence_risk": 0.942266,
+          "attribution_risk": -0.979265,
+          "supply_chain_risk": 0.579602,
+          "graph_risk": -0.69769,
+          "quality_risk": -1.503369,
+          "unknown_risk": 0.312006,
+          "click_volume_risk": 1.128777,
+          "conversion_timing_risk": 1.539777,
+          "incentive_risk": 1.388731,
+          "retention_risk": -0.879449,
+          "accidental_risk": 0.250205
+        },
+        "defaultDendritesWeights": {},
+        "decisionThreshold": null
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudEvidenceSignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.IAdFraudScoringNeuron"
+      ],
+      "runtimeMode": "ADVISORY",
+      "logicalNeuronRole": "NonLinearFeatureInteractionUnit7",
+      "ownedReasoning": "neuron owns the evidence transform and emits advisory fraud evidence; replay code only materializes auditable output",
+      "featureGate": [
+        "accidental_risk",
+        "attribution_risk",
+        "bot_risk",
+        "click_volume_risk",
+        "conversion_timing_risk",
+        "graph_risk",
+        "incentive_risk",
+        "integrity_risk",
+        "quality_risk",
+        "retention_risk",
+        "sequence_risk",
+        "supply_chain_risk",
+        "unknown_risk"
+      ],
+      "hiddenUnit": {
+        "output": "interaction_7",
+        "activation": "tanh",
+        "bias": 0.380728,
+        "inputNames": [
+          "integrity_risk",
+          "bot_risk",
+          "sequence_risk",
+          "attribution_risk",
+          "supply_chain_risk",
+          "graph_risk",
+          "quality_risk",
+          "unknown_risk",
+          "click_volume_risk",
+          "conversion_timing_risk",
+          "incentive_risk",
+          "retention_risk",
+          "accidental_risk"
+        ]
+      }
+    }
+  ]
+}

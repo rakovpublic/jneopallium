@@ -1,0 +1,284 @@
+{
+  "file": "layer-3-behavioural-evidence.json",
+  "layerID": 3,
+  "layerName": "Behavioural Fraud-Family Evidence",
+  "layerType": "behaviouralEvidence",
+  "layerSize": 4,
+  "commercialSupervisoryFunctions": [
+    "click-spam volume evidence",
+    "click-injection timing evidence",
+    "incentivized-install cohort evidence",
+    "delayed low-value and accidental-click evidence"
+  ],
+  "neurons": [
+    {
+      "neuronId": 300,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.ClickVolumeNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.SessionBehaviourSignal",
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudEvidenceSignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.AdClickSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.adfraud.SessionSequenceProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.IAdFraudScoringNeuron"
+        },
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.UserInteractionSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.adfraud.SessionSequenceProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.IAdFraudScoringNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "300": [
+            "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.SessionBehaviourSignal",
+            "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudEvidenceSignal"
+          ]
+        },
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {
+          "click_volume_risk": 1.0
+        },
+        "defaultDendritesWeights": {},
+        "decisionThreshold": 0.3
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.AdClickSignal",
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.UserInteractionSignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.IAdFraudScoringNeuron"
+      ],
+      "runtimeMode": "ADVISORY",
+      "logicalNeuronRole": "ClickVolumeAndSpamEvidence",
+      "ownedReasoning": "neuron owns the evidence transform and emits advisory fraud evidence; replay code only materializes auditable output",
+      "featureGate": [
+        "click_volume_risk"
+      ],
+      "emitsFraudLabels": [
+        "clickSpam"
+      ],
+      "evidenceFields": [
+        "session_event_count",
+        "event_type"
+      ],
+      "separatesFrom": "click injection, which arrives as an INSTALL conversion"
+    },
+    {
+      "neuronId": 301,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.ConversionTimingNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.AttributionAnomalySignal",
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudEvidenceSignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.AdClickSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.adfraud.AttributionIntegrityProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.IAdFraudScoringNeuron"
+        },
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.ConversionSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.adfraud.AttributionIntegrityProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.IAdFraudScoringNeuron"
+        },
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.PostbackSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.adfraud.AttributionIntegrityProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.IAdFraudScoringNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "301": [
+            "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.AttributionAnomalySignal",
+            "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudEvidenceSignal"
+          ]
+        },
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {
+          "conversion_timing_risk": 1.0
+        },
+        "defaultDendritesWeights": {},
+        "decisionThreshold": 0.05
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.AdClickSignal",
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.ConversionSignal",
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.PostbackSignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.IAdFraudScoringNeuron"
+      ],
+      "runtimeMode": "ADVISORY",
+      "logicalNeuronRole": "ClickInjectionTimingEvidence",
+      "ownedReasoning": "neuron owns the evidence transform and emits advisory fraud evidence; replay code only materializes auditable output",
+      "featureGate": [
+        "conversion_timing_risk"
+      ],
+      "emitsFraudLabels": [
+        "clickInjection"
+      ],
+      "evidenceFields": [
+        "click_id",
+        "conversion_id",
+        "event_time"
+      ]
+    },
+    {
+      "neuronId": 302,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.IncentivePatternNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.TrafficQualitySignal",
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudEvidenceSignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.ConversionSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.adfraud.TrafficQualityProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.IAdFraudScoringNeuron"
+        },
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.RetentionSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.adfraud.TrafficQualityProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.IAdFraudScoringNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "302": [
+            "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.TrafficQualitySignal",
+            "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudEvidenceSignal"
+          ]
+        },
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {
+          "incentive_risk": 1.0
+        },
+        "defaultDendritesWeights": {},
+        "decisionThreshold": 0.3
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.ConversionSignal",
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.RetentionSignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.IAdFraudScoringNeuron"
+      ],
+      "runtimeMode": "ADVISORY",
+      "logicalNeuronRole": "IncentivizedInstallCohortEvidence",
+      "ownedReasoning": "neuron owns the evidence transform and emits advisory fraud evidence; replay code only materializes auditable output",
+      "featureGate": [
+        "incentive_risk"
+      ],
+      "emitsFraudLabels": [
+        "incentivized"
+      ],
+      "separatesFrom": "click farm, which arrives as CLICK fanout"
+    },
+    {
+      "neuronId": 303,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.LowValueQualityNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.TrafficQualitySignal",
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudEvidenceSignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.RetentionSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.adfraud.TrafficQualityProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.IAdFraudScoringNeuron"
+        },
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.RefundSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.adfraud.TrafficQualityProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.IAdFraudScoringNeuron"
+        },
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.UserInteractionSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.adfraud.TrafficQualityProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.IAdFraudScoringNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "303": [
+            "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.TrafficQualitySignal",
+            "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudEvidenceSignal"
+          ]
+        },
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {
+          "retention_risk": 1.0,
+          "accidental_risk": 1.0
+        },
+        "defaultDendritesWeights": {},
+        "decisionThreshold": 0.15
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.RetentionSignal",
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.RefundSignal",
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.UserInteractionSignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.IAdFraudScoringNeuron"
+      ],
+      "runtimeMode": "ADVISORY",
+      "logicalNeuronRole": "DelayedLowValueAndAccidentalEvidence",
+      "ownedReasoning": "neuron owns the evidence transform and emits advisory fraud evidence; replay code only materializes auditable output",
+      "featureGate": [
+        "accidental_risk",
+        "retention_risk"
+      ],
+      "emitsFraudLabels": [
+        "accidentalOrLowValue"
+      ],
+      "delayedEvidence": [
+        "retention",
+        "refund",
+        "dwell-time",
+        "interaction-before-click"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "1.0",
+  "features": [
+    {
+      "name": "integrity_risk",
+      "missingDistinctFromZero": true
+    },
+    {
+      "name": "bot_risk",
+      "missingDistinctFromZero": true
+    },
+    {
+      "name": "sequence_risk",
+      "missingDistinctFromZero": true
+    },
+    {
+      "name": "attribution_risk",
+      "missingDistinctFromZero": true
+    },
+    {
+      "name": "supply_chain_risk",
+      "missingDistinctFromZero": true
+    },
+    {
+      "name": "graph_risk",
+      "missingDistinctFromZero": true
+    },
+    {
+      "name": "quality_risk",
+      "missingDistinctFromZero": true
+    },
+    {
+      "name": "unknown_risk",
+      "missingDistinctFromZero": true
+    },
+    {
+      "name": "click_volume_risk",
+      "missingDistinctFromZero": true
+    },
+    {
+      "name": "conversion_timing_risk",
+      "missingDistinctFromZero": true
+    },
+    {
+      "name": "incentive_risk",
+      "missingDistinctFromZero": true
+    },
+    {
+      "name": "retention_risk",
+      "missingDistinctFromZero": true
+    },
+    {
+      "name": "accidental_risk",
+      "missingDistinctFromZero": true
+    }
+  ]
+}

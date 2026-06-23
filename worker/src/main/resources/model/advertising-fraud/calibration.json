@@ -1,0 +1,64 @@
+{
+  "calibration": {
+    "bot": {
+      "method": "platt_scaling",
+      "scale": 1.97830158,
+      "offset": -0.39882913,
+      "calibrationRows": 170
+    },
+    "incentivized": {
+      "method": "platt_scaling",
+      "scale": 1.73128129,
+      "offset": -1.04153443,
+      "calibrationRows": 170
+    },
+    "clickFarm": {
+      "method": "platt_scaling",
+      "scale": 1.7842939,
+      "offset": -1.12946444,
+      "calibrationRows": 170
+    },
+    "eventSpoofing": {
+      "method": "platt_scaling",
+      "scale": 2.13579306,
+      "offset": -0.61785814,
+      "calibrationRows": 170
+    },
+    "clickSpam": {
+      "method": "platt_scaling",
+      "scale": 1.70568256,
+      "offset": -0.76998838,
+      "calibrationRows": 170
+    },
+    "clickInjection": {
+      "method": "platt_scaling",
+      "scale": 1.58079741,
+      "offset": -0.19419773,
+      "calibrationRows": 170
+    },
+    "attributionHijack": {
+      "method": "platt_scaling",
+      "scale": 1.75559915,
+      "offset": -0.39664683,
+      "calibrationRows": 170
+    },
+    "inventorySpoofing": {
+      "method": "platt_scaling",
+      "scale": 1.79763949,
+      "offset": -0.3114189,
+      "calibrationRows": 170
+    },
+    "accidentalOrLowValue": {
+      "method": "platt_scaling",
+      "scale": 1.65500477,
+      "offset": -1.17055161,
+      "calibrationRows": 170
+    },
+    "unknownSuspicious": {
+      "method": "platt_scaling",
+      "scale": 1.97912068,
+      "offset": -0.75623976,
+      "calibrationRows": 170
+    }
+  }
+}

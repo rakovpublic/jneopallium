@@ -1,0 +1,542 @@
+{
+  "schemaVersion": "1.0",
+  "modelId": "advertising-fraud",
+  "modelName": "Advertising Fraud Advisory Network",
+  "description": "Jneopallium-style advertising fraud model with explicit event-integrity receptors, entity graph and quality evidence, trained multi-label fraud correlation, and advisory response gating.",
+  "version": "1.0.0-reference-advisory",
+  "runtimeMode": "ADVISORY",
+  "safetyMode": "ADVISORY",
+  "artifact": "fallback-model.json",
+  "featureSchema": "feature-schema.json",
+  "labelSchema": "label-schema.json",
+  "featureCount": 21,
+  "labels": [
+    "bot",
+    "incentivized",
+    "clickFarm",
+    "eventSpoofing",
+    "clickSpam",
+    "clickInjection",
+    "attributionHijack",
+    "inventorySpoofing",
+    "accidentalOrLowValue",
+    "unknownSuspicious"
+  ],
+  "eventTypes": [
+    "BID_REQUEST",
+    "IMPRESSION",
+    "VIEWABLE_IMPRESSION",
+    "CLICK",
+    "LANDING",
+    "INTERACTION",
+    "INSTALL",
+    "REGISTRATION",
+    "PURCHASE",
+    "POSTBACK",
+    "REFUND",
+    "CHARGEBACK",
+    "UNINSTALL",
+    "RETENTION",
+    "PAYOUT"
+  ],
+  "automatedActionReady": false,
+  "javaRuntime": "AdFraudRuntimeScorer",
+  "latestTrainedSnapshot": "fallback-model.json",
+  "generatedFrom": {
+    "codePackage": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud",
+    "generator": "ad_fraud_pipeline.py",
+    "sourceRuntimeClasses": [
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.AdFraudRuntimeScorer",
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.IAdFraudScoringNeuron",
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.EventAuthenticityNeuron",
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.HumanInteractionNeuron",
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.SessionSequenceNeuron",
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.AttributionIntegrityNeuron",
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.PublisherBaselineNeuron",
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.ClickFarmGraphNeuron",
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.TrafficQualityNeuron",
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.ClickVolumeNeuron",
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.ConversionTimingNeuron",
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.IncentivePatternNeuron",
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.LowValueQualityNeuron",
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.FeatureInteractionNeuron",
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.FraudCorrelationNeuron",
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.FraudResponseGateNeuron",
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.AdFraudModelBundle",
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.AdFraudEvent",
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.AdFraudEventType",
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.AdFraudDecision",
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.AdFraudRuntimeMode",
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.AdFraudResponseAction",
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.adfraud.AdFraudPrivacy",
+      "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.adfraud.EventAuthenticityProcessor",
+      "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.adfraud.HumanInteractionProcessor",
+      "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.adfraud.SessionSequenceProcessor",
+      "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.adfraud.AttributionIntegrityProcessor",
+      "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.adfraud.PublisherBaselineProcessor",
+      "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.adfraud.ClickFarmGraphProcessor",
+      "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.adfraud.TrafficQualityProcessor",
+      "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.adfraud.FraudCorrelationProcessor",
+      "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.adfraud.FraudResponseGateProcessor",
+      "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.AdFraudSignal",
+      "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.AdBidSignal",
+      "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.AdImpressionSignal",
+      "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.AdClickSignal",
+      "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.LandingSignal",
+      "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.UserInteractionSignal",
+      "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.ConversionSignal",
+      "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.PostbackSignal",
+      "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.RetentionSignal",
+      "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.RefundSignal",
+      "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.BillingSignal",
+      "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.DeviceAttestationSignal",
+      "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.SupplyChainSignal",
+      "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.EventIntegritySignal",
+      "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.SessionBehaviourSignal",
+      "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.AttributionAnomalySignal",
+      "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.EntityBaselineSignal",
+      "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.GraphClusterSignal",
+      "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.TrafficQualitySignal",
+      "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudEvidenceSignal",
+      "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudHypothesisSignal",
+      "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudDecisionSignal",
+      "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.ModelDriftSignal",
+      "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.AnalystFeedbackSignal",
+      "com.rakovpublic.jneuropallium.worker.demo.adfraud.AdFraudDemo",
+      "com.rakovpublic.jneuropallium.worker.demo.adfraud.AdFraudStreamingService"
+    ]
+  },
+  "networkConfig": {
+    "safetyMode": "ADVISORY",
+    "featureCount": 21,
+    "labelCount": 10,
+    "responseActions": [
+      "ALLOW",
+      "LOG",
+      "REVIEW",
+      "RATE_LIMIT_CANDIDATE",
+      "HOLD_PAYOUT_CANDIDATE",
+      "DISCOUNT_TRAFFIC_CANDIDATE",
+      "ESCALATE_TO_ANALYST"
+    ],
+    "privacyControls": [
+      "device and account identifiers are pseudonymized before training",
+      "raw IP addresses, precise geolocation and user-agent strings are not exported",
+      "missing-value indicators are distinct from zero-valued risk evidence",
+      "model output is advisory-only until first-party validation and appeal controls exist"
+    ],
+    "splitPolicy": "scenario, campaign episode and deterministic replicate block holdout",
+    "responseBands": {
+      "log": [
+        0.0,
+        0.3
+      ],
+      "review": [
+        0.3,
+        0.6
+      ],
+      "rateLimitCandidate": [
+        0.6,
+        0.75
+      ],
+      "holdPayoutCandidate": [
+        0.75,
+        0.9
+      ],
+      "escalateToAnalyst": [
+        0.9,
+        1.0
+      ]
+    }
+  },
+  "metrics": {
+    "macroF1": 0.966132,
+    "perClass": {
+      "bot": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "falsePositiveRate": 0.0,
+        "tp": 60,
+        "fp": 0,
+        "tn": 480,
+        "fn": 0,
+        "prAuc": 1.0,
+        "rocAuc": 1.0,
+        "brierScore": 0.00081,
+        "expectedCalibrationError": 0.011122,
+        "precisionAtFixedReviewCapacity": 1.0,
+        "recallAt0_1Fpr": 1.0,
+        "recallAt1_0Fpr": 1.0
+      },
+      "incentivized": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "falsePositiveRate": 0.0,
+        "tp": 20,
+        "fp": 0,
+        "tn": 520,
+        "fn": 0,
+        "prAuc": 1.0,
+        "rocAuc": 1.0,
+        "brierScore": 0.00839,
+        "expectedCalibrationError": 0.034997,
+        "precisionAtFixedReviewCapacity": 1.0,
+        "recallAt0_1Fpr": 1.0,
+        "recallAt1_0Fpr": 1.0
+      },
+      "clickFarm": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "falsePositiveRate": 0.0,
+        "tp": 20,
+        "fp": 0,
+        "tn": 520,
+        "fn": 0,
+        "prAuc": 1.0,
+        "rocAuc": 1.0,
+        "brierScore": 0.015421,
+        "expectedCalibrationError": 0.055475,
+        "precisionAtFixedReviewCapacity": 1.0,
+        "recallAt0_1Fpr": 1.0,
+        "recallAt1_0Fpr": 1.0
+      },
+      "eventSpoofing": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "falsePositiveRate": 0.0,
+        "tp": 80,
+        "fp": 0,
+        "tn": 460,
+        "fn": 0,
+        "prAuc": 1.0,
+        "rocAuc": 1.0,
+        "brierScore": 0.002936,
+        "expectedCalibrationError": 0.011241,
+        "precisionAtFixedReviewCapacity": 1.0,
+        "recallAt0_1Fpr": 1.0,
+        "recallAt1_0Fpr": 1.0
+      },
+      "clickSpam": {
+        "precision": 0.952381,
+        "recall": 1.0,
+        "f1": 0.97561,
+        "falsePositiveRate": 0.001923,
+        "tp": 20,
+        "fp": 1,
+        "tn": 519,
+        "fn": 0,
+        "prAuc": 1.0,
+        "rocAuc": 1.0,
+        "brierScore": 0.004379,
+        "expectedCalibrationError": 0.016637,
+        "precisionAtFixedReviewCapacity": 0.952381,
+        "recallAt0_1Fpr": 0.0,
+        "recallAt1_0Fpr": 1.0
+      },
+      "clickInjection": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "falsePositiveRate": 0.0,
+        "tp": 20,
+        "fp": 0,
+        "tn": 520,
+        "fn": 0,
+        "prAuc": 1.0,
+        "rocAuc": 1.0,
+        "brierScore": 6.9e-05,
+        "expectedCalibrationError": 0.003189,
+        "precisionAtFixedReviewCapacity": 1.0,
+        "recallAt0_1Fpr": 1.0,
+        "recallAt1_0Fpr": 1.0
+      },
+      "attributionHijack": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "falsePositiveRate": 0.0,
+        "tp": 40,
+        "fp": 0,
+        "tn": 500,
+        "fn": 0,
+        "prAuc": 1.0,
+        "rocAuc": 1.0,
+        "brierScore": 0.001189,
+        "expectedCalibrationError": 0.007315,
+        "precisionAtFixedReviewCapacity": 1.0,
+        "recallAt0_1Fpr": 1.0,
+        "recallAt1_0Fpr": 1.0
+      },
+      "inventorySpoofing": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "falsePositiveRate": 0.0,
+        "tp": 20,
+        "fp": 0,
+        "tn": 520,
+        "fn": 0,
+        "prAuc": 1.0,
+        "rocAuc": 1.0,
+        "brierScore": 0.000251,
+        "expectedCalibrationError": 0.012043,
+        "precisionAtFixedReviewCapacity": 1.0,
+        "recallAt0_1Fpr": 1.0,
+        "recallAt1_0Fpr": 1.0
+      },
+      "accidentalOrLowValue": {
+        "precision": 0.521739,
+        "recall": 1.0,
+        "f1": 0.685714,
+        "falsePositiveRate": 0.114583,
+        "tp": 60,
+        "fp": 55,
+        "tn": 425,
+        "fn": 0,
+        "prAuc": 0.904103,
+        "rocAuc": 0.986111,
+        "brierScore": 0.048043,
+        "expectedCalibrationError": 0.0619,
+        "precisionAtFixedReviewCapacity": 0.521739,
+        "recallAt0_1Fpr": 0.0,
+        "recallAt1_0Fpr": 0.0
+      },
+      "unknownSuspicious": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "falsePositiveRate": 0.0,
+        "tp": 120,
+        "fp": 0,
+        "tn": 420,
+        "fn": 0,
+        "prAuc": 1.0,
+        "rocAuc": 1.0,
+        "brierScore": 0.004298,
+        "expectedCalibrationError": 0.026691,
+        "precisionAtFixedReviewCapacity": 1.0,
+        "recallAt0_1Fpr": 1.0,
+        "recallAt1_0Fpr": 1.0
+      }
+    }
+  },
+  "layers": [
+    {
+      "layerID": 0,
+      "file": "layer-0.json",
+      "name": "Multi-Source Advertising Event Input",
+      "type": "initInput",
+      "size": 0,
+      "quantitative": {
+        "neurons": 0,
+        "canonicalFeatureCount": 21,
+        "eventTypes": 15,
+        "sourceFamilies": 7
+      }
+    },
+    {
+      "layerID": 1,
+      "file": "layer-1-event-integrity.json",
+      "name": "Event Integrity And Session Evidence Receptors",
+      "type": "eventIntegrity",
+      "size": 4,
+      "quantitative": {
+        "neurons": 4,
+        "inputSignalTypes": 11,
+        "outputSignalTypes": 4
+      }
+    },
+    {
+      "layerID": 2,
+      "file": "layer-2-entity-graph-quality.json",
+      "name": "Entity Baseline, Graph And Traffic Quality Evidence",
+      "type": "entityGraphQuality",
+      "size": 3,
+      "quantitative": {
+        "neurons": 3,
+        "statefulStores": 4,
+        "graphTtlMs": 3600000,
+        "delayedEvidenceSignals": 4
+      }
+    },
+    {
+      "layerID": 3,
+      "file": "layer-3-behavioural-evidence.json",
+      "name": "Behavioural Fraud-Family Evidence",
+      "type": "behaviouralEvidence",
+      "size": 4,
+      "quantitative": {
+        "neurons": 4,
+        "evidenceFeatures": 5,
+        "emitsFraudLabels": [
+          "clickSpam",
+          "clickInjection",
+          "incentivized",
+          "accidentalOrLowValue"
+        ]
+      }
+    },
+    {
+      "layerID": 4,
+      "file": "layer-4-feature-interaction.json",
+      "name": "Non-Linear Feature Interaction",
+      "type": "featureInteraction",
+      "size": 8,
+      "quantitative": {
+        "neurons": 8,
+        "hiddenUnits": 8,
+        "activation": "tanh",
+        "inputFeatures": 13
+      }
+    },
+    {
+      "layerID": 5,
+      "file": "layer-5-trained-fraud-correlation.json",
+      "name": "Trained Multi-Label Fraud Correlation",
+      "type": "trainedFraudCorrelation",
+      "size": 1,
+      "quantitative": {
+        "neurons": 1,
+        "trainedFeatureWeights": 210,
+        "labels": 10,
+        "macroF1": 0.966132
+      }
+    },
+    {
+      "layerID": 6,
+      "file": "layer-6-response-gate.json",
+      "name": "Advisory Response Gate",
+      "type": "responseGate",
+      "size": 1,
+      "quantitative": {
+        "neurons": 1,
+        "candidateActions": 7,
+        "safetyMode": "ADVISORY",
+        "automaticActionAllowed": false
+      }
+    },
+    {
+      "layerID": 7,
+      "file": "result-layer.json",
+      "name": "Advertising Fraud Advisory Result Output",
+      "type": "result",
+      "size": 1,
+      "quantitative": {
+        "neurons": 1,
+        "resultSignalTypes": 1,
+        "probabilityOutputs": 11
+      }
+    }
+  ],
+  "signalFrequencyMap": {
+    "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.AdBidSignal": {
+      "epoch": "1",
+      "loop": "1"
+    },
+    "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.AdImpressionSignal": {
+      "epoch": "1",
+      "loop": "1"
+    },
+    "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.AdClickSignal": {
+      "epoch": "1",
+      "loop": "1"
+    },
+    "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.LandingSignal": {
+      "epoch": "1",
+      "loop": "1"
+    },
+    "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.UserInteractionSignal": {
+      "epoch": "2",
+      "loop": "1"
+    },
+    "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.ConversionSignal": {
+      "epoch": "5",
+      "loop": "1"
+    },
+    "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.PostbackSignal": {
+      "epoch": "1",
+      "loop": "1"
+    },
+    "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.RetentionSignal": {
+      "epoch": "10",
+      "loop": "2"
+    },
+    "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.RefundSignal": {
+      "epoch": "10",
+      "loop": "2"
+    },
+    "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.BillingSignal": {
+      "epoch": "10",
+      "loop": "2"
+    },
+    "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.DeviceAttestationSignal": {
+      "epoch": "1",
+      "loop": "1"
+    },
+    "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.SupplyChainSignal": {
+      "epoch": "1",
+      "loop": "2"
+    },
+    "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.EventIntegritySignal": {
+      "epoch": "1",
+      "loop": "1"
+    },
+    "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.SessionBehaviourSignal": {
+      "epoch": "5",
+      "loop": "1"
+    },
+    "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.AttributionAnomalySignal": {
+      "epoch": "5",
+      "loop": "1"
+    },
+    "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.EntityBaselineSignal": {
+      "epoch": "1",
+      "loop": "2"
+    },
+    "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.GraphClusterSignal": {
+      "epoch": "3",
+      "loop": "2"
+    },
+    "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.TrafficQualitySignal": {
+      "epoch": "5",
+      "loop": "2"
+    },
+    "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudEvidenceSignal": {
+      "epoch": "1",
+      "loop": "1"
+    },
+    "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudHypothesisSignal": {
+      "epoch": "1",
+      "loop": "2"
+    },
+    "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudDecisionSignal": {
+      "epoch": "1",
+      "loop": "1"
+    },
+    "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.ModelDriftSignal": {
+      "epoch": "60",
+      "loop": "2"
+    },
+    "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.AnalystFeedbackSignal": {
+      "epoch": "10",
+      "loop": "2"
+    }
+  },
+  "totalLayers": 8,
+  "totalRealNeurons": 22,
+  "totalTrainableWeightScalars": 314,
+  "totalTrainableBiasScalars": 18,
+  "notes": [
+    "Layer 0 is an explicit multi-source input boundary with no neuron objects.",
+    "Layer 3 adds single-purpose behavioural-evidence neurons that separate the conflated fraud families.",
+    "Layer 4 is a non-linear feature-interaction (hidden) layer; each unit is its own neuron.",
+    "Layer 5 embeds the trained calibrated multi-label heads from fallback-model.json over base + evidence + interaction features.",
+    "Layer 6 remains advisory-only; hard safety gates are fixed configuration and not learned.",
+    "Public-data model emits advisory candidates only.",
+    "Automated billing rejection, payout withholding, account blocking, or accusations require first-party validation gates."
+  ]
+}
