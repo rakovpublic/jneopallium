@@ -117,10 +117,12 @@ class AdFraudModuleTest {
             JsonNode descriptor = MAPPER.readTree(in);
             assertEquals("advertising-fraud", descriptor.path("modelId").asText());
             assertFalse(descriptor.path("automatedActionReady").asBoolean());
+            assertEquals(21, descriptor.path("featureCount").asInt());
             assertEquals(8, descriptor.path("totalLayers").asInt());
             assertEquals(22, descriptor.path("totalRealNeurons").asInt());
             assertTrue(descriptor.path("layers").isArray());
             assertEquals("layer-5-trained-fraud-correlation.json", descriptor.path("layers").get(5).path("file").asText());
+            assertTrue(descriptor.path("networkConfig").path("evaluationSplits").toString().contains("first_party_holdout"));
             assertTrue(descriptor.path("signalFrequencyMap").has(
                     "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.FraudDecisionSignal"));
         }
@@ -144,6 +146,7 @@ class AdFraudModuleTest {
             assertTrue(neuron.path("signalChain").path("processingChain").isArray());
             assertEquals("fallback-model.json",
                     neuron.path("trainedAdvertisingFraudModel").path("snapshot").asText());
+            assertTrue(neuron.path("trainedAdvertisingFraudModel").path("hidden").path("weights").isArray());
             assertTrue(neuron.path("trainedAdvertisingFraudModel").path("heads").has("bot"));
             assertTrue(neuron.path("trainedAdvertisingFraudModel").path("heads")
                     .path("bot").path("featureWeights").has("bot_risk"));

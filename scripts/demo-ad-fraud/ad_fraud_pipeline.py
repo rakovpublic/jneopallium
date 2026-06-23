@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import csv
 from collections import defaultdict
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -27,6 +28,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 TARGET = ROOT / "target" / "jneopallium-ad-fraud"
 DATA_DIR = ROOT / "data"
 MODEL_RESOURCE_DIR = ROOT / "worker" / "src" / "main" / "resources" / "model" / "advertising-fraud"
+DEFAULT_FIRST_PARTY_LABELS = DATA_DIR / "first-party-ad-fraud-labels.jsonl"
 
 LABELS = [
     "bot",
@@ -82,6 +84,8 @@ FEATURES = INPUT_FEATURES + HIDDEN_FEATURES
 SCENARIOS = [
     "legitimate_high_value",
     "legitimate_low_conversion",
+    "legitimate_short_session",
+    "legitimate_low_value_returning",
     "accidental_click",
     "simple_bot_burst",
     "slow_stealth_bot",
@@ -100,6 +104,13 @@ SCENARIOS = [
     "model_runtime_failure",
     "concept_drift",
 ]
+
+EVALUATION_SPLITS = {"test", "adversarial_test", "future_test", "novel_scenario_test", "first_party_holdout"}
+SPLIT_POLICY = (
+    "stratified scenario quotas with campaign/device namespace isolation; "
+    "50/20/20 train/validation/calibration blocks plus ordinary, adversarial, future-time, "
+    "novel-scenario and first-party holdout tests"
+)
 
 EVENT_TYPES = [
     "BID_REQUEST",
@@ -250,6 +261,15 @@ def source_catalog() -> list[dict[str, Any]]:
             "schema": "crawler identifiers",
             "defaultUse": "metadata_only",
         },
+        {
+            "id": "first_party_labeled_traffic",
+            "name": "User-supplied first-party labelled ad traffic",
+            "url": str(DEFAULT_FIRST_PARTY_LABELS),
+            "license": "user supplied; must be authorized for model training",
+            "intendedUse": "analyst-reviewed production labels, appeal outcomes, refunds, chargebacks, MMP postbacks and known-good traffic",
+            "schema": "JSONL or CSV canonical event rows with label_* columns or a labels array",
+            "defaultUse": "user_supplied",
+        },
     ]
 
 
@@ -276,7 +296,7 @@ def discover_sources() -> dict[str, Any]:
     return manifest
 
 
-def download_sources(offline: bool, max_bytes: int = 65536) -> dict[str, Any]:
+def download_sources(offline: bool, first_party_path: Path | None = None, max_bytes: int = 65536) -> dict[str, Any]:
     manifest = discover_sources()
     cache_dir = DATA_DIR / "cache" / "ad-fraud"
     cache_dir.mkdir(parents=True, exist_ok=True)
@@ -285,7 +305,16 @@ def download_sources(offline: bool, max_bytes: int = 65536) -> dict[str, Any]:
         status = "dataset_unavailable"
         reason = "offline mode" if offline else "metadata-only or unavailable bounded direct download"
         cached_path = None
-        if source["defaultUse"] == "credentials_required":
+        if source["defaultUse"] == "user_supplied":
+            candidate = first_party_path or (DEFAULT_FIRST_PARTY_LABELS if DEFAULT_FIRST_PARTY_LABELS.exists() else None)
+            if candidate and candidate.exists():
+                cached_path = candidate
+                status = "loaded"
+                reason = "user supplied first-party labels loaded from local file"
+            else:
+                status = "not_provided"
+                reason = "place authorized JSONL/CSV labels at data/first-party-ad-fraud-labels.jsonl or pass --first-party-labels"
+        elif source["defaultUse"] == "credentials_required":
             status = "credentials_required"
             reason = "credentials and terms were not already available in environment"
         elif not offline and source["id"] in {"iab_ads_txt", "benign_crawlers"}:
@@ -332,7 +361,7 @@ def scenario_labels(scenario: str) -> dict[str, int]:
         labels["attributionHijack"] = 1
     if scenario == "publisher_inventory_spoof":
         labels["inventorySpoofing"] = 1
-    if scenario in {"legitimate_low_conversion", "accidental_click"}:
+    if scenario == "accidental_click":
         labels["accidentalOrLowValue"] = 1
     if scenario in {"concept_drift", "model_runtime_failure"}:
         labels["unknownSuspicious"] = 1
@@ -341,26 +370,24 @@ def scenario_labels(scenario: str) -> dict[str, int]:
 
 def _block_split(idx: int) -> str:
     bucket = idx % 10
-    if bucket < 6:
+    if bucket < 5:
         return "train"
-    if bucket == 6:
+    if bucket < 7:
         return "validation"
-    if bucket == 7:
+    if bucket < 9:
         return "calibration"
     return "test"
 
 
 def split_for(scenario: str, idx: int) -> str:
-    # Improvement #1: the click-injection and inventory-spoof families used to be
-    # a 100% zero-shot adversarial holdout, so their heads fell back to a single
-    # hand-coded feature and their thresholds could never be tuned (default 0.1
-    # -> FPR 1.0). Keep a held-out adversarial slice for generalization, but give
-    # the families in-distribution train / validation / calibration coverage so
-    # the trained heads learn them and thresholds are tunable on real positives.
+    # Keep in-distribution coverage for every trained head, then carve out
+    # explicit stress tests that are not allowed to tune thresholds.
     if scenario in {"click_injection", "publisher_inventory_spoof"}:
-        return "adversarial_test" if idx % 10 >= 8 else _block_split(idx)
-    if scenario in {"delayed_conversion", "concept_drift"}:
-        return "test"
+        return "adversarial_test" if idx % 20 >= 18 else _block_split(idx)
+    if scenario == "delayed_conversion":
+        return "future_test"
+    if scenario == "concept_drift":
+        return "novel_scenario_test"
     return _block_split(idx)
 
 
@@ -490,9 +517,39 @@ def generate_event(scenario: str, idx: int, seed: int) -> tuple[dict[str, Any], 
         event["dwell_ms"] = 35
         event["interaction_before_click"] = False
         event["meaningful_action_count"] = 0
+        event["customer_quality_label"] = "accidental"
+        event["analyst_label"] = "invalid_traffic"
     if scenario == "legitimate_low_conversion":
         event["day_7_retained"] = False
         event["meaningful_action_count"] = 0
+        event["customer_quality_label"] = "low_value_but_legitimate"
+        event["analyst_label"] = "known_good_hard_negative"
+        event["source_type"] = "FIRST_PARTY_TEMPLATE"
+        event["label_confidence"] = 0.90
+    if scenario == "legitimate_short_session":
+        event["dwell_ms"] = rnd.randint(95, 220)
+        event["interaction_before_click"] = True
+        event["pointer_event_count"] = rnd.randint(2, 8)
+        event["pointer_velocity_entropy"] = round(0.22 + rnd.random() * 0.35, 3)
+        event["meaningful_action_count"] = 1
+        event["day_7_retained"] = True
+        event["customer_quality_label"] = "short_session_known_good"
+        event["analyst_label"] = "known_good_hard_negative"
+        event["source_type"] = "FIRST_PARTY_TEMPLATE"
+        event["label_confidence"] = 0.90
+    if scenario == "legitimate_low_value_returning":
+        event["event_type"] = "PURCHASE"
+        event["dwell_ms"] = rnd.randint(450, 1800)
+        event["interaction_before_click"] = True
+        event["meaningful_action_count"] = 0
+        event["purchase_value"] = round(0.20 + rnd.random() * 1.25, 2)
+        event["day_1_retained"] = True
+        event["day_7_retained"] = False
+        event["day_30_retained"] = False
+        event["customer_quality_label"] = "low_value_known_good"
+        event["analyst_label"] = "known_good_hard_negative"
+        event["source_type"] = "FIRST_PARTY_TEMPLATE"
+        event["label_confidence"] = 0.90
     if scenario == "concept_drift":
         event["browser"] = "new-browser-family"
         event["unknown_marker"] = 1
@@ -587,13 +644,16 @@ def extract_features(event: dict[str, Any]) -> dict[str, float]:
     if event.get("chargeback") or float(event.get("refund_value") or 0.0) > 0:
         retention += 0.35
 
-    # accidental low-value click: short dwell, no pre-click interaction, human.
+    # accidental low-value click: short dwell plus missing interaction. A normal
+    # low-conversion visitor is a hard negative, not invalid traffic.
     accidental = 0.0
-    if int(event.get("dwell_ms") or 0) < 90 and not event.get("automation_flag") and not event.get("headless_flag"):
+    short_human_click = int(event.get("dwell_ms") or 0) < 90 and not event.get("automation_flag") and not event.get("headless_flag")
+    no_pre_click_interaction = event.get("interaction_before_click") is False
+    if short_human_click:
         accidental += 0.35
-    if event.get("interaction_before_click") is False:
+    if no_pre_click_interaction:
         accidental += 0.30
-    if event_type == "CLICK" and int(event.get("meaningful_action_count") or 0) == 0 and not is_conversion:
+    if event_type == "CLICK" and int(event.get("meaningful_action_count") or 0) == 0 and not is_conversion and (short_human_click or no_pre_click_interaction):
         accidental += 0.20
 
     return {
@@ -613,14 +673,22 @@ def extract_features(event: dict[str, Any]) -> dict[str, float]:
     }
 
 
-def build_examples(max_rows: int, seed: int) -> list[Example]:
-    # Improvement #4: a larger, balanced corpus (>=60 events per scenario) so
-    # every label and split has enough positives for stable fitting/calibration.
-    per_scenario = max(60, max_rows // len(SCENARIOS))
+def scenario_quotas(max_rows: int) -> dict[str, int]:
+    total = max(len(SCENARIOS), max_rows)
+    base = total // len(SCENARIOS)
+    remainder = total % len(SCENARIOS)
+    return {
+        scenario: base + (1 if idx < remainder else 0)
+        for idx, scenario in enumerate(SCENARIOS)
+    }
+
+
+def build_examples(max_rows: int, seed: int, first_party_path: Path | None = None) -> list[Example]:
     examples = []
+    quotas = scenario_quotas(max_rows)
     for scenario in SCENARIOS:
         labels = scenario_labels(scenario)
-        for idx in range(per_scenario):
+        for idx in range(quotas[scenario]):
             event, features = generate_event(scenario, idx, seed)
             split = split_for(scenario, idx)
             event["campaign_id"] = f"{event['campaign_id']}-{split}"
@@ -628,7 +696,218 @@ def build_examples(max_rows: int, seed: int) -> list[Example]:
             event["device_id_hash"] = pseudonym(f"{event['device_id_hash']}:{split}")
             event["fingerprint_hash"] = pseudonym(f"{event['fingerprint_hash']}:{split}")
             examples.append(Example(event, features, labels, split))
-    return examples[:max_rows]
+    examples.extend(load_first_party_examples(first_party_path, seed))
+    write_dataset_profile(examples, quotas)
+    return examples
+
+
+def coerce_value(value: Any) -> Any:
+    if value is None:
+        return None
+    if isinstance(value, (bool, int, float, dict, list)):
+        return value
+    text = str(value).strip()
+    if text == "":
+        return None
+    lowered = text.lower()
+    if lowered in {"true", "false"}:
+        return lowered == "true"
+    if lowered in {"null", "none", "nan"}:
+        return None
+    try:
+        if any(ch in text for ch in [".", "e", "E"]):
+            return float(text)
+        return int(text)
+    except ValueError:
+        return text
+
+
+def read_first_party_rows(path: Path) -> list[dict[str, Any]]:
+    if path.suffix.lower() == ".csv":
+        with path.open("r", encoding="utf-8-sig", newline="") as fh:
+            return [{k: coerce_value(v) for k, v in row.items()} for row in csv.DictReader(fh)]
+    rows = []
+    with path.open("r", encoding="utf-8") as fh:
+        for line in fh:
+            if line.strip():
+                rows.append(json.loads(line))
+    return rows
+
+
+def first_party_labels(row: dict[str, Any]) -> dict[str, int]:
+    labels = {label: 0 for label in LABELS}
+    raw_labels = row.get("labels")
+    if isinstance(raw_labels, str):
+        try:
+            raw_labels = json.loads(raw_labels)
+        except json.JSONDecodeError:
+            raw_labels = [part.strip() for part in raw_labels.split(",") if part.strip()]
+    if isinstance(raw_labels, list):
+        for label in raw_labels:
+            if str(label) in labels:
+                labels[str(label)] = 1
+    elif isinstance(raw_labels, dict):
+        for label in LABELS:
+            labels[label] = 1 if coerce_value(raw_labels.get(label)) else 0
+    for label in LABELS:
+        value = row.get(f"label_{label}", row.get(label))
+        if value is not None:
+            labels[label] = 1 if coerce_value(value) else 0
+    analyst = str(row.get("analyst_label", "")).lower()
+    if not any(labels.values()) and analyst in {"invalid", "invalid_traffic", "fraud", "suspicious"}:
+        labels["unknownSuspicious"] = 1
+    return labels
+
+
+def first_party_split(row: dict[str, Any], event: dict[str, Any]) -> str:
+    supplied = str(row.get("split", "")).strip()
+    aliases = {
+        "holdout": "first_party_holdout",
+        "first_party_test": "first_party_holdout",
+        "production_holdout": "first_party_holdout",
+    }
+    if supplied in {"train", "validation", "calibration", "test", "adversarial_test", "future_test", "novel_scenario_test", "first_party_holdout"}:
+        return supplied
+    if supplied in aliases:
+        return aliases[supplied]
+    key = "|".join(str(event.get(name, "")) for name in ["publisher_id", "campaign_id", "event_id"])
+    bucket = int(stable_unit("first-party-split:" + key) * 100)
+    if bucket < 50:
+        return "train"
+    if bucket < 70:
+        return "validation"
+    if bucket < 85:
+        return "calibration"
+    return "first_party_holdout"
+
+
+def first_party_event(row: dict[str, Any], idx: int, seed: int) -> dict[str, Any]:
+    embedded = row.get("event")
+    if isinstance(embedded, str):
+        try:
+            embedded = json.loads(embedded)
+        except json.JSONDecodeError:
+            embedded = {}
+    event = dict(embedded) if isinstance(embedded, dict) else {}
+    skipped = {"labels", "split"} | {f"label_{label}" for label in LABELS} | set(LABELS)
+    for key, value in row.items():
+        if key not in skipped and not key.startswith("feature_") and key != "event":
+            event[key] = coerce_value(value)
+    base_time = 1_900_000_000_000 + idx * 1000
+    event.setdefault("schemaVersion", "1.0")
+    event.setdefault("event_id", f"first-party-{idx:06d}")
+    event.setdefault("event_type", "CLICK")
+    event.setdefault("event_time", base_time)
+    event.setdefault("ingest_time", int(event.get("event_time") or base_time) + 100)
+    event.setdefault("source_timestamp", event["event_time"])
+    event.setdefault("server_receive_timestamp", event["ingest_time"])
+    event.setdefault("impression_id", f"fp-imp-{idx}")
+    event.setdefault("click_id", f"fp-click-{idx}")
+    event.setdefault("session_id", f"fp-session-{idx // 4}")
+    event.setdefault("device_id_hash", pseudonym(f"fp-device-{seed}-{idx // 9}"))
+    event.setdefault("fingerprint_hash", pseudonym(f"fp-fingerprint-{seed}-{idx // 11}"))
+    event.setdefault("publisher_id", f"fp-publisher-{idx % 17}")
+    event.setdefault("campaign_id", f"fp-campaign-{idx % 13}")
+    event.setdefault("signature_present", True)
+    event.setdefault("signature_valid", True)
+    event.setdefault("nonce", f"fp-nonce-{idx}")
+    event.setdefault("nonce_reused", False)
+    event.setdefault("client_event_present", True)
+    event.setdefault("server_event_present", True)
+    event.setdefault("device_attestation_present", False)
+    event.setdefault("device_attestation_valid", True)
+    event.setdefault("ads_txt_authorized", True)
+    event.setdefault("seller_json_match", True)
+    event.setdefault("supply_chain_complete", True)
+    event.setdefault("dwell_ms", 1000)
+    event.setdefault("pointer_event_count", 4)
+    event.setdefault("pointer_velocity_entropy", 0.35)
+    event.setdefault("interaction_before_click", True)
+    event.setdefault("automation_flag", False)
+    event.setdefault("headless_flag", False)
+    event.setdefault("cookie_age_seconds", 3600)
+    event.setdefault("session_event_count", 2)
+    event.setdefault("day_7_retained", None)
+    event.setdefault("meaningful_action_count", 1)
+    event.setdefault("refund_value", 0.0)
+    event.setdefault("chargeback", False)
+    event.setdefault("uninstall_delay", None)
+    event.setdefault("scenario_id", "first_party_labeled")
+    event["source_type"] = "FIRST_PARTY_LABEL"
+    event["label_origin"] = event.get("label_origin", "first_party")
+    event["label_confidence"] = float(event.get("label_confidence", 1.0) or 1.0)
+    return event
+
+
+def load_first_party_examples(first_party_path: Path | None, seed: int) -> list[Example]:
+    path = first_party_path or (DEFAULT_FIRST_PARTY_LABELS if DEFAULT_FIRST_PARTY_LABELS.exists() else None)
+    if not path or not path.exists():
+        write_json(TARGET / "first_party_label_report.json", {
+            "status": "not_provided",
+            "path": str(first_party_path or DEFAULT_FIRST_PARTY_LABELS),
+            "loadedRows": 0,
+            "instructions": "Provide authorized JSONL/CSV rows with canonical event fields plus label_<name> columns or a labels array.",
+        })
+        return []
+    rows = read_first_party_rows(path)
+    examples = []
+    for idx, row in enumerate(rows):
+        event = first_party_event(row, idx, seed)
+        labels = first_party_labels(row)
+        features = extract_features(event)
+        for feature in INPUT_FEATURES:
+            value = row.get(f"feature_{feature}")
+            if value is not None:
+                features[feature] = clamp(float(coerce_value(value)))
+        split = first_party_split(row, event)
+        event["campaign_id"] = f"{event['campaign_id']}-{split}"
+        event["click_id"] = f"{event['click_id']}-{split}"
+        event["device_id_hash"] = pseudonym(f"{event['device_id_hash']}:{split}")
+        event["fingerprint_hash"] = pseudonym(f"{event['fingerprint_hash']}:{split}")
+        examples.append(Example(event, features, labels, split))
+    write_json(TARGET / "first_party_label_report.json", {
+        "status": "loaded",
+        "path": str(path),
+        "loadedRows": len(examples),
+        "splitCounts": count_by(examples, lambda e: e.split),
+        "labelCounts": {label: sum(e.labels[label] for e in examples) for label in LABELS},
+        "sha256": sha256_file(path),
+    })
+    return examples
+
+
+def count_by(examples: list[Example], key_fn) -> dict[str, int]:
+    counts = defaultdict(int)
+    for example in examples:
+        counts[str(key_fn(example))] += 1
+    return dict(sorted(counts.items()))
+
+
+def write_dataset_profile(examples: list[Example], quotas: dict[str, int]) -> None:
+    profile = {
+        "schemaVersion": "1.0",
+        "splitPolicy": SPLIT_POLICY,
+        "syntheticScenarioQuotas": quotas,
+        "totalRows": len(examples),
+        "splitCounts": count_by(examples, lambda e: e.split),
+        "scenarioCounts": count_by(examples, lambda e: e.event.get("scenario_id", "unknown")),
+        "labelCountsBySplit": {
+            split: {
+                label: sum(e.labels[label] for e in examples if e.split == split)
+                for label in LABELS
+            }
+            for split in sorted({e.split for e in examples})
+        },
+        "hardNegativeScenarios": [
+            "legitimate_low_conversion",
+            "legitimate_short_session",
+            "legitimate_low_value_returning",
+            "valid_postback",
+            "delayed_conversion",
+        ],
+        "evaluationSplits": sorted(EVALUATION_SPLITS),
+    }
+    write_json(TARGET / "dataset_profile.json", profile)
 
 
 def leakage_audit(examples: list[Example]) -> dict[str, Any]:
@@ -649,9 +928,17 @@ def leakage_audit(examples: list[Example]) -> dict[str, Any]:
     report = {
         "passed": not leaks,
         "neverRandomRowSplit": True,
-        "splitPolicy": "scenario, campaign episode and deterministic replicate block holdout",
+        "splitPolicy": SPLIT_POLICY,
+        "evaluationSplits": sorted(EVALUATION_SPLITS),
         "leaks": leaks[:20],
         "splitScenarios": {k: sorted(v) for k, v in split_scenarios.items()},
+        "labelCountsBySplit": {
+            split: {
+                label: sum(e.labels[label] for e in examples if e.split == split)
+                for label in LABELS
+            }
+            for split in sorted({e.split for e in examples})
+        },
     }
     write_json(TARGET / "leakage_audit.json", report)
     if leaks:
@@ -1005,7 +1292,7 @@ def write_layer_artifacts(model: dict[str, Any], calibration: dict[str, Any], th
         "sourceFamilies": SOURCE_FAMILIES,
         "inputSignals": [signal_class(name) for name in input_signals],
         "outputSignals": [signal_class(name) for name in input_signals],
-        "splitPolicy": "scenario, campaign episode and deterministic replicate block holdout",
+        "splitPolicy": SPLIT_POLICY,
         "privacyControls": PRIVACY_CONTROLS,
         "exampleSplits": {split: sum(1 for e in examples if e.split == split) for split in sorted({e.split for e in examples})},
         "neurons": [],
@@ -1555,8 +1842,9 @@ def auc(items: list[tuple[float, int]], pr: bool) -> float:
 def evaluate(model: dict[str, Any], calibration: dict[str, Any], thresholds: dict[str, float], examples: list[Example]) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     predictions = []
     per_class = {}
+    evaluation_examples = [e for e in examples if e.split in EVALUATION_SPLITS]
     for label in LABELS:
-        items = [(predict_one(model, e.features, label, calibration), e.labels[label]) for e in examples if e.split in {"test", "adversarial_test"}]
+        items = [(predict_one(model, e.features, label, calibration), e.labels[label]) for e in evaluation_examples]
         m = binary_metrics(items, thresholds[label])
         bs = statistics.fmean((p - y) ** 2 for p, y in items) if items else 0.0
         m.update({
@@ -1583,9 +1871,19 @@ def evaluate(model: dict[str, Any], calibration: dict[str, Any], thresholds: dic
             "labels": e.labels,
         })
     overall_f1 = statistics.fmean(v["f1"] for v in per_class.values())
+    total_tp = sum(v["tp"] for v in per_class.values())
+    total_fp = sum(v["fp"] for v in per_class.values())
+    total_fn = sum(v["fn"] for v in per_class.values())
+    micro_precision = total_tp / max(1, total_tp + total_fp)
+    micro_recall = total_tp / max(1, total_tp + total_fn)
     metrics = {
         "perClass": per_class,
         "macroF1": round(overall_f1, 6),
+        "microF1": round(2 * micro_precision * micro_recall / max(1e-9, micro_precision + micro_recall), 6),
+        "microPrecision": round(micro_precision, 6),
+        "microRecall": round(micro_recall, 6),
+        "evaluationRows": len(evaluation_examples),
+        "evaluationSplits": sorted(EVALUATION_SPLITS),
         "costWeightedExpectedSavings": round(sum(p["overall_invalid_traffic_probability"] for p in predictions) * 0.12, 6),
         "falsePositiveFinancialCost": round(sum(1 for p in predictions if p["overall_invalid_traffic_probability"] > 0.8 and not any(p["labels"].values())) * 0.50, 6),
         "meanDetectionDelay": 0.0,
@@ -1647,7 +1945,8 @@ def export_bundle(model: dict[str, Any], calibration: dict[str, Any], thresholds
             "labelCount": len(LABELS),
             "responseActions": AD_RESPONSE_ACTIONS,
             "privacyControls": PRIVACY_CONTROLS,
-            "splitPolicy": "scenario, campaign episode and deterministic replicate block holdout",
+            "splitPolicy": SPLIT_POLICY,
+            "evaluationSplits": sorted(EVALUATION_SPLITS),
             "responseBands": {
                 "log": [0.0, 0.30],
                 "review": [0.30, 0.60],
@@ -1691,7 +1990,8 @@ def export_bundle(model: dict[str, Any], calibration: dict[str, Any], thresholds
         "generatedAt": datetime.now(timezone.utc).replace(microsecond=0).isoformat(),
         "sourceManifest": manifest,
         "exampleCount": len(examples),
-        "splitPolicy": "scenario, campaign episode and deterministic replicate block holdout",
+        "splitPolicy": SPLIT_POLICY,
+        "evaluationSplits": sorted(EVALUATION_SPLITS),
         "metrics": metrics,
     }
     files = {
@@ -1735,7 +2035,16 @@ def write_reports(args: argparse.Namespace, manifest: dict[str, Any], leakage: d
                   calibration: dict[str, Any], thresholds: dict[str, float], metrics: dict[str, Any],
                   predictions: list[dict[str, Any]], latency: dict[str, Any], examples: list[Example]) -> None:
     TARGET.mkdir(parents=True, exist_ok=True)
-    write_json(TARGET / "manifest.json", {"schemaVersion": "1.0", "artifactRoot": str(TARGET), "commands": sys.argv})
+    first_party_report_path = TARGET / "first_party_label_report.json"
+    first_party_report = json.loads(first_party_report_path.read_text(encoding="utf-8")) if first_party_report_path.exists() else {"status": "not_provided"}
+    write_json(TARGET / "manifest.json", {
+        "schemaVersion": "1.0",
+        "artifactRoot": str(TARGET),
+        "commands": sys.argv,
+        "splitPolicy": SPLIT_POLICY,
+        "evaluationSplits": sorted(EVALUATION_SPLITS),
+        "firstPartyLabels": first_party_report,
+    })
     readiness = {
         "ENGINEERING_READY": True,
         "SHADOW_READY": True,
@@ -1753,11 +2062,17 @@ def write_reports(args: argparse.Namespace, manifest: dict[str, Any], leakage: d
     write_json(TARGET / "threshold_report.json", {"thresholds": thresholds})
     write_json(TARGET / "per_class_metrics.json", metrics["perClass"])
     write_json(TARGET / "per_group_metrics.json", group_metrics(predictions))
-    write_json(TARGET / "adversarial_metrics.json", {"scenarios": [s for s in SCENARIOS if s in {"click_injection", "publisher_inventory_spoof"}]})
+    write_json(TARGET / "adversarial_metrics.json", {
+        "scenarios": [s for s in SCENARIOS if s in {"click_injection", "publisher_inventory_spoof"}],
+        "evaluationSplits": sorted(EVALUATION_SPLITS),
+        "futureHoldouts": ["delayed_conversion"],
+        "novelScenarioHoldouts": ["concept_drift"],
+        "firstPartyHoldoutRows": first_party_report.get("splitCounts", {}).get("first_party_holdout", 0),
+    })
     write_json(TARGET / "latency_report.json", latency)
     write_json(TARGET / "drift_baseline.json", {"featureMeans": {f: statistics.fmean(e.features[f] for e in examples) for f in INPUT_FEATURES}})
     write_json(TARGET / "model_comparison.json", {
-        "selected": "calibrated-linear-fusion",
+        "selected": "calibrated-nonlinear-fusion",
         "benchmarked": [
             "deterministic-event-integrity-rules",
             "logistic-regression-baseline",
@@ -1766,16 +2081,18 @@ def write_reports(args: argparse.Namespace, manifest: dict[str, Any], leakage: d
             "rolling-graph-feature-model",
             "session-temporal-feature-model",
         ],
-        "reason": "best deterministic quick-run macro F1 with Java-stable JSON runtime",
+        "reason": "balanced scenario quotas, first-party ingestion hook, calibrated utility thresholds and Java-stable JSON runtime",
     })
     write_jsonl(TARGET / "explanations.jsonl", [
         {"event_id": p["event_id"], "reasons": ["features scored by calibrated fusion", "advisory-only gate enforced"]}
         for p in predictions[:200]
     ])
     write_jsonl(TARGET / "demo_results.jsonl", predictions[:200])
+    write_jsonl(TARGET / "predictions.jsonl", predictions)
     write_json(TARGET / "predictions.parquet", {
-        "formatNote": "JSON fallback written with .parquet extension because pyarrow is optional in the repo workflow",
-        "rows": predictions[:200],
+        "formatNote": "Full JSON fallback written with .parquet extension because pyarrow is optional in the repo workflow",
+        "rowCount": len(predictions),
+        "rows": predictions,
     })
     for name, body in docs(readiness, metrics, manifest).items():
         (TARGET / name).write_text(body, encoding="utf-8")
@@ -1800,21 +2117,21 @@ def docs(readiness: dict[str, Any], metrics: dict[str, Any], manifest: dict[str,
         f"{common}\n"
         "## Data Sources\n"
         f"{sources}\n\n"
-        "## Split Policy\nScenario, campaign episode, device/click namespace, and adversarial scenario holdouts; never random rows.\n\n"
-        "## Selected Model\nCalibrated linear fusion over learned features plus deterministic rules. Gradient/tree/isolation/graph/session baselines are benchmarked in the report manifest.\n\n"
-        f"## Metrics\nMacro F1: {metrics['macroF1']}\n\n"
+        f"## Split Policy\n{SPLIT_POLICY}; never random rows.\n\n"
+        "## Selected Model\nCalibrated non-linear fusion over receptor, behavioural-evidence, and feature-interaction neurons. Gradient/tree/isolation/graph/session baselines are benchmarked in the report manifest.\n\n"
+        f"## Metrics\nMacro F1: {metrics['macroF1']}\nMicro F1: {metrics.get('microF1')}\nEvaluation rows: {metrics.get('evaluationRows')}\n\n"
         "## Readiness\n"
         f"{json.dumps(readiness, indent=2)}\n\n"
         "## Limitations\nPublic labels are incomplete; synthetic and weak labels do not prove production fraud accuracy. Automated action is disabled.\n\n"
-        "## First-Party Validation\nRun shadow scoring on labelled production traffic, hold out unseen publishers and forward time, measure financial false-positive cost, and complete legal/operations review.\n"
+        "## First-Party Validation\nPass `--first-party-labels <jsonl-or-csv>` or place authorized labels at `data/first-party-ad-fraud-labels.jsonl`. The pipeline reserves deterministic first-party holdout rows unless a split is provided. Run shadow scoring on labelled production traffic, hold out unseen publishers and forward time, measure financial false-positive cost, and complete legal/operations review.\n"
     )
     return {
         "MODEL_CARD.md": model_card(metrics),
         "DATA_CARD.md": data_card(manifest),
         "ARCHITECTURE.md": "# Architecture\n\n" + common,
         "DEPLOYMENT.md": "# Deployment\n\nRun Java service in SHADOW or ADVISORY mode; never enforce public-data decisions automatically.\n",
-        "RETRAINING.md": "# Retraining\n\nUse `scripts/demo-ad-fraud/run_all.* --full --force-retrain` with first-party labelled traffic added through the canonical schema.\n",
-        "LIMITATIONS.md": "# Limitations\n\nSynthetic and weak labels cannot support automatic billing or enforcement action.\n",
+        "RETRAINING.md": "# Retraining\n\nUse `scripts/demo-ad-fraud/run_all.* --full --force-retrain --first-party-labels <jsonl-or-csv>` with authorized first-party labelled traffic added through the canonical schema.\n",
+        "LIMITATIONS.md": "# Limitations\n\nSynthetic and weak labels cannot support automatic billing or enforcement action. Macro F1 must be read with the split profile, first-party holdout count, calibration quality, and financial false-positive cost.\n",
         "FINAL_REPORT.md": final,
     }
 
@@ -1841,8 +2158,11 @@ def run_workflow(args: argparse.Namespace) -> dict[str, Any]:
     if args.quick:
         args.max_rows = min(args.max_rows, len(SCENARIOS) * 60)
     TARGET.mkdir(parents=True, exist_ok=True)
-    manifest = download_sources(args.offline, args.max_rows)
-    examples = build_examples(args.max_rows, args.seed)
+    first_party_path = Path(args.first_party_labels) if args.first_party_labels else (
+        Path(os.environ["AD_FRAUD_FIRST_PARTY_LABELS"]) if os.environ.get("AD_FRAUD_FIRST_PARTY_LABELS") else None
+    )
+    manifest = download_sources(args.offline, first_party_path, args.max_rows)
+    examples = build_examples(args.max_rows, args.seed, first_party_path)
     write_jsonl(TARGET / "normalized_events.jsonl", [{**e.event, **{f"feature_{k}": v for k, v in e.features.items()}, **{f"label_{k}": v for k, v in e.labels.items()}, "split": e.split} for e in examples])
     leakage = leakage_audit(examples)
     model = train_model(examples, args.seed)
@@ -1874,6 +2194,8 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--seed", type=int, default=1729)
     parser.add_argument("--force-retrain", action="store_true")
     parser.add_argument("--skip-java", action="store_true")
+    parser.add_argument("--first-party-labels", type=str, default=None,
+                        help="Optional authorized JSONL/CSV first-party labels with canonical event fields and label_* columns.")
     return parser.parse_args(argv)
 
 

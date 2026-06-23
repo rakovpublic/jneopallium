@@ -209,9 +209,16 @@ public class AdFraudRuntimeScorer extends Neuron implements IAdFraudScoringNeuro
         f.put("retention_risk", clamp(retention));
 
         double accidental = 0.0;
-        if (nullToZero(event.dwellMs) < 90 && !event.automationFlag && !event.headlessFlag) accidental += 0.35;
-        if (!event.interactionBeforeClick && nullToZero(event.dwellMs) < 200) accidental += 0.30;
-        if (event.eventType == AdFraudEventType.CLICK && nullToZero(event.meaningfulActionCount) == 0 && !conversion) accidental += 0.20;
+        boolean shortHumanClick = nullToZero(event.dwellMs) < 90 && !event.automationFlag && !event.headlessFlag;
+        boolean noPreClickInteraction = !event.interactionBeforeClick;
+        if (shortHumanClick) accidental += 0.35;
+        if (noPreClickInteraction) accidental += 0.30;
+        if (event.eventType == AdFraudEventType.CLICK
+                && nullToZero(event.meaningfulActionCount) == 0
+                && !conversion
+                && (shortHumanClick || noPreClickInteraction)) {
+            accidental += 0.20;
+        }
         f.put("accidental_risk", clamp(accidental));
 
         for (Map.Entry<String, Double> entry : event.numericFeatures.entrySet()) {
@@ -291,7 +298,9 @@ public class AdFraudRuntimeScorer extends Neuron implements IAdFraudScoringNeuro
             case "inventorySpoofing" -> f.getOrDefault("supply_chain_risk", 0.0);
             case "clickFarm" -> Math.max(f.getOrDefault("graph_risk", 0.0), f.getOrDefault("quality_risk", 0.0) * 0.8);
             case "incentivized" -> f.getOrDefault("quality_risk", 0.0);
-            case "accidentalOrLowValue" -> f.getOrDefault("quality_risk", 0.0) * 0.6;
+            case "accidentalOrLowValue" -> Math.max(
+                    f.getOrDefault("accidental_risk", 0.0),
+                    f.getOrDefault("retention_risk", 0.0) * 0.35);
             case "unknownSuspicious" -> f.getOrDefault("unknown_risk", 0.0);
             default -> 0.0;
         };

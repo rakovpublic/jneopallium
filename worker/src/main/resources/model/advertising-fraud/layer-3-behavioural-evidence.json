@@ -45,7 +45,7 @@
           "click_volume_risk": 1.0
         },
         "defaultDendritesWeights": {},
-        "decisionThreshold": 0.3
+        "decisionThreshold": 0.6
       },
       "signalChain": {
         "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
@@ -114,7 +114,7 @@
           "conversion_timing_risk": 1.0
         },
         "defaultDendritesWeights": {},
-        "decisionThreshold": 0.05
+        "decisionThreshold": 0.1
       },
       "signalChain": {
         "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
@@ -180,7 +180,7 @@
           "incentive_risk": 1.0
         },
         "defaultDendritesWeights": {},
-        "decisionThreshold": 0.3
+        "decisionThreshold": 0.2
       },
       "signalChain": {
         "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
@@ -246,7 +246,7 @@
           "accidental_risk": 1.0
         },
         "defaultDendritesWeights": {},
-        "decisionThreshold": 0.15
+        "decisionThreshold": 0.3
       },
       "signalChain": {
         "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",

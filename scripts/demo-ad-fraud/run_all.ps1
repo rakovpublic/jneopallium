@@ -5,6 +5,7 @@ param(
   [int]$maxRows = 760,
   [int]$maxMemoryMb = 1024,
   [int]$seed = 1729,
+  [string]$firstPartyLabels = "",
   [switch]$forceRetrain
 )
 
@@ -15,5 +16,6 @@ if ($quick) { $argsList += "--quick" }
 if ($full) { $argsList += "--full" }
 if ($offline) { $argsList += "--offline" }
 if ($forceRetrain) { $argsList += "--force-retrain" }
+if ($firstPartyLabels -ne "") { $argsList += @("--first-party-labels", "$firstPartyLabels") }
 $argsList += @("--max-rows", "$maxRows", "--max-memory-mb", "$maxMemoryMb", "--seed", "$seed")
 python (Join-Path $scriptDir "run_all.py") @argsList

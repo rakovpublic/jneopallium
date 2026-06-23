@@ -94,7 +94,7 @@
     "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.SupplyChainSignal",
     "com.rakovpublic.jneuropallium.worker.net.signals.impl.adfraud.AnalystFeedbackSignal"
   ],
-  "splitPolicy": "scenario, campaign episode and deterministic replicate block holdout",
+  "splitPolicy": "stratified scenario quotas with campaign/device namespace isolation; 50/20/20 train/validation/calibration blocks plus ordinary, adversarial, future-time, novel-scenario and first-party holdout tests",
   "privacyControls": [
     "device and account identifiers are pseudonymized before training",
     "raw IP addresses, precise geolocation and user-agent strings are not exported",
@@ -102,11 +102,13 @@
     "model output is advisory-only until first-party validation and appeal controls exist"
   ],
   "exampleSplits": {
-    "adversarial_test": 40,
-    "calibration": 170,
-    "test": 500,
-    "train": 1020,
-    "validation": 170
+    "adversarial_test": 16,
+    "calibration": 334,
+    "future_test": 90,
+    "novel_scenario_test": 90,
+    "test": 163,
+    "train": 865,
+    "validation": 342
   },
   "neurons": []
 }
