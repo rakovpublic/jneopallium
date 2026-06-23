@@ -145,7 +145,7 @@
           "quality_risk": 1.0
         },
         "defaultDendritesWeights": {},
-        "decisionThreshold": 0.55
+        "decisionThreshold": 0.75
       },
       "signalChain": {
         "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
@@ -233,7 +233,7 @@
           "unknown_risk": 1.0
         },
         "defaultDendritesWeights": {},
-        "decisionThreshold": 0.3
+        "decisionThreshold": 0.75
       },
       "signalChain": {
         "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",

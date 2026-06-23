@@ -102,13 +102,13 @@
     "model output is advisory-only until first-party validation and appeal controls exist"
   ],
   "exampleSplits": {
-    "adversarial_test": 16,
-    "calibration": 334,
-    "future_test": 90,
-    "novel_scenario_test": 90,
-    "test": 163,
-    "train": 865,
-    "validation": 342
+    "adversarial_test": 44,
+    "calibration": 2278,
+    "future_test": 230,
+    "novel_scenario_test": 230,
+    "test": 1128,
+    "train": 5790,
+    "validation": 2300
   },
   "neurons": []
 }

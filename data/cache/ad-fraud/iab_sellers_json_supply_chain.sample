@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width">
+	<meta name="google-adsense-account" content="ca-pub-5809322957837945">
+
+<!--<title>IAB Tech Lab</title>-->
+	<!--<meta name="description" content="Established in 2014, the IAB Technology Laboratory (Tech Lab) is a non-profit consortium that engages a member community globally to develop foundational technology and standards that enable growth and trust in the digital media ecosystem. Comprised of digital publishers, ad technology firms, agencies, marketers, and other member companies, IAB Tech Lab focuses on solutions for brand safety and ad fraud; identity, data, and consumer privacy; ad experiences and measurement; and programmatic effectiveness. Its work includes the OpenRTB real-time bidding protocol, ads.txt anti-fraud specification, Open Measurement SDK for viewability and verification, VAST video specification, and DigiTrust identity service. Board members/companies are listed at https://iabtechlab.com/about-the-iab-tech-lab/tech-lab-leadership/. For more information, please visit https://iabtechlab.com." />-->
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+	<link rel="pingback" href="https://iabtechlab.com/xmlrpc.php">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+	
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+  
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    
+	
+    <style>
+    .slick-dots {
+    position: absolute;
+    bottom: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    }
+
+    .slick-dots li {
+    display: inline-block;
+    margin: 0 5px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #000;
+    }
+
+    .slick-dots li.slick-active {
+    background-color: #fff;
+    }
+
+    .slider-container {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    }
+
+    .slider-item {
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    }
+
+
+    .search-submit, .wpcf7-form-control, .main-navigation ul ul, .content-boxes .circle, .feature .circle, .section-title-right::after, .boxtitle::after, .section-title::after, .content-btn, #comments .form-submit #submit {
+    background-color: #dd3333;
+    }
+
+    .boxtitle::after, .section-title::after {
+    height: 3px;
+    width: 20%;
+    }
+    
+    .wp-post-image {
+      margin-bottom: 0px;
+    }
+    
+    #slick-slide-control00{
+      display: none;
+    }
+    
+    #slick-slide-control01{
+      display: none;
+    }
+    
+    #slick-slide-control02{
+      display: none;
+    }
+    
+    #slick-slide-control03{
+      display: none;
+    }
+    
+    .slick-dots li.slick-active {
+      background-color: #d33;
+    }
+
+    @media (min-width: 1200px) {
+        .container {
+            width: 1250px;
+        }
+    }
+
+    @media (max-width: 740px) {
+        .slick-dots {
+            bottom: 35px;
+        }
+		
+		.slider-container {
+				height: 580px;
+		}
+    }
+		
+		
+	.modal-open .modal{
+		background-color: white;
+		max-width: 700px;
+		max-height: 600px;
+		align-content: center;
+		margin: auto;
+		margin-top: auto;
+		padding: 15px;
+		margin-top: 20px;
+	}
+
+</style>
+
+	 <style>
+		.header-profile-icon {
+		position: absolute;
+		right: 20px;
+		top: 28px;
+		}
+		.profile-menu {
+			left: auto !important;
+			right: 0;
+			line-height: 25px;
+			padding-left: 10px !important;
+		}
+		.profile-menu .logout-btn {
+		  background-color: black;
+		  color: white;
+		  padding: 8px 8px;
+		  border-radius: 5px;
+		  width: 90%;
+		  box-sizing: border-box;
+		  display: inline-block;
+		  text-align: center;
+		  font-size: 16px;
+		  margin-top: 5px;
+		}
+	</style>
+
+	<meta name='robots' content='index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1' />
+
+	<!-- This site is optimized with the Yoast SEO Premium plugin v27.5 (Yoast SEO v27.5) - https://yoast.com/product/yoast-seo-premium-wordpress/ -->
+	<title>sellers.json Supply Chain Transparency</title>
+	<meta name="description" content="sellers.json, enables buyers to verify the entities who are direct sellers, or intermediaries in the digital advertising supply chain" />
+	<link rel="canonical" href="https://iabtechlab.com/sellers-json/" />
+	<meta property="og:locale" content="en_US" />
+	<meta property="og:type" content="article" />
+	<meta property="og:title" content="sellers.json Supply Chain Transparency" />
+	<meta property="og:description" content="sellers.json, enables buyers to verify the entities who are direct sellers, or intermediaries in the digital advertising supply chain" />
+	<meta property="og:url" content="https://iabtechlab.com/sellers-json/" />
+	<meta property="og:site_name" content="IAB Tech Lab" />
+	<meta property="article:publisher" content="https://www.facebook.com/IABTechLab" />
+	<meta property="article:modified_time" content="2026-01-09T20:21:10+00:00" />
+	<meta property="og:image" content="https://iabtechlab.com/wp-content/uploads/2026/01/ads.txtsellers.json_1200x628.png" />
+	<meta property="og:image:width" content="1200" />
+	<meta property="og:image:height" content="628" />
+	<meta property="og:image:type" content="image/png" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="sellers.json Supply Chain Transparency" />
+	<meta name="twitter:description" content="sellers.json, enables buyers to verify the entities who are direct sellers, or intermediaries in the digital advertising supply chain" />
+	<meta name="twitter:site" content="@iabtechlab" />
+	<meta name="twitter:label1" content="Est. reading time" />
+	<meta name="twitter:data1" content="3 minutes" />
+	<script type="application/ld+json" class="yoast-schema-graph">{"@context":"https:\/\/schema.org","@graph":[{"@type":"WebPage","@id":"https:\/\/iabtechlab.com\/sellers-json\/","url":"https:\/\/iabtechlab.com\/sellers-json\/","name":"sellers.json Supply Chain Transparency","isPartOf":{"@id":"https:\/\/iabtechlab.com\/#website"},"primaryImageOfPage":{"@id":"https:\/\/iabtechlab.com\/sellers-json\/#primaryimage"},"image":{"@id":"https:\/\/iabtechlab.com\/sellers-json\/#primaryimage"},"thumbnailUrl":"https:\/\/iabtechlab.com\/wp-content\/uploads\/2026\/01\/ads.txtsellers.json_1200x628.png","datePublished":"2019-04-11T13:55:44+00:00","dateModified":"2026-01-09T20:21:10+00:00","description":"sellers.json, enables buyers to verify the entities who are direct sellers, or intermediaries in the digital advertising supply chain","breadcrumb":{"@id":"https:\/\/iabtechlab.com\/sellers-json\/#breadcrumb"},"inLanguage":"en-US","potentialAction":[{"@type":"ReadAction","target":["https:\/\/iabtechlab.com\/sellers-json\/"]}]},{"@type":"ImageObject","inLanguage":"en-US","@id":"https:\/\/iabtechlab.com\/sellers-json\/#primaryimage","url":"https:\/\/iabtechlab.com\/wp-content\/uploads\/2026\/01\/ads.txtsellers.json_1200x628.png","contentUrl":"https:\/\/iabtechlab.com\/wp-content\/uploads\/2026\/01\/ads.txtsellers.json_1200x628.png","width":1200,"height":628,"caption":"Supply Chain Transparency with ads.txt and sellers.json"},{"@type":"BreadcrumbList","@id":"https:\/\/iabtechlab.com\/sellers-json\/#breadcrumb","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https:\/\/iabtechlab.com\/"},{"@type":"ListItem","position":2,"name":"sellers.json"}]},{"@type":"WebSite","@id":"https:\/\/iabtechlab.com\/#website","url":"https:\/\/iabtechlab.com\/","name":"IAB Tech Lab","description":"Tech Lab works with the industry at large to develop guidelines, write specs, develop technology and provide services in an effort to bring alignment and standardization to help the industry grow.","publisher":{"@id":"https:\/\/iabtechlab.com\/#organization"},"potentialAction":[{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https:\/\/iabtechlab.com\/?s={search_term_string}"},"query-input":{"@type":"PropertyValueSpecification","valueRequired":true,"valueName":"search_term_string"}}],"inLanguage":"en-US"},{"@type":"Organization","@id":"https:\/\/iabtechlab.com\/#organization","name":"IAB Tech Lab","url":"https:\/\/iabtechlab.com\/","logo":{"@type":"ImageObject","inLanguage":"en-US","@id":"https:\/\/iabtechlab.com\/#\/schema\/logo\/image\/","url":"https:\/\/iabtechlab.com\/wp-content\/uploads\/2024\/12\/IAB_Tech-Lab_2019_Vertical_RGB-20241007-205703.png","contentUrl":"https:\/\/iabtechlab.com\/wp-content\/uploads\/2024\/12\/IAB_Tech-Lab_2019_Vertical_RGB-20241007-205703.png","width":643,"height":466,"caption":"IAB Tech Lab"},"image":{"@id":"https:\/\/iabtechlab.com\/#\/schema\/logo\/image\/"},"sameAs":["https:\/\/www.facebook.com\/IABTechLab","https:\/\/x.com\/iabtechlab"]}]}</script>
+	<!-- / Yoast SEO Premium plugin. -->
+
+
+<link rel='dns-prefetch' href='//cc.cdn.civiccomputing.com' />
+<link rel='dns-prefetch' href='//fonts.googleapis.com' />
+<link rel="alternate" type="application/rss+xml" title="IAB Tech Lab &raquo; Feed" href="https://iabtechlab.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="IAB Tech Lab &raquo; Comments Feed" href="https://iabtechlab.com/comments/feed/" />
+<link rel="alternate" type="text/calendar" title="IAB Tech Lab &raquo; iCal Feed" href="https://iabtechlab.com/events/?ical=1" />
+<link rel="alternate" title="oEmbed (JSON)" type="application/json+oembed" href="https://iabtechlab.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fiabtechlab.com%2Fsellers-json%2F" />
+<link rel="alternate" title="oEmbed (XML)" type="text/xml+oembed" href="https://iabtechlab.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fiabtechlab.com%2Fsellers-json%2F&#038;format=xml" />
+<style id='wp-img-auto-sizes-contain-inline-css' type='text/css'>
+img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
+/*# sourceURL=wp-img-auto-sizes-contain-inline-css */
+</style>
+<link rel='stylesheet' id='tribe-events-pro-mini-calendar-block-styles-css' href='https://iabtechlab.com/wp-content/plugins/events-calendar-pro/build/css/tribe-events-pro-mini-calendar-block.css?ver=7.7.14' type='text/css' media='all' />
+<link rel='stylesheet' id='dashicons-css' href='https://iabtechlab.com/wp-includes/css/dashicons.min.css?ver=6.9.4' type='text/css' media='all' />
+<link rel='stylesheet' id='tec-variables-skeleton-css' href='https://iabtechlab.com/wp-content/plugins/the-events-calendar/common/build/css/variables-skeleton.css?ver=6.10.3' type='text/css' media='all' />
+<link rel='stylesheet' id='tec-variables-full-css' href='https://iabtechlab.com/wp-content/plugins/the-events-calendar/common/build/css/variables-full.css?ver=6.10.3' type='text/css' media='all' />
+<link rel='stylesheet' id='tribe-common-skeleton-style-css' href='https://iabtechlab.com/wp-content/plugins/the-events-calendar/common/build/css/common-skeleton.css?ver=6.10.3' type='text/css' media='all' />
+<link rel='stylesheet' id='tribe-common-full-style-css' href='https://iabtechlab.com/wp-content/plugins/the-events-calendar/common/build/css/common-full.css?ver=6.10.3' type='text/css' media='all' />
+<link rel='stylesheet' id='event-tickets-tickets-css-css' href='https://iabtechlab.com/wp-content/plugins/event-tickets/build/css/tickets.css?ver=5.27.6.1' type='text/css' media='all' />
+<link rel='stylesheet' id='event-tickets-tickets-rsvp-css-css' href='https://iabtechlab.com/wp-content/plugins/event-tickets/build/css/rsvp-v1.css?ver=5.27.6.1' type='text/css' media='all' />
+<link rel='style

@@ -2,63 +2,63 @@
   "calibration": {
     "bot": {
       "method": "platt_scaling",
-      "scale": 1.99581131,
-      "offset": -0.41453561,
-      "calibrationRows": 334
+      "scale": 2.08999339,
+      "offset": -0.43675319,
+      "calibrationRows": 2278
     },
     "incentivized": {
       "method": "platt_scaling",
-      "scale": 1.77102477,
-      "offset": -1.1515886,
-      "calibrationRows": 334
+      "scale": 1.48911472,
+      "offset": -1.15311549,
+      "calibrationRows": 2278
     },
     "clickFarm": {
       "method": "platt_scaling",
-      "scale": 1.73260541,
-      "offset": -1.1448273,
-      "calibrationRows": 334
+      "scale": 1.81045405,
+      "offset": -0.70020637,
+      "calibrationRows": 2278
     },
     "eventSpoofing": {
       "method": "platt_scaling",
-      "scale": 2.23905061,
-      "offset": -0.6114571,
-      "calibrationRows": 334
+      "scale": 2.25173962,
+      "offset": -0.52108752,
+      "calibrationRows": 2278
     },
     "clickSpam": {
       "method": "platt_scaling",
-      "scale": 1.58375873,
-      "offset": -0.81261152,
-      "calibrationRows": 334
+      "scale": 1.5289368,
+      "offset": -1.03571677,
+      "calibrationRows": 2278
     },
     "clickInjection": {
       "method": "platt_scaling",
-      "scale": 1.60588579,
-      "offset": -0.21689206,
-      "calibrationRows": 334
+      "scale": 1.81557337,
+      "offset": -0.43684651,
+      "calibrationRows": 2278
     },
     "attributionHijack": {
       "method": "platt_scaling",
-      "scale": 1.72941714,
-      "offset": -0.46893668,
-      "calibrationRows": 334
+      "scale": 1.24020502,
+      "offset": -1.07566676,
+      "calibrationRows": 2278
     },
     "inventorySpoofing": {
       "method": "platt_scaling",
-      "scale": 1.81884784,
-      "offset": -0.3206642,
-      "calibrationRows": 334
+      "scale": 1.81067149,
+      "offset": -0.29741175,
+      "calibrationRows": 2278
     },
     "accidentalOrLowValue": {
       "method": "platt_scaling",
-      "scale": 1.97425523,
-      "offset": -1.17242021,
-      "calibrationRows": 334
+      "scale": 1.86225909,
+      "offset": -1.07319184,
+      "calibrationRows": 2278
     },
     "unknownSuspicious": {
       "method": "platt_scaling",
-      "scale": 1.91545435,
-      "offset": -0.85402519,
-      "calibrationRows": 334
+      "scale": 1.82174522,
+      "offset": -0.97857489,
+      "calibrationRows": 2278
     }
   }
 }

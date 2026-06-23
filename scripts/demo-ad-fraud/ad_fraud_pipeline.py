@@ -86,18 +86,49 @@ SCENARIOS = [
     "legitimate_low_conversion",
     "legitimate_short_session",
     "legitimate_low_value_returning",
+    "benign_privacy_limited",
+    "benign_delayed_conversion",
+    "benign_no_identifiers",
     "accidental_click",
+    "hidden_ad_accidental_click",
+    "stacked_ad_accidental_click",
     "simple_bot_burst",
+    "fixed_rate_bot",
+    "randomized_rate_bot",
+    "headed_browser_bot",
+    "replayed_mouse_trace_bot",
+    "valid_cookie_bot",
     "slow_stealth_bot",
     "rotating_proxy_bot",
+    "bot_fake_conversion",
     "human_click_farm",
+    "shared_network_click_farm",
+    "shared_device_click_farm",
+    "synchronized_click_farm",
     "incentivized_install_cohort",
+    "motivated_rewarded_install",
+    "consented_incentivized_returning_low_value",
     "click_spam",
+    "synchronized_campaign_click_spam",
+    "low_rate_click_reuse",
     "click_injection",
     "valid_postback",
     "forged_postback",
     "replayed_conversion",
+    "invalid_hmac",
+    "missing_signature",
+    "unknown_click_id",
+    "unknown_impression_id",
+    "mismatched_campaign_postback",
+    "mismatched_device_postback",
+    "altered_purchase_value",
+    "duplicated_conversion",
+    "client_server_disagreement",
     "publisher_inventory_spoof",
+    "supply_chain_missing_record",
+    "supply_chain_malformed_record",
+    "seller_owner_mismatch",
+    "supply_path_intermediary_anomaly",
     "missing_device_attestation",
     "out_of_order_events",
     "delayed_conversion",
@@ -219,53 +250,375 @@ def source_catalog() -> list[dict[str, Any]]:
         {
             "id": "criteo_attribution_dataset",
             "name": "Criteo Attribution Dataset",
-            "url": "https://ailab.criteo.com/criteo-attribution-modeling-bidding-dataset/",
-            "license": "research terms; inspect before full use",
+            "url": "https://huggingface.co/datasets/criteo/criteo-attribution-dataset",
+            "sourceType": "REAL_WEAK_LABEL",
+            "fraudClasses": ["CLICK_SPAM", "CLICK_INJECTION", "ATTRIBUTION_HIJACK"],
+            "labelStrength": "WEAK",
+            "commercialUse": "RESTRICTED",
+            "license": "CC-BY-NC-SA-4.0",
+            "automaticDownload": False,
+            "requiresCredentials": False,
+            "mayTrainProductionModel": False,
+            "mayEvaluateProductionClaims": False,
             "intendedUse": "temporal click and attribution modeling; not intentional-fraud labels",
             "schema": "click/conversion attribution logs",
+            "defaultUse": "metadata_only",
+            "boundedUse": "streamed sample for temporal baselines and simulation priors",
+        },
+        {
+            "id": "criteo_private_ad",
+            "name": "CriteoPrivateAd",
+            "url": "https://arxiv.org/abs/2502.12103",
+            "sourceType": "REAL_OUTCOME_LABEL",
+            "fraudClasses": ["MISSING_DELAYED_EVENTS", "PRIVACY_LIMITED_ATTRIBUTION"],
+            "labelStrength": "OUTCOME_ONLY",
+            "commercialUse": "SHAREALIKE_REVIEW_REQUIRED",
+            "license": "CC-BY-SA-4.0",
+            "automaticDownload": False,
+            "requiresCredentials": False,
+            "mayTrainProductionModel": False,
+            "mayEvaluateProductionClaims": False,
+            "intendedUse": "privacy-limited bidding, landed-click, delayed-reporting and benign auction baselines",
+            "schema": "real-world bidding outcomes with delayed reporting scenarios",
             "defaultUse": "metadata_only",
         },
         {
             "id": "criteo_click_logs",
             "name": "Criteo Click Logs",
-            "url": "https://ailab.criteo.com/download-criteo-1tb-click-logs-dataset/",
-            "license": "research terms; bounded sample only",
+            "url": "https://huggingface.co/datasets/criteo/CriteoClickLogs",
+            "sourceType": "REAL_CLICK_FEEDBACK",
+            "fraudClasses": ["BACKGROUND_TRAFFIC", "SCALABILITY", "RARE_CATEGORY_BASELINES"],
+            "labelStrength": "UNLABELED_FOR_FRAUD",
+            "commercialUse": "RESTRICTED",
+            "license": "CC-BY-NC-SA-4.0",
+            "automaticDownload": False,
+            "requiresCredentials": False,
+            "mayTrainProductionModel": False,
+            "mayEvaluateProductionClaims": False,
             "intendedUse": "normal click/impression baseline; CTR is not a fraud label",
             "schema": "bounded click-log sample",
             "defaultUse": "metadata_only",
+            "boundedUse": "1-5M streamed rows in non-quick experiments; no full 276GB download in repo workflow",
         },
         {
             "id": "talkingdata_kaggle",
             "name": "TalkingData AdTracking Fraud Detection Challenge",
-            "url": "https://www.kaggle.com/c/talkingdata-adtracking-fraud-detection",
+            "url": "https://www.kaggle.com/competitions/talkingdata-adtracking-fraud-detection",
+            "sourceType": "REAL_MOBILE_ATTRIBUTION",
+            "fraudClasses": ["CLICK_SPAM", "CLICK_INJECTION", "ATTRIBUTION_WINDOW_MODELING"],
+            "labelStrength": "POSITIVE_UNLABELED",
+            "commercialUse": "KAGGLE_TERMS",
             "license": "Kaggle competition terms",
+            "automaticDownload": False,
+            "requiresCredentials": True,
+            "mayTrainProductionModel": False,
+            "mayEvaluateProductionClaims": False,
             "intendedUse": "weak attribution-quality supervision only when credentials already exist",
             "schema": "mobile click attribution",
             "defaultUse": "credentials_required",
         },
         {
+            "id": "criteo_uplift",
+            "name": "Criteo Uplift Dataset",
+            "url": "https://huggingface.co/datasets/criteo/criteo-uplift",
+            "sourceType": "REAL_CAUSAL_OUTCOME",
+            "fraudClasses": ["LOW_INCREMENTALITY", "INCENTIVIZED_TRAFFIC_PRIORS"],
+            "labelStrength": "OUTCOME_ONLY",
+            "commercialUse": "RESTRICTED",
+            "license": "CC-BY-NC-SA-4.0",
+            "automaticDownload": False,
+            "requiresCredentials": False,
+            "mayTrainProductionModel": False,
+            "mayEvaluateProductionClaims": False,
+            "intendedUse": "uplift and incrementality baselines so conversion is not over-trusted",
+            "schema": "treatment, exposure, visit and conversion indicators",
+            "defaultUse": "metadata_only",
+        },
+        {
+            "id": "avazu_ctr_prediction",
+            "name": "Avazu CTR Prediction",
+            "url": "https://www.kaggle.com/c/avazu-ctr-prediction",
+            "sourceType": "REAL_CLICK_FEEDBACK",
+            "fraudClasses": ["BACKGROUND_TRAFFIC", "RARE_CATEGORY_BASELINES", "MOBILE_CONTEXT_BASELINES"],
+            "labelStrength": "UNLABELED_FOR_FRAUD",
+            "commercialUse": "KAGGLE_TERMS",
+            "license": "Kaggle competition terms",
+            "automaticDownload": False,
+            "requiresCredentials": True,
+            "mayTrainProductionModel": False,
+            "mayEvaluateProductionClaims": False,
+            "intendedUse": "chronological mobile ad click logs for normal-background and rare-context baselines",
+            "schema": "ad id, device/app/site/context categorical fields and click feedback",
+            "defaultUse": "credentials_required",
+        },
+        {
+            "id": "kddcup2012_track2",
+            "name": "KDD Cup 2012 Track 2 Tencent sponsored-search CTR",
+            "url": "https://www.kaggle.com/c/kddcup2012-track2",
+            "sourceType": "REAL_CLICK_FEEDBACK",
+            "fraudClasses": ["BACKGROUND_TRAFFIC", "SEARCH_AD_CONTEXT_BASELINES"],
+            "labelStrength": "UNLABELED_FOR_FRAUD",
+            "commercialUse": "KAGGLE_TERMS",
+            "license": "Kaggle/SIGKDD competition terms",
+            "automaticDownload": False,
+            "requiresCredentials": True,
+            "mayTrainProductionModel": False,
+            "mayEvaluateProductionClaims": False,
+            "intendedUse": "sponsored-search click-through baselines and query/ad/user context hard negatives",
+            "schema": "Tencent search advertising session instances with click feedback",
+            "defaultUse": "credentials_required",
+        },
+        {
+            "id": "ipinyou_rtb",
+            "name": "iPinYou Global RTB Bidding Algorithm Competition Dataset",
+            "url": "https://contest.ipinyou.com/",
+            "sourceType": "REAL_RTB_LOGS",
+            "fraudClasses": ["BID_IMPRESSION_CLICK_CONVERSION_PATHS", "SUPPLY_AND_AUCTION_BASELINES"],
+            "labelStrength": "OUTCOME_ONLY",
+            "commercialUse": "LICENSE_REVIEW_REQUIRED",
+            "license": "competition/dataset terms must be inspected before use",
+            "automaticDownload": False,
+            "requiresCredentials": False,
+            "mayTrainProductionModel": False,
+            "mayEvaluateProductionClaims": False,
+            "intendedUse": "RTB bid, impression, click and final conversion paths for auction and campaign baselines",
+            "schema": "DSP bidding logs, impressions, clicks and conversions",
+            "defaultUse": "metadata_only",
+        },
+        {
+            "id": "ali_ccp",
+            "name": "Ali-CCP Alibaba Click and Conversion Prediction Dataset",
+            "url": "https://tianchi.aliyun.com/dataset/408",
+            "sourceType": "REAL_CLICK_CONVERSION_LOGS",
+            "fraudClasses": ["POST_CLICK_CONVERSION_BASELINES", "BACKGROUND_TRAFFIC"],
+            "labelStrength": "OUTCOME_ONLY",
+            "commercialUse": "TIANCHI_TERMS",
+            "license": "Tianchi/Alibaba dataset terms",
+            "automaticDownload": False,
+            "requiresCredentials": True,
+            "mayTrainProductionModel": False,
+            "mayEvaluateProductionClaims": False,
+            "intendedUse": "post-click conversion baselines and click/conversion sparsity hard negatives",
+            "schema": "Taobao real-world traffic logs with click and conversion labels",
+            "defaultUse": "credentials_required",
+        },
+        {
+            "id": "frauddroid_artifacts",
+            "name": "FraudDroid research artifacts",
+            "url": "https://arxiv.org/abs/1709.01213",
+            "sourceType": "PUBLIC_FRAUD_RESEARCH",
+            "fraudClasses": ["MOBILE_INTERACTION_FRAUD", "HIDDEN_ADS", "ACCIDENTAL_CLICK_INDUCEMENT"],
+            "labelStrength": "RESEARCH_CONFIRMED",
+            "commercialUse": "LICENSE_REVIEW_REQUIRED",
+            "license": "paper/artifact license must be inspected before use",
+            "automaticDownload": False,
+            "requiresCredentials": False,
+            "mayTrainProductionModel": False,
+            "mayEvaluateProductionClaims": False,
+            "intendedUse": "mobile app UI-state and network-behaviour fraud scenarios; APK redistribution excluded unless rights are clear",
+            "schema": "labelled app metadata, UI transition findings and experiment results when available",
+            "defaultUse": "metadata_only",
+        },
+        {
+            "id": "advanced_web_bot_behaviour",
+            "name": "Advanced web-bot behaviour research",
+            "url": "https://zenodo.org/records/5549439",
+            "sourceType": "PUBLIC_BEHAVIOUR_RESEARCH",
+            "fraudClasses": ["BOT", "ADVANCED_BROWSER_BOT"],
+            "labelStrength": "METHODOLOGY",
+            "commercialUse": "LICENSE_REVIEW_REQUIRED",
+            "license": "record license must be inspected before use",
+            "automaticDownload": False,
+            "requiresCredentials": False,
+            "mayTrainProductionModel": False,
+            "mayEvaluateProductionClaims": False,
+            "intendedUse": "mouse movement, timing, entropy and protocol design for controlled bot generation",
+            "schema": "publication and possible behaviour artifacts",
+            "defaultUse": "metadata_only",
+        },
+        {
+            "id": "botcha_positive_unlabeled",
+            "name": "Botcha positive-unlabelled bot-detection method",
+            "url": "https://arxiv.org/abs/2103.01428",
+            "sourceType": "PUBLIC_FRAUD_RESEARCH",
+            "fraudClasses": ["BOT", "POSITIVE_UNLABELED_LEARNING"],
+            "labelStrength": "METHODOLOGY",
+            "commercialUse": "LICENSE_REVIEW_REQUIRED",
+            "license": "paper/artifact license must be inspected before use",
+            "automaticDownload": False,
+            "requiresCredentials": False,
+            "mayTrainProductionModel": False,
+            "mayEvaluateProductionClaims": False,
+            "intendedUse": "known-human positive plus unlabeled-mixture protocol for web bot modelling",
+            "schema": "methodology and public/proprietary evaluation description",
+            "defaultUse": "metadata_only",
+        },
+        {
+            "id": "clicktok_methodology",
+            "name": "Clicktok click-fraud traffic analysis",
+            "url": "https://arxiv.org/abs/1903.00733",
+            "sourceType": "PUBLIC_FRAUD_RESEARCH",
+            "fraudClasses": ["CLICK_FARM", "CLICK_REUSE", "SYNCHRONIZED_CLICKING"],
+            "labelStrength": "METHODOLOGY",
+            "commercialUse": "LICENSE_REVIEW_REQUIRED",
+            "license": "paper/artifact license must be inspected before use",
+            "automaticDownload": False,
+            "requiresCredentials": False,
+            "mayTrainProductionModel": False,
+            "mayEvaluateProductionClaims": False,
+            "intendedUse": "repeated click traces, copied timing templates and historical-distribution divergence scenarios",
+            "schema": "methodology and bait-click experiment design",
+            "defaultUse": "metadata_only",
+        },
+        {
             "id": "iab_ads_txt",
-            "name": "Bounded public ads.txt and sellers.json crawl",
+            "name": "ads.txt and app-ads.txt",
             "url": "https://iabtechlab.com/ads-txt/",
+            "sourceType": "DETERMINISTIC_STANDARDS_DATA",
+            "fraudClasses": ["INVENTORY_SPOOFING", "UNAUTHORIZED_SELLER", "MALFORMED_RECORD"],
+            "labelStrength": "DETERMINISTIC",
+            "commercialUse": "SITE_TERMS_AND_ROBOTS",
             "license": "public standards and site-specific robots",
-            "intendedUse": "supply-chain consistency, not fraud labels",
-            "schema": "ads.txt/sellers.json records",
+            "automaticDownload": True,
+            "requiresCredentials": False,
+            "mayTrainProductionModel": False,
+            "mayEvaluateProductionClaims": False,
+            "intendedUse": "publisher-declared authorization records for supply-chain consistency",
+            "schema": "publisher domain, app bundle, authorized exchange, seller account, DIRECT/RESELLER",
+            "defaultUse": "metadata_only",
+        },
+        {
+            "id": "iab_sellers_json_supply_chain",
+            "name": "sellers.json and OpenRTB SupplyChain objects",
+            "url": "https://iabtechlab.com/sellers-json/",
+            "sourceType": "DETERMINISTIC_STANDARDS_DATA",
+            "fraudClasses": ["INVENTORY_SPOOFING", "SELLER_MISMATCH", "SUPPLY_PATH_ANOMALY"],
+            "labelStrength": "DETERMINISTIC",
+            "commercialUse": "SITE_TERMS_AND_ROBOTS",
+            "license": "public standards and site-specific robots",
+            "automaticDownload": True,
+            "requiresCredentials": False,
+            "mayTrainProductionModel": False,
+            "mayEvaluateProductionClaims": False,
+            "intendedUse": "seller/intermediary graph and OpenRTB supply-chain consistency",
+            "schema": "seller account, seller type, intermediary path, buyer and domain-owner consistency",
+            "defaultUse": "metadata_only",
+        },
+        {
+            "id": "iab_om_sdk_device_attestation",
+            "name": "Open Measurement SDK device attestation",
+            "url": "https://iabtechlab.com/press-releases/device-attestation-support-in-open-measurement-sdk/",
+            "sourceType": "FUTURE_FIRST_PARTY_SIGNAL",
+            "fraudClasses": ["DEVICE_ATTESTATION_FAILURE", "MEASUREMENT_INTEGRITY"],
+            "labelStrength": "FIRST_PARTY_SIGNAL",
+            "commercialUse": "IMPLEMENTATION_DEPENDENT",
+            "license": "IAB Tech Lab documentation and SDK terms",
+            "automaticDownload": False,
+            "requiresCredentials": False,
+            "mayTrainProductionModel": True,
+            "mayEvaluateProductionClaims": False,
+            "intendedUse": "attestation-present, attestation-valid and device-claim consistency features",
+            "schema": "attestation provider, age, validity and measurement state",
             "defaultUse": "metadata_only",
         },
         {
             "id": "benign_crawlers",
             "name": "Public benign crawler identifiers",
             "url": "https://developers.google.com/search/docs/crawling-indexing/overview-google-crawlers",
+            "sourceType": "PUBLIC_BENIGN_AUTOMATION_CONTEXT",
+            "fraudClasses": ["BENIGN_AUTOMATION_HARD_NEGATIVE"],
+            "labelStrength": "CONTEXT",
+            "commercialUse": "DOCUMENTATION_TERMS",
             "license": "documentation terms",
+            "automaticDownload": True,
+            "requiresCredentials": False,
+            "mayTrainProductionModel": False,
+            "mayEvaluateProductionClaims": False,
             "intendedUse": "known benign automation context when terms permit",
             "schema": "crawler identifiers",
             "defaultUse": "metadata_only",
         },
         {
+            "id": "controlled_bot_lab",
+            "name": "Controlled bot laboratory",
+            "url": "generated://controlled-bot-lab",
+            "sourceType": "CONTROLLED_SYNTHETIC_ATTACK",
+            "fraudClasses": ["BOT", "STEALTH_BOT", "FAKE_CONVERSION_BOT"],
+            "labelStrength": "STRONG_SYNTHETIC",
+            "commercialUse": "INTERNAL_TEST_ENVIRONMENT_ONLY",
+            "license": "generated by project",
+            "automaticDownload": False,
+            "requiresCredentials": False,
+            "mayTrainProductionModel": False,
+            "mayEvaluateProductionClaims": False,
+            "intendedUse": "fixed-rate, randomized-rate, headed/headless, replayed-trace and valid-cookie bots against owned test surfaces",
+            "schema": "generated event stream with known mutation labels",
+            "defaultUse": "generated",
+        },
+        {
+            "id": "controlled_event_spoofing_lab",
+            "name": "Controlled event-spoofing laboratory",
+            "url": "generated://controlled-event-spoofing-lab",
+            "sourceType": "CONTROLLED_SYNTHETIC_ATTACK",
+            "fraudClasses": ["EVENT_SPOOFING", "REPLAY", "POSTBACK_SUBSTITUTION"],
+            "labelStrength": "STRONG_SYNTHETIC",
+            "commercialUse": "INTERNAL_TEST_ENVIRONMENT_ONLY",
+            "license": "generated by project",
+            "automaticDownload": False,
+            "requiresCredentials": False,
+            "mayTrainProductionModel": False,
+            "mayEvaluateProductionClaims": False,
+            "intendedUse": "invalid HMAC, missing signature, unknown click/impression, mismatched campaign/device and replayed postback mutations",
+            "schema": "generated event stream with exact mutation labels",
+            "defaultUse": "generated",
+        },
+        {
+            "id": "controlled_motivated_traffic_study",
+            "name": "Controlled motivated traffic study",
+            "url": "generated://controlled-motivated-traffic-study",
+            "sourceType": "CONTROLLED_SYNTHETIC_OR_CONSENTED_STUDY",
+            "fraudClasses": ["INCENTIVIZED", "LOW_VALUE_TRAFFIC"],
+            "labelStrength": "STRONG_WHEN_CONSENTED",
+            "commercialUse": "CONSENT_AND_POLICY_DEPENDENT",
+            "license": "generated by project unless replaced by consented study data",
+            "automaticDownload": False,
+            "requiresCredentials": False,
+            "mayTrainProductionModel": False,
+            "mayEvaluateProductionClaims": False,
+            "intendedUse": "reward-driven install/register/minimal-action cohorts and downstream quality labels",
+            "schema": "generated or consented events with retention, value, refund and uninstall outcomes",
+            "defaultUse": "generated",
+        },
+        {
+            "id": "controlled_human_click_farm_simulation",
+            "name": "Controlled human click-farm simulation",
+            "url": "generated://controlled-human-click-farm-simulation",
+            "sourceType": "CONTROLLED_SYNTHETIC_OR_CONSENTED_STUDY",
+            "fraudClasses": ["CLICK_FARM", "SYNCHRONIZED_CLICKING", "SHARED_DEVICE_FANOUT"],
+            "labelStrength": "STRONG_WHEN_CONSENTED",
+            "commercialUse": "CONSENT_AND_POLICY_DEPENDENT",
+            "license": "generated by project unless replaced by consented study data",
+            "automaticDownload": False,
+            "requiresCredentials": False,
+            "mayTrainProductionModel": False,
+            "mayEvaluateProductionClaims": False,
+            "intendedUse": "shared networks/devices, synchronized schedules and repeated advertising task cohorts",
+            "schema": "generated graph/cohort event stream",
+            "defaultUse": "generated",
+        },
+        {
             "id": "first_party_labeled_traffic",
             "name": "User-supplied first-party labelled ad traffic",
             "url": str(DEFAULT_FIRST_PARTY_LABELS),
+            "sourceType": "REAL_STRONG_LABEL",
+            "fraudClasses": ["ALL_CLASSES_WHEN_LABELLED"],
+            "labelStrength": "STRONG_OR_WEAK_BY_PROVENANCE",
+            "commercialUse": "CONTRACT_DEPENDENT",
             "license": "user supplied; must be authorized for model training",
+            "automaticDownload": False,
+            "requiresCredentials": False,
+            "mayTrainProductionModel": True,
+            "mayEvaluateProductionClaims": True,
             "intendedUse": "analyst-reviewed production labels, appeal outcomes, refunds, chargebacks, MMP postbacks and known-good traffic",
             "schema": "JSONL or CSV canonical event rows with label_* columns or a labels array",
             "defaultUse": "user_supplied",
@@ -305,7 +658,10 @@ def download_sources(offline: bool, first_party_path: Path | None = None, max_by
         status = "dataset_unavailable"
         reason = "offline mode" if offline else "metadata-only or unavailable bounded direct download"
         cached_path = None
-        if source["defaultUse"] == "user_supplied":
+        if source["defaultUse"] == "generated":
+            status = "generated"
+            reason = "controlled deterministic scenarios are generated by the pipeline"
+        elif source["defaultUse"] == "user_supplied":
             candidate = first_party_path or (DEFAULT_FIRST_PARTY_LABELS if DEFAULT_FIRST_PARTY_LABELS.exists() else None)
             if candidate and candidate.exists():
                 cached_path = candidate
@@ -317,7 +673,7 @@ def download_sources(offline: bool, first_party_path: Path | None = None, max_by
         elif source["defaultUse"] == "credentials_required":
             status = "credentials_required"
             reason = "credentials and terms were not already available in environment"
-        elif not offline and source["id"] in {"iab_ads_txt", "benign_crawlers"}:
+        elif not offline and source.get("automaticDownload") and str(source.get("url", "")).startswith("http"):
             try:
                 request = Request(source["url"], headers={"User-Agent": "jneopallium-ad-fraud-demo/1.0"})
                 with urlopen(request, timeout=10) as response:
@@ -349,19 +705,43 @@ def scenario_labels(scenario: str) -> dict[str, int]:
     if "incentivized" in scenario:
         labels["incentivized"] = 1
         labels["accidentalOrLowValue"] = 1
+    if scenario in {"motivated_rewarded_install", "consented_incentivized_returning_low_value"}:
+        labels["incentivized"] = 1
+        labels["accidentalOrLowValue"] = 1
     if "click_farm" in scenario:
         labels["clickFarm"] = 1
-    if scenario in {"forged_postback", "replayed_conversion", "missing_device_attestation", "out_of_order_events"}:
+    if scenario in {
+        "forged_postback",
+        "replayed_conversion",
+        "missing_device_attestation",
+        "out_of_order_events",
+        "invalid_hmac",
+        "missing_signature",
+        "unknown_click_id",
+        "unknown_impression_id",
+        "mismatched_campaign_postback",
+        "mismatched_device_postback",
+        "altered_purchase_value",
+        "duplicated_conversion",
+        "client_server_disagreement",
+        "bot_fake_conversion",
+    }:
         labels["eventSpoofing"] = 1
-    if scenario == "click_spam":
+    if scenario in {"click_spam", "synchronized_campaign_click_spam", "low_rate_click_reuse"}:
         labels["clickSpam"] = 1
         labels["attributionHijack"] = 1
-    if scenario == "click_injection":
+    if scenario in {"click_injection", "bot_fake_conversion"}:
         labels["clickInjection"] = 1
         labels["attributionHijack"] = 1
-    if scenario == "publisher_inventory_spoof":
+    if scenario in {
+        "publisher_inventory_spoof",
+        "supply_chain_missing_record",
+        "supply_chain_malformed_record",
+        "seller_owner_mismatch",
+        "supply_path_intermediary_anomaly",
+    }:
         labels["inventorySpoofing"] = 1
-    if scenario == "accidental_click":
+    if scenario in {"accidental_click", "hidden_ad_accidental_click", "stacked_ad_accidental_click"}:
         labels["accidentalOrLowValue"] = 1
     if scenario in {"concept_drift", "model_runtime_failure"}:
         labels["unknownSuspicious"] = 1
@@ -398,11 +778,25 @@ def generate_event(scenario: str, idx: int, seed: int) -> tuple[dict[str, Any], 
     event_type = "CLICK"
     if "postback" in scenario:
         event_type = "POSTBACK"
-    elif "conversion" in scenario or "install" in scenario or "incentivized" in scenario:
+    elif (
+        "conversion" in scenario
+        or "install" in scenario
+        or "incentivized" in scenario
+        or "rewarded" in scenario
+        or scenario in {"altered_purchase_value"}
+    ):
         event_type = "INSTALL"
     elif scenario == "legitimate_high_value":
         event_type = "PURCHASE"
-    elif scenario == "publisher_inventory_spoof":
+    elif scenario == "legitimate_low_value_returning":
+        event_type = "PURCHASE"
+    elif scenario in {
+        "publisher_inventory_spoof",
+        "supply_chain_missing_record",
+        "supply_chain_malformed_record",
+        "seller_owner_mismatch",
+        "supply_path_intermediary_anomaly",
+    }:
         event_type = "IMPRESSION"
     event = {
         "schemaVersion": "1.0",
@@ -488,12 +882,67 @@ def generate_event(scenario: str, idx: int, seed: int) -> tuple[dict[str, Any], 
             "dwell_ms": 30 if scenario == "simple_bot_burst" else 240,
             "cookie_age_seconds": rnd.randint(0, 30),
         })
+        if scenario == "fixed_rate_bot":
+            event["session_event_count"] = 44
+            event["dwell_ms"] = 45
+            event["pointer_velocity_entropy"] = 0.03
+        if scenario == "randomized_rate_bot":
+            event["session_event_count"] = rnd.randint(18, 44)
+            event["dwell_ms"] = rnd.randint(90, 420)
+            event["pointer_velocity_entropy"] = 0.12
+        if scenario == "headed_browser_bot":
+            event["headless_flag"] = False
+            event["pointer_event_count"] = rnd.randint(1, 4)
+            event["pointer_velocity_entropy"] = 0.08
+        if scenario == "replayed_mouse_trace_bot":
+            event["headless_flag"] = False
+            event["pointer_event_count"] = 32
+            event["pointer_distance"] = 900.0
+            event["pointer_velocity_entropy"] = 0.06
+            event["focus_change_count"] = 0
+        if scenario == "valid_cookie_bot":
+            event["cookie_age_seconds"] = rnd.randint(86_400, 864_000)
+            event["headless_flag"] = False
+            event["pointer_velocity_entropy"] = 0.09
+        if scenario == "bot_fake_conversion":
+            event["event_type"] = "INSTALL"
+            event["session_event_count"] = 55
+            event["dwell_ms"] = 120
     if labels["eventSpoofing"]:
         event["signature_valid"] = False
         if scenario == "replayed_conversion":
             event["event_id"] = f"replayed-{idx // 3}"
             event["nonce"] = f"reused-{idx // 3}"
             event["nonce_reused"] = True
+        if scenario == "invalid_hmac":
+            event["signature_key_id"] = "tampered-key"
+        if scenario == "missing_signature":
+            event["signature_present"] = False
+        if scenario == "unknown_click_id":
+            event["click_id"] = f"unknown-click-{idx}"
+            event["client_event_present"] = False
+        if scenario == "unknown_impression_id":
+            event["impression_id"] = f"unknown-imp-{idx}"
+            event["server_event_present"] = False
+        if scenario == "mismatched_campaign_postback":
+            event["event_type"] = "POSTBACK"
+            event["campaign_id"] = f"camp-mismatch-{idx % 7}"
+            event["server_event_present"] = False
+        if scenario == "mismatched_device_postback":
+            event["event_type"] = "POSTBACK"
+            event["device_id_hash"] = pseudonym(f"mismatched-device-{idx}")
+            event["client_event_present"] = False
+        if scenario == "altered_purchase_value":
+            event["event_type"] = "PURCHASE"
+            event["purchase_value"] = 99.0
+            event["server_receive_timestamp"] = base_time + 7_200_000
+        if scenario == "duplicated_conversion":
+            event["event_id"] = f"duplicated-conversion-{idx // 2}"
+            event["nonce"] = f"duplicated-nonce-{idx // 2}"
+            event["nonce_reused"] = True
+        if scenario == "client_server_disagreement":
+            event["client_event_present"] = False
+            event["server_receive_timestamp"] = base_time + 4_200_000
         if scenario == "missing_device_attestation":
             event["device_attestation_present"] = True
             event["device_attestation_valid"] = False
@@ -502,6 +951,12 @@ def generate_event(scenario: str, idx: int, seed: int) -> tuple[dict[str, Any], 
     if labels["clickSpam"] or labels["clickInjection"]:
         event["session_event_count"] = rnd.randint(30, 80)
         event["dwell_ms"] = rnd.randint(80, 250)
+        if scenario == "synchronized_campaign_click_spam":
+            event["session_event_count"] = rnd.randint(45, 90)
+            event["campaign_id"] = f"sync-campaign-{idx % 2}"
+        if scenario == "low_rate_click_reuse":
+            event["session_event_count"] = rnd.randint(26, 34)
+            event["click_id"] = f"reused-click-pattern-{idx % 9}"
         if labels["clickInjection"]:
             event["event_type"] = "INSTALL"
             event["event_time"] = base_time + 400
@@ -509,15 +964,53 @@ def generate_event(scenario: str, idx: int, seed: int) -> tuple[dict[str, Any], 
         event["ads_txt_authorized"] = False
         event["seller_json_match"] = False
         event["supply_chain_complete"] = False
+        if scenario == "supply_chain_missing_record":
+            event["seller_id"] = f"missing-seller-{idx}"
+        if scenario == "supply_chain_malformed_record":
+            event["supply_chain"] = "malformed"
+        if scenario == "seller_owner_mismatch":
+            event["site_domain"] = f"owner-mismatch-{idx % 5}.example"
+        if scenario == "supply_path_intermediary_anomaly":
+            event["supply_chain"] = "direct>unexpected-intermediary>reseller"
     if labels["clickFarm"] or labels["incentivized"]:
         event["day_7_retained"] = False
         event["meaningful_action_count"] = 0
         event["uninstall_delay"] = rnd.randint(10_000, 86_000_000)
+        if "shared_network" in scenario:
+            event["ip_prefix_hash"] = pseudonym("shared-click-farm-network")
+        if "shared_device" in scenario:
+            event["device_id_hash"] = pseudonym(f"shared-device-{idx % 3}")
+            event["fingerprint_hash"] = pseudonym(f"shared-fingerprint-{idx % 3}")
+        if "synchronized" in scenario:
+            event["event_time"] = base_time - (idx % 12)
+            event["campaign_id"] = f"sync-farm-{idx % 2}"
+        if scenario == "motivated_rewarded_install":
+            event["event_type"] = "INSTALL"
+            event["customer_quality_label"] = "rewarded_low_value"
+        if scenario == "consented_incentivized_returning_low_value":
+            event["event_type"] = "INSTALL"
+            event["day_1_retained"] = True
+            event["day_7_retained"] = False
+            event["day_30_retained"] = False
+            event["meaningful_action_count"] = 0
+            event["customer_quality_label"] = "consented_incentivized_low_value"
     if scenario == "accidental_click":
         event["dwell_ms"] = 35
         event["interaction_before_click"] = False
         event["meaningful_action_count"] = 0
         event["customer_quality_label"] = "accidental"
+        event["analyst_label"] = "invalid_traffic"
+    if scenario == "hidden_ad_accidental_click":
+        event["dwell_ms"] = 55
+        event["interaction_before_click"] = False
+        event["pointer_event_count"] = 1
+        event["customer_quality_label"] = "hidden_ad_accidental"
+        event["analyst_label"] = "invalid_traffic"
+    if scenario == "stacked_ad_accidental_click":
+        event["dwell_ms"] = 70
+        event["interaction_before_click"] = False
+        event["pointer_event_count"] = 2
+        event["customer_quality_label"] = "stacked_ad_accidental"
         event["analyst_label"] = "invalid_traffic"
     if scenario == "legitimate_low_conversion":
         event["day_7_retained"] = False
@@ -550,6 +1043,37 @@ def generate_event(scenario: str, idx: int, seed: int) -> tuple[dict[str, Any], 
         event["analyst_label"] = "known_good_hard_negative"
         event["source_type"] = "FIRST_PARTY_TEMPLATE"
         event["label_confidence"] = 0.90
+    if scenario == "benign_privacy_limited":
+        event["device_id_hash"] = None
+        event["fingerprint_hash"] = None
+        event["device_attestation_present"] = False
+        event["day_7_retained"] = True
+        event["meaningful_action_count"] = 1
+        event["customer_quality_label"] = "privacy_limited_known_good"
+        event["analyst_label"] = "known_good_hard_negative"
+        event["source_type"] = "CRITEO_PRIVATE_AD_TEMPLATE"
+        event["label_confidence"] = 0.80
+    if scenario == "benign_delayed_conversion":
+        event["event_type"] = "INSTALL"
+        event["event_time"] = base_time + 2_400_000
+        event["server_receive_timestamp"] = event["event_time"] + rnd.randint(100, 2000)
+        event["day_7_retained"] = True
+        event["meaningful_action_count"] = 2
+        event["customer_quality_label"] = "delayed_conversion_known_good"
+        event["analyst_label"] = "known_good_hard_negative"
+        event["source_type"] = "CRITEO_ATTRIBUTION_TEMPLATE"
+        event["label_confidence"] = 0.80
+    if scenario == "benign_no_identifiers":
+        event["device_id_hash"] = None
+        event["fingerprint_hash"] = None
+        event["ip_prefix_hash"] = None
+        event["cookie_age_seconds"] = None
+        event["day_7_retained"] = True
+        event["meaningful_action_count"] = 2
+        event["customer_quality_label"] = "no_identifier_known_good"
+        event["analyst_label"] = "known_good_hard_negative"
+        event["source_type"] = "PRIVACY_SANDBOX_TEMPLATE"
+        event["label_confidence"] = 0.75
     if scenario == "concept_drift":
         event["browser"] = "new-browser-family"
         event["unknown_marker"] = 1
@@ -598,7 +1122,9 @@ def extract_features(event: dict[str, Any]) -> dict[str, float]:
         supply += 0.25
     if not event.get("supply_chain_complete", True):
         supply += 0.25
-    graph = 0.45 if event["scenario_id"] in {"human_click_farm", "incentivized_install_cohort"} else 0.0
+    graph = 0.45 if "click_farm" in event["scenario_id"] else 0.0
+    if "synchronized_click_farm" in event["scenario_id"]:
+        graph = 0.60
     quality = 0.0
     if event.get("day_7_retained") is False:
         quality += 0.18
@@ -693,8 +1219,10 @@ def build_examples(max_rows: int, seed: int, first_party_path: Path | None = Non
             split = split_for(scenario, idx)
             event["campaign_id"] = f"{event['campaign_id']}-{split}"
             event["click_id"] = f"{event['click_id']}-{split}"
-            event["device_id_hash"] = pseudonym(f"{event['device_id_hash']}:{split}")
-            event["fingerprint_hash"] = pseudonym(f"{event['fingerprint_hash']}:{split}")
+            if event.get("device_id_hash") is not None:
+                event["device_id_hash"] = pseudonym(f"{event['device_id_hash']}:{split}")
+            if event.get("fingerprint_hash") is not None:
+                event["fingerprint_hash"] = pseudonym(f"{event['fingerprint_hash']}:{split}")
             examples.append(Example(event, features, labels, split))
     examples.extend(load_first_party_examples(first_party_path, seed))
     write_dataset_profile(examples, quotas)
@@ -862,8 +1390,10 @@ def load_first_party_examples(first_party_path: Path | None, seed: int) -> list[
         split = first_party_split(row, event)
         event["campaign_id"] = f"{event['campaign_id']}-{split}"
         event["click_id"] = f"{event['click_id']}-{split}"
-        event["device_id_hash"] = pseudonym(f"{event['device_id_hash']}:{split}")
-        event["fingerprint_hash"] = pseudonym(f"{event['fingerprint_hash']}:{split}")
+        if event.get("device_id_hash") is not None:
+            event["device_id_hash"] = pseudonym(f"{event['device_id_hash']}:{split}")
+        if event.get("fingerprint_hash") is not None:
+            event["fingerprint_hash"] = pseudonym(f"{event['fingerprint_hash']}:{split}")
         examples.append(Example(event, features, labels, split))
     write_json(TARGET / "first_party_label_report.json", {
         "status": "loaded",
@@ -902,6 +1432,9 @@ def write_dataset_profile(examples: list[Example], quotas: dict[str, int]) -> No
             "legitimate_low_conversion",
             "legitimate_short_session",
             "legitimate_low_value_returning",
+            "benign_privacy_limited",
+            "benign_delayed_conversion",
+            "benign_no_identifiers",
             "valid_postback",
             "delayed_conversion",
         ],
@@ -2156,7 +2689,7 @@ def run_java_tests() -> dict[str, Any]:
 
 def run_workflow(args: argparse.Namespace) -> dict[str, Any]:
     if args.quick:
-        args.max_rows = min(args.max_rows, len(SCENARIOS) * 60)
+        args.max_rows = min(args.max_rows, len(SCENARIOS) * 120)
     TARGET.mkdir(parents=True, exist_ok=True)
     first_party_path = Path(args.first_party_labels) if args.first_party_labels else (
         Path(os.environ["AD_FRAUD_FIRST_PARTY_LABELS"]) if os.environ.get("AD_FRAUD_FIRST_PARTY_LABELS") else None
@@ -2189,7 +2722,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--quick", action="store_true")
     parser.add_argument("--full", action="store_true")
     parser.add_argument("--offline", action="store_true")
-    parser.add_argument("--max-rows", type=int, default=1900)
+    parser.add_argument("--max-rows", type=int, default=12000)
     parser.add_argument("--max-memory-mb", type=int, default=1024)
     parser.add_argument("--seed", type=int, default=1729)
     parser.add_argument("--force-retrain", action="store_true")

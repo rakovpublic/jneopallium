@@ -2,7 +2,7 @@ param(
   [switch]$quick,
   [switch]$full,
   [switch]$offline,
-  [int]$maxRows = 760,
+  [int]$maxRows = 12000,
   [int]$maxMemoryMb = 1024,
   [int]$seed = 1729,
   [string]$firstPartyLabels = "",
