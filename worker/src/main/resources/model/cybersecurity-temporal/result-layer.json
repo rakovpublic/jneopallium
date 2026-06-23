@@ -1,0 +1,63 @@
+{
+  "layerID": 4,
+  "layerName": "Security Advisory Result Output",
+  "layerType": "result",
+  "isResultLayer": true,
+  "layerSize": 1,
+  "neurons": [
+    {
+      "neuronId": 0,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.security.ResponsePlanningNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.security.ThreatHypothesisSignal",
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.security.QuarantineRequestSignal",
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.security.IncidentReportSignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.security.ThreatHypothesisSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.security.HypothesisResponseProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.security.IResponsePlanningNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {},
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {},
+        "defaultDendritesWeights": {}
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.security.ThreatHypothesisSignal",
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.security.QuarantineRequestSignal",
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.security.IncidentReportSignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.net.neuron.impl.security.IResponsePlanningNeuron"
+      ],
+      "outputSelection": {
+        "mode": "ADVISORY",
+        "emitHypothesis": true,
+        "emitQuarantineCandidate": true,
+        "emitIncidentReport": true
+      },
+      "quantitative": {
+        "resultSignalTypes": 3
+      }
+    }
+  ],
+  "quantitative": {
+    "neurons": 1,
+    "resultSignalTypes": 3
+  }
+}

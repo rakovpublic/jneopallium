@@ -71,6 +71,12 @@ Reference training command:
 python scripts/demo-cybersecurity-training/train_temporal_model.py
 ```
 
+Production-scale reference evidence command:
+
+```text
+python scripts/demo-cybersecurity-training/train_temporal_model.py --reference-multiplier 1000 --target-corpus-bytes 100gb --max-corpus-bytes 100gb --max-train-windows-per-epoch 4096
+```
+
 External dataset training command:
 
 ```text
@@ -85,6 +91,11 @@ worker/src/main/resources/model/cybersecurity-temporal/model-descriptor.json
 worker/src/main/resources/model/cybersecurity-temporal/quantitative-summary.json
 worker/src/main/resources/model/cybersecurity-temporal/source-mapping.json
 ```
+
+Production deployment guidance lives in
+[`cybersecurity-production-deployment-manual.md`](cybersecurity-production-deployment-manual.md).
+The latest production-scale reference evidence is summarized in
+[`reports/demo-06-cybersecurity-production-training-evidence.md`](reports/demo-06-cybersecurity-production-training-evidence.md).
 
 Phase 1: pipeline implementation with ToN_IoT.
 

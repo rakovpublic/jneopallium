@@ -1,0 +1,73 @@
+{
+  "requireAllSources": false,
+  "maxRowsPerSource": 50000,
+  "sources": [
+    {
+      "id": "LANL",
+      "kind": "lanl-auth",
+      "paths": ["external/lanl/auth.txt.gz"],
+      "maxRows": 50000
+    },
+    {
+      "id": "LANL",
+      "kind": "lanl-proc",
+      "paths": ["external/lanl/proc.txt.gz"],
+      "maxRows": 50000
+    },
+    {
+      "id": "LANL",
+      "kind": "lanl-dns",
+      "paths": ["external/lanl/dns.txt.gz"],
+      "maxRows": 50000
+    },
+    {
+      "id": "LANL",
+      "kind": "lanl-flow",
+      "paths": ["external/lanl/flows.txt.gz"],
+      "maxRows": 50000,
+      "sampleModulo": 10,
+      "sampleKeep": 0
+    },
+    {
+      "id": "LANL",
+      "kind": "lanl-redteam",
+      "paths": ["external/lanl/redteam.txt.gz"],
+      "maxRows": 0
+    },
+    {
+      "id": "ToN_IoT",
+      "kind": "toniot-network",
+      "paths": [
+        "external/toniot/**/Train_Test_Network*.csv",
+        "external/toniot/**/Network*.csv",
+        "external/toniot/**/network*.csv"
+      ],
+      "maxRows": 100000,
+      "sampleModulo": 5,
+      "sampleKeep": 0,
+      "signalSource": "flow"
+    },
+    {
+      "id": "ToN_IoT",
+      "kind": "toniot-windows",
+      "paths": [
+        "external/toniot/**/Train_Test_Windows*.csv",
+        "external/toniot/**/Windows*.csv",
+        "external/toniot/**/windows*.csv"
+      ],
+      "maxRows": 50000,
+      "signalSource": "process"
+    },
+    {
+      "id": "ToN_IoT",
+      "kind": "toniot-linux",
+      "paths": [
+        "external/toniot/**/Train_Test_Linux*.csv",
+        "external/toniot/**/Linux*.csv",
+        "external/toniot/**/linux*.csv"
+      ],
+      "maxRows": 50000,
+      "signalSource": "process"
+    }
+  ]
+}

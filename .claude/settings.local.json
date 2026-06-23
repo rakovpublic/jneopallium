@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c \"import docx; print\\('python-docx', docx.__version__\\)\")"
+    ]
+  }
+}

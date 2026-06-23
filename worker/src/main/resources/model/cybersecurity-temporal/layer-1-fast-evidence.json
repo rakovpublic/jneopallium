@@ -1,0 +1,168 @@
+{
+  "layerID": 1,
+  "layerName": "Fast Security Evidence Receptors",
+  "layerType": "fastEvidence",
+  "layerSize": 4,
+  "neurons": [
+    {
+      "neuronId": 0,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.security.NetworkFlowNeuron",
+      "resultClasses": [],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.security.PacketSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.security.PacketFlowProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.security.INetworkFlowNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {},
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {},
+        "defaultDendritesWeights": {}
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.security.PacketSignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.net.neuron.impl.security.INetworkFlowNeuron"
+      ],
+      "role": "aggregate packet bytes and packet counts into network-flow evidence"
+    },
+    {
+      "neuronId": 1,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.security.SignaturePatternNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.security.SignatureMatchSignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.security.PacketSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.security.PacketSignatureProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.security.ISignaturePatternNeuron"
+        },
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.security.LogEventSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.security.LogSignatureProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.security.ISignaturePatternNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {},
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {},
+        "defaultDendritesWeights": {}
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.security.PacketSignal",
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.security.LogEventSignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.net.neuron.impl.security.ISignaturePatternNeuron"
+      ],
+      "role": "produce signature evidence from packet and log streams"
+    },
+    {
+      "neuronId": 2,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.security.ProcessBehaviourNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.security.AnomalyScoreSignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.security.SyscallSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.security.SyscallBehaviourProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.security.IProcessBehaviourNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {},
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {},
+        "defaultDendritesWeights": {}
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.security.SyscallSignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.net.neuron.impl.security.IProcessBehaviourNeuron"
+      ],
+      "role": "score process/syscall behavior before temporal correlation"
+    },
+    {
+      "neuronId": 3,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.security.EntityBehaviourBaselineNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.security.SelfToleranceSignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.security.InflammationBroadcastSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.security.InflammationBaselineProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.security.IEntityBehaviourBaselineNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {},
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {},
+        "defaultDendritesWeights": {}
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.security.InflammationBroadcastSignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.net.neuron.impl.security.IEntityBehaviourBaselineNeuron"
+      ],
+      "role": "track entity baseline state and expose tolerance context"
+    }
+  ],
+  "quantitative": {
+    "neurons": 4,
+    "inputSignalTypes": 5,
+    "outputSignalTypes": 3
+  }
+}

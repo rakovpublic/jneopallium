@@ -17,23 +17,23 @@
   "threshold": 0.2,
   "metrics": {
     "train": {
-      "count": 10,
-      "truePositive": 7,
+      "count": 10000,
+      "truePositive": 7000,
       "falsePositive": 0,
-      "trueNegative": 3,
+      "trueNegative": 3000,
       "falseNegative": 0,
       "precision": 1.0,
       "recall": 1.0,
       "f1": 1.0,
       "accuracy": 1.0,
       "falsePositiveRate": 0.0,
-      "meanTimeToDetectionTicks": 0.0
+      "meanTimeToDetectionTicks": 0.126
     },
     "validation": {
-      "count": 6,
-      "truePositive": 4,
+      "count": 6000,
+      "truePositive": 4000,
       "falsePositive": 0,
-      "trueNegative": 2,
+      "trueNegative": 2000,
       "falseNegative": 0,
       "precision": 1.0,
       "recall": 1.0,
@@ -43,10 +43,10 @@
       "meanTimeToDetectionTicks": 0.0
     },
     "test": {
-      "count": 5,
-      "truePositive": 3,
+      "count": 5000,
+      "truePositive": 3000,
       "falsePositive": 0,
-      "trueNegative": 2,
+      "trueNegative": 2000,
       "falseNegative": 0,
       "precision": 1.0,
       "recall": 1.0,
@@ -56,33 +56,185 @@
       "meanTimeToDetectionTicks": 0.0
     },
     "overall": {
-      "count": 21,
-      "truePositive": 14,
+      "count": 21000,
+      "truePositive": 14000,
       "falsePositive": 0,
-      "trueNegative": 7,
+      "trueNegative": 7000,
       "falseNegative": 0,
       "precision": 1.0,
       "recall": 1.0,
       "f1": 1.0,
       "accuracy": 1.0,
       "falsePositiveRate": 0.0,
-      "meanTimeToDetectionTicks": 0.0
+      "meanTimeToDetectionTicks": 0.063
     },
     "calibration": [
       {
         "low": 0.0,
         "high": 0.1,
-        "count": 7,
+        "count": 7000,
         "positiveRate": 0.0,
-        "meanScore": 0.004391489680872425
+        "meanScore": 0.004419040918604948
       },
       {
         "low": 0.9,
         "high": 1.0,
-        "count": 14,
+        "count": 14000,
         "positiveRate": 1.0,
-        "meanScore": 0.9951009828356349
+        "meanScore": 0.9950903484022765
       }
     ]
-  }
+  },
+  "modelName": "Temporal Cybersecurity Threat Correlation Network",
+  "description": "Jneopallium-style temporal cybersecurity model with explicit fast evidence receptors, a trained temporal threat-correlation neuron, advisory response planning, and a fixed safety gate.",
+  "latestTrainedSnapshot": "trained-model-update.json",
+  "latestTrainedTemporalModel": "trained-temporal-threat-model.json",
+  "generatedFrom": {
+    "codePackage": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.security",
+    "generator": "train_temporal_model.py",
+    "sourceRuntimeClasses": [
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.security.NetworkFlowNeuron",
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.security.SignaturePatternNeuron",
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.security.ProcessBehaviourNeuron",
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.security.EntityBehaviourBaselineNeuron",
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.security.TemporalThreatCorrelationNeuron",
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.security.ResponsePlanningNeuron",
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.security.ResponseGateNeuron"
+    ]
+  },
+  "networkConfig": {
+    "safetyMode": "ADVISORY",
+    "featureCount": 34,
+    "decisionThreshold": 0.2,
+    "responseBands": {
+      "log": [
+        0.0,
+        0.3
+      ],
+      "alert": [
+        0.3,
+        0.6
+      ],
+      "connectionQuarantineCandidate": [
+        0.6,
+        0.85
+      ],
+      "hostQuarantineCandidate": [
+        0.85,
+        1.0
+      ]
+    },
+    "sequenceGates": [
+      "UNUSUAL_LOGIN -> EXECUTION",
+      "EXECUTION -> LATERAL_MOVEMENT",
+      "CREDENTIAL_ACCESS -> LATERAL_MOVEMENT",
+      "LATERAL_MOVEMENT -> COMMAND_AND_CONTROL",
+      "COMMAND_AND_CONTROL -> EXFILTRATION"
+    ]
+  },
+  "layers": [
+    {
+      "layerID": 0,
+      "file": "layer-0.json",
+      "name": "Multi-Source Security Event Input",
+      "type": "initInput",
+      "size": 0,
+      "quantitative": {
+        "neurons": 0,
+        "canonicalFeatureCount": 34,
+        "sourceFamilies": 7
+      }
+    },
+    {
+      "layerID": 1,
+      "file": "layer-1-fast-evidence.json",
+      "name": "Fast Security Evidence Receptors",
+      "type": "fastEvidence",
+      "size": 4,
+      "quantitative": {
+        "neurons": 4,
+        "inputSignalTypes": 5,
+        "outputSignalTypes": 2
+      }
+    },
+    {
+      "layerID": 2,
+      "file": "layer-2-temporal-correlation.json",
+      "name": "Trained Temporal Threat Correlator",
+      "type": "temporalCorrelation",
+      "size": 1,
+      "quantitative": {
+        "neurons": 1,
+        "trainedFeatureWeights": 34,
+        "decisionThreshold": 0.2
+      }
+    },
+    {
+      "layerID": 3,
+      "file": "layer-3-response-planning.json",
+      "name": "Advisory Response Planning And Safety Gate",
+      "type": "responsePlanning",
+      "size": 2,
+      "quantitative": {
+        "neurons": 2,
+        "responseBands": 4,
+        "safetyMode": "ADVISORY"
+      }
+    },
+    {
+      "layerID": 4,
+      "file": "result-layer.json",
+      "name": "Security Advisory Result Output",
+      "type": "result",
+      "size": 1,
+      "quantitative": {
+        "neurons": 1,
+        "resultSignalTypes": 3
+      }
+    }
+  ],
+  "signalFrequencyMap": {
+    "com.rakovpublic.jneuropallium.worker.net.signals.impl.security.PacketSignal": {
+      "epoch": "1",
+      "loop": "1"
+    },
+    "com.rakovpublic.jneuropallium.worker.net.signals.impl.security.LogEventSignal": {
+      "epoch": "1",
+      "loop": "1"
+    },
+    "com.rakovpublic.jneuropallium.worker.net.signals.impl.security.SyscallSignal": {
+      "epoch": "1",
+      "loop": "1"
+    },
+    "com.rakovpublic.jneuropallium.worker.net.signals.impl.security.SignatureMatchSignal": {
+      "epoch": "1",
+      "loop": "1"
+    },
+    "com.rakovpublic.jneuropallium.worker.net.signals.impl.security.AnomalyScoreSignal": {
+      "epoch": "1",
+      "loop": "1"
+    },
+    "com.rakovpublic.jneuropallium.worker.net.signals.impl.security.ThreatHypothesisSignal": {
+      "epoch": "1",
+      "loop": "2"
+    },
+    "com.rakovpublic.jneuropallium.worker.net.signals.impl.security.QuarantineRequestSignal": {
+      "epoch": "1",
+      "loop": "2"
+    },
+    "com.rakovpublic.jneuropallium.worker.net.signals.impl.security.IncidentReportSignal": {
+      "epoch": "1",
+      "loop": "5"
+    }
+  },
+  "totalLayers": 5,
+  "totalRealNeurons": 8,
+  "totalTrainableWeightScalars": 34,
+  "totalTrainableBiasScalars": 1,
+  "notes": [
+    "Layer 0 is an explicit multi-source input boundary with no neuron objects.",
+    "Layer 2 embeds the trained logistic temporal-correlator weights from trained-temporal-threat-model.json.",
+    "Layer 3 remains advisory-only; hard safety gates are fixed configuration and not learned.",
+    "Real production accuracy requires external LANL/ToN_IoT/OpTC/CIC/UNSW/CALDERA validation."
+  ]
 }

@@ -1,39 +1,69 @@
 {
   "modelId": "cybersecurity-temporal-threat-correlator",
   "trainingSummary": {
-    "eventCount": 96,
-    "windowCount": 21,
-    "positiveWindows": 14,
-    "negativeWindows": 7,
+    "eventCount": 96000,
+    "windowCount": 21000,
+    "positiveWindows": 14000,
+    "negativeWindows": 7000,
     "sourceEventCounts": {
-      "LANL": 21,
-      "ToN_IoT": 12,
-      "OpTC": 31,
-      "CIC-IDS2017": 3,
-      "CSE-CIC-IDS2018": 3,
-      "UNSW-NB15": 6,
-      "CALDERA": 20
-    }
+      "LANL": 21000,
+      "ToN_IoT": 12000,
+      "OpTC": 31000,
+      "CIC-IDS2017": 3000,
+      "CSE-CIC-IDS2018": 3000,
+      "UNSW-NB15": 6000,
+      "CALDERA": 20000
+    },
+    "referenceMultiplier": 1000,
+    "effectiveReferenceMultiplier": 2411186,
+    "targetCorpusBytes": 107374182400,
+    "targetCorpusSize": "100.00 GiB",
+    "estimatedCanonicalCorpusBytes": 43458705,
+    "estimatedCanonicalCorpusSize": "41.45 MiB",
+    "estimatedEffectiveCanonicalCorpusBytes": 107370809563,
+    "estimatedEffectiveCanonicalCorpusSize": "100.00 GiB",
+    "effectiveCorpusReachRatio": 0.999968588007614,
+    "effectiveEventCount": 231473856,
+    "effectiveWindowCount": 50634906,
+    "effectiveSourceEventCounts": {
+      "LANL": 50634906,
+      "ToN_IoT": 28934232,
+      "OpTC": 74746766,
+      "CIC-IDS2017": 7233558,
+      "CSE-CIC-IDS2018": 7233558,
+      "UNSW-NB15": 14467116,
+      "CALDERA": 48223720
+    },
+    "effectiveSplitCounts": {
+      "train": 24111860,
+      "validation": 14467116,
+      "test": 12055930
+    },
+    "maxCorpusBytes": 107374182400,
+    "maxCorpusSize": "100.00 GiB",
+    "exportedCorpus": null,
+    "epochs": 2400,
+    "maxTrainWindowsPerEpoch": 4096
   },
   "metrics": {
     "train": {
-      "count": 10,
-      "truePositive": 7,
+      "count": 10000,
+      "truePositive": 7000,
       "falsePositive": 0,
-      "trueNegative": 3,
+      "trueNegative": 3000,
       "falseNegative": 0,
       "precision": 1.0,
       "recall": 1.0,
       "f1": 1.0,
       "accuracy": 1.0,
       "falsePositiveRate": 0.0,
-      "meanTimeToDetectionTicks": 0.0
+      "meanTimeToDetectionTicks": 0.126
     },
     "validation": {
-      "count": 6,
-      "truePositive": 4,
+      "count": 6000,
+      "truePositive": 4000,
       "falsePositive": 0,
-      "trueNegative": 2,
+      "trueNegative": 2000,
       "falseNegative": 0,
       "precision": 1.0,
       "recall": 1.0,
@@ -43,10 +73,10 @@
       "meanTimeToDetectionTicks": 0.0
     },
     "test": {
-      "count": 5,
-      "truePositive": 3,
+      "count": 5000,
+      "truePositive": 3000,
       "falsePositive": 0,
-      "trueNegative": 2,
+      "trueNegative": 2000,
       "falseNegative": 0,
       "precision": 1.0,
       "recall": 1.0,
@@ -56,101 +86,168 @@
       "meanTimeToDetectionTicks": 0.0
     },
     "overall": {
-      "count": 21,
-      "truePositive": 14,
+      "count": 21000,
+      "truePositive": 14000,
       "falsePositive": 0,
-      "trueNegative": 7,
+      "trueNegative": 7000,
       "falseNegative": 0,
       "precision": 1.0,
       "recall": 1.0,
       "f1": 1.0,
       "accuracy": 1.0,
       "falsePositiveRate": 0.0,
-      "meanTimeToDetectionTicks": 0.0
+      "meanTimeToDetectionTicks": 0.063
     },
     "calibration": [
       {
         "low": 0.0,
         "high": 0.1,
-        "count": 7,
+        "count": 7000,
         "positiveRate": 0.0,
-        "meanScore": 0.004391489680872425
+        "meanScore": 0.004419040918604948
       },
       {
         "low": 0.9,
         "high": 1.0,
-        "count": 14,
+        "count": 14000,
         "positiveRate": 1.0,
-        "meanScore": 0.9951009828356349
+        "meanScore": 0.9950903484022765
       }
     ]
   },
   "topPositiveWeights": [
     {
       "feature": "technique_command_and_control",
-      "weight": 0.4260761728160053
+      "weight": 0.4280677756856642
     },
     {
       "feature": "network_receptor_score",
-      "weight": 0.42418840786190404
+      "weight": 0.4243269642446866
     },
     {
       "feature": "max_threat_intel",
-      "weight": 0.41599115304863077
+      "weight": 0.41567130448697887
     },
     {
       "feature": "slow_context_score",
-      "weight": 0.3960982148872187
-    },
-    {
-      "feature": "max_evidence",
-      "weight": 0.39210816792771375
+      "weight": 0.3949444548747332
     },
     {
       "feature": "mean_evidence",
-      "weight": 0.38944709876071754
+      "weight": 0.38993401347438883
+    },
+    {
+      "feature": "max_evidence",
+      "weight": 0.3891337734614719
     },
     {
       "feature": "mean_asset_criticality",
-      "weight": 0.350048783461509
+      "weight": 0.34857922968020244
     },
     {
       "feature": "technique_network_attack",
-      "weight": 0.30717876032521996
+      "weight": 0.30855227090420023
     }
   ],
   "topNegativeWeights": [
     {
       "feature": "maintenance_ratio",
-      "weight": -0.44970234439413787
+      "weight": -0.4516004012992941
     },
     {
       "feature": "benign_context_ratio",
-      "weight": -0.3835364503356276
+      "weight": -0.38523626630802993
     },
     {
       "feature": "technique_benign_context",
-      "weight": -0.3835364503356276
+      "weight": -0.38523626630802993
     },
     {
       "feature": "technique_unusual_login",
-      "weight": -0.26606015259021026
+      "weight": -0.2669847665020012
     },
     {
       "feature": "technique_execution",
-      "weight": -0.26606015259021026
+      "weight": -0.2669847665020012
     },
     {
       "feature": "source_diversity",
-      "weight": -0.17757611427624997
+      "weight": -0.1781903417329266
     },
     {
       "feature": "ordered_login_to_execution",
-      "weight": -0.1447735578647211
+      "weight": -0.14515166858811032
     },
     {
       "feature": "source_optc",
-      "weight": -0.14324673325046966
+      "weight": -0.14396218846108946
     }
-  ]
+  ],
+  "jneopalliumLayerSummary": {
+    "layers": [
+      {
+        "layerID": 0,
+        "file": "layer-0.json",
+        "name": "Multi-Source Security Event Input",
+        "type": "initInput",
+        "size": 0,
+        "quantitative": {
+          "neurons": 0,
+          "canonicalFeatureCount": 34,
+          "sourceFamilies": 7
+        }
+      },
+      {
+        "layerID": 1,
+        "file": "layer-1-fast-evidence.json",
+        "name": "Fast Security Evidence Receptors",
+        "type": "fastEvidence",
+        "size": 4,
+        "quantitative": {
+          "neurons": 4,
+          "inputSignalTypes": 5,
+          "outputSignalTypes": 2
+        }
+      },
+      {
+        "layerID": 2,
+        "file": "layer-2-temporal-correlation.json",
+        "name": "Trained Temporal Threat Correlator",
+        "type": "temporalCorrelation",
+        "size": 1,
+        "quantitative": {
+          "neurons": 1,
+          "trainedFeatureWeights": 34,
+          "decisionThreshold": 0.2
+        }
+      },
+      {
+        "layerID": 3,
+        "file": "layer-3-response-planning.json",
+        "name": "Advisory Response Planning And Safety Gate",
+        "type": "responsePlanning",
+        "size": 2,
+        "quantitative": {
+          "neurons": 2,
+          "responseBands": 4,
+          "safetyMode": "ADVISORY"
+        }
+      },
+      {
+        "layerID": 4,
+        "file": "result-layer.json",
+        "name": "Security Advisory Result Output",
+        "type": "result",
+        "size": 1,
+        "quantitative": {
+          "neurons": 1,
+          "resultSignalTypes": 3
+        }
+      }
+    ],
+    "totalLayers": 5,
+    "totalRealNeurons": 8,
+    "totalTrainableWeightScalars": 34,
+    "totalTrainableBiasScalars": 1
+  }
 }

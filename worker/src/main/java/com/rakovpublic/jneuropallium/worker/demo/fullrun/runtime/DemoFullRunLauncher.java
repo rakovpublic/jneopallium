@@ -97,13 +97,20 @@ public final class DemoFullRunLauncher {
     private static int runEntryProcess(Path modelJar, String contextJson, Path entryLogPath) throws IOException, InterruptedException {
         List<String> command = new ArrayList<>();
         command.add(javaBinary());
+        command.add("-Xms16m");
+        command.add("-Xmx128m");
+        command.add("-XX:+UseSerialGC");
+        command.add("-XX:MaxMetaspaceSize=96m");
+        command.add("-XX:ReservedCodeCacheSize=32m");
+        command.add("-Xss256k");
+        command.add("-Xint");
         command.add(ENTRY_CLASS);
         command.add("local");
         command.add(modelJar.toUri().toURL().toString());
         command.add(CONTEXT_CLASS);
         command.add(contextJson);
 
-        Files.writeString(entryLogPath, String.join(System.lineSeparator(), command.subList(0, Math.min(5, command.size())))
+        Files.writeString(entryLogPath, String.join(System.lineSeparator(), command)
                 + System.lineSeparator(), StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
         ProcessBuilder processBuilder = new ProcessBuilder(command);
         processBuilder.environment().put("CLASSPATH", launcherClasspath());

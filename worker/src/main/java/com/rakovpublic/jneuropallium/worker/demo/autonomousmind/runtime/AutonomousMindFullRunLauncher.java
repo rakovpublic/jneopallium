@@ -259,6 +259,7 @@ public final class AutonomousMindFullRunLauncher {
         command.add("-XX:MaxMetaspaceSize=96m");
         command.add("-XX:ReservedCodeCacheSize=32m");
         command.add("-Xss256k");
+        command.add("-Xint");
         command.add("-cp");
         command.add(launcherClasspath());
         command.add(ENTRY_CLASS);

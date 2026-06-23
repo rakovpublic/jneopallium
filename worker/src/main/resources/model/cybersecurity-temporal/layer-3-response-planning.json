@@ -1,0 +1,109 @@
+{
+  "layerID": 3,
+  "layerName": "Advisory Response Planning And Safety Gate",
+  "layerType": "responsePlanning",
+  "layerSize": 2,
+  "neurons": [
+    {
+      "neuronId": 0,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.security.ResponsePlanningNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.security.QuarantineRequestSignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.security.ThreatHypothesisSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.security.HypothesisResponseProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.security.IResponsePlanningNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {},
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {},
+        "defaultDendritesWeights": {}
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.security.ThreatHypothesisSignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.net.neuron.impl.security.IResponsePlanningNeuron"
+      ],
+      "responseBands": {
+        "log": [
+          0.0,
+          0.3
+        ],
+        "alert": [
+          0.3,
+          0.6
+        ],
+        "connectionQuarantineCandidate": [
+          0.6,
+          0.85
+        ],
+        "hostQuarantineCandidate": [
+          0.85,
+          1.0
+        ]
+      },
+      "safetyMode": "ADVISORY",
+      "role": "convert posterior bands into advisory response candidates"
+    },
+    {
+      "neuronId": 1,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.security.ResponseGateNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.security.QuarantineRequestSignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.security.QuarantineRequestSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.security.QuarantineGateProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.security.IResponseGateNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {},
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {},
+        "defaultDendritesWeights": {}
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.security.QuarantineRequestSignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.net.neuron.impl.security.IResponseGateNeuron"
+      ],
+      "safetyMode": "ADVISORY",
+      "hardGatePolicy": "fixed configuration; model weights cannot bypass hard allow or approval controls"
+    }
+  ],
+  "quantitative": {
+    "neurons": 2,
+    "responseBands": 4,
+    "safetyMode": "ADVISORY"
+  }
+}

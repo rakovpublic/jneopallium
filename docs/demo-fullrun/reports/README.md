@@ -11,6 +11,8 @@ Reports:
 - [Demo 05: DICOM Read-Only Context](demo-05-dicom-readonly-context-report.md)
 - [Demo 06: Cybersecurity Kafka Triage](demo-06-cybersecurity-kafka-triage-report.md)
 - [Demo 06 Training Design](../cybersecurity-training-design.md)
+- [Demo 06 Production Training Evidence](demo-06-cybersecurity-production-training-evidence.md)
+- [Demo 06 Production Deployment Manual](../cybersecurity-production-deployment-manual.md)
 - [Demo 07: OpenTelemetry Export-Only](demo-07-observability-otel-export-report.md)
 - [Demo 08: Adaptive Tutoring](demo-08-adaptive-tutoring-lti-report.md)
 - [Demo 09: Nengo Interoperability](demo-09-nengo-interop-report.md)
