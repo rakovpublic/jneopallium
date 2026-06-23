@@ -3,10 +3,17 @@ durationSeconds: 160
 controllerMode: "AUTONOMOUS"
 initial:
   processLoadFlow: 0.45
+  faultValveStuck: false
 events:
+  - at: 55
+    set:
+      faultValveStuck: true
   - at: 60
     set:
       processLoadFlow: 0.95
   - at: 110
     set:
       processLoadFlow: 0.45
+  - at: 125
+    set:
+      faultValveStuck: false

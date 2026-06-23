@@ -1,0 +1,122 @@
+{
+  "layerID": 4,
+  "layerName": "Industrial Advisory JSONL Output",
+  "layerType": "result",
+  "isResultLayer": true,
+  "layerSize": 2,
+  "neurons": [
+    {
+      "neuronId": 0,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.MaintenanceSchedulingNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.MaintenanceWindowSignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.MaintenanceWindowSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.MaintenanceWindowSchedulingProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.IMaintenanceSchedulingNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "0": [
+            "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.MaintenanceWindowSignal"
+          ]
+        },
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {},
+        "defaultDendritesWeights": {}
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.MaintenanceWindowSignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.IMaintenanceSchedulingNeuron"
+      ],
+      "jsonShape": {
+        "asset": "string",
+        "finding": "string",
+        "confidence": "number 0.0-1.0",
+        "evidence": "object",
+        "recommendation": "operator-readable recommendation code",
+        "recommendedAction": "string",
+        "urgencyHours": "integer",
+        "economicBasis": "object produced by EconomicBasisNeuron",
+        "safetyEnvelopeSatisfied": "boolean produced by SafetyEnvelopeNeuron",
+        "controlBoundary": "object identifying PLC/PID/SIS, OPC UA, MQTT, and Jneopallium responsibilities",
+        "autonomousAction": "false"
+      }
+    },
+    {
+      "neuronId": 1,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.SetpointOptimiserNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.SetpointSignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.SetpointSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.EfficiencyOptimiserProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.ISetpointOptimiserNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "1": [
+            "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.SetpointSignal"
+          ]
+        },
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {},
+        "defaultDendritesWeights": {}
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.SetpointSignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.ISetpointOptimiserNeuron"
+      ],
+      "jsonShape": {
+        "asset": "string",
+        "finding": "string",
+        "confidence": "number 0.0-1.0",
+        "evidence": "object",
+        "recommendation": "operator-readable recommendation code",
+        "recommendedAction": "string",
+        "urgencyHours": "integer",
+        "economicBasis": "object produced by EconomicBasisNeuron",
+        "safetyEnvelopeSatisfied": "boolean produced by SafetyEnvelopeNeuron",
+        "controlBoundary": "object identifying PLC/PID/SIS, OPC UA, MQTT, and Jneopallium responsibilities",
+        "autonomousAction": "false"
+      },
+      "autonomousAction": false
+    }
+  ],
+  "quantitative": {
+    "neurons": 2,
+    "resultSignalTypes": 2
+  }
+}

@@ -1,0 +1,329 @@
+{
+  "layerID": 1,
+  "layerName": "Fast Telemetry Validation And Loop State",
+  "layerType": "fastTelemetry",
+  "layerSize": 7,
+  "neurons": [
+    {
+      "neuronId": 0,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.SensorNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.MeasurementSignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.MeasurementSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.MeasurementValidationProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.ISensorNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "0": [
+            "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.MeasurementSignal"
+          ]
+        },
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {},
+        "defaultDendritesWeights": {}
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.MeasurementSignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.ISensorNeuron"
+      ],
+      "tag": "SKID.TIC101.PV",
+      "range": [
+        -20.0,
+        130.0
+      ]
+    },
+    {
+      "neuronId": 1,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.SensorNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.MeasurementSignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.MeasurementSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.MeasurementValidationProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.ISensorNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "1": [
+            "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.MeasurementSignal"
+          ]
+        },
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {},
+        "defaultDendritesWeights": {}
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.MeasurementSignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.ISensorNeuron"
+      ],
+      "tag": "SKID.FIC101.PV",
+      "range": [
+        0.0,
+        2.0
+      ]
+    },
+    {
+      "neuronId": 2,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.SensorNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.MeasurementSignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.MeasurementSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.MeasurementValidationProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.ISensorNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "2": [
+            "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.MeasurementSignal"
+          ]
+        },
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {},
+        "defaultDendritesWeights": {}
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.MeasurementSignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.ISensorNeuron"
+      ],
+      "tag": "SKID.SUCTION.PRESSURE",
+      "range": [
+        0.0,
+        2.0
+      ]
+    },
+    {
+      "neuronId": 3,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.MeasurementValidatorNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.MeasurementSignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.MeasurementSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.MeasurementValidationProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.IMeasurementValidatorNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "3": [
+            "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.MeasurementSignal"
+          ]
+        },
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {},
+        "defaultDendritesWeights": {}
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.MeasurementSignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.IMeasurementValidatorNeuron"
+      ],
+      "maxRateOfChange": {
+        "SKID.TIC101.PV": 3.0,
+        "SKID.FIC101.PV": 1.0
+      }
+    },
+    {
+      "neuronId": 4,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.OscillationMonitorNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.AlarmSignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.MeasurementSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.MeasurementOscillationProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.IOscillationMonitorNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "4": [
+            "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.AlarmSignal"
+          ]
+        },
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {},
+        "defaultDendritesWeights": {}
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.MeasurementSignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.IOscillationMonitorNeuron"
+      ],
+      "acfWindowTicks": 24,
+      "trainedFinding": "CONTROL_LOOP_OSCILLATION_TUNING_DEGRADATION"
+    },
+    {
+      "neuronId": 5,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.InterlockNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.InterlockSignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.MeasurementSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.MeasurementInterlockProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.IInterlockNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "5": [
+            "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.InterlockSignal"
+          ]
+        },
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {},
+        "defaultDendritesWeights": {}
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.MeasurementSignal",
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.AlarmSignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.IInterlockNeuron"
+      ],
+      "hardInterlocks": [
+        "HIGH_TEMPERATURE",
+        "LOW_FLOW",
+        "LOW_SUCTION"
+      ]
+    },
+    {
+      "neuronId": 6,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.ModeControllerNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.OperatorOverrideSignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.OperatorOverrideSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.OperatorOverrideProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.IModeControllerNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "6": [
+            "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.OperatorOverrideSignal"
+          ]
+        },
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {},
+        "defaultDendritesWeights": {}
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.OperatorOverrideSignal",
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.InterlockSignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.IModeControllerNeuron"
+      ],
+      "priority": "hard interlock -> fail-safe -> operator override -> advisory"
+    }
+  ],
+  "quantitative": {
+    "neurons": 7,
+    "inputSignalTypes": 3,
+    "outputSignalTypes": 3
+  }
+}

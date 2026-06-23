@@ -1,0 +1,84 @@
+{
+  "sources": {
+    "OPC_UA": [
+      "MeasurementSignal",
+      "AlarmSignal",
+      "OperatorOverrideSignal",
+      "InterlockSignal"
+    ],
+    "MQTT": [
+      "MeasurementSignal",
+      "EfficiencySignal"
+    ],
+    "FMI_REPLAY": [
+      "MeasurementSignal",
+      "DegradationSignal",
+      "EfficiencySignal"
+    ],
+    "KAFKA_SHADOW": [
+      "MeasurementSignal",
+      "AlarmSignal",
+      "MaintenanceWindowSignal",
+      "SetpointSignal"
+    ],
+    "CMMS": [
+      "MaintenanceWindowSignal",
+      "DegradationSignal"
+    ],
+    "ENERGY_METER": [
+      "EfficiencySignal"
+    ]
+  },
+  "canonicalFeatureNames": [
+    "max_health_risk",
+    "mean_health_risk",
+    "max_vibration_rms",
+    "max_bearing_temperature_c",
+    "mean_pump_power_kw",
+    "max_pump_power_kw",
+    "min_flow_pv",
+    "low_flow_ratio",
+    "min_suction_pressure_bar",
+    "low_suction_ratio",
+    "actuator_reversal_rate",
+    "total_actuator_travel",
+    "max_temperature_model_residual_c",
+    "mean_temperature_model_residual_c",
+    "energy_consumption_kwh",
+    "energy_per_unit_production_kwh",
+    "baseline_energy_delta_ratio",
+    "integral_absolute_error",
+    "maximum_overshoot_c",
+    "time_outside_safety_bounds",
+    "interlock_ratio",
+    "operator_override_ratio",
+    "opcua_failsafe_ratio",
+    "mqtt_outage_available",
+    "temperature_error_zero_crossing_rate",
+    "temperature_error_acf_peak",
+    "temperature_error_acf_lag_ticks",
+    "flow_acf_peak",
+    "flow_acf_lag_ticks",
+    "valve_command_reversal_density",
+    "pump_command_reversal_density",
+    "command_position_mismatch_ratio",
+    "valve_stiction_proxy",
+    "cascade_interaction_score",
+    "controller_intervention_rate",
+    "load_transition_ratio",
+    "startup_phase_ratio",
+    "steady_state_phase_ratio",
+    "maintenance_context_active"
+  ],
+  "findingCodes": [
+    "PUMP_WEAR_CAVITATION_RISK",
+    "CONTROL_LOOP_OSCILLATION_TUNING_DEGRADATION",
+    "TEMPERATURE_SENSOR_DRIFT",
+    "ENERGY_PER_UNIT_PRODUCTION_DETERIORATION"
+  ],
+  "supervisoryBoundary": {
+    "fastControl": "PLC/PID/SIS",
+    "diagnosisAndOptimisation": "Jneopallium neurons",
+    "hardInterlocks": "deterministic plant safety"
+  }
+}

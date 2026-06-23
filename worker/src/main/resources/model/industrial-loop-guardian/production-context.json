@@ -1,0 +1,32 @@
+{
+  "properties": {
+    "configuration.demo.id": "industrial-loop-guardian",
+    "configuration.demo.entry.mode": "local",
+    "configuration.input.type": "fileSystem",
+    "configuration.input.path": "target/industrial-loop-guardian/input",
+    "configuration.input.layermeta": "model/industrial-loop-guardian/",
+    "configuration.storage.json": "{\"storageClass\":\"com.rakovpublic.jneuropallium.worker.demo.fullrun.runtime.DemoFileStorage\",\"storage\":{\"rootPath\":\"worker/src/main/resources\"}}",
+    "configuration.history.slow.runs": "64",
+    "configuration.history.fast.runs": "4096",
+    "configuration.slowfast.ratio": "10",
+    "configuration.processing.frequency.map": "{\"com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.MeasurementSignal\":{\"epoch\":\"1\",\"loop\":\"1\"},\"com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.AlarmSignal\":{\"epoch\":\"1\",\"loop\":\"1\"},\"com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.OperatorOverrideSignal\":{\"epoch\":\"1\",\"loop\":\"1\"},\"com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.DegradationSignal\":{\"epoch\":\"1\",\"loop\":\"10\"},\"com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.EfficiencySignal\":{\"epoch\":\"1\",\"loop\":\"10\"},\"com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.MaintenanceWindowSignal\":{\"epoch\":\"1\",\"loop\":\"60\"},\"com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.SetpointSignal\":{\"epoch\":\"1\",\"loop\":\"10\"},\"com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.InterlockSignal\":{\"epoch\":\"1\",\"loop\":\"1\"},\"com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.ActuatorCommandSignal\":{\"epoch\":\"1\",\"loop\":\"1\"}}",
+    "configuration.input.inputs": "{\"inputData\":[]}",
+    "configuration.isteacherstudying": "false",
+    "configuration.maxRun": "1",
+    "configuration.infiniteRun": "true",
+    "configuration.runoncein": "1000",
+    "configuration.outputAggregator": "com.rakovpublic.jneuropallium.worker.demo.fullrun.runtime.JsonlResultAggregator",
+    "configuration.demo.output.path": "target/industrial-loop-guardian/advisory-results.jsonl",
+    "configuration.demo.audit.path": "target/industrial-loop-guardian/advisory-audit.jsonl",
+    "worker.threads.amount": "4",
+    "configuration.discriminatorsAmount": "0",
+    "configuration.neuronnet.classes": "com.rakovpublic.jneuropallium.worker.bridge.kafka.KafkaAdvisoryOutputAggregator,com.rakovpublic.jneuropallium.worker.bridge.mqtt.MqttEventInput,com.rakovpublic.jneuropallium.worker.bridge.mqtt.MqttMetricInput,com.rakovpublic.jneuropallium.worker.demo.fullrun.runtime.JsonlResultAggregator,com.rakovpublic.jneuropallium.worker.demo.industrialfmi.EquipmentHealthProcessor,com.rakovpublic.jneuropallium.worker.demo.industrialfmi.EquipmentHealthSignal,com.rakovpublic.jneuropallium.worker.demo.industrialfmi.IndustrialFmiController,com.rakovpublic.jneuropallium.worker.demo.industrialfmi.IndustrialFmiNetworkFactory,com.rakovpublic.jneuropallium.worker.demo.industrialfmi.IndustrialFmiResult,com.rakovpublic.jneuropallium.worker.input.opcua.OpcUaAlarmInput,com.rakovpublic.jneuropallium.worker.input.opcua.OpcUaMeasurementInput,com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.ActuatorNeuron,com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.DegradationModelNeuron,com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.EnergyAccountingNeuron,com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.MaintenanceSchedulingNeuron,com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.MeasurementValidatorNeuron,com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.OscillationMonitorNeuron,com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.SafetyGateNeuron,com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.SensorNeuron,com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.SetpointOptimiserNeuron,com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.ActuatorCommandSignal,com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.AlarmSignal,com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.DegradationSignal,com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.EfficiencySignal,com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.InterlockSignal,com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.MaintenanceWindowSignal,com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.MeasurementSignal,com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.OperatorOverrideSignal,com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.SetpointSignal,com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.ActuatorDispatchProcessor,com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.ActuatorSafetyGateProcessor,com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.DegradationSchedulingProcessor,com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.EfficiencyOptimiserProcessor,com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.MaintenanceWindowSchedulingProcessor,com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.MeasurementOscillationProcessor,com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.MeasurementValidationProcessor",
+    "industrial.advisory.mode": "shadow-or-advisory",
+    "industrial.autonomousAction": "false",
+    "industrial.controlBoundary": "PLC/PID/SIS deterministic; Jneopallium supervisory only",
+    "industrial.opcua.role": "bounded-local-actuator-path",
+    "industrial.mqtt.role": "telemetry-and-advisory-only",
+    "industrial.neuronOwnedLogic": "diagnosis,economic-basis,safety-envelope,bounded-recommendation",
+    "industrial.kafka.eventSource.contract": "custom IInitInput converts records to industrial MeasurementSignal/AlarmSignal and preserves event-time"
+  }
+}

@@ -3,6 +3,8 @@
  */
 package com.rakovpublic.jneuropallium.worker.demo.industrialfmi;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rakovpublic.jneuropallium.worker.bridge.common.BridgeSafetyMode;
 import com.rakovpublic.jneuropallium.worker.bridge.mqtt.MqttBridgeConfig;
 import com.rakovpublic.jneuropallium.worker.bridge.mqtt.MqttSignalMapper;
@@ -28,6 +30,7 @@ import org.eclipse.milo.opcua.stack.core.types.builtin.Variant;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -39,6 +42,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import static org.junit.jupiter.api.Assertions.*;
 
 class IndustrialFmiDemoTest {
+
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     @TempDir Path tempDir;
 
@@ -149,6 +154,41 @@ class IndustrialFmiDemoTest {
     }
 
     @Test
+    void trainedLoopGuardianModelPackageIsProductionLoadable() throws Exception {
+        JsonNode descriptor = resourceJson(IndustrialFmiNetworkFactory.loopGuardianModelDescriptorResource());
+        JsonNode context = resourceJson("model/industrial-loop-guardian/production-context.json");
+        JsonNode findingLayer = resourceJson("model/industrial-loop-guardian/layer-2-maintenance-energy.json");
+
+        assertEquals(IndustrialFmiNetworkFactory.LOOP_GUARDIAN_MODEL_ID, descriptor.path("modelId").asText());
+        assertEquals(5, descriptor.path("totalLayers").asInt());
+        assertEquals(17, descriptor.path("totalRealNeurons").asInt());
+        assertEquals("ADVISORY", descriptor.path("safetyMode").asText());
+        assertEquals("false", context.path("properties").path("configuration.isteacherstudying").asText());
+        assertEquals("0", context.path("properties").path("configuration.discriminatorsAmount").asText());
+        assertEquals("true", context.path("properties").path("configuration.infiniteRun").asText());
+        assertEquals("1000", context.path("properties").path("configuration.runoncein").asText());
+        assertEquals("diagnosis,economic-basis,safety-envelope,bounded-recommendation",
+                context.path("properties").path("industrial.neuronOwnedLogic").asText());
+        assertTrue(descriptor.path("networkConfig").path("neuronOwnedLogic").toString().contains("EconomicBasisNeuron"));
+
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        for (JsonNode className : descriptor.path("generatedFrom").path("sourceRuntimeClasses")) {
+            Class.forName(className.asText(), false, loader);
+        }
+        JsonNode firstNeuron = findingLayer.path("neurons").get(0);
+        assertTrue(firstNeuron.hasNonNull("currentNeuronClass"));
+        assertTrue(firstNeuron.has("resultClasses"));
+        assertTrue(firstNeuron.has("processorMap"));
+        assertTrue(firstNeuron.has("dendrites"));
+        assertTrue(firstNeuron.path("signalChain").has("processingChain"));
+        assertTrue(firstNeuron.has("trainedIndustrialModel"));
+        assertTrue(firstNeuron.has("logicalNeuronRole"));
+        assertTrue(firstNeuron.has("featureGate"));
+        assertTrue(context.path("properties").path("configuration.neuronnet.classes").asText()
+                .contains("MeasurementValidatorNeuron"));
+    }
+
+    @Test
     void interlockFailSafeWritesAndAudits() throws Exception {
         Path auditFile = tempDir.resolve("interlock-audit.jsonl");
         OpcUaBridgeConfig cfg = opcConfig(SafetyMode.AUTONOMOUS, auditFile);
@@ -176,6 +216,13 @@ class IndustrialFmiDemoTest {
                 .filter(signal -> tag.equals(signal.getTag()))
                 .findFirst()
                 .orElseThrow();
+    }
+
+    private static JsonNode resourceJson(String resource) throws Exception {
+        try (InputStream in = IndustrialFmiDemoTest.class.getClassLoader().getResourceAsStream(resource)) {
+            assertNotNull(in, "missing resource " + resource);
+            return MAPPER.readTree(in);
+        }
     }
 
     private static OpcUaBridgeConfig opcConfig(SafetyMode mode, Path auditFile) {

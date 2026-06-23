@@ -3,14 +3,17 @@
 This demo adds a deterministic heated circulation and heat-exchanger skid around Jneopallium's existing industrial bridge stack.
 
 ```text
+PLC / PID / SIS
+  -> deterministic millisecond control and hard safety
 ThermalSkid FMI 2.0 Co-Simulation FMU
   -> Python plant gateway
      -> OPC UA process/control namespace
      -> MQTT IIoT telemetry topics
-  -> Jneopallium industrial controller
-     -> validation, cascade/PID control, oscillation supervision
-     -> equipment-health advisory loop
-     -> safety gate and audit outputs
+  -> Jneopallium Industrial Loop Guardian
+     -> multi-loop supervisory diagnosis
+     -> oscillation, valve-stiction, and sensor-fault discrimination
+     -> pump health, energy, economic basis, and maintenance planning
+     -> bounded setpoint recommendations, safety gate, and audit outputs
 ```
 
 ## Run Commands
@@ -37,6 +40,25 @@ Fast Python-only model verification:
 python -m unittest discover -s scripts/demo-industrial-fmi/tests
 ```
 
+Train and export the Industrial Loop Guardian maintenance and energy model:
+
+```bash
+python scripts/demo-industrial-fmi/train_loop_guardian_model.py \
+  --reference-multiplier 1000 \
+  --target-corpus-bytes 100gb \
+  --max-corpus-bytes 100gb
+```
+
+The trained model package is written to
+`worker/src/main/resources/model/industrial-loop-guardian/`. Production launch
+details are in `docs/demo-industrial-fmi-production-deployment.md`.
+
+Generate training and production run reports after training and replay:
+
+```bash
+python scripts/demo-industrial-fmi/generate_run_reports.py
+```
+
 Build the FMU from source:
 
 ```bash
@@ -57,7 +79,12 @@ python scripts/demo-industrial-fmi/gateway/plant_gateway.py \
 
 ## Safety Boundary
 
-OPC UA is the only autonomous actuator command path. The command nodes are:
+The demo positions Jneopallium above simple controls, not instead of them.
+PLC/PID/SIS logic remains responsible for deterministic control and hard
+interlocks. Jneopallium neurons own supervisory diagnosis, economic ranking,
+maintenance planning, and bounded recommendations.
+
+OPC UA is the only bounded actuator command path. The command nodes are:
 
 | Actuator | OPC UA command node | Signal tag |
 | --- | --- | --- |
@@ -65,7 +92,8 @@ OPC UA is the only autonomous actuator command path. The command nodes are:
 | P-101 pump speed | `ns=2;s=Skid.P101.SpeedSP` | `SKID.P101.SPEED.SP` |
 | HTR-101 heater power | `ns=2;s=Skid.HTR101.PowerCMD` | `SKID.HTR101.POWER.CMD` |
 
-MQTT is advisory-only. The Java `MqttBridgeConfig` constructor rejects `AUTONOMOUS`, and the demo advisory tags do not match actuator command tags.
+MQTT is telemetry/advisory-only. The Java `MqttBridgeConfig` constructor rejects
+`AUTONOMOUS`, and the demo advisory tags do not match actuator command tags.
 
 Command priority is:
 
@@ -186,6 +214,9 @@ target/jneopallium-industrial-fmi/<scenario>/
   manifest.json
   process_trace.csv
   controller_results.jsonl
+  advisory_findings.jsonl
+  model_advisory_findings.jsonl
+  heuristic_advisory_findings.jsonl
   opcua_audit.jsonl
   mqtt_audit.jsonl
   alarms.jsonl
@@ -205,5 +236,7 @@ The deterministic runner records evidence that:
 - MQTT outage leaves fast-loop control availability at `1.0`.
 - OPC UA outage applies local fail-safe values.
 - Each scenario produces deterministic traces and baseline comparison metrics.
+- Advisory JSON includes the owning neuron, recommendation code, economic basis,
+  safety-envelope result, and the PLC/PID/SIS versus Jneopallium boundary.
 
 The demo is simulation/HIL evidence. It is not a certified safety controller and does not replace PLC/SIS validation, hazard analysis, management of change, or site acceptance testing.

@@ -1,0 +1,209 @@
+{
+  "layerID": 3,
+  "layerName": "Economic Advisory Planning And Safety Gate",
+  "layerType": "advisoryPlanning",
+  "layerSize": 4,
+  "neurons": [
+    {
+      "neuronId": 0,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.MaintenanceSchedulingNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.MaintenanceWindowSignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.DegradationSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.DegradationSchedulingProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.IMaintenanceSchedulingNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "0": [
+            "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.MaintenanceWindowSignal"
+          ]
+        },
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {},
+        "defaultDendritesWeights": {}
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.DegradationSignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.IMaintenanceSchedulingNeuron"
+      ],
+      "logicalNeuronRole": "MaintenancePlanningNeuron",
+      "leadTimeTicks": 10000,
+      "cmmsInputs": [
+        "runningHours",
+        "previousMaintenance",
+        "workOrderPriority"
+      ],
+      "autonomousAction": false
+    },
+    {
+      "neuronId": 1,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.SetpointOptimiserNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.SetpointSignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.EfficiencySignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.EfficiencyOptimiserProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.ISetpointOptimiserNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "1": [
+            "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.SetpointSignal"
+          ]
+        },
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {},
+        "defaultDendritesWeights": {}
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.EfficiencySignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.ISetpointOptimiserNeuron"
+      ],
+      "logicalNeuronRole": "BoundedSetpointRecommendationNeuron",
+      "boundedPumpTrimPercent": [
+        -4.0,
+        8.0
+      ],
+      "autonomousAction": false,
+      "output": "recommendation only until site-specific approval"
+    },
+    {
+      "neuronId": 2,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.EnergyAccountingNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.EfficiencySignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.EfficiencySignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.EfficiencyOptimiserProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.IEnergyAccountingNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "2": [
+            "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.EfficiencySignal"
+          ]
+        },
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {},
+        "defaultDendritesWeights": {}
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.EfficiencySignal",
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.DegradationSignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.IEnergyAccountingNeuron"
+      ],
+      "logicalNeuronRole": "EconomicBasisNeuron",
+      "valueFormula": "V = E + D + Q + M + O - C",
+      "reports": [
+        "predictedEnergySavingKw",
+        "estimatedAnnualEnergyValueUsd",
+        "estimatedAvoidedShutdownValueUsd",
+        "equipmentRiskChange",
+        "safetyEnvelopeSatisfied"
+      ],
+      "autonomousAction": false
+    },
+    {
+      "neuronId": 3,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.SafetyGateNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.SetpointSignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.SetpointSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.ActuatorSafetyGateProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.ISafetyGateNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {
+          "3": [
+            "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.SetpointSignal"
+          ]
+        },
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {},
+        "defaultDendritesWeights": {}
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.SetpointSignal",
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.InterlockSignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.ISafetyGateNeuron"
+      ],
+      "logicalNeuronRole": "SafetyEnvelopeNeuron",
+      "mode": "ADVISORY",
+      "hardInterlocksAuthoritative": true,
+      "operatorOverrideAuthoritative": true,
+      "plcSisAuthoritative": true
+    }
+  ],
+  "quantitative": {
+    "neurons": 4,
+    "safetyMode": "ADVISORY",
+    "economicBasisNeurons": 1
+  }
+}
