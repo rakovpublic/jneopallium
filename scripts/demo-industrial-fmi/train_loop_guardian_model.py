@@ -113,6 +113,70 @@ INDUSTRIAL_NEURON_PACKAGE = "com.rakovpublic.jneuropallium.worker.net.neuron.imp
 INDUSTRIAL_SIGNAL_PACKAGE = "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial"
 INDUSTRIAL_PROCESSOR_PACKAGE = "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial"
 INDUSTRIAL_DEMO_PACKAGE = "com.rakovpublic.jneuropallium.worker.demo.industrialfmi"
+MACHINE_HEALTH_SIGNAL_CLASSES = [
+    "MachineWaveformSignal",
+    "MachineFeatureSignal",
+    "OperatingRegimeSignal",
+    "DomainShiftSignal",
+    "FaultHypothesisSignal",
+    "MachineHealthAdvisorySignal",
+]
+MACHINE_HEALTH_NEURON_CLASSES = [
+    "AcousticFeatureNeuron",
+    "VibrationFeatureNeuron",
+    "OperatingRegimeNeuron",
+    "MachineBaselineNeuron",
+    "FaultHypothesisNeuron",
+    "MachineHealthCorrelationNeuron",
+    "AdvisoryGateNeuron",
+]
+MACHINE_HEALTH_NEURON_INTERFACES = [
+    "IAcousticFeatureNeuron",
+    "IVibrationFeatureNeuron",
+    "IOperatingRegimeNeuron",
+    "IMachineBaselineNeuron",
+    "IFaultHypothesisNeuron",
+    "IMachineHealthCorrelationNeuron",
+    "IAdvisoryGateNeuron",
+]
+MACHINE_HEALTH_PROCESSOR_CLASSES = [
+    "AcousticFeatureProcessor",
+    "VibrationFeatureProcessor",
+    "OperatingRegimeProcessor",
+    "MachineBaselineProcessor",
+    "FaultHypothesisProcessor",
+    "DomainShiftContextProcessor",
+    "OperatingRegimeContextProcessor",
+    "MachineHealthCorrelationProcessor",
+    "MachineHealthAdvisoryGateProcessor",
+]
+MACHINE_HEALTH_FAULTS = [
+    "bearingDamage",
+    "cavitation",
+    "imbalance",
+    "sensorFault",
+    "unknownAnomaly",
+]
+MACHINE_HEALTH_FEATURE_FAMILIES = [
+    "acousticRms",
+    "acousticCrestFactor",
+    "acousticSpectralCentroidHz",
+    "vibrationRms",
+    "vibrationEnvelopeEnergy",
+    "vibrationCrestFactor",
+    "speedNormalizedScore",
+    "operatingRegime",
+    "domainShiftScore",
+    "crossSensorConsistency",
+]
+MACHINE_HEALTH_TRAINING_SOURCES = [
+    "MIMII",
+    "DCASE_MACHINE_CONDITION",
+    "MIMII_DUE_DG",
+    "PADERBORN_BEARING_DATA_CENTER",
+    "JNEOPALLIUM_FMI_PUMP_SIMULATOR",
+    "AUTHORIZED_SITE_TELEMETRY",
+]
 
 
 @dataclass(frozen=True)
@@ -487,9 +551,23 @@ def runtime_classes() -> list[str]:
         "com.rakovpublic.jneuropallium.worker.input.opcua.OpcUaAlarmInput",
         "com.rakovpublic.jneuropallium.worker.bridge.mqtt.MqttMetricInput",
         "com.rakovpublic.jneuropallium.worker.bridge.mqtt.MqttEventInput",
+        "com.rakovpublic.jneuropallium.worker.bridge.fmi.FmuMeasurementInput",
+        "com.rakovpublic.jneuropallium.worker.bridge.fmi.FmuEventInput",
+        "com.rakovpublic.jneuropallium.worker.bridge.plc4x.Plc4xMeasurementInput",
+        "com.rakovpublic.jneuropallium.worker.bridge.plc4x.Plc4xEventInput",
         "com.rakovpublic.jneuropallium.worker.bridge.kafka.KafkaAdvisoryOutputAggregator",
         "com.rakovpublic.jneuropallium.worker.demo.fullrun.runtime.JsonlResultAggregator",
+        "com.rakovpublic.jneuropallium.worker.demo.industrialfmi.runtime.IndustrialLoopGuardianEntryLauncher",
+        "com.rakovpublic.jneuropallium.worker.demo.industrialfmi.runtime.IndustrialLoopGuardianReplayInput",
+        "com.rakovpublic.jneuropallium.worker.demo.industrialfmi.runtime.IndustrialLoopGuardianResultAggregator",
+        "com.rakovpublic.jneuropallium.worker.demo.industrialfmi.runtime.IndustrialPassThroughWeight",
+        "com.rakovpublic.jneuropallium.worker.demo.industrialfmi.runtime.IndustrialSignalChain",
+        "com.rakovpublic.jneuropallium.worker.demo.industrialfmi.runtime.MachineHealthResultNeuron",
     ]
+    classes.extend(signal(name) for name in MACHINE_HEALTH_SIGNAL_CLASSES)
+    classes.extend(neuron_class(name) for name in MACHINE_HEALTH_NEURON_CLASSES)
+    classes.extend(neuron_class(name) for name in MACHINE_HEALTH_NEURON_INTERFACES)
+    classes.extend(processor(name) for name in MACHINE_HEALTH_PROCESSOR_CLASSES)
     return sorted(set(classes))
 
 
@@ -583,6 +661,7 @@ def write_layer_artifacts(output_dir: Path, artifact: dict[str, Any], descriptor
         "canonicalInputs": {
             "OPC_UA": ["temperature", "flow", "suction_pressure", "interlocks", "operator_override", "bounded actuator path"],
             "MQTT": ["vibration", "bearing_temperature", "pump_power_kw", "ambient_temperature", "advisory telemetry"],
+            "WAVEFORM_TELEMETRY": ["audio waveform", "vibration waveform", "motor-current waveform"],
             "FMI_REPLAY": ["process_temperature", "fault_pump_wear", "fault_sensor_drift", "load_disturbance"],
             "KAFKA_SHADOW": ["typed industrial telemetry records with event-time retained"],
             "CMMS": ["maintenance history", "work orders", "calibration age"],
@@ -638,6 +717,8 @@ def write_layer_artifacts(output_dir: Path, artifact: dict[str, Any], descriptor
         "layerSize": 4,
         "commercialSupervisoryFunctions": [
             "predictive maintenance",
+            "multimodal machine-health anomaly detection",
+            "fault hypothesis and domain-shift detection",
             "oscillation and valve-stiction diagnosis",
             "sensor-fault discrimination",
             "energy-per-unit-production optimisation",
@@ -660,6 +741,7 @@ def write_layer_artifacts(output_dir: Path, artifact: dict[str, Any], descriptor
             "neurons": 4,
             "featureCount": len(FEATURE_NAMES),
             "findingHeads": len(FINDING_CODES),
+            "machineHealthFaults": len(MACHINE_HEALTH_FAULTS),
             "oscillationFeatureGate": len(HEAD_FEATURES["CONTROL_LOOP_OSCILLATION_TUNING_DEGRADATION"]),
         },
     }
@@ -766,12 +848,27 @@ def write_layer_artifacts(output_dir: Path, artifact: dict[str, Any], descriptor
             "findingCodes": FINDING_CODES,
             "advisoryJsonShape": advisory_json_shape(),
             "neuronOwnedLogic": [
+                "AcousticFeatureNeuron",
+                "VibrationFeatureNeuron",
+                "OperatingRegimeNeuron",
+                "MachineBaselineNeuron",
+                "FaultHypothesisNeuron",
+                "MachineHealthCorrelationNeuron",
+                "AdvisoryGateNeuron",
                 "PumpHealthAndEfficiencyNeuron",
                 "OscillationDiagnosisNeuron",
                 "SensorFaultDiscriminationNeuron",
                 "EconomicBasisNeuron",
                 "SafetyEnvelopeNeuron",
             ],
+            "machineHealthRuntime": {
+                "status": "JAVA_RUNTIME_IMPLEMENTED",
+                "role": "read-only/shadow/advisory condition-monitoring subsystem",
+                "trainingSources": MACHINE_HEALTH_TRAINING_SOURCES,
+                "featureFamilies": MACHINE_HEALTH_FEATURE_FAMILIES,
+                "faultOutputs": MACHINE_HEALTH_FAULTS,
+                "safetyBoundary": "MachineHealthAdvisorySignal never writes actuator commands; InterlockNeuron, SafetyGateNeuron, and OperatorOverrideProcessor remain authoritative.",
+            },
         },
         "layers": [
             layer_summary(layer_0, "initInput"),
@@ -788,6 +885,7 @@ def write_layer_artifacts(output_dir: Path, artifact: dict[str, Any], descriptor
         "notes": [
             "Layer 0 is the plant telemetry/event-source boundary.",
             "Layer 2 embeds trained diagnostic finding heads from the bundled reference skid corpus.",
+            "Java machine-health runtime classes add acoustic/vibration feature extraction, domain-shift scoring, fault hypotheses, and advisory-only health output.",
             "Layer 3 encapsulates economic basis, bounded recommendations, and safety-envelope gating in neurons.",
             "The result layer is advisory-only; PLC/SIS interlocks and operator overrides remain authoritative.",
             "Use external site historian, CMMS, energy meter, and maintenance-ticket validation before bounded autonomous optimization.",
@@ -822,6 +920,12 @@ def advisory_json_shape() -> dict[str, str]:
         "safetyEnvelopeSatisfied": "boolean produced by SafetyEnvelopeNeuron",
         "controlBoundary": "object identifying PLC/PID/SIS, OPC UA, MQTT, and Jneopallium responsibilities",
         "autonomousAction": "false",
+        "healthScore": "number 0.0-1.0 for MachineHealthAdvisorySignal",
+        "anomalyProbability": "number 0.0-1.0 for multimodal machine-health output",
+        "faultProbabilities": "object keyed by bearingDamage, cavitation, imbalance, sensorFault",
+        "unknownAnomalyProbability": "number 0.0-1.0",
+        "domainShiftScore": "number 0.0-1.0",
+        "uncertainty": "number 0.0-1.0",
     }
 
 
@@ -853,6 +957,12 @@ def signal_frequency_map() -> dict[str, dict[str, str]]:
         signal("SetpointSignal"): {"epoch": "1", "loop": "10"},
         signal("InterlockSignal"): {"epoch": "1", "loop": "1"},
         signal("ActuatorCommandSignal"): {"epoch": "1", "loop": "1"},
+        signal("MachineWaveformSignal"): {"epoch": "1", "loop": "1"},
+        signal("MachineFeatureSignal"): {"epoch": "2", "loop": "2"},
+        signal("OperatingRegimeSignal"): {"epoch": "3", "loop": "2"},
+        signal("DomainShiftSignal"): {"epoch": "4", "loop": "2"},
+        signal("FaultHypothesisSignal"): {"epoch": "4", "loop": "2"},
+        signal("MachineHealthAdvisorySignal"): {"epoch": "5", "loop": "2"},
     }
 
 
@@ -876,7 +986,7 @@ def production_context(descriptor: dict[str, Any]) -> dict[str, Any]:
             "configuration.isteacherstudying": "false",
             "configuration.maxRun": "1",
             "configuration.infiniteRun": "true",
-            "configuration.runoncein": "1000",
+            "configuration.runoncein": "1",
             "configuration.outputAggregator": "com.rakovpublic.jneuropallium.worker.demo.fullrun.runtime.JsonlResultAggregator",
             "configuration.demo.output.path": "target/industrial-loop-guardian/advisory-results.jsonl",
             "configuration.demo.audit.path": "target/industrial-loop-guardian/advisory-audit.jsonl",
@@ -889,6 +999,23 @@ def production_context(descriptor: dict[str, Any]) -> dict[str, Any]:
             "industrial.opcua.role": "bounded-local-actuator-path",
             "industrial.mqtt.role": "telemetry-and-advisory-only",
             "industrial.neuronOwnedLogic": "diagnosis,economic-basis,safety-envelope,bounded-recommendation",
+            "industrial.machineHealth.mode": "shadow-or-advisory",
+            "industrial.machineHealth.javaRuntime": "acoustic/vibration features, operating regime, baseline/domain shift, fault hypotheses, health advisory gate",
+            "industrial.machineHealth.trainingSources": ",".join(MACHINE_HEALTH_TRAINING_SOURCES),
+            "industrial.machineHealth.autonomousAction": "false",
+            "industrial.iinitinput.contract": "configuration.input.inputs is an InputArray of IInitInput bindings; local Entry evidence uses IndustrialLoopGuardianReplayInput, production swaps in OPC-UA/MQTT/FMI/PLC bridge inputs",
+            "industrial.iinitinput.localEntryLauncher": "com.rakovpublic.jneuropallium.worker.demo.industrialfmi.runtime.IndustrialLoopGuardianEntryLauncher",
+            "industrial.iinitinput.localReplayInput": "com.rakovpublic.jneuropallium.worker.demo.industrialfmi.runtime.IndustrialLoopGuardianReplayInput",
+            "industrial.iinitinput.bridgeClasses": ",".join([
+                "com.rakovpublic.jneuropallium.worker.input.opcua.OpcUaMeasurementInput",
+                "com.rakovpublic.jneuropallium.worker.input.opcua.OpcUaAlarmInput",
+                "com.rakovpublic.jneuropallium.worker.bridge.mqtt.MqttMetricInput",
+                "com.rakovpublic.jneuropallium.worker.bridge.mqtt.MqttEventInput",
+                "com.rakovpublic.jneuropallium.worker.bridge.fmi.FmuMeasurementInput",
+                "com.rakovpublic.jneuropallium.worker.bridge.fmi.FmuEventInput",
+                "com.rakovpublic.jneuropallium.worker.bridge.plc4x.Plc4xMeasurementInput",
+                "com.rakovpublic.jneuropallium.worker.bridge.plc4x.Plc4xEventInput",
+            ]),
             "industrial.kafka.eventSource.contract": "custom IInitInput converts records to industrial MeasurementSignal/AlarmSignal and preserves event-time",
         }
     }
@@ -898,14 +1025,17 @@ def source_mapping() -> dict[str, Any]:
     return {
         "sources": {
             "OPC_UA": ["MeasurementSignal", "AlarmSignal", "OperatorOverrideSignal", "InterlockSignal"],
-            "MQTT": ["MeasurementSignal", "EfficiencySignal"],
+            "MQTT": ["MeasurementSignal", "EfficiencySignal", "MachineHealthAdvisorySignal"],
+            "WAVEFORM_TELEMETRY": ["MachineWaveformSignal", "MachineFeatureSignal"],
             "FMI_REPLAY": ["MeasurementSignal", "DegradationSignal", "EfficiencySignal"],
             "KAFKA_SHADOW": ["MeasurementSignal", "AlarmSignal", "MaintenanceWindowSignal", "SetpointSignal"],
             "CMMS": ["MaintenanceWindowSignal", "DegradationSignal"],
             "ENERGY_METER": ["EfficiencySignal"],
         },
         "canonicalFeatureNames": FEATURE_NAMES,
+        "machineHealthFeatureFamilies": MACHINE_HEALTH_FEATURE_FAMILIES,
         "findingCodes": FINDING_CODES,
+        "machineHealthFaults": MACHINE_HEALTH_FAULTS,
         "supervisoryBoundary": {
             "fastControl": "PLC/PID/SIS",
             "diagnosisAndOptimisation": "Jneopallium neurons",

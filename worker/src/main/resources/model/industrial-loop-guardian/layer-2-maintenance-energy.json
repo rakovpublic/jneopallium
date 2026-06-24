@@ -5,6 +5,8 @@
   "layerSize": 4,
   "commercialSupervisoryFunctions": [
     "predictive maintenance",
+    "multimodal machine-health anomaly detection",
+    "fault hypothesis and domain-shift detection",
     "oscillation and valve-stiction diagnosis",
     "sensor-fault discrimination",
     "energy-per-unit-production optimisation"
@@ -695,6 +697,7 @@
     "neurons": 4,
     "featureCount": 39,
     "findingHeads": 4,
+    "machineHealthFaults": 5,
     "oscillationFeatureGate": 17
   }
 }

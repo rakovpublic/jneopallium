@@ -1,7 +1,7 @@
 {
   "modelId": "industrial-loop-guardian",
   "trainedSnapshotVersion": "1.0.0-reference-maintenance-energy",
-  "updatedAtUtc": "2026-06-23T12:42:09+00:00",
+  "updatedAtUtc": "2026-06-24T21:21:02+00:00",
   "status": "TRAINED",
   "trainingMode": "bundled-reference-fmi-corpus",
   "trainingChecksum": "1f9ffa1d72e9cbe8f28c04ca0097e952caf587532af565f7c48c90deb2718986",

@@ -60,14 +60,14 @@ Critical advisory-loop settings:
 | `configuration.isteacherstudying` | `false` |
 | `configuration.discriminatorsAmount` | `0` |
 | `configuration.infiniteRun` | `true` |
-| `configuration.runoncein` | `1000` milliseconds |
+| `configuration.runoncein` | `1` millisecond |
 | `configuration.processing.frequency.map` | fast measurements every loop, maintenance/energy slower |
 | `industrial.autonomousAction` | `false` |
 | `industrial.neuronOwnedLogic` | diagnosis, economic basis, safety envelope, bounded recommendation |
 
 Together, `isteacherstudying=false`, `discriminatorsAmount=0`, and
 `infiniteRun=true` put the worker into the continuous advisory loop.
-`runoncein=1000` paces that loop to one advisory tick per second before the
+`runoncein=1` paces that loop to one advisory tick per millisecond before the
 per-signal frequency map fans fast and slow signals out.
 
 ## 4. Neuron-Net Structure
@@ -90,9 +90,13 @@ reviewers can see that the logic is encapsulated in the Jneopallium model.
 
 ## 5. Event Sources And Streaming Input
 
-Batch replay uses the deterministic FMI traces. Production should plug in a
-site-specific `IInitInput` that converts Kafka, OPC UA, or MQTT records into
-typed industrial signals while preserving event time.
+Batch replay uses deterministic FMI traces only as training/support data.
+Production and the Java Entry evidence path use `IInitInput`: a source returns
+typed industrial signals, an input strategy routes them into layer 0, and
+`configuration.runoncein` controls the Jneopallium loop cadence. Existing bridge
+inputs include `OpcUaMeasurementInput`, `OpcUaAlarmInput`, `MqttMetricInput`,
+`MqttEventInput`, `FmuMeasurementInput`, `FmuEventInput`,
+`Plc4xMeasurementInput`, and `Plc4xEventInput`.
 
 Recommended Kafka topic groups:
 

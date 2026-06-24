@@ -15,6 +15,9 @@ public class JarClassLoaderService extends URLClassLoader {
 
     public Boolean containsClass(String name) {
         try {
+            if (this.findLoadedClass(name) != null) {
+                return true;
+            }
             this.findClass(name);
             return true;
         } catch (ClassNotFoundException e) {

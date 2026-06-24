@@ -8,7 +8,12 @@
     ],
     "MQTT": [
       "MeasurementSignal",
-      "EfficiencySignal"
+      "EfficiencySignal",
+      "MachineHealthAdvisorySignal"
+    ],
+    "WAVEFORM_TELEMETRY": [
+      "MachineWaveformSignal",
+      "MachineFeatureSignal"
     ],
     "FMI_REPLAY": [
       "MeasurementSignal",
@@ -70,11 +75,30 @@
     "steady_state_phase_ratio",
     "maintenance_context_active"
   ],
+  "machineHealthFeatureFamilies": [
+    "acousticRms",
+    "acousticCrestFactor",
+    "acousticSpectralCentroidHz",
+    "vibrationRms",
+    "vibrationEnvelopeEnergy",
+    "vibrationCrestFactor",
+    "speedNormalizedScore",
+    "operatingRegime",
+    "domainShiftScore",
+    "crossSensorConsistency"
+  ],
   "findingCodes": [
     "PUMP_WEAR_CAVITATION_RISK",
     "CONTROL_LOOP_OSCILLATION_TUNING_DEGRADATION",
     "TEMPERATURE_SENSOR_DRIFT",
     "ENERGY_PER_UNIT_PRODUCTION_DETERIORATION"
+  ],
+  "machineHealthFaults": [
+    "bearingDamage",
+    "cavitation",
+    "imbalance",
+    "sensorFault",
+    "unknownAnomaly"
   ],
   "supervisoryBoundary": {
     "fastControl": "PLC/PID/SIS",

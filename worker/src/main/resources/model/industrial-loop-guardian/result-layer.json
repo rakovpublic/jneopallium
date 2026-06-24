@@ -56,7 +56,13 @@
         "economicBasis": "object produced by EconomicBasisNeuron",
         "safetyEnvelopeSatisfied": "boolean produced by SafetyEnvelopeNeuron",
         "controlBoundary": "object identifying PLC/PID/SIS, OPC UA, MQTT, and Jneopallium responsibilities",
-        "autonomousAction": "false"
+        "autonomousAction": "false",
+        "healthScore": "number 0.0-1.0 for MachineHealthAdvisorySignal",
+        "anomalyProbability": "number 0.0-1.0 for multimodal machine-health output",
+        "faultProbabilities": "object keyed by bearingDamage, cavitation, imbalance, sensorFault",
+        "unknownAnomalyProbability": "number 0.0-1.0",
+        "domainShiftScore": "number 0.0-1.0",
+        "uncertainty": "number 0.0-1.0"
       }
     },
     {
@@ -110,7 +116,13 @@
         "economicBasis": "object produced by EconomicBasisNeuron",
         "safetyEnvelopeSatisfied": "boolean produced by SafetyEnvelopeNeuron",
         "controlBoundary": "object identifying PLC/PID/SIS, OPC UA, MQTT, and Jneopallium responsibilities",
-        "autonomousAction": "false"
+        "autonomousAction": "false",
+        "healthScore": "number 0.0-1.0 for MachineHealthAdvisorySignal",
+        "anomalyProbability": "number 0.0-1.0 for multimodal machine-health output",
+        "faultProbabilities": "object keyed by bearingDamage, cavitation, imbalance, sensorFault",
+        "unknownAnomalyProbability": "number 0.0-1.0",
+        "domainShiftScore": "number 0.0-1.0",
+        "uncertainty": "number 0.0-1.0"
       },
       "autonomousAction": false
     }

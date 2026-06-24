@@ -529,6 +529,7 @@
           "neurons": 4,
           "featureCount": 39,
           "findingHeads": 4,
+          "machineHealthFaults": 5,
           "oscillationFeatureGate": 17
         }
       },

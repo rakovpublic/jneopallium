@@ -43,6 +43,38 @@ def evidence_row(path: Path, root: Path) -> dict[str, Any]:
     }
 
 
+def markdown_cell(item: Any) -> str:
+    return str(item).replace("|", "\\|")
+
+
+def advisory_output_evidence(
+        scenario: str,
+        source: str,
+        output_path: Path,
+        finding: dict[str, Any]) -> dict[str, Any]:
+    evidence = finding.get("evidence") or {}
+    return {
+        "scenario": scenario,
+        "source": source,
+        "outputFile": str(output_path.resolve()),
+        "outputRelativePath": str(output_path.resolve().relative_to(ROOT.resolve()))
+        if output_path.resolve().is_relative_to(ROOT.resolve()) else str(output_path.resolve()),
+        "simulationTime": finding.get("simulationTime"),
+        "asset": finding.get("asset"),
+        "findingCode": finding.get("findingCode"),
+        "finding": finding.get("finding"),
+        "recommendation": finding.get("recommendation", "REVIEW_ADVISORY"),
+        "recommendedAction": finding.get("recommendedAction"),
+        "confidence": finding.get("confidence"),
+        "urgencyHours": finding.get("urgencyHours"),
+        "safetyEnvelopeSatisfied": bool(finding.get("safetyEnvelopeSatisfied", False)),
+        "autonomousAction": bool(finding.get("autonomousAction", False)),
+        "evidenceNeuron": evidence.get("neuron"),
+        "modelId": evidence.get("modelId"),
+        "decisionThreshold": evidence.get("decisionThreshold"),
+    }
+
+
 def write_training_report(model_dir: Path, output_dir: Path) -> Path:
     descriptor = load_json(model_dir / "model-descriptor.json")
     trained = load_json(model_dir / "trained-industrial-loop-guardian-model.json")
@@ -84,7 +116,7 @@ def write_training_report(model_dir: Path, output_dir: Path) -> Path:
         f"- Effective reference multiplier: `{summary['effectiveReferenceMultiplier']}`",
         f"- Effective example count: `{summary['effectiveExampleCount']}`",
         f"- Safety mode: `{descriptor['safetyMode']}`",
-        f"- Tick pacing: `{context['properties'].get('configuration.runoncein')} ms`",
+        f"- Jneopallium runOnceIn: `{context['properties'].get('configuration.runoncein')} ms`",
         "",
         "## Metrics",
         "",
@@ -132,6 +164,7 @@ def write_production_report(run_dir: Path, model_dir: Path, output_dir: Path) ->
     context = load_json(model_dir / "production-context.json")
     scenarios = sorted(path for path in run_dir.iterdir() if path.is_dir())
     scenario_rows: list[dict[str, Any]] = []
+    advisory_rows: list[dict[str, Any]] = []
     evidence_files: list[Path] = []
     finding_counts: dict[str, int] = {}
 
@@ -151,6 +184,13 @@ def write_production_report(run_dir: Path, model_dir: Path, output_dir: Path) ->
         findings = load_jsonl(findings_path)
         model_findings = load_jsonl(model_findings_path)
         heuristic_findings = load_jsonl(heuristic_findings_path)
+        production_source = "trained-model" if model_findings else "heuristic-fallback"
+        for finding in findings:
+            advisory_rows.append(advisory_output_evidence(
+                scenario_dir.name,
+                production_source,
+                findings_path,
+                finding))
         for finding in findings:
             finding_counts[finding["findingCode"]] = finding_counts.get(finding["findingCode"], 0) + 1
         recommendations = [item.get("recommendation", "REVIEW_ADVISORY") for item in findings]
@@ -177,11 +217,21 @@ def write_production_report(run_dir: Path, model_dir: Path, output_dir: Path) ->
             "safetyBlocked": safety_blocked,
         })
 
+    advisory_output_path = output_dir / "production-advisory-output-evidence.json"
+    write_json(advisory_output_path, {
+        "runDir": str(run_dir.resolve()),
+        "advisoryMode": context["properties"].get("industrial.advisory.mode"),
+        "autonomousAction": context["properties"].get("industrial.autonomousAction"),
+        "advisoryCount": len(advisory_rows),
+        "advisories": advisory_rows,
+    })
+    evidence_files.append(advisory_output_path)
     evidence = [evidence_row(path, ROOT) for path in sorted(evidence_files)]
     write_json(output_dir / "production-run-evidence-manifest.json", {
         "runDir": str(run_dir.resolve()),
         "contextRunOnceInMs": context["properties"].get("configuration.runoncein"),
         "evidence": evidence,
+        "advisoryOutputs": advisory_rows,
         "findingCounts": finding_counts,
     })
 
@@ -190,7 +240,8 @@ def write_production_report(run_dir: Path, model_dir: Path, output_dir: Path) ->
         "",
         f"- Run directory: `{run_dir.resolve()}`",
         f"- Production context: `{(model_dir / 'production-context.json').resolve()}`",
-        f"- Tick pacing: `{context['properties'].get('configuration.runoncein')} ms`",
+        f"- Jneopallium runOnceIn: `{context['properties'].get('configuration.runoncein')} ms`",
+        "- FMI replay timestep: `100 ms` (`run_demo.py` uses `dt = 0.1`, independent of `runOnceIn`)",
         f"- Advisory mode: `{context['properties'].get('industrial.advisory.mode')}`",
         f"- Autonomous action: `{context['properties'].get('industrial.autonomousAction')}`",
         f"- Scenarios executed: `{len(scenario_rows)}`",
@@ -226,6 +277,20 @@ def write_production_report(run_dir: Path, model_dir: Path, output_dir: Path) ->
     for row in scenario_rows:
         lines.append(
             f"| `{row['scenario']}` | {row['recommendations']} | {row['annualValue']} | {row['safetyBlocked']} |")
+    lines.extend([
+        "",
+        "## Advisory Output Evidence",
+        "",
+        "| Scenario | Source | Advice output | Confidence | Safety gate | Autonomous action | Recommended action | Output file |",
+        "| --- | --- | --- | ---: | --- | --- | --- | --- |",
+    ])
+    for row in advisory_rows:
+        lines.append(
+            f"| `{row['scenario']}` | `{row['source']}` | `{row['recommendation']}` "
+            f"({row['findingCode']}) | {value(row['confidence'])} | "
+            f"`{str(row['safetyEnvelopeSatisfied']).lower()}` | "
+            f"`{str(row['autonomousAction']).lower()}` | "
+            f"{markdown_cell(row['recommendedAction'])} | `{row['outputRelativePath']}` |")
     lines.extend([
         "",
         "## Finding Counts",

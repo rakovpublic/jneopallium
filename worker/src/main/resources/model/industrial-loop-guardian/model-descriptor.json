@@ -211,42 +211,81 @@
     "codePackage": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial",
     "generator": "train_loop_guardian_model.py",
     "sourceRuntimeClasses": [
+      "com.rakovpublic.jneuropallium.worker.bridge.fmi.FmuEventInput",
+      "com.rakovpublic.jneuropallium.worker.bridge.fmi.FmuMeasurementInput",
       "com.rakovpublic.jneuropallium.worker.bridge.kafka.KafkaAdvisoryOutputAggregator",
       "com.rakovpublic.jneuropallium.worker.bridge.mqtt.MqttEventInput",
       "com.rakovpublic.jneuropallium.worker.bridge.mqtt.MqttMetricInput",
+      "com.rakovpublic.jneuropallium.worker.bridge.plc4x.Plc4xEventInput",
+      "com.rakovpublic.jneuropallium.worker.bridge.plc4x.Plc4xMeasurementInput",
       "com.rakovpublic.jneuropallium.worker.demo.fullrun.runtime.JsonlResultAggregator",
       "com.rakovpublic.jneuropallium.worker.demo.industrialfmi.EquipmentHealthProcessor",
       "com.rakovpublic.jneuropallium.worker.demo.industrialfmi.EquipmentHealthSignal",
       "com.rakovpublic.jneuropallium.worker.demo.industrialfmi.IndustrialFmiController",
       "com.rakovpublic.jneuropallium.worker.demo.industrialfmi.IndustrialFmiNetworkFactory",
       "com.rakovpublic.jneuropallium.worker.demo.industrialfmi.IndustrialFmiResult",
+      "com.rakovpublic.jneuropallium.worker.demo.industrialfmi.runtime.IndustrialLoopGuardianEntryLauncher",
+      "com.rakovpublic.jneuropallium.worker.demo.industrialfmi.runtime.IndustrialLoopGuardianReplayInput",
+      "com.rakovpublic.jneuropallium.worker.demo.industrialfmi.runtime.IndustrialLoopGuardianResultAggregator",
+      "com.rakovpublic.jneuropallium.worker.demo.industrialfmi.runtime.IndustrialPassThroughWeight",
+      "com.rakovpublic.jneuropallium.worker.demo.industrialfmi.runtime.IndustrialSignalChain",
+      "com.rakovpublic.jneuropallium.worker.demo.industrialfmi.runtime.MachineHealthResultNeuron",
       "com.rakovpublic.jneuropallium.worker.input.opcua.OpcUaAlarmInput",
       "com.rakovpublic.jneuropallium.worker.input.opcua.OpcUaMeasurementInput",
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.AcousticFeatureNeuron",
       "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.ActuatorNeuron",
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.AdvisoryGateNeuron",
       "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.DegradationModelNeuron",
       "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.EnergyAccountingNeuron",
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.FaultHypothesisNeuron",
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.IAcousticFeatureNeuron",
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.IAdvisoryGateNeuron",
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.IFaultHypothesisNeuron",
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.IMachineBaselineNeuron",
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.IMachineHealthCorrelationNeuron",
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.IOperatingRegimeNeuron",
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.IVibrationFeatureNeuron",
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.MachineBaselineNeuron",
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.MachineHealthCorrelationNeuron",
       "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.MaintenanceSchedulingNeuron",
       "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.MeasurementValidatorNeuron",
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.OperatingRegimeNeuron",
       "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.OscillationMonitorNeuron",
       "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.SafetyGateNeuron",
       "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.SensorNeuron",
       "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.SetpointOptimiserNeuron",
+      "com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.VibrationFeatureNeuron",
       "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.ActuatorCommandSignal",
       "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.AlarmSignal",
       "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.DegradationSignal",
+      "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.DomainShiftSignal",
       "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.EfficiencySignal",
+      "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.FaultHypothesisSignal",
       "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.InterlockSignal",
+      "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.MachineFeatureSignal",
+      "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.MachineHealthAdvisorySignal",
+      "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.MachineWaveformSignal",
       "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.MaintenanceWindowSignal",
       "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.MeasurementSignal",
+      "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.OperatingRegimeSignal",
       "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.OperatorOverrideSignal",
       "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.SetpointSignal",
+      "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.AcousticFeatureProcessor",
       "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.ActuatorDispatchProcessor",
       "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.ActuatorSafetyGateProcessor",
       "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.DegradationSchedulingProcessor",
+      "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.DomainShiftContextProcessor",
       "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.EfficiencyOptimiserProcessor",
+      "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.FaultHypothesisProcessor",
+      "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.MachineBaselineProcessor",
+      "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.MachineHealthAdvisoryGateProcessor",
+      "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.MachineHealthCorrelationProcessor",
       "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.MaintenanceWindowSchedulingProcessor",
       "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.MeasurementOscillationProcessor",
-      "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.MeasurementValidationProcessor"
+      "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.MeasurementValidationProcessor",
+      "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.OperatingRegimeContextProcessor",
+      "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.OperatingRegimeProcessor",
+      "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.VibrationFeatureProcessor"
     ]
   },
   "networkConfig": {
@@ -276,15 +315,60 @@
       "economicBasis": "object produced by EconomicBasisNeuron",
       "safetyEnvelopeSatisfied": "boolean produced by SafetyEnvelopeNeuron",
       "controlBoundary": "object identifying PLC/PID/SIS, OPC UA, MQTT, and Jneopallium responsibilities",
-      "autonomousAction": "false"
+      "autonomousAction": "false",
+      "healthScore": "number 0.0-1.0 for MachineHealthAdvisorySignal",
+      "anomalyProbability": "number 0.0-1.0 for multimodal machine-health output",
+      "faultProbabilities": "object keyed by bearingDamage, cavitation, imbalance, sensorFault",
+      "unknownAnomalyProbability": "number 0.0-1.0",
+      "domainShiftScore": "number 0.0-1.0",
+      "uncertainty": "number 0.0-1.0"
     },
     "neuronOwnedLogic": [
+      "AcousticFeatureNeuron",
+      "VibrationFeatureNeuron",
+      "OperatingRegimeNeuron",
+      "MachineBaselineNeuron",
+      "FaultHypothesisNeuron",
+      "MachineHealthCorrelationNeuron",
+      "AdvisoryGateNeuron",
       "PumpHealthAndEfficiencyNeuron",
       "OscillationDiagnosisNeuron",
       "SensorFaultDiscriminationNeuron",
       "EconomicBasisNeuron",
       "SafetyEnvelopeNeuron"
-    ]
+    ],
+    "machineHealthRuntime": {
+      "status": "JAVA_RUNTIME_IMPLEMENTED",
+      "role": "read-only/shadow/advisory condition-monitoring subsystem",
+      "trainingSources": [
+        "MIMII",
+        "DCASE_MACHINE_CONDITION",
+        "MIMII_DUE_DG",
+        "PADERBORN_BEARING_DATA_CENTER",
+        "JNEOPALLIUM_FMI_PUMP_SIMULATOR",
+        "AUTHORIZED_SITE_TELEMETRY"
+      ],
+      "featureFamilies": [
+        "acousticRms",
+        "acousticCrestFactor",
+        "acousticSpectralCentroidHz",
+        "vibrationRms",
+        "vibrationEnvelopeEnergy",
+        "vibrationCrestFactor",
+        "speedNormalizedScore",
+        "operatingRegime",
+        "domainShiftScore",
+        "crossSensorConsistency"
+      ],
+      "faultOutputs": [
+        "bearingDamage",
+        "cavitation",
+        "imbalance",
+        "sensorFault",
+        "unknownAnomaly"
+      ],
+      "safetyBoundary": "MachineHealthAdvisorySignal never writes actuator commands; InterlockNeuron, SafetyGateNeuron, and OperatorOverrideProcessor remain authoritative."
+    }
   },
   "layers": [
     {
@@ -320,6 +404,7 @@
         "neurons": 4,
         "featureCount": 39,
         "findingHeads": 4,
+        "machineHealthFaults": 5,
         "oscillationFeatureGate": 17
       }
     },
@@ -383,6 +468,30 @@
     "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.ActuatorCommandSignal": {
       "epoch": "1",
       "loop": "1"
+    },
+    "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.MachineWaveformSignal": {
+      "epoch": "1",
+      "loop": "1"
+    },
+    "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.MachineFeatureSignal": {
+      "epoch": "2",
+      "loop": "2"
+    },
+    "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.OperatingRegimeSignal": {
+      "epoch": "3",
+      "loop": "2"
+    },
+    "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.DomainShiftSignal": {
+      "epoch": "4",
+      "loop": "2"
+    },
+    "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.FaultHypothesisSignal": {
+      "epoch": "4",
+      "loop": "2"
+    },
+    "com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.MachineHealthAdvisorySignal": {
+      "epoch": "5",
+      "loop": "2"
     }
   },
   "totalLayers": 5,
@@ -392,6 +501,7 @@
   "notes": [
     "Layer 0 is the plant telemetry/event-source boundary.",
     "Layer 2 embeds trained diagnostic finding heads from the bundled reference skid corpus.",
+    "Java machine-health runtime classes add acoustic/vibration feature extraction, domain-shift scoring, fault hypotheses, and advisory-only health output.",
     "Layer 3 encapsulates economic basis, bounded recommendations, and safety-envelope gating in neurons.",
     "The result layer is advisory-only; PLC/SIS interlocks and operator overrides remain authoritative.",
     "Use external site historian, CMMS, energy meter, and maintenance-ticket validation before bounded autonomous optimization."

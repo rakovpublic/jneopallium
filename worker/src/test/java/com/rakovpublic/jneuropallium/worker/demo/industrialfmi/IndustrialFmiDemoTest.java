@@ -8,21 +8,44 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rakovpublic.jneuropallium.worker.bridge.common.BridgeSafetyMode;
 import com.rakovpublic.jneuropallium.worker.bridge.mqtt.MqttBridgeConfig;
 import com.rakovpublic.jneuropallium.worker.bridge.mqtt.MqttSignalMapper;
+import com.rakovpublic.jneuropallium.worker.demo.industrialfmi.runtime.IndustrialLoopGuardianEntryLauncher;
 import com.rakovpublic.jneuropallium.worker.input.opcua.OpcUaMeasurementInput;
 import com.rakovpublic.jneuropallium.worker.net.layers.IResult;
+import com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.AcousticFeatureNeuron;
+import com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.AdvisoryGateNeuron;
+import com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.FaultHypothesisNeuron;
+import com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.MachineBaselineNeuron;
+import com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.MachineHealthCorrelationNeuron;
+import com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.OperatingRegimeNeuron;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.Quality;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.SafetyMode;
+import com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.VibrationFeatureNeuron;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.opcua.MiloOpcUaClientService;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.opcua.OpcUaBridgeConfig;
 import com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.opcua.OpcUaNodeBinding;
 import com.rakovpublic.jneuropallium.worker.net.signals.IInputSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.ActuatorCommandSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.DomainShiftSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.FaultHypothesisSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.InterlockSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.MachineFeatureSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.MachineHealthAdvisorySignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.MachineWaveformSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.MeasurementSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.OperatorOverrideSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.OperatingRegimeSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.SetpointSignal;
 import com.rakovpublic.jneuropallium.worker.output.opcua.OpcUaCommandOutputAggregator;
 import com.rakovpublic.jneuropallium.worker.output.opcua.OpcUaTransparencyLogOutput;
+import com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.AcousticFeatureProcessor;
+import com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.DomainShiftContextProcessor;
+import com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.FaultHypothesisProcessor;
+import com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.MachineBaselineProcessor;
+import com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.MachineHealthAdvisoryGateProcessor;
+import com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.MachineHealthCorrelationProcessor;
+import com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.OperatingRegimeContextProcessor;
+import com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial.VibrationFeatureProcessor;
 import org.eclipse.milo.opcua.stack.core.types.builtin.DataValue;
 import org.eclipse.milo.opcua.stack.core.types.builtin.NodeId;
 import org.eclipse.milo.opcua.stack.core.types.builtin.StatusCode;
@@ -89,6 +112,56 @@ class IndustrialFmiDemoTest {
         SetpointSignal pump = (SetpointSignal) advisories.get(0).getResult();
         assertEquals(IndustrialFmiTags.ADVISORY_PUMP_SPEED, pump.getTag());
         assertTrue(pump.getSetpoint() <= 53.0, "slow-loop recommendation must be bounded");
+        MachineHealthAdvisorySignal health = (MachineHealthAdvisorySignal) advisories.get(4).getResult();
+        assertEquals("ADVISORY", health.getMode());
+        assertFalse(health.isAutonomousAction());
+        assertTrue(health.getFaultProbabilities().containsKey(FaultHypothesisNeuron.BEARING_DAMAGE));
+    }
+
+    @Test
+    void multimodalMachineHealthPipelineUsesInterfaceProcessorsAndGatesAdvisoryOnly() {
+        AcousticFeatureNeuron acousticNeuron = new AcousticFeatureNeuron();
+        VibrationFeatureNeuron vibrationNeuron = new VibrationFeatureNeuron();
+        acousticNeuron.seedBaseline("P-101", 0.04);
+        vibrationNeuron.seedBaseline("P-101", 0.03);
+
+        MachineFeatureSignal acoustic = (MachineFeatureSignal) new AcousticFeatureProcessor()
+                .process(new MachineWaveformSignal("P-101", MachineWaveformSignal.CHANNEL_ACOUSTIC,
+                        waveform(128, 0.95, 7.0), 16_000.0, 1800.0, 1L), acousticNeuron)
+                .get(0);
+        MachineFeatureSignal vibration = (MachineFeatureSignal) new VibrationFeatureProcessor()
+                .process(new MachineWaveformSignal("P-101", MachineWaveformSignal.CHANNEL_VIBRATION,
+                        waveform(128, 0.85, 3.0), 4_000.0, 1800.0, 1L), vibrationNeuron)
+                .get(0);
+
+        MachineBaselineNeuron baselineNeuron = new MachineBaselineNeuron();
+        baselineNeuron.seedBaseline("P-101", MachineWaveformSignal.CHANNEL_ACOUSTIC, 0.04, 400.0, 0.02);
+        baselineNeuron.seedBaseline("P-101", MachineWaveformSignal.CHANNEL_VIBRATION, 0.03, 150.0, 0.02);
+        List<ISignal> shifts = new MachineBaselineProcessor().process(vibration, baselineNeuron);
+        DomainShiftSignal shift = (DomainShiftSignal) shifts.get(0);
+
+        FaultHypothesisNeuron faultNeuron = new FaultHypothesisNeuron();
+        OperatingRegimeSignal regime = new OperatingRegimeNeuron()
+                .classify("P-101", 1800.0, 0.82, 0.22, 0.24, 78.0, 0.74, 1L);
+        new OperatingRegimeContextProcessor().process(regime, faultNeuron);
+        new DomainShiftContextProcessor().process(shift, faultNeuron);
+        new FaultHypothesisProcessor().process(acoustic, faultNeuron);
+        FaultHypothesisSignal hypothesis = (FaultHypothesisSignal) new FaultHypothesisProcessor()
+                .process(vibration, faultNeuron)
+                .get(0);
+
+        MachineHealthAdvisorySignal advisory = (MachineHealthAdvisorySignal) new MachineHealthCorrelationProcessor()
+                .process(hypothesis, new MachineHealthCorrelationNeuron())
+                .get(0);
+        MachineHealthAdvisorySignal gated = (MachineHealthAdvisorySignal) new MachineHealthAdvisoryGateProcessor()
+                .process(advisory, new AdvisoryGateNeuron())
+                .get(0);
+
+        assertEquals("ADVISORY", gated.getMode());
+        assertFalse(gated.isAutonomousAction());
+        assertTrue(gated.getAnomalyProbability() > 0.35);
+        assertTrue(gated.getFaultProbabilities().get(FaultHypothesisNeuron.CAVITATION) > 0.25);
+        assertTrue(gated.getResultObject().containsKey("domainShiftScore"));
     }
 
     @Test
@@ -166,7 +239,7 @@ class IndustrialFmiDemoTest {
         assertEquals("false", context.path("properties").path("configuration.isteacherstudying").asText());
         assertEquals("0", context.path("properties").path("configuration.discriminatorsAmount").asText());
         assertEquals("true", context.path("properties").path("configuration.infiniteRun").asText());
-        assertEquals("1000", context.path("properties").path("configuration.runoncein").asText());
+        assertEquals("1", context.path("properties").path("configuration.runoncein").asText());
         assertEquals("diagnosis,economic-basis,safety-envelope,bounded-recommendation",
                 context.path("properties").path("industrial.neuronOwnedLogic").asText());
         assertTrue(descriptor.path("networkConfig").path("neuronOwnedLogic").toString().contains("EconomicBasisNeuron"));
@@ -208,6 +281,25 @@ class IndustrialFmiDemoTest {
         assertTrue(audit.contains("INTERLOCK_HOLD"));
     }
 
+    @Test
+    void pumpWearEntryWorkflowUsesIInitInputAndReportsDelay() throws Exception {
+        Path runDir = tempDir.resolve("entry-pump-wear");
+        IndustrialLoopGuardianEntryLauncher.IndustrialRunManifest manifest =
+                IndustrialLoopGuardianEntryLauncher.runPumpWear(runDir, 80, 1L);
+
+        assertEquals("PASS", manifest.status, Files.readString(Path.of(manifest.entryLogPath)));
+        assertEquals(1L, manifest.runOnceInMs);
+        assertNotNull(manifest.pumpWearFaultDetectionDelayMs);
+        assertTrue(manifest.pumpWearFaultDetectionDelayMs >= 0);
+        assertTrue(manifest.pumpWearFaultDetectionDelayMs < 50);
+        assertTrue(manifest.advisoryCount > 0);
+
+        JsonNode summary = MAPPER.readTree(Path.of(manifest.summaryPath).toFile());
+        assertEquals("Entry local -> IInitInput -> industrial layers -> IOutputAggregator",
+                summary.path("workflow").asText());
+        assertTrue(summary.path("firstFaultAdvice").path("evidence").isArray());
+    }
+
     private static ActuatorCommandSignal command(List<IResult> results, String tag) {
         return results.stream()
                 .map(IResult::getResult)
@@ -216,6 +308,16 @@ class IndustrialFmiDemoTest {
                 .filter(signal -> tag.equals(signal.getTag()))
                 .findFirst()
                 .orElseThrow();
+    }
+
+    private static double[] waveform(int samples, double amplitude, double cycles) {
+        double[] out = new double[samples];
+        for (int i = 0; i < samples; i++) {
+            double carrier = amplitude * Math.sin(2.0 * Math.PI * cycles * i / samples);
+            double impulse = i % 17 == 0 ? amplitude * 0.65 : 0.0;
+            out[i] = carrier + impulse;
+        }
+        return out;
     }
 
     private static JsonNode resourceJson(String resource) throws Exception {

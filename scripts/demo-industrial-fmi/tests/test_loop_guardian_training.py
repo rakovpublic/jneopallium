@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 import train_loop_guardian_model as trainer  # noqa: E402
+import generate_run_reports as reports  # noqa: E402
 from run_demo import run_scenario  # noqa: E402
 
 
@@ -56,7 +57,7 @@ class LoopGuardianTrainingTest(unittest.TestCase):
             self.assertEqual("false", context["properties"]["configuration.isteacherstudying"])
             self.assertEqual("0", context["properties"]["configuration.discriminatorsAmount"])
             self.assertEqual("true", context["properties"]["configuration.infiniteRun"])
-            self.assertEqual("1000", context["properties"]["configuration.runoncein"])
+            self.assertEqual("1", context["properties"]["configuration.runoncein"])
             self.assertEqual("diagnosis,economic-basis,safety-envelope,bounded-recommendation",
                              context["properties"]["industrial.neuronOwnedLogic"])
             self.assertIn("configuration.neuronnet.classes", context["properties"])
@@ -86,6 +87,27 @@ class LoopGuardianTrainingTest(unittest.TestCase):
             self.assertFalse(finding["autonomousAction"])
             self.assertTrue((Path(tmp) / "pump-wear" / "model_advisory_findings.jsonl").exists())
             self.assertTrue((Path(tmp) / "pump-wear" / "heuristic_advisory_findings.jsonl").exists())
+
+    def test_production_report_contains_advisory_output_evidence(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            run_scenario("pump-wear", root)
+            report_dir = root / "reports"
+            report_dir.mkdir()
+
+            report_path = reports.write_production_report(root, reports.DEFAULT_MODEL_DIR, report_dir)
+
+            advice_evidence = json.loads(
+                (report_dir / "production-advisory-output-evidence.json").read_text(encoding="utf-8"))
+            manifest = json.loads(
+                (report_dir / "production-run-evidence-manifest.json").read_text(encoding="utf-8"))
+            report_text = report_path.read_text(encoding="utf-8")
+
+            self.assertEqual(2, advice_evidence["advisoryCount"])
+            self.assertIn("advisoryOutputs", manifest)
+            self.assertIn("Advisory Output Evidence", report_text)
+            self.assertIn("SCHEDULE_PUMP_INSPECTION", report_text)
+            self.assertIn("advisory_findings.jsonl", advice_evidence["advisories"][0]["outputRelativePath"])
 
 
 if __name__ == "__main__":

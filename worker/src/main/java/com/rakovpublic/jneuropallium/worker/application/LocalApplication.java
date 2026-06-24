@@ -116,6 +116,14 @@ public class LocalApplication implements IApplication {
                     String algoType = context.getProperty("configuration.studyingalgotype");
                     ObjectMapper mapper = new ObjectMapper();
                     for (; currentRun < maxRun || isInfinite; currentRun++) {
+                        if (currentRun > 0 && runOnceIn > 0l) {
+                            try {
+                                Thread.sleep(runOnceIn);
+                            } catch (InterruptedException e) {
+                                Thread.currentThread().interrupt();
+                                logger.error("thread error", e);
+                            }
+                        }
                         //Supervised learning
 
                         if (algoType != null && resultComparingStrategy != null) {

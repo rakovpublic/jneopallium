@@ -11,6 +11,7 @@ ThermalSkid FMI 2.0 Co-Simulation FMU
      -> MQTT IIoT telemetry topics
   -> Jneopallium Industrial Loop Guardian
      -> multi-loop supervisory diagnosis
+     -> Java machine-health feature extraction, fault hypotheses, and domain-shift scoring
      -> oscillation, valve-stiction, and sensor-fault discrimination
      -> pump health, energy, economic basis, and maintenance planning
      -> bounded setpoint recommendations, safety gate, and audit outputs
@@ -52,6 +53,26 @@ python scripts/demo-industrial-fmi/train_loop_guardian_model.py \
 The trained model package is written to
 `worker/src/main/resources/model/industrial-loop-guardian/`. Production launch
 details are in `docs/demo-industrial-fmi-production-deployment.md`.
+
+Run the real Jneopallium `Entry local` machine-health workflow with a Java
+`IInitInput` source and `configuration.runoncein=1`:
+
+```powershell
+$env:MAVEN_OPTS='-Xms32m -Xmx768m -XX:ReservedCodeCacheSize=96m -XX:+UseSerialGC'
+& 'C:\Program Files\JetBrains\IntelliJ IDEA 2025.3.1\plugins\maven\lib\maven3\bin\mvn.cmd' `
+  -pl worker -DskipTests '-Dmaven.compiler.useIncrementalCompilation=false' `
+  test-compile dependency:build-classpath '-Dmdep.outputFile=target\industrial-cp.txt'
+$cp = "worker\target\test-classes;worker\target\classes;" + (Get-Content worker\target\industrial-cp.txt -Raw)
+& 'C:\Program Files\Java\jdk-17.0.4.1\bin\java.exe' -Xms32m -Xmx768m -XX:+UseSerialGC `
+  -cp $cp `
+  com.rakovpublic.jneuropallium.worker.demo.industrialfmi.runtime.IndustrialLoopGuardianEntryLauncher `
+  worker\target\industrial-loop-guardian-entry 80 1
+```
+
+The launcher writes `advisory-output.jsonl`, `input-audit.jsonl`, and
+`advisory-summary.json`. The local replay input is a Java `IInitInput`; site
+deployments swap it for the existing OPC UA, MQTT, FMI, or PLC4X `IInitInput`
+bridges.
 
 Generate training and production run reports after training and replay:
 
@@ -190,6 +211,12 @@ jneopallium/demo/skid/advisory/maintenance-priority
 jneopallium/demo/skid/advisory/predicted-bearing-risk
 jneopallium/demo/skid/advisory/energy-mode
 ```
+
+The Java runtime also supports `MachineHealthAdvisorySignal` for a
+structured advisory payload containing `healthScore`,
+`anomalyProbability`, `faultProbabilities`, `domainShiftScore`,
+`uncertainty`, and evidence. This signal is read-only/advisory and is
+kept outside the OPC UA actuator command path.
 
 ## Scenarios
 

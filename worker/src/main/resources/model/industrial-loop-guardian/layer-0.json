@@ -20,6 +20,11 @@
       "ambient_temperature",
       "advisory telemetry"
     ],
+    "WAVEFORM_TELEMETRY": [
+      "audio waveform",
+      "vibration waveform",
+      "motor-current waveform"
+    ],
     "FMI_REPLAY": [
       "process_temperature",
       "fault_pump_wear",

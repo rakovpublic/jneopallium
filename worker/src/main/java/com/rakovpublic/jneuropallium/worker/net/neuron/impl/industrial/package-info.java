@@ -8,7 +8,9 @@
  * alarm aggregation, plant-mode state machine), process / degradation
  * / product-quality models, MPC and campaign planning, safety gate /
  * actuator with operator override, hard-wired interlocks, oscillation
- * monitor with graduated interventions, and energy accounting.
+ * monitor with graduated interventions, energy accounting, and Java
+ * machine-health advisory receptors for acoustic/vibration features,
+ * domain shift, fault hypotheses, and advisory-only health output.
  *
  * <p>Architectural invariants enforced at the package level:
  * <ul>
@@ -23,6 +25,10 @@
  *   <li>Per-loop deployment mode is
  *       {@code SHADOW / ADVISORY / AUTONOMOUS}; the SafetyGate
  *       downgrades {@code execute} accordingly (spec §7).</li>
+ *   <li>Machine-health neurons emit
+ *       {@link com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.MachineHealthAdvisorySignal}
+ *       and never write actuator commands; deterministic safety and
+ *       operator authority remain outside the learned path.</li>
  * </ul>
  *
  * @see com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial

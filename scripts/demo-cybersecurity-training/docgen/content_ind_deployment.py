@@ -143,7 +143,7 @@ _EN = [
       ["`configuration.isteacherstudying`", "`false`"],
       ["`configuration.discriminatorsAmount`", "`0`"],
       ["`configuration.infiniteRun`", "`true`"],
-      ["`configuration.runoncein`", "`1000` ms (one advisory tick per second)"],
+      ["`configuration.runoncein`", "`1` ms (one advisory tick per millisecond)"],
       ["`configuration.processing.frequency.map`", "fast tags every loop; degradation/energy every 10; maintenance every 60"],
       ["`configuration.outputAggregator`", "`JsonlResultAggregator` (swap for your SIEM/Kafka sink)"],
       ["`industrial.autonomousAction`", "`false`"],
@@ -153,7 +153,7 @@ _EN = [
      [3.4, 3.4]),
     ("callout", "The continuous advisory loop",
      "Together, `isteacherstudying=false`, `discriminatorsAmount=0`, and `infiniteRun=true` put the worker "
-     "into its continuous advisory loop. `runoncein=1000` paces it to one advisory tick per second, before "
+     "into its continuous advisory loop. `runoncein=1` paces it to one advisory tick per millisecond, before "
      "the per-signal frequency map fans fast and slow signals out at their own cadences.", "success"),
 
     ("h1", "Configure event sources and streaming input", "8"),
@@ -282,7 +282,7 @@ _EN = [
      "configuration.isteacherstudying = false\n"
      "configuration.discriminatorsAmount = 0\n"
      "configuration.infiniteRun       = true\n"
-     "configuration.runoncein         = 1000\n"
+     "configuration.runoncein         = 1\n"
      "industrial.autonomousAction     = false"),
     ("spacer", 8),
     ("pi", "Jneopallium Industrial Loop Guardian · Deployment Guide. Consumes the network produced by the "
@@ -424,7 +424,7 @@ _UK = [
       ["`configuration.isteacherstudying`", "`false`"],
       ["`configuration.discriminatorsAmount`", "`0`"],
       ["`configuration.infiniteRun`", "`true`"],
-      ["`configuration.runoncein`", "`1000` мс (один рекомендаційний такт на секунду)"],
+      ["`configuration.runoncein`", "`1` мс (один рекомендаційний такт на мілісекунду)"],
       ["`configuration.processing.frequency.map`", "швидкі теги щоцикл; деградація/енергія кожні 10; обслуговування кожні 60"],
       ["`configuration.outputAggregator`", "`JsonlResultAggregator` (замініть на ваш приймач SIEM/Kafka)"],
       ["`industrial.autonomousAction`", "`false`"],
@@ -434,7 +434,7 @@ _UK = [
      [3.4, 3.4]),
     ("callout", "Безперервний рекомендаційний цикл",
      "Разом `isteacherstudying=false`, `discriminatorsAmount=0` та `infiniteRun=true` переводять worker у "
-     "безперервний рекомендаційний цикл. `runoncein=1000` задає темп одного такту на секунду, перш ніж "
+     "безперервний рекомендаційний цикл. `runoncein=1` задає темп одного такту на мілісекунду, перш ніж "
      "мапа частот фанить швидкі й повільні сигнали за їхніми кадансами.", "success"),
 
     ("h1", "Налаштуйте джерела подій і потоковий вхід", "8"),
@@ -567,7 +567,7 @@ _UK = [
      "configuration.isteacherstudying = false\n"
      "configuration.discriminatorsAmount = 0\n"
      "configuration.infiniteRun       = true\n"
-     "configuration.runoncein         = 1000\n"
+     "configuration.runoncein         = 1\n"
      "industrial.autonomousAction     = false"),
     ("spacer", 8),
     ("pi", "Jneopallium Industrial Loop Guardian · Посібник з розгортання. Споживає мережу, створену "

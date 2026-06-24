@@ -21,6 +21,20 @@ INJECT_INHIBITION / BREAK_CONNECTION / QUARANTINE_NEURON`) so the
 network can unilaterally damp a misbehaving cascade without permanent
 reconfiguration.
 
+The same Java module now also includes a read-only multimodal
+machine-health path for acoustic and vibration condition monitoring.
+It converts raw waveform frames into compressed features, estimates
+operating regime and domain shift, builds fault hypotheses, and emits
+`MachineHealthAdvisorySignal`. That path is advisory-only and never
+writes actuator commands.
+
+The machine-health path can be exercised through the real worker entrypoint:
+`IndustrialLoopGuardianEntryLauncher` writes numeric layer metadata, configures
+`configuration.input.inputs` with a Java `IInitInput`, and starts
+`Entry local`. The local replay input is only a deterministic Java source for
+evidence; production swaps in the OPC UA, MQTT, FMI, or PLC4X `IInitInput`
+bridges.
+
 ## Design Principles
 
 1. **Typed timescales.** Measurements and actuator commands run on
@@ -67,6 +81,12 @@ Package: `com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial`.
 | `BatchStateSignal` | 2/2 | batch id, `BatchPhase`, key metrics |
 | `OperatorOverrideSignal` | 1/1 | tag, `OverrideKind`, operator, reason, manual value |
 | `MaintenanceWindowSignal` | 2/10 | asset id, scheduled tick, duration |
+| `MachineWaveformSignal` | 1/1 | asset id, channel, waveform samples, sample rate, RPM |
+| `MachineFeatureSignal` | 2/2 | acoustic/vibration features, anomaly score, spectral metrics |
+| `OperatingRegimeSignal` | 2/3 | RPM, load, flow, pressure, temperature, regime |
+| `DomainShiftSignal` | 2/4 | baseline distance, uncertainty, evidence |
+| `FaultHypothesisSignal` | 2/4 | fault probabilities, unknown anomaly, uncertainty |
+| `MachineHealthAdvisorySignal` | 2/5 | health score, anomaly, domain shift, evidence, action |
 
 ## Neurons
 
@@ -101,6 +121,18 @@ processors never depend on the concrete type.
 - `DegradationModelNeuron` / `IDegradationModelNeuron` — per-asset RUL.
 - `ProductQualityModelNeuron` / `IProductQualityModelNeuron` — target
   / tolerance compliance.
+- `AcousticFeatureNeuron` / `IAcousticFeatureNeuron` — acoustic RMS,
+  crest, spectral centroid, and anomaly features.
+- `VibrationFeatureNeuron` / `IVibrationFeatureNeuron` — vibration RMS,
+  envelope, crest, and speed-normalised anomaly features.
+- `OperatingRegimeNeuron` / `IOperatingRegimeNeuron` — RPM/load/flow/
+  pressure context for avoiding false positives across regimes.
+- `MachineBaselineNeuron` / `IMachineBaselineNeuron` — site baseline
+  adaptation and domain-shift scoring.
+- `FaultHypothesisNeuron` / `IFaultHypothesisNeuron` — bearing damage,
+  cavitation, imbalance, sensor-fault, and unknown-anomaly probabilities.
+- `MachineHealthCorrelationNeuron` / `IMachineHealthCorrelationNeuron`
+  — converts fault hypotheses into advisory health-score outputs.
 
 ### Layer 4 — planning
 - `MPCPlanningNeuron` / `IMPCPlanningNeuron` — discrete candidate-move
@@ -123,6 +155,8 @@ processors never depend on the concrete type.
   lag-1 severity, mapped to `OscillationIntervention` bands.
 - `EnergyAccountingNeuron` / `IEnergyAccountingNeuron` — production-
   per-kWh efficiency with baseline anchoring.
+- `AdvisoryGateNeuron` / `IAdvisoryGateNeuron` — keeps machine-health
+  output in ADVISORY mode and gates high-domain-shift recommendations.
 
 ## Processors
 
@@ -140,6 +174,12 @@ Package: `com.rakovpublic.jneuropallium.worker.signalprocessor.impl.industrial`.
 | `BatchStateSignal` | `BatchModeProcessor` |
 | `OperatorOverrideSignal` | `OperatorOverrideProcessor` |
 | `MaintenanceWindowSignal` | `MaintenanceWindowSchedulingProcessor` |
+| `MachineWaveformSignal` | `AcousticFeatureProcessor`, `VibrationFeatureProcessor` |
+| `MachineFeatureSignal` | `MachineBaselineProcessor`, `FaultHypothesisProcessor` |
+| `DomainShiftSignal` | `DomainShiftContextProcessor` |
+| `OperatingRegimeSignal` | `OperatingRegimeContextProcessor` |
+| `FaultHypothesisSignal` | `MachineHealthCorrelationProcessor` |
+| `MachineHealthAdvisorySignal` | `MachineHealthAdvisoryGateProcessor` |
 
 Every processor's `getNeuronClass()` returns an interface —
 `IndustrialModuleTest::processors_allInterfaceTyped` asserts this.
