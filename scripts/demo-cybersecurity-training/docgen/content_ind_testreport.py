@@ -37,6 +37,7 @@ _EN = [
       "Layer 2 — Scenario behaviour (nine runs)",
       "Layer 3 — Acceptance checks (the safety boundary)",
       "Layer 4 — Production-scale evidence and the deployable network",
+      "Layer 5 — The machine-health condition-monitoring subsystem",
       "The honest limitations (read this carefully)",
       "Overall verdict",
       "Glossary"]),
@@ -184,7 +185,24 @@ _EN = [
           "safety gate are embedded directly, so **the artifact that was tested is the artifact that "
           "deploys**."),
 
-    ("h1", "The honest limitations (read this carefully)", "10"),
+    ("h1", "Layer 5 — The machine-health condition-monitoring subsystem", "10"),
+    ("p", "The updated model adds a multimodal **machine-health** (acoustic + vibration) condition-"
+          "monitoring subsystem, implemented and verified as a Java runtime layer "
+          "(`status: JAVA_RUNTIME_IMPLEMENTED`). It is read-only / shadow / advisory and is covered by the "
+          "module's Java test suite alongside the maintenance-and-energy network."),
+    ("table", ["Aspect", "What it provides"],
+     [["Feature families", "acoustic RMS / crest / spectral centroid; vibration RMS / envelope / crest; speed-normalised score; operating regime; domain-shift; cross-sensor consistency"],
+      ["Fault outputs", "bearing damage, cavitation, imbalance, sensor fault, unknown anomaly"],
+      ["Advisory shape", "health score, anomaly probability, per-fault probabilities, unknown-anomaly, domain-shift, uncertainty"],
+      ["Safety boundary", "`MachineHealthAdvisorySignal` never writes actuator commands; interlocks / safety gate / operator override remain authoritative"]],
+     [1.9, 4.9]),
+    ("callout", "Machine-health is engineered, not yet field-validated",
+     "The condition-monitoring runtime is implemented, wired, and unit-tested. But its real-world detection "
+     "quality must be earned on the public benchmarks it targets (MIMII, DCASE, Paderborn) and on "
+     "authorised site telemetry — which is exactly why its domain-shift and uncertainty outputs exist, and "
+     "why it stays read-only / shadow until that validation is recorded.", "warning"),
+
+    ("h1", "The honest limitations (read this carefully)", "11"),
     ("num", "**The reference corpus is synthetic and deterministic.** It is a physically-coupled skid "
             "simulation, built so each fault is separable. Near-perfect scores confirm the pipeline and the "
             "diagnostic separation — not real-world accuracy."),
@@ -199,7 +217,7 @@ _EN = [
      "trusted near a plant. The honesty is part of the product: every advisory carries its economic basis "
      "and safety-envelope result, and every claim in this report carries its scope.", "info"),
 
-    ("h1", "Overall verdict", "11"),
+    ("h1", "Overall verdict", "12"),
     ("p", "**The Industrial Loop Guardian passes every test at every level on the reference skid corpus.** "
           "The four diagnostic heads separate their faults with honest, well-behaved confidence; the "
           "running system diagnoses correctly across nine scenarios while the deterministic controls keep "
@@ -210,7 +228,7 @@ _EN = [
           "field-accuracy claim. The architecture, the safety boundary, and the evidence discipline needed "
           "for that stage are already in place."),
 
-    ("h1", "Glossary", "12"),
+    ("h1", "Glossary", "13"),
     ("table", ["Term", "Meaning"],
      [["Finding head", "A trained detector for one fault type (e.g. pump wear)"],
       ["Multi-label", "Several independent yes/no findings can be true at once"],
@@ -255,6 +273,7 @@ _UK = [
       "Рівень 2 — Поведінка за сценаріями (дев'ять запусків)",
       "Рівень 3 — Приймальні перевірки (межа безпеки)",
       "Рівень 4 — Докази масштабу та готова до розгортання мережа",
+      "Рівень 5 — Підсистема моніторингу стану машини",
       "Чесні обмеження (прочитайте уважно)",
       "Загальний вердикт",
       "Словник"]),
@@ -402,7 +421,25 @@ _UK = [
           "фіксований запобіжник вбудовані прямо, тож **протестований артефакт — це той самий артефакт, що "
           "розгортається**."),
 
-    ("h1", "Чесні обмеження (прочитайте уважно)", "10"),
+    ("h1", "Рівень 5 — Підсистема моніторингу стану машини", "10"),
+    ("p", "Оновлена модель додає мультимодальну підсистему **здоров'я машини** (акустика + вібрація) "
+          "моніторингу стану, реалізовану й перевірену як рівень часу виконання Java "
+          "(`status: JAVA_RUNTIME_IMPLEMENTED`). Вона лише для читання / тінь / рекомендації й охоплена "
+          "набором тестів Java модуля поряд із мережею обслуговування та енергії."),
+    ("table", ["Аспект", "Що надає"],
+     [["Родини ознак", "акустичні СКЗ / крест / спектральний центроїд; вібраційні СКЗ / обвідна / крест; нормалізований за швидкістю бал; робочий режим; зсув домену; узгодженість між датчиками"],
+      ["Виходи несправностей", "пошкодження підшипника, кавітація, дисбаланс, несправність датчика, невідома аномалія"],
+      ["Форма рекомендації", "бал здоров'я, ймовірність аномалії, ймовірності несправностей, невідома аномалія, зсув домену, невпевненість"],
+      ["Межа безпеки", "`MachineHealthAdvisorySignal` ніколи не записує команди; інтерлоки / запобіжник / перевизначення оператора лишаються авторитетними"]],
+     [1.9, 4.9]),
+    ("callout", "Здоров'я машини реалізоване, але ще не валідоване в полі",
+     "Середовище моніторингу стану реалізоване, з'єднане й покрите модульними тестами. Але його реальну "
+     "якість виявлення треба заслужити на публічних бенчмарках, на які воно націлене (MIMII, DCASE, "
+     "Paderborn), і на авторизованій телеметрії майданчика — саме тому існують його виходи зсуву домену й "
+     "невпевненості, і саме тому воно лишається лише для читання / тінь, доки ця валідація не зафіксована.",
+     "warning"),
+
+    ("h1", "Чесні обмеження (прочитайте уважно)", "11"),
     ("num", "**Еталонний корпус синтетичний і детермінований.** Це фізично зв'язана симуляція скіда, "
             "побудована так, щоб кожна несправність була роздільною. Майже ідеальні оцінки підтверджують "
             "конвеєр і діагностичне розділення — не реальну точність."),
@@ -418,7 +455,7 @@ _UK = [
      "поряд із заводом. Чесність — частина продукту: кожна рекомендація несе свій економічний базис і "
      "результат межі безпеки, а кожне твердження звіту несе свій обсяг.", "info"),
 
-    ("h1", "Загальний вердикт", "11"),
+    ("h1", "Загальний вердикт", "12"),
     ("p", "**Industrial Loop Guardian проходить кожен тест на кожному рівні на еталонному корпусі скіда.** "
           "Чотири діагностичні голови відділяють свої несправності з чесною, добре поведеною впевненістю; "
           "робоча система правильно діагностує на дев'яти сценаріях, поки детерміноване керування тримає "
@@ -429,7 +466,7 @@ _UK = [
           "про польову точність. Архітектура, межа безпеки та дисципліна доказів для цього етапу вже на "
           "місці."),
 
-    ("h1", "Словник", "12"),
+    ("h1", "Словник", "13"),
     ("table", ["Термін", "Значення"],
      [["Голова висновку", "Навчений детектор одного типу несправності (напр. знос насоса)"],
       ["Багатоміткова", "Кілька незалежних висновків «так/ні» можуть бути істинними водночас"],

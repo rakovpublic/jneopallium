@@ -51,7 +51,17 @@ _EN = [
       "**Temperature-sensor drift** — tells a drifting sensor from a genuine process rise, avoiding a needless trip.",
       "**Energy-per-unit-production deterioration** — flags a loop that holds its variable while wasting energy."]),
 
-    ("bullets", "05", "Every advisory carries its economic basis",
+    ("bullets", "05", "Now it also hears and feels your machines",
+     "New: a multimodal machine-health subsystem — acoustic + vibration condition monitoring.",
+     ["**Listens and feels** — turns sound and vibration into a calibrated health score and named faults.",
+      "**Names the fault** — bearing damage, cavitation, imbalance, sensor fault, or an unknown anomaly.",
+      "**Knows when it's unsure** — a domain-shift score and an uncertainty value, so an unfamiliar machine "
+      "reads as \"not sure,\" not a false alarm.",
+      "**Learns from public benchmarks** — MIMII, DCASE, and the Paderborn bearing dataset, plus your own "
+      "telemetry once reviewed.",
+      "**Read-only by construction** — it advises; it never touches an actuator."]),
+
+    ("bullets", "06", "Every advisory carries its economic basis",
      "Not just \"there's a problem\" — what it is, why, and what it's worth.",
      ["`finding`: pump wear and cavitation risk · `confidence`: 0.73",
       "`evidence`: PumpHealthAndEfficiencyNeuron, max vibration 4.3 mm/s",
@@ -59,7 +69,7 @@ _EN = [
       "`economicBasis`: estimated avoided-shutdown value **$20,000**, safety envelope satisfied",
       "`autonomousAction`: **false** — and the PLC/PID/SIS boundary is stated in every record."]),
 
-    ("bullets", "06", "The profitability is simple to compute",
+    ("bullets", "07", "The profitability is simple to compute",
      "Annual value V = Energy + Downtime + Quality + Maintenance + Operator − Cost. Illustrative example:",
      ["Energy: 2% of an $800k bill  →  **$16,000**",
       "Avoided shutdowns: 2 × $20,000  →  **$40,000**",
@@ -67,14 +77,14 @@ _EN = [
       "Gross annual value  →  **$71,000**  ·  platform & support  →  −$20,000",
       "**Net annual value ≈ $51,000.** Price the product at ~10–20% of verified savings."]),
 
-    ("metrics", "07", "Proof: the pipeline works",
+    ("metrics", "08", "Proof: the pipeline works",
      "Near-perfect separation on the reference skid — machinery proven, ready for your data.",
      [("0.9995", "Macro-F1 across\nthe four detectors"),
       ("~0.0005", "Macro false-\npositive rate"),
       ("1.0", "Fast-control availability\nthrough an MQTT outage"),
       ("0.1 s", "Hard interlock latency\n(owned by PLC/SIS)")]),
 
-    ("bullets", "08", "Safe by construction",
+    ("bullets", "09", "Safe by construction",
      "Easy to demonstrate, validate, insure, and sell.",
      ["**Advisory by default.** It recommends; PLC/PID/SIS and operators decide. It never trips the plant.",
       "**Deterministic controls stay authoritative** — interlocks and overrides outrank any suggestion.",
@@ -82,14 +92,14 @@ _EN = [
       "**Fail-safe on loss:** lose the supervisor and fast control stays up; lose OPC UA and local fail-safe applies.",
       "It is **simulation/HIL evidence** today — not a certified SIS, and it never claims to be."]),
 
-    ("bullets", "09", "Land and expand — paid at every step",
+    ("bullets", "10", "Land and expand — paid at every step",
      "A low-risk path from a data export to a recurring subscription. (Indicative pricing.)",
      ["**Phase A — Offline replay.** Analyse a historian export; deliver anomalies, timeline, and €-impact. **€3–8k / assessment.**",
       "**Phase B — Shadow pilot.** Read-only, no writes, 6–12 weeks; compare against real outcomes. **€7.5–20k**, credited to year one.",
       "**Phase C — Production advisory subscription.** Operator-visible advisories, one edge deployment. **€15–40k / site / year.**",
       "**Phase D — Bounded autonomous optimisation.** Only after evidence + a site safety case. **€30–100k+ / site / year.**"]),
 
-    ("twocol", "10", "Where we don't compete — and where we do",
+    ("twocol", "11", "Where we don't compete — and where we do",
      "Keep your PID (low/no value)", [
          "A single stable regulatory loop",
          "Hard interlocks & emergency shutdown",
@@ -103,7 +113,7 @@ _EN = [
          "Batch-context anomaly detection",
      ]),
 
-    ("bullets", "11", "Built to fit the plant you already run",
+    ("bullets", "12", "Built to fit the plant you already run",
      "On-premises, open core, integrator-friendly.",
      ["**Reads what you already produce** — OPC UA process tags and MQTT IIoT telemetry; optional Kafka, CMMS, energy meters.",
       "**On-premises edge deployment** — local, HTTP cluster, or gRPC; no cloud required.",
@@ -165,7 +175,17 @@ _UK = [
       "**Дрейф датчика температури** — відрізняє дрейфуючий датчик від справжнього зростання, уникаючи зайвої зупинки.",
       "**Погіршення енергії на одиницю продукції** — позначає контур, що тримає змінну, але марнує енергію."]),
 
-    ("bullets", "05", "Кожна рекомендація несе свій економічний базис",
+    ("bullets", "05", "Тепер він ще й чує та відчуває ваші машини",
+     "Нове: мультимодальна підсистема здоров'я машини — акустичний + вібраційний моніторинг стану.",
+     ["**Слухає й відчуває** — перетворює звук і вібрацію на калібрований бал здоров'я й названі несправності.",
+      "**Називає несправність** — пошкодження підшипника, кавітація, дисбаланс, несправність датчика чи невідома аномалія.",
+      "**Знає, коли не впевнений** — бал зсуву домену й значення невпевненості, тож незнайома машина читається "
+      "як «не впевнений», а не як хибна тривога.",
+      "**Вчиться на публічних бенчмарках** — MIMII, DCASE й набір підшипників Paderborn, плюс ваша телеметрія "
+      "після перегляду.",
+      "**Лише для читання за побудовою** — він радить; ніколи не торкається виконавчого механізму."]),
+
+    ("bullets", "06", "Кожна рекомендація несе свій економічний базис",
      "Не просто «є проблема» — що, чому й скільки це коштує.",
      ["`finding`: знос насоса й ризик кавітації · `confidence`: 0.73",
       "`evidence`: PumpHealthAndEfficiencyNeuron, макс. вібрація 4.3 мм/с",
@@ -173,7 +193,7 @@ _UK = [
       "`economicBasis`: оцінена вартість уникненої зупинки **$20 000**, межу безпеки дотримано",
       "`autonomousAction`: **false** — і межа PLC/PID/SIS зазначена в кожному записі."]),
 
-    ("bullets", "06", "Прибутковість легко порахувати",
+    ("bullets", "07", "Прибутковість легко порахувати",
      "Річна цінність V = Енергія + Простій + Якість + Обслуговування + Оператор − Витрати. Ілюстративно:",
      ["Енергія: 2% від рахунку $800k  →  **$16 000**",
       "Уникнені зупинки: 2 × $20 000  →  **$40 000**",
@@ -181,14 +201,14 @@ _UK = [
       "Валова річна цінність  →  **$71 000**  ·  платформа й підтримка  →  −$20 000",
       "**Чиста річна цінність ≈ $51 000.** Ціна продукту ~10–20% від перевірених заощаджень."]),
 
-    ("metrics", "07", "Доказ: конвеєр працює",
+    ("metrics", "08", "Доказ: конвеєр працює",
      "Майже ідеальне розділення на еталонному скіді — механізм доведено, готовий до ваших даних.",
      [("0.9995", "Macro-F1 по\nчотирьох детекторах"),
       ("~0.0005", "Macro рівень\nхибних спрацювань"),
       ("1.0", "Доступність керування\nпід час відмови MQTT"),
       ("0.1 с", "Затримка інтерлока\n(належить PLC/SIS)")]),
 
-    ("bullets", "08", "Безпечний за побудовою",
+    ("bullets", "09", "Безпечний за побудовою",
      "Легко продемонструвати, валідувати, застрахувати й продати.",
      ["**Рекомендаційний за замовчуванням.** Він радить; PLC/PID/SIS та оператори вирішують. Ніколи не зупиняє завод.",
       "**Детерміноване керування лишається авторитетним** — інтерлоки й перевизначення вищі за будь-яку пропозицію.",
@@ -196,14 +216,14 @@ _UK = [
       "**Fail-safe при втраті:** втратите наглядача — швидке керування лишається; втратите OPC UA — локальний fail-safe.",
       "Сьогодні це **доказ симуляції/HIL** — не сертифікована SIS, і він ніколи цього не стверджує."]),
 
-    ("bullets", "09", "Заходь і розширюйся — оплата на кожному кроці",
+    ("bullets", "10", "Заходь і розширюйся — оплата на кожному кроці",
      "Низькоризиковий шлях від експорту даних до регулярної підписки. (Орієнтовні ціни.)",
      ["**Фаза A — Офлайн-відтворення.** Аналіз експорту історіана; аномалії, хронологія, €-вплив. **€3–8k / оцінка.**",
       "**Фаза B — Тіньовий пілот.** Лише читання, без записів, 6–12 тижнів; порівняння з реальністю. **€7.5–20k**, зараховується в рік 1.",
       "**Фаза C — Промислова рекомендаційна підписка.** Видимі оператору рекомендації, одне розгортання. **€15–40k / майданчик / рік.**",
       "**Фаза D — Обмежена автономна оптимізація.** Лише після доказів + обґрунтування безпеки. **€30–100k+ / майданчик / рік.**"]),
 
-    ("twocol", "10", "Де ми не конкуруємо — і де конкуруємо",
+    ("twocol", "11", "Де ми не конкуруємо — і де конкуруємо",
      "Залиште свій PID (низька/нульова цінність)", [
          "Окремий стабільний контур регулювання",
          "Жорсткі інтерлоки й аварійна зупинка",
@@ -217,7 +237,7 @@ _UK = [
          "Виявлення аномалій з урахуванням фази партії",
      ]),
 
-    ("bullets", "11", "Створено вписатися в завод, який ви вже маєте",
+    ("bullets", "12", "Створено вписатися в завод, який ви вже маєте",
      "Локально, відкрите ядро, дружньо до інтеграторів.",
      ["**Читає те, що ви вже виробляєте** — теги OPC UA та телеметрію MQTT; за бажанням Kafka, CMMS, лічильники енергії.",
       "**Локальне периферійне розгортання** — local, HTTP-кластер або gRPC; хмара не потрібна.",

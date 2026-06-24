@@ -17,7 +17,7 @@ _EN = [
      "Cross-loop, cross-timescale diagnosis above PLC/PID/SIS — complete architecture, explained",
      [("Document", "Architecture & Technical Overview"),
       ("Product", "Jneopallium Industrial Loop Guardian (FMI Skid Demo)"),
-      ("Model", "industrial-loop-guardian 1.0.0"),
+      ("Model", "industrial-loop-guardian 1.0.0 + machine-health condition monitoring"),
       ("Safety mode", "ADVISORY (supervisory, recommend-only)"),
       ("Author", "Dmytro Rakovskyi — Kharkiv, Ukraine"),
       ("Date", DATE),
@@ -38,6 +38,7 @@ _EN = [
       "The protocol boundary: OPC UA, MQTT, and PLC/SIS",
       "Signals: the common language, on many clocks",
       "The four things it diagnoses",
+      "Hearing and feeling the machine: multimodal condition monitoring",
       "The trained model and the deployable network",
       "Safety by design: why it cannot trip your plant",
       "Deployment topology: where it runs",
@@ -198,7 +199,10 @@ _EN = [
       ["DegradationSignal", "Equipment degradation evidence", "Every 10 loops"],
       ["EfficiencySignal", "Energy / efficiency context", "Every 10 loops"],
       ["SetpointSignal", "Bounded setpoint recommendation", "Every 10 loops"],
-      ["MaintenanceWindowSignal", "Planned-maintenance context", "Every 60 loops"]],
+      ["MaintenanceWindowSignal", "Planned-maintenance context", "Every 60 loops"],
+      ["MachineWaveformSignal", "Raw acoustic / vibration waveform", "Every loop"],
+      ["MachineFeatureSignal", "Acoustic & vibration features", "Every ~4 loops"],
+      ["MachineHealthAdvisorySignal", "Health score + fault probabilities", "Every ~10 loops"]],
      [2.5, 2.7, 1.6]),
     ("p", "Fast signals give immediate condition and safety state; slow signals carry the context that "
           "*changes the meaning* of the fast ones — without ever slowing the fast path down."),
@@ -222,7 +226,36 @@ _EN = [
     ("p", "Energy consumption relative to production, combined with health risk and actuator activity, "
           "flags a loop that holds its variable correctly while quietly wasting energy."),
 
-    ("h1", "The trained model and the deployable network", "10"),
+    ("h1", "Hearing and feeling the machine: multimodal condition monitoring", "10"),
+    ("p", "The four heads above read *process* telemetry. The updated Guardian adds a **multimodal "
+          "machine-health subsystem** that also *hears and feels* the equipment — acoustic and vibration "
+          "condition monitoring — implemented as a read-only / shadow / advisory runtime layer that never "
+          "touches control. It turns raw sound and vibration into named fault hypotheses with a calibrated "
+          "health score and an honest measure of its own uncertainty:"),
+    ("table", ["Stage (owning neuron)", "What it does"],
+     [["Acoustic features (AcousticFeatureNeuron)", "RMS, crest factor, spectral centroid from the sound stream"],
+      ["Vibration features (VibrationFeatureNeuron)", "RMS, envelope energy, crest factor from the vibration stream"],
+      ["Operating regime (OperatingRegimeNeuron)", "Speed-normalised scoring so a reading means the right thing at each load"],
+      ["Baseline & domain shift (MachineBaselineNeuron)", "Per-machine baseline, a domain-shift score, cross-sensor consistency"],
+      ["Fault hypotheses (FaultHypothesisNeuron)", "Probabilities for bearing damage, cavitation, imbalance, sensor fault, unknown anomaly"],
+      ["Health correlation & gate (MachineHealthCorrelationNeuron, AdvisoryGateNeuron)", "Fuses the evidence into a health advisory and keeps it advisory-only"]],
+     [3.0, 3.8]),
+    ("p", "The health advisory carries a `healthScore`, an `anomalyProbability`, per-fault "
+          "`faultProbabilities` (bearing damage, cavitation, imbalance, sensor fault), an "
+          "`unknownAnomalyProbability`, a `domainShiftScore`, and an `uncertainty` value — so it tells you "
+          "not just *what* it suspects but *how sure it is*."),
+    ("callout", "Why domain-shift and uncertainty matter",
+     "A condition-monitoring model that confidently mislabels an unfamiliar machine is dangerous. This "
+     "subsystem reports a domain-shift score and an uncertainty value, so an unfamiliar machine or regime "
+     "surfaces as \"I am not sure\" rather than a false alarm — exactly what makes it trustworthy in shadow "
+     "mode.", "success"),
+    ("p", "It is trained on public machine-condition datasets — **MIMII**, **DCASE machine-condition**, "
+          "**MIMII DUE/DG**, and the **Paderborn Bearing Data Center** — plus the FMI pump simulator and "
+          "authorised site telemetry, and it is **read-only by construction**: the "
+          "`MachineHealthAdvisorySignal` never writes an actuator command, and the interlocks, safety gate, "
+          "and operator override remain authoritative."),
+
+    ("h1", "The trained model and the deployable network", "11"),
     ("p", "Bundled with the product is a checked-in reference model, `industrial-loop-guardian`. Training "
           "does not stop at a set of weights — it emits a **complete, deployable JNeopallium network**: "
           "five layers, seventeen real neurons, 39 features, 156 trainable weights and 4 biases, written "
@@ -231,6 +264,7 @@ _EN = [
      [["Fast telemetry", "SensorNeuron, MeasurementValidatorNeuron, OscillationMonitorNeuron, …"],
       ["Diagnostic heads", "DegradationModelNeuron, EnergyAccountingNeuron (the four finding heads)"],
       ["Advisory planning", "MaintenanceSchedulingNeuron, SetpointOptimiserNeuron, EconomicBasisNeuron, SafetyGateNeuron"],
+      ["Machine-health runtime (Java)", "AcousticFeatureNeuron, VibrationFeatureNeuron, FaultHypothesisNeuron, MachineHealthCorrelationNeuron, AdvisoryGateNeuron"],
       ["Result", "Advisory JSONL output neurons"]],
      [1.9, 4.9]),
     ("p", "Each diagnostic head also records a **logical role** (e.g. `PumpHealthAndEfficiencyNeuron`, "
@@ -244,7 +278,7 @@ _EN = [
      "and the diagnostic separation — it is NOT a claim of real-world accuracy, which must be earned on "
      "external historian, CMMS, and energy-meter data. The Test Report states this plainly.", "warning"),
 
-    ("h1", "Safety by design: why it cannot trip your plant", "11"),
+    ("h1", "Safety by design: why it cannot trip your plant", "12"),
     ("num", "**Supervisory and advisory by default.** The safety ceiling is ADVISORY. The Loop Guardian "
             "recommends; it does not control. Bounded autonomous setpoint changes require a separate, "
             "deliberately added safety case, approval workflow, and rollback path."),
@@ -259,18 +293,20 @@ _EN = [
           "engineer can see not just *what* is recommended but *why*, *what it is worth*, and *that it "
           "stays inside the configured envelope*."),
 
-    ("h1", "Deployment topology: where it runs", "12"),
+    ("h1", "Deployment topology: where it runs", "13"),
     ("table", ["Mode", "Description", "Typical use"],
      [["Local", "Single Java process", "Offline replay, pilots, edge box at the plant"],
       ["Cluster (HTTP)", "Distributed over HTTP", "Multi-asset, multi-line sites"],
       ["Cluster (gRPC)", "Distributed over gRPC; FPGA-capable", "High-throughput fleets"]],
      [1.8, 3.2, 1.8]),
     ("p", "Telemetry arrives through **bridges** that translate a protocol into typed signals: OPC UA "
-          "measurement/alarm inputs, MQTT telemetry inputs, and a Kafka shadow stream. A site-specific "
-          "input adapter converts your historian or live feeds into the same typed signals while "
-          "preserving event time, so the same model runs on a laptop replay and a clustered plant alike."),
+          "measurement/alarm inputs, MQTT telemetry inputs, **FMI and PLC4X** measurement/event inputs, "
+          "and a Kafka shadow stream — plus a machine-waveform input for the acoustic/vibration streams. A "
+          "site-specific input adapter converts your historian or live feeds into the same typed signals "
+          "while preserving event time, so the same model runs on a laptop replay and a clustered plant "
+          "alike."),
 
-    ("h1", "End-to-end walkthrough: nine scenarios", "13"),
+    ("h1", "End-to-end walkthrough: nine scenarios", "14"),
     ("p", "The deterministic runner exercises nine scenarios and records evidence for each. A few show the "
           "architecture's character:"),
     ("bullet", "**pump-wear** — degradation evidence accumulates; the pump-health head raises a "
@@ -290,9 +326,11 @@ _EN = [
      "the plant safe and running. The supervisor improves the decision; it never owns the safety.",
      "success"),
 
-    ("h1", "Glossary for non-specialists", "14"),
+    ("h1", "Glossary for non-specialists", "15"),
     ("table", ["Term", "Plain-language meaning"],
      [["Advisory mode", "The system recommends; humans and PLCs decide. It never trips the plant."],
+      ["Condition monitoring", "Judging machine health from sound and vibration, not just process values."],
+      ["Domain shift", "When live data differs from the training data — the model flags this instead of guessing."],
       ["Cavitation", "Vapour bubbles forming at a pump's suction, damaging it — caused by low pressure."],
       ["Interlock", "A hard, deterministic safety rule (e.g. high temp → cooling fail-safe)."],
       ["FMI / FMU", "A standard way to package a plant simulation; used here to drive the demo skid."],
@@ -317,7 +355,7 @@ _UK = [
      "Міжконтурна, різночасова діагностика над PLC/PID/SIS — повна архітектура, пояснена просто",
      [("Документ", "Архітектурний і технічний огляд"),
       ("Продукт", "Jneopallium Industrial Loop Guardian (демо FMI-скіда)"),
-      ("Модель", "industrial-loop-guardian 1.0.0"),
+      ("Модель", "industrial-loop-guardian 1.0.0 + моніторинг стану машини"),
       ("Режим безпеки", "ADVISORY (наглядовий, лише рекомендації)"),
       ("Автор", "Дмитро Раковський — Харків, Україна"),
       ("Дата", DATE_UK),
@@ -339,6 +377,7 @@ _UK = [
       "Межа протоколів: OPC UA, MQTT і PLC/SIS",
       "Сигнали: спільна мова на багатьох годинниках",
       "Чотири речі, які він діагностує",
+      "Слух і відчуття машини: мультимодальний моніторинг стану",
       "Навчена модель і готова до розгортання мережа",
       "Безпека за задумом: чому він не зупинить ваш завод",
       "Топологія розгортання: де це працює",
@@ -502,7 +541,10 @@ _UK = [
       ["DegradationSignal", "Докази деградації обладнання", "Кожні 10 циклів"],
       ["EfficiencySignal", "Контекст енергії / ефективності", "Кожні 10 циклів"],
       ["SetpointSignal", "Обмежена рекомендація уставки", "Кожні 10 циклів"],
-      ["MaintenanceWindowSignal", "Контекст планового обслуговування", "Кожні 60 циклів"]],
+      ["MaintenanceWindowSignal", "Контекст планового обслуговування", "Кожні 60 циклів"],
+      ["MachineWaveformSignal", "Сира акустична / вібраційна хвиля", "Щоцикл"],
+      ["MachineFeatureSignal", "Акустичні й вібраційні ознаки", "Кожні ~4 цикли"],
+      ["MachineHealthAdvisorySignal", "Бал здоров'я + ймовірності несправностей", "Кожні ~10 циклів"]],
      [2.6, 2.6, 1.6]),
     ("p", "Швидкі сигнали дають миттєвий стан і безпеку; повільні несуть контекст, що *змінює зміст* "
           "швидких, — жодного разу не сповільнюючи швидкий шлях."),
@@ -526,7 +568,35 @@ _UK = [
     ("p", "Споживання енергії відносно виробництва, поєднане з ризиком здоров'я та активністю "
           "виконавчих механізмів, позначає контур, що тримає змінну правильно, але тихо марнує енергію."),
 
-    ("h1", "Навчена модель і готова до розгортання мережа", "10"),
+    ("h1", "Слух і відчуття машини: мультимодальний моніторинг стану", "10"),
+    ("p", "Чотири голови вище читають *процесну* телеметрію. Оновлений Guardian додає **мультимодальну "
+          "підсистему здоров'я машини**, що також *чує й відчуває* обладнання — акустичний і вібраційний "
+          "моніторинг стану — реалізовану як рівень часу виконання «лише для читання / тінь / рекомендації», "
+          "що ніколи не торкається керування. Він перетворює сирий звук і вібрацію на названі гіпотези "
+          "несправностей із каліброваним балом здоров'я та чесною мірою власної невпевненості:"),
+    ("table", ["Етап (нейрон-власник)", "Що робить"],
+     [["Акустичні ознаки (AcousticFeatureNeuron)", "СКЗ, крест-фактор, спектральний центроїд зі звукового потоку"],
+      ["Вібраційні ознаки (VibrationFeatureNeuron)", "СКЗ, енергія обвідної, крест-фактор із потоку вібрації"],
+      ["Робочий режим (OperatingRegimeNeuron)", "Нормалізація за швидкістю, щоб показник означав правильне за кожного навантаження"],
+      ["Базова лінія й зсув домену (MachineBaselineNeuron)", "Базова лінія машини, бал зсуву домену, узгодженість між датчиками"],
+      ["Гіпотези несправностей (FaultHypothesisNeuron)", "Ймовірності пошкодження підшипника, кавітації, дисбалансу, несправності датчика, невідомої аномалії"],
+      ["Кореляція й запобіжник (MachineHealthCorrelationNeuron, AdvisoryGateNeuron)", "Поєднує докази в рекомендацію щодо здоров'я й тримає її лише рекомендаційною"]],
+     [3.1, 3.7]),
+    ("p", "Рекомендація щодо здоров'я несе `healthScore`, `anomalyProbability`, ймовірності несправностей "
+          "`faultProbabilities` (пошкодження підшипника, кавітація, дисбаланс, несправність датчика), "
+          "`unknownAnomalyProbability`, `domainShiftScore` та значення `uncertainty` — тож вона каже не лише "
+          "*що* підозрює, а й *наскільки впевнена*."),
+    ("callout", "Чому важливі зсув домену й невпевненість",
+     "Модель моніторингу стану, що впевнено хибно маркує незнайому машину, небезпечна. Ця підсистема "
+     "повідомляє бал зсуву домену й значення невпевненості, тож незнайома машина чи режим спливає як «я не "
+     "впевнений», а не як хибна тривога, — саме це робить її гідною довіри в тіньовому режимі.", "success"),
+    ("p", "Її навчено на публічних наборах стану машин — **MIMII**, **DCASE machine-condition**, "
+          "**MIMII DUE/DG** і **Paderborn Bearing Data Center** — плюс симулятор насоса FMI й авторизована "
+          "телеметрія майданчика, і вона **лише для читання за побудовою**: `MachineHealthAdvisorySignal` "
+          "ніколи не записує команду виконавчого механізму, а інтерлоки, запобіжник і перевизначення "
+          "оператора лишаються авторитетними."),
+
+    ("h1", "Навчена модель і готова до розгортання мережа", "11"),
     ("p", "У комплекті з продуктом — вбудована еталонна модель `industrial-loop-guardian`. Навчання не "
           "зупиняється на наборі ваг — воно видає **повну, готову до розгортання мережу JNeopallium**: "
           "п'ять рівнів, сімнадцять справжніх нейронів, 39 ознак, 156 навчуваних ваг і 4 зсуви, записані в "
@@ -536,6 +606,7 @@ _UK = [
      [["Швидка телеметрія", "SensorNeuron, MeasurementValidatorNeuron, OscillationMonitorNeuron, …"],
       ["Діагностичні голови", "DegradationModelNeuron, EnergyAccountingNeuron (чотири голови висновків)"],
       ["Планування рекомендацій", "MaintenanceSchedulingNeuron, SetpointOptimiserNeuron, EconomicBasisNeuron, SafetyGateNeuron"],
+      ["Здоров'я машини (Java)", "AcousticFeatureNeuron, VibrationFeatureNeuron, FaultHypothesisNeuron, MachineHealthCorrelationNeuron, AdvisoryGateNeuron"],
       ["Результат", "Нейрони виводу рекомендаційного JSONL"]],
      [2.0, 4.8]),
     ("p", "Кожна діагностична голова також записує **логічну роль** (напр. `PumpHealthAndEfficiencyNeuron`, "
@@ -549,7 +620,7 @@ _UK = [
      "діагностичне розділення — це НЕ твердження про реальну точність, яку треба заслужити на зовнішніх "
      "даних історіана, CMMS та лічильників енергії. Звіт про тестування прямо про це говорить.", "warning"),
 
-    ("h1", "Безпека за задумом: чому він не зупинить ваш завод", "11"),
+    ("h1", "Безпека за задумом: чому він не зупинить ваш завод", "12"),
     ("num", "**Наглядовий і рекомендаційний за замовчуванням.** Стеля безпеки — ADVISORY. Loop Guardian "
             "рекомендує; він не керує. Обмежені автономні зміни уставок потребують окремого, навмисно "
             "доданого обґрунтування безпеки, процесу погодження та шляху відкату."),
@@ -565,19 +636,20 @@ _UK = [
           "інженер бачить не лише *що* рекомендовано, а й *чому*, *скільки це коштує* і *що це лишається в "
           "межах налаштованої межі*."),
 
-    ("h1", "Топологія розгортання: де це працює", "12"),
+    ("h1", "Топологія розгортання: де це працює", "13"),
     ("table", ["Режим", "Опис", "Типове застосування"],
      [["Локальний", "Один Java-процес", "Офлайн-відтворення, пілоти, периферійний пристрій на заводі"],
       ["Кластер (HTTP)", "Розподіл через HTTP", "Майданчики з багатьма активами й лініями"],
       ["Кластер (gRPC)", "Розподіл через gRPC; підтримка FPGA", "Високопродуктивні парки"]],
      [1.8, 3.2, 1.8]),
     ("p", "Телеметрія надходить через **мости**, що перекладають протокол на типізовані сигнали: входи "
-          "вимірювань/тривог OPC UA, входи телеметрії MQTT і тіньовий потік Kafka. Специфічний для "
-          "майданчика адаптер входу перетворює ваш історіан чи живі потоки на ті самі типізовані сигнали, "
-          "зберігаючи час події, тож та сама модель працює і на відтворенні на ноутбуці, і на "
+          "вимірювань/тривог OPC UA, входи телеметрії MQTT, входи вимірювань/подій **FMI та PLC4X** і "
+          "тіньовий потік Kafka — плюс вхід машинної хвилі для акустичних/вібраційних потоків. Специфічний "
+          "для майданчика адаптер входу перетворює ваш історіан чи живі потоки на ті самі типізовані "
+          "сигнали, зберігаючи час події, тож та сама модель працює і на відтворенні на ноутбуці, і на "
           "кластерному заводі."),
 
-    ("h1", "Наскрізний приклад: дев'ять сценаріїв", "13"),
+    ("h1", "Наскрізний приклад: дев'ять сценаріїв", "14"),
     ("p", "Детермінований раннер проганяє дев'ять сценаріїв і фіксує докази для кожного. Кілька показують "
           "характер архітектури:"),
     ("bullet", "**pump-wear** — докази деградації накопичуються; голова здоров'я насоса піднімає "
@@ -597,9 +669,11 @@ _UK = [
      "У кожному разі модель додає діагностику й економічний контекст, а детерміноване керування тримає "
      "завод безпечним і працюючим. Наглядач покращує рішення; він ніколи не володіє безпекою.", "success"),
 
-    ("h1", "Словник для нефахівців", "14"),
+    ("h1", "Словник для нефахівців", "15"),
     ("table", ["Термін", "Значення простою мовою"],
      [["Режим ADVISORY", "Система рекомендує; рішення приймають люди й PLC. Вона ніколи не зупиняє завод."],
+      ["Моніторинг стану", "Оцінка здоров'я машини за звуком і вібрацією, а не лише за процесними значеннями."],
+      ["Зсув домену", "Коли живі дані відрізняються від навчальних — модель це позначає, а не вгадує."],
       ["Кавітація", "Утворення парових бульбашок на всмоктуванні насоса, що його руйнують — через низький тиск."],
       ["Інтерлок", "Жорстке детерміноване правило безпеки (напр. висока темп. → fail-safe охолодження)."],
       ["FMI / FMU", "Стандартний спосіб упакувати симуляцію заводу; тут — для керування демо-скідом."],

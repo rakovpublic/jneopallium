@@ -142,6 +142,26 @@ _EN = [
      "records the logical production-scale target (100 GiB) reached by replication. `--max-corpus-bytes` "
      "is a hard guardrail that aborts rather than inflate the repository — the fitted sample stays a few "
      "tens of MiB so the run completes on a workstation.", "info"),
+    ("h2", "The machine-health condition-monitoring subsystem"),
+    ("p", "Alongside the four maintenance-and-energy heads, the updated model includes a multimodal "
+          "**machine-health** subsystem (acoustic + vibration) implemented as a Java runtime layer. Its "
+          "feature extractors, operating-regime normalisation, baseline / domain-shift scoring, fault "
+          "hypotheses, and advisory gate are designed to be trained and validated on public "
+          "condition-monitoring datasets:"),
+    ("table", ["Dataset", "Role"],
+     [["MIMII", "Industrial machine sound under normal and faulty conditions"],
+      ["DCASE machine-condition", "Acoustic anomaly-detection benchmark"],
+      ["MIMII DUE / DG", "Domain-shift / domain-generalisation variants"],
+      ["Paderborn Bearing Data Center", "Labelled bearing-fault vibration data"],
+      ["FMI pump simulator", "Bundled deterministic skid signals for repeatable evidence"],
+      ["Authorised site telemetry", "Your own machines, once a data-handling review is in place"]],
+     [2.6, 4.2]),
+    ("p", "The subsystem is **read-only / shadow / advisory** by construction: it emits a "
+          "`MachineHealthAdvisorySignal` (health score, per-fault probabilities, unknown-anomaly, "
+          "domain-shift, uncertainty) and never writes an actuator command. The domain-shift and "
+          "uncertainty outputs let it say \"I am not sure\" on an unfamiliar machine instead of "
+          "over-claiming — which is what real condition-monitoring validation requires before any "
+          "production reliance."),
 
     ("h1", "Step 5 — Fast Python model verification", "8"),
     ("p", "For a quick, build-free check of the model logic, run the Python unit tests:"),
@@ -371,6 +391,25 @@ _UK = [
      "фіксує логічну ціль промислового масштабу (100 ГіБ), досягнуту реплікацією. `--max-corpus-bytes` — "
      "жорсткий запобіжник, що переривається, замість роздувати репозиторій — припасована вибірка лишається "
      "кілька десятків МіБ, тож запуск завершується на робочій станції.", "info"),
+    ("h2", "Підсистема моніторингу стану машини"),
+    ("p", "Поряд із чотирма головами обслуговування й енергії оновлена модель містить мультимодальну "
+          "підсистему **здоров'я машини** (акустика + вібрація), реалізовану як рівень часу виконання Java. "
+          "Її екстрактори ознак, нормалізація робочого режиму, оцінка базової лінії / зсуву домену, "
+          "гіпотези несправностей і запобіжник рекомендацій призначені для навчання й валідації на "
+          "публічних наборах моніторингу стану:"),
+    ("table", ["Набір даних", "Роль"],
+     [["MIMII", "Звук промислових машин у нормальному й несправному станах"],
+      ["DCASE machine-condition", "Бенчмарк виявлення акустичних аномалій"],
+      ["MIMII DUE / DG", "Варіанти зсуву домену / узагальнення домену"],
+      ["Paderborn Bearing Data Center", "Розмічені вібраційні дані несправностей підшипників"],
+      ["Симулятор насоса FMI", "Вбудовані детерміновані сигнали скіда для відтворюваних доказів"],
+      ["Авторизована телеметрія майданчика", "Ваші власні машини після перегляду обробки даних"]],
+     [2.6, 4.2]),
+    ("p", "Підсистема **лише для читання / тінь / рекомендації** за побудовою: вона видає "
+          "`MachineHealthAdvisorySignal` (бал здоров'я, ймовірності несправностей, невідома аномалія, зсув "
+          "домену, невпевненість) і ніколи не записує команду виконавчого механізму. Виходи зсуву домену й "
+          "невпевненості дають їй казати «я не впевнений» на незнайомій машині, а не перебільшувати — саме "
+          "цього вимагає реальна валідація моніторингу стану перед будь-якою промисловою опорою.", ),
 
     ("h1", "Крок 5 — Швидка перевірка моделі на Python", "8"),
     ("p", "Для швидкої перевірки логіки моделі без збірки запустіть модульні тести Python:"),

@@ -157,19 +157,28 @@ _EN = [
      "the per-signal frequency map fans fast and slow signals out at their own cadences.", "success"),
 
     ("h1", "Configure event sources and streaming input", "8"),
-    ("p", "Batch replay uses the deterministic FMI traces. For production, plug in a site-specific "
-          "`IInitInput` that converts your Kafka, OPC UA, or MQTT records into typed industrial signals "
-          "while preserving event time. Recommended Kafka topic groups:"),
+    ("p", "Local Entry replay uses the bundled `IndustrialLoopGuardianReplayInput` (started by the "
+          "`IndustrialLoopGuardianEntryLauncher`). For production, plug in a site-specific `IInitInput`, or "
+          "one of the shipped bridge inputs — **OPC UA, MQTT, FMI, and PLC4X** measurement/event inputs — "
+          "that convert your records into typed industrial signals while preserving event time. Recommended "
+          "Kafka topic groups:"),
     ("table", ["Topic group", "Maps to signal"],
      [["`plant.telemetry.measurements`", "`MeasurementSignal`"],
       ["`plant.telemetry.alarms`", "`AlarmSignal`"],
       ["`plant.maintenance.events`", "`DegradationSignal` / maintenance context"],
       ["`plant.energy.meters`", "`EfficiencySignal`"],
-      ["`plant.cmms.workorders`", "`MaintenanceWindowSignal` / maintenance history"]],
+      ["`plant.cmms.workorders`", "`MaintenanceWindowSignal` / maintenance history"],
+      ["`plant.condition.waveforms`", "`MachineWaveformSignal` (acoustic / vibration streams)"]],
      [3.2, 3.6]),
     ("p", "Keep the streaming cadence aligned with `configuration.processing.frequency.map`: fast-loop tags "
-          "every loop; maintenance and energy findings every 10–60 loops. Because correlation is by event "
-          "time, delayed or out-of-order telemetry still lands in the right place."),
+          "every loop; maintenance and energy findings every 10–60 loops; machine-health features and "
+          "advisories on their own slower cadence. Because correlation is by event time, delayed or "
+          "out-of-order telemetry still lands in the right place."),
+    ("callout", "Machine-health condition-monitoring input",
+     "Acoustic and vibration waveforms arrive as `MachineWaveformSignal`; the Java machine-health runtime "
+     "extracts features, scores operating regime and domain shift, forms fault hypotheses, and emits an "
+     "advisory — all read-only. Feed it from the same OPC UA / MQTT / FMI / PLC4X bridges, or a dedicated "
+     "high-rate sensor stream.", "info"),
 
     ("h1", "Wire the advisory output and launch the worker", "9"),
     ("p", "`configuration.outputAggregator` names an `IOutputAggregator`, called every cycle with the "
@@ -191,6 +200,22 @@ _EN = [
      '                       "jneopallium": "supervisory diagnosis and bounded recommendations" },\n'
      '  "autonomousAction": false\n'
      '}'),
+    ("p", "The machine-health subsystem emits a parallel **`MachineHealthAdvisorySignal`** with its own "
+          "calibrated, uncertainty-aware shape — also advisory-only:"),
+    ("code",
+     '{\n'
+     '  "asset": "P-101",\n'
+     '  "healthScore": 0.62,\n'
+     '  "anomalyProbability": 0.71,\n'
+     '  "faultProbabilities": { "bearingDamage": 0.66, "cavitation": 0.21,\n'
+     '                          "imbalance": 0.08, "sensorFault": 0.05 },\n'
+     '  "unknownAnomalyProbability": 0.12,\n'
+     '  "domainShiftScore": 0.18,\n'
+     '  "uncertainty": 0.24,\n'
+     '  "evidence": { "neuron": "MachineHealthCorrelationNeuron",\n'
+     '                "acousticRms": 0.41, "vibrationEnvelopeEnergy": 0.58 },\n'
+     '  "autonomousAction": false\n'
+     '}'),
     ("p", "For production, forward this JSONL to your SIEM, a Kafka topic, a CMMS, or a webhook. Then launch "
           "the worker (use `;` as the classpath separator on Windows, `:` on Linux/macOS):"),
     ("code",
@@ -209,6 +234,8 @@ _EN = [
     ("bullet", "**OPC UA** is the only bounded actuator path, and only when a safety case allows writes. "
                "Three command nodes; every write passes the priority chain below."),
     ("bullet", "**MQTT** is telemetry and advisory only — the bridge structurally rejects AUTONOMOUS."),
+    ("bullet", "**Machine-health** is read-only: the `MachineHealthAdvisorySignal` never writes an actuator "
+               "command; the interlocks, safety gate, and operator override stay authoritative over it too."),
     ("code",
      "hard interlock -> local fail-safe -> operator override -> safety mode\n"
      "  -> validation/quality -> clamp -> ramp limit -> diff suppression\n"
@@ -438,19 +465,28 @@ _UK = [
      "мапа частот фанить швидкі й повільні сигнали за їхніми кадансами.", "success"),
 
     ("h1", "Налаштуйте джерела подій і потоковий вхід", "8"),
-    ("p", "Пакетне відтворення використовує детерміновані траси FMI. Для промислу під'єднайте специфічний "
-          "для майданчика `IInitInput`, що перетворює ваші записи Kafka, OPC UA чи MQTT на типізовані "
-          "промислові сигнали, зберігаючи час події. Рекомендовані групи тем Kafka:"),
+    ("p", "Локальне відтворення через Entry використовує вбудований `IndustrialLoopGuardianReplayInput` "
+          "(запускається `IndustrialLoopGuardianEntryLauncher`). Для промислу під'єднайте специфічний для "
+          "майданчика `IInitInput` або один із наявних вхідних мостів — вимірювань/подій **OPC UA, MQTT, "
+          "FMI та PLC4X** — що перетворюють ваші записи на типізовані промислові сигнали, зберігаючи час "
+          "події. Рекомендовані групи тем Kafka:"),
     ("table", ["Група тем", "Відображається на сигнал"],
      [["`plant.telemetry.measurements`", "`MeasurementSignal`"],
       ["`plant.telemetry.alarms`", "`AlarmSignal`"],
       ["`plant.maintenance.events`", "`DegradationSignal` / контекст обслуговування"],
       ["`plant.energy.meters`", "`EfficiencySignal`"],
-      ["`plant.cmms.workorders`", "`MaintenanceWindowSignal` / історія обслуговування"]],
+      ["`plant.cmms.workorders`", "`MaintenanceWindowSignal` / історія обслуговування"],
+      ["`plant.condition.waveforms`", "`MachineWaveformSignal` (акустичні / вібраційні потоки)"]],
      [3.2, 3.6]),
     ("p", "Тримайте каданс потоку узгодженим із `configuration.processing.frequency.map`: швидкі теги "
-          "щоцикл; висновки з обслуговування й енергії кожні 10–60 циклів. Оскільки кореляція ведеться за "
-          "часом події, запізніла чи невпорядкована телеметрія все одно потрапляє в правильне місце."),
+          "щоцикл; висновки з обслуговування й енергії кожні 10–60 циклів; ознаки й рекомендації здоров'я "
+          "машини — на власному повільнішому кадансі. Оскільки кореляція ведеться за часом події, запізніла "
+          "чи невпорядкована телеметрія все одно потрапляє в правильне місце."),
+    ("callout", "Вхід моніторингу стану машини",
+     "Акустичні й вібраційні хвилі надходять як `MachineWaveformSignal`; рівень здоров'я машини на Java "
+     "видобуває ознаки, оцінює робочий режим і зсув домену, формує гіпотези несправностей і видає "
+     "рекомендацію — усе лише для читання. Подавайте його з тих самих мостів OPC UA / MQTT / FMI / PLC4X "
+     "або з виділеного високочастотного потоку сенсорів.", "info"),
 
     ("h1", "Під'єднайте рекомендаційний вивід та запустіть worker", "9"),
     ("p", "`configuration.outputAggregator` вказує `IOutputAggregator`, що викликається щоцикл із "
@@ -473,6 +509,22 @@ _UK = [
      '                       "jneopallium": "supervisory diagnosis and bounded recommendations" },\n'
      '  "autonomousAction": false\n'
      '}'),
+    ("p", "Підсистема здоров'я машини видає паралельний **`MachineHealthAdvisorySignal`** із власною "
+          "каліброваною формою з урахуванням невпевненості — також лише рекомендаційний:"),
+    ("code",
+     '{\n'
+     '  "asset": "P-101",\n'
+     '  "healthScore": 0.62,\n'
+     '  "anomalyProbability": 0.71,\n'
+     '  "faultProbabilities": { "bearingDamage": 0.66, "cavitation": 0.21,\n'
+     '                          "imbalance": 0.08, "sensorFault": 0.05 },\n'
+     '  "unknownAnomalyProbability": 0.12,\n'
+     '  "domainShiftScore": 0.18,\n'
+     '  "uncertainty": 0.24,\n'
+     '  "evidence": { "neuron": "MachineHealthCorrelationNeuron",\n'
+     '                "acousticRms": 0.41, "vibrationEnvelopeEnergy": 0.58 },\n'
+     '  "autonomousAction": false\n'
+     '}'),
     ("p", "Для промислу пересилайте цей JSONL у вашу SIEM, тему Kafka, CMMS чи вебхук. Потім запустіть "
           "worker (роздільник classpath: `;` у Windows, `:` у Linux/macOS):"),
     ("code",
@@ -491,6 +543,9 @@ _UK = [
     ("bullet", "**OPC UA** — єдиний обмежений шлях виконавчих механізмів, і лише коли обґрунтування "
                "безпеки дозволяє записи. Три командні вузли; кожен запис проходить ланцюг пріоритету нижче."),
     ("bullet", "**MQTT** — лише телеметрія й рекомендації; міст структурно відхиляє AUTONOMOUS."),
+    ("bullet", "**Здоров'я машини** — лише для читання: `MachineHealthAdvisorySignal` ніколи не записує "
+               "команду виконавчого механізму; інтерлоки, запобіжник і перевизначення оператора лишаються "
+               "авторитетними й над ним."),
     ("code",
      "жорсткий інтерлок -> локальний fail-safe -> перевизначення оператора -> режим безпеки\n"
      "  -> валідація/якість -> обмеження -> ліміт рампи -> придушення різниці\n"
