@@ -1,0 +1,85 @@
+{
+  "modelId": "self-supervised-maintenance",
+  "title": "Self-Supervised Maintenance Guardian",
+  "version": "1.0.0-label-free-continuous",
+  "labelFree": true,
+  "continuousLearning": true,
+  "redeployRequiredForLearning": false,
+  "safetyMode": "ADVISORY",
+  "artifact": "fitted-model.json",
+  "sensorCount": 8,
+  "sensors": [
+    "suction_pressure",
+    "flow",
+    "pump_speed",
+    "pump_power",
+    "vibration_rms",
+    "bearing_temp",
+    "process_temp",
+    "valve_position"
+  ],
+  "layers": [
+    {
+      "layerID": 0,
+      "layerName": "Telemetry Ingest (Unlabeled)",
+      "layerType": "input",
+      "layerSize": 0
+    },
+    {
+      "layerID": 1,
+      "layerName": "Self-Supervised Cross-Sensor Reconstruction",
+      "layerType": "selfSupervisedHealth",
+      "layerSize": 1
+    },
+    {
+      "layerID": 2,
+      "layerName": "Maintenance Hypothesis (Trend / Severity / Evidence)",
+      "layerType": "fusion",
+      "layerSize": 1
+    },
+    {
+      "layerID": 3,
+      "layerName": "Continuous Feedback Adaptation",
+      "layerType": "onlineLearning",
+      "layerSize": 1
+    },
+    {
+      "layerID": 4,
+      "layerName": "Advisory Gate (Read-Only)",
+      "layerType": "advisoryGate",
+      "layerSize": 1
+    }
+  ],
+  "neuronCount": 4,
+  "signals": [
+    "com.rakovpublic.jneuropallium.worker.net.signals.impl.ssmaint.AssetTelemetrySignal",
+    "com.rakovpublic.jneuropallium.worker.net.signals.impl.ssmaint.ReconResidualSignal",
+    "com.rakovpublic.jneuropallium.worker.net.signals.impl.ssmaint.HealthHypothesisSignal",
+    "com.rakovpublic.jneuropallium.worker.net.signals.impl.ssmaint.OperatorFeedbackSignal",
+    "com.rakovpublic.jneuropallium.worker.net.signals.impl.ssmaint.ThresholdUpdateSignal",
+    "com.rakovpublic.jneuropallium.worker.net.signals.impl.ssmaint.MaintenanceAdvisorySignal"
+  ],
+  "dataSources": [
+    "UNLABELED_TELEMETRY_HISTORIAN",
+    "OPC_UA_PROCESS_TAGS",
+    "MQTT_IIOT_TELEMETRY",
+    "FLEET_PEER_TELEMETRY",
+    "OPERATOR_FEEDBACK_STREAM"
+  ],
+  "labelFreeObjectives": [
+    "cross-sensor-reconstruction",
+    "slow-trend-extrapolation",
+    "page-hinkley-change-point",
+    "own-history-severity-calibration"
+  ],
+  "trainedOn": {
+    "assets": 6,
+    "ticksPerAsset": 2000,
+    "labelsUsed": 0
+  },
+  "generatedFrom": {
+    "trainer": "scripts/demo-self-supervised-maintenance/train_ss_maintenance_model.py",
+    "deterministicSeed": 20240628,
+    "runtime": "Java neurons under net.neuron.impl.ssmaint (advisory-only)"
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "layerID": 4,
+  "layerName": "Advisory Gate (Read-Only)",
+  "layerType": "advisoryGate",
+  "labelFree": true,
+  "neurons": [
+    {
+      "neuronId": 0,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.ssmaint.SsAdvisoryGateNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.ssmaint.MaintenanceAdvisorySignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.ssmaint.HealthHypothesisSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.ssmaint.AdvisoryGateProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.ssmaint.ISsAdvisoryGateNeuron"
+        },
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.ssmaint.ThresholdUpdateSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.ssmaint.ThresholdUpdateProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.ssmaint.ISsAdvisoryGateNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {},
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {},
+        "defaultDendritesWeights": {}
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.ssmaint.HealthHypothesisSignal",
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.ssmaint.ThresholdUpdateSignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.net.neuron.impl.ssmaint.ISsAdvisoryGateNeuron"
+      ],
+      "logicalNeuronRole": "SsAdvisoryGateNeuron",
+      "advisoryOnly": true,
+      "thresholds": {
+        "bearing_damage": 1.0,
+        "cavitation": 1.0,
+        "sensor_fault": 1.0,
+        "energy": 1.0,
+        "oscillation": 1.0,
+        "unknown_anomaly": 1.0
+      },
+      "defaultThreshold": 1.0,
+      "deduplicationTicks": 60,
+      "neverActuates": true
+    }
+  ],
+  "layerSize": 1
+}

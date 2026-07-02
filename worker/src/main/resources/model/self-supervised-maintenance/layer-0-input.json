@@ -1,0 +1,19 @@
+{
+  "layerID": 0,
+  "layerName": "Telemetry Ingest (Unlabeled)",
+  "layerType": "input",
+  "labelFree": true,
+  "inputSignal": "com.rakovpublic.jneuropallium.worker.net.signals.impl.ssmaint.AssetTelemetrySignal",
+  "sensors": [
+    "suction_pressure",
+    "flow",
+    "pump_speed",
+    "pump_power",
+    "vibration_rms",
+    "bearing_temp",
+    "process_temp",
+    "valve_position"
+  ],
+  "neurons": [],
+  "layerSize": 0
+}
