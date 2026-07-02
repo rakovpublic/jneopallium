@@ -1,0 +1,205 @@
+{
+  "layerID": 1,
+  "layerName": "Self-Supervised Cross-Sensor Reconstruction",
+  "layerType": "selfSupervisedHealth",
+  "labelFree": true,
+  "neurons": [
+    {
+      "neuronId": 0,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.ssmaint.CrossSensorReconstructionNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.ssmaint.ReconResidualSignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.ssmaint.AssetTelemetrySignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.ssmaint.CrossSensorReconstructionProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.ssmaint.ICrossSensorReconstructionNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {},
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {},
+        "defaultDendritesWeights": {}
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.ssmaint.AssetTelemetrySignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.net.neuron.impl.ssmaint.ICrossSensorReconstructionNeuron"
+      ],
+      "logicalNeuronRole": "CrossSensorReconstructionNeuron",
+      "advisoryOnly": true,
+      "sensorOrder": [
+        "suction_pressure",
+        "flow",
+        "pump_speed",
+        "pump_power",
+        "vibration_rms",
+        "bearing_temp",
+        "process_temp",
+        "valve_position"
+      ],
+      "regimeMeans": [
+        [
+          3.1010461980036514,
+          50.02243948883498,
+          1180.0674758136624,
+          30.72658317399396,
+          1.1269508372878256,
+          40.801595487734225,
+          65.68409664649872,
+          28.016861385917014
+        ],
+        [
+          3.0197913533007275,
+          71.99515358331651,
+          1460.3511310095248,
+          41.08538193226075,
+          1.7225214382710035,
+          46.272080789798615,
+          75.77530058192777,
+          42.009961582544975
+        ],
+        [
+          2.94014905927425,
+          93.99143534733965,
+          1739.4958752711723,
+          51.43198000265073,
+          2.3159247218380026,
+          51.704941190890295,
+          85.86070606193525,
+          56.00687704327626
+        ]
+      ],
+      "regimeStds": [
+        [
+          0.05024862619667722,
+          1.4020186200589562,
+          14.021397884257635,
+          0.7749671939735192,
+          0.06783618855707749,
+          0.41294735218500295,
+          0.44493157880354567,
+          0.8079993911806317
+        ],
+        [
+          0.04950419893767938,
+          1.4369566636275877,
+          14.04586967891321,
+          0.7895486539132578,
+          0.0675785155397337,
+          0.4132325383150202,
+          0.441296873199832,
+          0.7997784109367122
+        ],
+        [
+          0.04955564888569113,
+          1.3943429327691583,
+          13.925744112957885,
+          0.7700501278437467,
+          0.06861598805417188,
+          0.4133253334888105,
+          0.4436254986994464,
+          0.8013804515840902
+        ]
+      ],
+      "crossWeights": [
+        [
+          -0.013140634117901884,
+          -0.014702538036890252,
+          0.0023128349159411447,
+          0.004864944584836603,
+          -0.00014973699544003596,
+          0.0125714725940561,
+          0.0024201906497547387,
+          -4.6478444588758024e-15
+        ],
+        [
+          -0.005423004197882848,
+          -0.05388948691014538,
+          0.7685867047949423,
+          0.0008661538711911923,
+          -0.0019813144646340063,
+          -0.0018254246381344196,
+          0.00040534044696823984,
+          5.821642846287557e-15
+        ],
+        [
+          -0.014546142637363724,
+          -0.1291921011101802,
+          0.15784452042159855,
+          0.00739821026082505,
+          0.0021775308510881054,
+          -0.0005363775014365853,
+          0.002187455135336452,
+          3.285488848859311e-15
+        ],
+        [
+          0.0007909839358526633,
+          0.6369308411514313,
+          0.054562845123976626,
+          0.19751834332989454,
+          0.001743181019948054,
+          0.17871041853840547,
+          -0.006417570117475579,
+          -6.891533162274997e-15
+        ],
+        [
+          0.003610975081202439,
+          0.0015578226967877802,
+          0.005550316302656335,
+          0.42867780635903724,
+          0.2159344537707507,
+          0.005360176200099069,
+          -0.003318555865963687,
+          3.573770506236388e-15
+        ],
+        [
+          -0.00013869535660490775,
+          -0.004446953617325331,
+          0.002038644939792993,
+          0.004721198573434914,
+          0.2694685936015635,
+          0.00932560381858509,
+          -0.004347983491298652,
+          -4.5120145133882125e-15
+        ],
+        [
+          0.010271746068380149,
+          -0.0036140854122390736,
+          -0.0004429688060736511,
+          0.4269578128842563,
+          0.005900524173248837,
+          0.00822625704671349,
+          0.0055833091971381876,
+          5.999216453516871e-15
+        ],
+        [
+          0.0024203220238823747,
+          0.0009822451623996973,
+          0.0022110939595476778,
+          -0.01876597649382703,
+          -0.004471220763397709,
+          -0.004694384448191498,
+          0.006833719233692204,
+          1.7205253255393712e-15
+        ]
+      ],
+      "domainShiftZ": 6.0
+    }
+  ],
+  "layerSize": 1
+}

@@ -1,0 +1,65 @@
+{
+  "layerID": 3,
+  "layerName": "Continuous Feedback Adaptation",
+  "layerType": "onlineLearning",
+  "labelFree": true,
+  "neurons": [
+    {
+      "neuronId": 0,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.ssmaint.FeedbackAdaptationNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.ssmaint.ThresholdUpdateSignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.ssmaint.OperatorFeedbackSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.ssmaint.FeedbackAdaptationProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.ssmaint.IFeedbackAdaptationNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {},
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {},
+        "defaultDendritesWeights": {}
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.ssmaint.OperatorFeedbackSignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.net.neuron.impl.ssmaint.IFeedbackAdaptationNeuron"
+      ],
+      "logicalNeuronRole": "FeedbackAdaptationNeuron",
+      "advisoryOnly": true,
+      "baseThresholds": {
+        "bearing_damage": 1.0,
+        "cavitation": 1.0,
+        "sensor_fault": 1.0,
+        "energy": 1.0,
+        "oscillation": 1.0,
+        "unknown_anomaly": 1.0
+      },
+      "defaultBaseThreshold": 1.0,
+      "stepUp": 0.2,
+      "stepDown": 0.01,
+      "maxOffset": 1.6,
+      "minOffset": -0.1,
+      "rateLimitTicks": 5,
+      "freezeDomainShift": 0.25,
+      "persistTo": "IStorage",
+      "noRedeploy": true
+    }
+  ],
+  "layerSize": 1
+}

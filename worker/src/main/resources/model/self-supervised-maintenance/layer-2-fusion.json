@@ -1,0 +1,55 @@
+{
+  "layerID": 2,
+  "layerName": "Maintenance Hypothesis (Trend / Severity / Evidence)",
+  "layerType": "fusion",
+  "labelFree": true,
+  "neurons": [
+    {
+      "neuronId": 0,
+      "currentNeuronClass": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.ssmaint.MaintenanceHypothesisNeuron",
+      "resultClasses": [
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.ssmaint.HealthHypothesisSignal"
+      ],
+      "processorMap": {
+        "com.rakovpublic.jneuropallium.worker.net.signals.impl.ssmaint.ReconResidualSignal": {
+          "signalProcessorClass": "com.rakovpublic.jneuropallium.worker.signalprocessor.impl.ssmaint.MaintenanceHypothesisProcessor",
+          "neuronInterface": "com.rakovpublic.jneuropallium.worker.net.neuron.impl.ssmaint.IMaintenanceHypothesisNeuron"
+        }
+      },
+      "mergerMap": {},
+      "axon": {
+        "connectionMap": {},
+        "addressMap": {},
+        "connectionsWrapped": false,
+        "defaultWeights": {}
+      },
+      "dendrites": {
+        "weights": {},
+        "defaultDendritesWeights": {}
+      },
+      "signalChain": {
+        "clazz": "com.rakovpublic.jneuropallium.ai.neurons.base.SimpleSignalChain",
+        "processingChain": [
+          "com.rakovpublic.jneuropallium.worker.net.signals.impl.ssmaint.ReconResidualSignal"
+        ]
+      },
+      "isProcessed": false,
+      "changed": false,
+      "onDelete": false,
+      "run": 0,
+      "interfaces": [
+        "com.rakovpublic.jneuropallium.worker.net.neuron.impl.ssmaint.IMaintenanceHypothesisNeuron"
+      ],
+      "logicalNeuronRole": "MaintenanceHypothesisNeuron",
+      "advisoryOnly": true,
+      "baselineMean": 0.7781202860972521,
+      "baselineP99": 2.0808171380994938,
+      "baselineP999": 2.754419204390162,
+      "slowAlpha": 0.02,
+      "evidenceAlpha": 0.08,
+      "phDelta": 0.25,
+      "phLambda": 6.0
+    }
+  ],
+  "layerSize": 1
+}

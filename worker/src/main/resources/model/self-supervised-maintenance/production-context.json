@@ -1,0 +1,52 @@
+{
+  "configuration.input.layermeta": [
+    {
+      "layerID": 0,
+      "layerName": "Telemetry Ingest (Unlabeled)",
+      "layerType": "input"
+    },
+    {
+      "layerID": 1,
+      "layerName": "Self-Supervised Cross-Sensor Reconstruction",
+      "layerType": "selfSupervisedHealth"
+    },
+    {
+      "layerID": 2,
+      "layerName": "Maintenance Hypothesis (Trend / Severity / Evidence)",
+      "layerType": "fusion"
+    },
+    {
+      "layerID": 3,
+      "layerName": "Continuous Feedback Adaptation",
+      "layerType": "onlineLearning"
+    },
+    {
+      "layerID": 4,
+      "layerName": "Advisory Gate (Read-Only)",
+      "layerType": "advisoryGate"
+    }
+  ],
+  "neuronnet.classes": [
+    "com.rakovpublic.jneuropallium.worker.net.neuron.impl.ssmaint.CrossSensorReconstructionNeuron",
+    "com.rakovpublic.jneuropallium.worker.net.neuron.impl.ssmaint.MaintenanceHypothesisNeuron",
+    "com.rakovpublic.jneuropallium.worker.net.neuron.impl.ssmaint.FeedbackAdaptationNeuron",
+    "com.rakovpublic.jneuropallium.worker.net.neuron.impl.ssmaint.SsAdvisoryGateNeuron"
+  ],
+  "input.inputs": {
+    "type": "com.rakovpublic.jneuropallium.worker.net.signals.impl.ssmaint.AssetTelemetrySignal",
+    "source": "OPC_UA/MQTT unlabeled telemetry"
+  },
+  "outputAggregator": "com.rakovpublic.jneuropallium.worker.application.impl.output.JsonlResultAggregator",
+  "storage.json": "model/self-supervised-maintenance",
+  "processing.frequency.map": {
+    "fast": 1,
+    "slow": 10
+  },
+  "slowfast.ratio": 10,
+  "isteacherstudying": false,
+  "discriminatorsAmount": 0,
+  "infiniteRun": true,
+  "safetyMode": "ADVISORY",
+  "advisoryOnly": true,
+  "continuousLearning": true
+}
