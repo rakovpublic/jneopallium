@@ -1,2 +1,0 @@
-"""JNeoBattlespace supervisor package."""
-
