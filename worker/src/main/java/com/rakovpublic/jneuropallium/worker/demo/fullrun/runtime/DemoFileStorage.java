@@ -26,19 +26,31 @@ public class DemoFileStorage implements IStorage<DemoStorageItem> {
         this.rootPath = rootPath == null || rootPath.isBlank() ? "." : rootPath;
     }
 
+    private Path getNormalizedRootPath() {
+        return Path.of(rootPath).toAbsolutePath().normalize();
+    }
+
+    private Path resolveAndValidatePath(String path) {
+        Path root = getNormalizedRootPath();
+        Path requested = Path.of(path);
+        Path resolved = requested.isAbsolute() ? requested : root.resolve(requested);
+        Path normalizedResolved = resolved.toAbsolutePath().normalize();
+        if (!normalizedResolved.equals(root) && !normalizedResolved.startsWith(root)) {
+            throw new IllegalArgumentException("Invalid path outside of storage root: " + path);
+        }
+        return normalizedResolved;
+    }
+
     @Override
     public DemoStorageItem getItem(String path) {
-        Path requested = Path.of(path);
-        if (!requested.isAbsolute()) {
-            requested = Path.of(rootPath).resolve(requested);
-        }
-        return new DemoStorageItem(requested.normalize());
+        return new DemoStorageItem(resolveAndValidatePath(path));
     }
 
     @Override
     public String read(DemoStorageItem path) {
         try {
-            return Files.readString(path.asPath(), StandardCharsets.UTF_8);
+            Path safePath = resolveAndValidatePath(path.getPath());
+            return Files.readString(safePath, StandardCharsets.UTF_8);
         } catch (IOException e) {
             throw new IllegalStateException("Cannot read " + path.getPath(), e);
         }
