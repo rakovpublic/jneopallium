@@ -121,6 +121,85 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
+        <!-- Extracted protocol bridge modules (Phase 3). The transitional
+             worker still holds the bridge tests, the demos, and the OPC UA
+             classes, so it depends on each bridge jar. -->
+        <dependency>
+            <groupId>com.rakovpublic.jneopallium</groupId>
+            <artifactId>bridge-canopen</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rakovpublic.jneopallium</groupId>
+            <artifactId>bridge-dicom</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rakovpublic.jneopallium</groupId>
+            <artifactId>bridge-ditto</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rakovpublic.jneopallium</groupId>
+            <artifactId>bridge-fhir</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rakovpublic.jneopallium</groupId>
+            <artifactId>bridge-fmi</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rakovpublic.jneopallium</groupId>
+            <artifactId>bridge-iec61850</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rakovpublic.jneopallium</groupId>
+            <artifactId>bridge-kafka</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rakovpublic.jneopallium</groupId>
+            <artifactId>bridge-lsl</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rakovpublic.jneopallium</groupId>
+            <artifactId>bridge-lti</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rakovpublic.jneopallium</groupId>
+            <artifactId>bridge-mavlink</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rakovpublic.jneopallium</groupId>
+            <artifactId>bridge-mqtt</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rakovpublic.jneopallium</groupId>
+            <artifactId>bridge-otel</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rakovpublic.jneopallium</groupId>
+            <artifactId>bridge-plc4x</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rakovpublic.jneopallium</groupId>
+            <artifactId>bridge-ros2</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rakovpublic.jneopallium</groupId>
+            <artifactId>bridge-nengo</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
         <!-- Core JSON (used directly by bridge/domain code) -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
