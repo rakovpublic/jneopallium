@@ -10,30 +10,22 @@
         <artifactId>wrapper</artifactId>
         <version>1.0</version>
     </parent>
-    <artifactId>worker</artifactId>
+    <artifactId>worker-core</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <!--
-      TRANSITIONAL module (see docs/refactor/worker-modularization-plan.md).
-      The lightweight engine + contracts now live in worker-core. This module
-      still aggregates the protocol bridges, the per-domain neuron/signal/
-      processor implementations, the `ai` AGI package, and the demos until each
-      is carved into its own artifact in later phases. It depends on
-      worker-core and keeps only the bridge/domain-specific third-party
-      libraries (milo, mqtt/tahu, mavlink, opentelemetry). The shared JSON /
-      logging / kafka libraries used directly by bridge and domain code are
-      declared explicitly here rather than relied on transitively.
+      worker-core: the lightweight processing engine and definition/contract
+      layer. Contains only the network engine, neuron/signal interfaces, the
+      framework mechanics (cycleprocessing, layersizing), signal storage, and
+      the cluster application runtime. It carries NO domain implementations,
+      NO protocol bridges, and NO demos - those live in their own modules and
+      are discovered at runtime by fully-qualified class name (see
+      SignalDeserializer / JSONProcessorConverter). This is the module every
+      model owner builds against.
     -->
 
     <dependencies>
-        <!-- The lightweight core engine + contracts. -->
-        <dependency>
-            <groupId>com.rakovpublic.jneopallium</groupId>
-            <artifactId>worker-core</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
-        <!-- Core JSON (used directly by bridge/domain code) -->
+        <!-- Core JSON -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
@@ -55,7 +47,8 @@
             <version>${gson.version}</version>
         </dependency>
 
-        <!-- Logging -->
+        <!-- Logging - pin api/core/impl all to ${log4j.version} so the
+             spring-boot-dependencies BOM does not partially downgrade api. -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
@@ -79,65 +72,39 @@
             <version>${jakarta-annotation.version}</version>
         </dependency>
 
-        <!-- Kafka (used directly by the Kafka bridge transport) -->
+        <!-- Storage / messaging - used by net/layers and signals/storage -->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>${jedis.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-clients</artifactId>
             <version>${kafka.version}</version>
         </dependency>
 
-        <!-- ============== OpenTelemetry (Bridge 09) ==============
-             Versions are pulled from the opentelemetry-bom imported in the
-             parent. Export-only - no input/aggregator surface. -->
+        <!-- gRPC + protobuf - cluster transport (application/GRPC*). The
+             jneoapalliumservice.proto lives in this module. -->
         <dependency>
-            <groupId>io.opentelemetry</groupId>
-            <artifactId>opentelemetry-api</artifactId>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>${protobuf.version}</version>
         </dependency>
         <dependency>
-            <groupId>io.opentelemetry</groupId>
-            <artifactId>opentelemetry-sdk</artifactId>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-netty-shaded</artifactId>
+            <version>${grpc.version}</version>
         </dependency>
         <dependency>
-            <groupId>io.opentelemetry</groupId>
-            <artifactId>opentelemetry-exporter-otlp</artifactId>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-protobuf</artifactId>
+            <version>${grpc.version}</version>
         </dependency>
         <dependency>
-            <groupId>io.opentelemetry</groupId>
-            <artifactId>opentelemetry-sdk-extension-autoconfigure</artifactId>
-        </dependency>
-        <!-- In-memory exporters used by the unit tests for traces/metrics/logs. -->
-        <dependency>
-            <groupId>io.opentelemetry</groupId>
-            <artifactId>opentelemetry-sdk-testing</artifactId>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- ============== MQTT + Sparkplug B (Bridge 02) ============== -->
-        <dependency>
-            <groupId>com.hivemq</groupId>
-            <artifactId>hivemq-mqtt-client</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.tahu</groupId>
-            <artifactId>tahu-core</artifactId>
-        </dependency>
-
-        <!-- ============== MAVLink (Bridge 12) ============== -->
-        <dependency>
-            <groupId>io.dronefleet.mavlink</groupId>
-            <artifactId>mavlink</artifactId>
-        </dependency>
-
-        <!-- ============== OPC UA (Phase 2) ============== -->
-        <dependency>
-            <groupId>org.eclipse.milo</groupId>
-            <artifactId>milo-sdk-client</artifactId>
-        </dependency>
-        <!-- Server SDK for the embedded OPC UA test harness. -->
-        <dependency>
-            <groupId>org.eclipse.milo</groupId>
-            <artifactId>milo-sdk-server</artifactId>
-            <scope>test</scope>
+            <groupId>io.grpc</groupId>
+            <artifactId>grpc-stub</artifactId>
+            <version>${grpc.version}</version>
         </dependency>
 
         <!-- Tests -->
@@ -161,6 +128,13 @@
     </dependencies>
 
     <build>
+        <extensions>
+            <extension>
+                <groupId>kr.motd.maven</groupId>
+                <artifactId>os-maven-plugin</artifactId>
+                <version>${os-maven-plugin.version}</version>
+            </extension>
+        </extensions>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -183,6 +157,31 @@
                         <goals>
                             <goal>integration-test</goal>
                             <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.xolstice.maven.plugins</groupId>
+                <artifactId>protobuf-maven-plugin</artifactId>
+                <version>${protobuf-maven-plugin.version}</version>
+                <configuration>
+                    <!-- Cross-platform: protoc is downloaded for the host OS -->
+                    <protocArtifact>
+                        com.google.protobuf:protoc:${protobuf.version}:exe:${os.detected.classifier}
+                    </protocArtifact>
+                    <pluginId>grpc-java</pluginId>
+                    <pluginArtifact>
+                        io.grpc:protoc-gen-grpc-java:${grpc.version}:exe:${os.detected.classifier}
+                    </pluginArtifact>
+                    <clearOutputDirectory>false</clearOutputDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>compile-custom</goal>
+                            <goal>test-compile</goal>
                         </goals>
                     </execution>
                 </executions>
