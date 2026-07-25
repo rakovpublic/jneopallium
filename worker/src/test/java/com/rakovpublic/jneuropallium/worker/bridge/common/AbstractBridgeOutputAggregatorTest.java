@@ -5,6 +5,7 @@ package com.rakovpublic.jneuropallium.worker.bridge.common;
 
 import com.rakovpublic.jneuropallium.worker.net.layers.IResult;
 import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.control.IActuatorCommandSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.ActuatorCommandSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.InterlockSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.OperatorOverrideSignal;
@@ -67,7 +68,7 @@ class AbstractBridgeOutputAggregatorTest {
         }
 
         @Override
-        protected boolean operatorConfirmed(ActuatorCommandSignal command) { return operatorConfirms; }
+        protected boolean operatorConfirmed(IActuatorCommandSignal command) { return operatorConfirms; }
 
         @Override
         protected BridgeWriteResult issueWrite(TestBinding binding, double value) {

@@ -7,6 +7,7 @@ import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.Proc
 import com.rakovpublic.jneuropallium.worker.net.signals.AbstractSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.control.IInterlockSignal;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,7 +18,7 @@ import java.util.List;
  * a TransparencyLogSignal at the dispatch layer.
  * ProcessingFrequency: loop=1, epoch=1.
  */
-public class InterlockSignal extends AbstractSignal<Void> implements ISignal<Void>, IResultSignal<Void> {
+public class InterlockSignal extends AbstractSignal<Void> implements ISignal<Void>, IResultSignal<Void>, IInterlockSignal {
 
     @Override public Void getResultObject() { return null; }
     @Override public Class<Void> getResultObjectClass() { return Void.class; }

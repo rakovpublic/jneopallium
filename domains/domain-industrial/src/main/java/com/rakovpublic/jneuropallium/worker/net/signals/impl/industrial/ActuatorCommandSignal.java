@@ -7,13 +7,14 @@ import com.rakovpublic.jneuropallium.worker.net.neuron.impl.cycleprocessing.Proc
 import com.rakovpublic.jneuropallium.worker.net.signals.AbstractSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.control.IActuatorCommandSignal;
 
 /**
  * Actuator command. {@code execute=false} means shadow-mode — the
  * signal is logged and compared but not written to the field.
  * ProcessingFrequency: loop=1, epoch=1.
  */
-public class ActuatorCommandSignal extends AbstractSignal<Void> implements ISignal<Void>, IResultSignal<Void> {
+public class ActuatorCommandSignal extends AbstractSignal<Void> implements ISignal<Void>, IResultSignal<Void>, IActuatorCommandSignal {
 
     @Override public Void getResultObject() { return null; }
     @Override public Class<Void> getResultObjectClass() { return Void.class; }

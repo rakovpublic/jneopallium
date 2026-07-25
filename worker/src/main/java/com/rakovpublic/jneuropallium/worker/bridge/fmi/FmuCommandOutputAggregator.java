@@ -10,7 +10,7 @@ import com.rakovpublic.jneuropallium.worker.bridge.common.BridgeSafetyMode;
 import com.rakovpublic.jneuropallium.worker.bridge.common.BridgeWriteResult;
 import com.rakovpublic.jneuropallium.worker.bridge.common.OverrideRegistry;
 import com.rakovpublic.jneuropallium.worker.net.layers.IResult;
-import com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.ActuatorCommandSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.control.IActuatorCommandSignal;
 import com.rakovpublic.jneuropallium.worker.util.IContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -131,7 +131,7 @@ public final class FmuCommandOutputAggregator implements IOutputAggregator, Auto
         }
 
         @Override
-        protected boolean operatorConfirmed(ActuatorCommandSignal command) {
+        protected boolean operatorConfirmed(IActuatorCommandSignal command) {
             return false; // FMI bridge does not implement operator confirmation UI
         }
 

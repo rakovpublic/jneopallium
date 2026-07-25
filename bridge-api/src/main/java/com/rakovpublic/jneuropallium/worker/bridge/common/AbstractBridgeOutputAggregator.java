@@ -6,9 +6,9 @@ package com.rakovpublic.jneuropallium.worker.bridge.common;
 import com.rakovpublic.jneuropallium.worker.application.IOutputAggregator;
 import com.rakovpublic.jneuropallium.worker.net.layers.IResult;
 import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
-import com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.ActuatorCommandSignal;
-import com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.InterlockSignal;
-import com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.OperatorOverrideSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.control.IActuatorCommandSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.control.IInterlockSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.control.IOperatorOverrideSignal;
 import com.rakovpublic.jneuropallium.worker.util.IContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +25,12 @@ import java.util.Objects;
  * {@link #issueWrite(BridgeBinding, double)} (and, optionally, the binding
  * / safety-mode lookup hooks).
  *
+ * <p>The algorithm operates on the neutral bridge-control contracts
+ * {@link IInterlockSignal}, {@link IOperatorOverrideSignal} and
+ * {@link IActuatorCommandSignal} (defined in worker-core), so the bridge SPI
+ * does not depend on any specific domain module. Domain signals such as the
+ * industrial actuator/interlock/override signals implement these contracts.
+ *
  * <p>The algorithm enforces ground rules §0.1–§0.4:
  *
  * <ol>
@@ -33,7 +39,7 @@ import java.util.Objects;
  *       {@link BridgeBinding#failSafeValue() fail-safe value}. <b>No vetoes
  *       apply.</b></li>
  *   <li>Refresh the {@link OverrideRegistry} from incoming
- *       {@link OperatorOverrideSignal}s.</li>
+ *       {@link IOperatorOverrideSignal}s.</li>
  *   <li>For each command:
  *       <ol type="a">
  *         <li>resolve binding ({@code UNKNOWN_TAG} → {@code REJECTED})</li>
@@ -74,7 +80,7 @@ public abstract class AbstractBridgeOutputAggregator<BindingT extends BridgeBind
     /** §2.2.4f diff-suppression epsilon (relative to value scale). */
     public static final double DIFF_EPSILON = 1e-9;
 
-    /** Default override TTL when an OperatorOverrideSignal carries no explicit one. */
+    /** Default override TTL when an IOperatorOverrideSignal carries no explicit one. */
     public static final long DEFAULT_OVERRIDE_TTL_MS = 5 * 60_000L;
 
     private final String bridgeName;
@@ -123,7 +129,7 @@ public abstract class AbstractBridgeOutputAggregator<BindingT extends BridgeBind
      * override is by command tag rather than time so a single confirmation
      * can authorise a single tick's command.
      */
-    protected boolean operatorConfirmed(ActuatorCommandSignal command) { return false; }
+    protected boolean operatorConfirmed(IActuatorCommandSignal command) { return false; }
 
     /* ===== IOutputAggregator =================================================== */
 
@@ -146,9 +152,9 @@ public abstract class AbstractBridgeOutputAggregator<BindingT extends BridgeBind
     private record EvidencedSignal<S extends IResultSignal<?>>(S signal, Long neuronId) {}
 
     private static final class Partition {
-        final List<EvidencedSignal<InterlockSignal>> interlocks = new ArrayList<>();
-        final List<EvidencedSignal<OperatorOverrideSignal>> overrides = new ArrayList<>();
-        final List<EvidencedSignal<ActuatorCommandSignal>> commands = new ArrayList<>();
+        final List<EvidencedSignal<IInterlockSignal>> interlocks = new ArrayList<>();
+        final List<EvidencedSignal<IOperatorOverrideSignal>> overrides = new ArrayList<>();
+        final List<EvidencedSignal<IActuatorCommandSignal>> commands = new ArrayList<>();
     }
 
     private Partition partition(List<IResult> results) {
@@ -158,21 +164,21 @@ public abstract class AbstractBridgeOutputAggregator<BindingT extends BridgeBind
             IResultSignal<?> s = r.getResult();
             if (s == null) continue;
             Long neuronId = r.getNeuronId();
-            if (s instanceof InterlockSignal il) {
+            if (s instanceof IInterlockSignal il) {
                 p.interlocks.add(new EvidencedSignal<>(il, neuronId));
-            } else if (s instanceof OperatorOverrideSignal oo) {
+            } else if (s instanceof IOperatorOverrideSignal oo) {
                 p.overrides.add(new EvidencedSignal<>(oo, neuronId));
-            } else if (s instanceof ActuatorCommandSignal ac) {
+            } else if (s instanceof IActuatorCommandSignal ac) {
                 p.commands.add(new EvidencedSignal<>(ac, neuronId));
             }
         }
         return p;
     }
 
-    private void applyInterlocks(List<EvidencedSignal<InterlockSignal>> interlocks,
+    private void applyInterlocks(List<EvidencedSignal<IInterlockSignal>> interlocks,
                                  long ts, long run) {
-        for (EvidencedSignal<InterlockSignal> e : interlocks) {
-            InterlockSignal il = e.signal();
+        for (EvidencedSignal<IInterlockSignal> e : interlocks) {
+            IInterlockSignal il = e.signal();
             if (!il.isTripped()) continue;
             for (BindingT b : safe(bindingsForInterlock(il.getInterlockId()))) {
                 Double fs = b.failSafeValue();
@@ -199,23 +205,23 @@ public abstract class AbstractBridgeOutputAggregator<BindingT extends BridgeBind
         }
     }
 
-    private void registerOverrides(List<EvidencedSignal<OperatorOverrideSignal>> ovs, long ts) {
-        for (EvidencedSignal<OperatorOverrideSignal> e : ovs) {
-            OperatorOverrideSignal oo = e.signal();
+    private void registerOverrides(List<EvidencedSignal<IOperatorOverrideSignal>> ovs, long ts) {
+        for (EvidencedSignal<IOperatorOverrideSignal> e : ovs) {
+            IOperatorOverrideSignal oo = e.signal();
             if (oo.getTag() == null) continue;
             overrides.put(oo.getTag(), oo.getOperatorId(), oo.getReason(),
                     oo.getManualValue(), DEFAULT_OVERRIDE_TTL_MS, ts);
         }
     }
 
-    private void applyCommands(List<EvidencedSignal<ActuatorCommandSignal>> commands,
+    private void applyCommands(List<EvidencedSignal<IActuatorCommandSignal>> commands,
                                long ts, long run) {
         double dtSec = (lastTickTimestampMs > 0 && ts > lastTickTimestampMs)
                 ? (ts - lastTickTimestampMs) / 1000.0
                 : 0.0;
 
-        for (EvidencedSignal<ActuatorCommandSignal> e : commands) {
-            ActuatorCommandSignal cmd = e.signal();
+        for (EvidencedSignal<IActuatorCommandSignal> e : commands) {
+            IActuatorCommandSignal cmd = e.signal();
             String tag = cmd.getTag();
             double proposed = cmd.getTargetValue();
 

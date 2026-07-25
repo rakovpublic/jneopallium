@@ -8,13 +8,14 @@ import com.rakovpublic.jneuropallium.worker.net.neuron.impl.industrial.OverrideK
 import com.rakovpublic.jneuropallium.worker.net.signals.AbstractSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.IResultSignal;
 import com.rakovpublic.jneuropallium.worker.net.signals.ISignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.control.IOperatorOverrideSignal;
 
 /**
  * Operator override. Per spec §5 operator override always wins for
  * regulatory control; it does not affect interlocks. ProcessingFrequency:
  * loop=1, epoch=1.
  */
-public class OperatorOverrideSignal extends AbstractSignal<Void> implements ISignal<Void>, IResultSignal<Void> {
+public class OperatorOverrideSignal extends AbstractSignal<Void> implements ISignal<Void>, IResultSignal<Void>, IOperatorOverrideSignal {
 
     @Override public Void getResultObject() { return null; }
     @Override public Class<Void> getResultObjectClass() { return Void.class; }

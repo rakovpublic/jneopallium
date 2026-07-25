@@ -5,6 +5,23 @@ module into a lightweight core plus per-domain, per-bridge, and per-demo Maven a
 
 ## Progress log
 
+- **2026-07-25 — Phase 2 complete (agi-base + 15 domains), BUILD-VERIFIED.** Commits
+  `071ef56` (agi-base + 12 leaf domains) and `89f8dca` (domain-industrial + domain-agi).
+  - New `agi-base` foundation module (`ai/neurons/base` + `ai/signals` + `ai/enums` +
+    `ai/model`); 11/13 domains depend on it (`adfraud`/`llm` do not). Corrects the earlier
+    "domains are independent" note — the dependency was on `ai.neurons.base.ModulatableNeuron`.
+  - `domains/` aggregator + 15 domain modules. `ssmaint` folded into `domain-industrial`;
+    `opcua` left in transitional `worker` (→ `bridge-opcua`). `domain-agi` = higher cognitive
+    `ai/*`. Domain tests stay in `worker` for now (some reference demos).
+  - Demo-launcher fix: `IndustrialLoopGuardianEntryLauncher` now assembles its child-JVM model
+    jar from the distinct code-source locations of its `MODEL_CLASSES` (layout-independent),
+    not one hard-coded `worker/target/classes` dir. The other 4 launchers use demo-local model
+    classes and were unaffected — revisit when demos are extracted.
+  - Verified: `mvn -pl worker -am test` → BUILD SUCCESS, 955 tests, 0 failures (18 modules).
+  - **Remaining:** `bridge-api` + 16 bridges (incl. new `bridge-opcua` + its demo fixes),
+    then 7 demos, then retire the transitional `worker`.
+
+
 - **2026-07-25 — Phase 0 + Phase 1 complete and BUILD-VERIFIED.**
   - Branch fast-forwarded to `master` first (it was 20 commits behind; now includes
     `adfraud`, `ssmaint`, newer industrial-ML work).

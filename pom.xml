@@ -16,6 +16,8 @@
         <module>worker-core</module>
         <!-- Shared neuromodulatory foundation (ModulatableNeuron + base signals). -->
         <module>agi-base</module>
+        <!-- Shared bridge SPI (formerly bridge/common). -->
+        <module>bridge-api</module>
         <!-- Per-domain neuron/signal/processor implementation modules. -->
         <module>domains</module>
         <!-- Transitional aggregate: still holds bridges, domain impls, and

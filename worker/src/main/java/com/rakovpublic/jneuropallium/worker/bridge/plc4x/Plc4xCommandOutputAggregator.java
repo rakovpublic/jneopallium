@@ -8,7 +8,7 @@ import com.rakovpublic.jneuropallium.worker.bridge.common.AbstractBridgeOutputAg
 import com.rakovpublic.jneuropallium.worker.bridge.common.BridgeSafetyMode;
 import com.rakovpublic.jneuropallium.worker.bridge.common.BridgeWriteResult;
 import com.rakovpublic.jneuropallium.worker.bridge.common.OverrideRegistry;
-import com.rakovpublic.jneuropallium.worker.net.signals.impl.industrial.ActuatorCommandSignal;
+import com.rakovpublic.jneuropallium.worker.net.signals.control.IActuatorCommandSignal;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -74,7 +74,7 @@ public final class Plc4xCommandOutputAggregator
     }
 
     @Override
-    protected boolean operatorConfirmed(ActuatorCommandSignal command) {
+    protected boolean operatorConfirmed(IActuatorCommandSignal command) {
         // PLC4X bridge does not implement an operator-confirmation UI; sites
         // that need ADVISORY-mode writes wire one in via a subclass.
         return false;
