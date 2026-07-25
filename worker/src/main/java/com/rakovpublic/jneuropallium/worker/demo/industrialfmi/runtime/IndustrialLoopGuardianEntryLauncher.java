@@ -34,16 +34,19 @@ import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.security.CodeSource;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.jar.JarEntry;
+import java.util.jar.JarInputStream;
 import java.util.jar.JarOutputStream;
 
 public final class IndustrialLoopGuardianEntryLauncher {
@@ -358,65 +361,106 @@ public final class IndustrialLoopGuardianEntryLauncher {
         return axon;
     }
 
+    /**
+     * The classes the generated model instantiates by name. They are spread
+     * across the worker demo runtime and the domain-industrial module, so the
+     * model jar is assembled from the distinct code sources of these classes
+     * (see {@link #buildModelJar}) rather than a single directory.
+     */
+    private static final List<Class<?>> MODEL_CLASSES = List.of(
+            IndustrialLoopGuardianReplayInput.class,
+            IndustrialLoopGuardianResultAggregator.class,
+            IndustrialSignalChain.class,
+            IndustrialPassThroughWeight.class,
+            MachineHealthResultNeuron.class,
+            DemoFileStorage.class,
+            DemoJsonContext.class,
+            MachineWaveformSignal.class,
+            MachineFeatureSignal.class,
+            FaultHypothesisSignal.class,
+            MachineHealthAdvisorySignal.class,
+            IAcousticFeatureNeuron.class,
+            IVibrationFeatureNeuron.class,
+            IFaultHypothesisNeuron.class,
+            IMachineHealthCorrelationNeuron.class,
+            IAdvisoryGateNeuron.class,
+            AcousticFeatureNeuron.class,
+            VibrationFeatureNeuron.class,
+            FaultHypothesisNeuron.class,
+            MachineHealthCorrelationNeuron.class,
+            AdvisoryGateNeuron.class,
+            AcousticFeatureProcessor.class,
+            VibrationFeatureProcessor.class,
+            FaultHypothesisProcessor.class,
+            MachineHealthCorrelationProcessor.class,
+            MachineHealthAdvisoryGateProcessor.class
+    );
+
     private static List<String> modelClasses() {
-        return List.of(
-                IndustrialLoopGuardianReplayInput.class.getName(),
-                IndustrialLoopGuardianResultAggregator.class.getName(),
-                IndustrialSignalChain.class.getName(),
-                IndustrialPassThroughWeight.class.getName(),
-                MachineHealthResultNeuron.class.getName(),
-                DemoFileStorage.class.getName(),
-                DemoJsonContext.class.getName(),
-                MachineWaveformSignal.class.getName(),
-                MachineFeatureSignal.class.getName(),
-                FaultHypothesisSignal.class.getName(),
-                MachineHealthAdvisorySignal.class.getName(),
-                IAcousticFeatureNeuron.class.getName(),
-                IVibrationFeatureNeuron.class.getName(),
-                IFaultHypothesisNeuron.class.getName(),
-                IMachineHealthCorrelationNeuron.class.getName(),
-                IAdvisoryGateNeuron.class.getName(),
-                AcousticFeatureNeuron.class.getName(),
-                VibrationFeatureNeuron.class.getName(),
-                FaultHypothesisNeuron.class.getName(),
-                MachineHealthCorrelationNeuron.class.getName(),
-                AdvisoryGateNeuron.class.getName(),
-                AcousticFeatureProcessor.class.getName(),
-                VibrationFeatureProcessor.class.getName(),
-                FaultHypothesisProcessor.class.getName(),
-                MachineHealthCorrelationProcessor.class.getName(),
-                MachineHealthAdvisoryGateProcessor.class.getName()
-        );
+        List<String> names = new ArrayList<>(MODEL_CLASSES.size());
+        for (Class<?> modelClass : MODEL_CLASSES) {
+            names.add(modelClass.getName());
+        }
+        return names;
     }
 
     private static void buildModelJar(Path modelJar) throws IOException, URISyntaxException {
-        CodeSource codeSource = IndustrialLoopGuardianEntryLauncher.class.getProtectionDomain().getCodeSource();
-        if (codeSource == null) {
-            throw new IllegalStateException("Cannot resolve worker code source for industrial model jar");
+        // Model classes may be split across several Maven modules (worker demo
+        // runtime + domain-industrial). Collect the distinct code-source
+        // locations of all model classes so the jar contains them regardless of
+        // the module layout (reactor target/classes dirs or installed jars).
+        LinkedHashSet<Path> sources = new LinkedHashSet<>();
+        for (Class<?> modelClass : MODEL_CLASSES) {
+            CodeSource codeSource = modelClass.getProtectionDomain().getCodeSource();
+            if (codeSource == null || codeSource.getLocation() == null) {
+                throw new IllegalStateException("Cannot resolve code source for model class " + modelClass.getName());
+            }
+            sources.add(Path.of(codeSource.getLocation().toURI()));
         }
-        Path source = Path.of(codeSource.getLocation().toURI());
         Files.createDirectories(modelJar.getParent());
-        if (Files.isRegularFile(source) && source.toString().endsWith(".jar")) {
-            Files.copy(source, modelJar, StandardCopyOption.REPLACE_EXISTING);
-        } else if (Files.isDirectory(source)) {
-            jarDirectory(source, modelJar);
-        } else {
-            throw new IllegalStateException("Unsupported worker code source for model jar: " + source);
+        try (JarOutputStream jar = new JarOutputStream(Files.newOutputStream(modelJar,
+                StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING))) {
+            Set<String> written = new HashSet<>();
+            for (Path source : sources) {
+                if (Files.isDirectory(source)) {
+                    addDirectoryToJar(source, jar, written);
+                } else if (Files.isRegularFile(source) && source.toString().endsWith(".jar")) {
+                    addJarToJar(source, jar, written);
+                } else {
+                    throw new IllegalStateException("Unsupported model code source: " + source);
+                }
+            }
         }
     }
 
-    private static void jarDirectory(Path classesDir, Path jarPath) throws IOException {
-        try (JarOutputStream jar = new JarOutputStream(Files.newOutputStream(jarPath,
-                StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING))) {
-            try (var stream = Files.walk(classesDir)) {
-                for (Path file : stream.filter(Files::isRegularFile).sorted().toList()) {
-                    String entryName = classesDir.relativize(file).toString().replace('\\', '/');
-                    jar.putNextEntry(new JarEntry(entryName));
-                    try (InputStream input = Files.newInputStream(file)) {
-                        input.transferTo(jar);
-                    }
-                    jar.closeEntry();
+    private static void addDirectoryToJar(Path classesDir, JarOutputStream jar, Set<String> written)
+            throws IOException {
+        try (var stream = Files.walk(classesDir)) {
+            for (Path file : stream.filter(Files::isRegularFile).sorted().toList()) {
+                String entryName = classesDir.relativize(file).toString().replace('\\', '/');
+                if (!written.add(entryName)) {
+                    continue;
                 }
+                jar.putNextEntry(new JarEntry(entryName));
+                try (InputStream input = Files.newInputStream(file)) {
+                    input.transferTo(jar);
+                }
+                jar.closeEntry();
+            }
+        }
+    }
+
+    private static void addJarToJar(Path sourceJar, JarOutputStream jar, Set<String> written)
+            throws IOException {
+        try (JarInputStream in = new JarInputStream(Files.newInputStream(sourceJar))) {
+            JarEntry entry;
+            while ((entry = in.getNextJarEntry()) != null) {
+                if (entry.isDirectory() || !written.add(entry.getName())) {
+                    continue;
+                }
+                jar.putNextEntry(new JarEntry(entry.getName()));
+                in.transferTo(jar);
+                jar.closeEntry();
             }
         }
     }

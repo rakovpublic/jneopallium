@@ -20,6 +20,8 @@
         <module>domain-curiosity</module>
         <module>domain-embodiment</module>
         <module>domain-glia</module>
+        <module>domain-industrial</module>
+        <module>domain-agi</module>
         <module>domain-llm</module>
         <module>domain-security</module>
         <module>domain-sleep</module>
