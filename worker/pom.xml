@@ -32,6 +32,78 @@
             <artifactId>worker-core</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
+        <!-- Shared neuromodulatory foundation (used by the domain impls and the
+             higher-level ai/* neurons still held here). -->
+        <dependency>
+            <groupId>com.rakovpublic.jneopallium</groupId>
+            <artifactId>agi-base</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <!-- Extracted leaf-domain implementation modules (Phase 2, batch A).
+             The transitional worker still holds the bridges, demos, and the
+             higher-level ai/* neurons that reference these domain classes, so
+             it depends on each extracted domain jar. -->
+        <dependency>
+            <groupId>com.rakovpublic.jneopallium</groupId>
+            <artifactId>domain-adfraud</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rakovpublic.jneopallium</groupId>
+            <artifactId>domain-affect</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rakovpublic.jneopallium</groupId>
+            <artifactId>domain-bci</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rakovpublic.jneopallium</groupId>
+            <artifactId>domain-clinical</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rakovpublic.jneopallium</groupId>
+            <artifactId>domain-curiosity</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rakovpublic.jneopallium</groupId>
+            <artifactId>domain-embodiment</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rakovpublic.jneopallium</groupId>
+            <artifactId>domain-glia</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rakovpublic.jneopallium</groupId>
+            <artifactId>domain-llm</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rakovpublic.jneopallium</groupId>
+            <artifactId>domain-security</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rakovpublic.jneopallium</groupId>
+            <artifactId>domain-sleep</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rakovpublic.jneopallium</groupId>
+            <artifactId>domain-swarm</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rakovpublic.jneopallium</groupId>
+            <artifactId>domain-tutoring</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
 
         <!-- Core JSON (used directly by bridge/domain code) -->
         <dependency>

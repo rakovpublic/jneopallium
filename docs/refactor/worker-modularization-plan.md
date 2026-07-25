@@ -265,6 +265,14 @@ Each phase compiles and keeps tests green before the next.
 4. **Naming / groupId:** keep root `com.rakovpublic.jneopallium`; artifactIds `worker-core`,
    `bridge-api`, `domain-*`, `bridge-*`, `demo-*`. Java packages unchanged.
 5. **Demos:** in-repo `demos/*` modules.
+6. **`ssmaint` folds into `domain-industrial`** (not its own jar) — self-supervised
+   maintenance is industrial-adjacent. → 14 domains.
+7. **`opcua` becomes its own `bridge-opcua`** (extract `input/opcua`,
+   `neuron.impl.industrial.opcua`, `signals.industrial.opcua`); fix the demos that use it.
+   **`nengo` is a bridge** (`bridge-nengo`). → 16 bridges.
+
+**Revised jar total: 40** = master 1 + worker-core 1 + bridge-api 1 + 14 domains + 16 bridges
++ 7 demos.
 
 ## 9. Full module list (package-per-module)
 

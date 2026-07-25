@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.rakovpublic.jneopallium</groupId>
+        <artifactId>wrapper</artifactId>
+        <version>1.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    <artifactId>domains</artifactId>
+    <packaging>pom</packaging>
+    <!-- Aggregator for the per-domain neuron/signal/processor implementation modules. -->
+    <modules>
+        <module>domain-adfraud</module>
+        <module>domain-affect</module>
+        <module>domain-bci</module>
+        <module>domain-clinical</module>
+        <module>domain-curiosity</module>
+        <module>domain-embodiment</module>
+        <module>domain-glia</module>
+        <module>domain-llm</module>
+        <module>domain-security</module>
+        <module>domain-sleep</module>
+        <module>domain-swarm</module>
+        <module>domain-tutoring</module>
+    </modules>
+</project>
