@@ -28,5 +28,6 @@
         <module>bridge-plc4x</module>
         <module>bridge-ros2</module>
         <module>bridge-nengo</module>
+        <module>bridge-opcua</module>
     </modules>
 </project>
