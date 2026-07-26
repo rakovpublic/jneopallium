@@ -137,7 +137,7 @@ Bridge-specific (01-PLC4X.md §8):
 
 All of these are implemented in
 `worker/src/test/java/com/rakovpublic/jneuropallium/worker/bridge/plc4x/Plc4xBridgeIntegrationTest.java`
-and run as part of `mvn -pl worker test`.
+and run as part of `mvn -pl bridges/bridge-plc4x test`.
 
 ## Manual demo procedure
 

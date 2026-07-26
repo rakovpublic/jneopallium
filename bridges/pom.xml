@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.rakovpublic.jneopallium</groupId>
+        <artifactId>wrapper</artifactId>
+        <version>1.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    <artifactId>bridges</artifactId>
+    <packaging>pom</packaging>
+    <!-- Aggregator for the per-protocol bridge modules. -->
+    <modules>
+        <module>bridge-canopen</module>
+        <module>bridge-dicom</module>
+        <module>bridge-ditto</module>
+        <module>bridge-fhir</module>
+        <module>bridge-fmi</module>
+        <module>bridge-iec61850</module>
+        <module>bridge-kafka</module>
+        <module>bridge-lsl</module>
+        <module>bridge-lti</module>
+        <module>bridge-mavlink</module>
+        <module>bridge-mqtt</module>
+        <module>bridge-otel</module>
+        <module>bridge-plc4x</module>
+        <module>bridge-ros2</module>
+        <module>bridge-nengo</module>
+        <module>bridge-opcua</module>
+    </modules>
+</project>

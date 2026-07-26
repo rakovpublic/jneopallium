@@ -16,7 +16,7 @@ $Maven = if ([string]::IsNullOrWhiteSpace($env:MAVEN_CMD)) { "mvn" } else { $env
 Push-Location $RootDir
 try {
     & $Maven -q -DskipTests=false clean install
-    & $Maven -q -pl worker "-DincludeScope=runtime" dependency:build-classpath "-Dmdep.outputFile=target/fullrun-classpath.txt"
+    & $Maven -q -pl demos/demo-fullrun -am "-DincludeScope=runtime" dependency:build-classpath "-Dmdep.outputFile=target/fullrun-classpath.txt"
 
     $WorkerJar = Join-Path $RootDir "worker\target\worker-1.0-SNAPSHOT.jar"
     $Deps = (Get-Content (Join-Path $RootDir "worker\target\fullrun-classpath.txt") -Raw).Trim()

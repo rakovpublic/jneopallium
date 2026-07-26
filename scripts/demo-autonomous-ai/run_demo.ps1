@@ -17,7 +17,7 @@ $Maven = if ([string]::IsNullOrWhiteSpace($env:MAVEN_CMD)) { "mvn" } else { $env
 Push-Location $RootDir
 try {
     & $Maven -q -DskipTests=false install
-    & $Maven -q -pl worker "-DincludeScope=runtime" dependency:build-classpath "-Dmdep.outputFile=target/autonomous-ai-classpath.txt"
+    & $Maven -q -pl demos/demo-autonomousai -am "-DincludeScope=runtime" dependency:build-classpath "-Dmdep.outputFile=target/autonomous-ai-classpath.txt"
 
     $WorkerJar = Join-Path $RootDir "worker\target\worker-1.0-SNAPSHOT.jar"
     $Deps = (Get-Content (Join-Path $RootDir "worker\target\autonomous-ai-classpath.txt") -Raw).Trim()
