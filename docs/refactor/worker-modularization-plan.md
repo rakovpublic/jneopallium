@@ -37,6 +37,13 @@ lower health = more significant — so severity must come from the result type/d
 
 ## Progress log
 
+- **2026-07-26 — Phase 7: CI + docs.** Commit `32d76bc`. CI unchanged (maven-verify builds the
+  root reactor structure-agnostically; codeql build-mode none). README Project Layout / dependency /
+  bridge-framework sections rewritten for the module tree; actionable `mvn -pl worker -Dtest=…`
+  commands and demo run scripts repointed to their new modules. Follow-up left: docgen Python +
+  historical demo report docs still reference the old single worker fat jar (fat-jar deployment model
+  the modular layout replaces — needs demo-author decisions, not a path swap). **Phase 6 (retire
+  worker) was completed within Phase 5 (commit `e003f9a`).**
 - **2026-07-26 — Phase 5 complete: worker retired.** Commit `e003f9a`. All remaining test sources
   (core/domain/bridge) and resources migrated from the transitional `worker` to their owning
   modules; cross-domain `ModuleProcessorsTest` moved to a new `integration-tests` module; `master`
