@@ -24,11 +24,8 @@
         <module>bridges</module>
         <!-- Runnable demo modules. -->
         <module>demos</module>
-        <!-- Transitional aggregate: still holds bridges, domain impls, and
-             demos until they are carved into their own modules (see
-             docs/refactor/worker-modularization-plan.md). Depends on
-             worker-core. -->
-        <module>worker</module>
+        <!-- Cross-module (cross-domain) integration tests. -->
+        <module>integration-tests</module>
     </modules>
 
     <properties>
