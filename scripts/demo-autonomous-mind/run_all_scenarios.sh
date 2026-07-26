@@ -10,10 +10,10 @@ MVN="${MAVEN_CMD:-mvn}"
 cd "$ROOT_DIR"
 
 "$MVN" -q -DskipTests install
-"$MVN" -q -pl worker -DincludeScope=runtime dependency:build-classpath -Dmdep.outputFile=target/autonomous-mind-classpath.txt
+"$MVN" -q -pl demos/demo-autonomousmind -am -DincludeScope=runtime dependency:build-classpath -Dmdep.outputFile=target/autonomous-mind-classpath.txt
 
-WORKER_JAR="$ROOT_DIR/worker/target/worker-1.0-SNAPSHOT.jar"
-DEPS="$(cat "$ROOT_DIR/worker/target/autonomous-mind-classpath.txt")"
+WORKER_JAR="$ROOT_DIR/demos/demo-autonomousmind/target/demo-autonomousmind-1.0-SNAPSHOT.jar"
+DEPS="$(cat "$ROOT_DIR/demos/demo-autonomousmind/target/autonomous-mind-classpath.txt")"
 PATH_SEPARATOR=":"
 case "$(uname -s)" in
   MINGW*|MSYS*|CYGWIN*)

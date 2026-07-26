@@ -10,6 +10,6 @@ Get-Command java | Out-Null
 Get-Command mvn | Out-Null
 Get-Command python | Out-Null
 
-mvn -q -pl worker -DskipTests package
+mvn -q -pl demos/demo-industrialfmi -am -DskipTests package
 python -m pip install -q -r scripts/demo-industrial-fmi/requirements.txt
 python scripts/demo-industrial-fmi/run_demo.py $Scenario

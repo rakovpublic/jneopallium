@@ -10,10 +10,10 @@ MVN="${MAVEN_CMD:-mvn}"
 cd "$ROOT_DIR"
 
 "$MVN" -q -DskipTests=false clean install
-"$MVN" -q -pl worker -DincludeScope=runtime dependency:build-classpath -Dmdep.outputFile=target/fullrun-classpath.txt
+"$MVN" -q -pl demos/demo-fullrun -am -DincludeScope=runtime dependency:build-classpath -Dmdep.outputFile=target/fullrun-classpath.txt
 
-WORKER_JAR="$ROOT_DIR/worker/target/worker-1.0-SNAPSHOT.jar"
-DEPS="$(cat "$ROOT_DIR/worker/target/fullrun-classpath.txt")"
+WORKER_JAR="$ROOT_DIR/demos/demo-fullrun/target/demo-fullrun-1.0-SNAPSHOT.jar"
+DEPS="$(cat "$ROOT_DIR/demos/demo-fullrun/target/fullrun-classpath.txt")"
 PATH_SEPARATOR=":"
 case "$(uname -s)" in
   MINGW*|MSYS*|CYGWIN*)

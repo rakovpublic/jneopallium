@@ -70,24 +70,40 @@ This makes the framework well-suited to:
 
 ## Project Layout
 
-The build is a multi-module Maven project (`com.rakovpublic.jneopallium:wrapper:1.0`).
+The build is a multi-module Maven project (`com.rakovpublic.jneopallium:wrapper:1.0`). The engine,
+the per-domain implementations, the protocol bridges and the demos are each separate Maven
+artifacts, so a deployment (or a "model owner") depends on only the modules its model actually uses.
 
 ```
 jneopallium/
-├── master/         # Cluster master node — coordinates workers, holds shared state
-├── worker/         # Worker node — runs neurons, processors, signal chains, bridges
-├── doc/            # Design notes, diagrams, architecture documents
-├── .github/        # Workflows, issue/PR templates
-├── pom.xml         # Aggregator POM (packaging=pom)
-├── LICENSE.MD      # BSD 3-Clause
-├── CODE_OF_CONDUCT.md
-├── CONTRIBUTING.md
-├── SECURITY.md
-├── TestPlanPhase1.md / TestPlanPhase2*.md   # Phase test plans
-└── WorkDiary.md    # Running design log
+├── master/            # Cluster master node — coordinates workers, holds shared state
+├── worker-core/       # Lightweight engine + neuron/signal contracts + cluster runtime
+├── agi-base/          # Shared neuromodulatory foundation (ModulatableNeuron + base signals)
+├── bridge-api/        # Shared bridge SPI (universal write algorithm, audit, bindings, safety mode)
+├── domains/           # Per-domain neuron/signal/processor implementations (14 modules)
+│   └── domain-*/      #   industrial · security · adfraud · swarm · clinical · bci · tutoring
+│                      #   affect · glia · sleep · curiosity · embodiment · llm · agi
+├── bridges/           # Per-protocol bridge modules (16 modules)
+│   └── bridge-*/      #   fmi · iec61850 · plc4x · canopen · mqtt · ditto · opcua · kafka · fhir
+│                      #   dicom · lsl · lti · mavlink · ros2 · otel · nengo
+├── demos/             # Runnable demo modules (7 modules)
+│   └── demo-*/        #   fullrun · industrial · industrialfmi · uavsingle · autonomousai
+│                      #   autonomousmind · adfraud
+├── integration-tests/ # Cross-module (cross-domain) tests
+├── doc/  docs/        # Design notes, diagrams, protocol manuals, per-module docs
+├── .github/           # Workflows, issue/PR templates
+├── pom.xml            # Aggregator POM (packaging=pom)
+└── LICENSE.MD · CONTRIBUTING.md · SECURITY.md · WorkDiary.md · ...
 ```
 
-All bridge adapters live under `worker/src/main/java/com/rakovpublic/jneuropallium/worker/bridge/`.
+The engine resolves neuron/signal/processor classes at runtime by fully-qualified name
+(`Class.forName`), so `worker-core` needs no compile-time dependency on any domain. A model owner
+depends on `worker-core` plus only the `domain-*` and `bridge-*` modules their model references.
+See [docs/refactor/worker-modularization-plan.md](docs/refactor/worker-modularization-plan.md) for
+the module map and rationale.
+
+Bridge adapters live under each `bridges/bridge-<id>/`; the shared bridge SPI is in `bridge-api`
+(formerly `worker.bridge.common`).
 
 ## Core Abstractions
 
@@ -150,17 +166,26 @@ cd jneopallium
 mvn clean install
 ```
 
-This builds both `master` and `worker` modules and installs the artifacts to your local Maven repository under `com.rakovpublic.jneopallium`.
+This builds every module in the reactor (engine, foundation, domains, bridges, demos) and installs
+the artifacts to your local Maven repository under `com.rakovpublic.jneopallium`.
 
 ### Using as a Dependency
 
-Add the worker module to your own project once the artifacts are published (currently install locally, see [Roadmap](#roadmap) for Maven Central plans):
+Depend on the lightweight engine plus only the `domain-*` / `bridge-*` modules your model uses (once
+published — currently install locally, see [Roadmap](#roadmap) for Maven Central plans):
 
 ```xml
+<!-- The engine + neuron/signal contracts -->
 <dependency>
     <groupId>com.rakovpublic.jneopallium</groupId>
-    <artifactId>worker</artifactId>
-    <version>1.0</version>
+    <artifactId>worker-core</artifactId>
+    <version>1.0-SNAPSHOT</version>
+</dependency>
+<!-- A domain implementation (e.g. industrial); add other domain-*/bridge-* as needed -->
+<dependency>
+    <groupId>com.rakovpublic.jneopallium</groupId>
+    <artifactId>domain-industrial</artifactId>
+    <version>1.0-SNAPSHOT</version>
 </dependency>
 ```
 
@@ -301,12 +326,12 @@ With a fast/slow ratio of *N* = 10:
 
 Every adapter between an external real-world system and the Jneopallium signal pipeline is a **bridge**. The shared contract — six ground rules, universal write algorithm, audit schema, acceptance scenarios, phase progression — is specified once in [`00-FRAMEWORK.md`](00-FRAMEWORK.md); per-protocol specs (`01-PLC4X.md` … `14-LTI-XAPI.md`) reference it instead of restating it.
 
-Shared scaffolding under `worker/src/main/java/com/rakovpublic/jneuropallium/worker/bridge/common/`:
+Shared scaffolding lives in the `bridge-api` module (`worker.bridge.common`):
 
-- `AbstractBridgeOutputAggregator` — template-method enforcement of the universal §2.2 write algorithm (interlock → override → clamp → rate-limit → diff-suppress → audit);
+- `AbstractBridgeOutputAggregator` — template-method enforcement of the universal §2.2 write algorithm (interlock → override → clamp → rate-limit → diff-suppress → audit). It programs against the neutral control contracts in `worker-core` (`worker.net.signals.control.*`), so `bridge-api` carries no dependency on any domain module;
 - `OverrideRegistry`, `AbstractBridgeAuditOutput`, `BridgeReconnectPolicy`, `BridgeAuditRecord`, `BridgeBindingDirection`.
 
-New bridges go in `worker.bridge.<bridge-id>/` and start every loop in `SHADOW` mode.
+New bridges go in their own `bridges/bridge-<bridge-id>/` module (package `worker.bridge.<bridge-id>`), depend on `bridge-api` plus the `domain-*` modules whose signals they map, and start every loop in `SHADOW` mode.
 
 ### Bridge index
 
