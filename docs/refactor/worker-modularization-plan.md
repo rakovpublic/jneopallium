@@ -1,7 +1,12 @@
 # Worker Modularization Plan — Bridges, Domains, Demos → Separate Maven Modules
 
-Status: **in progress** (Phase 0 + Phase 1 done) · Scope: split the monolithic `worker`
-module into a lightweight core plus per-domain, per-bridge, and per-demo Maven artifacts.
+Status: **COMPLETE** · Scope: split the monolithic `worker` module into a lightweight core plus
+per-domain, per-bridge, and per-demo Maven artifacts. The monolithic `worker` module is retired.
+
+Final module set (46 reactor modules incl. aggregators): `master`, `worker-core`, `agi-base`,
+`bridge-api`, 15 `domain-*`, 16 `bridge-*`, 7 `demo-*`, `integration-tests`. Full green build:
+`mvn -B -o clean test` → BUILD SUCCESS, 0 failures (3 demo-fullrun demo-06 assertions `@Disabled`,
+see the follow-up section below).
 
 ## Known follow-up: demo-fullrun signal-order fragility (demo-06)
 
@@ -31,6 +36,13 @@ first-encountered (note: a naive max-`numericValue` heuristic fixes demo-06 but 
 lower health = more significant — so severity must come from the result type/decision, not the value).
 
 ## Progress log
+
+- **2026-07-26 — Phase 5 complete: worker retired.** Commit `e003f9a`. All remaining test sources
+  (core/domain/bridge) and resources migrated from the transitional `worker` to their owning
+  modules; cross-domain `ModuleProcessorsTest` moved to a new `integration-tests` module; `master`
+  repointed to `worker-core`; the `worker` module deleted. `mvn -B -o clean test` → BUILD SUCCESS
+  across all 46 modules, 0 failures. **Refactor complete.**
+
 
 - **2026-07-26 — Phase 4 complete (7 demo modules), BUILD-VERIFIED.** Commit `dfc2131`.
   - `demos/` aggregator + 7 modules (`demo-adfraud`, `demo-autonomousai`, `demo-autonomousmind`,
