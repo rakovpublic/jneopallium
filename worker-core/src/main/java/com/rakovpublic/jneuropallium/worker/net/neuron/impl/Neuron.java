@@ -218,7 +218,10 @@ public class Neuron implements INeuron {
             cyclingNeuronInputMapping = new HashMap<>();
         }
         try {
-            HashMap<Class<? extends ISignal>, List<ISignal>> signalsMap = new HashMap<>();
+            // LinkedHashMap: iteration order must be deterministic (insertion order of
+            // the incoming signals), not Class-identity-hash order, so signal
+            // processing does not depend on class-loading order / packaging.
+            LinkedHashMap<Class<? extends ISignal>, List<ISignal>> signalsMap = new LinkedHashMap<>();
             if (dendrites == null) {
                 dendrites = new Dendrites();
             }
@@ -428,7 +431,10 @@ public class Neuron implements INeuron {
             cyclingNeuronInputMapping = new HashMap<>();
         }
         try {
-            HashMap<Class<? extends ISignal>, List<ISignal>> signalsMap = new HashMap<>();
+            // LinkedHashMap: iteration order must be deterministic (insertion order of
+            // the incoming signals), not Class-identity-hash order, so signal
+            // processing does not depend on class-loading order / packaging.
+            LinkedHashMap<Class<? extends ISignal>, List<ISignal>> signalsMap = new LinkedHashMap<>();
 
             for (ISignal s : signals) {
                 if(s instanceof IChangingSignal){
