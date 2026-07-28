@@ -1,6 +1,6 @@
 # Initial (label-free) training + Python tests for the Self-Supervised
 # Maintenance Guardian. The runtime model and its tests are Java (run with
-# Maven: mvn -pl worker -Dtest=SelfSupervisedMaintenanceModuleTest test).
+# Maven: mvn -pl domains/domain-industrial -am -Dtest=SelfSupervisedMaintenanceModuleTest test).
 $ErrorActionPreference = "Stop"
 Set-Location $PSScriptRoot
 

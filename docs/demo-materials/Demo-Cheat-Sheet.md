@@ -11,12 +11,12 @@ Keep this on screen. Full detail in **Industrial-Demos-Runbook.md**.
 # A. Industrial Loop Guardian (supervised, FMI skid)
 python scripts/demo-industrial-fmi/run_demo.py all
 python scripts/demo-industrial-fmi/run_demo.py pump-wear     # the headline
-mvn -pl worker -Dtest=IndustrialModuleTest test              # verify
+mvn -pl domains/domain-industrial -Dtest=IndustrialModuleTest test              # verify
 
 # B. Self-Supervised Maintenance (label-free, real Java neurons)
 python scripts/demo-self-supervised-maintenance/train_ss_maintenance_model.py   # 0 labels
 scripts/demo-self-supervised-maintenance/demo/run_demo.ps1   # or run_demo.sh
-mvn -pl worker -Dtest=SelfSupervisedMaintenanceModuleTest test               # verify (14)
+mvn -pl domains/domain-industrial -Dtest=SelfSupervisedMaintenanceModuleTest test               # verify (14)
 python -m unittest tests.test_ss_maintenance                                 # verify (5)
 ```
 

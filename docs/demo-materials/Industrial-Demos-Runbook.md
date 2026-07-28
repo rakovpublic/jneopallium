@@ -82,7 +82,7 @@ Nine deterministic scenarios: `normal`, `load-disturbance`, `oscillation`, `pump
 ### A.4 Verify (for the sceptic in the room)
 ```bash
 # the model + runtime are unit-tested
-mvn -pl worker -Dtest=IndustrialModuleTest test
+mvn -pl domains/domain-industrial -Dtest=IndustrialModuleTest test
 ```
 Point out `target/jneopallium-industrial-fmi/<scenario>/manifest.json` records the exact model file and FMU source used — reproducible evidence, not a slide claim.
 
@@ -133,7 +133,7 @@ Safety posture .............................. ADVISORY (never actuates)
 ### B.5 Verify
 ```bash
 # runtime model (14 tests) and trainer/label-free separation (5 tests)
-mvn -pl worker -Dtest=SelfSupervisedMaintenanceModuleTest test
+mvn -pl domains/domain-industrial -Dtest=SelfSupervisedMaintenanceModuleTest test
 python -m unittest -v tests.test_ss_maintenance   # from the demo script dir
 ```
 Call out: the Python suite proves **every** injected fault family separates from the healthy baseline (>2× the p999 extreme) **with zero labels**, and the tests caught two real timestamp-overflow bugs before production.

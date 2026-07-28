@@ -21,8 +21,8 @@ if (-not (Test-Path $classes) -or $null -eq $cpFile) {
     Write-Host "Compiling worker and resolving classpath via Maven..."
     $cpFile = Join-Path $root "worker\target\ssmaint-demo-cp.txt"
     Push-Location $root
-    mvn -q -pl worker -am compile
-    mvn -q -pl worker dependency:build-classpath "-Dmdep.outputFile=$cpFile"
+    mvn -q -pl domains/domain-industrial -am compile
+    mvn -q -pl domains/domain-industrial -am dependency:build-classpath "-Dmdep.outputFile=$cpFile"
     Pop-Location
 }
 $cp = "$classes;" + (Get-Content $cpFile -Raw).Trim()

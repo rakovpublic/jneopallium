@@ -60,7 +60,7 @@ Run the real Jneopallium `Entry local` machine-health workflow with a Java
 ```powershell
 $env:MAVEN_OPTS='-Xms32m -Xmx768m -XX:ReservedCodeCacheSize=96m -XX:+UseSerialGC'
 & 'C:\Program Files\JetBrains\IntelliJ IDEA 2025.3.1\plugins\maven\lib\maven3\bin\mvn.cmd' `
-  -pl worker -DskipTests '-Dmaven.compiler.useIncrementalCompilation=false' `
+  -pl demos/demo-industrialfmi -am -DskipTests '-Dmaven.compiler.useIncrementalCompilation=false' `
   test-compile dependency:build-classpath '-Dmdep.outputFile=target\industrial-cp.txt'
 $cp = "worker\target\test-classes;worker\target\classes;" + (Get-Content worker\target\industrial-cp.txt -Raw)
 & 'C:\Program Files\Java\jdk-17.0.4.1\bin\java.exe' -Xms32m -Xmx768m -XX:+UseSerialGC `

@@ -63,9 +63,9 @@ A worker is started with three coordinates and nothing else; it reads the master
 its thread count from the `demo09_properties` hash:
 
 ```bash
-java -cp <worker runtime classpath> \
+java -cp <demo-cluster runtime classpath> \
   com.rakovpublic.jneuropallium.worker.application.Entry \
-  http file:///<worker jar> \
+  http file:///<worker-core jar> \
   com.rakovpublic.jneuropallium.worker.util.RedisContext \
   <path to context.json>
 ```
@@ -169,17 +169,21 @@ one `HMGET` + one `HSET` for the signals, one pipeline for the neurons.
 
 ## 5. Components
 
-| Component | Package | Responsibility |
+| Component | Module / package | Responsibility |
 |---|---|---|
-| `RedisSplitInput` | `worker.net.signals.storage.redis` | the assignment: `{host, port, neuronNetName, threads, layerId, start, end, run, loop, cycleNeuronMapping, nodeIdentifier}` and nothing else |
-| `RedisInputResolver` | `worker.net.layers.impl.redis` | worker-side run state; replaces `InMemoryInputResolver`, which holds the input loading strategy — and with it the whole input history — as a field |
-| `RedisLayerMeta` / `RedisLayersMeta` / `RedisResultLayerMeta` | `worker.net.layers.impl.redis` | layer configuration over HASH + ZSET |
-| `RedisLayer` | `worker.net.layers.impl.redis` | the layer handle a neuron sees while a worker processes it |
-| `RedisSignalStorage` / `RedisSignalHistoryStorage` | `worker.net.signals.storage.redis` | pending signals and history |
-| `RedisInitInput` | `worker.net.signals.storage.redis` | input source over a Redis list (was a stub returning `null`) |
-| `RedisClientFactory` / `RedisKeys` / `SignalJson` | `worker.util` | one pooled client per endpoint, the key layout, signal (de)serialisation |
-| `ClusterDemoSeeder` / `ClusterDemoConfigurator` / `ClusterSignalProcessor` / `ClusterResultLayerRunner` | `worker.demo.cluster` | the demo model, its configuration and its arithmetic |
-| `DebugController` | `master.controllers` | `GET /debug/state` — nodes, their partitions, layer sizes |
+| `RedisSplitInput` | `worker-core` · `worker.net.signals.storage.redis` | the assignment: `{host, port, neuronNetName, threads, layerId, start, end, run, loop, cycleNeuronMapping, nodeIdentifier}` and nothing else |
+| `RedisInputResolver` | `worker-core` · `worker.net.layers.impl.redis` | worker-side run state; replaces `InMemoryInputResolver`, which holds the input loading strategy — and with it the whole input history — as a field |
+| `RedisLayerMeta` / `RedisLayersMeta` / `RedisResultLayerMeta` | `worker-core` · `worker.net.layers.impl.redis` | layer configuration over HASH + ZSET |
+| `RedisLayer` | `worker-core` · `worker.net.layers.impl.redis` | the layer handle a neuron sees while a worker processes it |
+| `RedisSignalStorage` / `RedisSignalHistoryStorage` | `worker-core` · `worker.net.signals.storage.redis` | pending signals and history |
+| `RedisInitInput` | `worker-core` · `worker.net.signals.storage.redis` | input source over a Redis list (was a stub returning `null`) |
+| `RedisClientFactory` / `RedisKeys` / `SignalJson` | `worker-core` · `worker.util` | one pooled client per endpoint, the key layout, signal (de)serialisation |
+| `ClusterDemoSeeder` / `ClusterDemoConfigurator` / `ClusterSignalProcessor` / `ClusterResultLayerRunner` | `demos/demo-cluster` · `worker.demo.cluster` | the demo model, its configuration and its arithmetic |
+| `DebugController` | `master` · `master.controllers` | `GET /debug/state` — nodes, their partitions, layer sizes |
+
+`demos/demo-cluster` depends on `worker-core` for the engine and on `demo-fullrun` for the
+neuron, signal and weight classes the model is built from; only the processor and the result
+runner are specific to this demo.
 
 ### The payload
 

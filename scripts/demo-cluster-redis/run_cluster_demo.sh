@@ -42,10 +42,12 @@ if [ "$SKIP_BUILD" != "1" ]; then
   mvn -B -q -DskipTests -f "$repo_root/pom.xml" install
 fi
 
+# The runtime classpath is resolved from the demo module, which pulls in worker-core and the
+# model classes it shares with the full-run demos.
 classpath_file="$run_dir/worker-classpath.txt"
-[ -f "$classpath_file" ] || mvn -B -q -f "$repo_root/pom.xml" -pl worker dependency:build-classpath "-Dmdep.outputFile=$classpath_file"
-worker_cp="$repo_root/worker/target/classes:$(cat "$classpath_file")"
-worker_jar_url="file://$repo_root/worker/target/worker-1.0-SNAPSHOT.jar"
+[ -f "$classpath_file" ] || mvn -B -q -f "$repo_root/pom.xml" -pl demos/demo-cluster dependency:build-classpath "-Dmdep.outputFile=$classpath_file"
+worker_cp="$repo_root/demos/demo-cluster/target/classes:$repo_root/worker-core/target/classes:$(cat "$classpath_file")"
+worker_jar_url="file://$repo_root/worker-core/target/worker-core-1.0-SNAPSHOT.jar"
 context_path="$run_dir/context.json"
 printf '{"host":"127.0.0.1","port":%s,"neuronNetName":"%s"}' "$REDIS_PORT" "$NET" > "$context_path"
 
@@ -56,7 +58,13 @@ java -cp "$worker_cp" com.rakovpublic.jneuropallium.worker.demo.cluster.ClusterD
   --master "$master_url" --threads "$THREADS" --flush
 
 phase "Phase 2 - start the master"
-java -jar "$repo_root/master/target/jneuronnetmaster.war" "--server.port=$MASTER_PORT" \
+# The master resolves the model's classes by name - the result layer runner, the result neurons -
+# so the model has to be on its classpath. Start it from its main class with the demo module
+# appended rather than from the packaged war, which carries only the master and worker-core.
+master_classpath_file="$run_dir/master-classpath.txt"
+[ -f "$master_classpath_file" ] || mvn -B -q -f "$repo_root/pom.xml" -pl master dependency:build-classpath "-Dmdep.outputFile=$master_classpath_file"
+master_cp="$repo_root/master/target/classes:$(cat "$master_classpath_file"):$worker_cp"
+java -cp "$master_cp" com.rakovpublic.jneuropallium.master.Application "--server.port=$MASTER_PORT" \
   > "$run_dir/master.log" 2>&1 &
 pids+=($!)
 for _ in $(seq 1 120); do

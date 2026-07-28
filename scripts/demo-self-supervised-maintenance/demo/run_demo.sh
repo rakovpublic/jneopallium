@@ -12,17 +12,17 @@ w() { if [ "$WIN" = 1 ]; then cygpath -w "$1"; else printf '%s' "$1"; fi; }
 
 python make_demo_replay.py
 
-CLASSES="$ROOT/worker/target/classes"
+CLASSES="$ROOT/domains/domain-industrial/target/classes"
 # reuse a dependency classpath from a prior build if present, else ask Maven
 CP_FILE=""
-for f in "$ROOT/worker/target/ssmaint-demo-cp.txt" "$ROOT/worker/target/industrial-cp.txt"; do
+for f in "$ROOT/domains/domain-industrial/target/ssmaint-demo-cp.txt" "$ROOT/domains/domain-industrial/target/industrial-cp.txt"; do
   [ -f "$f" ] && CP_FILE="$f" && break
 done
 if [ ! -d "$CLASSES" ] || [ -z "$CP_FILE" ]; then
   echo "Compiling worker and resolving classpath via Maven..."
-  CP_FILE="$ROOT/worker/target/ssmaint-demo-cp.txt"
-  ( cd "$ROOT" && mvn -q -pl worker -am compile \
-      && mvn -q -pl worker dependency:build-classpath -Dmdep.outputFile="$CP_FILE" )
+  CP_FILE="$ROOT/domains/domain-industrial/target/ssmaint-demo-cp.txt"
+  ( cd "$ROOT" && mvn -q -pl domains/domain-industrial -am compile \
+      && mvn -q -pl domains/domain-industrial -am dependency:build-classpath -Dmdep.outputFile="$CP_FILE" )
 fi
 DEPCP="$(cat "$CP_FILE")"          # maven-generated, native to this platform
 

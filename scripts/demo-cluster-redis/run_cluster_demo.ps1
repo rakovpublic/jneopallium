@@ -95,14 +95,28 @@ if (-not $SkipBuild) {
     if ($LASTEXITCODE -ne 0) { throw "Build failed" }
 }
 
+# The runtime classpath is resolved from the demo module, which pulls in worker-core and the
+# model classes it shares with the full-run demos.
 $classpathFile = Join-Path $runDir "worker-classpath.txt"
 if (-not (Test-Path $classpathFile)) {
-    & mvn -B -q -f (Join-Path $repoRoot "pom.xml") -pl worker dependency:build-classpath "-Dmdep.outputFile=$classpathFile"
-    if ($LASTEXITCODE -ne 0) { throw "Cannot resolve the worker classpath" }
+    & mvn -B -q -f (Join-Path $repoRoot "pom.xml") -pl demos/demo-cluster dependency:build-classpath "-Dmdep.outputFile=$classpathFile"
+    if ($LASTEXITCODE -ne 0) { throw "Cannot resolve the demo classpath" }
 }
-$workerClasspath = (Join-Path $repoRoot "worker\target\classes") + ";" + (Get-Content $classpathFile -Raw).Trim()
-$workerJarUrl = ([System.Uri]((Resolve-Path (Join-Path $repoRoot "worker\target\worker-1.0-SNAPSHOT.jar")).Path)).AbsoluteUri
-$masterWar = Join-Path $repoRoot "master\target\jneuronnetmaster.war"
+$workerClasspath = (Join-Path $repoRoot "demos\demo-cluster\target\classes") + ";" +
+                   (Join-Path $repoRoot "worker-core\target\classes") + ";" +
+                   (Get-Content $classpathFile -Raw).Trim()
+$workerJarUrl = ([System.Uri]((Resolve-Path (Join-Path $repoRoot "worker-core\target\worker-core-1.0-SNAPSHOT.jar")).Path)).AbsoluteUri
+
+# The master resolves the model's classes by name - the result layer runner, the result neurons -
+# so the model has to be on its classpath. It is started from its main class with the demo module
+# appended rather than from the packaged war, which carries only the master and worker-core.
+$masterClasspathFile = Join-Path $runDir "master-classpath.txt"
+if (-not (Test-Path $masterClasspathFile)) {
+    & mvn -B -q -f (Join-Path $repoRoot "pom.xml") -pl master dependency:build-classpath "-Dmdep.outputFile=$masterClasspathFile"
+    if ($LASTEXITCODE -ne 0) { throw "Cannot resolve the master classpath" }
+}
+$masterClasspath = (Join-Path $repoRoot "master\target\classes") + ";" +
+                   (Get-Content $masterClasspathFile -Raw).Trim() + ";" + $workerClasspath
 
 # Pass the context as a file: Entry resolves a path into the JSON itself, which avoids the
 # shell mangling the quotes of an inline JSON argument.
@@ -121,7 +135,8 @@ Write-Host "redis keys holding the whole model: $((& $redisCli -p $RedisPort key
 # ------------------------------------------------------------------ master
 Write-Phase "Phase 2 - start the master"
 $masterLog = Join-Path $runDir "master.log"
-$masterProcess = Start-Process -FilePath "java" -ArgumentList @("-jar", $masterWar, "--server.port=$MasterPort") `
+$masterProcess = Start-Process -FilePath "java" `
+    -ArgumentList @("-cp", $masterClasspath, "com.rakovpublic.jneuropallium.master.Application", "--server.port=$MasterPort") `
     -RedirectStandardOutput $masterLog -RedirectStandardError "$masterLog.err" -PassThru -WindowStyle Hidden
 $processes += $masterProcess
 Wait-For { (Get-MasterState) -ne $null } 120 "the master to accept requests"
@@ -185,29 +200,34 @@ $assignments = @()
 for ($i = 1; $i -le $Workers; $i++) {
     $workerLog = Join-Path $runDir "worker-$i.log"
     if (-not (Test-Path $workerLog)) { continue }
-    foreach ($line in Select-String -Path $workerLog -Pattern 'Processing layer (-?\d+) partition \[(\d+),(\d+)\)') {
+    foreach ($line in Select-String -Path $workerLog -Pattern '^(\S+) .*Processing layer (-?\d+) partition \[(\d+),(\d+)\)') {
         $groups = $line.Matches[0].Groups
         $assignments += [pscustomobject]@{
+            at     = $groups[1].Value
             worker = "worker-$i"
-            layer  = [int]$groups[1].Value
-            start  = [long]$groups[2].Value
-            end    = [long]$groups[3].Value
+            layer  = [int]$groups[2].Value
+            start  = [long]$groups[3].Value
+            end    = [long]$groups[4].Value
         }
     }
 }
-$layerUnderTest = $assignments | Where-Object { $_.layer -ge 0 -and $_.layer -ne 2147483647 } |
-    Group-Object layer | Sort-Object Count -Descending | Select-Object -First 1
-if ($layerUnderTest) {
-    $first = @($layerUnderTest.Group | Select-Object -First ($Partitions) | Sort-Object start)
-    Write-Host ("first pass over layer {0}:" -f $layerUnderTest.Name)
-    $first | ForEach-Object { Write-Host ("  {0,-10} neurons [{1},{2})" -f $_.worker, $_.start, $_.end) }
-    $tiles = $true
-    if ($first[0].start -ne 0) { $tiles = $false }
-    for ($i = 1; $i -lt $first.Count; $i++) {
-        if ($first[$i].start -ne $first[$i - 1].end) { $tiles = $false }
+# The logs of the different workers have to be interleaved by timestamp, otherwise "the first
+# pass over a layer" is just the first worker's whole history.
+$firstLayer = @($assignments | Where-Object { $_.layer -ge 0 -and $_.layer -ne 2147483647 } | Sort-Object at)
+if ($firstLayer.Count -gt 0) {
+    $layerId = $firstLayer[0].layer
+    $pass = @()
+    $covered = 0
+    foreach ($assignment in ($firstLayer | Where-Object { $_.layer -eq $layerId })) {
+        if ($assignment.start -ne $covered) { continue }
+        $pass += $assignment
+        $covered = $assignment.end
+        if ($covered -ge $Neurons) { break }
     }
-    if ($first[-1].end -ne $Neurons) { $tiles = $false }
-    $distinct = (@($first | Select-Object -ExpandProperty worker | Sort-Object -Unique)).Count
+    Write-Host ("first pass over layer {0}:" -f $layerId)
+    $pass | ForEach-Object { Write-Host ("  {0,-10} neurons [{1},{2})" -f $_.worker, $_.start, $_.end) }
+    $tiles = ($pass.Count -gt 0) -and ($pass[0].start -eq 0) -and ($covered -eq $Neurons)
+    $distinct = (@($pass | Select-Object -ExpandProperty worker | Sort-Object -Unique)).Count
     Write-Host ("  partitions tile [0,$Neurons) with no gap or overlap: {0}" -f $tiles) -ForegroundColor Green
     Write-Host ("  spread across {0} distinct workers" -f $distinct) -ForegroundColor Green
 }

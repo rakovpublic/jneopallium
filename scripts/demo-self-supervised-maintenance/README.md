@@ -47,7 +47,7 @@ python scripts/demo-self-supervised-maintenance/train_ss_maintenance_model.py
 cd scripts/demo-self-supervised-maintenance && python -m unittest tests.test_ss_maintenance
 
 # 3. Java tests (validate the runtime model) — via Maven
-mvn -q -pl worker -Dtest=SelfSupervisedMaintenanceModuleTest test
+mvn -q -pl domains/domain-industrial -Dtest=SelfSupervisedMaintenanceModuleTest test
 ```
 
 `run_all.sh` / `run_all.ps1` run steps 1–2 (Java tests need Maven).

@@ -107,7 +107,7 @@ Phase 1 acceptance is exercised against the simulator that ships with
    `Iec61850EventInput.readSignals()` returns an `AlarmSignal` of priority
    `URGENT` (per the `severityMap`).
 
-Acceptance tests (`mvn -pl worker -Dtest='Iec61850*,Scl*' test`) cover
+Acceptance tests (`mvn -pl bridges/bridge-iec61850 -Dtest='Iec61850*,Scl*' test`) cover
 the no-simulator path with `InMemoryIec61850MmsClient`. Production
 sites need a real MMS adapter, which slots in unchanged behind the
 `Iec61850MmsClient` seam.
