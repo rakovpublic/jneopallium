@@ -110,6 +110,13 @@ Useful switches: `-SkipBuild` after the first run, `-KeepRunning` to leave the c
 poking at with `redis-cli`, `-Neurons 6000` to show the payload is unchanged on a model ten
 times the size.
 
+> **The master needs the model's classes.** It resolves the result layer runner and the result
+> neurons by name when it assembles an epoch's results, and since the modular split it no
+> longer ships the demos. The script therefore starts it from its main class with
+> `demos/demo-cluster` on the classpath rather than from the packaged war, which carries only
+> the master and `worker-core`. A real deployment would either do the same or upload the model
+> jar through `/classloader/upload`.
+
 ### Phases
 
 | # | Phase | What the audience sees |
