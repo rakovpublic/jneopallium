@@ -14,6 +14,10 @@ simulators/jneo-battlespace/**/*.mkv
 __pycache__/
 *.pyc
 
+# JVM crash and deoptimisation dumps, written next to the working directory
+hs_err_pid*.log
+replay_pid*.log
+
 # IDE files
 .idea/
 *.iml
