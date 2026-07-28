@@ -16,6 +16,7 @@
         <module>demo-adfraud</module>
         <module>demo-autonomousai</module>
         <module>demo-autonomousmind</module>
+        <module>demo-cluster</module>
         <module>demo-fullrun</module>
         <module>demo-industrial</module>
         <module>demo-industrialfmi</module>

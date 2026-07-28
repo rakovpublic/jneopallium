@@ -12,10 +12,14 @@ public class HttpRequestResolver {
     public static <K extends Object> HttpRequest createPost(String uri, K payload) throws JsonProcessingException {
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
         String json = ow.writeValueAsString(payload);
-        return HttpRequest.newBuilder(URI.create(uri)).POST(HttpRequest.BodyPublishers.ofString(json)).build();
+        return HttpRequest.newBuilder(URI.create(uri))
+                .header("Content-Type", "application/json")
+                .header("Accept", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(json))
+                .build();
     }
 
     public static HttpRequest createGet(String uri) throws JsonProcessingException {
-        return HttpRequest.newBuilder(URI.create(uri)).GET().build();
+        return HttpRequest.newBuilder(URI.create(uri)).header("Accept", "application/json").GET().build();
     }
 }

@@ -42,6 +42,18 @@ public interface ISplitInput extends IStorageMeta {
     void saveNeuron(INeuron neuron);
 
     /**
+     * Saves a whole partition worth of neurons. Implementations backed by a remote store should
+     * override this to write them in one round trip instead of one per neuron.
+     *
+     * @param neurons neurons to persist
+     */
+    default void saveNeurons(List<? extends INeuron> neurons) {
+        for (INeuron neuron : neurons) {
+            saveNeuron(neuron);
+        }
+    }
+
+    /**
      * This method set the name of worker where it will be processed
      *
      * @param name
@@ -80,6 +92,19 @@ public interface ISplitInput extends IStorageMeta {
     void setLayer(Integer layerId);
 
     void applyMeta(ILayersMeta layersMeta);
+
+    /**
+     * Stamps the assignment with the epoch and loop it belongs to, together with the mapping of
+     * input names to cycle neurons. Implementations that resolve their state from a shared store
+     * need this because they do not carry the input loading strategy; the ones that ship the
+     * whole resolver already know it and can ignore it.
+     *
+     * @param run                current epoch
+     * @param loop               current loop inside the epoch
+     * @param cycleNeuronMapping input name to cycle neuron id
+     */
+    default void applyRunState(Long run, Integer loop, HashMap<String, Long> cycleNeuronMapping) {
+    }
 
     Integer getThreads();
 

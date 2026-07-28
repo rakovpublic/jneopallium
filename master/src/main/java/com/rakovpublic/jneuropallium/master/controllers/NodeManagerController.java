@@ -8,8 +8,9 @@ import com.rakovpublic.jneuropallium.worker.model.NodeCompleteRequest;
 import com.rakovpublic.jneuropallium.worker.model.SplitInputResponse;
 import com.rakovpublic.jneuropallium.worker.net.neuron.IResultNeuron;
 import com.rakovpublic.jneuropallium.worker.net.signals.storage.ISplitInput;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/nodeManager")
 public class NodeManagerController {
+    private static final Logger logger = LogManager.getLogger(NodeManagerController.class);
     private NodeManager nodeManager;
     private ConfigurationService configurationService;
 
@@ -43,27 +45,30 @@ public class NodeManagerController {
         IInputService inputService = configurationService.getInputService();
         ISplitInput splitInput = null;
         try {
-            splitInput = configurationService.getInputService().getNext(request.getNodeName());
-            if (splitInput == null) {
-                if (inputService.hasDiscriminators() && !inputService.isDiscriminatorsDone() && inputService.runCompleted()) {
+            splitInput = inputService.getNext(request.getNodeName());
+            if (splitInput == null && inputService.runCompleted()) {
+                if (inputService.hasDiscriminators() && !inputService.isDiscriminatorsDone()) {
                     inputService.prepareDiscriminatorsInputs();
                     splitInput = inputService.getNextDiscriminators(request.getNodeName());
                 } else {
-                    if (inputService.isResultValid() && inputService.runCompleted()) {
+                    if (inputService.isResultValid()) {
                         inputService.prepareResults();
-                    } else if (inputService.runCompleted()) {
-                        inputService.nextRun();
-                        inputService.prepareInputs();
-                        inputService.nextRunDiscriminator();
-                        splitInput = configurationService.getInputService().getNext(request.getNodeName());
-                    } else {
-                        return ResponseEntity.status(HttpStatus.TEMPORARY_REDIRECT).build();
                     }
+                    inputService.nextRun();
+                    inputService.nextRunDiscriminator();
+                    splitInput = inputService.getNext(request.getNodeName());
                 }
+            }
+            if (splitInput == null) {
+                // Nothing to hand out right now - other nodes are still finishing the current
+                // layer. The worker backs off and asks again; do not report this as an error.
+                nodeManager.setNodeStatus(request.getNodeName(), NodeStatus.IDLE);
+                return ResponseEntity.noContent().build();
             }
             nodeManager.setNodeStatus(request.getNodeName(), NodeStatus.RUNNING);
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body(e);
+            logger.error("Cannot resolve next partition for node " + request.getNodeName(), e);
+            return ResponseEntity.internalServerError().body(e.getMessage());
         }
         return ResponseEntity.ok(new SplitInputResponse(splitInput));
     }

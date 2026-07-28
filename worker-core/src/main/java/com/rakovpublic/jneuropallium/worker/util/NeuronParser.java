@@ -25,13 +25,21 @@ import java.util.Map;
 
 public class NeuronParser {
     private static final Logger logger = LogManager.getLogger(NeuronParser.class);
+    /**
+     * Neurons expose derived, read-only properties - and a stored neuron is written by whichever
+     * node processed it last, so its document carries whatever that node's serializer emitted.
+     * Reading has to tolerate properties that have no setter, otherwise a neuron cannot survive
+     * a round trip through a shared store.
+     */
+    private static final com.fasterxml.jackson.databind.ObjectMapper MAPPER = new ObjectMapper()
+            .configure(com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
     public static List<INeuron> parseNeurons(String json) {
         List<INeuron> result = new ArrayList<>();
         JsonElement jelement = JsonParser.parseString(json);
         JsonObject jobject = jelement.getAsJsonObject();
         JsonArray jarray = jobject.getAsJsonArray("neurons");
-        ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper mapper = MAPPER;
         for (JsonElement jel : jarray) {
             String cl = jel.getAsJsonObject().getAsJsonPrimitive("currentNeuronClass").getAsString();
             try {
@@ -58,7 +66,7 @@ public class NeuronParser {
         JsonElement jelement = JsonParser.parseString(json);
         JsonObject jobject = jelement.getAsJsonObject();
         JsonArray jarray = jobject.getAsJsonArray("neurons");
-        ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper mapper = MAPPER;
         for (JsonElement jel : jarray) {
             String cl = jel.getAsJsonObject().getAsJsonPrimitive("currentNeuronClass").getAsString();
             try {
@@ -84,7 +92,7 @@ public class NeuronParser {
         List<INeuron> result = new ArrayList<>();
         JsonElement jelement = JsonParser.parseString(json);
         JsonObject jobject = jelement.getAsJsonObject();
-        ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper mapper = MAPPER;
 
         INeuron neuron = null;
 

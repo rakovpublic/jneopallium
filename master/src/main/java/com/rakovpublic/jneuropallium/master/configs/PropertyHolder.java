@@ -25,8 +25,29 @@ public class PropertyHolder {
         return propertyHolder;
     }
 
+    /**
+     * System properties win over the packaged defaults, and {@code ${...}} placeholders are
+     * resolved against them, so a deployment can point the master at its own folders without
+     * repackaging.
+     */
     public synchronized String getProp(String propertyName) {
-        return prop.getProperty(propertyName);
+        String value = System.getProperty(propertyName, prop.getProperty(propertyName));
+        return value == null ? null : resolvePlaceholders(value);
+    }
+
+    private String resolvePlaceholders(String value) {
+        String result = value;
+        int start;
+        while ((start = result.indexOf("${")) >= 0) {
+            int end = result.indexOf('}', start);
+            if (end < 0) {
+                break;
+            }
+            String key = result.substring(start + 2, end);
+            String replacement = System.getProperty(key, "");
+            result = result.substring(0, start) + replacement + result.substring(end + 1);
+        }
+        return result;
     }
 
     public synchronized void updateConfig(String path) {
@@ -41,12 +62,13 @@ public class PropertyHolder {
     }
 
     private void init() {
-        try {
-            InputStream input = getClass()
-                    .getClassLoader().getResourceAsStream("config.properties");
-            prop = new Properties();
+        prop = new Properties();
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream("config.properties")) {
+            if (input == null) {
+                logger.warn("No config.properties on the classpath, relying on system properties");
+                return;
+            }
             prop.load(input);
-
         } catch (IOException ex) {
             logger.error("cannot read default properties", ex);
         }

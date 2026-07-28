@@ -82,7 +82,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
         } catch (JsonProcessingException e) {
             logger.error("Cannot create instance of inputLoadingStrategy for json " + configuration.getInputLoadingStrategyJson(), e);
         } catch (NullPointerException e) {
-            logger.error("Wrong configuration for inputLoadingStrategy " + configuration.toString());
+            logger.error("Wrong configuration for inputLoadingStrategy " + configuration.toString(), e);
         }
 
         try {
@@ -96,7 +96,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
         } catch (JsonProcessingException e) {
             logger.error("Cannot create instance of IResultLayerRunner for json " + configuration.getResultRunnerJson(), e);
         } catch (NullPointerException e) {
-            logger.error("Wrong configuration for IResultLayerRunner " + configuration.toString());
+            logger.error("Wrong configuration for IResultLayerRunner " + configuration.toString(), e);
         }
         try {
             if (configuration.getSignalsPersistJson() != null) {
@@ -109,10 +109,12 @@ public class ConfigurationServiceImpl implements ConfigurationService {
         } catch (JsonProcessingException e) {
             logger.error("Cannot create instance of ISignalsPersistStorage for json " + configuration.getSignalsPersistJson(), e);
         } catch (NullPointerException e) {
-            logger.error("Wrong configuration for ISignalsPersistStorage " + configuration.toString());
+            logger.error("Wrong configuration for ISignalsPersistStorage " + configuration.toString(), e);
         }
         try {
-            if (configuration.getHistoryJson() != null) {
+            if (configuration.getHistoryClass() == null) {
+                logger.info("No signal history storage configured");
+            } else if (configuration.getHistoryJson() != null) {
                 signalHistoryStorage = (ISignalHistoryStorage) mapper.readValue(configuration.getHistoryJson(), Class.forName(configuration.getHistoryClass()));
             } else {
                 signalHistoryStorage = (ISignalHistoryStorage) Class.forName(configuration.getHistoryClass()).newInstance();
@@ -122,7 +124,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
         } catch (JsonProcessingException e) {
             logger.error("Cannot create instance of ISignalHistoryStorage for json " + configuration.getHistoryJson(), e);
         } catch (NullPointerException e) {
-            logger.error("Wrong configuration for ISignalHistoryStorage " + configuration.toString());
+            logger.error("Wrong configuration for ISignalHistoryStorage " + configuration.toString(), e);
         }
 
         try {
@@ -131,7 +133,12 @@ public class ConfigurationServiceImpl implements ConfigurationService {
         } catch (JsonProcessingException | ClassNotFoundException e) {
             logger.error("Cannot create instance of ILayersMeta for class " + configuration.getLayersMetaClass(), e);
         } catch (NullPointerException e) {
-            logger.error("Wrong configuration for ILayersMeta " + configuration.toString());
+            logger.error("Wrong configuration for ILayersMeta " + configuration.toString(), e);
+        }
+        if (runningStrategy != null && layersMeta != null) {
+            // The strategy is built from the configuration before the layers exist, so it gets
+            // them here; it needs them to create and find the cycle layer.
+            runningStrategy.setLayersMeta(layersMeta);
         }
         try {
             if (configuration.getSplitInputJson() != null) {
@@ -144,10 +151,12 @@ public class ConfigurationServiceImpl implements ConfigurationService {
         } catch (JsonProcessingException e) {
             logger.error("Cannot create instance of ISplitInput for json " + configuration.getSplitInputJson(), e);
         } catch (NullPointerException e) {
-            logger.error("Wrong configuration for ISplitInput " + configuration.toString());
+            logger.error("Wrong configuration for ISplitInput " + configuration.toString(), e);
         }
         try {
-            if (configuration.getReconnectStrategyJson() != null) {
+            if (configuration.getReconnectStrategyClass() == null) {
+                logger.info("No reconnect strategy configured; layer removal will be unavailable");
+            } else if (configuration.getReconnectStrategyJson() != null) {
                 reconnectStrategy = (ReconnectStrategy) mapper.readValue(configuration.getReconnectStrategyJson(), Class.forName(configuration.getReconnectStrategyClass()));
             } else {
                 reconnectStrategy = (ReconnectStrategy) Class.forName(configuration.getReconnectStrategyClass()).newInstance();
@@ -157,10 +166,12 @@ public class ConfigurationServiceImpl implements ConfigurationService {
         } catch (JsonProcessingException e) {
             logger.error("Cannot create instance of ReconnectStrategy for json " + configuration.getReconnectStrategyJson(), e);
         } catch (NullPointerException e) {
-            logger.error("Wrong configuration for reconnectStrategy " + configuration.toString());
+            logger.error("Wrong configuration for reconnectStrategy " + configuration.toString(), e);
         }
         try {
-            if (configuration.getResultInterpreterJson() != null) {
+            if (configuration.getResultInterpreterClass() == null) {
+                logger.info("No result interpreter configured; raw result neurons will be returned");
+            } else if (configuration.getResultInterpreterJson() != null) {
                 resultInterpreter = (ResultInterpreter) mapper.readValue(configuration.getResultInterpreterJson(), Class.forName(configuration.getResultInterpreterClass()));
             } else {
                 resultInterpreter = (ResultInterpreter) Class.forName(configuration.getResultInterpreterClass()).newInstance();
@@ -170,7 +181,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
         } catch (JsonProcessingException e) {
             logger.error("Cannot create instance of resultInterpreter for json " + configuration.getResultInterpreterJson(), e);
         } catch (NullPointerException e) {
-            logger.error("Wrong configuration for resultInterpreter " + configuration.toString());
+            logger.error("Wrong configuration for resultInterpreter " + configuration.toString(), e);
         }
         List<String> discriminators = configuration.getDiscriminators();
         HashMap<String, IInputLoadingStrategy> discriminatorsLoadingStrategies = new HashMap<>();
@@ -197,7 +208,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
             } catch (JsonProcessingException e) {
                 logger.error("Cannot create instance of inputLoadingStrategy for json " + configuration.getDiscriminatorsLoadingStrategies().get(name).getJson(), e);
             } catch (NullPointerException e) {
-                logger.error("Wrong configuration for discriminator " + name + " config " + configuration.toString());
+                logger.error("Wrong configuration for discriminator " + name + " config " + configuration.toString(), e);
             }
             try {
                 if (configuration.getDiscriminatorsSignalStorage().get(name).getJson() != null) {
@@ -210,7 +221,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
             } catch (JsonProcessingException e) {
                 logger.error("Cannot create instance of ISignalsPersistStorage for json " + configuration.getDiscriminatorsSignalStorage().get(name).getJson(), e);
             } catch (NullPointerException e) {
-                logger.error("Wrong configuration for discriminator " + name + " config " + configuration.toString());
+                logger.error("Wrong configuration for discriminator " + name + " config " + configuration.toString(), e);
             }
             try {
                 if (configuration.getDiscriminatorsSignalStorageHistory().get(name).getJson() != null) {
@@ -223,7 +234,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
             } catch (JsonProcessingException e) {
                 logger.error("Cannot create instance of ISignalHistoryStorage for json " + configuration.getDiscriminatorsSignalStorageHistory().get(name).getJson(), e);
             } catch (NullPointerException e) {
-                logger.error("Wrong configuration for discriminator " + name + " config " + configuration.toString());
+                logger.error("Wrong configuration for discriminator " + name + " config " + configuration.toString(), e);
             }
 
             try {
@@ -232,7 +243,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
             } catch (JsonProcessingException | ClassNotFoundException e) {
                 logger.error("Cannot create instance of ILayersMeta for class " + configuration.getDiscriminatorsLayers().get(name).getClassName(), e);
             } catch (NullPointerException e) {
-                logger.error("Wrong configuration for discriminator " + name + " config " + configuration.toString());
+                logger.error("Wrong configuration for discriminator " + name + " config " + configuration.toString(), e);
             }
             discriminatorsLoadingStrategies.put(name, discriminatorRunningStrategy);
             discriminatorsSignalStorage.put(name, discriminatorSignalsPersist);
@@ -259,7 +270,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
         } catch (JsonProcessingException e) {
             logger.error("Cannot create instance of ISplitInput for json " + configuration.getDiscriminatorSplitInputJson(), e);
         } catch (NullPointerException e) {
-            logger.error("Wrong configuration for ISplitInput " + configuration.toString());
+            logger.error("Wrong configuration for ISplitInput " + configuration.toString(), e);
         }
         inputService = new InputService(configuration.getRunOnceIn(),signalsPersist, layersMeta, splitInput, partitions, runningStrategy, signalHistoryStorage, resultLayerRunner, discriminatorsLoadingStrategies, discriminatorsSignalStorage, discriminatorsSignalStorageHistory, inputDiscriminatorStatuses, discriminatorSplitInput, configuration.getNodeTimeout(), resultLayerHolder);
         inputService.updateDiscriminators(discriminatorsLayers);
@@ -279,7 +290,7 @@ public class ConfigurationServiceImpl implements ConfigurationService {
         } catch (JsonProcessingException e) {
             logger.error("Cannot create instance of ISignalHistoryStorage for json " + json.getJson(), e);
         } catch (NullPointerException e) {
-            logger.error("Wrong configuration for discriminator  config " + json.toString());
+            logger.error("Wrong configuration for discriminator  config " + json.toString(), e);
         }
         return result;
     }
