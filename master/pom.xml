@@ -27,6 +27,16 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <!-- The worker logs through log4j-slf4j2-impl. Keeping Spring's default logback
+                     plus log4j-to-slf4j next to it makes log4j refuse to initialise
+                     ("log4j-slf4j2-impl cannot be present with log4j-to-slf4j") and the master
+                     dies before the context starts. -->
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!-- War packaging needs the servlet container in `provided` scope -->
         <dependency>
@@ -56,6 +66,16 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>${spring-boot.version}</version>
+                <executions>
+                    <!-- The build does not inherit spring-boot-starter-parent, so the repackage
+                         goal has to be bound explicitly; without it the war has no main manifest
+                         and cannot be started with java -jar. -->
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <artifactId>maven-war-plugin</artifactId>

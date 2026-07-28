@@ -26,7 +26,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Input loading strategy designed to have different input loading delay for each init input
+ * <p>
+ * The deserializer declared on {@code IInputLoadingStrategy} expects a
+ * {@code {"clazz":..,"iInputLoadingStrategy":{..}}} envelope and is inherited by concrete
+ * classes, where it can only recurse; cancelling it here lets this class be built from its own
+ * JSON.
  */
+@com.fasterxml.jackson.databind.annotation.JsonDeserialize(using = com.fasterxml.jackson.databind.JsonDeserializer.None.class)
 public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
     private static final Logger logger = LogManager.getLogger(CycledInputLoadingStrategy.class);
     public ILayersMeta layersMeta;
@@ -37,7 +43,32 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
     public Long epoch;
     public int defaultLoopsCount;
     public TreeMap<Long, TreeMap<Integer, List<IInputSignal>>> inputHistory;
-    HashMap<String, ProcessingFrequency> signalProcessingFrequencyMap;
+    public HashMap<String, ProcessingFrequency> signalProcessingFrequencyMap;
+
+    /**
+     * Configuration driven construction: the master deserialises the strategy from the
+     * configuration request and supplies the layers afterwards through
+     * {@link #setLayersMeta(ILayersMeta)}. The cycle layer is created lazily by
+     * {@link #updateInputs}, once the first input is registered.
+     */
+    public CycledInputLoadingStrategy() {
+        this.epoch = 0L;
+        this.loop = 0;
+        this.externalInputs = new HashMap<>();
+        this.inputStatuses = new HashMap<>();
+        this.neuronInputMapping = new HashMap<>();
+        this.inputHistory = new TreeMap<>();
+        this.signalProcessingFrequencyMap = new HashMap<>();
+        this.defaultLoopsCount = 1;
+    }
+
+    public HashMap<String, ProcessingFrequency> getSignalProcessingFrequencyMap() {
+        return signalProcessingFrequencyMap;
+    }
+
+    public void setSignalProcessingFrequencyMap(HashMap<String, ProcessingFrequency> signalProcessingFrequencyMap) {
+        this.signalProcessingFrequencyMap = signalProcessingFrequencyMap;
+    }
 
     public ILayersMeta getLayersMeta() {
         return layersMeta;
@@ -148,7 +179,7 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
                         CopyOnWriteArrayList<ISignal> signals = new CopyOnWriteArrayList<>();
                         List<IInputSignal> signalsHistory = new LinkedList<>();
                         for (IInputSignal signal : iii.readSignals()) {
-                            ProcessingFrequency pf = frequencyHashMap.get(signal.getCurrentSignalClass());
+                            ProcessingFrequency pf = frequencyFor(frequencyHashMap, signal);
                             if (pf.getLoop()==null){
                                 if(loop==0&&epoch % pf.getEpoch() == 0){
                                     signal.setInnerLoop(defaultLoopsCount);
@@ -204,7 +235,7 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
                         CopyOnWriteArrayList<ISignal> signals = new CopyOnWriteArrayList<>();
                         List<IInputSignal> signalsHistory = new LinkedList<>();
                         for (IInputSignal signal : iii.readSignals()) {
-                            ProcessingFrequency pf = frequencyHashMap.get(signal.getCurrentSignalClass());
+                            ProcessingFrequency pf = frequencyFor(frequencyHashMap, signal);
                             if (pf.getLoop()==null){
                                 if(loop==0&&epoch % pf.getEpoch() == 0){
                                     signal.setInnerLoop(defaultLoopsCount);
@@ -248,6 +279,16 @@ public class CycledInputLoadingStrategy implements IInputLoadingStrategy {
         return true;
     }
 
+
+    /**
+     * A signal class that was never configured is processed on every loop of every epoch rather
+     * than failing the whole population - the frequency map is an optional tuning input, not a
+     * registry of the signals the net may see.
+     */
+    private ProcessingFrequency frequencyFor(HashMap<Class<? extends ISignal>, ProcessingFrequency> frequencies, ISignal signal) {
+        ProcessingFrequency frequency = frequencies == null ? null : frequencies.get(signal.getCurrentSignalClass());
+        return frequency == null ? new ProcessingFrequency(1L, 1) : frequency;
+    }
 
     @Override
     public void setLayersMeta(ILayersMeta layersMeta) {

@@ -5,6 +5,7 @@
 package com.rakovpublic.jneuropallium.worker.net.core;
 
 import com.rakovpublic.jneuropallium.worker.model.InputRegistrationRequest;
+import com.rakovpublic.jneuropallium.worker.model.NodeMeta;
 import com.rakovpublic.jneuropallium.worker.net.layers.ILayersMeta;
 import com.rakovpublic.jneuropallium.worker.net.neuron.IResultNeuron;
 import com.rakovpublic.jneuropallium.worker.net.signals.*;
@@ -36,6 +37,11 @@ public interface IInputService {
     void uploadDiscriminatorWorkerResult(String name, String nameDiscriminator, HashMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> signals);
 
     ISplitInput getNext(String name);
+
+    /**
+     * @return live scheduling state per node, for monitoring and debugging
+     */
+    HashMap<String, NodeMeta> getNodeMetas();
 
     boolean hasNextComplete();
 

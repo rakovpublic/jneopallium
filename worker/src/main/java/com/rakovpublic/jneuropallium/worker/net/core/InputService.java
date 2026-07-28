@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class InputService implements IInputService {
@@ -80,6 +81,7 @@ public class InputService implements IInputService {
         this.results = new HashMap<>();
         this.resultLayerHolder = resultLayerHolder;
         this.runOnceIn =runOnceIn;
+        this.run = 0l;
     }
 
 
@@ -115,6 +117,9 @@ public class InputService implements IInputService {
         this.discriminatorsSignalStorageHistory = discriminatorsSignalStorageHistory;
         this.inputDiscriminatorStatuses = inputDiscriminatorStatuses;
         this.discriminatorSplitInput = discriminatorSplitInput;
+        if (this.run == null) {
+            this.run = 0l;
+        }
     }
 
     @Override
@@ -123,9 +128,12 @@ public class InputService implements IInputService {
     }
 
     @Override
-    public void register(IInitInput iInputSource, boolean isMandatory, InputInitStrategy initStrategy, Integer amountOfRuns) {
+    public synchronized void register(IInitInput iInputSource, boolean isMandatory, InputInitStrategy initStrategy, Integer amountOfRuns) {
         inputStatuses.put(iInputSource, new InputStatusMeta(true, isMandatory, iInputSource.getName()));
         inputs.put(iInputSource, initStrategy);
+        // The loading strategy owns the cycle layer and the input to strategy mapping, so it has
+        // to learn about the new input; without this the input is registered but never read.
+        runningStrategy.updateInputs(inputStatuses, inputs);
     }
 
     @Override
@@ -152,16 +160,29 @@ public class InputService implements IInputService {
     }
 
     @Override
-    public void uploadWorkerResult(String name, HashMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> signals) {
-        if (nodeMetas.get(name).getCurrentInput() != null) {
-            signalsPersist.putSignals(signals);
-            nodeMetas.get(name).setStatus(true);
+    public synchronized void uploadWorkerResult(String name, HashMap<Integer, HashMap<Long, CopyOnWriteArrayList<ISignal>>> signals) {
+        NodeMeta meta = nodeMetas.get(name);
+        if (meta == null) {
+            logger.warn("Result upload from unknown node " + name + ", ignoring");
+            return;
         }
+        if (meta.getCurrentInput() == null) {
+            logger.warn("Result upload from node " + name + " which has no assigned partition, ignoring");
+            return;
+        }
+        // Shared storages (Redis) are written by the worker itself, in which case
+        // the callback only carries the completion notification and no payload.
+        if (signals != null && !signals.isEmpty()) {
+            signalsPersist.putSignals(signals);
+        }
+        meta.setCurrentInput(null);
+        meta.setStatus(true);
     }
 
     @Override
     public Boolean isProcessing(String name) {
-        return nodeMetas.get(name).getCurrentInput() != null;
+        NodeMeta meta = nodeMetas.get(name);
+        return meta != null && meta.getCurrentInput() != null;
     }
 
     @Override
@@ -172,50 +193,100 @@ public class InputService implements IInputService {
 
     @Override
     public synchronized ISplitInput getNext(String name) {
-        if (!nodeMetas.containsKey(name)) {
-            if (nodeMetas.size() == 0) {
-                nodeMetas.put(name, new NodeMeta(0, false));
-            } else {
-                nodeMetas.put(name, new NodeMeta(nodeMetas.get(0).getCurrentLayer(), false));
-            }
-        }
-        ISplitInput res = null;
-        if (preparedInputs.size() > 0) {
-            res = preparedInputs.get(0);
-            preparedInputs.remove(0);
-            res.setNodeIdentifier(name);
-            nodeMetas.get(name).setStatus(false);
-            nodeMetas.get(name).setTimestamp(System.currentTimeMillis());
-        } else {
-            if(runOnceIn > 0){
-                try {
-                    Thread.sleep(runOnceIn);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
+        registerNode(name);
+        ISplitInput res = assignPrepared(name);
+        if (res == null) {
             prepareInputs();
-            if (preparedInputs.size() > 0) {
-                res = preparedInputs.get(0);
-                preparedInputs.remove(0);
-                res.setNodeIdentifier(name);
-                nodeMetas.get(name).setStatus(false);
-                nodeMetas.get(name).setTimestamp(System.currentTimeMillis());
-            } else {
-                for (NodeMeta meta : nodeMetas.values()) {
-                    if (System.currentTimeMillis() - meta.getTimestamp() > this.nodeTimeOut) {
-                        nodeMetas.remove(meta.getCurrentInput().getNodeIdentifier());
-                        res = meta.getCurrentInput();
-                        res.setNodeIdentifier(name);
-                        meta.setCurrentInput(null);
-                        meta.setStatus(true);
-                        nodeMetas.get(name).setStatus(false);
-                        nodeMetas.get(name).setTimestamp(System.currentTimeMillis());
-                    }
-                }
-            }
+            res = assignPrepared(name);
+        }
+        if (res == null) {
+            res = reclaimTimedOutPartition(name);
         }
         return res;
+    }
+
+    /**
+     * Registers a node that has not been seen before. A fresh node is idle: it holds no
+     * partition, so it must not hold back the "all nodes idle" barrier in
+     * {@link #prepareInputs()}. It joins at the layer the rest of the cluster is on.
+     */
+    private void registerNode(String name) {
+        if (nodeMetas.containsKey(name)) {
+            return;
+        }
+        Integer currentLayer = -1;
+        if (!nodeMetas.isEmpty()) {
+            currentLayer = nodeMetas.values().iterator().next().getCurrentLayer();
+        }
+        NodeMeta meta = new NodeMeta(currentLayer, true);
+        meta.setTimestamp(System.currentTimeMillis());
+        nodeMetas.put(name, meta);
+    }
+
+    private ISplitInput assignPrepared(String name) {
+        if (preparedInputs.isEmpty()) {
+            return null;
+        }
+        ISplitInput res = preparedInputs.remove(0);
+        res.setNodeIdentifier(name);
+        NodeMeta meta = nodeMetas.get(name);
+        meta.setCurrentInput(res);
+        meta.setStatus(false);
+        meta.setTimestamp(System.currentTimeMillis());
+        return res;
+    }
+
+    /**
+     * Hands a partition owned by a node that stopped responding to the caller. The stale
+     * node is dropped from the cluster so that it stops blocking the barrier.
+     */
+    private ISplitInput reclaimTimedOutPartition(String name) {
+        String staleNode = null;
+        ISplitInput orphaned = null;
+        for (Map.Entry<String, NodeMeta> entry : nodeMetas.entrySet()) {
+            if (entry.getKey().equals(name)) {
+                continue;
+            }
+            NodeMeta meta = entry.getValue();
+            if (meta.getCurrentInput() == null || meta.getTimestamp() == null) {
+                continue;
+            }
+            if (System.currentTimeMillis() - meta.getTimestamp() > this.nodeTimeOut) {
+                staleNode = entry.getKey();
+                orphaned = meta.getCurrentInput();
+                break;
+            }
+        }
+        if (orphaned == null) {
+            return null;
+        }
+        logger.warn("Node " + staleNode + " timed out, reassigning layer " + orphaned.getLayerId()
+                + " partition [" + orphaned.getStart() + "," + orphaned.getEnd() + ") to " + name);
+        nodeMetas.remove(staleNode);
+        orphaned.setNodeIdentifier(name);
+        NodeMeta meta = nodeMetas.get(name);
+        meta.setCurrentInput(orphaned);
+        meta.setStatus(false);
+        meta.setTimestamp(System.currentTimeMillis());
+        return orphaned;
+    }
+
+    /**
+     * @return true when every known node is idle, i.e. the cluster finished the layer it
+     * was working on and the next one may be prepared.
+     */
+    private boolean allNodesIdle() {
+        for (NodeMeta meta : nodeMetas.values()) {
+            if (!meta.getStatus()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public synchronized HashMap<String, NodeMeta> getNodeMetas() {
+        return new HashMap<>(nodeMetas);
     }
 
     @Override
@@ -235,72 +306,102 @@ public class InputService implements IInputService {
 
     @Override
     public synchronized void prepareInputs() {
+        if (!preparedInputs.isEmpty() || nodeMetas.isEmpty()) {
+            return;
+        }
+        // Never advance to the next layer while somebody is still working on the current
+        // one. Returning instead of blocking keeps the lock free for the nodes that still
+        // have to report their results.
+        if (!allNodesIdle()) {
+            return;
+        }
+        if (layersMeta == null || splitInput == null || runningStrategy == null || signalsPersist == null) {
+            logger.error("The input service is not fully configured; layers, split input, loading strategy"
+                    + " and signal storage are all required before nodes can be scheduled");
+            return;
+        }
+        int layerCount = layersMeta.getLayers().size();
+        int currentPosition = nodeMetas.values().iterator().next().getCurrentLayer();
+        int nextPosition = currentPosition + 1;
 
-        if (preparedInputs.size() == 0) {
-            List<String> nodeNames = new ArrayList<>();
-            nodeNames.addAll(nodeMetas.keySet());
-            for (int i = 0; i < nodeNames.size(); i++) {
-                if (!nodeMetas.get(nodeNames.get(i)).getStatus()) {
-                    i = 0;
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        logger.error(e);
-                    }
+        if (nextPosition > layerCount) {
+            boolean isDisc = false;
+            for (DiscriminatorStatus discriminatorStatus : discriminatorStatuses) {
+                if (!discriminatorStatus.isProcessed() || !discriminatorStatus.isValid()) {
+                    break;
                 }
+                isDisc = true;
             }
-            if (nodeMetas.get(nodeNames.get(0)).getCurrentLayer() <= layersMeta.getLayers().size() - 1) {
-                if (nodeMetas.get(nodeNames.get(0)).getCurrentLayer() == layersMeta.getLayers().size() - 1) {
-                    resultLayerHolder.setResultLayerMeta(layersMeta.getResultLayer());
-                }
-                runFlag = false;
-                ILayerMeta layerMeta = nodeMetas.get(nodeNames.get(0)).getCurrentLayer() == layersMeta.getLayers().size() - 1 ? layersMeta.getResultLayer() : layersMeta.getLayerByPosition(nodeMetas.get(nodeNames.get(0)).getCurrentLayer() + 1);
-                Long size = layerMeta.getSize() / nodeNames.size() <= partitions ? Long.parseLong(partitions + "") : nodeNames.size();
-                List<ISplitInput> resList = new ArrayList<>();
-                ISplitInput input = splitInput.getNewInstance();
-                input.applyMeta(layersMeta);
-                Long atomic = layerMeta.getSize() / size > 1 ? layerMeta.getSize() / size : 1;
-                for (int i = 0; i < size; i++) {
-                    input.setStart(i * atomic);
-                    input.setEnd((i + 1) * atomic < layerMeta.getSize() ? (i + 1) * atomic : layerMeta.getSize() - 1);
-                    input.setNodeIdentifier(nodeNames.get(0));
-                    input.setLayer(layerMeta.getID());
-                    resList.add(input);
-
-                }
-                for (String nodeName : nodeNames) {
-                    nodeMetas.get(nodeName).setCurrentLayer(nodeMetas.get(nodeNames.get(0)).getCurrentLayer() + 1);
-                }
-                preparedInputs.addAll(resList);
-            } else {
-                boolean isDisc = false;
-                for (DiscriminatorStatus discriminatorStatus : discriminatorStatuses) {
-                    if (!discriminatorStatus.isProcessed() || !discriminatorStatus.isValid()) {
-                        break;
-                    }
-                    isDisc = true;
-                }
-                if (isDisc || discriminatorStatuses == null || discriminatorStatuses.size() == 0) {
-                    signalHistoryStorage.save(signalsPersist.getAllSignals(), runningStrategy.getEpoch(), runningStrategy.getCurrentLoopCount());
-                    runningStrategy.populateInput(signalsPersist, inputStatuses);
-                    runFlag = true;
-                }
+            if (isDisc || discriminatorStatuses == null || discriminatorStatuses.size() == 0) {
+                signalHistoryStorage.save(signalsPersist.getAllSignals(), runningStrategy.getEpoch(), runningStrategy.getCurrentLoopCount());
+                // The input for the next epoch is populated by nextRun(), so that a completed
+                // epoch feeds the network exactly once.
+                runFlag = true;
             }
+            return;
         }
 
+        if (nextPosition == 0) {
+            // Start of an epoch: feed the net before the first layer is handed out. Nothing else
+            // populates the input, so without this the first epoch would process empty layers.
+            runningStrategy.populateInput(signalsPersist, inputStatuses);
+        }
+        runFlag = false;
+        boolean isResultLayer = nextPosition == layerCount;
+        ILayerMeta layerMeta = isResultLayer ? layersMeta.getResultLayer() : layersMeta.getLayerByPosition(nextPosition);
+        if (isResultLayer) {
+            resultLayerHolder.setResultLayerMeta(layersMeta.getResultLayer());
+        }
+        preparedInputs.addAll(split(splitInput, layersMeta, layerMeta));
+        for (NodeMeta meta : nodeMetas.values()) {
+            meta.setCurrentLayer(nextPosition);
+        }
+    }
+
+    /**
+     * Cuts a layer into partitions of neuron index ranges. Every partition is a distinct
+     * {@link ISplitInput} instance; the ranges are half open - {@code [start, end)} - and
+     * together cover the whole layer exactly once.
+     */
+    private List<ISplitInput> split(ISplitInput prototype, ILayersMeta meta, ILayerMeta layerMeta) {
+        List<ISplitInput> resList = new ArrayList<>();
+        long layerSize = layerMeta.getSize() == null ? 0l : layerMeta.getSize();
+        if (layerSize <= 0) {
+            return resList;
+        }
+        int nodeCount = Math.max(nodeMetas.size(), 1);
+        long partitionCount = Math.max(partitions == null ? 1 : partitions, nodeCount);
+        partitionCount = Math.min(partitionCount, layerSize);
+        long atomic = Math.max(layerSize / partitionCount, 1);
+        for (long i = 0; i < partitionCount; i++) {
+            long start = i * atomic;
+            long end = i == partitionCount - 1 ? layerSize : Math.min((i + 1) * atomic, layerSize);
+            if (start >= end) {
+                break;
+            }
+            ISplitInput input = prototype.getNewInstance();
+            input.applyMeta(meta);
+            input.applyRunState(runningStrategy.getEpoch(), runningStrategy.getCurrentLoopCount(), runningStrategy.getNeuronInputMapping());
+            input.setLayer(layerMeta.getID());
+            input.setStart(start);
+            input.setEnd(end);
+            resList.add(input);
+        }
+        return resList;
     }
 
     @Override
     public Boolean runCompleted() {
-        if (layersMeta.getResultLayer().getID() == nodeMetas.values().iterator().next().getCurrentLayer()) {
-            for (NodeMeta meta : nodeMetas.values()) {
-                if (!meta.getStatus()) {
-                    return false;
-                }
-            }
-            return true;
+        if (nodeMetas.isEmpty()) {
+            return false;
         }
-        return false;
+        // The result layer sits one position past the last regular layer. Comparing layer
+        // *positions* here - comparing layer ids does not work because implementations are
+        // free to give the result layer any id (the Redis one uses Integer.MAX_VALUE).
+        if (nodeMetas.values().iterator().next().getCurrentLayer() < layersMeta.getLayers().size()) {
+            return false;
+        }
+        return allNodesIdle();
     }
 
     @Override
@@ -319,13 +420,22 @@ public class InputService implements IInputService {
     }
 
     @Override
-    public void nextRun() {
+    public synchronized void nextRun() {
         if (runFlag) {
             runFlag = false;
-            runningStrategy.populateInput(signalsPersist, inputStatuses);
+            if (runOnceIn != null && runOnceIn > 0) {
+                try {
+                    Thread.sleep(runOnceIn);
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    logger.error("Interrupted while pacing the next run", e);
+                }
+            }
             run++;
-            for (String name : nodeMetas.keySet()) {
-                nodeMetas.get(name).setCurrentLayer(0);
+            // Back to "before the first layer"; prepareInputs populates the input for the new
+            // epoch when it prepares position 0.
+            for (NodeMeta meta : nodeMetas.values()) {
+                meta.setCurrentLayer(-1);
             }
         }
 
@@ -339,8 +449,8 @@ public class InputService implements IInputService {
             discriminatorStatus.setCurrentLayer(-1);
             discriminatorStatus.setInputPopulated(false);
         }
-        for (String name : nodeMetas.keySet()) {
-            nodeMetas.get(name).setCurrentLayer(0);
+        for (NodeMeta meta : nodeMetas.values()) {
+            meta.setCurrentLayer(-1);
         }
     }
 
@@ -386,7 +496,7 @@ public class InputService implements IInputService {
     }
 
     @Override
-    public void prepareDiscriminatorsInputs() {
+    public synchronized void prepareDiscriminatorsInputs() {
         DiscriminatorStatus currentDiscriminator = null;
         for (DiscriminatorStatus discriminatorStatus : discriminatorStatuses) {
             if (!discriminatorStatus.isProcessed()) {
@@ -401,40 +511,19 @@ public class InputService implements IInputService {
             if (!currentDiscriminator.isInputPopulated()) {
                 discriminatorsLoadingStrategies.get(discriminatorName).populateInput(discriminatorsSignalStorage.get(discriminatorName), inputDiscriminatorStatuses.get(discriminatorName));
             }
-            List<String> nodeNames = new ArrayList<>();
-            nodeNames.addAll(nodeMetas.keySet());
-            for (int i = 0; i < nodeNames.size(); i++) {
-                if (!nodeMetas.get(nodeNames.get(i)).getStatus()) {
-                    i = 0;
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        logger.error(e);
-                    }
-                }
+            if (nodeMetas.isEmpty() || !allNodesIdle()) {
+                return;
             }
             ILayersMeta discriminatorLayersMeta = discriminators.get(discriminatorName);
-            if (currentDiscriminator.getCurrentLayer() <= discriminatorLayersMeta.getLayers().size()) {
-
-                ILayerMeta layerMeta = currentDiscriminator.getCurrentLayer() + 1 == discriminatorLayersMeta.getLayers().size() ? discriminatorLayersMeta.getResultLayer() : discriminatorLayersMeta.getLayerByPosition(nodeMetas.get(nodeNames.get(0)).getCurrentLayer() + 1);
-                Long size = layerMeta.getSize() / nodeNames.size() <= partitions ? Long.parseLong(partitions + "") : nodeNames.size();
-                List<ISplitInput> resList = new ArrayList<>();
-                ISplitInput input = discriminatorSplitInput.getNewInstance();
-                input.applyMeta(discriminators.get(currentDiscriminator.getName()));
-                Long atomic = layerMeta.getSize() / size > 1 ? layerMeta.getSize() / size : 1;
-                for (int i = 0; i < size; i++) {
-                    input.setStart(i * atomic);
-                    input.setEnd((i + 1) * atomic);
-                    input.setNodeIdentifier(nodeNames.get(0));
-                    input.setLayer(layerMeta.getID());
-                    resList.add(input);
-
+            int nextPosition = nodeMetas.values().iterator().next().getCurrentLayer() + 1;
+            if (nextPosition <= discriminatorLayersMeta.getLayers().size()) {
+                boolean isResultLayer = nextPosition == discriminatorLayersMeta.getLayers().size();
+                ILayerMeta layerMeta = isResultLayer ? discriminatorLayersMeta.getResultLayer() : discriminatorLayersMeta.getLayerByPosition(nextPosition);
+                preparedDiscriminatorsInputs.addAll(split(discriminatorSplitInput, discriminatorLayersMeta, layerMeta));
+                for (NodeMeta meta : nodeMetas.values()) {
+                    meta.setCurrentLayer(nextPosition);
                 }
-                for (String nodeName : nodeNames) {
-                    nodeMetas.get(nodeName).setCurrentLayer(nodeMetas.get(nodeNames.get(0)).getCurrentLayer() + 1);
-                }
-                currentDiscriminator.setCurrentLayer(nodeMetas.get(nodeNames.get(0)).getCurrentLayer() + 1);
-                preparedDiscriminatorsInputs.addAll(resList);
+                currentDiscriminator.setCurrentLayer(nextPosition);
             } else {
 
                 DiscriminatorResultLayer resultLayer = (DiscriminatorResultLayer) discriminatorLayersMeta.getResultLayer();
@@ -498,43 +587,29 @@ public class InputService implements IInputService {
     }
 
     @Override
-    public ISplitInput getNextDiscriminators(String name) {
-        if (!nodeMetas.containsKey(name)) {
-            if (nodeMetas.size() == 0) {
-                nodeMetas.put(name, new NodeMeta(0, false));
-            } else {
-                nodeMetas.put(name, new NodeMeta(nodeMetas.get(0).getCurrentLayer(), false));
-            }
+    public synchronized ISplitInput getNextDiscriminators(String name) {
+        registerNode(name);
+        ISplitInput res = assignPreparedDiscriminator(name);
+        if (res == null) {
+            prepareDiscriminatorsInputs();
+            res = assignPreparedDiscriminator(name);
         }
-        ISplitInput res = null;
-        if (preparedDiscriminatorsInputs.size() > 0) {
-            res = preparedDiscriminatorsInputs.get(0);
-            preparedDiscriminatorsInputs.remove(0);
-            res.setNodeIdentifier(name);
-            nodeMetas.get(name).setStatus(false);
-            nodeMetas.get(name).setTimestamp(System.currentTimeMillis());
-        } else {
-            prepareInputs();
-            if (preparedDiscriminatorsInputs.size() > 0) {
-                res = preparedDiscriminatorsInputs.get(0);
-                preparedDiscriminatorsInputs.remove(0);
-                res.setNodeIdentifier(name);
-                nodeMetas.get(name).setStatus(false);
-                nodeMetas.get(name).setTimestamp(System.currentTimeMillis());
-            } else {
-                for (NodeMeta meta : nodeMetas.values()) {
-                    if (System.currentTimeMillis() - meta.getTimestamp() > this.nodeTimeOut) {
-                        nodeMetas.remove(meta.getCurrentInput().getNodeIdentifier());
-                        res = meta.getCurrentInput();
-                        meta.setCurrentInput(null);
-                        res.setNodeIdentifier(name);
-                        meta.setStatus(true);
-                        nodeMetas.get(name).setStatus(false);
-                        nodeMetas.get(name).setTimestamp(System.currentTimeMillis());
-                    }
-                }
-            }
+        if (res == null) {
+            res = reclaimTimedOutPartition(name);
         }
+        return res;
+    }
+
+    private ISplitInput assignPreparedDiscriminator(String name) {
+        if (preparedDiscriminatorsInputs.isEmpty()) {
+            return null;
+        }
+        ISplitInput res = preparedDiscriminatorsInputs.remove(0);
+        res.setNodeIdentifier(name);
+        NodeMeta meta = nodeMetas.get(name);
+        meta.setCurrentInput(res);
+        meta.setStatus(false);
+        meta.setTimestamp(System.currentTimeMillis());
         return res;
     }
 

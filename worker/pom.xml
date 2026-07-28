@@ -132,6 +132,19 @@
         <dependency>
             <groupId>org.eclipse.tahu</groupId>
             <artifactId>tahu-core</artifactId>
+            <exclusions>
+                <!-- tahu-core drags in a logging backend of its own. Together with the log4j
+                     binding this project uses, SLF4J ends up with two providers and log4j
+                     refuses to start, which takes the master down before its context loads. -->
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-core</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- ============== MAVLink (Bridge 12) ==============

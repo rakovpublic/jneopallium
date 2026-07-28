@@ -25,17 +25,17 @@ public class ConfigurationUpdateRequest {
     private String reconnectStrategyJson;
     private String resultInterpreterClass;
     private String resultInterpreterJson;
-    private List<String> discriminators;
-    private HashMap<String, ConfigurationRecord> discriminatorsLoadingStrategies;
-    private HashMap<String, ConfigurationRecord> discriminatorsSignalStorage;
-    private HashMap<String, ConfigurationRecord> discriminatorsSignalStorageHistory;
-    private HashMap<String, ConfigurationRecord> inputDiscriminatorStatuses;
-    private HashMap<String, ConfigurationRecord> discriminatorsLayers;
+    private List<String> discriminators = new java.util.LinkedList<>();
+    private HashMap<String, ConfigurationRecord> discriminatorsLoadingStrategies = new HashMap<>();
+    private HashMap<String, ConfigurationRecord> discriminatorsSignalStorage = new HashMap<>();
+    private HashMap<String, ConfigurationRecord> discriminatorsSignalStorageHistory = new HashMap<>();
+    private HashMap<String, ConfigurationRecord> inputDiscriminatorStatuses = new HashMap<>();
+    private HashMap<String, ConfigurationRecord> discriminatorsLayers = new HashMap<>();
     private String discriminatorSplitInput;
     private String discriminatorSplitInputJson;
-    private HashMap<String, ConfigurationRecord> discriminatorsInitStrategySource;
-    private HashMap<String, ConfigurationRecord> discriminatorsInitStrategyInputs;
-    private HashMap<String, ConfigurationRecord> discriminatorsInitStrategyInputsCallback;
+    private HashMap<String, ConfigurationRecord> discriminatorsInitStrategySource = new HashMap<>();
+    private HashMap<String, ConfigurationRecord> discriminatorsInitStrategyInputs = new HashMap<>();
+    private HashMap<String, ConfigurationRecord> discriminatorsInitStrategyInputsCallback = new HashMap<>();
 
 
     public ConfigurationUpdateRequest(Long runOnceIn ,String layersMetaJson, String layersMetaClass, String splitInputClass, String splitInputJson, String inputLoadingStrategyClass, String inputLoadingStrategyJson, Integer partitions, Integer defaultLoopsCount, String signalsPersistClass, String signalsPersistJson, String historyClass, String historyJson, Long iterationsToStore, Integer loopsToStore, String resultRunnerClass, String resultRunnerJson, String reconnectStrategyClass, String reconnectStrategyJson, String resultInterpreterClass, String resultInterpreterJson, List<String> discriminators, HashMap<String, ConfigurationRecord> discriminatorsLoadingStrategies, HashMap<String, ConfigurationRecord> discriminatorsSignalStorage, HashMap<String, ConfigurationRecord> discriminatorsSignalStorageHistory, HashMap<String, ConfigurationRecord> inputDiscriminatorStatuses, HashMap<String, ConfigurationRecord> discriminatorsLayers, String discriminatorSplitInput, String discriminatorSplitInputJson, HashMap<String, ConfigurationRecord> discriminatorsInitStrategySource, HashMap<String, ConfigurationRecord> discriminatorsInitStrategyInputs, HashMap<String, ConfigurationRecord> discriminatorsInitStrategyInputsCallback, String layersMetaPath, Long nodeTimeout) {

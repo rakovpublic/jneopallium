@@ -5,6 +5,9 @@
 package com.rakovpublic.jneuropallium.worker.net.layers.impl.redis;
 
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonElement;
@@ -15,81 +18,107 @@ import com.rakovpublic.jneuropallium.worker.net.layers.impl.LayerMetaParam;
 import com.rakovpublic.jneuropallium.worker.net.layers.impl.LayerMove;
 import com.rakovpublic.jneuropallium.worker.net.neuron.INeuron;
 import com.rakovpublic.jneuropallium.worker.util.NeuronParser;
+import com.rakovpublic.jneuropallium.worker.util.RedisClientFactory;
+import com.rakovpublic.jneuropallium.worker.util.RedisKeys;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.json.JSONArray;
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
-import redis.clients.jedis.JedisPooled;
-import redis.clients.jedis.json.Path2;
+import redis.clients.jedis.Pipeline;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Layer configuration stored in Redis.
+ * <p>
+ * Neurons live in a HASH keyed by neuron id, with a companion ZSET that keeps the ids
+ * ordered. A worker partition is a rank range over that ZSET, so fetching the neurons a
+ * worker owns costs {@code ZRANGE} + {@code HMGET} instead of reading the whole layer.
+ */
 public class RedisLayerMeta implements ILayerMeta {
     private static final Logger logger = LogManager.getLogger(RedisLayerMeta.class);
-    protected JedisPool pool = null;
-    protected String host;
-    protected Integer port;
-    protected String neuronNetName;
-    protected Integer layerId;
+    protected final String host;
+    protected final Integer port;
+    protected final String neuronNetName;
+    protected final Integer layerId;
 
-    public RedisLayerMeta(String host, Integer port, String neuronNetName, Integer layerId) {
+    @JsonCreator
+    public RedisLayerMeta(@JsonProperty("host") String host,
+                          @JsonProperty("port") Integer port,
+                          @JsonProperty("neuronNetName") String neuronNetName,
+                          @JsonProperty("layerId") Integer layerId) {
         this.host = host;
         this.port = port;
         this.neuronNetName = neuronNetName;
         this.layerId = layerId;
-        this.pool = new JedisPool(this.host, this.port);
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    public Integer getPort() {
+        return port;
+    }
+
+    public String getNeuronNetName() {
+        return neuronNetName;
+    }
+
+    public Integer getLayerId() {
+        return layerId;
     }
 
     @Override
+    @JsonIgnore
     public HashMap<String, LayerMetaParam> getLayerMetaParams() {
         HashMap<String, LayerMetaParam> result = new HashMap<>();
-        if (pool == null) {
-            this.pool = new JedisPool(this.host, this.port);
-        }
-        try (Jedis jedis = pool.getResource()) {
-            Map<String, String> jmetaParams = jedis.hgetAll(neuronNetName + "_layer_metaparam" + layerId);
-            for (String paramName : jmetaParams.keySet()) {
-                JsonElement jelement = new JsonParser().parse(jmetaParams.get(paramName));
-                JsonObject jobject = jelement.getAsJsonObject();
-                String cl = jobject.getAsJsonPrimitive("paramClass").getAsString();
-                ObjectMapper mapper = new ObjectMapper();
-                LayerMetaParam metaParam = null;
-                try {
-                    metaParam = new LayerMetaParam(mapper.readValue(jobject.getAsJsonPrimitive("param").getAsString(), Class.forName(cl)));
-                } catch (IOException | ClassNotFoundException e) {
-                    logger.error("cannot parse layer meta param from json " + jmetaParams.get(paramName), e);
+        ObjectMapper mapper = new ObjectMapper();
+        try (Jedis jedis = RedisClientFactory.jedis(host, port)) {
+            Map<String, String> stored = jedis.hgetAll(RedisKeys.layerMeta(neuronNetName, layerId));
+            for (Map.Entry<String, String> entry : stored.entrySet()) {
+                JsonObject json = JsonParser.parseString(entry.getValue()).getAsJsonObject();
+                JsonElement paramClass = json.get("paramClass");
+                JsonElement param = json.get("param");
+                if (paramClass == null || param == null) {
+                    continue;
                 }
-                if (metaParam != null) {
-                    result.put(paramName, metaParam);
+                try {
+                    result.put(entry.getKey(), new LayerMetaParam(mapper.readValue(param.toString(), Class.forName(paramClass.getAsString()))));
+                } catch (IOException | ClassNotFoundException e) {
+                    logger.error("Cannot parse layer meta param " + entry.getValue(), e);
                 }
             }
         } catch (Exception e) {
-            logger.error("Cannot extract property from redis", e);
-            return null;
+            logger.error("Cannot read layer meta params for layer " + layerId, e);
         }
         return result;
     }
 
     @Override
     public void setLayerMetaParams(HashMap<String, LayerMetaParam> metaParams) {
-        if (pool == null) {
-            this.pool = new JedisPool(this.host, this.port);
+        if (metaParams == null || metaParams.isEmpty()) {
+            return;
         }
-        HashMap<String, String> tmap = new HashMap<>();
         ObjectMapper mapper = new ObjectMapper();
-        for (String paramName : metaParams.keySet()) {
+        HashMap<String, String> serialized = new HashMap<>();
+        for (Map.Entry<String, LayerMetaParam> entry : metaParams.entrySet()) {
             try {
-                tmap.put(paramName, mapper.writeValueAsString(metaParams.get(paramName)));
+                serialized.put(entry.getKey(), mapper.writeValueAsString(entry.getValue()));
             } catch (JsonProcessingException e) {
-                logger.error("cannot put layer meta param to json " + metaParams.get(paramName), e);
+                logger.error("Cannot serialize layer meta param " + entry.getValue(), e);
             }
         }
-        pool.getResource().hset(neuronNetName + "_layer_metaparam" + layerId, tmap);
+        if (serialized.isEmpty()) {
+            return;
+        }
+        try (Jedis jedis = RedisClientFactory.jedis(host, port)) {
+            jedis.hset(RedisKeys.layerMeta(neuronNetName, layerId), serialized);
+        }
     }
 
     @Override
@@ -103,6 +132,9 @@ public class RedisLayerMeta implements ILayerMeta {
         HashMap<Long, HashMap<Integer, List<Long>>> moves = layerMove.getMovingMap();
         for (Long targetNeuronId : moves.keySet()) {
             INeuron neuron = getNeuronByID(targetNeuronId);
+            if (neuron == null) {
+                continue;
+            }
             neuron.getAxon().moveConnection(layerMove, neuron.getLayer().getId(), targetNeuronId);
             neurons.add(neuron);
         }
@@ -110,73 +142,113 @@ public class RedisLayerMeta implements ILayerMeta {
     }
 
     @Override
+    @JsonIgnore
     public List<INeuron> getNeurons() {
-        JedisPooled jedisPooled = new JedisPooled(this.host, this.port);
-        String json = jedisPooled.jsonGet(neuronNetName + "_layer_neurons" + layerId).toString();
-        return NeuronParser.parseNeurons(json);
+        try (Jedis jedis = RedisClientFactory.jedis(host, port)) {
+            List<String> ids = jedis.zrange(RedisKeys.layerIndex(neuronNetName, layerId), 0, -1);
+            return readNeurons(jedis, ids);
+        }
     }
 
+    /**
+     * @param start inclusive rank of the first neuron of the partition
+     * @param end   exclusive rank one past the last neuron of the partition
+     */
     @Override
     public List<INeuron> getNeurons(Long start, Long end) {
-        List<INeuron> result = new LinkedList<>();
-        JedisPooled jedisPooled = new JedisPooled(this.host, this.port);
-        List<JSONArray> json = jedisPooled.jsonMGet(Path2.of("$..[?(@.neuronId => " + start + " && @.neuronId < " + end + " )]"), neuronNetName + "_layer_neurons" + layerId);
-        for (JSONArray jsonArray : json) {
-            //TODO: dooble check
-            result.addAll(NeuronParser.parseNeurons(jsonArray.toString()));
-            //result.add(NeuronParser.parseNeuron(jsonArray.toString()));
+        if (start == null || end == null || end <= start) {
+            return new LinkedList<>();
         }
-        return result;
+        try (Jedis jedis = RedisClientFactory.jedis(host, port)) {
+            List<String> ids = jedis.zrange(RedisKeys.layerIndex(neuronNetName, layerId), start, end - 1);
+            return readNeurons(jedis, ids);
+        }
+    }
+
+    private List<INeuron> readNeurons(Jedis jedis, List<String> ids) {
+        if (ids == null || ids.isEmpty()) {
+            return new LinkedList<>();
+        }
+        List<String> documents = jedis.hmget(RedisKeys.layerNeurons(neuronNetName, layerId), ids.toArray(new String[0]));
+        StringBuilder sb = new StringBuilder("{\"neurons\":[");
+        boolean first = true;
+        for (String document : documents) {
+            if (document == null) {
+                continue;
+            }
+            if (!first) {
+                sb.append(',');
+            }
+            sb.append(document);
+            first = false;
+        }
+        sb.append("]}");
+        return NeuronParser.parseNeurons(sb.toString());
     }
 
     @Override
     public INeuron getNeuronByID(Long id) {
-        JedisPooled jedisPooled = new JedisPooled(this.host, this.port);
-        String json = jedisPooled.jsonGet(neuronNetName + "_layer_neurons" + layerId, Path2.of("$..[?(@.neuronId == " + id + " )]")).toString();
-        return NeuronParser.parseNeuron(json);
+        try (Jedis jedis = RedisClientFactory.jedis(host, port)) {
+            String document = jedis.hget(RedisKeys.layerNeurons(neuronNetName, layerId), String.valueOf(id));
+            if (document == null) {
+                return null;
+            }
+            return NeuronParser.parseNeuron(document);
+        }
     }
 
     @Override
     public void removeNeuron(Long neuron) {
-        JedisPooled jedisPooled = new JedisPooled(this.host, this.port);
-        jedisPooled.jsonDel(neuronNetName + "_layer_neurons" + layerId, Path2.of("$..[?(@.neuronId == " + neuron + " )]"));
+        try (Jedis jedis = RedisClientFactory.jedis(host, port)) {
+            jedis.hdel(RedisKeys.layerNeurons(neuronNetName, layerId), String.valueOf(neuron));
+            jedis.zrem(RedisKeys.layerIndex(neuronNetName, layerId), String.valueOf(neuron));
+        }
     }
 
     @Override
     public void addNeuron(INeuron neuron) {
-        JedisPooled jedisPooled = new JedisPooled(this.host, this.port);
-        ObjectMapper mapper = new ObjectMapper();
-        try {
-            jedisPooled.jsonMerge(neuronNetName + "_layer_neurons" + layerId, Path2.of("$"), mapper.writeValueAsString(neuron));
-        } catch (JsonProcessingException e) {
-            logger.error("Cannot add neuron", e);
-        }
-
+        saveNeurons(List.of(neuron));
     }
 
     @Override
     public void saveNeurons(List<INeuron> neurons) {
-        JedisPooled jedisPooled = new JedisPooled(this.host, this.port);
-        StringBuilder sb = new StringBuilder();
-        sb.append("[");
-        for (INeuron neuron : neurons) {
-            sb.append(neuron.getId() + ",");
+        if (neurons == null || neurons.isEmpty()) {
+            return;
         }
-        sb.deleteCharAt(sb.length() - 1);
-        sb.append("]");
-        jedisPooled.jsonDel(neuronNetName + "_layer_neurons" + layerId, Path2.of("$..[?(@.neuronId in " + sb.toString() + " )]"));
+        ObjectMapper mapper = new ObjectMapper();
+        List<String> ids = new ArrayList<>(neurons.size());
+        List<String> documents = new ArrayList<>(neurons.size());
         for (INeuron neuron : neurons) {
-            addNeuron(neuron);
+            try {
+                documents.add(mapper.writeValueAsString(neuron));
+                ids.add(String.valueOf(neuron.getId()));
+            } catch (JsonProcessingException e) {
+                logger.error("Cannot serialize neuron " + neuron.getId(), e);
+            }
+        }
+        if (ids.isEmpty()) {
+            return;
+        }
+        try (Jedis jedis = RedisClientFactory.jedis(host, port)) {
+            Pipeline pipeline = jedis.pipelined();
+            for (int i = 0; i < ids.size(); i++) {
+                pipeline.hset(RedisKeys.layerNeurons(neuronNetName, layerId), ids.get(i), documents.get(i));
+                pipeline.zadd(RedisKeys.layerIndex(neuronNetName, layerId), Double.parseDouble(ids.get(i)), ids.get(i));
+            }
+            pipeline.sync();
         }
     }
 
     @Override
     public void dumpLayer() {
-
+        // Neurons are written straight through on save; nothing is buffered in memory.
     }
 
     @Override
+    @JsonIgnore
     public Long getSize() {
-        return Long.parseLong(getNeurons().size() + "");
+        try (Jedis jedis = RedisClientFactory.jedis(host, port)) {
+            return jedis.zcard(RedisKeys.layerIndex(neuronNetName, layerId));
+        }
     }
 }

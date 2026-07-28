@@ -4,47 +4,56 @@
 
 package com.rakovpublic.jneuropallium.worker.util;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
 
-import java.util.Map;
-
+/**
+ * Runtime configuration read from Redis, so every node of the cluster is started with the same
+ * three coordinates and picks up the rest - master address, thread counts - from the shared store.
+ */
 public class RedisContext implements IContext {
 
     private static final Logger logger = LogManager.getLogger(RedisContext.class);
-    private JedisPool pool = null;
     private String host;
     private final Integer port;
     private final String neuronNetName;
 
-    public RedisContext(String host, Integer port, String neuronNetName) {
+    @JsonCreator
+    public RedisContext(@JsonProperty("host") String host,
+                        @JsonProperty("port") Integer port,
+                        @JsonProperty("neuronNetName") String neuronNetName) {
         this.host = host;
         this.port = port;
         this.neuronNetName = neuronNetName;
-        this.pool = new JedisPool(this.host, this.port);
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    public Integer getPort() {
+        return port;
+    }
+
+    public String getNeuronNetName() {
+        return neuronNetName;
     }
 
     @Override
     public String getProperty(String propertyName) {
-        if (pool == null) {
-            this.pool = new JedisPool(this.host, this.port);
-        }
-        try (Jedis jedis = pool.getResource()) {
-            Map<String, String> props = jedis.hgetAll(neuronNetName + "_properties");
-            return props.get(propertyName);
-
+        try (Jedis jedis = RedisClientFactory.jedis(host, port)) {
+            return jedis.hget(RedisKeys.properties(neuronNetName), propertyName);
         } catch (Exception e) {
-            logger.error("Cannot extract property from redis", e);
+            logger.error("Cannot extract property " + propertyName + " from redis", e);
             return null;
         }
-
     }
 
     @Override
     public void update(String path) {
         this.host = path;
-        this.pool = new JedisPool(this.host);
     }
 }
