@@ -60,6 +60,23 @@ chat, a pom, or a repository. The build reads the passphrase from the gpg agent 
 
 Back the key up. Losing it means future releases cannot be signed with the same identity.
 
+Two things that will bite otherwise:
+
+- **If the keyring holds more than one secret key**, `maven-gpg-plugin` signs with gpg's default,
+  which is the first one — not necessarily the one you meant. Either delete the keys you are not
+  using (`gpg --delete-secret-keys <FPR>` then `gpg --delete-keys <FPR>`), set `default-key` in
+  `gpg.conf`, or pass `-Dgpg.keyname=<FPR>` on every release.
+- **Signing needs to reach a pinentry.** A release run from a non-interactive shell fails with
+  `gpg: signing failed: No pinentry`. Run it from an interactive terminal, or export the
+  passphrase for the duration of the command:
+
+  ```bash
+  export MAVEN_GPG_PASSPHRASE='...'      # not stored anywhere, just this shell
+  ```
+
+  The profile already passes `--pinentry-mode loopback`, which is what makes the environment
+  variable work.
+
 ### 2.4 Portal token
 
 In the portal: *Account → Generate User Token*. It gives a username/password pair. Put it in
