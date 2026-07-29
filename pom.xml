@@ -5,10 +5,46 @@
                              http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.rakovpublic.jneopallium</groupId>
+    <groupId>io.github.rakovpublic.jneopallium</groupId>
     <artifactId>wrapper</artifactId>
     <version>1.0</version>
     <packaging>pom</packaging>
+
+    <!-- name, url, licenses, developers and scm below are required by Maven Central.
+         url, licenses, developers, organization and scm are inherited by every module;
+         name and description are not, so each published module declares its own. -->
+    <name>Jneopallium</name>
+    <description>
+        Jneopallium is a neuron-network framework whose units are programs rather than
+        activation functions: neurons carry their own signal processors, weights and axon
+        wiring, and the engine routes typed signals between them layer by layer. The build is
+        split into a processing engine, per-domain neuron implementations and per-protocol
+        bridges so that a model depends only on the code it uses.
+    </description>
+    <url>https://github.com/rakovpublic/jneopallium</url>
+
+    <licenses>
+        <license>
+            <name>BSD 3-Clause License</name>
+            <url>https://github.com/rakovpublic/jneopallium/blob/master/LICENSE.MD</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>rakovpublic</id>
+            <name>Dmytro Rakovskyi</name>
+            <url>https://github.com/rakovpublic</url>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:https://github.com/rakovpublic/jneopallium.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/rakovpublic/jneopallium.git</developerConnection>
+        <url>https://github.com/rakovpublic/jneopallium</url>
+        <tag>HEAD</tag>
+    </scm>
 
     <modules>
         <module>master</module>
@@ -60,6 +96,12 @@
         <maven-war-plugin.version>3.4.0</maven-war-plugin.version>
         <protobuf-maven-plugin.version>0.6.1</protobuf-maven-plugin.version>
         <os-maven-plugin.version>1.7.1</os-maven-plugin.version>
+
+        <!-- Only used by the `release` profile (Maven Central publishing). -->
+        <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
+        <maven-javadoc-plugin.version>3.8.0</maven-javadoc-plugin.version>
+        <maven-gpg-plugin.version>3.2.4</maven-gpg-plugin.version>
+        <central-publishing-plugin.version>0.5.0</central-publishing-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -167,4 +209,88 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <profiles>
+        <!--
+          Maven Central publishing. Everything Central needs but a normal build does not -
+          sources, javadoc, PGP signatures and the portal upload - lives here, so the default
+          build and the GitLab package-registry deploy behave exactly as before.
+
+              mvn -Prelease deploy
+
+          See docs/publishing-to-maven-central.md for the full procedure, including the steps
+          that can only be done by the account owner.
+        -->
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>${maven-source-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals><goal>jar-no-fork</goal></goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>${maven-javadoc-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals><goal>jar</goal></goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <!-- Central requires a javadoc jar to exist, not that the sources
+                                 are fully documented. doclint would fail the release on missing
+                                 tags in code that predates this requirement. -->
+                            <doclint>none</doclint>
+                            <quiet>true</quiet>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>${maven-gpg-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals><goal>sign</goal></goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <!-- Take the passphrase from the gpg agent or the
+                                 MAVEN_GPG_PASSPHRASE environment variable; never from a pom. -->
+                            <gpgArguments>
+                                <arg>--pinentry-mode</arg>
+                                <arg>loopback</arg>
+                            </gpgArguments>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>${central-publishing-plugin.version}</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <!-- Credentials come from a server entry with this id in
+                                 settings.xml, holding the Central portal user token. -->
+                            <publishingServerId>central</publishingServerId>
+                            <!-- Upload and validate, then wait for the release to be
+                                 confirmed in the portal rather than releasing automatically. -->
+                            <autoPublish>false</autoPublish>
+                            <waitUntil>validated</waitUntil>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

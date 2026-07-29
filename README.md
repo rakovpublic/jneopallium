@@ -70,7 +70,7 @@ This makes the framework well-suited to:
 
 ## Project Layout
 
-The build is a multi-module Maven project (`com.rakovpublic.jneopallium:wrapper:1.0`). The engine,
+The build is a multi-module Maven project (`io.github.rakovpublic.jneopallium:wrapper:1.0`). The engine,
 the per-domain implementations, the protocol bridges and the demos are each separate Maven
 artifacts, so a deployment (or a "model owner") depends on only the modules its model actually uses.
 
@@ -167,7 +167,7 @@ mvn clean install
 ```
 
 This builds every module in the reactor (engine, foundation, domains, bridges, demos) and installs
-the artifacts to your local Maven repository under `com.rakovpublic.jneopallium`.
+the artifacts to your local Maven repository under `io.github.rakovpublic.jneopallium`.
 
 ### Using as a Dependency
 
@@ -177,13 +177,13 @@ published — currently install locally, see [Roadmap](#roadmap) for Maven Centr
 ```xml
 <!-- The engine + neuron/signal contracts -->
 <dependency>
-    <groupId>com.rakovpublic.jneopallium</groupId>
+    <groupId>io.github.rakovpublic.jneopallium</groupId>
     <artifactId>worker-core</artifactId>
     <version>1.0-SNAPSHOT</version>
 </dependency>
 <!-- A domain implementation (e.g. industrial); add other domain-*/bridge-* as needed -->
 <dependency>
-    <groupId>com.rakovpublic.jneopallium</groupId>
+    <groupId>io.github.rakovpublic.jneopallium</groupId>
     <artifactId>domain-industrial</artifactId>
     <version>1.0-SNAPSHOT</version>
 </dependency>

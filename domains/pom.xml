@@ -4,13 +4,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.rakovpublic.jneopallium</groupId>
+        <groupId>io.github.rakovpublic.jneopallium</groupId>
         <artifactId>wrapper</artifactId>
         <version>1.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>domains</artifactId>
     <packaging>pom</packaging>
+    <name>Jneopallium :: domains</name>
+    <description>Aggregator for the per-domain neuron, signal and processor implementations.</description>
     <!-- Aggregator for the per-domain neuron/signal/processor implementation modules. -->
     <modules>
         <module>domain-adfraud</module>
