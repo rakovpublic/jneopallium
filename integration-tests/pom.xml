@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.rakovpublic.jneopallium</groupId>
+        <groupId>io.github.rakovpublic.jneopallium</groupId>
         <artifactId>wrapper</artifactId>
         <version>1.0</version>
         <relativePath>../pom.xml</relativePath>
@@ -14,6 +14,8 @@
     <artifactId>integration-tests</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <name>Jneopallium :: integration-tests</name>
+    <description>Cross-module integration tests. Not published.</description>
     <!--
       Test-only module for cross-module (cross-domain) integration tests that
       cannot live in a single domain jar. Currently holds ModuleProcessorsTest,
@@ -23,55 +25,55 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.rakovpublic.jneopallium</groupId>
+            <groupId>io.github.rakovpublic.jneopallium</groupId>
             <artifactId>worker-core</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.rakovpublic.jneopallium</groupId>
+            <groupId>io.github.rakovpublic.jneopallium</groupId>
             <artifactId>agi-base</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.rakovpublic.jneopallium</groupId>
+            <groupId>io.github.rakovpublic.jneopallium</groupId>
             <artifactId>domain-affect</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.rakovpublic.jneopallium</groupId>
+            <groupId>io.github.rakovpublic.jneopallium</groupId>
             <artifactId>domain-bci</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.rakovpublic.jneopallium</groupId>
+            <groupId>io.github.rakovpublic.jneopallium</groupId>
             <artifactId>domain-curiosity</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.rakovpublic.jneopallium</groupId>
+            <groupId>io.github.rakovpublic.jneopallium</groupId>
             <artifactId>domain-embodiment</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.rakovpublic.jneopallium</groupId>
+            <groupId>io.github.rakovpublic.jneopallium</groupId>
             <artifactId>domain-glia</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.rakovpublic.jneopallium</groupId>
+            <groupId>io.github.rakovpublic.jneopallium</groupId>
             <artifactId>domain-sleep</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.rakovpublic.jneopallium</groupId>
+            <groupId>io.github.rakovpublic.jneopallium</groupId>
             <artifactId>domain-tutoring</artifactId>
             <version>1.0-SNAPSHOT</version>
             <scope>test</scope>
@@ -125,4 +127,10 @@
             </plugin>
         </plugins>
     </build>
+
+    <properties>
+        <!-- Cross-module tests; there is nothing here for a consumer to depend on, so this
+             module is not published to any repository. -->
+        <maven.deploy.skip>true</maven.deploy.skip>
+    </properties>
 </project>

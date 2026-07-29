@@ -4,13 +4,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.rakovpublic.jneopallium</groupId>
+        <groupId>io.github.rakovpublic.jneopallium</groupId>
         <artifactId>wrapper</artifactId>
         <version>1.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <artifactId>demos</artifactId>
     <packaging>pom</packaging>
+    <name>Jneopallium :: demos</name>
+    <description>Aggregator for the runnable demo modules.</description>
     <!-- Aggregator for the runnable demo modules. -->
     <modules>
         <module>demo-adfraud</module>
@@ -22,4 +24,16 @@
         <module>demo-industrialfmi</module>
         <module>demo-uavsingle</module>
     </modules>
+
+    <profiles>
+        <!-- Keeps this aggregator POM itself out of Maven Central. Note that the demo modules
+             do NOT inherit this: their parent is the root pom and this one only aggregates
+             them, so each demo module declares the same profile. -->
+        <profile>
+            <id>release</id>
+            <properties>
+                <maven.deploy.skip>true</maven.deploy.skip>
+            </properties>
+        </profile>
+    </profiles>
 </project>

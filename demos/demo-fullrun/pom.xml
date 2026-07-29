@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.rakovpublic.jneopallium</groupId>
+        <groupId>io.github.rakovpublic.jneopallium</groupId>
         <artifactId>wrapper</artifactId>
         <version>1.0</version>
         <relativePath>../../pom.xml</relativePath>
@@ -14,7 +14,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.rakovpublic.jneopallium</groupId>
+            <groupId>io.github.rakovpublic.jneopallium</groupId>
             <artifactId>worker-core</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
@@ -55,4 +55,18 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <!-- The demos are runnable examples, not something to depend on, so they stay out of
+             Maven Central. This has to be declared per module: demos/pom.xml only aggregates
+             them, their parent is the root pom, so a profile there is not inherited. Scoping
+             it to the release profile leaves the GitLab package-registry deploy, which does
+             publish the demo jars, exactly as it was. -->
+        <profile>
+            <id>release</id>
+            <properties>
+                <maven.deploy.skip>true</maven.deploy.skip>
+            </properties>
+        </profile>
+    </profiles>
 </project>

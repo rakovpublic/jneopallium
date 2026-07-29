@@ -6,19 +6,20 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.rakovpublic.jneopallium</groupId>
+        <groupId>io.github.rakovpublic.jneopallium</groupId>
         <artifactId>wrapper</artifactId>
         <version>1.0</version>
     </parent>
     <artifactId>master</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
+    <description>Cluster coordinator: partitions each layer across the registered workers, holds the run configuration and serves the results.</description>
     <name>jneuronnet.master</name>
     <url>https://github.com/rakovpublic/jneopallium</url>
 
     <dependencies>
         <dependency>
-            <groupId>com.rakovpublic.jneopallium</groupId>
+            <groupId>io.github.rakovpublic.jneopallium</groupId>
             <artifactId>worker-core</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>

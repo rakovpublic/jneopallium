@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.rakovpublic.jneopallium</groupId>
+        <groupId>io.github.rakovpublic.jneopallium</groupId>
         <artifactId>wrapper</artifactId>
         <version>1.0</version>
         <relativePath>../../pom.xml</relativePath>
@@ -12,19 +12,21 @@
     <artifactId>bridge-plc4x</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <name>Jneopallium :: bridge-plc4x</name>
+    <description>Apache PLC4X bridge: inputs, output aggregators and audit.</description>
     <dependencies>
         <dependency>
-            <groupId>com.rakovpublic.jneopallium</groupId>
+            <groupId>io.github.rakovpublic.jneopallium</groupId>
             <artifactId>worker-core</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>com.rakovpublic.jneopallium</groupId>
+            <groupId>io.github.rakovpublic.jneopallium</groupId>
             <artifactId>bridge-api</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>com.rakovpublic.jneopallium</groupId>
+            <groupId>io.github.rakovpublic.jneopallium</groupId>
             <artifactId>domain-industrial</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>

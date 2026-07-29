@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.rakovpublic.jneopallium</groupId>
+        <groupId>io.github.rakovpublic.jneopallium</groupId>
         <artifactId>wrapper</artifactId>
         <version>1.0</version>
         <relativePath>../../pom.xml</relativePath>
@@ -14,33 +14,33 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.rakovpublic.jneopallium</groupId>
+            <groupId>io.github.rakovpublic.jneopallium</groupId>
             <artifactId>worker-core</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <!-- Reuses the shared demo runtime helpers (DemoJsonContext / DemoFileStorage). -->
         <dependency>
-            <groupId>com.rakovpublic.jneopallium</groupId>
+            <groupId>io.github.rakovpublic.jneopallium</groupId>
             <artifactId>demo-fullrun</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>com.rakovpublic.jneopallium</groupId>
+            <groupId>io.github.rakovpublic.jneopallium</groupId>
             <artifactId>bridge-api</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>com.rakovpublic.jneopallium</groupId>
+            <groupId>io.github.rakovpublic.jneopallium</groupId>
             <artifactId>bridge-mqtt</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>com.rakovpublic.jneopallium</groupId>
+            <groupId>io.github.rakovpublic.jneopallium</groupId>
             <artifactId>bridge-opcua</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>com.rakovpublic.jneopallium</groupId>
+            <groupId>io.github.rakovpublic.jneopallium</groupId>
             <artifactId>domain-industrial</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
@@ -48,17 +48,17 @@
              from these protocol bridges (verified by the production-loadable test);
              they are resolved by name at runtime, not imported. -->
         <dependency>
-            <groupId>com.rakovpublic.jneopallium</groupId>
+            <groupId>io.github.rakovpublic.jneopallium</groupId>
             <artifactId>bridge-fmi</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>com.rakovpublic.jneopallium</groupId>
+            <groupId>io.github.rakovpublic.jneopallium</groupId>
             <artifactId>bridge-kafka</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>com.rakovpublic.jneopallium</groupId>
+            <groupId>io.github.rakovpublic.jneopallium</groupId>
             <artifactId>bridge-plc4x</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
@@ -99,4 +99,18 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <!-- The demos are runnable examples, not something to depend on, so they stay out of
+             Maven Central. This has to be declared per module: demos/pom.xml only aggregates
+             them, their parent is the root pom, so a profile there is not inherited. Scoping
+             it to the release profile leaves the GitLab package-registry deploy, which does
+             publish the demo jars, exactly as it was. -->
+        <profile>
+            <id>release</id>
+            <properties>
+                <maven.deploy.skip>true</maven.deploy.skip>
+            </properties>
+        </profile>
+    </profiles>
 </project>
