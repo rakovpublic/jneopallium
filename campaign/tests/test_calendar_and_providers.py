@@ -1,7 +1,10 @@
 from __future__ import annotations
 
+from unittest.mock import MagicMock
+
 from sqlalchemy import select
 
+from jneo_campaign.providers.google import GoogleCalendarProvider
 from jneo_campaign.providers.interfaces import OutboundEmail
 from jneo_campaign.providers.mock import MockCalendarProvider, MockGmailProvider
 from jneo_campaign.storage.models import (
@@ -26,6 +29,26 @@ def test_mock_gmail_is_idempotent() -> None:
     second = provider.send(message, ["JNEOPALLIUM_CAMPAIGN"])
     assert first == second
     assert len(provider.sent) == 1
+
+
+def test_google_calendar_validation_uses_minimum_scope_freebusy(monkeypatch) -> None:
+    service = MagicMock()
+    service.freebusy.return_value.query.return_value.execute.return_value = {
+        "calendars": {"primary": {"busy": []}}
+    }
+    provider = GoogleCalendarProvider(manager=MagicMock())
+    monkeypatch.setattr(provider, "_service", lambda: service)
+
+    result = provider.validate_credentials()
+
+    assert result == {
+        "provider": "calendar",
+        "valid": True,
+        "calendar_id": "primary",
+        "busy_entries": 0,
+    }
+    body = service.freebusy.return_value.query.call_args.kwargs["body"]
+    assert body["items"] == [{"id": "primary"}]
 
 
 def test_calendar_event_requires_agreed_option(runner) -> None:

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import base64
-from datetime import datetime
+from datetime import UTC, datetime, timedelta
 from email.message import EmailMessage
 from typing import Any
 
@@ -180,8 +180,28 @@ class GoogleCalendarProvider:
         )
 
     def validate_credentials(self) -> dict[str, Any]:
-        calendar = self._service().calendars().get(calendarId="primary").execute()
-        return {"provider": "calendar", "valid": True, "summary": calendar.get("summary")}
+        now = datetime.now(UTC)
+        response = (
+            self._service()
+            .freebusy()
+            .query(
+                body={
+                    "timeMin": now.isoformat(),
+                    "timeMax": (now + timedelta(minutes=1)).isoformat(),
+                    "items": [{"id": "primary"}],
+                }
+            )
+            .execute()
+        )
+        calendar = response.get("calendars", {}).get("primary", {})
+        if calendar.get("errors"):
+            raise RuntimeError("Primary calendar free/busy validation failed")
+        return {
+            "provider": "calendar",
+            "valid": True,
+            "calendar_id": "primary",
+            "busy_entries": len(calendar.get("busy", [])),
+        }
 
     def free_busy(self, start: datetime, end: datetime, calendar_id: str) -> list[CalendarSlot]:
         response = (
