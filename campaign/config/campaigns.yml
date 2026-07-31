@@ -1,0 +1,50 @@
+default:
+  campaign_id: dry-run-pilot
+  language: en
+  target_regions: [EU, UK, US, CA, GLOBAL]
+  excluded_regions: []
+  prospect_types:
+    - potential_customer
+    - integration_partner
+    - technology_partner
+    - research_partner
+    - investor
+    - accelerator
+    - grant_program
+    - standards_organization
+    - community_partner
+  active_domains:
+    - Industrial automation
+    - Industrial digital twins
+    - Ad fraud and invalid-traffic detection
+    - Clinical decision support
+    - Medical workflow supervision
+    - Medical imaging context integration
+    - Cybersecurity triage
+    - AIOps and observability
+    - Mobile and industrial robotics
+    - UAV autonomy
+    - Nengo and computational-neuroscience interoperability
+  excluded_domains: []
+  minimum_prospect_score: 60
+  demo_auto_plan_threshold: 72
+  research_budget_usd: 20
+  llm_budget_usd: 20
+  demo_engineering_budget_hours: 40
+  send_window_start: 9
+  send_window_end: 16
+  limits:
+    max_new_contacts_per_day: 10
+    max_outbound_per_day: 20
+    max_initial_contacts_per_organization: 1
+    max_automated_followups: 2
+    min_business_days_between_followups: 4
+    bounce_halt_rate: 0.05
+    complaint_halt_count: 1
+campaigns:
+  customers: {audience: potential_customer, enabled: true}
+  integrators: {audience: integration_partner, enabled: true}
+  researchers: {audience: research_partner, enabled: true}
+  investors: {audience: investor, enabled: false}
+  accelerators: {audience: accelerator, enabled: false}
+  grants: {audience: grant_program, enabled: false}

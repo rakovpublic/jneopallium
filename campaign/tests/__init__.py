@@ -1,0 +1,1 @@
+"""Campaign test suite."""

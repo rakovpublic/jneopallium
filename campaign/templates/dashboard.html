@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Jneopallium Campaign</title>
+  <style>
+    :root { color-scheme: light dark; font-family: system-ui, sans-serif; }
+    body { max-width: 1280px; margin: 0 auto; padding: 1.5rem; }
+    .warning { padding: .8rem; border: 2px solid #b45309; border-radius: .5rem; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: .75rem; }
+    .card { border: 1px solid #7778; border-radius: .5rem; padding: 1rem; }
+    .metric { font-size: 1.8rem; font-weight: 700; }
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0 2rem; }
+    th, td { text-align: left; padding: .5rem; border-bottom: 1px solid #7775; vertical-align: top; }
+    code { overflow-wrap: anywhere; }
+  </style>
+</head>
+<body>
+  <h1>Jneopallium Campaign</h1>
+  <p class="warning">Mode: <strong>{{ mode }}</strong>. External writes: <strong>{{ "ENABLED" if live_enabled else "DISABLED" }}</strong>.</p>
+  <section class="grid">
+    {% for name, value in counts.items() %}
+    <article class="card"><div class="metric">{{ value }}</div><div>{{ name.replace('_', ' ') }}</div></article>
+    {% endfor %}
+  </section>
+  <h2>Domain priorities</h2>
+  <table><thead><tr><th>Domain</th><th>Score</th><th>Allocation</th><th>Paused</th></tr></thead><tbody>
+    {% for item in domains %}<tr><td>{{ item.name }}</td><td>{{ "%.2f"|format(item.score) }}</td><td>{{ item.allocation }}</td><td>{{ item.paused }}</td></tr>{% endfor %}
+  </tbody></table>
+  <h2>Prospects by stage score</h2>
+  <table><thead><tr><th>Organization</th><th>Domain</th><th>Region</th><th>Score</th><th>Paused</th></tr></thead><tbody>
+    {% for organization, score in prospects %}<tr><td>{{ organization.name }}</td><td>{{ organization.target_domain }}</td><td>{{ organization.region }}</td><td>{{ "%.2f"|format(score.total) }}</td><td>{{ organization.paused }}</td></tr>{% endfor %}
+  </tbody></table>
+  <h2>Recent audit events</h2>
+  <table><thead><tr><th>Time</th><th>Entity</th><th>Transition</th><th>Reason</th></tr></thead><tbody>
+    {% for item in audit %}<tr><td>{{ item.occurred_at }}</td><td>{{ item.entity_type }}:{{ item.entity_id }}</td><td>{{ item.from_state }} → {{ item.to_state }}</td><td>{{ item.reason }}</td></tr>{% endfor %}
+  </tbody></table>
+  <p>Pause controls are available through <code>POST /api/pause/{campaign|domain|region|organization|sequence}/{value}</code> with JSON <code>{"paused": true, "reason": "..."}</code>.</p>
+</body>
+</html>

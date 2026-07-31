@@ -1,0 +1,474 @@
+retrieved_at: "2026-07-31"
+notes: >-
+  Recorded official-site findings for deterministic DRY_RUN testing. They are not proof of
+  willingness to receive outreach. LIVE mode must apply source freshness and jurisdiction checks.
+organizations:
+  - organization_name: IAB Technology Laboratory
+    canonical_domain: iabtechlab.com
+    organization_type: standards_organization
+    prospect_category: research_partner
+    target_domain: Ad fraud and invalid-traffic detection
+    region: US
+    country: US
+    summary: Develops technical standards for the digital advertising supply chain.
+    source_url: https://iabtechlab.com/standards/supply-chain-foundations/
+    source_type: official_website
+    supporting_excerpt: The official standards page covers OpenRTB, ads.txt, app-ads.txt, sellers.json, the SupplyChain object, and taxonomies.
+    contact_role: Membership and technical collaboration channel
+    contact_channel_type: email
+    contact_channel_value: membership@iabtechlab.com
+    contact_source_url: https://iabtechlab.com/about-the-iab-tech-lab/
+    contact_supporting_excerpt: The official about page publishes this address for membership inquiries.
+    contact_timezone: America/New_York
+  - organization_name: Media Rating Council
+    canonical_domain: mediaratingcouncil.org
+    organization_type: standards_organization
+    prospect_category: research_partner
+    target_domain: Ad fraud and invalid-traffic detection
+    region: US
+    country: US
+    summary: Publishes measurement and invalid-traffic guidance for media measurement services.
+    source_url: https://mediaratingcouncil.org/standards-and-guidelines
+    source_type: official_website
+    supporting_excerpt: The official site lists standards and guidance, including invalid-traffic measurement materials.
+    contact_role: Official general inquiry channel
+    contact_channel_type: contact_form
+    contact_channel_value: https://mediaratingcouncil.org/contact-us
+    contact_source_url: https://mediaratingcouncil.org/contact-us
+    contact_supporting_excerpt: The organization provides an official contact page.
+  - organization_name: HUMAN Security
+    canonical_domain: humansecurity.com
+    organization_type: company
+    prospect_category: technology_partner
+    target_domain: Ad fraud and invalid-traffic detection
+    region: US
+    country: US
+    summary: Provides bot, fraud, and abuse defenses for digital platforms and advertising.
+    source_url: https://www.humansecurity.com/products/media-guard
+    source_type: official_product_page
+    supporting_excerpt: The official product page describes protection for digital advertising media quality and fraud workflows.
+    contact_role: Product partnership inquiry
+    contact_channel_type: contact_form
+    contact_channel_value: https://www.humansecurity.com/contact-us
+    contact_source_url: https://www.humansecurity.com/contact-us
+    contact_supporting_excerpt: The company provides an official business contact form.
+  - organization_name: DoubleVerify
+    canonical_domain: doubleverify.com
+    organization_type: company
+    prospect_category: potential_customer
+    target_domain: Ad fraud and invalid-traffic detection
+    region: US
+    country: US
+    summary: Provides digital media measurement, verification, and fraud-related products.
+    source_url: https://doubleverify.com/solutions/fraud-invalid-traffic/
+    source_type: official_product_page
+    supporting_excerpt: The official solution page describes fraud and invalid-traffic measurement for digital media.
+    contact_role: Product innovation inquiry
+    contact_channel_type: contact_form
+    contact_channel_value: https://doubleverify.com/contact-us/
+    contact_source_url: https://doubleverify.com/contact-us/
+    contact_supporting_excerpt: The company provides an official contact form.
+  - organization_name: Integral Ad Science
+    canonical_domain: integralads.com
+    organization_type: company
+    prospect_category: potential_customer
+    target_domain: Ad fraud and invalid-traffic detection
+    region: US
+    country: US
+    summary: Provides media-quality measurement including invalid-traffic capabilities.
+    source_url: https://integralads.com/solutions/total-visibility/
+    source_type: official_product_page
+    supporting_excerpt: The official site describes media-quality measurement across digital campaigns.
+    contact_role: Product inquiry
+    contact_channel_type: contact_form
+    contact_channel_value: https://integralads.com/contact/
+    contact_source_url: https://integralads.com/contact/
+    contact_supporting_excerpt: The company provides an official contact form.
+  - organization_name: Pixalate
+    canonical_domain: pixalate.com
+    organization_type: company
+    prospect_category: potential_customer
+    target_domain: Ad fraud and invalid-traffic detection
+    region: US
+    country: US
+    summary: Provides ad-fraud protection, privacy, and compliance analytics.
+    source_url: https://www.pixalate.com/ad-fraud-protection
+    source_type: official_product_page
+    supporting_excerpt: The official page describes analytics for ad-fraud detection across advertising channels.
+    contact_role: Product inquiry
+    contact_channel_type: contact_form
+    contact_channel_value: https://www.pixalate.com/contact
+    contact_source_url: https://www.pixalate.com/contact
+    contact_supporting_excerpt: The company provides an official contact channel.
+  - organization_name: Magnite
+    canonical_domain: magnite.com
+    organization_type: company
+    prospect_category: potential_customer
+    target_domain: Ad fraud and invalid-traffic detection
+    region: US
+    country: US
+    summary: Operates sell-side advertising technology for multiple channels including CTV.
+    source_url: https://www.magnite.com/
+    source_type: official_website
+    supporting_excerpt: The official site identifies Magnite as an independent sell-side advertising platform with CTV activity.
+    contact_role: Technology partnership inquiry
+    contact_channel_type: contact_form
+    contact_channel_value: https://www.magnite.com/contact-us/
+    contact_source_url: https://www.magnite.com/contact-us/
+    contact_supporting_excerpt: The company provides an official contact form.
+  - organization_name: OpenX
+    canonical_domain: openx.com
+    organization_type: company
+    prospect_category: potential_customer
+    target_domain: Ad fraud and invalid-traffic detection
+    region: US
+    country: US
+    summary: Operates programmatic advertising marketplace technology.
+    source_url: https://www.openx.com/
+    source_type: official_website
+    supporting_excerpt: The official site describes an independent programmatic advertising supply platform.
+    contact_role: Technology inquiry
+    contact_channel_type: contact_form
+    contact_channel_value: https://www.openx.com/contact/
+    contact_source_url: https://www.openx.com/contact/
+    contact_supporting_excerpt: The company provides an official contact form.
+  - organization_name: Index Exchange
+    canonical_domain: indexexchange.com
+    organization_type: company
+    prospect_category: potential_customer
+    target_domain: Ad fraud and invalid-traffic detection
+    region: CA
+    country: CA
+    summary: Operates a global advertising marketplace and programmatic infrastructure.
+    source_url: https://www.indexexchange.com/
+    source_type: official_website
+    supporting_excerpt: The official site describes programmatic advertising exchange infrastructure.
+    contact_role: Product and partnership inquiry
+    contact_channel_type: contact_form
+    contact_channel_value: https://www.indexexchange.com/contact/
+    contact_source_url: https://www.indexexchange.com/contact/
+    contact_supporting_excerpt: The company provides an official contact page.
+  - organization_name: AppsFlyer
+    canonical_domain: appsflyer.com
+    organization_type: company
+    prospect_category: potential_customer
+    target_domain: Ad fraud and invalid-traffic detection
+    region: US
+    country: US
+    summary: Provides mobile measurement, attribution, and fraud-protection products.
+    source_url: https://www.appsflyer.com/products/protect360/
+    source_type: official_product_page
+    supporting_excerpt: The official product page describes mobile fraud protection and detection workflows.
+    contact_role: Product inquiry
+    contact_channel_type: contact_form
+    contact_channel_value: https://www.appsflyer.com/company/contact/
+    contact_source_url: https://www.appsflyer.com/company/contact/
+    contact_supporting_excerpt: The company provides an official contact form.
+  - organization_name: OPC Foundation
+    canonical_domain: opcfoundation.org
+    organization_type: standards_organization
+    prospect_category: integration_partner
+    target_domain: Industrial automation
+    region: US
+    country: US
+    summary: Maintains OPC UA interoperability specifications for industrial systems.
+    source_url: https://opcfoundation.org/about/opc-technologies/opc-ua/
+    source_type: official_website
+    supporting_excerpt: The official page describes OPC UA as an industrial interoperability architecture spanning field through cloud systems.
+    contact_role: Working-group inquiry
+    contact_channel_type: contact_form
+    contact_channel_value: https://opcfoundation.org/contact/
+    contact_source_url: https://opcfoundation.org/contact/
+    contact_supporting_excerpt: The foundation provides an official contact route.
+  - organization_name: Eclipse Foundation Sparkplug
+    canonical_domain: sparkplug.eclipse.org
+    organization_type: open_source_foundation
+    prospect_category: integration_partner
+    target_domain: Industrial automation
+    region: EU
+    country: BE
+    summary: Hosts the Eclipse Sparkplug specification and implementation ecosystem for industrial MQTT.
+    source_url: https://sparkplug.eclipse.org/
+    source_type: official_project_page
+    supporting_excerpt: The official project page describes Sparkplug as an open specification for MQTT-enabled industrial applications.
+    contact_role: Foundation collaboration inquiry
+    contact_channel_type: contact_form
+    contact_channel_value: https://www.eclipse.org/org/foundation/contact.php
+    contact_source_url: https://www.eclipse.org/org/foundation/contact.php
+    contact_supporting_excerpt: The Eclipse Foundation publishes an official contact page.
+  - organization_name: Modelica Association FMI Project
+    canonical_domain: fmi-standard.org
+    organization_type: standards_organization
+    prospect_category: integration_partner
+    target_domain: Industrial digital twins
+    region: EU
+    country: DE
+    summary: Develops the Functional Mock-up Interface standard for model exchange and co-simulation.
+    source_url: https://fmi-standard.org/
+    source_type: official_project_page
+    supporting_excerpt: The official project site describes FMI as a standard for exchanging and co-simulating dynamic models.
+    contact_role: Project collaboration channel
+    contact_channel_type: contact_form
+    contact_channel_value: https://fmi-standard.org/contact/
+    contact_source_url: https://fmi-standard.org/contact/
+    contact_supporting_excerpt: The project provides an official contact page.
+  - organization_name: Festo
+    canonical_domain: festo.com
+    organization_type: company
+    prospect_category: potential_customer
+    target_domain: Industrial automation
+    region: EU
+    country: DE
+    summary: Develops industrial automation and pneumatic/electric automation technology.
+    source_url: https://www.festo.com/
+    source_type: official_website
+    supporting_excerpt: The official site presents industrial automation products, services, and technical learning offerings.
+    contact_role: Innovation inquiry
+    contact_channel_type: contact_form
+    contact_channel_value: https://www.festo.com/us/en/e/contact/
+    contact_source_url: https://www.festo.com/us/en/e/contact/
+    contact_supporting_excerpt: The company provides an official contact page.
+  - organization_name: Bosch Rexroth
+    canonical_domain: boschrexroth.com
+    organization_type: company
+    prospect_category: potential_customer
+    target_domain: Industrial automation
+    region: EU
+    country: DE
+    summary: Provides drive, control, motion, and industrial automation technologies.
+    source_url: https://www.boschrexroth.com/
+    source_type: official_website
+    supporting_excerpt: The official site describes industrial automation, control, and motion technology offerings.
+    contact_role: Innovation inquiry
+    contact_channel_type: contact_form
+    contact_channel_value: https://www.boschrexroth.com/en/us/contact/
+    contact_source_url: https://www.boschrexroth.com/en/us/contact/
+    contact_supporting_excerpt: The company provides an official contact page.
+  - organization_name: HL7 International
+    canonical_domain: hl7.org
+    organization_type: standards_organization
+    prospect_category: integration_partner
+    target_domain: Clinical decision support
+    region: US
+    country: US
+    summary: Develops standards for health-information exchange, including FHIR.
+    source_url: https://www.hl7.org/fhir/
+    source_type: official_standard_page
+    supporting_excerpt: The official FHIR specification describes a standard for exchanging healthcare information electronically.
+    contact_role: Official standards inquiry
+    contact_channel_type: contact_form
+    contact_channel_value: https://www.hl7.org/about/contact.cfm
+    contact_source_url: https://www.hl7.org/about/contact.cfm
+    contact_supporting_excerpt: HL7 publishes an official contact page.
+  - organization_name: DICOM Standards Committee
+    canonical_domain: dicomstandard.org
+    organization_type: standards_organization
+    prospect_category: integration_partner
+    target_domain: Medical imaging context integration
+    region: US
+    country: US
+    summary: Maintains the DICOM standard for medical imaging information and related workflows.
+    source_url: https://www.dicomstandard.org/current
+    source_type: official_standard_page
+    supporting_excerpt: The official site publishes the current DICOM standard and supporting materials.
+    contact_role: DICOM Secretariat
+    contact_channel_type: email
+    contact_channel_value: dicom@dicomstandard.org
+    contact_source_url: https://www.dicomstandard.org/contact
+    contact_supporting_excerpt: The official contact page publishes this address for the DICOM Secretariat.
+    contact_timezone: America/New_York
+  - organization_name: OpenMRS
+    canonical_domain: openmrs.org
+    organization_type: open_source_project
+    prospect_category: research_partner
+    target_domain: Clinical decision support
+    region: GLOBAL
+    country: null
+    summary: Develops an open-source medical record platform and implementation community.
+    source_url: https://openmrs.org/
+    source_type: official_project_page
+    supporting_excerpt: The official site describes a global open-source medical record system and community.
+    contact_role: Community collaboration channel
+    contact_channel_type: contact_form
+    contact_channel_value: https://openmrs.org/contact/
+    contact_source_url: https://openmrs.org/contact/
+    contact_supporting_excerpt: The project provides an official contact channel.
+  - organization_name: Redox
+    canonical_domain: redoxengine.com
+    organization_type: company
+    prospect_category: integration_partner
+    target_domain: Medical workflow supervision
+    region: US
+    country: US
+    summary: Provides healthcare data interoperability infrastructure and integrations.
+    source_url: https://www.redoxengine.com/platform
+    source_type: official_product_page
+    supporting_excerpt: The official platform page describes healthcare data exchange and integration capabilities.
+    contact_role: Partnership inquiry
+    contact_channel_type: contact_form
+    contact_channel_value: https://www.redoxengine.com/contact/
+    contact_source_url: https://www.redoxengine.com/contact/
+    contact_supporting_excerpt: The company provides an official contact form.
+  - organization_name: Smile Digital Health
+    canonical_domain: smiledigitalhealth.com
+    organization_type: company
+    prospect_category: integration_partner
+    target_domain: Medical workflow supervision
+    region: CA
+    country: CA
+    summary: Develops health data and FHIR-based interoperability products.
+    source_url: https://www.smiledigitalhealth.com/our-platform
+    source_type: official_product_page
+    supporting_excerpt: The official platform page describes FHIR-oriented health data infrastructure.
+    contact_role: Partnership inquiry
+    contact_channel_type: contact_form
+    contact_channel_value: https://www.smiledigitalhealth.com/contact
+    contact_source_url: https://www.smiledigitalhealth.com/contact
+    contact_supporting_excerpt: The company provides an official contact form.
+  - organization_name: InterSystems
+    canonical_domain: intersystems.com
+    organization_type: company
+    prospect_category: integration_partner
+    target_domain: Medical workflow supervision
+    region: US
+    country: US
+    summary: Provides healthcare data platforms and interoperability technology.
+    source_url: https://www.intersystems.com/industries/healthcare/
+    source_type: official_product_page
+    supporting_excerpt: The official healthcare page describes data management and interoperability products for health systems.
+    contact_role: Healthcare technology inquiry
+    contact_channel_type: contact_form
+    contact_channel_value: https://www.intersystems.com/contact-us/
+    contact_source_url: https://www.intersystems.com/contact-us/
+    contact_supporting_excerpt: The company provides an official contact route.
+  - organization_name: Open Information Security Foundation
+    canonical_domain: oisf.net
+    organization_type: open_source_foundation
+    prospect_category: research_partner
+    target_domain: Cybersecurity triage
+    region: US
+    country: US
+    summary: Supports Suricata open-source network threat detection technology and its community.
+    source_url: https://oisf.net/suricata/
+    source_type: official_project_page
+    supporting_excerpt: The official site describes Suricata as open-source network threat detection technology.
+    contact_role: Consortium and collaboration inquiry
+    contact_channel_type: email
+    contact_channel_value: info@oisf.net
+    contact_source_url: https://oisf.net/contact
+    contact_supporting_excerpt: The official contact page publishes this general consortium inquiry address.
+    contact_timezone: America/Indiana/Indianapolis
+  - organization_name: Zeek Project
+    canonical_domain: zeek.org
+    organization_type: open_source_project
+    prospect_category: research_partner
+    target_domain: Cybersecurity triage
+    region: GLOBAL
+    country: null
+    summary: Develops an open-source network security monitoring platform.
+    source_url: https://zeek.org/
+    source_type: official_project_page
+    supporting_excerpt: The official project site describes Zeek as a network security monitoring platform.
+    contact_role: Community channel
+    contact_channel_type: contact_form
+    contact_channel_value: https://zeek.org/community/
+    contact_source_url: https://zeek.org/community/
+    contact_supporting_excerpt: The project publishes official community communication channels.
+  - organization_name: Wazuh
+    canonical_domain: wazuh.com
+    organization_type: company
+    prospect_category: integration_partner
+    target_domain: Cybersecurity triage
+    region: US
+    country: US
+    summary: Develops an open-source security platform integrating endpoint and cloud telemetry.
+    source_url: https://wazuh.com/platform/
+    source_type: official_product_page
+    supporting_excerpt: The official platform page describes open-source security monitoring and detection capabilities.
+    contact_role: Technology partnership inquiry
+    contact_channel_type: contact_form
+    contact_channel_value: https://wazuh.com/contact-us/
+    contact_source_url: https://wazuh.com/contact-us/
+    contact_supporting_excerpt: The company provides an official contact form.
+  - organization_name: Cloud Native Computing Foundation
+    canonical_domain: cncf.io
+    organization_type: open_source_foundation
+    prospect_category: community_partner
+    target_domain: AIOps and observability
+    region: US
+    country: US
+    summary: Hosts cloud-native projects including OpenTelemetry and related observability ecosystems.
+    source_url: https://www.cncf.io/projects/opentelemetry/
+    source_type: official_project_page
+    supporting_excerpt: The official project page identifies OpenTelemetry as a CNCF project for observability telemetry.
+    contact_role: General foundation inquiry
+    contact_channel_type: email
+    contact_channel_value: info@cncf.io
+    contact_source_url: https://www.cncf.io/about/contact/
+    contact_supporting_excerpt: The official contact page publishes this general inquiry address.
+    contact_timezone: America/New_York
+  - organization_name: Open Robotics
+    canonical_domain: openrobotics.org
+    organization_type: open_source_company
+    prospect_category: integration_partner
+    target_domain: Mobile and industrial robotics
+    region: US
+    country: US
+    summary: Develops and supports open-source robotics software including ROS and Gazebo.
+    source_url: https://www.openrobotics.org/
+    source_type: official_website
+    supporting_excerpt: The official site describes open-source software and hardware platforms for robotics.
+    contact_role: General robotics collaboration inquiry
+    contact_channel_type: email
+    contact_channel_value: info@openrobotics.org
+    contact_source_url: https://www.openrobotics.org/contact
+    contact_supporting_excerpt: The official contact page publishes this general address.
+    contact_timezone: America/Los_Angeles
+  - organization_name: PX4 Autopilot
+    canonical_domain: px4.io
+    organization_type: open_source_project
+    prospect_category: integration_partner
+    target_domain: UAV autonomy
+    region: GLOBAL
+    country: null
+    summary: Develops an open-source flight-control platform and ecosystem.
+    source_url: https://px4.io/
+    source_type: official_project_page
+    supporting_excerpt: The official project site describes an open-source autopilot ecosystem for drones and autonomous vehicles.
+    contact_role: Developer community channel
+    contact_channel_type: contact_form
+    contact_channel_value: https://px4.io/community/
+    contact_source_url: https://px4.io/community/
+    contact_supporting_excerpt: The project publishes official community collaboration channels.
+  - organization_name: ArduPilot
+    canonical_domain: ardupilot.org
+    organization_type: open_source_project
+    prospect_category: integration_partner
+    target_domain: UAV autonomy
+    region: GLOBAL
+    country: null
+    summary: Develops an open-source autopilot system and developer ecosystem.
+    source_url: https://ardupilot.org/
+    source_type: official_project_page
+    supporting_excerpt: The official project site documents open autopilot software across vehicle types.
+    contact_role: Developer community channel
+    contact_channel_type: contact_form
+    contact_channel_value: https://ardupilot.org/copter/docs/common-contact-us.html
+    contact_source_url: https://ardupilot.org/copter/docs/common-contact-us.html
+    contact_supporting_excerpt: The project documents official community contact options.
+  - organization_name: Applied Brain Research
+    canonical_domain: appliedbrainresearch.com
+    organization_type: company
+    prospect_category: research_partner
+    target_domain: Nengo and computational-neuroscience interoperability
+    region: CA
+    country: CA
+    summary: Develops the Nengo neural simulation ecosystem and neuromorphic engineering tools.
+    source_url: https://appliedbrainresearch.com/
+    source_type: official_website
+    supporting_excerpt: The official site describes neural simulation and neuromorphic technology work associated with Nengo.
+    contact_role: Research collaboration inquiry
+    contact_channel_type: contact_form
+    contact_channel_value: https://appliedbrainresearch.com/contact/
+    contact_source_url: https://appliedbrainresearch.com/contact/
+    contact_supporting_excerpt: The company provides an official contact form.

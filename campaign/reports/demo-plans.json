@@ -1,0 +1,1573 @@
+{
+  "generated_at": "2026-07-31T14:32:21.729957+00:00",
+  "plans": [
+    {
+      "organization_id": 1,
+      "demo_id": "demo.adfraud",
+      "disposition": "CONFIGURE_EXISTING_DEMO",
+      "engineering_hours": 8,
+      "safe_to_auto_implement": false,
+      "plan": {
+        "customer_problem": "Evaluate multi-timescale invalid-traffic and supply-path evidence on synthetic streams.",
+        "proposed_scenario": "Replay a deterministic synthetic Ad fraud and invalid-traffic detection scenario and compare multi-timescale evidence handling with transparent baselines.",
+        "why_jneopallium_may_be_suitable": "Typed signals, separate fast/slow loops, protocol bridges, and auditable safety gates can be evaluated without claiming a production outcome.",
+        "existing_reusable_modules": [
+          "domain.adfraud",
+          "bridge.kafka",
+          "demo.adfraud"
+        ],
+        "existing_demo": "demo.adfraud",
+        "required_new_modules": [],
+        "required_bridges": [
+          "ad-fraud"
+        ],
+        "synthetic_data_plan": "Generate deterministic, non-personal, non-operational events with fixed seeds.",
+        "architecture": "source --> typed inputs --> fast/slow evidence --> safety gate --> advisory output --> audit log",
+        "expected_outputs": [
+          "decision JSONL",
+          "evidence trail",
+          "baseline comparison",
+          "limitations report"
+        ],
+        "comparison_baseline": "Simple threshold rules plus a conventional deterministic statistical score",
+        "success_metrics": [
+          "deterministic replay",
+          "schema validity",
+          "evidence completeness",
+          "false-positive/negative matrix on labeled synthetic cases"
+        ],
+        "safety_constraints": [
+          "Synthetic data only",
+          "No autonomous external actuation",
+          "Human review required"
+        ],
+        "estimated_engineering_hours": 8,
+        "unresolved_assumptions": [
+          "Prospect interface and evaluation dataset are unknown",
+          "No production performance or regulatory status is assumed"
+        ],
+        "implementation_milestones": [
+          "schema agreement",
+          "synthetic fixture",
+          "adapter",
+          "baseline",
+          "deterministic test",
+          "review"
+        ],
+        "auto_implementation_eligible": false,
+        "disposition": "CONFIGURE_EXISTING_DEMO"
+      }
+    },
+    {
+      "organization_id": 2,
+      "demo_id": "demo.adfraud",
+      "disposition": "CONFIGURE_EXISTING_DEMO",
+      "engineering_hours": 8,
+      "safe_to_auto_implement": false,
+      "plan": {
+        "customer_problem": "Evaluate multi-timescale invalid-traffic and supply-path evidence on synthetic streams.",
+        "proposed_scenario": "Replay a deterministic synthetic Ad fraud and invalid-traffic detection scenario and compare multi-timescale evidence handling with transparent baselines.",
+        "why_jneopallium_may_be_suitable": "Typed signals, separate fast/slow loops, protocol bridges, and auditable safety gates can be evaluated without claiming a production outcome.",
+        "existing_reusable_modules": [
+          "domain.adfraud",
+          "bridge.kafka",
+          "demo.adfraud"
+        ],
+        "existing_demo": "demo.adfraud",
+        "required_new_modules": [],
+        "required_bridges": [
+          "ad-fraud"
+        ],
+        "synthetic_data_plan": "Generate deterministic, non-personal, non-operational events with fixed seeds.",
+        "architecture": "source --> typed inputs --> fast/slow evidence --> safety gate --> advisory output --> audit log",
+        "expected_outputs": [
+          "decision JSONL",
+          "evidence trail",
+          "baseline comparison",
+          "limitations report"
+        ],
+        "comparison_baseline": "Simple threshold rules plus a conventional deterministic statistical score",
+        "success_metrics": [
+          "deterministic replay",
+          "schema validity",
+          "evidence completeness",
+          "false-positive/negative matrix on labeled synthetic cases"
+        ],
+        "safety_constraints": [
+          "Synthetic data only",
+          "No autonomous external actuation",
+          "Human review required"
+        ],
+        "estimated_engineering_hours": 8,
+        "unresolved_assumptions": [
+          "Prospect interface and evaluation dataset are unknown",
+          "No production performance or regulatory status is assumed"
+        ],
+        "implementation_milestones": [
+          "schema agreement",
+          "synthetic fixture",
+          "adapter",
+          "baseline",
+          "deterministic test",
+          "review"
+        ],
+        "auto_implementation_eligible": false,
+        "disposition": "CONFIGURE_EXISTING_DEMO"
+      }
+    },
+    {
+      "organization_id": 3,
+      "demo_id": "demo.adfraud",
+      "disposition": "CONFIGURE_EXISTING_DEMO",
+      "engineering_hours": 8,
+      "safe_to_auto_implement": false,
+      "plan": {
+        "customer_problem": "Evaluate multi-timescale invalid-traffic and supply-path evidence on synthetic streams.",
+        "proposed_scenario": "Replay a deterministic synthetic Ad fraud and invalid-traffic detection scenario and compare multi-timescale evidence handling with transparent baselines.",
+        "why_jneopallium_may_be_suitable": "Typed signals, separate fast/slow loops, protocol bridges, and auditable safety gates can be evaluated without claiming a production outcome.",
+        "existing_reusable_modules": [
+          "domain.adfraud",
+          "bridge.kafka",
+          "demo.adfraud"
+        ],
+        "existing_demo": "demo.adfraud",
+        "required_new_modules": [],
+        "required_bridges": [
+          "ad-fraud"
+        ],
+        "synthetic_data_plan": "Generate deterministic, non-personal, non-operational events with fixed seeds.",
+        "architecture": "source --> typed inputs --> fast/slow evidence --> safety gate --> advisory output --> audit log",
+        "expected_outputs": [
+          "decision JSONL",
+          "evidence trail",
+          "baseline comparison",
+          "limitations report"
+        ],
+        "comparison_baseline": "Simple threshold rules plus a conventional deterministic statistical score",
+        "success_metrics": [
+          "deterministic replay",
+          "schema validity",
+          "evidence completeness",
+          "false-positive/negative matrix on labeled synthetic cases"
+        ],
+        "safety_constraints": [
+          "Synthetic data only",
+          "No autonomous external actuation",
+          "Human review required"
+        ],
+        "estimated_engineering_hours": 8,
+        "unresolved_assumptions": [
+          "Prospect interface and evaluation dataset are unknown",
+          "No production performance or regulatory status is assumed"
+        ],
+        "implementation_milestones": [
+          "schema agreement",
+          "synthetic fixture",
+          "adapter",
+          "baseline",
+          "deterministic test",
+          "review"
+        ],
+        "auto_implementation_eligible": false,
+        "disposition": "CONFIGURE_EXISTING_DEMO"
+      }
+    },
+    {
+      "organization_id": 4,
+      "demo_id": "demo.adfraud",
+      "disposition": "CONFIGURE_EXISTING_DEMO",
+      "engineering_hours": 8,
+      "safe_to_auto_implement": false,
+      "plan": {
+        "customer_problem": "Evaluate multi-timescale invalid-traffic and supply-path evidence on synthetic streams.",
+        "proposed_scenario": "Replay a deterministic synthetic Ad fraud and invalid-traffic detection scenario and compare multi-timescale evidence handling with transparent baselines.",
+        "why_jneopallium_may_be_suitable": "Typed signals, separate fast/slow loops, protocol bridges, and auditable safety gates can be evaluated without claiming a production outcome.",
+        "existing_reusable_modules": [
+          "domain.adfraud",
+          "bridge.kafka",
+          "demo.adfraud"
+        ],
+        "existing_demo": "demo.adfraud",
+        "required_new_modules": [],
+        "required_bridges": [
+          "ad-fraud"
+        ],
+        "synthetic_data_plan": "Generate deterministic, non-personal, non-operational events with fixed seeds.",
+        "architecture": "source --> typed inputs --> fast/slow evidence --> safety gate --> advisory output --> audit log",
+        "expected_outputs": [
+          "decision JSONL",
+          "evidence trail",
+          "baseline comparison",
+          "limitations report"
+        ],
+        "comparison_baseline": "Simple threshold rules plus a conventional deterministic statistical score",
+        "success_metrics": [
+          "deterministic replay",
+          "schema validity",
+          "evidence completeness",
+          "false-positive/negative matrix on labeled synthetic cases"
+        ],
+        "safety_constraints": [
+          "Synthetic data only",
+          "No autonomous external actuation",
+          "Human review required"
+        ],
+        "estimated_engineering_hours": 8,
+        "unresolved_assumptions": [
+          "Prospect interface and evaluation dataset are unknown",
+          "No production performance or regulatory status is assumed"
+        ],
+        "implementation_milestones": [
+          "schema agreement",
+          "synthetic fixture",
+          "adapter",
+          "baseline",
+          "deterministic test",
+          "review"
+        ],
+        "auto_implementation_eligible": false,
+        "disposition": "CONFIGURE_EXISTING_DEMO"
+      }
+    },
+    {
+      "organization_id": 5,
+      "demo_id": "demo.adfraud",
+      "disposition": "CONFIGURE_EXISTING_DEMO",
+      "engineering_hours": 8,
+      "safe_to_auto_implement": false,
+      "plan": {
+        "customer_problem": "Evaluate multi-timescale invalid-traffic and supply-path evidence on synthetic streams.",
+        "proposed_scenario": "Replay a deterministic synthetic Ad fraud and invalid-traffic detection scenario and compare multi-timescale evidence handling with transparent baselines.",
+        "why_jneopallium_may_be_suitable": "Typed signals, separate fast/slow loops, protocol bridges, and auditable safety gates can be evaluated without claiming a production outcome.",
+        "existing_reusable_modules": [
+          "domain.adfraud",
+          "bridge.kafka",
+          "demo.adfraud"
+        ],
+        "existing_demo": "demo.adfraud",
+        "required_new_modules": [],
+        "required_bridges": [
+          "ad-fraud"
+        ],
+        "synthetic_data_plan": "Generate deterministic, non-personal, non-operational events with fixed seeds.",
+        "architecture": "source --> typed inputs --> fast/slow evidence --> safety gate --> advisory output --> audit log",
+        "expected_outputs": [
+          "decision JSONL",
+          "evidence trail",
+          "baseline comparison",
+          "limitations report"
+        ],
+        "comparison_baseline": "Simple threshold rules plus a conventional deterministic statistical score",
+        "success_metrics": [
+          "deterministic replay",
+          "schema validity",
+          "evidence completeness",
+          "false-positive/negative matrix on labeled synthetic cases"
+        ],
+        "safety_constraints": [
+          "Synthetic data only",
+          "No autonomous external actuation",
+          "Human review required"
+        ],
+        "estimated_engineering_hours": 8,
+        "unresolved_assumptions": [
+          "Prospect interface and evaluation dataset are unknown",
+          "No production performance or regulatory status is assumed"
+        ],
+        "implementation_milestones": [
+          "schema agreement",
+          "synthetic fixture",
+          "adapter",
+          "baseline",
+          "deterministic test",
+          "review"
+        ],
+        "auto_implementation_eligible": false,
+        "disposition": "CONFIGURE_EXISTING_DEMO"
+      }
+    },
+    {
+      "organization_id": 6,
+      "demo_id": "demo.adfraud",
+      "disposition": "CONFIGURE_EXISTING_DEMO",
+      "engineering_hours": 8,
+      "safe_to_auto_implement": false,
+      "plan": {
+        "customer_problem": "Evaluate multi-timescale invalid-traffic and supply-path evidence on synthetic streams.",
+        "proposed_scenario": "Replay a deterministic synthetic Ad fraud and invalid-traffic detection scenario and compare multi-timescale evidence handling with transparent baselines.",
+        "why_jneopallium_may_be_suitable": "Typed signals, separate fast/slow loops, protocol bridges, and auditable safety gates can be evaluated without claiming a production outcome.",
+        "existing_reusable_modules": [
+          "domain.adfraud",
+          "bridge.kafka",
+          "demo.adfraud"
+        ],
+        "existing_demo": "demo.adfraud",
+        "required_new_modules": [],
+        "required_bridges": [
+          "ad-fraud"
+        ],
+        "synthetic_data_plan": "Generate deterministic, non-personal, non-operational events with fixed seeds.",
+        "architecture": "source --> typed inputs --> fast/slow evidence --> safety gate --> advisory output --> audit log",
+        "expected_outputs": [
+          "decision JSONL",
+          "evidence trail",
+          "baseline comparison",
+          "limitations report"
+        ],
+        "comparison_baseline": "Simple threshold rules plus a conventional deterministic statistical score",
+        "success_metrics": [
+          "deterministic replay",
+          "schema validity",
+          "evidence completeness",
+          "false-positive/negative matrix on labeled synthetic cases"
+        ],
+        "safety_constraints": [
+          "Synthetic data only",
+          "No autonomous external actuation",
+          "Human review required"
+        ],
+        "estimated_engineering_hours": 8,
+        "unresolved_assumptions": [
+          "Prospect interface and evaluation dataset are unknown",
+          "No production performance or regulatory status is assumed"
+        ],
+        "implementation_milestones": [
+          "schema agreement",
+          "synthetic fixture",
+          "adapter",
+          "baseline",
+          "deterministic test",
+          "review"
+        ],
+        "auto_implementation_eligible": false,
+        "disposition": "CONFIGURE_EXISTING_DEMO"
+      }
+    },
+    {
+      "organization_id": 7,
+      "demo_id": "demo.adfraud",
+      "disposition": "CONFIGURE_EXISTING_DEMO",
+      "engineering_hours": 8,
+      "safe_to_auto_implement": false,
+      "plan": {
+        "customer_problem": "Evaluate multi-timescale invalid-traffic and supply-path evidence on synthetic streams.",
+        "proposed_scenario": "Replay a deterministic synthetic Ad fraud and invalid-traffic detection scenario and compare multi-timescale evidence handling with transparent baselines.",
+        "why_jneopallium_may_be_suitable": "Typed signals, separate fast/slow loops, protocol bridges, and auditable safety gates can be evaluated without claiming a production outcome.",
+        "existing_reusable_modules": [
+          "domain.adfraud",
+          "bridge.kafka",
+          "demo.adfraud"
+        ],
+        "existing_demo": "demo.adfraud",
+        "required_new_modules": [],
+        "required_bridges": [
+          "ad-fraud"
+        ],
+        "synthetic_data_plan": "Generate deterministic, non-personal, non-operational events with fixed seeds.",
+        "architecture": "source --> typed inputs --> fast/slow evidence --> safety gate --> advisory output --> audit log",
+        "expected_outputs": [
+          "decision JSONL",
+          "evidence trail",
+          "baseline comparison",
+          "limitations report"
+        ],
+        "comparison_baseline": "Simple threshold rules plus a conventional deterministic statistical score",
+        "success_metrics": [
+          "deterministic replay",
+          "schema validity",
+          "evidence completeness",
+          "false-positive/negative matrix on labeled synthetic cases"
+        ],
+        "safety_constraints": [
+          "Synthetic data only",
+          "No autonomous external actuation",
+          "Human review required"
+        ],
+        "estimated_engineering_hours": 8,
+        "unresolved_assumptions": [
+          "Prospect interface and evaluation dataset are unknown",
+          "No production performance or regulatory status is assumed"
+        ],
+        "implementation_milestones": [
+          "schema agreement",
+          "synthetic fixture",
+          "adapter",
+          "baseline",
+          "deterministic test",
+          "review"
+        ],
+        "auto_implementation_eligible": false,
+        "disposition": "CONFIGURE_EXISTING_DEMO"
+      }
+    },
+    {
+      "organization_id": 8,
+      "demo_id": "demo.adfraud",
+      "disposition": "CONFIGURE_EXISTING_DEMO",
+      "engineering_hours": 8,
+      "safe_to_auto_implement": false,
+      "plan": {
+        "customer_problem": "Evaluate multi-timescale invalid-traffic and supply-path evidence on synthetic streams.",
+        "proposed_scenario": "Replay a deterministic synthetic Ad fraud and invalid-traffic detection scenario and compare multi-timescale evidence handling with transparent baselines.",
+        "why_jneopallium_may_be_suitable": "Typed signals, separate fast/slow loops, protocol bridges, and auditable safety gates can be evaluated without claiming a production outcome.",
+        "existing_reusable_modules": [
+          "domain.adfraud",
+          "bridge.kafka",
+          "demo.adfraud"
+        ],
+        "existing_demo": "demo.adfraud",
+        "required_new_modules": [],
+        "required_bridges": [
+          "ad-fraud"
+        ],
+        "synthetic_data_plan": "Generate deterministic, non-personal, non-operational events with fixed seeds.",
+        "architecture": "source --> typed inputs --> fast/slow evidence --> safety gate --> advisory output --> audit log",
+        "expected_outputs": [
+          "decision JSONL",
+          "evidence trail",
+          "baseline comparison",
+          "limitations report"
+        ],
+        "comparison_baseline": "Simple threshold rules plus a conventional deterministic statistical score",
+        "success_metrics": [
+          "deterministic replay",
+          "schema validity",
+          "evidence completeness",
+          "false-positive/negative matrix on labeled synthetic cases"
+        ],
+        "safety_constraints": [
+          "Synthetic data only",
+          "No autonomous external actuation",
+          "Human review required"
+        ],
+        "estimated_engineering_hours": 8,
+        "unresolved_assumptions": [
+          "Prospect interface and evaluation dataset are unknown",
+          "No production performance or regulatory status is assumed"
+        ],
+        "implementation_milestones": [
+          "schema agreement",
+          "synthetic fixture",
+          "adapter",
+          "baseline",
+          "deterministic test",
+          "review"
+        ],
+        "auto_implementation_eligible": false,
+        "disposition": "CONFIGURE_EXISTING_DEMO"
+      }
+    },
+    {
+      "organization_id": 9,
+      "demo_id": "demo.adfraud",
+      "disposition": "CONFIGURE_EXISTING_DEMO",
+      "engineering_hours": 8,
+      "safe_to_auto_implement": false,
+      "plan": {
+        "customer_problem": "Evaluate multi-timescale invalid-traffic and supply-path evidence on synthetic streams.",
+        "proposed_scenario": "Replay a deterministic synthetic Ad fraud and invalid-traffic detection scenario and compare multi-timescale evidence handling with transparent baselines.",
+        "why_jneopallium_may_be_suitable": "Typed signals, separate fast/slow loops, protocol bridges, and auditable safety gates can be evaluated without claiming a production outcome.",
+        "existing_reusable_modules": [
+          "domain.adfraud",
+          "bridge.kafka",
+          "demo.adfraud"
+        ],
+        "existing_demo": "demo.adfraud",
+        "required_new_modules": [],
+        "required_bridges": [
+          "ad-fraud"
+        ],
+        "synthetic_data_plan": "Generate deterministic, non-personal, non-operational events with fixed seeds.",
+        "architecture": "source --> typed inputs --> fast/slow evidence --> safety gate --> advisory output --> audit log",
+        "expected_outputs": [
+          "decision JSONL",
+          "evidence trail",
+          "baseline comparison",
+          "limitations report"
+        ],
+        "comparison_baseline": "Simple threshold rules plus a conventional deterministic statistical score",
+        "success_metrics": [
+          "deterministic replay",
+          "schema validity",
+          "evidence completeness",
+          "false-positive/negative matrix on labeled synthetic cases"
+        ],
+        "safety_constraints": [
+          "Synthetic data only",
+          "No autonomous external actuation",
+          "Human review required"
+        ],
+        "estimated_engineering_hours": 8,
+        "unresolved_assumptions": [
+          "Prospect interface and evaluation dataset are unknown",
+          "No production performance or regulatory status is assumed"
+        ],
+        "implementation_milestones": [
+          "schema agreement",
+          "synthetic fixture",
+          "adapter",
+          "baseline",
+          "deterministic test",
+          "review"
+        ],
+        "auto_implementation_eligible": false,
+        "disposition": "CONFIGURE_EXISTING_DEMO"
+      }
+    },
+    {
+      "organization_id": 10,
+      "demo_id": "demo.adfraud",
+      "disposition": "CONFIGURE_EXISTING_DEMO",
+      "engineering_hours": 8,
+      "safe_to_auto_implement": false,
+      "plan": {
+        "customer_problem": "Evaluate multi-timescale invalid-traffic and supply-path evidence on synthetic streams.",
+        "proposed_scenario": "Replay a deterministic synthetic Ad fraud and invalid-traffic detection scenario and compare multi-timescale evidence handling with transparent baselines.",
+        "why_jneopallium_may_be_suitable": "Typed signals, separate fast/slow loops, protocol bridges, and auditable safety gates can be evaluated without claiming a production outcome.",
+        "existing_reusable_modules": [
+          "domain.adfraud",
+          "bridge.kafka",
+          "demo.adfraud"
+        ],
+        "existing_demo": "demo.adfraud",
+        "required_new_modules": [],
+        "required_bridges": [
+          "ad-fraud"
+        ],
+        "synthetic_data_plan": "Generate deterministic, non-personal, non-operational events with fixed seeds.",
+        "architecture": "source --> typed inputs --> fast/slow evidence --> safety gate --> advisory output --> audit log",
+        "expected_outputs": [
+          "decision JSONL",
+          "evidence trail",
+          "baseline comparison",
+          "limitations report"
+        ],
+        "comparison_baseline": "Simple threshold rules plus a conventional deterministic statistical score",
+        "success_metrics": [
+          "deterministic replay",
+          "schema validity",
+          "evidence completeness",
+          "false-positive/negative matrix on labeled synthetic cases"
+        ],
+        "safety_constraints": [
+          "Synthetic data only",
+          "No autonomous external actuation",
+          "Human review required"
+        ],
+        "estimated_engineering_hours": 8,
+        "unresolved_assumptions": [
+          "Prospect interface and evaluation dataset are unknown",
+          "No production performance or regulatory status is assumed"
+        ],
+        "implementation_milestones": [
+          "schema agreement",
+          "synthetic fixture",
+          "adapter",
+          "baseline",
+          "deterministic test",
+          "review"
+        ],
+        "auto_implementation_eligible": false,
+        "disposition": "CONFIGURE_EXISTING_DEMO"
+      }
+    },
+    {
+      "organization_id": 11,
+      "demo_id": "demo.industrial_fmi",
+      "disposition": "CONFIGURE_EXISTING_DEMO",
+      "engineering_hours": 8,
+      "safe_to_auto_implement": false,
+      "plan": {
+        "customer_problem": "Add auditable slow-timescale supervision above deterministic PLC and SIS controls.",
+        "proposed_scenario": "Replay a deterministic synthetic Industrial automation scenario and compare multi-timescale evidence handling with transparent baselines.",
+        "why_jneopallium_may_be_suitable": "Typed signals, separate fast/slow loops, protocol bridges, and auditable safety gates can be evaluated without claiming a production outcome.",
+        "existing_reusable_modules": [
+          "bridge.fmi",
+          "bridge.plc4x",
+          "bridge.opcua",
+          "demo.industrial_fmi",
+          "demo.fullrun.01-industrial-control",
+          "demo.fullrun.02-pump-fleet-maintenance"
+        ],
+        "existing_demo": "demo.industrial_fmi",
+        "required_new_modules": [],
+        "required_bridges": [
+          "industrial automation"
+        ],
+        "synthetic_data_plan": "Generate deterministic, non-personal, non-operational events with fixed seeds.",
+        "architecture": "source --> typed inputs --> fast/slow evidence --> safety gate --> advisory output --> audit log",
+        "expected_outputs": [
+          "decision JSONL",
+          "evidence trail",
+          "baseline comparison",
+          "limitations report"
+        ],
+        "comparison_baseline": "Simple threshold rules plus a conventional deterministic statistical score",
+        "success_metrics": [
+          "deterministic replay",
+          "schema validity",
+          "evidence completeness",
+          "false-positive/negative matrix on labeled synthetic cases"
+        ],
+        "safety_constraints": [
+          "Synthetic data only",
+          "No autonomous external actuation",
+          "Human review required"
+        ],
+        "estimated_engineering_hours": 8,
+        "unresolved_assumptions": [
+          "Prospect interface and evaluation dataset are unknown",
+          "No production performance or regulatory status is assumed"
+        ],
+        "implementation_milestones": [
+          "schema agreement",
+          "synthetic fixture",
+          "adapter",
+          "baseline",
+          "deterministic test",
+          "review"
+        ],
+        "auto_implementation_eligible": false,
+        "disposition": "CONFIGURE_EXISTING_DEMO"
+      }
+    },
+    {
+      "organization_id": 12,
+      "demo_id": "demo.industrial_fmi",
+      "disposition": "CONFIGURE_EXISTING_DEMO",
+      "engineering_hours": 8,
+      "safe_to_auto_implement": false,
+      "plan": {
+        "customer_problem": "Add auditable slow-timescale supervision above deterministic PLC and SIS controls.",
+        "proposed_scenario": "Replay a deterministic synthetic Industrial automation scenario and compare multi-timescale evidence handling with transparent baselines.",
+        "why_jneopallium_may_be_suitable": "Typed signals, separate fast/slow loops, protocol bridges, and auditable safety gates can be evaluated without claiming a production outcome.",
+        "existing_reusable_modules": [
+          "bridge.fmi",
+          "bridge.plc4x",
+          "bridge.opcua",
+          "demo.industrial_fmi",
+          "demo.fullrun.01-industrial-control",
+          "demo.fullrun.02-pump-fleet-maintenance"
+        ],
+        "existing_demo": "demo.industrial_fmi",
+        "required_new_modules": [],
+        "required_bridges": [
+          "industrial automation"
+        ],
+        "synthetic_data_plan": "Generate deterministic, non-personal, non-operational events with fixed seeds.",
+        "architecture": "source --> typed inputs --> fast/slow evidence --> safety gate --> advisory output --> audit log",
+        "expected_outputs": [
+          "decision JSONL",
+          "evidence trail",
+          "baseline comparison",
+          "limitations report"
+        ],
+        "comparison_baseline": "Simple threshold rules plus a conventional deterministic statistical score",
+        "success_metrics": [
+          "deterministic replay",
+          "schema validity",
+          "evidence completeness",
+          "false-positive/negative matrix on labeled synthetic cases"
+        ],
+        "safety_constraints": [
+          "Synthetic data only",
+          "No autonomous external actuation",
+          "Human review required"
+        ],
+        "estimated_engineering_hours": 8,
+        "unresolved_assumptions": [
+          "Prospect interface and evaluation dataset are unknown",
+          "No production performance or regulatory status is assumed"
+        ],
+        "implementation_milestones": [
+          "schema agreement",
+          "synthetic fixture",
+          "adapter",
+          "baseline",
+          "deterministic test",
+          "review"
+        ],
+        "auto_implementation_eligible": false,
+        "disposition": "CONFIGURE_EXISTING_DEMO"
+      }
+    },
+    {
+      "organization_id": 13,
+      "demo_id": "demo.industrial_fmi",
+      "disposition": "CONFIGURE_EXISTING_DEMO",
+      "engineering_hours": 8,
+      "safe_to_auto_implement": false,
+      "plan": {
+        "customer_problem": "Add auditable slow-timescale supervision above deterministic PLC and SIS controls.",
+        "proposed_scenario": "Replay a deterministic synthetic Industrial digital twins scenario and compare multi-timescale evidence handling with transparent baselines.",
+        "why_jneopallium_may_be_suitable": "Typed signals, separate fast/slow loops, protocol bridges, and auditable safety gates can be evaluated without claiming a production outcome.",
+        "existing_reusable_modules": [
+          "bridge.fmi",
+          "bridge.plc4x",
+          "bridge.opcua",
+          "demo.industrial_fmi",
+          "demo.fullrun.01-industrial-control",
+          "demo.fullrun.02-pump-fleet-maintenance"
+        ],
+        "existing_demo": "demo.industrial_fmi",
+        "required_new_modules": [],
+        "required_bridges": [
+          "industrial automation"
+        ],
+        "synthetic_data_plan": "Generate deterministic, non-personal, non-operational events with fixed seeds.",
+        "architecture": "source --> typed inputs --> fast/slow evidence --> safety gate --> advisory output --> audit log",
+        "expected_outputs": [
+          "decision JSONL",
+          "evidence trail",
+          "baseline comparison",
+          "limitations report"
+        ],
+        "comparison_baseline": "Simple threshold rules plus a conventional deterministic statistical score",
+        "success_metrics": [
+          "deterministic replay",
+          "schema validity",
+          "evidence completeness",
+          "false-positive/negative matrix on labeled synthetic cases"
+        ],
+        "safety_constraints": [
+          "Synthetic data only",
+          "No autonomous external actuation",
+          "Human review required"
+        ],
+        "estimated_engineering_hours": 8,
+        "unresolved_assumptions": [
+          "Prospect interface and evaluation dataset are unknown",
+          "No production performance or regulatory status is assumed"
+        ],
+        "implementation_milestones": [
+          "schema agreement",
+          "synthetic fixture",
+          "adapter",
+          "baseline",
+          "deterministic test",
+          "review"
+        ],
+        "auto_implementation_eligible": false,
+        "disposition": "CONFIGURE_EXISTING_DEMO"
+      }
+    },
+    {
+      "organization_id": 14,
+      "demo_id": "demo.industrial_fmi",
+      "disposition": "CONFIGURE_EXISTING_DEMO",
+      "engineering_hours": 8,
+      "safe_to_auto_implement": false,
+      "plan": {
+        "customer_problem": "Add auditable slow-timescale supervision above deterministic PLC and SIS controls.",
+        "proposed_scenario": "Replay a deterministic synthetic Industrial automation scenario and compare multi-timescale evidence handling with transparent baselines.",
+        "why_jneopallium_may_be_suitable": "Typed signals, separate fast/slow loops, protocol bridges, and auditable safety gates can be evaluated without claiming a production outcome.",
+        "existing_reusable_modules": [
+          "bridge.fmi",
+          "bridge.plc4x",
+          "bridge.opcua",
+          "demo.industrial_fmi",
+          "demo.fullrun.01-industrial-control",
+          "demo.fullrun.02-pump-fleet-maintenance"
+        ],
+        "existing_demo": "demo.industrial_fmi",
+        "required_new_modules": [],
+        "required_bridges": [
+          "industrial automation"
+        ],
+        "synthetic_data_plan": "Generate deterministic, non-personal, non-operational events with fixed seeds.",
+        "architecture": "source --> typed inputs --> fast/slow evidence --> safety gate --> advisory output --> audit log",
+        "expected_outputs": [
+          "decision JSONL",
+          "evidence trail",
+          "baseline comparison",
+          "limitations report"
+        ],
+        "comparison_baseline": "Simple threshold rules plus a conventional deterministic statistical score",
+        "success_metrics": [
+          "deterministic replay",
+          "schema validity",
+          "evidence completeness",
+          "false-positive/negative matrix on labeled synthetic cases"
+        ],
+        "safety_constraints": [
+          "Synthetic data only",
+          "No autonomous external actuation",
+          "Human review required"
+        ],
+        "estimated_engineering_hours": 8,
+        "unresolved_assumptions": [
+          "Prospect interface and evaluation dataset are unknown",
+          "No production performance or regulatory status is assumed"
+        ],
+        "implementation_milestones": [
+          "schema agreement",
+          "synthetic fixture",
+          "adapter",
+          "baseline",
+          "deterministic test",
+          "review"
+        ],
+        "auto_implementation_eligible": false,
+        "disposition": "CONFIGURE_EXISTING_DEMO"
+      }
+    },
+    {
+      "organization_id": 15,
+      "demo_id": "demo.industrial_fmi",
+      "disposition": "CONFIGURE_EXISTING_DEMO",
+      "engineering_hours": 8,
+      "safe_to_auto_implement": false,
+      "plan": {
+        "customer_problem": "Add auditable slow-timescale supervision above deterministic PLC and SIS controls.",
+        "proposed_scenario": "Replay a deterministic synthetic Industrial automation scenario and compare multi-timescale evidence handling with transparent baselines.",
+        "why_jneopallium_may_be_suitable": "Typed signals, separate fast/slow loops, protocol bridges, and auditable safety gates can be evaluated without claiming a production outcome.",
+        "existing_reusable_modules": [
+          "bridge.fmi",
+          "bridge.plc4x",
+          "bridge.opcua",
+          "demo.industrial_fmi",
+          "demo.fullrun.01-industrial-control",
+          "demo.fullrun.02-pump-fleet-maintenance"
+        ],
+        "existing_demo": "demo.industrial_fmi",
+        "required_new_modules": [],
+        "required_bridges": [
+          "industrial automation"
+        ],
+        "synthetic_data_plan": "Generate deterministic, non-personal, non-operational events with fixed seeds.",
+        "architecture": "source --> typed inputs --> fast/slow evidence --> safety gate --> advisory output --> audit log",
+        "expected_outputs": [
+          "decision JSONL",
+          "evidence trail",
+          "baseline comparison",
+          "limitations report"
+        ],
+        "comparison_baseline": "Simple threshold rules plus a conventional deterministic statistical score",
+        "success_metrics": [
+          "deterministic replay",
+          "schema validity",
+          "evidence completeness",
+          "false-positive/negative matrix on labeled synthetic cases"
+        ],
+        "safety_constraints": [
+          "Synthetic data only",
+          "No autonomous external actuation",
+          "Human review required"
+        ],
+        "estimated_engineering_hours": 8,
+        "unresolved_assumptions": [
+          "Prospect interface and evaluation dataset are unknown",
+          "No production performance or regulatory status is assumed"
+        ],
+        "implementation_milestones": [
+          "schema agreement",
+          "synthetic fixture",
+          "adapter",
+          "baseline",
+          "deterministic test",
+          "review"
+        ],
+        "auto_implementation_eligible": false,
+        "disposition": "CONFIGURE_EXISTING_DEMO"
+      }
+    },
+    {
+      "organization_id": 16,
+      "demo_id": "demo.fullrun.04-clinical-fhir-advisory",
+      "disposition": "CONFIGURE_EXISTING_DEMO",
+      "engineering_hours": 8,
+      "safe_to_auto_implement": false,
+      "plan": {
+        "customer_problem": "Evaluate human-reviewed multi-timescale advisory workflows over synthetic FHIR events.",
+        "proposed_scenario": "Replay a deterministic synthetic Clinical decision support scenario and compare multi-timescale evidence handling with transparent baselines.",
+        "why_jneopallium_may_be_suitable": "Typed signals, separate fast/slow loops, protocol bridges, and auditable safety gates can be evaluated without claiming a production outcome.",
+        "existing_reusable_modules": [
+          "domain.clinical",
+          "bridge.fhir",
+          "demo.fullrun.04-clinical-fhir-advisory"
+        ],
+        "existing_demo": "demo.fullrun.04-clinical-fhir-advisory",
+        "required_new_modules": [],
+        "required_bridges": [
+          "health-IT interoperability"
+        ],
+        "synthetic_data_plan": "Generate deterministic, non-personal, non-operational events with fixed seeds.",
+        "architecture": "source --> typed inputs --> fast/slow evidence --> safety gate --> advisory output --> audit log",
+        "expected_outputs": [
+          "decision JSONL",
+          "evidence trail",
+          "baseline comparison",
+          "limitations report"
+        ],
+        "comparison_baseline": "Simple threshold rules plus a conventional deterministic statistical score",
+        "success_metrics": [
+          "deterministic replay",
+          "schema validity",
+          "evidence completeness",
+          "false-positive/negative matrix on labeled synthetic cases"
+        ],
+        "safety_constraints": [
+          "Synthetic data only",
+          "No autonomous external actuation",
+          "Human review required",
+          "No diagnosis, treatment, or real patient data"
+        ],
+        "estimated_engineering_hours": 8,
+        "unresolved_assumptions": [
+          "Prospect interface and evaluation dataset are unknown",
+          "No production performance or regulatory status is assumed"
+        ],
+        "implementation_milestones": [
+          "schema agreement",
+          "synthetic fixture",
+          "adapter",
+          "baseline",
+          "deterministic test",
+          "review"
+        ],
+        "auto_implementation_eligible": false,
+        "disposition": "CONFIGURE_EXISTING_DEMO"
+      }
+    },
+    {
+      "organization_id": 17,
+      "demo_id": "demo.fullrun.05-dicom-readonly-context",
+      "disposition": "USE_EXISTING_DEMO",
+      "engineering_hours": 8,
+      "safe_to_auto_implement": false,
+      "plan": {
+        "customer_problem": "Evaluate human-reviewed multi-timescale advisory workflows over synthetic FHIR events.",
+        "proposed_scenario": "Replay a deterministic synthetic Medical imaging context integration scenario and compare multi-timescale evidence handling with transparent baselines.",
+        "why_jneopallium_may_be_suitable": "Typed signals, separate fast/slow loops, protocol bridges, and auditable safety gates can be evaluated without claiming a production outcome.",
+        "existing_reusable_modules": [
+          "domain.clinical",
+          "bridge.fhir",
+          "demo.fullrun.04-clinical-fhir-advisory"
+        ],
+        "existing_demo": "demo.fullrun.05-dicom-readonly-context",
+        "required_new_modules": [],
+        "required_bridges": [
+          "medical imaging workflow"
+        ],
+        "synthetic_data_plan": "Generate deterministic, non-personal, non-operational events with fixed seeds.",
+        "architecture": "source --> typed inputs --> fast/slow evidence --> safety gate --> advisory output --> audit log",
+        "expected_outputs": [
+          "decision JSONL",
+          "evidence trail",
+          "baseline comparison",
+          "limitations report"
+        ],
+        "comparison_baseline": "Simple threshold rules plus a conventional deterministic statistical score",
+        "success_metrics": [
+          "deterministic replay",
+          "schema validity",
+          "evidence completeness",
+          "false-positive/negative matrix on labeled synthetic cases"
+        ],
+        "safety_constraints": [
+          "Synthetic data only",
+          "No autonomous external actuation",
+          "Human review required",
+          "No diagnosis, treatment, or real patient data"
+        ],
+        "estimated_engineering_hours": 8,
+        "unresolved_assumptions": [
+          "Prospect interface and evaluation dataset are unknown",
+          "No production performance or regulatory status is assumed"
+        ],
+        "implementation_milestones": [
+          "schema agreement",
+          "synthetic fixture",
+          "adapter",
+          "baseline",
+          "deterministic test",
+          "review"
+        ],
+        "auto_implementation_eligible": false,
+        "disposition": "USE_EXISTING_DEMO"
+      }
+    },
+    {
+      "organization_id": 18,
+      "demo_id": "demo.fullrun.04-clinical-fhir-advisory",
+      "disposition": "CONFIGURE_EXISTING_DEMO",
+      "engineering_hours": 8,
+      "safe_to_auto_implement": false,
+      "plan": {
+        "customer_problem": "Evaluate human-reviewed multi-timescale advisory workflows over synthetic FHIR events.",
+        "proposed_scenario": "Replay a deterministic synthetic Clinical decision support scenario and compare multi-timescale evidence handling with transparent baselines.",
+        "why_jneopallium_may_be_suitable": "Typed signals, separate fast/slow loops, protocol bridges, and auditable safety gates can be evaluated without claiming a production outcome.",
+        "existing_reusable_modules": [
+          "domain.clinical",
+          "bridge.fhir",
+          "demo.fullrun.04-clinical-fhir-advisory"
+        ],
+        "existing_demo": "demo.fullrun.04-clinical-fhir-advisory",
+        "required_new_modules": [],
+        "required_bridges": [
+          "health-IT interoperability"
+        ],
+        "synthetic_data_plan": "Generate deterministic, non-personal, non-operational events with fixed seeds.",
+        "architecture": "source --> typed inputs --> fast/slow evidence --> safety gate --> advisory output --> audit log",
+        "expected_outputs": [
+          "decision JSONL",
+          "evidence trail",
+          "baseline comparison",
+          "limitations report"
+        ],
+        "comparison_baseline": "Simple threshold rules plus a conventional deterministic statistical score",
+        "success_metrics": [
+          "deterministic replay",
+          "schema validity",
+          "evidence completeness",
+          "false-positive/negative matrix on labeled synthetic cases"
+        ],
+        "safety_constraints": [
+          "Synthetic data only",
+          "No autonomous external actuation",
+          "Human review required",
+          "No diagnosis, treatment, or real patient data"
+        ],
+        "estimated_engineering_hours": 8,
+        "unresolved_assumptions": [
+          "Prospect interface and evaluation dataset are unknown",
+          "No production performance or regulatory status is assumed"
+        ],
+        "implementation_milestones": [
+          "schema agreement",
+          "synthetic fixture",
+          "adapter",
+          "baseline",
+          "deterministic test",
+          "review"
+        ],
+        "auto_implementation_eligible": false,
+        "disposition": "CONFIGURE_EXISTING_DEMO"
+      }
+    },
+    {
+      "organization_id": 19,
+      "demo_id": "demo.fullrun.04-clinical-fhir-advisory",
+      "disposition": "CONFIGURE_EXISTING_DEMO",
+      "engineering_hours": 8,
+      "safe_to_auto_implement": false,
+      "plan": {
+        "customer_problem": "Evaluate human-reviewed multi-timescale advisory workflows over synthetic FHIR events.",
+        "proposed_scenario": "Replay a deterministic synthetic Medical workflow supervision scenario and compare multi-timescale evidence handling with transparent baselines.",
+        "why_jneopallium_may_be_suitable": "Typed signals, separate fast/slow loops, protocol bridges, and auditable safety gates can be evaluated without claiming a production outcome.",
+        "existing_reusable_modules": [
+          "domain.clinical",
+          "bridge.fhir",
+          "demo.fullrun.04-clinical-fhir-advisory"
+        ],
+        "existing_demo": "demo.fullrun.04-clinical-fhir-advisory",
+        "required_new_modules": [],
+        "required_bridges": [
+          "health-IT interoperability"
+        ],
+        "synthetic_data_plan": "Generate deterministic, non-personal, non-operational events with fixed seeds.",
+        "architecture": "source --> typed inputs --> fast/slow evidence --> safety gate --> advisory output --> audit log",
+        "expected_outputs": [
+          "decision JSONL",
+          "evidence trail",
+          "baseline comparison",
+          "limitations report"
+        ],
+        "comparison_baseline": "Simple threshold rules plus a conventional deterministic statistical score",
+        "success_metrics": [
+          "deterministic replay",
+          "schema validity",
+          "evidence completeness",
+          "false-positive/negative matrix on labeled synthetic cases"
+        ],
+        "safety_constraints": [
+          "Synthetic data only",
+          "No autonomous external actuation",
+          "Human review required",
+          "No diagnosis, treatment, or real patient data"
+        ],
+        "estimated_engineering_hours": 8,
+        "unresolved_assumptions": [
+          "Prospect interface and evaluation dataset are unknown",
+          "No production performance or regulatory status is assumed"
+        ],
+        "implementation_milestones": [
+          "schema agreement",
+          "synthetic fixture",
+          "adapter",
+          "baseline",
+          "deterministic test",
+          "review"
+        ],
+        "auto_implementation_eligible": false,
+        "disposition": "CONFIGURE_EXISTING_DEMO"
+      }
+    },
+    {
+      "organization_id": 20,
+      "demo_id": "demo.fullrun.04-clinical-fhir-advisory",
+      "disposition": "CONFIGURE_EXISTING_DEMO",
+      "engineering_hours": 8,
+      "safe_to_auto_implement": false,
+      "plan": {
+        "customer_problem": "Evaluate human-reviewed multi-timescale advisory workflows over synthetic FHIR events.",
+        "proposed_scenario": "Replay a deterministic synthetic Medical workflow supervision scenario and compare multi-timescale evidence handling with transparent baselines.",
+        "why_jneopallium_may_be_suitable": "Typed signals, separate fast/slow loops, protocol bridges, and auditable safety gates can be evaluated without claiming a production outcome.",
+        "existing_reusable_modules": [
+          "domain.clinical",
+          "bridge.fhir",
+          "demo.fullrun.04-clinical-fhir-advisory"
+        ],
+        "existing_demo": "demo.fullrun.04-clinical-fhir-advisory",
+        "required_new_modules": [],
+        "required_bridges": [
+          "health-IT interoperability"
+        ],
+        "synthetic_data_plan": "Generate deterministic, non-personal, non-operational events with fixed seeds.",
+        "architecture": "source --> typed inputs --> fast/slow evidence --> safety gate --> advisory output --> audit log",
+        "expected_outputs": [
+          "decision JSONL",
+          "evidence trail",
+          "baseline comparison",
+          "limitations report"
+        ],
+        "comparison_baseline": "Simple threshold rules plus a conventional deterministic statistical score",
+        "success_metrics": [
+          "deterministic replay",
+          "schema validity",
+          "evidence completeness",
+          "false-positive/negative matrix on labeled synthetic cases"
+        ],
+        "safety_constraints": [
+          "Synthetic data only",
+          "No autonomous external actuation",
+          "Human review required",
+          "No diagnosis, treatment, or real patient data"
+        ],
+        "estimated_engineering_hours": 8,
+        "unresolved_assumptions": [
+          "Prospect interface and evaluation dataset are unknown",
+          "No production performance or regulatory status is assumed"
+        ],
+        "implementation_milestones": [
+          "schema agreement",
+          "synthetic fixture",
+          "adapter",
+          "baseline",
+          "deterministic test",
+          "review"
+        ],
+        "auto_implementation_eligible": false,
+        "disposition": "CONFIGURE_EXISTING_DEMO"
+      }
+    },
+    {
+      "organization_id": 21,
+      "demo_id": "demo.fullrun.04-clinical-fhir-advisory",
+      "disposition": "CONFIGURE_EXISTING_DEMO",
+      "engineering_hours": 8,
+      "safe_to_auto_implement": false,
+      "plan": {
+        "customer_problem": "Evaluate human-reviewed multi-timescale advisory workflows over synthetic FHIR events.",
+        "proposed_scenario": "Replay a deterministic synthetic Medical workflow supervision scenario and compare multi-timescale evidence handling with transparent baselines.",
+        "why_jneopallium_may_be_suitable": "Typed signals, separate fast/slow loops, protocol bridges, and auditable safety gates can be evaluated without claiming a production outcome.",
+        "existing_reusable_modules": [
+          "domain.clinical",
+          "bridge.fhir",
+          "demo.fullrun.04-clinical-fhir-advisory"
+        ],
+        "existing_demo": "demo.fullrun.04-clinical-fhir-advisory",
+        "required_new_modules": [],
+        "required_bridges": [
+          "health-IT interoperability"
+        ],
+        "synthetic_data_plan": "Generate deterministic, non-personal, non-operational events with fixed seeds.",
+        "architecture": "source --> typed inputs --> fast/slow evidence --> safety gate --> advisory output --> audit log",
+        "expected_outputs": [
+          "decision JSONL",
+          "evidence trail",
+          "baseline comparison",
+          "limitations report"
+        ],
+        "comparison_baseline": "Simple threshold rules plus a conventional deterministic statistical score",
+        "success_metrics": [
+          "deterministic replay",
+          "schema validity",
+          "evidence completeness",
+          "false-positive/negative matrix on labeled synthetic cases"
+        ],
+        "safety_constraints": [
+          "Synthetic data only",
+          "No autonomous external actuation",
+          "Human review required",
+          "No diagnosis, treatment, or real patient data"
+        ],
+        "estimated_engineering_hours": 8,
+        "unresolved_assumptions": [
+          "Prospect interface and evaluation dataset are unknown",
+          "No production performance or regulatory status is assumed"
+        ],
+        "implementation_milestones": [
+          "schema agreement",
+          "synthetic fixture",
+          "adapter",
+          "baseline",
+          "deterministic test",
+          "review"
+        ],
+        "auto_implementation_eligible": false,
+        "disposition": "CONFIGURE_EXISTING_DEMO"
+      }
+    },
+    {
+      "organization_id": 22,
+      "demo_id": "demo.fullrun.06-cybersecurity-kafka-triage",
+      "disposition": "CONFIGURE_EXISTING_DEMO",
+      "engineering_hours": 8,
+      "safe_to_auto_implement": false,
+      "plan": {
+        "customer_problem": "Correlate fast network events with slower behavioral evidence for analyst review.",
+        "proposed_scenario": "Replay a deterministic synthetic Cybersecurity triage scenario and compare multi-timescale evidence handling with transparent baselines.",
+        "why_jneopallium_may_be_suitable": "Typed signals, separate fast/slow loops, protocol bridges, and auditable safety gates can be evaluated without claiming a production outcome.",
+        "existing_reusable_modules": [
+          "domain.security",
+          "bridge.kafka",
+          "demo.fullrun.06-cybersecurity-kafka-triage"
+        ],
+        "existing_demo": "demo.fullrun.06-cybersecurity-kafka-triage",
+        "required_new_modules": [],
+        "required_bridges": [
+          "cybersecurity"
+        ],
+        "synthetic_data_plan": "Generate deterministic, non-personal, non-operational events with fixed seeds.",
+        "architecture": "source --> typed inputs --> fast/slow evidence --> safety gate --> advisory output --> audit log",
+        "expected_outputs": [
+          "decision JSONL",
+          "evidence trail",
+          "baseline comparison",
+          "limitations report"
+        ],
+        "comparison_baseline": "Simple threshold rules plus a conventional deterministic statistical score",
+        "success_metrics": [
+          "deterministic replay",
+          "schema validity",
+          "evidence completeness",
+          "false-positive/negative matrix on labeled synthetic cases"
+        ],
+        "safety_constraints": [
+          "Synthetic data only",
+          "No autonomous external actuation",
+          "Human review required"
+        ],
+        "estimated_engineering_hours": 8,
+        "unresolved_assumptions": [
+          "Prospect interface and evaluation dataset are unknown",
+          "No production performance or regulatory status is assumed"
+        ],
+        "implementation_milestones": [
+          "schema agreement",
+          "synthetic fixture",
+          "adapter",
+          "baseline",
+          "deterministic test",
+          "review"
+        ],
+        "auto_implementation_eligible": false,
+        "disposition": "CONFIGURE_EXISTING_DEMO"
+      }
+    },
+    {
+      "organization_id": 23,
+      "demo_id": "demo.fullrun.06-cybersecurity-kafka-triage",
+      "disposition": "CONFIGURE_EXISTING_DEMO",
+      "engineering_hours": 8,
+      "safe_to_auto_implement": false,
+      "plan": {
+        "customer_problem": "Correlate fast network events with slower behavioral evidence for analyst review.",
+        "proposed_scenario": "Replay a deterministic synthetic Cybersecurity triage scenario and compare multi-timescale evidence handling with transparent baselines.",
+        "why_jneopallium_may_be_suitable": "Typed signals, separate fast/slow loops, protocol bridges, and auditable safety gates can be evaluated without claiming a production outcome.",
+        "existing_reusable_modules": [
+          "domain.security",
+          "bridge.kafka",
+          "demo.fullrun.06-cybersecurity-kafka-triage"
+        ],
+        "existing_demo": "demo.fullrun.06-cybersecurity-kafka-triage",
+        "required_new_modules": [],
+        "required_bridges": [
+          "cybersecurity"
+        ],
+        "synthetic_data_plan": "Generate deterministic, non-personal, non-operational events with fixed seeds.",
+        "architecture": "source --> typed inputs --> fast/slow evidence --> safety gate --> advisory output --> audit log",
+        "expected_outputs": [
+          "decision JSONL",
+          "evidence trail",
+          "baseline comparison",
+          "limitations report"
+        ],
+        "comparison_baseline": "Simple threshold rules plus a conventional deterministic statistical score",
+        "success_metrics": [
+          "deterministic replay",
+          "schema validity",
+          "evidence completeness",
+          "false-positive/negative matrix on labeled synthetic cases"
+        ],
+        "safety_constraints": [
+          "Synthetic data only",
+          "No autonomous external actuation",
+          "Human review required"
+        ],
+        "estimated_engineering_hours": 8,
+        "unresolved_assumptions": [
+          "Prospect interface and evaluation dataset are unknown",
+          "No production performance or regulatory status is assumed"
+        ],
+        "implementation_milestones": [
+          "schema agreement",
+          "synthetic fixture",
+          "adapter",
+          "baseline",
+          "deterministic test",
+          "review"
+        ],
+        "auto_implementation_eligible": false,
+        "disposition": "CONFIGURE_EXISTING_DEMO"
+      }
+    },
+    {
+      "organization_id": 24,
+      "demo_id": "demo.fullrun.06-cybersecurity-kafka-triage",
+      "disposition": "CONFIGURE_EXISTING_DEMO",
+      "engineering_hours": 8,
+      "safe_to_auto_implement": false,
+      "plan": {
+        "customer_problem": "Correlate fast network events with slower behavioral evidence for analyst review.",
+        "proposed_scenario": "Replay a deterministic synthetic Cybersecurity triage scenario and compare multi-timescale evidence handling with transparent baselines.",
+        "why_jneopallium_may_be_suitable": "Typed signals, separate fast/slow loops, protocol bridges, and auditable safety gates can be evaluated without claiming a production outcome.",
+        "existing_reusable_modules": [
+          "domain.security",
+          "bridge.kafka",
+          "demo.fullrun.06-cybersecurity-kafka-triage"
+        ],
+        "existing_demo": "demo.fullrun.06-cybersecurity-kafka-triage",
+        "required_new_modules": [],
+        "required_bridges": [
+          "cybersecurity"
+        ],
+        "synthetic_data_plan": "Generate deterministic, non-personal, non-operational events with fixed seeds.",
+        "architecture": "source --> typed inputs --> fast/slow evidence --> safety gate --> advisory output --> audit log",
+        "expected_outputs": [
+          "decision JSONL",
+          "evidence trail",
+          "baseline comparison",
+          "limitations report"
+        ],
+        "comparison_baseline": "Simple threshold rules plus a conventional deterministic statistical score",
+        "success_metrics": [
+          "deterministic replay",
+          "schema validity",
+          "evidence completeness",
+          "false-positive/negative matrix on labeled synthetic cases"
+        ],
+        "safety_constraints": [
+          "Synthetic data only",
+          "No autonomous external actuation",
+          "Human review required"
+        ],
+        "estimated_engineering_hours": 8,
+        "unresolved_assumptions": [
+          "Prospect interface and evaluation dataset are unknown",
+          "No production performance or regulatory status is assumed"
+        ],
+        "implementation_milestones": [
+          "schema agreement",
+          "synthetic fixture",
+          "adapter",
+          "baseline",
+          "deterministic test",
+          "review"
+        ],
+        "auto_implementation_eligible": false,
+        "disposition": "CONFIGURE_EXISTING_DEMO"
+      }
+    },
+    {
+      "organization_id": 25,
+      "demo_id": "demo.fullrun.07-observability-otel-export",
+      "disposition": "USE_EXISTING_DEMO",
+      "engineering_hours": 8,
+      "safe_to_auto_implement": false,
+      "plan": {
+        "customer_problem": "Add auditable slow-timescale supervision above deterministic PLC and SIS controls.",
+        "proposed_scenario": "Replay a deterministic synthetic AIOps and observability scenario and compare multi-timescale evidence handling with transparent baselines.",
+        "why_jneopallium_may_be_suitable": "Typed signals, separate fast/slow loops, protocol bridges, and auditable safety gates can be evaluated without claiming a production outcome.",
+        "existing_reusable_modules": [
+          "bridge.fmi",
+          "bridge.plc4x",
+          "bridge.opcua",
+          "demo.industrial_fmi",
+          "demo.fullrun.01-industrial-control",
+          "demo.fullrun.02-pump-fleet-maintenance"
+        ],
+        "existing_demo": "demo.fullrun.07-observability-otel-export",
+        "required_new_modules": [],
+        "required_bridges": [
+          "observability"
+        ],
+        "synthetic_data_plan": "Generate deterministic, non-personal, non-operational events with fixed seeds.",
+        "architecture": "source --> typed inputs --> fast/slow evidence --> safety gate --> advisory output --> audit log",
+        "expected_outputs": [
+          "decision JSONL",
+          "evidence trail",
+          "baseline comparison",
+          "limitations report"
+        ],
+        "comparison_baseline": "Simple threshold rules plus a conventional deterministic statistical score",
+        "success_metrics": [
+          "deterministic replay",
+          "schema validity",
+          "evidence completeness",
+          "false-positive/negative matrix on labeled synthetic cases"
+        ],
+        "safety_constraints": [
+          "Synthetic data only",
+          "No autonomous external actuation",
+          "Human review required"
+        ],
+        "estimated_engineering_hours": 8,
+        "unresolved_assumptions": [
+          "Prospect interface and evaluation dataset are unknown",
+          "No production performance or regulatory status is assumed"
+        ],
+        "implementation_milestones": [
+          "schema agreement",
+          "synthetic fixture",
+          "adapter",
+          "baseline",
+          "deterministic test",
+          "review"
+        ],
+        "auto_implementation_eligible": false,
+        "disposition": "USE_EXISTING_DEMO"
+      }
+    },
+    {
+      "organization_id": 26,
+      "demo_id": "demo.uav_single",
+      "disposition": "EXTEND_EXISTING_DEMO",
+      "engineering_hours": 8,
+      "safe_to_auto_implement": false,
+      "plan": {
+        "customer_problem": "Add auditable slow-timescale supervision above deterministic PLC and SIS controls.",
+        "proposed_scenario": "Replay a deterministic synthetic Mobile and industrial robotics scenario and compare multi-timescale evidence handling with transparent baselines.",
+        "why_jneopallium_may_be_suitable": "Typed signals, separate fast/slow loops, protocol bridges, and auditable safety gates can be evaluated without claiming a production outcome.",
+        "existing_reusable_modules": [
+          "bridge.fmi",
+          "bridge.plc4x",
+          "bridge.opcua",
+          "demo.industrial_fmi",
+          "demo.fullrun.01-industrial-control",
+          "demo.fullrun.02-pump-fleet-maintenance"
+        ],
+        "existing_demo": "demo.uav_single",
+        "required_new_modules": [],
+        "required_bridges": [
+          "UAV simulation"
+        ],
+        "synthetic_data_plan": "Generate deterministic, non-personal, non-operational events with fixed seeds.",
+        "architecture": "source --> typed inputs --> fast/slow evidence --> safety gate --> advisory output --> audit log",
+        "expected_outputs": [
+          "decision JSONL",
+          "evidence trail",
+          "baseline comparison",
+          "limitations report"
+        ],
+        "comparison_baseline": "Simple threshold rules plus a conventional deterministic statistical score",
+        "success_metrics": [
+          "deterministic replay",
+          "schema validity",
+          "evidence completeness",
+          "false-positive/negative matrix on labeled synthetic cases"
+        ],
+        "safety_constraints": [
+          "Synthetic data only",
+          "No autonomous external actuation",
+          "Human review required"
+        ],
+        "estimated_engineering_hours": 8,
+        "unresolved_assumptions": [
+          "Prospect interface and evaluation dataset are unknown",
+          "No production performance or regulatory status is assumed"
+        ],
+        "implementation_milestones": [
+          "schema agreement",
+          "synthetic fixture",
+          "adapter",
+          "baseline",
+          "deterministic test",
+          "review"
+        ],
+        "auto_implementation_eligible": false,
+        "disposition": "EXTEND_EXISTING_DEMO"
+      }
+    },
+    {
+      "organization_id": 29,
+      "demo_id": "demo.fullrun.09-nengo-interop",
+      "disposition": "USE_EXISTING_DEMO",
+      "engineering_hours": 8,
+      "safe_to_auto_implement": false,
+      "plan": {
+        "customer_problem": "Explore typed-signal interchange between Jneopallium and Nengo research models.",
+        "proposed_scenario": "Replay a deterministic synthetic Nengo and computational-neuroscience interoperability scenario and compare multi-timescale evidence handling with transparent baselines.",
+        "why_jneopallium_may_be_suitable": "Typed signals, separate fast/slow loops, protocol bridges, and auditable safety gates can be evaluated without claiming a production outcome.",
+        "existing_reusable_modules": [
+          "domain.glia",
+          "domain.sleep",
+          "domain.curiosity",
+          "bridge.nengo",
+          "demo.fullrun.09-nengo-interop"
+        ],
+        "existing_demo": "demo.fullrun.09-nengo-interop",
+        "required_new_modules": [],
+        "required_bridges": [
+          "computational neuroscience"
+        ],
+        "synthetic_data_plan": "Generate deterministic, non-personal, non-operational events with fixed seeds.",
+        "architecture": "source --> typed inputs --> fast/slow evidence --> safety gate --> advisory output --> audit log",
+        "expected_outputs": [
+          "decision JSONL",
+          "evidence trail",
+          "baseline comparison",
+          "limitations report"
+        ],
+        "comparison_baseline": "Simple threshold rules plus a conventional deterministic statistical score",
+        "success_metrics": [
+          "deterministic replay",
+          "schema validity",
+          "evidence completeness",
+          "false-positive/negative matrix on labeled synthetic cases"
+        ],
+        "safety_constraints": [
+          "Synthetic data only",
+          "No autonomous external actuation",
+          "Human review required"
+        ],
+        "estimated_engineering_hours": 8,
+        "unresolved_assumptions": [
+          "Prospect interface and evaluation dataset are unknown",
+          "No production performance or regulatory status is assumed"
+        ],
+        "implementation_milestones": [
+          "schema agreement",
+          "synthetic fixture",
+          "adapter",
+          "baseline",
+          "deterministic test",
+          "review"
+        ],
+        "auto_implementation_eligible": false,
+        "disposition": "USE_EXISTING_DEMO"
+      }
+    }
+  ]
+}

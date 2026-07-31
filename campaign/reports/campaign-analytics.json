@@ -1,0 +1,249 @@
+{
+  "generated_at": "2026-07-31T14:32:22.564672+00:00",
+  "campaign_key": "dry-run-pilot",
+  "mode": "DRY_RUN",
+  "organizations_discovered": 29,
+  "organizations_verified": 29,
+  "verified_contacts": 29,
+  "prospects_scored": 29,
+  "messages_prepared": 5,
+  "messages_sent_or_simulated": 5,
+  "real_external_messages_sent": 0,
+  "mock_messages_sent": 5,
+  "delivery_rate": 1.0,
+  "bounce_rate": 0.0,
+  "reply_rate": 1.0,
+  "positive_reply_rate": 0.2,
+  "meeting_rate": 0.2,
+  "proposal_rate": 0.0,
+  "proof_of_concept_requests": 0,
+  "unsubscribe_rate": 0.2,
+  "compliance_blocks": 0,
+  "suppression_entries": 2,
+  "common_objections_and_questions": {
+    "MEETING_REQUEST": 2,
+    "TECHNICAL_QUESTION": 1,
+    "UNSUBSCRIBE": 1,
+    "REQUEST_FOR_INFORMATION": 1,
+    "NOT_NOW": 1
+  },
+  "conversion_by_domain": {
+    "Ad fraud and invalid-traffic detection": {
+      "prospects": 10,
+      "sent": 1,
+      "replied": 1,
+      "positive_replies": 1,
+      "positive_conversion_rate": 1.0
+    },
+    "Industrial automation": {
+      "prospects": 4,
+      "sent": 0,
+      "replied": 0,
+      "positive_replies": 0,
+      "positive_conversion_rate": 0.0
+    },
+    "Industrial digital twins": {
+      "prospects": 1,
+      "sent": 0,
+      "replied": 0,
+      "positive_replies": 0,
+      "positive_conversion_rate": 0.0
+    },
+    "Clinical decision support": {
+      "prospects": 2,
+      "sent": 0,
+      "replied": 0,
+      "positive_replies": 0,
+      "positive_conversion_rate": 0.0
+    },
+    "Medical imaging context integration": {
+      "prospects": 1,
+      "sent": 1,
+      "replied": 1,
+      "positive_replies": 0,
+      "positive_conversion_rate": 0.0
+    },
+    "Medical workflow supervision": {
+      "prospects": 3,
+      "sent": 0,
+      "replied": 0,
+      "positive_replies": 0,
+      "positive_conversion_rate": 0.0
+    },
+    "Cybersecurity triage": {
+      "prospects": 3,
+      "sent": 1,
+      "replied": 1,
+      "positive_replies": 0,
+      "positive_conversion_rate": 0.0
+    },
+    "AIOps and observability": {
+      "prospects": 1,
+      "sent": 1,
+      "replied": 1,
+      "positive_replies": 0,
+      "positive_conversion_rate": 0.0
+    },
+    "Mobile and industrial robotics": {
+      "prospects": 1,
+      "sent": 1,
+      "replied": 1,
+      "positive_replies": 0,
+      "positive_conversion_rate": 0.0
+    },
+    "UAV autonomy": {
+      "prospects": 2,
+      "sent": 0,
+      "replied": 0,
+      "positive_replies": 0,
+      "positive_conversion_rate": 0.0
+    },
+    "Nengo and computational-neuroscience interoperability": {
+      "prospects": 1,
+      "sent": 0,
+      "replied": 0,
+      "positive_replies": 0,
+      "positive_conversion_rate": 0.0
+    }
+  },
+  "conversion_by_persona": {
+    "adtech_fraud_lead": {
+      "prospects": 1,
+      "sent": 1,
+      "replied": 1,
+      "positive_replies": 1,
+      "positive_conversion_rate": 1.0
+    },
+    "clinical_informatics_lead": {
+      "prospects": 1,
+      "sent": 1,
+      "replied": 1,
+      "positive_replies": 0,
+      "positive_conversion_rate": 0.0
+    },
+    "cybersecurity_lead": {
+      "prospects": 1,
+      "sent": 1,
+      "replied": 1,
+      "positive_replies": 0,
+      "positive_conversion_rate": 0.0
+    },
+    "research_director": {
+      "prospects": 1,
+      "sent": 1,
+      "replied": 1,
+      "positive_replies": 0,
+      "positive_conversion_rate": 0.0
+    },
+    "system_architect": {
+      "prospects": 1,
+      "sent": 1,
+      "replied": 1,
+      "positive_replies": 0,
+      "positive_conversion_rate": 0.0
+    }
+  },
+  "conversion_by_offer": {
+    "research_partnership": {
+      "prospects": 11,
+      "sent": 1,
+      "replied": 1,
+      "positive_replies": 1,
+      "positive_conversion_rate": 1.0
+    },
+    "integration_proposition": {
+      "prospects": 16,
+      "sent": 4,
+      "replied": 4,
+      "positive_replies": 0,
+      "positive_conversion_rate": 0.0
+    }
+  },
+  "conversion_by_demo": {
+    "CONFIGURE_EXISTING_DEMO": {
+      "prospects": 23,
+      "sent": 2,
+      "replied": 2,
+      "positive_replies": 1,
+      "positive_conversion_rate": 0.5
+    },
+    "USE_EXISTING_DEMO": {
+      "prospects": 3,
+      "sent": 2,
+      "replied": 2,
+      "positive_replies": 0,
+      "positive_conversion_rate": 0.0
+    },
+    "EXTEND_EXISTING_DEMO": {
+      "prospects": 1,
+      "sent": 1,
+      "replied": 1,
+      "positive_replies": 0,
+      "positive_conversion_rate": 0.0
+    }
+  },
+  "conversion_by_region": {
+    "US": {
+      "prospects": 18,
+      "sent": 5,
+      "replied": 5,
+      "positive_replies": 1,
+      "positive_conversion_rate": 0.2
+    },
+    "CA": {
+      "prospects": 3,
+      "sent": 0,
+      "replied": 0,
+      "positive_replies": 0,
+      "positive_conversion_rate": 0.0
+    },
+    "EU": {
+      "prospects": 4,
+      "sent": 0,
+      "replied": 0,
+      "positive_replies": 0,
+      "positive_conversion_rate": 0.0
+    },
+    "GLOBAL": {
+      "prospects": 4,
+      "sent": 0,
+      "replied": 0,
+      "positive_replies": 0,
+      "positive_conversion_rate": 0.0
+    }
+  },
+  "disqualification_reasons": {},
+  "average_hours_between_stages": {
+    "DOMAIN_DISCOVERED->DOMAIN_RESEARCHED": 0.0,
+    "DOMAIN_RESEARCHED->DOMAIN_SCORED": 0.0,
+    "ORGANIZATION_DISCOVERED->ORGANIZATION_VERIFIED": 0.0,
+    "ORGANIZATION_VERIFIED->CONTACT_DISCOVERED": 0.0,
+    "CONTACT_DISCOVERED->CONTACT_VERIFIED": 0.0,
+    "CONTACT_VERIFIED->PROSPECT_SCORED": 0.0,
+    "PROSPECT_SCORED->OFFER_SELECTED": 0.0,
+    "OFFER_SELECTED->DEMO_SELECTED": 0.0,
+    "DEMO_SELECTED->MATERIALS_GENERATED": 0.0,
+    "MATERIALS_GENERATED->COMPLIANCE_APPROVED": 0.0,
+    "COMPLIANCE_APPROVED->QUEUED": 0.0,
+    "QUEUED->CONTACTED": 0.0,
+    "CONTACTED->DELIVERED": 0.0,
+    "DELIVERED->REPLIED": 0.0,
+    "REPLIED->MEETING_REQUESTED": 0.0,
+    "MEETING_REQUESTED->MEETING_SCHEDULED": 0.0,
+    "REPLIED->DO_NOT_CONTACT": 0.0,
+    "REPLIED->QUESTION_RECEIVED": 0.0
+  },
+  "research_cost_usd": 0.0,
+  "llm_cost_usd": 0.0,
+  "estimated_demo_engineering_hours": 216,
+  "provider_failures": 0,
+  "objective_hierarchy": [
+    "legitimate positive conversations",
+    "technically relevant meetings",
+    "proof-of-concept opportunities",
+    "integration opportunities",
+    "qualified investor conversations",
+    "reply rate",
+    "send volume"
+  ]
+}

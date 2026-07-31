@@ -1,0 +1,35 @@
+rules:
+  - domains: [Ad fraud and invalid-traffic detection]
+    demo_id: demo.adfraud
+    disposition: CONFIGURE_EXISTING_DEMO
+  - domains: [Industrial automation, Industrial digital twins, Predictive maintenance, Process supervision and safety gating]
+    demo_id: demo.industrial_fmi
+    disposition: CONFIGURE_EXISTING_DEMO
+  - domains: [Clinical decision support, Medical workflow supervision, Health-IT interoperability]
+    demo_id: demo.fullrun.04-clinical-fhir-advisory
+    disposition: CONFIGURE_EXISTING_DEMO
+  - domains: [Medical imaging context integration]
+    demo_id: demo.fullrun.05-dicom-readonly-context
+    disposition: USE_EXISTING_DEMO
+  - domains: [Cybersecurity triage, Adaptive cyber defence]
+    demo_id: demo.fullrun.06-cybersecurity-kafka-triage
+    disposition: CONFIGURE_EXISTING_DEMO
+  - domains: [AIOps and observability]
+    demo_id: demo.fullrun.07-observability-otel-export
+    disposition: USE_EXISTING_DEMO
+  - domains: [Mobile and industrial robotics]
+    demo_id: demo.uav_single
+    disposition: EXTEND_EXISTING_DEMO
+  - domains: [UAV autonomy, Multi-UAV and swarm coordination]
+    demo_id: demo.uav_single
+    disposition: CONFIGURE_EXISTING_DEMO
+  - domains: [Adaptive tutoring, Educational platform integration]
+    demo_id: demo.fullrun.08-adaptive-tutoring-lti
+    disposition: USE_EXISTING_DEMO
+  - domains: [Nengo and computational-neuroscience interoperability]
+    demo_id: demo.fullrun.09-nengo-interop
+    disposition: USE_EXISTING_DEMO
+fallback:
+  disposition: DESIGN_SYNTHETIC_POC
+  estimated_engineering_hours: 32
+  safety_mode: SIMULATION_OR_ADVISORY_ONLY

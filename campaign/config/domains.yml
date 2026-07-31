@@ -1,0 +1,74 @@
+weights:
+  capability_match: 0.16
+  working_demo: 0.10
+  repository_evidence: 0.10
+  customer_pain: 0.08
+  identifiable_buyers: 0.06
+  prospect_accessibility: 0.06
+  poc_feasibility: 0.08
+  sales_cycle: 0.04
+  regulatory_burden: 0.05
+  safety_risk: 0.05
+  competitive_intensity: 0.04
+  recurring_value: 0.05
+  strategic_value: 0.05
+  feedback_likelihood: 0.03
+  investor_relevance: 0.03
+  protocol_fit: 0.02
+thresholds:
+  PURSUE_NOW: 75
+  PILOT: 65
+  RESEARCH_MORE: 50
+  DEFER: 35
+active_domains:
+  - Industrial automation
+  - Industrial digital twins
+  - Predictive maintenance
+  - Process supervision and safety gating
+  - Ad fraud and invalid-traffic detection
+  - Cybersecurity triage
+  - Clinical decision support
+  - Medical workflow supervision
+  - Mobile and industrial robotics
+  - Nengo and computational-neuroscience interoperability
+evidence_sources:
+  Industrial automation:
+    - url: https://opcfoundation.org/about/opc-technologies/opc-ua/
+      source_type: official_standard_body
+      excerpt: The OPC Foundation describes OPC UA as a platform-independent industrial interoperability architecture.
+  Industrial digital twins:
+    - url: https://fmi-standard.org/
+      source_type: official_standard_body
+      excerpt: The FMI project describes a standard for exchanging and co-simulating dynamic models.
+  Ad fraud and invalid-traffic detection:
+    - url: https://iabtechlab.com/standards/supply-chain-foundations/
+      source_type: official_standard_body
+      excerpt: IAB Tech Lab groups OpenRTB, ads.txt, app-ads.txt, sellers.json, SupplyChain Object, and taxonomies in its supply-chain standards.
+  Clinical decision support:
+    - url: https://www.hl7.org/fhir/
+      source_type: official_standard_body
+      excerpt: HL7 publishes FHIR as a standard for electronic healthcare information exchange.
+  Medical imaging context integration:
+    - url: https://www.dicomstandard.org/current
+      source_type: official_standard_body
+      excerpt: The DICOM Standards Committee publishes the current medical imaging information standard.
+  Cybersecurity triage:
+    - url: https://oisf.net/suricata/
+      source_type: official_project
+      excerpt: OISF describes Suricata as open-source network threat detection technology.
+  Mobile and industrial robotics:
+    - url: https://www.openrobotics.org/
+      source_type: official_project
+      excerpt: Open Robotics publishes open-source software platforms for robotics.
+  UAV autonomy:
+    - url: https://px4.io/
+      source_type: official_project
+      excerpt: PX4 describes an open-source autopilot ecosystem for drones and autonomous vehicles.
+  AIOps and observability:
+    - url: https://www.cncf.io/projects/opentelemetry/
+      source_type: official_project
+      excerpt: CNCF identifies OpenTelemetry as an observability telemetry project.
+  Nengo and computational-neuroscience interoperability:
+    - url: https://www.nengo.ai/
+      source_type: official_project
+      excerpt: The Nengo project publishes tools for building and simulating large-scale neural models.

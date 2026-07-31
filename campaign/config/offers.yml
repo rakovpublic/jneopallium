@@ -1,0 +1,31 @@
+offers:
+  ad-fraud-evaluation:
+    type: research_partnership
+    problem: Evaluate multi-timescale invalid-traffic and supply-path evidence on synthetic streams.
+    capability_domains: [ad-fraud, distributed event processing]
+    next_step: A 30-minute technical fit review followed by a bounded synthetic replay.
+  industrial-loop-guardian:
+    type: integration_proposition
+    problem: Add auditable slow-timescale supervision above deterministic PLC and SIS controls.
+    capability_domains: [industrial automation, industrial digital twins, predictive maintenance]
+    next_step: Map one synthetic or historical-safe telemetry schema to the existing FMI demo.
+  health-it-advisory:
+    type: integration_proposition
+    problem: Evaluate human-reviewed multi-timescale advisory workflows over synthetic FHIR events.
+    capability_domains: [health-IT interoperability, clinical]
+    next_step: Review a synthetic event schema and clinical safety boundary with an informatics lead.
+  security-triage:
+    type: integration_proposition
+    problem: Correlate fast network events with slower behavioral evidence for analyst review.
+    capability_domains: [cybersecurity, distributed event processing]
+    next_step: Replay a public or synthetic event corpus through the existing advisory demo.
+  robotics-guard:
+    type: research_partnership
+    problem: Evaluate advisory safety-gating and multi-timescale context in simulation.
+    capability_domains: [robotics, UAV simulation, swarm robotics]
+    next_step: Compare a synthetic mission scenario with the repository simulator boundary.
+  nengo-interop:
+    type: research_partnership
+    problem: Explore typed-signal interchange between Jneopallium and Nengo research models.
+    capability_domains: [computational neuroscience, cognitive research]
+    next_step: Exchange one deterministic vector-frame example and validation expectation.

@@ -1,0 +1,28 @@
+allowed_organization_types:
+  - company
+  - standards_organization
+  - open_source_foundation
+  - open_source_project
+  - open_source_company
+  - university
+  - research_laboratory
+  - accelerator
+  - grant_program
+require_public_contact_evidence: true
+require_source_and_lawful_basis: true
+require_postal_address: true
+require_opt_out: true
+personal_email_domains: [gmail.com, yahoo.com, outlook.com, hotmail.com, proton.me, icloud.com]
+geographic_exclusions: []
+legal_review_regions: [DE_SOLE_TRADER, UK_SOLE_TRADER, UNKNOWN]
+prohibited_claim_patterns:
+  - guaranteed fraud reduction
+  - clinically proven
+  - regulatory approved
+  - production ready
+  - MRC accredited
+  - IAB certified
+  - military deployed
+  - proven ROI
+  - customers include
+  - patented

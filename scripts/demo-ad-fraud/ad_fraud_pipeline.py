@@ -27,7 +27,7 @@ ROOT = Path(__file__).resolve().parents[2]
 SCRIPT_DIR = Path(__file__).resolve().parent
 TARGET = ROOT / "target" / "jneopallium-ad-fraud"
 DATA_DIR = ROOT / "data"
-MODEL_RESOURCE_DIR = ROOT / "worker" / "src" / "main" / "resources" / "model" / "advertising-fraud"
+MODEL_RESOURCE_DIR = TARGET / "model-bundle"
 DEFAULT_FIRST_PARTY_LABELS = DATA_DIR / "first-party-ad-fraud-labels.jsonl"
 
 LABELS = [
@@ -626,7 +626,7 @@ def source_catalog() -> list[dict[str, Any]]:
     ]
 
 
-def discover_sources() -> dict[str, Any]:
+def discover_sources(write_repository_manifest: bool = True) -> dict[str, Any]:
     DATA_DIR.mkdir(exist_ok=True)
     (DATA_DIR / "licenses").mkdir(exist_ok=True)
     generated_at = datetime.now(timezone.utc).replace(microsecond=0).isoformat()
@@ -635,7 +635,8 @@ def discover_sources() -> dict[str, Any]:
         "generatedAt": generated_at,
         "sources": source_catalog(),
     }
-    write_json(DATA_DIR / "source-manifest.json", manifest)
+    manifest_path = DATA_DIR / "source-manifest.json" if write_repository_manifest else TARGET / "source-manifest.json"
+    write_json(manifest_path, manifest)
     write_json(TARGET / "dataset_report.json", {
         "generatedAt": generated_at,
         "sourcesEvaluated": len(manifest["sources"]),
@@ -650,7 +651,7 @@ def discover_sources() -> dict[str, Any]:
 
 
 def download_sources(offline: bool, first_party_path: Path | None = None, max_bytes: int = 65536) -> dict[str, Any]:
-    manifest = discover_sources()
+    manifest = discover_sources(write_repository_manifest=False)
     cache_dir = DATA_DIR / "cache" / "ad-fraud"
     cache_dir.mkdir(parents=True, exist_ok=True)
     results = []
@@ -694,7 +695,7 @@ def download_sources(offline: bool, first_party_path: Path | None = None, max_by
             "sha256": sha256_file(cached_path) if cached_path and cached_path.exists() else None,
         })
     payload = {"sources": results}
-    write_json(DATA_DIR / "source-manifest.json", {"schemaVersion": "1.0", "sources": results})
+    write_json(TARGET / "source-manifest.json", {"schemaVersion": "1.0", "sources": results})
     return payload
 
 
@@ -2682,7 +2683,15 @@ def run_java_tests() -> dict[str, Any]:
                 break
     if not mvn:
         return {"status": "skipped", "reason": "maven not found"}
-    cmd = [mvn, "-pl", "worker", "-Dtest=AdFraudModuleTest", "test"]
+    cmd = [
+        mvn,
+        "-pl",
+        "demos/demo-adfraud",
+        "-am",
+        "-Dtest=AdFraudModuleTest",
+        "-Dsurefire.failIfNoSpecifiedTests=false",
+        "test",
+    ]
     result = subprocess.run(cmd, cwd=ROOT, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, timeout=180)
     return {"status": "passed" if result.returncode == 0 else "failed", "command": cmd, "outputTail": result.stdout[-4000:]}
 

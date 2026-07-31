@@ -1,0 +1,1 @@
+"""Repository-backed capability inventory."""

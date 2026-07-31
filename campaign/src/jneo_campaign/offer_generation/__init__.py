@@ -1,0 +1,1 @@
+"""Evidence-grounded offer selection."""

@@ -1,0 +1,42 @@
+# Technical proposition for {{ proposition.organization }}
+
+Persona lens: {{ persona_guidance }}
+
+## Verified activity and relevance
+
+{{ proposition.specific_activity }}
+
+{{ proposition.activity_evidence }}
+
+## Current repository capability
+
+{{ proposition.implemented_now }}
+
+{{ proposition.relevant_capability }}
+
+## Proposed bounded work
+
+{{ proposition.proposed_work }}
+
+Inputs:
+{% for item in proposition.poc_inputs %}
+- {{ item }}
+{% endfor %}
+
+Outputs:
+{% for item in proposition.poc_outputs %}
+- {{ item }}
+{% endfor %}
+
+## Limits and safety boundary
+{% for item in proposition.limitations %}
+- {{ item }}
+{% endfor %}
+
+## Small next step
+
+{{ proposition.next_step }} {{ proposition.call_to_action }}
+
+Repository: {{ repository_url }}
+
+Evidence references: {{ proposition.evidence_refs | join(', ') }}

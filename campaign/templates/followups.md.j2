@@ -1,0 +1,13 @@
+# Value-adding follow-up sequence for {{ proposition.organization }}
+
+## Follow-up 1 — integration artifact
+
+I am adding a concrete interface sketch rather than simply checking in: {{ proposition.proposed_work }} The expected outputs are {{ proposition.poc_outputs | join('; ') }}. Evidence: {{ proposition.evidence_refs | join(', ') }}.
+
+Would it be useful to redirect this to the team responsible for the relevant technical workflow? Reply “unsubscribe” to stop all follow-ups.
+
+## Follow-up 2 — evaluation boundary
+
+One final useful detail: the proposed evaluation uses synthetic inputs and a deterministic baseline, and does not claim production readiness or outcomes. The principal limits are {{ proposition.limitations[:3] | join('; ') }}.
+
+If a bounded evaluation is not relevant, no reply is needed and the sequence will stop. Reply “unsubscribe” for organization-level suppression.

@@ -1,0 +1,17 @@
+# Architecture sketch: {{ proposition.organization }}
+
+```mermaid
+flowchart LR
+  S["Synthetic or approved source events"] --> V["Schema validation and provenance"]
+  V --> F["Fast typed-signal path"]
+  V --> L["Slow behavioural/context path"]
+  F --> E["Evidence fusion"]
+  L --> E
+  E --> G["Safety and human-review gate"]
+  G --> O["Advisory output"]
+  E --> A["Immutable audit evidence"]
+  B["Rules/statistical baseline"] --> C["Deterministic comparison"]
+  O --> C
+```
+
+Evidence references: {{ proposition.evidence_refs | join(', ') }}

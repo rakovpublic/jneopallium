@@ -1,0 +1,11 @@
+.env
+.venv/
+*.db
+*.db-*
+secrets/
+reports/generated-assets/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+htmlcov/
+.coverage
