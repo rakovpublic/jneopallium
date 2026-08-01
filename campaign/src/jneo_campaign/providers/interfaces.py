@@ -18,6 +18,7 @@ class SearchFact:
     source_url: str
     source_type: str
     supporting_excerpt: str
+    retrieved_at: datetime
     contact_role: str | None = None
     contact_channel_type: str | None = None
     contact_channel_value: str | None = None

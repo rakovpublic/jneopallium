@@ -1,0 +1,56 @@
+retrieved_at: "2026-08-01T00:00:00+00:00"
+notes: >-
+  Operator-reviewed official public sources for the bounded US industrial pilot. Generic,
+  role-based organizational inboxes only; no guessed addresses or private-source data.
+organizations:
+  - organization_name: CESMII
+    canonical_domain: cesmii.org
+    organization_type: research_laboratory
+    prospect_category: integration_partner
+    target_domain: Industrial automation
+    region: US
+    country: US
+    summary: A US smart-manufacturing institute focused on interoperable manufacturing technology.
+    source_url: https://www.cesmii.org/about/
+    source_type: official_website
+    supporting_excerpt: The official site describes CESMII's US smart-manufacturing mission and technology ecosystem.
+    contact_role: Smart-manufacturing collaboration inquiry
+    contact_channel_type: email
+    contact_channel_value: info@cesmii.org
+    contact_source_url: https://www.cesmii.org/about/contact-us/
+    contact_supporting_excerpt: The official contact page publishes this general organizational inbox.
+    contact_timezone: America/Los_Angeles
+  - organization_name: Digital Twin Consortium
+    canonical_domain: digitaltwinconsortium.org
+    organization_type: standards_organization
+    prospect_category: integration_partner
+    target_domain: Industrial digital twins
+    region: US
+    country: US
+    summary: An industry consortium advancing digital-twin interoperability and adoption.
+    source_url: https://www.digitaltwinconsortium.org/
+    source_type: official_website
+    supporting_excerpt: The official site describes work to advance digital-twin innovation and interoperability.
+    contact_role: Digital-twin collaboration inquiry
+    contact_channel_type: email
+    contact_channel_value: info@digitaltwinconsortium.org
+    contact_source_url: https://www.digitaltwinconsortium.org/join-our-mailing-list/
+    contact_supporting_excerpt: The official contact section publishes this general organizational inbox.
+    contact_timezone: America/New_York
+  - organization_name: International Society of Automation (ISA)
+    canonical_domain: isa.org
+    organization_type: standards_organization
+    prospect_category: research_partner
+    target_domain: Industrial automation
+    region: US
+    country: US
+    summary: A professional association developing standards and technical resources for automation.
+    source_url: https://www.isa.org/
+    source_type: official_website
+    supporting_excerpt: The official site identifies ISA as a professional association for industrial automation.
+    contact_role: Automation technical collaboration inquiry
+    contact_channel_type: email
+    contact_channel_value: info@isa.org
+    contact_source_url: https://www.isa.org/about-isa/contact-us
+    contact_supporting_excerpt: The official contact page publishes this general organizational inbox.
+    contact_timezone: America/New_York

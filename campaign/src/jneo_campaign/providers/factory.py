@@ -17,7 +17,11 @@ from jneo_campaign.providers.interfaces import (
 )
 from jneo_campaign.providers.llm import DeterministicLLMProvider, JsonLLMProvider
 from jneo_campaign.providers.mock import MockCalendarProvider, MockGmailProvider
-from jneo_campaign.providers.search import FixtureSearchProvider, JsonSearchProvider
+from jneo_campaign.providers.search import (
+    FixtureSearchProvider,
+    JsonSearchProvider,
+    VerifiedFileSearchProvider,
+)
 
 
 @dataclass
@@ -41,9 +45,15 @@ def build_providers(config: AppConfig) -> Providers:
         gmail = MockGmailProvider()
         calendar = MockCalendarProvider()
     if settings.search_provider == "fixture":
+        if settings.live_writes_enabled:
+            raise ValueError("The deterministic fixture search provider is forbidden in LIVE mode")
         search: SearchProvider = FixtureSearchProvider(CAMPAIGN_ROOT / "fixtures" / "prospects.yml")
-    else:
+    elif settings.search_provider == "verified-file":
+        search = VerifiedFileSearchProvider(settings.search_verified_file)
+    elif settings.search_provider == "json-api":
         search = JsonSearchProvider(settings.search_api_endpoint, settings.search_api_key)
+    else:
+        raise ValueError(f"Unsupported search provider: {settings.search_provider}")
     if settings.llm_provider == "deterministic":
         llm: StructuredLLMProvider = DeterministicLLMProvider()
     else:

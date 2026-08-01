@@ -1,19 +1,25 @@
-Subject: {{ proposition.organization }}: a bounded Jneopallium technical evaluation
+Subject: Exploring a bounded Jneopallium evaluation with {{ proposition.organization }}
 
 Hello,
 
-I am writing because {{ proposition.activity_evidence }}
+I am reaching out because your organization's public work appears relevant to a bounded technical evaluation. {{ proposition.activity_evidence }}
 
-{{ proposition.implemented_now }} For {{ proposition.organization }}, {{ proposition.proposed_work }}
+{{ proposition.implemented_now }} For your team, I propose a bounded technical evaluation around this scenario:
 
-The evaluation would use {{ proposition.poc_inputs | join('; ') }} and return {{ proposition.poc_outputs | join('; ') }}. It would remain synthetic/advisory, with these explicit limits: {{ proposition.limitations[:3] | join('; ') }}.
+{{ proposition.proposed_work }}
+
+Evaluation method: {{ proposition.poc_inputs | join('; ') }}
+
+Expected outputs: {{ proposition.poc_outputs | join('; ') }}.
+
+The work would remain synthetic and advisory. Scope limits: {{ proposition.limitations[:3] | join('; ') }}.
 
 {{ proposition.call_to_action }}
 
-If this is not relevant, reply “unsubscribe” and this organization/channel will be suppressed immediately.
+If this is not relevant, reply "unsubscribe" and this organization and address will be suppressed immediately.
 
 Jneopallium campaign team
 Open-source technical research project
 Sender identity and postal address must be configured before LIVE sending.
 
-Evidence: {{ proposition.evidence_refs | join(', ') }}
+Repository: {{ repository_url }}

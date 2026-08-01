@@ -1,5 +1,9 @@
 from __future__ import annotations
 
+from sqlalchemy import select
+
+from jneo_campaign.storage.models import EmailMessage
+
 
 def test_complete_dry_run_acceptance_scenario(runner) -> None:
     result = runner.run_once(simulate_replies=True)
@@ -21,3 +25,16 @@ def test_complete_dry_run_acceptance_scenario(runner) -> None:
         for bucket in metrics["conversion_by_domain"].values()
     )
     assert metrics["conversion_by_persona"]
+    with runner.database.session() as session:
+        messages = list(
+            session.scalars(
+                select(EmailMessage).where(
+                    EmailMessage.direction == "OUTBOUND", EmailMessage.sequence_number == 0
+                )
+            )
+        )
+        assert all("would use Generate" not in message.body_text for message in messages)
+        assert all(
+            "Repository: https://github.com/rakovpublic/jneopallium" in message.body_text
+            for message in messages
+        )

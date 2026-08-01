@@ -92,8 +92,8 @@ class GmailOutreachService:
             message = session.scalar(
                 select(EmailMessage).where(EmailMessage.idempotency_key == key)
             )
+            finalized = self._finalize_body(body)
             if message is None:
-                finalized = self._finalize_body(body)
                 message = EmailMessage(
                     thread_id=thread.id,
                     direction="OUTBOUND",
@@ -106,6 +106,21 @@ class GmailOutreachService:
                     idempotency_key=key,
                 )
                 session.add(message)
+                prepared.append(message)
+            elif (
+                message.status == "QUEUED"
+                and message.provider_message_id is None
+                and message.sent_at is None
+                and (
+                    message.subject != subject
+                    or message.body_text != finalized
+                    or message.body_html != text_to_safe_html(finalized)
+                )
+            ):
+                message.subject = subject
+                message.body_text = finalized
+                message.body_html = text_to_safe_html(finalized)
+                thread.subject = subject
                 prepared.append(message)
             transition(
                 session,

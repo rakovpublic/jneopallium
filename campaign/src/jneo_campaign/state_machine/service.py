@@ -50,6 +50,28 @@ TERMINAL = {
     CampaignState.LOST,
 }
 
+PRE_OUTREACH_RANK: dict[CampaignState, int] = {
+    CampaignState.ORGANIZATION_DISCOVERED: 0,
+    CampaignState.ORGANIZATION_VERIFIED: 1,
+    CampaignState.CONTACT_DISCOVERED: 2,
+    CampaignState.CONTACT_VERIFIED: 3,
+    CampaignState.PROSPECT_SCORED: 4,
+    CampaignState.OFFER_SELECTED: 5,
+    CampaignState.DEMO_SELECTED: 6,
+    CampaignState.DEMO_SPEC_REQUIRED: 6,
+    CampaignState.MATERIALS_GENERATED: 7,
+    CampaignState.COMPLIANCE_APPROVED: 8,
+    CampaignState.QUEUED: 9,
+    CampaignState.CONTACTED: 10,
+    CampaignState.DELIVERED: 11,
+}
+
+DOMAIN_RANK: dict[CampaignState, int] = {
+    CampaignState.DOMAIN_DISCOVERED: 0,
+    CampaignState.DOMAIN_RESEARCHED: 1,
+    CampaignState.DOMAIN_SCORED: 2,
+}
+
 # Entity-specific workflows can start at their first applicable state. The graph keeps
 # outreach transitions strict while allowing reply outcomes to branch independently.
 ALLOWED_TRANSITIONS: dict[CampaignState, set[CampaignState]] = {
@@ -183,6 +205,23 @@ def transition(
         return current
     if old in TERMINAL:
         raise InvalidTransition(f"{old.value} is terminal")
+    if old in DOMAIN_RANK and to_state in DOMAIN_RANK and DOMAIN_RANK[old] >= DOMAIN_RANK[to_state]:
+        return current
+    if to_state in PRE_OUTREACH_RANK and (
+        (old in PRE_OUTREACH_RANK and PRE_OUTREACH_RANK[old] >= PRE_OUTREACH_RANK[to_state])
+        or old
+        in {
+            CampaignState.REPLIED,
+            CampaignState.POSITIVE_REPLY,
+            CampaignState.QUESTION_RECEIVED,
+            CampaignState.MEETING_REQUESTED,
+            CampaignState.MEETING_SCHEDULED,
+            CampaignState.PROPOSAL_REQUESTED,
+            CampaignState.PROPOSAL_SENT,
+            CampaignState.POC_REQUESTED,
+        }
+    ):
+        return current
     if to_state not in ALLOWED_TRANSITIONS.get(old, set()):
         raise InvalidTransition(f"Transition {old.value} -> {to_state.value} is not allowed")
     current.state = to_state.value

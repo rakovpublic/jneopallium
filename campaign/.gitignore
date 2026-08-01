@@ -4,6 +4,7 @@
 *.db-*
 secrets/
 reports/generated-assets/
+runtime/
 __pycache__/
 .pytest_cache/
 .ruff_cache/

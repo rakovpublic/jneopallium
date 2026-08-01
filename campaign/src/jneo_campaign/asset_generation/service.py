@@ -101,6 +101,7 @@ class AssetGenerationService:
                     proposition=proposition,
                     persona_guidance=PERSONAS[persona],
                     demo=plan.demo if plan else None,
+                    repository_url=self.repository_url,
                 )
                 generated.extend(
                     self._store_formats(
@@ -218,7 +219,10 @@ class AssetGenerationService:
                     offer.limitations + (plan.plan.get("safety_constraints", []) if plan else [])
                 )
             ),
-            "call_to_action": f"Would the {contact.role.lower()} be open to a short technical fit review?",
+            "call_to_action": (
+                "Would your team be open to a short technical fit review? "
+                "If another contact handles this kind of inquiry, I would appreciate a redirect."
+            ),
             "evidence_refs": refs,
         }
         return self.llm_provider.generate(

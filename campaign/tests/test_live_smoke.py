@@ -8,6 +8,15 @@ from jneo_campaign.config import load_config
 from jneo_campaign.providers.factory import build_providers
 
 
+def test_live_mode_rejects_deterministic_prospect_fixture(settings) -> None:
+    live_settings = settings.model_copy(
+        update={"campaign_mode": "LIVE", "campaign_live_send": True}
+    )
+
+    with pytest.raises(ValueError, match="fixture search provider is forbidden"):
+        build_providers(load_config(live_settings))
+
+
 @pytest.mark.live
 @pytest.mark.skipif(
     os.getenv("JNEO_ENABLE_LIVE_TESTS", "false").lower() != "true",

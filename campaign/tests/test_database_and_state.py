@@ -94,3 +94,53 @@ def test_invalid_transition_is_rejected(runner) -> None:
                 reason="skip",
                 source="unit-test",
             )
+
+
+def test_replaying_completed_pre_outreach_stage_does_not_regress(runner) -> None:
+    with runner.database.session() as session:
+        current = transition(
+            session,
+            entity_type="prospect",
+            entity_id="replay-safe",
+            to_state=CampaignState.QUEUED,
+            reason="already queued",
+            source="unit-test",
+        )
+
+        replayed = transition(
+            session,
+            entity_type="prospect",
+            entity_id="replay-safe",
+            to_state=CampaignState.MATERIALS_GENERATED,
+            reason="asset refresh",
+            source="unit-test",
+        )
+
+        assert replayed.id == current.id
+        assert replayed.state == CampaignState.QUEUED
+        assert replayed.version == current.version
+
+
+def test_replaying_domain_discovery_does_not_regress_scored_domain(runner) -> None:
+    with runner.database.session() as session:
+        current = transition(
+            session,
+            entity_type="domain",
+            entity_id="industrial",
+            to_state=CampaignState.DOMAIN_SCORED,
+            reason="already scored",
+            source="unit-test",
+        )
+
+        replayed = transition(
+            session,
+            entity_type="domain",
+            entity_id="industrial",
+            to_state=CampaignState.DOMAIN_DISCOVERED,
+            reason="scheduled refresh",
+            source="unit-test",
+        )
+
+        assert replayed.id == current.id
+        assert replayed.state == CampaignState.DOMAIN_SCORED
+        assert replayed.version == current.version

@@ -140,6 +140,12 @@ CAMPAIGN_MODE=LIVE
 CAMPAIGN_LIVE_SEND=true
 ```
 
+The deterministic prospect fixture is rejected whenever LIVE writes are enabled. Select either an
+authorized `json-api` research provider or the operator-reviewed `verified-file` provider; every
+record must include an explicit retrieval timestamp and remains subject to the 90-day freshness
+check. `config/live-pilot.yml` is the bounded US industrial profile and
+`config/verified-prospects.yml` contains its public-source evidence.
+
 Run `jneo-campaign doctor --validate-credentials`, inspect the local dashboard, and begin with the
 safe defaults: at most 10 new contacts and 20 total outbound messages per day, one initial contact per
 organization, no more than two value-adding follow-ups, and a minimum four business days between

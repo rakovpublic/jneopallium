@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+from datetime import UTC, date, datetime, time
 from pathlib import Path
+from typing import Any
 
 import httpx
 import yaml
@@ -20,6 +22,7 @@ class FixtureSearchProvider:
     def discover(self, domains: list[str], limit: int) -> list[SearchFact]:
         with self.fixture_path.open("r", encoding="utf-8") as stream:
             data = yaml.safe_load(stream) or {}
+        retrieved_at = _parse_retrieved_at(data.get("retrieved_at"))
         allowed = {item.lower() for item in domains}
         facts: list[SearchFact] = []
         for item in data.get("organizations", []):
@@ -32,10 +35,20 @@ class FixtureSearchProvider:
             contact_excerpt = sanitize_external_content(item.get("contact_supporting_excerpt", ""))
             if excerpt.prompt_injection_suspected or contact_excerpt.prompt_injection_suspected:
                 continue
-            facts.append(SearchFact(**item))
+            facts.append(SearchFact(**item, retrieved_at=retrieved_at))
             if len(facts) >= limit:
                 break
         return facts
+
+
+class VerifiedFileSearchProvider(FixtureSearchProvider):
+    """Operator-reviewed public facts with an explicit evidence timestamp.
+
+    Unlike the deterministic fixture, this provider may be selected for a LIVE run. The file is
+    still treated as untrusted input and passes through the same URL and content controls.
+    """
+
+    name = "verified-file"
 
 
 class JsonSearchProvider:
@@ -83,5 +96,22 @@ class JsonSearchProvider:
             excerpt = sanitize_external_content(row["supporting_excerpt"])
             if excerpt.prompt_injection_suspected:
                 continue
-            result.append(SearchFact(**row))
+            result.append(
+                SearchFact(
+                    **{key: value for key, value in row.items() if key != "retrieved_at"},
+                    retrieved_at=_parse_retrieved_at(row.get("retrieved_at")),
+                )
+            )
         return result[:limit]
+
+
+def _parse_retrieved_at(value: Any) -> datetime:
+    if isinstance(value, datetime):
+        parsed = value
+    elif isinstance(value, date):
+        parsed = datetime.combine(value, time.min)
+    elif isinstance(value, str) and value.strip():
+        parsed = datetime.fromisoformat(value.strip().replace("Z", "+00:00"))
+    else:
+        raise ValueError("Prospect evidence requires an explicit retrieved_at timestamp")
+    return parsed.replace(tzinfo=UTC) if parsed.tzinfo is None else parsed.astimezone(UTC)

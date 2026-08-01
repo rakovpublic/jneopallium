@@ -1,0 +1,19 @@
+default:
+  campaign_id: jneopallium-us-industrial-pilot
+  target_regions: [US]
+  excluded_regions: [EU, UK, CA, GLOBAL, UNKNOWN]
+  prospect_types:
+    - integration_partner
+    - research_partner
+  active_domains:
+    - Industrial automation
+    - Industrial digital twins
+  excluded_domains: []
+  limits:
+    max_new_contacts_per_day: 3
+    max_outbound_per_day: 6
+    max_initial_contacts_per_organization: 1
+    max_automated_followups: 1
+    min_business_days_between_followups: 5
+    bounce_halt_rate: 0.05
+    complaint_halt_count: 1

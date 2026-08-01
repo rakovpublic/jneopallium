@@ -29,6 +29,7 @@ class Settings(BaseSettings):
     google_oauth_token_file: Path = Path("secrets/google-token.enc")
     google_oauth_account: str = ""
     search_provider: str = "fixture"
+    search_verified_file: Path = CAMPAIGN_ROOT / "config" / "verified-prospects.yml"
     search_api_endpoint: str = ""
     search_api_key: str = ""
     llm_provider: str = "deterministic"
@@ -42,15 +43,22 @@ class Settings(BaseSettings):
     campaign_reply_to: str = ""
     campaign_escalation_email: str = ""
     campaign_default_timezone: str = "Europe/Kyiv"
+    campaign_profile_file: Path | None = None
 
     @property
     def live_writes_enabled(self) -> bool:
         return self.campaign_mode == "LIVE" and self.campaign_live_send
 
-    @field_validator("campaign_repository_root", "campaign_config_dir", "campaign_report_dir")
+    @field_validator(
+        "campaign_repository_root",
+        "campaign_config_dir",
+        "campaign_report_dir",
+        "search_verified_file",
+        "campaign_profile_file",
+    )
     @classmethod
-    def expand_path(cls, value: Path) -> Path:
-        return value.expanduser()
+    def expand_path(cls, value: Path | None) -> Path | None:
+        return value.expanduser() if value is not None else None
 
 
 class LimitsConfig(BaseModel):
@@ -101,6 +109,17 @@ def load_yaml(path: Path) -> dict[str, Any]:
     return data
 
 
+def merge_config(base: dict[str, Any], override: dict[str, Any]) -> dict[str, Any]:
+    """Recursively apply a small deployment profile without changing safe defaults."""
+    merged = dict(base)
+    for key, value in override.items():
+        if isinstance(value, dict) and isinstance(merged.get(key), dict):
+            merged[key] = merge_config(merged[key], value)
+        else:
+            merged[key] = value
+    return merged
+
+
 @dataclass(frozen=True)
 class AppConfig:
     settings: Settings
@@ -115,10 +134,14 @@ def load_config(settings: Settings | None = None) -> AppConfig:
     settings = settings or Settings()
     base = settings.campaign_config_dir
     campaigns = load_yaml(base / "campaigns.yml")
+    campaign_defaults = campaigns.get("default", {})
+    if settings.campaign_profile_file is not None:
+        profile = load_yaml(settings.campaign_profile_file)
+        campaign_defaults = merge_config(campaign_defaults, profile.get("default", profile))
     policies = load_yaml(base / "compliance.yml")
     return AppConfig(
         settings=settings,
-        campaign=CampaignPolicy.model_validate(campaigns.get("default", {})),
+        campaign=CampaignPolicy.model_validate(campaign_defaults),
         compliance=CompliancePolicy.model_validate(policies),
         raw_domains=load_yaml(base / "domains.yml"),
         raw_offers=load_yaml(base / "offers.yml"),

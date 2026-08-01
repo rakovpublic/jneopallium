@@ -132,7 +132,7 @@ class DemoMatchingService:
         return {
             "customer_problem": offer.problem,
             "proposed_scenario": (
-                f"Replay a deterministic synthetic {organization.target_domain} scenario and compare "
+                f"Replay a deterministic synthetic {organization.target_domain.lower()} scenario and compare "
                 "multi-timescale evidence handling with transparent baselines."
             ),
             "why_jneopallium_may_be_suitable": (

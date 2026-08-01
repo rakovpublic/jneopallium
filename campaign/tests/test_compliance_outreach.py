@@ -50,6 +50,38 @@ def test_duplicate_initial_send_is_prevented(runner) -> None:
         assert len(list(session.scalars(select(EmailMessage)))) == 1
 
 
+def test_unsent_queued_message_refreshes_when_approved_asset_changes(runner) -> None:
+    with runner.database.session() as session:
+        _organization, _contact, asset = seed_compliance_ready(session)
+        runner.compliance.review(session)
+        [message] = runner.outreach.prepare(session)
+
+        asset.content = asset.content.replace(
+            "Subject: Example Engineering: bounded technical evaluation",
+            "Subject: Updated bounded technical evaluation",
+        )
+        refreshed = runner.outreach.prepare(session)
+
+        assert refreshed == [message]
+        assert message.subject == "Updated bounded technical evaluation"
+        assert message.provider_message_id is None
+        assert message.sent_at is None
+
+
+def test_queued_message_is_not_reported_as_sent(runner) -> None:
+    with runner.database.session() as session:
+        seed_compliance_ready(session)
+        runner.compliance.review(session)
+        runner.outreach.prepare(session)
+
+        metrics = runner.analytics.report(session, runner.config.campaign.campaign_id)
+
+        assert metrics["messages_prepared"] == 1
+        assert metrics["messages_sent_or_simulated"] == 0
+        assert metrics["real_external_messages_sent"] == 0
+        assert metrics["conversion_by_domain"]["Industrial automation"]["sent"] == 0
+
+
 def test_suppression_is_checked_before_queueing(runner) -> None:
     with runner.database.session() as session:
         _organization, contact, _asset = seed_compliance_ready(session)

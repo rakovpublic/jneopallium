@@ -102,11 +102,13 @@ class ProspectDiscoveryService:
                     source_url=fact.source_url,
                     source_type=fact.source_type,
                     supporting_excerpt=fact.supporting_excerpt,
+                    retrieved_at=fact.retrieved_at,
                     source_hash=digest,
                 )
             )
         else:
             existing.supporting_excerpt = fact.supporting_excerpt
+            existing.retrieved_at = fact.retrieved_at
             existing.source_hash = digest
 
     @staticmethod
@@ -128,6 +130,7 @@ class ProspectDiscoveryService:
                     source_type="official_contact_page",
                     supporting_excerpt=fact.contact_supporting_excerpt
                     or "Official contact channel",
+                    retrieved_at=fact.retrieved_at,
                     source_hash=digest,
                 )
             )
@@ -135,4 +138,5 @@ class ProspectDiscoveryService:
             existing.supporting_excerpt = (
                 fact.contact_supporting_excerpt or "Official contact channel"
             )
+            existing.retrieved_at = fact.retrieved_at
             existing.source_hash = digest

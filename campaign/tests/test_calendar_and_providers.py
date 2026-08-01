@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import UTC
 from unittest.mock import MagicMock
 
 from sqlalchemy import select
@@ -7,6 +8,7 @@ from sqlalchemy import select
 from jneo_campaign.providers.google import GoogleCalendarProvider
 from jneo_campaign.providers.interfaces import OutboundEmail
 from jneo_campaign.providers.mock import MockCalendarProvider, MockGmailProvider
+from jneo_campaign.providers.search import VerifiedFileSearchProvider
 from jneo_campaign.storage.models import (
     EmailMessage,
     EmailThread,
@@ -49,6 +51,16 @@ def test_google_calendar_validation_uses_minimum_scope_freebusy(monkeypatch) -> 
     }
     body = service.freebusy.return_value.query.call_args.kwargs["body"]
     assert body["items"] == [{"id": "primary"}]
+
+
+def test_verified_file_provider_preserves_evidence_timestamp(runner) -> None:
+    provider = VerifiedFileSearchProvider(runner.config.settings.search_verified_file)
+
+    facts = provider.discover(["Industrial automation"], limit=1)
+
+    assert len(facts) == 1
+    assert facts[0].retrieved_at.tzinfo == UTC
+    assert facts[0].contact_channel_value == "info@cesmii.org"
 
 
 def test_calendar_event_requires_agreed_option(runner) -> None:

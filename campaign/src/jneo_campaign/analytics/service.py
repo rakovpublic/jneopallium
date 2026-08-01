@@ -47,6 +47,7 @@ class AnalyticsService:
         demos = list(session.scalars(select(DemoPlan)))
         outbound = [item for item in messages if item.direction == "OUTBOUND"]
         initial = [item for item in outbound if item.sequence_number == 0]
+        sent_initial = [item for item in initial if item.sent_at is not None]
         delivered = [item for item in initial if item.status in {"DELIVERED", "MOCK_SENT"}]
         bounced = [item for item in messages if item.status == "BOUNCED"]
         inbound = [item for item in messages if item.direction == "INBOUND"]
@@ -77,7 +78,7 @@ class AnalyticsService:
         }
         conversion = self._conversion_dimensions(
             organizations=organizations,
-            initial=initial,
+            initial=sent_initial,
             inbound=inbound,
             thread_by_id=thread_by_id,
             positive_thread_ids=positive_thread_ids,
@@ -103,21 +104,21 @@ class AnalyticsService:
             "verified_contacts": sum(item.public_evidence_verified for item in contacts),
             "prospects_scored": len(scores),
             "messages_prepared": len(initial),
-            "messages_sent_or_simulated": len(initial),
-            "real_external_messages_sent": sum(
-                item.status in {"SENT", "DELIVERED"} for item in initial
-            ),
+            "messages_sent_or_simulated": len(sent_initial),
+            "real_external_messages_sent": sum(item.status != "MOCK_SENT" for item in sent_initial),
             "mock_messages_sent": sum(item.status == "MOCK_SENT" for item in initial),
-            "delivery_rate": self._rate(len(delivered), len(initial)),
-            "bounce_rate": self._rate(len(bounced), len(initial)),
-            "reply_rate": self._rate(len({item.thread_id for item in inbound}), len(initial)),
-            "positive_reply_rate": self._rate(len(positive_thread_ids), len(initial)),
+            "delivery_rate": self._rate(len(delivered), len(sent_initial)),
+            "bounce_rate": self._rate(len(bounced), len(sent_initial)),
+            "reply_rate": self._rate(len({item.thread_id for item in inbound}), len(sent_initial)),
+            "positive_reply_rate": self._rate(len(positive_thread_ids), len(sent_initial)),
             "meeting_rate": self._rate(
-                sum(item.status == "MEETING_SCHEDULED" for item in meetings), len(initial)
+                sum(item.status == "MEETING_SCHEDULED" for item in meetings), len(sent_initial)
             ),
-            "proposal_rate": self._rate(classification_counts["PROPOSAL_REQUEST"], len(initial)),
+            "proposal_rate": self._rate(
+                classification_counts["PROPOSAL_REQUEST"], len(sent_initial)
+            ),
             "proof_of_concept_requests": classification_counts["POC_REQUEST"],
-            "unsubscribe_rate": self._rate(classification_counts["UNSUBSCRIBE"], len(initial)),
+            "unsubscribe_rate": self._rate(classification_counts["UNSUBSCRIBE"], len(sent_initial)),
             "compliance_blocks": sum(
                 item.decision not in {"APPROVED", "APPROVED_DRY_RUN"} for item in compliance
             ),
