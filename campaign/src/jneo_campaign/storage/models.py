@@ -148,6 +148,23 @@ class ContactSource(Base, TimestampMixin):
     __table_args__ = (UniqueConstraint("contact_id", "source_url"),)
 
 
+class OutreachPermissionEvidence(Base, TimestampMixin):
+    __tablename__ = "outreach_permission_evidence"
+    id: Mapped[int] = mapped_column(primary_key=True)
+    contact_id: Mapped[int] = mapped_column(
+        ForeignKey("contacts.id", ondelete="CASCADE"), unique=True
+    )
+    basis: Mapped[str] = mapped_column(String(120))
+    recipient_entity_type: Mapped[str] = mapped_column(String(40), default="unknown")
+    public_address: Mapped[bool] = mapped_column(Boolean, default=False)
+    no_solicitation_notice: Mapped[bool | None] = mapped_column(Boolean, nullable=True)
+    relevant_to_role: Mapped[bool] = mapped_column(Boolean, default=False)
+    evidence_url: Mapped[str] = mapped_column(Text)
+    evidence_excerpt: Mapped[str] = mapped_column(Text)
+    reviewed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+    contact: Mapped[Contact] = relationship()
+
+
 class ProspectScore(Base, TimestampMixin):
     __tablename__ = "prospect_scores"
     id: Mapped[int] = mapped_column(primary_key=True)

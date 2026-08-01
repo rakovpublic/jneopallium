@@ -1,7 +1,7 @@
 default:
   campaign_id: jneopallium-us-industrial-pilot
-  target_regions: [US]
-  excluded_regions: [EU, UK, CA, GLOBAL, UNKNOWN]
+  target_regions: [US, EU, CA, JP, KR, UA, IL, GB, AU]
+  excluded_regions: [GLOBAL, UNKNOWN]
   prospect_types:
     - integration_partner
     - research_partner

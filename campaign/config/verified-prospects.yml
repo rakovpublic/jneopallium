@@ -20,6 +20,11 @@ organizations:
     contact_source_url: https://www.cesmii.org/about/contact-us/
     contact_supporting_excerpt: The official contact page publishes this general organizational inbox.
     contact_timezone: America/Los_Angeles
+    outreach_basis: us_b2b_opt_out
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
   - organization_name: Digital Twin Consortium
     canonical_domain: digitaltwinconsortium.org
     organization_type: standards_organization
@@ -37,6 +42,11 @@ organizations:
     contact_source_url: https://www.digitaltwinconsortium.org/join-our-mailing-list/
     contact_supporting_excerpt: The official contact section publishes this general organizational inbox.
     contact_timezone: America/New_York
+    outreach_basis: us_b2b_opt_out
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
   - organization_name: International Society of Automation (ISA)
     canonical_domain: isa.org
     organization_type: standards_organization
@@ -54,3 +64,8 @@ organizations:
     contact_source_url: https://www.isa.org/about-isa/contact-us
     contact_supporting_excerpt: The official contact page publishes this general organizational inbox.
     contact_timezone: America/New_York
+    outreach_basis: us_b2b_opt_out
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true

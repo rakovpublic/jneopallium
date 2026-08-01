@@ -9,14 +9,45 @@ message content.
 Every introductory asset receives one of four decisions:
 
 - `APPROVED_DRY_RUN`: evidence and content checks pass, but external writes are disabled.
-- `APPROVED`: the implemented US professional B2B ruleset and all LIVE identity/source checks pass.
+- `APPROVED`: the applicable region-specific evidence rule and all LIVE identity/source checks pass.
 - `MANUAL_LEGAL_REVIEW_REQUIRED`: facts may be sufficient, but no approved automated ruleset covers
   the jurisdiction or uncertainty.
 - `BLOCKED` or `DO_NOT_CONTACT`: a required fact/control is absent or suppression applies.
 
-Only `APPROVED` can be sent in LIVE. EU, UK, Canada, global/unknown recipients, sole traders, personal
-mailboxes, and any unimplemented jurisdiction require a documented human legal decision; the
-software does not guess how GDPR, ePrivacy, PECR, CASL, or local laws apply.
+Only `APPROVED` can be sent in LIVE. The configured region codes are `US`, `EU`, `CA` (Canada), `JP`
+(Japan), `KR` (South Korea), `UA` (Ukraine), `IL` (Israel), `GB` (United Kingdom), and `AU`
+(Australia). Global/unknown recipients, personal mailboxes, and evidence that does not meet the
+applicable rule require documented human review.
+
+## Region-specific automation gates
+
+These are conservative product gates, not a substitute for legal advice:
+
+| Region | Evidence required for automated LIVE approval |
+|---|---|
+| US | Professional B2B relevance, truthful identification, postal address, and working opt-out. |
+| GB | Verified corporate subscriber, generic organizational inbox, identification, and opt-out. Sole traders and non-corporate subscribers require review. |
+| CA | Conspicuously published business address, no accompanying solicitation restriction, documented role relevance, identification, and unsubscribe. |
+| JP | Address intentionally published by the organization/business, no adjacent refusal notice, documented relevance, and opt-out. |
+| AU | Inferred-consent evidence for a directly published work address, documented relevance, no refusal notice, and unsubscribe. |
+| EU | Explicit consent evidence. Member-state exceptions are not inferred automatically. |
+| KR | Explicit prior consent evidence. |
+| IL | Explicit prior consent evidence. |
+| UA | Explicit consent, or reviewed Ukrainian-language opt-out evidence for the no-consent exception. |
+
+The implementation follows the evidence distinctions described by the
+[US FTC CAN-SPAM guide](https://www.ftc.gov/business-guidance/resources/can-spam-act-compliance-guide-business),
+[UK ICO B2B marketing guidance](https://ico.org.uk/for-organisations/direct-marketing-and-privacy-and-electronic-communications/business-to-business-marketing/),
+[Canada's CRTC CASL guidance](https://www.crtc.gc.ca/eng/com500/faq500.htm),
+[Australia's ACMA Spam Act guidance](https://www.acma.gov.au/Industry/Marketers/Anti-Spam/Ensuring-you-dont-spam/key-elements-of-the-spam-act-ensuring-you-dont-spam-i-acma),
+[EU ePrivacy Directive Article 13](https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32002L0058),
+[Japan's specified-email rules](https://www.caa.go.jp/policies/policy/consumer_transaction/specifed_email/),
+[Korea's Network Act Article 50](https://www.law.go.kr/LSW/lsLawLinkInfo.do?chrClsCd=010202&lsId=000030&lsJoLnkSeq=1000688185&print=print),
+[Ukraine's E-Commerce Law Article 10](https://zakon.rada.gov.ua/laws/show/en/675-19), and
+[Israel's Communications Law section 30A](https://main.knesset.gov.il/Activity/Legislation/Laws/pages/lawbill.aspx?lawitemid=544591&t=lawreshumot). Permission
+evidence has its own URL, excerpt, basis, entity type, review date, relevance flag, and record of
+whether the publication contained a solicitation restriction. It expires after 90 days for this
+campaign even where the underlying law may allow a longer period.
 
 ## Required evidence
 

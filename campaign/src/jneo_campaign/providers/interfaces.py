@@ -25,6 +25,11 @@ class SearchFact:
     contact_source_url: str | None = None
     contact_supporting_excerpt: str | None = None
     contact_timezone: str | None = None
+    outreach_basis: str | None = None
+    recipient_entity_type: str = "unknown"
+    public_address: bool = False
+    no_solicitation_notice: bool | None = None
+    relevant_to_role: bool = False
 
 
 class SearchProvider(Protocol):

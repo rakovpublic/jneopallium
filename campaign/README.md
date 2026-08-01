@@ -143,7 +143,7 @@ CAMPAIGN_LIVE_SEND=true
 The deterministic prospect fixture is rejected whenever LIVE writes are enabled. Select either an
 authorized `json-api` research provider or the operator-reviewed `verified-file` provider; every
 record must include an explicit retrieval timestamp and remains subject to the 90-day freshness
-check. `config/live-pilot.yml` is the bounded US industrial profile and
+check. `config/live-pilot.yml` is the bounded multi-region industrial profile and
 `config/verified-prospects.yml` contains its public-source evidence.
 
 Run `jneo-campaign doctor --validate-credentials`, inspect the local dashboard, and begin with the

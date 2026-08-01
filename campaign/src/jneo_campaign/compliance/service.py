@@ -14,10 +14,17 @@ from jneo_campaign.storage.models import (
     GeneratedAsset,
     Organization,
     OrganizationSource,
+    OutreachPermissionEvidence,
     SuppressionEntry,
 )
 
-SUPPORTED_LIVE_JURISDICTIONS = {"US"}
+TARGETABLE_LIVE_JURISDICTIONS = {"US", "EU", "CA", "JP", "KR", "UA", "IL", "GB", "AU"}
+EXPLICIT_CONSENT_JURISDICTIONS = {"EU", "KR", "IL"}
+PUBLICATION_EVIDENCE_RULES = {
+    "CA": ("conspicuous_publication", "implied_consent_conspicuous_publication"),
+    "JP": ("public_business_address", "public_business_address_exception"),
+    "AU": ("inferred_consent_publication", "inferred_consent_publication"),
+}
 
 
 class ComplianceService:
@@ -152,11 +159,11 @@ class ComplianceService:
         freshest = max((source.retrieved_at for source in sources + contact_sources), default=None)
         if freshest and freshest.tzinfo is None:
             freshest = freshest.replace(tzinfo=UTC)
+        regional_basis: str | None = None
         if self.settings.live_writes_enabled:
-            if organization.region not in SUPPORTED_LIVE_JURISDICTIONS:
-                manual.append(
-                    f"No approved LIVE legal ruleset for region {organization.region or 'UNKNOWN'}"
-                )
+            regional_basis, regional_review = self._regional_basis(session, organization, contact)
+            if regional_review:
+                manual.append(regional_review)
             if not contact.timezone:
                 manual.append("Recipient business timezone is not verified")
             if not self.settings.campaign_sender_name or not self.settings.campaign_sender_email:
@@ -171,12 +178,12 @@ class ComplianceService:
             return "BLOCKED", blocking + manual, None, source_refs
         if manual:
             return "MANUAL_LEGAL_REVIEW_REQUIRED", manual, None, source_refs
-        basis = "legitimate_interest_b2b_technical_relevance"
+        basis = regional_basis or "legitimate_interest_b2b_technical_relevance"
         if self.settings.live_writes_enabled:
             return (
                 "APPROVED",
                 [
-                    "US professional B2B ruleset passed",
+                    f"{organization.region} region-specific outreach ruleset passed",
                     "Suppression checked immediately before queueing",
                 ],
                 basis,
@@ -201,3 +208,63 @@ class ComplianceService:
         if any(term in value for term in ("industrial", "robot", "uav")):
             return "system_architect"
         return "research_director"
+
+    @staticmethod
+    def _regional_basis(
+        session: Session, organization: Organization, contact: Contact
+    ) -> tuple[str | None, str | None]:
+        region = organization.region
+        if region not in TARGETABLE_LIVE_JURISDICTIONS:
+            return None, f"No configured LIVE legal ruleset for region {region or 'UNKNOWN'}"
+        if region == "US":
+            return "legitimate_interest_b2b_technical_relevance", None
+
+        evidence = session.scalar(
+            select(OutreachPermissionEvidence).where(
+                OutreachPermissionEvidence.contact_id == contact.id
+            )
+        )
+        if evidence is None:
+            return None, f"{region} outreach requires region-specific permission evidence"
+        reviewed_at = evidence.reviewed_at
+        if reviewed_at.tzinfo is None:
+            reviewed_at = reviewed_at.replace(tzinfo=UTC)
+        if reviewed_at < datetime.now(UTC) - timedelta(days=90):
+            return None, f"{region} permission evidence is older than 90 days"
+        if not evidence.evidence_url or not evidence.evidence_excerpt.strip():
+            return None, f"{region} permission evidence requires a URL and review excerpt"
+        if evidence.basis == "explicit_consent":
+            return "explicit_consent", None
+
+        if region in EXPLICIT_CONSENT_JURISDICTIONS:
+            return None, f"{region} automated outreach requires explicit consent evidence"
+        if region == "GB":
+            if (
+                evidence.basis == "corporate_subscriber"
+                and evidence.recipient_entity_type == "corporate"
+                and contact.name is None
+            ):
+                return "legitimate_interest_b2b_corporate_subscriber", None
+            return None, "GB automation requires a verified corporate subscriber and generic inbox"
+        if region in PUBLICATION_EVIDENCE_RULES:
+            required_basis, lawful_basis = PUBLICATION_EVIDENCE_RULES[region]
+            if (
+                evidence.basis == required_basis
+                and evidence.public_address
+                and evidence.no_solicitation_notice is False
+                and evidence.relevant_to_role
+            ):
+                return lawful_basis, None
+            return (
+                None,
+                f"{region} automation requires a conspicuously published relevant business address "
+                "with a recorded absence of solicitation restrictions",
+            )
+        if region == "UA":
+            if evidence.basis == "ukraine_opt_out" and contact.locale == "uk":
+                return "ukraine_opt_out_business_outreach", None
+            return (
+                None,
+                "UA automation requires Ukrainian-language opt-out evidence or explicit consent",
+            )
+        return None, f"{region} permission evidence did not match the configured ruleset"

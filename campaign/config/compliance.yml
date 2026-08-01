@@ -14,7 +14,16 @@ require_postal_address: true
 require_opt_out: true
 personal_email_domains: [gmail.com, yahoo.com, outlook.com, hotmail.com, proton.me, icloud.com]
 geographic_exclusions: []
-legal_review_regions: [DE_SOLE_TRADER, UK_SOLE_TRADER, UNKNOWN]
+legal_review_regions:
+  - EU_WITHOUT_EXPLICIT_CONSENT
+  - GB_NON_CORPORATE_SUBSCRIBER
+  - CA_WITHOUT_PUBLICATION_EVIDENCE
+  - JP_WITHOUT_PUBLICATION_EVIDENCE
+  - KR_WITHOUT_EXPLICIT_CONSENT
+  - UA_WITHOUT_LOCALIZED_OPT_OUT_BASIS
+  - IL_WITHOUT_EXPLICIT_CONSENT
+  - AU_WITHOUT_INFERRED_CONSENT_EVIDENCE
+  - UNKNOWN
 prohibited_claim_patterns:
   - guaranteed fraud reduction
   - clinically proven

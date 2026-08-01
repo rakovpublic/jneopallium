@@ -22,6 +22,7 @@ def test_database_contains_required_entities(runner) -> None:
         "organization_sources",
         "contacts",
         "contact_sources",
+        "outreach_permission_evidence",
         "prospect_scores",
         "offers",
         "demos",

@@ -92,7 +92,9 @@ class JsonSearchProvider:
         payload = response.json()
         result: list[SearchFact] = []
         for row in payload.get("results", []):
-            validate_outbound_url(row["source_url"])
+            for key in ("source_url", "contact_source_url"):
+                if row.get(key):
+                    validate_outbound_url(row[key])
             excerpt = sanitize_external_content(row["supporting_excerpt"])
             if excerpt.prompt_injection_suspected:
                 continue

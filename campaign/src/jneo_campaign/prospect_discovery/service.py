@@ -12,6 +12,7 @@ from jneo_campaign.storage.models import (
     ContactSource,
     Organization,
     OrganizationSource,
+    OutreachPermissionEvidence,
 )
 
 
@@ -77,6 +78,7 @@ class ProspectDiscoveryService:
                 elif fact.contact_timezone:
                     contact.timezone = fact.contact_timezone
                 self._contact_source(session, contact.id, fact)
+                self._permission_evidence(session, contact.id, fact)
         return {
             "organizations_created": created_organizations,
             "contacts_created": created_contacts,
@@ -140,3 +142,29 @@ class ProspectDiscoveryService:
             )
             existing.retrieved_at = fact.retrieved_at
             existing.source_hash = digest
+
+    @staticmethod
+    def _permission_evidence(session: Session, contact_id: int, fact: object) -> None:
+        if not fact.outreach_basis:
+            return
+        existing = session.scalar(
+            select(OutreachPermissionEvidence).where(
+                OutreachPermissionEvidence.contact_id == contact_id
+            )
+        )
+        values = {
+            "basis": fact.outreach_basis,
+            "recipient_entity_type": fact.recipient_entity_type,
+            "public_address": fact.public_address,
+            "no_solicitation_notice": fact.no_solicitation_notice,
+            "relevant_to_role": fact.relevant_to_role,
+            "evidence_url": fact.contact_source_url,
+            "evidence_excerpt": fact.contact_supporting_excerpt
+            or "Operator-reviewed outreach permission evidence",
+            "reviewed_at": fact.retrieved_at,
+        }
+        if existing is None:
+            session.add(OutreachPermissionEvidence(contact_id=contact_id, **values))
+        else:
+            for key, value in values.items():
+                setattr(existing, key, value)
