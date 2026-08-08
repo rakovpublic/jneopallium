@@ -1,6 +1,7 @@
 allowed_organization_types:
   - company
   - standards_organization
+  - industry_association
   - open_source_foundation
   - open_source_project
   - open_source_company

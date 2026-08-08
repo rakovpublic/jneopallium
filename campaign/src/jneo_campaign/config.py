@@ -84,6 +84,8 @@ class CampaignPolicy(BaseModel):
     research_budget_usd: float = 20.0
     llm_budget_usd: float = 20.0
     demo_engineering_budget_hours: int = 40
+    prospect_discovery_limit: int = Field(default=50, ge=1, le=500)
+    asset_generation_batch_size: int = Field(default=5, ge=1, le=100)
     send_window_start: int = Field(default=9, ge=0, le=23)
     send_window_end: int = Field(default=16, ge=1, le=24)
     limits: LimitsConfig = Field(default_factory=LimitsConfig)

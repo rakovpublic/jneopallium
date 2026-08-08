@@ -42,3 +42,17 @@ def test_live_profile_targets_requested_regions(settings) -> None:
         "GB",
         "AU",
     ]
+
+
+def test_full_scale_profile_activates_complete_domain_universe(settings) -> None:
+    config = load_config(
+        settings.model_copy(
+            update={"campaign_profile_file": CAMPAIGN_ROOT / "config" / "live-full-scale.yml"}
+        )
+    )
+
+    assert len(config.campaign.active_domains) == 60
+    assert config.campaign.prospect_discovery_limit == 250
+    assert config.campaign.asset_generation_batch_size == 50
+    assert config.campaign.limits.max_new_contacts_per_day == 10
+    assert config.campaign.limits.max_outbound_per_day == 20

@@ -1,0 +1,88 @@
+default:
+  # Keep the established campaign key so already-queued contacts remain deduplicated.
+  campaign_id: jneopallium-us-industrial-pilot
+  language: en
+  target_regions: [US, EU, CA, JP, KR, UA, IL, GB, AU]
+  excluded_regions: [GLOBAL, UNKNOWN]
+  prospect_types:
+    - potential_customer
+    - integration_partner
+    - technology_partner
+    - research_partner
+    - investor
+    - accelerator
+    - grant_program
+    - standards_organization
+    - community_partner
+  active_domains:
+    - Industrial automation
+    - Industrial digital twins
+    - Predictive maintenance
+    - Process supervision and safety gating
+    - UAV autonomy
+    - Multi-UAV and swarm coordination
+    - Mobile and industrial robotics
+    - Cybersecurity triage
+    - Adaptive cyber defence
+    - Ad fraud and invalid-traffic detection
+    - Clinical decision support
+    - Medical workflow supervision
+    - Medical imaging context integration
+    - Adaptive tutoring
+    - Educational platform integration
+    - BCI and neurotechnology
+    - Autonomous AI safety
+    - Cognitive-agent research
+    - LLM advisory and orchestration
+    - Nengo and computational-neuroscience interoperability
+    - Smart-grid supervision and energy systems
+    - Renewable-energy asset monitoring
+    - Building automation and smart infrastructure
+    - Warehouse robotics
+    - Logistics and fleet coordination
+    - Agricultural robotics
+    - Environmental monitoring
+    - Search-and-rescue robotics
+    - Telecom and edge-network orchestration
+    - AIOps and observability
+    - Distributed event-processing supervision
+    - Automotive and connected-vehicle systems
+    - Rail and transport infrastructure
+    - Aerospace and space-system simulation
+    - Pharmaceutical manufacturing
+    - Bioprocess digital twins
+    - Medical-device monitoring
+    - Remote patient-monitoring research
+    - Hospital operations and resource optimization
+    - Public-safety communications
+    - Semiconductor and electronics manufacturing
+    - Mining automation
+    - Oil, gas and chemical-process monitoring
+    - Water and wastewater infrastructure
+    - Supply-chain anomaly detection
+    - Payment fraud
+    - Financial transaction anomaly detection
+    - Insurance claims anomaly detection
+    - Marketplace and affiliate fraud
+    - Account-takeover behaviour analysis
+    - Bot and abuse detection
+    - Content-integrity and brand-safety workflows
+    - Human-machine affect modelling
+    - Game-agent research
+    - Assistive technology
+    - Wearable sensor fusion
+    - Human-performance monitoring
+    - Scientific simulation orchestration
+    - Multi-agent enterprise workflows
+    - Safety middleware for external AI agents
+  excluded_domains: []
+  prospect_discovery_limit: 250
+  asset_generation_batch_size: 50
+  limits:
+    max_new_contacts_per_day: 10
+    max_outbound_per_day: 20
+    max_initial_contacts_per_organization: 1
+    max_automated_followups: 2
+    min_business_days_between_followups: 4
+    bounce_halt_rate: 0.05
+    complaint_halt_count: 1

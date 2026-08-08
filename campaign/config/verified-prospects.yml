@@ -1,7 +1,7 @@
 retrieved_at: "2026-08-01T00:00:00+00:00"
 notes: >-
-  Operator-reviewed official public sources for the bounded US industrial pilot. Generic,
-  role-based organizational inboxes only; no guessed addresses or private-source data.
+  Operator-reviewed official public sources for the multi-domain, multi-region LIVE campaign.
+  Professional organizational inboxes only; no guessed addresses or private-source data.
 organizations:
   - organization_name: CESMII
     canonical_domain: cesmii.org
@@ -65,6 +65,237 @@ organizations:
     contact_supporting_excerpt: The official contact page publishes this general organizational inbox.
     contact_timezone: America/New_York
     outreach_basis: us_b2b_opt_out
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: IAB Technology Laboratory
+    canonical_domain: iabtechlab.com
+    organization_type: standards_organization
+    prospect_category: research_partner
+    target_domain: Ad fraud and invalid-traffic detection
+    region: US
+    country: US
+    summary: A nonprofit consortium developing technical standards for trust and interoperability in digital advertising.
+    source_url: https://iabtechlab.com/about-the-iab-tech-lab/
+    source_type: official_website
+    supporting_excerpt: The official page describes work on brand safety, ad fraud, OpenRTB, supply-chain standards, measurement, and technical working groups.
+    retrieved_at: "2026-08-08T00:00:00+00:00"
+    contact_role: Membership and technical collaboration inquiry
+    contact_channel_type: email
+    contact_channel_value: membership@iabtechlab.com
+    contact_source_url: https://iabtechlab.com/about-the-iab-tech-lab/
+    contact_supporting_excerpt: The official page asks prospective members and international organizations to contact this membership inbox.
+    contact_timezone: America/New_York
+    outreach_basis: us_b2b_opt_out
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: DICOM Standards Committee
+    canonical_domain: dicomstandard.org
+    organization_type: standards_organization
+    prospect_category: integration_partner
+    target_domain: Medical imaging context integration
+    region: US
+    country: US
+    summary: The standards committee maintains DICOM medical-imaging information and workflow specifications.
+    source_url: https://www.dicomstandard.org/current
+    source_type: official_standard_page
+    supporting_excerpt: The official site publishes the current DICOM standard and supporting materials.
+    retrieved_at: "2026-08-08T00:00:00+00:00"
+    contact_role: DICOM Secretariat technical collaboration inquiry
+    contact_channel_type: email
+    contact_channel_value: dicom@dicomstandard.org
+    contact_source_url: https://www.dicomstandard.org/contact
+    contact_supporting_excerpt: The official contact page publishes this address for the DICOM Secretariat and General Secretary.
+    contact_timezone: America/New_York
+    outreach_basis: us_b2b_opt_out
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: Open Information Security Foundation
+    canonical_domain: oisf.net
+    organization_type: open_source_foundation
+    prospect_category: research_partner
+    target_domain: Cybersecurity triage
+    region: US
+    country: US
+    summary: The foundation supports Suricata open-source network threat-detection technology and its consortium.
+    source_url: https://oisf.net/suricata/
+    source_type: official_project_page
+    supporting_excerpt: The official site describes Suricata as open-source network threat detection technology.
+    retrieved_at: "2026-08-08T00:00:00+00:00"
+    contact_role: Consortium and collaboration inquiry
+    contact_channel_type: email
+    contact_channel_value: info@oisf.net
+    contact_source_url: https://oisf.net/contact/
+    contact_supporting_excerpt: The official contact page invites consortium and open-source security inquiries at this general inbox.
+    contact_timezone: America/Indiana/Indianapolis
+    outreach_basis: us_b2b_opt_out
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: Cloud Native Computing Foundation
+    canonical_domain: cncf.io
+    organization_type: open_source_foundation
+    prospect_category: community_partner
+    target_domain: AIOps and observability
+    region: US
+    country: US
+    summary: CNCF hosts OpenTelemetry and related cloud-native observability ecosystems.
+    source_url: https://www.cncf.io/projects/opentelemetry/
+    source_type: official_project_page
+    supporting_excerpt: The official project page identifies OpenTelemetry as a CNCF project for observability telemetry.
+    retrieved_at: "2026-08-08T00:00:00+00:00"
+    contact_role: General foundation collaboration inquiry
+    contact_channel_type: email
+    contact_channel_value: info@cncf.io
+    contact_source_url: https://www.cncf.io/about/contact/
+    contact_supporting_excerpt: The official contact page publishes this address for general CNCF inquiries.
+    contact_timezone: America/New_York
+    outreach_basis: us_b2b_opt_out
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: Open Robotics
+    canonical_domain: openrobotics.org
+    organization_type: open_source_company
+    prospect_category: integration_partner
+    target_domain: Mobile and industrial robotics
+    region: US
+    country: US
+    summary: Open Robotics develops and supports open-source robotics software, including ROS and Gazebo.
+    source_url: https://www.openrobotics.org/
+    source_type: official_website
+    supporting_excerpt: The official site describes open-source software and hardware platforms for robotics.
+    retrieved_at: "2026-08-08T00:00:00+00:00"
+    contact_role: General robotics collaboration inquiry
+    contact_channel_type: email
+    contact_channel_value: info@openrobotics.org
+    contact_source_url: https://www.openrobotics.org/contact
+    contact_supporting_excerpt: The official contact page publishes this general organizational address.
+    contact_timezone: America/Los_Angeles
+    outreach_basis: us_b2b_opt_out
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: Digital Catapult
+    canonical_domain: digicatapult.org.uk
+    organization_type: company
+    prospect_category: integration_partner
+    target_domain: Industrial digital twins
+    region: GB
+    country: GB
+    summary: A UK deep-tech innovation organization operating the UK Digital Twin Centre and industrial technology programs.
+    source_url: https://www.digicatapult.org.uk/about/contact/
+    source_type: official_website
+    supporting_excerpt: The official site describes the UK Digital Twin Centre, industrial supply-chain programs, testbeds, and proof-of-concept services.
+    retrieved_at: "2026-08-08T00:00:00+00:00"
+    contact_role: General deep-tech collaboration inquiry
+    contact_channel_type: email
+    contact_channel_value: info@digicatapult.org.uk
+    contact_source_url: https://www.digicatapult.org.uk/about/contact/
+    contact_supporting_excerpt: The official contact page publishes this general inquiry inbox for the corporate organization.
+    contact_timezone: Europe/London
+    outreach_basis: corporate_subscriber
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: Applied Brain Research
+    canonical_domain: appliedbrainresearch.com
+    organization_type: company
+    prospect_category: research_partner
+    target_domain: Nengo and computational-neuroscience interoperability
+    region: CA
+    country: CA
+    summary: A Canadian AI company associated with the Nengo neural-modeling ecosystem and current edge-AI products.
+    source_url: https://www.nengo.ai/people/
+    source_type: official_project_page
+    supporting_excerpt: The official Nengo site states that Nengo is an Applied Brain Research product and identifies its active development community.
+    retrieved_at: "2026-08-08T00:00:00+00:00"
+    contact_role: Nengo and edge-AI product inquiry
+    contact_channel_type: email
+    contact_channel_value: info@appliedbrainresearch.com
+    contact_source_url: https://www.appliedbrainresearch.com/contact
+    contact_supporting_excerpt: The official company contact page conspicuously publishes this address for sales and product conversations.
+    contact_timezone: America/Toronto
+    outreach_basis: conspicuous_publication
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: Japan Embedded Systems Technology Association
+    canonical_domain: jasa.or.jp
+    organization_type: industry_association
+    prospect_category: integration_partner
+    target_domain: Telecom and edge-network orchestration
+    region: JP
+    country: JP
+    summary: A Japanese industry association advancing embedded-systems technology, standardization, research, and international exchange.
+    source_url: https://www.jasa.or.jp/data/english/
+    source_type: official_website
+    supporting_excerpt: The official English page describes embedded-systems standardization, technical research, and international information exchange.
+    retrieved_at: "2026-08-08T00:00:00+00:00"
+    contact_role: Embedded-systems collaboration inquiry
+    contact_channel_type: email
+    contact_channel_value: jasainfo@jasa.or.jp
+    contact_source_url: https://www.jasa.or.jp/data/english/
+    contact_supporting_excerpt: The official association profile conspicuously publishes this headquarters business address.
+    contact_timezone: Asia/Tokyo
+    outreach_basis: public_business_address
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: Robotic Automation
+    canonical_domain: ragroup.com.au
+    organization_type: company
+    prospect_category: potential_customer
+    target_domain: Industrial automation
+    region: AU
+    country: AU
+    summary: An Australian industrial robotics and automation integrator serving manufacturing and logistics operations.
+    source_url: https://ragroup.com.au/contact-us/
+    source_type: official_website
+    supporting_excerpt: The official page describes an Australian automation provider with thousands of installed and supported solutions.
+    retrieved_at: "2026-08-08T00:00:00+00:00"
+    contact_role: Industrial automation enquiry
+    contact_channel_type: email
+    contact_channel_value: webenquiry@ragroup.com.au
+    contact_source_url: https://ragroup.com.au/contact-us/
+    contact_supporting_excerpt: The official contact page conspicuously publishes this address for general business enquiries.
+    contact_timezone: Australia/Sydney
+    outreach_basis: inferred_consent_publication
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: IT Ukraine Association
+    canonical_domain: itukraine.org.ua
+    organization_type: industry_association
+    prospect_category: community_partner
+    target_domain: Cybersecurity triage
+    region: UA
+    country: UA
+    summary: A Ukrainian national IT-industry association supporting business, international partnerships, and cybersecurity ecosystems.
+    source_url: https://itukraine.org.ua/en/about-us/
+    source_type: official_website
+    supporting_excerpt: The official page describes a national technology association working with international partners and participating in CyberHubs.
+    retrieved_at: "2026-08-08T00:00:00+00:00"
+    contact_role: Technology partnership inquiry
+    contact_channel_type: email
+    contact_channel_value: hello@itukraine.org.ua
+    contact_source_url: https://itukraine.org.ua/en/about-us/
+    contact_supporting_excerpt: The official association page publishes this general organizational inbox for contact.
+    contact_timezone: Europe/Kyiv
+    contact_locale: uk
+    outreach_basis: ukraine_opt_out
     recipient_entity_type: corporate
     public_address: true
     no_solicitation_notice: false

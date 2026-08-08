@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from datetime import UTC, datetime
+
 import pytest
 from sqlalchemy import select
 
@@ -84,9 +86,13 @@ def test_region_specific_permission_evidence_can_approve_live_outreach(
     runner, region, basis, entity_type, locale, expected_lawful_basis
 ) -> None:
     with runner.database.session() as session:
-        organization, contact, _asset = seed_compliance_ready(session)
+        organization, contact, asset = seed_compliance_ready(session)
         organization.region = region
         contact.locale = locale
+        if region == "UA":
+            asset.content += (
+                '\nЯкщо це неактуально, дайте відповідь "unsubscribe" або "відписатися".'
+            )
         session.add(
             OutreachPermissionEvidence(
                 contact_id=contact.id,
@@ -134,6 +140,31 @@ def test_duplicate_initial_send_is_prevented(runner) -> None:
         assert len(runner.outreach.send(session)) == 0
         assert len(runner.providers.gmail.sent) == 1
         assert len(list(session.scalars(select(EmailMessage)))) == 1
+
+
+def test_new_contact_limit_is_cumulative_across_cycles(runner) -> None:
+    with runner.database.session() as session:
+        seed_compliance_ready(session)
+        runner.compliance.review(session)
+        [queued] = runner.outreach.prepare(session)
+        for index in range(runner.config.campaign.limits.max_new_contacts_per_day):
+            session.add(
+                EmailMessage(
+                    thread_id=queued.thread_id,
+                    direction="OUTBOUND",
+                    sequence_number=0,
+                    subject=f"Earlier initial {index}",
+                    body_text="Earlier initial",
+                    body_html="Earlier initial",
+                    status="MOCK_SENT",
+                    sent_at=datetime.now(UTC),
+                    idempotency_key=f"earlier-initial-{index}",
+                )
+            )
+        session.flush()
+
+        assert runner.outreach.send(session) == []
+        assert queued.status == "QUEUED"
 
 
 def test_unsent_queued_message_refreshes_when_approved_asset_changes(runner) -> None:

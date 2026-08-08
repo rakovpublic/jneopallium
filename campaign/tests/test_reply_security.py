@@ -22,6 +22,7 @@ from tests.helpers import seed_campaign, seed_compliance_ready
     ("body", "label"),
     [
         ("Please unsubscribe", "UNSUBSCRIBE"),
+        ("Будь ласка, відписатися від подальших листів", "UNSUBSCRIBE"),
         ("This is spam and I will report it", "HOSTILE_OR_SPAM_COMPLAINT"),
         ("550 5.1.1 mailbox unavailable", "BOUNCE"),
         ("Automatic reply: out of office", "OUT_OF_OFFICE"),

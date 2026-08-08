@@ -103,6 +103,11 @@ class AssetGenerationService:
                     demo=plan.demo if plan else None,
                     repository_url=self.repository_url,
                 )
+                if contact.locale == "uk":
+                    intro = intro.replace(
+                        'If this is not relevant, reply "unsubscribe" and this organization and address will be suppressed immediately.',
+                        'Якщо це неактуально, дайте відповідь "unsubscribe" або "відписатися" — ми негайно припинимо звернення до цієї адреси й організації.',
+                    )
                 generated.extend(
                     self._store_formats(
                         session,

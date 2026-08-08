@@ -62,6 +62,11 @@ def test_verified_file_provider_preserves_evidence_timestamp(runner) -> None:
     assert facts[0].retrieved_at.tzinfo == UTC
     assert facts[0].contact_channel_value == "info@cesmii.org"
 
+    expanded = provider.discover([], limit=50)
+    ukraine = next(item for item in expanded if item.canonical_domain == "itukraine.org.ua")
+    assert ukraine.retrieved_at.date().isoformat() == "2026-08-08"
+    assert ukraine.contact_locale == "uk"
+
 
 def test_calendar_event_requires_agreed_option(runner) -> None:
     assert isinstance(runner.providers.calendar, MockCalendarProvider)

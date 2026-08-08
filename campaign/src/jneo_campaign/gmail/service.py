@@ -151,7 +151,23 @@ class GmailOutreachService:
             )
             or 0
         )
-        capacity = max(0, self.policy.limits.max_outbound_per_day - sent_today)
+        new_contacts_today = (
+            session.scalar(
+                select(func.count(EmailMessage.id)).where(
+                    EmailMessage.direction == "OUTBOUND",
+                    EmailMessage.sequence_number == 0,
+                    EmailMessage.sent_at >= start,
+                    EmailMessage.status.in_(["SENT", "MOCK_SENT", "DELIVERED"]),
+                )
+            )
+            or 0
+        )
+        capacity = min(
+            max(0, self.policy.limits.max_outbound_per_day - sent_today),
+            max(0, self.policy.limits.max_new_contacts_per_day - new_contacts_today),
+        )
+        if capacity == 0:
+            return []
         now = datetime.now(UTC)
         queue = list(
             session.scalars(
@@ -163,11 +179,12 @@ class GmailOutreachService:
                     or_(EmailMessage.scheduled_for.is_(None), EmailMessage.scheduled_for <= now),
                 )
                 .order_by(EmailMessage.scheduled_for, EmailMessage.id)
-                .limit(min(capacity, self.policy.limits.max_new_contacts_per_day))
             )
         )
         sent: list[EmailMessage] = []
         for message in queue:
+            if len(sent) >= capacity:
+                break
             thread = session.get(EmailThread, message.thread_id)
             if thread is None or thread.sequence_paused:
                 continue

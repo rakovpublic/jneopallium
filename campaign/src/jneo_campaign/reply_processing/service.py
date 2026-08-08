@@ -224,7 +224,10 @@ def classify_reply(message: ProviderMessage) -> Classification:
             "Prompt-injection-like instructions were quarantined as untrusted email content",
             escalation=True,
         )
-    if re.search(r"\b(unsubscribe|remove me|opt[ -]?out|do not contact)\b", text):
+    if re.search(
+        r"\b(unsubscribe|remove me|opt[ -]?out|do not contact)\b|відписат(?:ися|ись)|не пишіть",
+        text,
+    ):
         return Classification("UNSUBSCRIBE", 0.99, "Explicit opt-out phrase matched")
     if re.search(r"\b(spam|report(ed)? you|complaint)\b", text) and "not spam" not in text:
         return Classification(

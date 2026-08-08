@@ -71,12 +71,15 @@ class ProspectDiscoveryService:
                         channel_value=fact.contact_channel_value,
                         professional=True,
                         timezone=fact.contact_timezone,
+                        locale=fact.contact_locale,
                     )
                     session.add(contact)
                     session.flush()
                     created_contacts += 1
                 elif fact.contact_timezone:
                     contact.timezone = fact.contact_timezone
+                if fact.contact_locale:
+                    contact.locale = fact.contact_locale
                 self._contact_source(session, contact.id, fact)
                 self._permission_evidence(session, contact.id, fact)
         return {

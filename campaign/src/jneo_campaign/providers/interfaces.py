@@ -25,6 +25,7 @@ class SearchFact:
     contact_source_url: str | None = None
     contact_supporting_excerpt: str | None = None
     contact_timezone: str | None = None
+    contact_locale: str | None = None
     outreach_basis: str | None = None
     recipient_entity_type: str = "unknown"
     public_address: bool = False

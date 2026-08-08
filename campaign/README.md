@@ -9,7 +9,9 @@ run inside the Jneopallium neuron-network runtime.
 deterministic templates, mock Gmail, mock Calendar, simulated replies, and a local SQLite database.
 External Gmail or Calendar writes require both `CAMPAIGN_MODE=LIVE` and
 `CAMPAIGN_LIVE_SEND=true`, valid OAuth credentials, complete sender identity, a supported legal
-ruleset, fresh public contact evidence, and a verified recipient timezone.
+ruleset, fresh public contact evidence, and a verified recipient timezone. The optional
+`config/live-full-scale.yml` profile activates all 60 researched domains and every implemented
+regional ruleset while retaining the safe 10-new-contact/20-total-message daily ceilings.
 
 ## Quick start
 
@@ -87,6 +89,11 @@ jneo-campaign dashboard
 The complete acceptance path is `jneo-campaign run --once`. The continuous command schedules the
 same repeat-safe stages and persists each job run and failure. A failed stage is retried with
 exponential backoff and recorded without terminating later independent stages.
+
+For a durable Windows production cycle, schedule `campaign/scripts/run-scheduled-cycle.ps1` once
+per hour with Task Scheduler. The wrapper uses the campaign virtual environment, prevents reliance
+on the caller's Python installation, and appends operational output to
+`campaign/runtime/campaign.scheduler.log`.
 
 ## Configuration
 

@@ -22,7 +22,7 @@ class FixtureSearchProvider:
     def discover(self, domains: list[str], limit: int) -> list[SearchFact]:
         with self.fixture_path.open("r", encoding="utf-8") as stream:
             data = yaml.safe_load(stream) or {}
-        retrieved_at = _parse_retrieved_at(data.get("retrieved_at"))
+        default_retrieved_at = data.get("retrieved_at")
         allowed = {item.lower() for item in domains}
         facts: list[SearchFact] = []
         for item in data.get("organizations", []):
@@ -35,7 +35,9 @@ class FixtureSearchProvider:
             contact_excerpt = sanitize_external_content(item.get("contact_supporting_excerpt", ""))
             if excerpt.prompt_injection_suspected or contact_excerpt.prompt_injection_suspected:
                 continue
-            facts.append(SearchFact(**item, retrieved_at=retrieved_at))
+            row = dict(item)
+            retrieved_at = _parse_retrieved_at(row.pop("retrieved_at", default_retrieved_at))
+            facts.append(SearchFact(**row, retrieved_at=retrieved_at))
             if len(facts) >= limit:
                 break
         return facts

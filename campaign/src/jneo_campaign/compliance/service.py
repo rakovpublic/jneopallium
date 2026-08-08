@@ -156,6 +156,13 @@ class ComplianceService:
         for required in ("unsubscribe", "jneopallium", "because"):
             if required not in lowered:
                 blocking.append(f"Required outreach element is missing: {required}")
+        if (
+            self.settings.live_writes_enabled
+            and organization.region == "UA"
+            and contact.locale == "uk"
+            and "відписатися" not in lowered
+        ):
+            manual.append("UA outreach requires a Ukrainian-language opt-out instruction")
         freshest = max((source.retrieved_at for source in sources + contact_sources), default=None)
         if freshest and freshest.tzinfo is None:
             freshest = freshest.replace(tzinfo=UTC)

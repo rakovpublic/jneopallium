@@ -183,7 +183,7 @@ def demos_match() -> None:
 def outreach_prepare() -> None:
     runner = _orchestrator()
     with runner.database.session() as session:
-        runner.assets.generate(session, limit=5)
+        runner.assets.generate(session, limit=runner.config.campaign.asset_generation_batch_size)
         runner.compliance.review(session)
         _print({"prepared": len(runner.outreach.prepare(session))})
 

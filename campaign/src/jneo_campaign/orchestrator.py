@@ -113,7 +113,13 @@ class CampaignOrchestrator:
             ("demo_matching", lambda session: {"plans": len(self.demos.match(session))}),
             (
                 "asset_generation",
-                lambda session: {"assets": len(self.assets.generate(session, limit=5))},
+                lambda session: {
+                    "assets": len(
+                        self.assets.generate(
+                            session, limit=self.config.campaign.asset_generation_batch_size
+                        )
+                    )
+                },
             ),
             ("compliance", self._compliance),
             ("outreach_prepare", lambda session: {"prepared": len(self.outreach.prepare(session))}),
@@ -246,7 +252,11 @@ class CampaignOrchestrator:
         }
 
     def _prospect_discovery(self, session: Session) -> dict[str, int]:
-        return self.discovery.discover(session, self.config.campaign.active_domains, limit=50)
+        return self.discovery.discover(
+            session,
+            self.config.campaign.active_domains,
+            limit=self.config.campaign.prospect_discovery_limit,
+        )
 
     def _compliance(self, session: Session) -> dict[str, Any]:
         decisions = self.compliance.review(session)
