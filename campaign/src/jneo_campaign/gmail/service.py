@@ -227,9 +227,7 @@ class GmailOutreachService:
                     reply_to=self.settings.campaign_reply_to or "dry-run@example.invalid",
                     idempotency_key=message.idempotency_key,
                     thread_id=thread.provider_thread_id,
-                    headers={
-                        "List-Unsubscribe": f"<mailto:{self.settings.campaign_reply_to or 'dry-run@example.invalid'}?subject=unsubscribe>"
-                    },
+                    headers={},
                 ),
                 [
                     "JNEOPALLIUM_CAMPAIGN",

@@ -38,6 +38,9 @@ def test_complete_dry_run_acceptance_scenario(runner) -> None:
     assert metrics["meeting_rate"] > 0
     assert metrics["provider_failures"] == 0
     assert all(
+        "List-Unsubscribe" not in message.headers for message in runner.providers.gmail.sent
+    )
+    assert all(
         {"prospects", "sent", "replied", "positive_replies", "positive_conversion_rate"}
         <= set(bucket)
         for bucket in metrics["conversion_by_domain"].values()
