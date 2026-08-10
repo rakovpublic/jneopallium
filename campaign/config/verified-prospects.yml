@@ -300,3 +300,371 @@ organizations:
     public_address: true
     no_solicitation_notice: false
     relevant_to_role: true
+  - organization_name: MassRobotics
+    canonical_domain: massrobotics.org
+    organization_type: accelerator
+    prospect_category: integration_partner
+    target_domain: Mobile and industrial robotics
+    region: US
+    country: US
+    summary: A Boston robotics innovation hub connecting startups, industry partners, researchers, and workforce programs.
+    source_url: https://www.massrobotics.org/join-massrobotics/
+    source_type: official_website
+    supporting_excerpt: The official page invites robotics startups, sponsors, and STEM partners to participate in the MassRobotics ecosystem.
+    retrieved_at: "2026-08-10T18:45:00+00:00"
+    contact_role: Robotics ecosystem collaboration inquiry
+    contact_channel_type: email
+    contact_channel_value: info@massrobotics.org
+    contact_source_url: https://www.massrobotics.org/join-massrobotics/
+    contact_supporting_excerpt: The official join page publishes this general organizational inbox beneath its collaboration options.
+    contact_timezone: America/New_York
+    outreach_basis: us_b2b_opt_out
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: OpenADR Alliance
+    canonical_domain: openadr.org
+    organization_type: standards_organization
+    prospect_category: technology_partner
+    target_domain: Smart-grid supervision and energy systems
+    region: US
+    country: US
+    summary: An industry alliance advancing interoperable demand-response and distributed-energy-resource communications.
+    source_url: https://www.openadr.org/about-us
+    source_type: official_website
+    supporting_excerpt: The official page describes collaboration, education, testing, and certification around OpenADR smart-grid standards.
+    retrieved_at: "2026-08-10T18:45:00+00:00"
+    contact_role: OpenADR implementation collaboration inquiry
+    contact_channel_type: email
+    contact_channel_value: info@openadr.org
+    contact_source_url: https://www.openadr.org/get-implementation-help
+    contact_supporting_excerpt: The official implementation-support page publishes this address for OpenADR implementation questions and feedback.
+    contact_timezone: America/Los_Angeles
+    outreach_basis: us_b2b_opt_out
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: Health Level Seven International
+    canonical_domain: hl7.org
+    organization_type: standards_organization
+    prospect_category: integration_partner
+    target_domain: Medical workflow supervision
+    region: US
+    country: US
+    summary: A standards organization developing interoperability specifications for electronic health information exchange.
+    source_url: https://www.hl7.org/
+    source_type: official_website
+    supporting_excerpt: The official site publishes HL7 interoperability standards and implementation resources for health-information systems.
+    retrieved_at: "2026-08-10T18:45:00+00:00"
+    contact_role: Health-interoperability collaboration inquiry
+    contact_channel_type: email
+    contact_channel_value: hq@hl7.org
+    contact_source_url: https://fhir.hl7.org/fhir/location-example-hl7hq.json.html
+    contact_supporting_excerpt: The official FHIR publication identifies this address as the email for HL7 headquarters.
+    contact_timezone: America/Detroit
+    outreach_basis: us_b2b_opt_out
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: Anti-Phishing Working Group
+    canonical_domain: apwg.org
+    organization_type: industry_association
+    prospect_category: research_partner
+    target_domain: Cybersecurity triage
+    region: US
+    country: US
+    summary: A global coalition supporting cybercrime data exchange, research, and public-awareness programs.
+    source_url: https://apwg.org/ecx
+    source_type: official_website
+    supporting_excerpt: The official eCrime Exchange page describes a REST-enabled repository for curated cybercrime event data and research collaboration.
+    retrieved_at: "2026-08-10T18:45:00+00:00"
+    contact_role: Cybercrime research and data-integration inquiry
+    contact_channel_type: email
+    contact_channel_value: membership@apwg.org
+    contact_source_url: https://education.apwg.org/membership/
+    contact_supporting_excerpt: The official membership page publishes this address for qualifying organizations and membership questions.
+    contact_timezone: America/New_York
+    outreach_basis: us_b2b_opt_out
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: 1EdTech Consortium
+    canonical_domain: 1edtech.org
+    organization_type: standards_organization
+    prospect_category: integration_partner
+    target_domain: Educational platform integration
+    region: US
+    country: US
+    summary: An education-technology consortium developing interoperability, credential, assessment, and learner-data standards.
+    source_url: https://www.1edtech.org/standards/case
+    source_type: official_website
+    supporting_excerpt: The official page publishes education interoperability specifications and implementation resources for suppliers and institutions.
+    retrieved_at: "2026-08-10T18:45:00+00:00"
+    contact_role: Education interoperability inquiry
+    contact_channel_type: email
+    contact_channel_value: support@1edtech.org
+    contact_source_url: https://www.1edtech.org/form/contact-us
+    contact_supporting_excerpt: The official contact page explicitly publishes this address for direct consortium inquiries and support routing.
+    contact_timezone: America/New_York
+    outreach_basis: us_b2b_opt_out
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: Open Source Security Foundation
+    canonical_domain: openssf.org
+    organization_type: open_source_foundation
+    prospect_category: research_partner
+    target_domain: Adaptive cyber defence
+    region: US
+    country: US
+    summary: An open-source foundation coordinating technical initiatives and best practices for securing the software ecosystem.
+    source_url: https://openssf.org/about/
+    source_type: official_website
+    supporting_excerpt: The official page describes cross-industry collaboration, best practices, and technical initiatives for sustainable open-source security.
+    retrieved_at: "2026-08-10T18:45:00+00:00"
+    contact_role: Open-source security collaboration inquiry
+    contact_channel_type: email
+    contact_channel_value: support@openssf.org
+    contact_source_url: https://openssf.org/about/contact/
+    contact_supporting_excerpt: The official contact page publishes this address for general OpenSSF questions.
+    contact_timezone: America/New_York
+    outreach_basis: us_b2b_opt_out
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: Linux Foundation
+    canonical_domain: linuxfoundation.org
+    organization_type: open_source_foundation
+    prospect_category: community_partner
+    target_domain: Multi-agent enterprise workflows
+    region: US
+    country: US
+    summary: A nonprofit foundation hosting collaborative open-source software, hardware, standards, and data ecosystems.
+    source_url: https://www.linuxfoundation.org/about
+    source_type: official_website
+    supporting_excerpt: The official organization describes a neutral home for large-scale technical collaboration and sustainable open-source ecosystems.
+    retrieved_at: "2026-08-10T18:45:00+00:00"
+    contact_role: Open-source ecosystem collaboration inquiry
+    contact_channel_type: email
+    contact_channel_value: info@linuxfoundation.org
+    contact_source_url: https://www.linuxfoundation.org/hubfs/Publications/2025%20Linux%20Foundation%20Annual%20Report_121825a_lr.pdf
+    contact_supporting_excerpt: The official annual report publishes this general organizational address and invites technology collaboration inquiries.
+    contact_timezone: America/New_York
+    outreach_basis: us_b2b_opt_out
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: Association for Uncrewed Vehicle Systems International
+    canonical_domain: auvsi.org
+    organization_type: industry_association
+    prospect_category: community_partner
+    target_domain: UAV autonomy
+    region: US
+    country: US
+    summary: An industry association for autonomous and uncrewed air, ground, and maritime systems, robotics, and related research.
+    source_url: https://www.auvsi.org/about/
+    source_type: official_website
+    supporting_excerpt: The official page describes a community advancing autonomous and robotic systems through industry, research, policy, and education.
+    retrieved_at: "2026-08-10T18:45:00+00:00"
+    contact_role: Autonomy and robotics collaboration inquiry
+    contact_channel_type: email
+    contact_channel_value: info@auvsi.org
+    contact_source_url: https://www.auvsi.org/about-auvsi/contact-us/
+    contact_supporting_excerpt: The official contact page publishes this address for general organizational inquiries.
+    contact_timezone: America/New_York
+    outreach_basis: us_b2b_opt_out
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: Dronecode Foundation
+    canonical_domain: dronecode.org
+    organization_type: open_source_foundation
+    prospect_category: technology_partner
+    target_domain: Multi-UAV and swarm coordination
+    region: US
+    country: US
+    summary: An open-source foundation coordinating interoperable drone autopilot, ground-control, and developer-tool projects.
+    source_url: https://dronecode.org/
+    source_type: official_website
+    supporting_excerpt: The official site presents a vendor-neutral open-source ecosystem for drone platform development and collaboration.
+    retrieved_at: "2026-08-10T18:45:00+00:00"
+    contact_role: Open-source drone collaboration inquiry
+    contact_channel_type: email
+    contact_channel_value: info@dronecode.org
+    contact_source_url: https://dronecode.org/dronecode-2026-membership-renewals-and-board-elections/
+    contact_supporting_excerpt: The official foundation article publishes this address for membership, governance, and participation questions.
+    contact_timezone: America/Los_Angeles
+    outreach_basis: us_b2b_opt_out
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: Space Information Sharing and Analysis Center
+    canonical_domain: spaceisac.org
+    organization_type: industry_association
+    prospect_category: research_partner
+    target_domain: Aerospace and space-system simulation
+    region: US
+    country: US
+    summary: A nonprofit information-sharing community focused on cyber resilience and threat intelligence for space systems.
+    source_url: https://spaceisac.org/
+    source_type: official_website
+    supporting_excerpt: The official organization describes collaboration, actionable threat intelligence, and vulnerability disclosure for the global space community.
+    retrieved_at: "2026-08-10T18:45:00+00:00"
+    contact_role: Space-system security research inquiry
+    contact_channel_type: email
+    contact_channel_value: info@spaceisac.org
+    contact_source_url: https://spaceisac.org/wp-content/uploads/2025/10/03-03-2026_Membership-Brochure.pdf
+    contact_supporting_excerpt: The official current membership brochure publishes this general organizational inbox for the Colorado headquarters.
+    contact_timezone: America/Denver
+    outreach_basis: us_b2b_opt_out
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: Open Compute Project Foundation
+    canonical_domain: opencompute.org
+    organization_type: open_source_foundation
+    prospect_category: technology_partner
+    target_domain: Semiconductor and electronics manufacturing
+    region: US
+    country: US
+    summary: An open-source hardware foundation coordinating data-center, silicon, networking, and infrastructure designs.
+    source_url: https://www.opencompute.org/
+    source_type: official_website
+    supporting_excerpt: The official site presents open hardware projects and industry collaboration across computing infrastructure and silicon ecosystems.
+    retrieved_at: "2026-08-10T18:45:00+00:00"
+    contact_role: Open hardware and infrastructure collaboration inquiry
+    contact_channel_type: email
+    contact_channel_value: membership@opencompute.org
+    contact_source_url: https://www.opencompute.org/contact
+    contact_supporting_excerpt: The official contact page publishes this address for organizational membership and ecosystem questions.
+    contact_timezone: America/Chicago
+    outreach_basis: us_b2b_opt_out
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: Wi-SUN Alliance
+    canonical_domain: wi-sun.org
+    organization_type: standards_organization
+    prospect_category: integration_partner
+    target_domain: Environmental monitoring
+    region: US
+    country: US
+    summary: An industry alliance promoting interoperable wireless networks for smart utilities, cities, and Internet-of-Things deployments.
+    source_url: https://wi-sun.org/faqs/
+    source_type: official_website
+    supporting_excerpt: The official FAQ describes interoperable wireless networks for utility metering, outage response, leak detection, and environmental sensing.
+    retrieved_at: "2026-08-10T18:45:00+00:00"
+    contact_role: Smart-utility and IoT interoperability inquiry
+    contact_channel_type: email
+    contact_channel_value: MemSvcs@ws.wi-sun.org
+    contact_source_url: https://wi-sun.org/contact/
+    contact_supporting_excerpt: The official contact page publishes this member-services address for technology and membership questions at the US office.
+    contact_timezone: America/Los_Angeles
+    outreach_basis: us_b2b_opt_out
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: ASHRAE
+    canonical_domain: ashrae.org
+    organization_type: standards_organization
+    prospect_category: research_partner
+    target_domain: Building automation and smart infrastructure
+    region: US
+    country: US
+    summary: A technical society developing standards, research, and education for building systems, energy performance, and indoor environments.
+    source_url: https://www.ashrae.org/about
+    source_type: official_website
+    supporting_excerpt: The official organization describes global technical work supporting sustainable heating, cooling, refrigeration, and building performance.
+    retrieved_at: "2026-08-10T18:45:00+00:00"
+    contact_role: Building-systems research collaboration inquiry
+    contact_channel_type: email
+    contact_channel_value: ashrae@ashrae.org
+    contact_source_url: https://www.ashrae.org/about/contact-us
+    contact_supporting_excerpt: The official contact page publishes this address for general questions and comments about ASHRAE activities.
+    contact_timezone: America/New_York
+    outreach_basis: us_b2b_opt_out
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: Object Management Group
+    canonical_domain: omg.org
+    organization_type: standards_organization
+    prospect_category: integration_partner
+    target_domain: Multi-agent enterprise workflows
+    region: US
+    country: US
+    summary: A technology standards consortium developing enterprise integration and modeling specifications across industries.
+    source_url: https://www.omg.org/
+    source_type: official_website
+    supporting_excerpt: The official organization describes open standards communities for enterprise interoperability, modeling, middleware, and digital twins.
+    retrieved_at: "2026-08-10T18:45:00+00:00"
+    contact_role: Enterprise interoperability inquiry
+    contact_channel_type: email
+    contact_channel_value: info@omg.org
+    contact_source_url: https://www.omg.org/memberservices/OMG-brochure.pdf
+    contact_supporting_excerpt: The official current organization brochure publishes this general contact address for the standards communities.
+    contact_timezone: America/New_York
+    outreach_basis: us_b2b_opt_out
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: Control System Integrators Association
+    canonical_domain: controlsys.org
+    organization_type: industry_association
+    prospect_category: integration_partner
+    target_domain: Process supervision and safety gating
+    region: US
+    country: US
+    summary: A professional association for control-system integrators working across industrial automation markets.
+    source_url: https://controlsys.org/contact/
+    source_type: official_website
+    supporting_excerpt: The official contact page describes membership, certification, and an industrial-automation exchange for control-system integrators.
+    retrieved_at: "2026-08-10T18:45:00+00:00"
+    contact_role: Industrial integration collaboration inquiry
+    contact_channel_type: email
+    contact_channel_value: info@controlsys.org
+    contact_source_url: https://controlsys.org/contact/
+    contact_supporting_excerpt: The official headquarters contact page publishes this general organizational inbox.
+    contact_timezone: America/Chicago
+    outreach_basis: us_b2b_opt_out
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: National Electrical Manufacturers Association
+    canonical_domain: nema.org
+    organization_type: standards_organization
+    prospect_category: integration_partner
+    target_domain: Smart-grid supervision and energy systems
+    region: US
+    country: US
+    summary: An electroindustry association active in standards, grid modernization, digitalization, Internet of Things, and medical imaging.
+    source_url: https://www.nema.org/analytics
+    source_type: official_website
+    supporting_excerpt: The official page identifies grid modernization, digitalization, Internet of Things, and medical imaging among current strategic initiatives.
+    retrieved_at: "2026-08-10T18:45:00+00:00"
+    contact_role: Grid and industrial standards collaboration inquiry
+    contact_channel_type: email
+    contact_channel_value: communications@nema.org
+    contact_source_url: https://www.nema.org/about/contact
+    contact_supporting_excerpt: The official contact page publishes this general organizational communications address.
+    contact_timezone: America/New_York
+    outreach_basis: us_b2b_opt_out
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true

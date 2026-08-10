@@ -92,8 +92,10 @@ exponential backoff and recorded without terminating later independent stages.
 
 For a durable Windows production cycle, schedule `campaign/scripts/run-scheduled-cycle.ps1` once
 per hour with Task Scheduler. The wrapper uses the campaign virtual environment, prevents reliance
-on the caller's Python installation, and appends operational output to
-`campaign/runtime/campaign.scheduler.log`.
+on the caller's Python installation, applies a 20-minute child-process watchdog, and appends
+operational output to `campaign/runtime/campaign.scheduler.log`. Its latest heartbeat and terminal
+state are written atomically to `campaign/runtime/campaign.scheduler.status.json`; a failed or timed
+out child returns a nonzero task result instead of leaving a silent incomplete cycle.
 
 ## Configuration
 
