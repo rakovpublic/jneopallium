@@ -9,6 +9,7 @@ from jneo_campaign.compliance.service import ComplianceService
 from jneo_campaign.config import Settings
 from jneo_campaign.providers.mock import MockGmailProvider
 from jneo_campaign.storage.models import (
+    Campaign,
     EmailMessage,
     OutreachPermissionEvidence,
     SuppressionEntry,
@@ -183,6 +184,30 @@ def test_unsent_queued_message_refreshes_when_approved_asset_changes(runner) -> 
         assert message.subject == "Updated bounded technical evaluation"
         assert message.provider_message_id is None
         assert message.sent_at is None
+
+
+def test_paused_campaign_can_refresh_existing_draft_without_sending(runner) -> None:
+    assert isinstance(runner.providers.gmail, MockGmailProvider)
+    with runner.database.session() as session:
+        _organization, _contact, asset = seed_compliance_ready(session)
+        runner.compliance.review(session)
+        [message] = runner.outreach.prepare(session)
+        campaign = session.scalar(select(Campaign))
+        assert campaign is not None
+        campaign.paused = True
+        asset.content = asset.content.replace(
+            "Subject: Example Engineering: bounded technical evaluation",
+            "Subject: Revised human review copy",
+        )
+
+        assert runner.outreach.prepare(session) == []
+        refreshed = runner.outreach.refresh_queued(session)
+
+        assert refreshed == [message]
+        assert message.subject == "Revised human review copy"
+        assert message.status == "QUEUED"
+        assert message.provider_message_id is None
+        assert runner.providers.gmail.sent == []
 
 
 def test_queued_message_is_not_reported_as_sent(runner) -> None:

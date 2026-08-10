@@ -195,6 +195,16 @@ def outreach_send() -> None:
         _print({"sent_or_simulated": len(runner.outreach.send(session))})
 
 
+@outreach_app.command("refresh-queued")
+def outreach_refresh_queued() -> None:
+    """Regenerate assets and refresh unsent drafts without sending or creating messages."""
+    runner = _orchestrator()
+    with runner.database.session() as session:
+        runner.assets.generate(session, limit=runner.config.campaign.asset_generation_batch_size)
+        runner.compliance.review(session)
+        _print({"refreshed": len(runner.outreach.refresh_queued(session)), "sent": 0})
+
+
 @inbox_app.command("sync")
 def inbox_sync() -> None:
     runner = _orchestrator()

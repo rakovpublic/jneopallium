@@ -52,6 +52,20 @@ class GmailOutreachService:
         campaign = self._campaign(session)
         if campaign.paused:
             return []
+        return self._prepare_messages(session, campaign, create_missing=True)
+
+    def refresh_queued(self, session: Session) -> list[EmailMessage]:
+        """Refresh existing unsent drafts without creating or sending messages.
+
+        This is intentionally allowed while a campaign is paused so operators can review revised
+        copy before resuming outbound activity.
+        """
+        campaign = self._campaign(session)
+        return self._prepare_messages(session, campaign, create_missing=False)
+
+    def _prepare_messages(
+        self, session: Session, campaign: Campaign, *, create_missing: bool
+    ) -> list[EmailMessage]:
         prepared: list[EmailMessage] = []
         approved = list(
             session.scalars(
@@ -77,6 +91,8 @@ class GmailOutreachService:
             )
             subject, body = self._split_subject(asset.content)
             if thread is None:
+                if not create_missing:
+                    continue
                 thread = EmailThread(
                     campaign_id=campaign.id,
                     organization_id=organization.id,
@@ -94,6 +110,8 @@ class GmailOutreachService:
             )
             finalized = self._finalize_body(body)
             if message is None:
+                if not create_missing:
+                    continue
                 message = EmailMessage(
                     thread_id=thread.id,
                     direction="OUTBOUND",

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import re
 from pathlib import Path
 from typing import Any
 
@@ -207,26 +208,32 @@ class AssetGenerationService:
         draft: dict[str, Any] = {
             "organization": organization.name,
             "persona": persona,
+            "subject_line": self._subject_line(organization.name, organization.target_domain),
             "specific_activity": organization.summary,
-            "activity_evidence": f"{source.supporting_excerpt} [source: {source.source_url}]",
-            "relevant_capability": offer.proposition,
-            "implemented_now": implemented,
-            "proposed_work": (
-                plan.plan["proposed_scenario"]
-                if plan
-                else "Design a synthetic, bounded evaluation."
+            "activity_evidence": self._relevance_clause(
+                source.supporting_excerpt, organization.summary
             ),
-            "next_step": "A 30-minute technical review to reject or refine one bounded synthetic evaluation.",
+            "relevant_capability": offer.proposition,
+            "implemented_now": self._implemented_claim(implemented),
+            "proposed_work": (
+                self._plain_scenario(plan.plan["proposed_scenario"])
+                if plan
+                else "design a small evaluation using synthetic data"
+            ),
+            "next_step": "Send a two-page test plan before requesting a meeting.",
             "poc_inputs": (plan.plan.get("synthetic_data_plan", "Synthetic events"),),
-            "poc_outputs": plan.plan.get("expected_outputs", ["evidence trail"]),
+            "poc_outputs": self._plain_outputs(
+                plan.plan.get("expected_outputs", ["evidence trail"])
+            ),
             "limitations": list(
                 dict.fromkeys(
                     offer.limitations + (plan.plan.get("safety_constraints", []) if plan else [])
                 )
             ),
+            "scope_boundary": self._scope_boundary(organization.target_domain),
             "call_to_action": (
-                "Would your team be open to a short technical fit review? "
-                "If another contact handles this kind of inquiry, I would appreciate a redirect."
+                "Would it be useful if I sent that plan first? If another team handles this work, "
+                "a redirect would be appreciated."
             ),
             "evidence_refs": refs,
         }
@@ -237,6 +244,113 @@ class AssetGenerationService:
                 "claims, customers, outcomes, certifications, or readiness assertions."
             ),
             evidence=[{"draft": draft}],
+        )
+
+    @staticmethod
+    def _subject_line(organization: str, domain: str) -> str:
+        value = domain.lower()
+        if "digital twin" in value:
+            topic = "FMI digital-twin test plan"
+        elif any(term in value for term in ("clinical", "medical", "health", "patient")):
+            topic = "Synthetic health-workflow test plan"
+        elif "cyber" in value or "security" in value:
+            topic = "Synthetic cyber-triage test plan"
+        elif "ad fraud" in value or "fraud" in value or re.search(r"\bbot\b", value):
+            topic = "Synthetic anomaly-detection test plan"
+        elif any(term in value for term in ("robot", "uav", "autonomy")):
+            topic = "Reproducible autonomy test plan"
+        elif any(term in value for term in ("industrial", "process supervision")):
+            topic = "Synthetic industrial-control test plan"
+        elif "education" in value or "tutoring" in value:
+            topic = "Adaptive-learning integration test plan"
+        else:
+            topic = f"Reproducible {domain.lower()} test plan"
+        candidate = f"{topic} for {organization}"
+        return candidate if len(candidate) <= 100 else topic
+
+    @staticmethod
+    def _relevance_clause(excerpt: str, summary: str) -> str:
+        value = re.sub(r"\s+", " ", excerpt).strip().rstrip(".")
+        match = re.match(
+            r"^The official .+? (describes|publishes|presents|identifies|states|invites) (.+)$",
+            value,
+            flags=re.IGNORECASE,
+        )
+        if match:
+            verb, detail = match.groups()
+            normalized_verbs = {
+                "describes": "describe",
+                "publishes": "publish",
+                "presents": "present",
+                "identifies": "identify",
+                "states": "state that",
+                "invites": "invite",
+            }
+            return f"your public materials {normalized_verbs[verb.lower()]} {detail}"
+
+        fallback = re.sub(r"\s+", " ", summary).strip().rstrip(".")
+        if fallback.lower().startswith(("a ", "an ", "the ")):
+            fallback = fallback[0].lower() + fallback[1:]
+            return f"your public materials describe {fallback}"
+        return f"your public materials explain that {fallback}"
+
+    @staticmethod
+    def _plain_scenario(scenario: str) -> str:
+        value = re.sub(r"\s+", " ", scenario).strip().rstrip(".")
+        value = re.sub(
+            r"^Replay a deterministic synthetic ",
+            "run a repeatable synthetic ",
+            value,
+            flags=re.IGNORECASE,
+        )
+        value = value.replace("digital twins scenario", "digital-twin scenario")
+        value = value.replace(
+            " and compare multi-timescale evidence handling with transparent baselines",
+            " and compare its decision trail with a simple rules-based baseline",
+        )
+        return value[0].lower() + value[1:] if value else "run a synthetic evaluation"
+
+    @staticmethod
+    def _plain_outputs(outputs: list[str]) -> list[str]:
+        replacements = {
+            "decision JSONL": "decision log",
+            "limitations report": "clear limitations",
+        }
+        return [replacements.get(item, item) for item in outputs]
+
+    @staticmethod
+    def _implemented_claim(claim: str) -> str:
+        match = re.fullmatch(
+            r"The repository contains an implementation of (.+); customer-specific validation is required\.",
+            claim,
+        )
+        if not match:
+            return claim
+        capability = match.group(1)
+        article = "an" if capability[0].upper() in set("AEFHILMNORSX") else "a"
+        return (
+            f"The repository includes {article} {capability}; adapting it to your environment "
+            "would require validation."
+        )
+
+    @staticmethod
+    def _scope_boundary(domain: str) -> str:
+        value = domain.lower()
+        if any(term in value for term in ("clinical", "medical", "health", "patient")):
+            return (
+                "The evaluation would use synthetic data, remain advisory, and would not diagnose, "
+                "prescribe, or claim clinical effectiveness."
+            )
+        if "cyber" in value or "security" in value or "fraud" in value:
+            return (
+                "The evaluation would use synthetic data and produce advisory evidence only; it "
+                "would not take automatic action or claim production performance."
+            )
+        if any(term in value for term in ("robot", "uav", "autonomy")):
+            return "The evaluation would remain simulation-only and would not control real equipment."
+        return (
+            "The evaluation would use deterministic synthetic data and would not be evidence of "
+            "production deployment."
         )
 
     def _store_formats(

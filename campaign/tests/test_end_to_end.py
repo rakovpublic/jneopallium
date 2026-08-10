@@ -2,7 +2,25 @@ from __future__ import annotations
 
 from sqlalchemy import select
 
+from jneo_campaign.asset_generation.service import AssetGenerationService
 from jneo_campaign.storage.models import EmailMessage
+
+
+def test_robotics_topic_is_not_misclassified_as_bot_detection() -> None:
+    subject = AssetGenerationService._subject_line(
+        "MassRobotics", "Mobile and industrial robotics"
+    )
+
+    assert subject == "Reproducible autonomy test plan for MassRobotics"
+
+
+def test_relevance_clause_uses_plural_verb_agreement() -> None:
+    clause = AssetGenerationService._relevance_clause(
+        "The official page describes testbeds and proof-of-concept services.",
+        "A technical organization.",
+    )
+
+    assert clause == "your public materials describe testbeds and proof-of-concept services"
 
 
 def test_complete_dry_run_acceptance_scenario(runner) -> None:
@@ -38,3 +56,17 @@ def test_complete_dry_run_acceptance_scenario(runner) -> None:
             "Repository: https://github.com/rakovpublic/jneopallium" in message.body_text
             for message in messages
         )
+        assert all("[source:" not in message.body_text.lower() for message in messages)
+        assert all("scope limits:" not in message.body_text.lower() for message in messages)
+        assert all("bounded technical evaluation" not in message.body_text.lower() for message in messages)
+        assert all("multi-timescale" not in message.body_text.lower() for message in messages)
+        assert all("decision jsonl" not in message.body_text.lower() for message in messages)
+        assert all(
+            "Would it be useful if I sent that plan first?" in message.body_text
+            for message in messages
+        )
+        assert all(
+            "Jneopallium is an open-source Java research framework" in message.body_text
+            for message in messages
+        )
+        assert all(len(message.body_text.split()) <= 200 for message in messages)

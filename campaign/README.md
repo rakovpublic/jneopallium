@@ -76,6 +76,7 @@ jneo-campaign prospects verify
 jneo-campaign offers generate
 jneo-campaign demos match
 jneo-campaign outreach prepare
+jneo-campaign outreach refresh-queued
 jneo-campaign outreach send
 jneo-campaign inbox sync
 jneo-campaign followups run
@@ -85,6 +86,9 @@ jneo-campaign run --once
 jneo-campaign run --continuous --interval-minutes 60
 jneo-campaign dashboard
 ```
+
+`outreach refresh-queued` is safe to run while a campaign is paused. It regenerates approved
+assets and updates only existing unsent queue entries; it cannot create or send messages.
 
 The complete acceptance path is `jneo-campaign run --once`. The continuous command schedules the
 same repeat-safe stages and persists each job run and failure. A failed stage is retried with

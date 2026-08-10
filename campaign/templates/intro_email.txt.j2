@@ -1,25 +1,23 @@
-Subject: Exploring a bounded Jneopallium evaluation with {{ proposition.organization }}
+Subject: {{ proposition.subject_line }}
 
-Hello,
+Hello {{ proposition.organization }} team,
 
-I am reaching out because your organization's public work appears relevant to a bounded technical evaluation. {{ proposition.activity_evidence }}
+I'm contacting you because {{ proposition.activity_evidence }}.
 
-{{ proposition.implemented_now }} For your team, I propose a bounded technical evaluation around this scenario:
+Jneopallium is an open-source Java research framework for event-driven cognitive and control experiments. {{ proposition.implemented_now }}
 
-{{ proposition.proposed_work }}
+A practical first step would be to {{ proposition.proposed_work }}. I can send a two-page plan covering the synthetic inputs, comparison baseline, and expected outputs: {{ proposition.poc_outputs[:3] | join(', ') }}.
 
-Evaluation method: {{ proposition.poc_inputs | join('; ') }}
-
-Expected outputs: {{ proposition.poc_outputs | join('; ') }}.
-
-The work would remain synthetic and advisory. Scope limits: {{ proposition.limitations[:3] | join('; ') }}.
+{{ proposition.scope_boundary }}
 
 {{ proposition.call_to_action }}
 
-If this is not relevant, reply "unsubscribe" and this organization and address will be suppressed immediately.
+Best regards,
 
 Jneopallium campaign team
 Open-source technical research project
 Sender identity and postal address must be configured before LIVE sending.
 
 Repository: {{ repository_url }}
+
+If you would prefer not to receive further messages, reply "unsubscribe" and we will not contact you again.
