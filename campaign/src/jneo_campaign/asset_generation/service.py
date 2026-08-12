@@ -52,6 +52,15 @@ SUPPORTING_ASSETS = [
     "architecture_diagram",
 ]
 
+ENGLISH_OPT_OUT = (
+    'If you would prefer not to receive further messages, reply "unsubscribe" and we will '
+    "not contact you again."
+)
+UKRAINIAN_OPT_OUT = (
+    'Якщо ви не бажаєте отримувати подальші повідомлення, дайте відповідь "unsubscribe" '
+    'або "відписатися", і ми більше не будемо з вами зв’язуватися.'
+)
+
 
 class AssetGenerationService:
     def __init__(
@@ -104,11 +113,7 @@ class AssetGenerationService:
                     demo=plan.demo if plan else None,
                     repository_url=self.repository_url,
                 )
-                if contact.locale == "uk":
-                    intro = intro.replace(
-                        'If this is not relevant, reply "unsubscribe" and this organization and address will be suppressed immediately.',
-                        'Якщо це неактуально, дайте відповідь "unsubscribe" або "відписатися" — ми негайно припинимо звернення до цієї адреси й організації.',
-                    )
+                intro = self._localize_opt_out(intro, contact.locale)
                 generated.extend(
                     self._store_formats(
                         session,
@@ -352,6 +357,12 @@ class AssetGenerationService:
             "The evaluation would use deterministic synthetic data and would not be evidence of "
             "production deployment."
         )
+
+    @staticmethod
+    def _localize_opt_out(intro: str, locale: str) -> str:
+        if locale == "uk":
+            return intro.replace(ENGLISH_OPT_OUT, UKRAINIAN_OPT_OUT)
+        return intro
 
     def _store_formats(
         self,

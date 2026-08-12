@@ -2,7 +2,11 @@ from __future__ import annotations
 
 from sqlalchemy import select
 
-from jneo_campaign.asset_generation.service import AssetGenerationService
+from jneo_campaign.asset_generation.service import (
+    ENGLISH_OPT_OUT,
+    UKRAINIAN_OPT_OUT,
+    AssetGenerationService,
+)
 from jneo_campaign.storage.models import EmailMessage
 
 
@@ -21,6 +25,13 @@ def test_relevance_clause_uses_plural_verb_agreement() -> None:
     )
 
     assert clause == "your public materials describe testbeds and proof-of-concept services"
+
+
+def test_ukrainian_opt_out_is_localized() -> None:
+    localized = AssetGenerationService._localize_opt_out(ENGLISH_OPT_OUT, "uk")
+
+    assert localized == UKRAINIAN_OPT_OUT
+    assert "відписатися" in localized
 
 
 def test_complete_dry_run_acceptance_scenario(runner) -> None:

@@ -668,3 +668,487 @@ organizations:
     public_address: true
     no_solicitation_notice: false
     relevant_to_role: true
+  - organization_name: Next Generation Manufacturing Canada
+    canonical_domain: ngen.ca
+    organization_type: industry_association
+    prospect_category: integration_partner
+    target_domain: Industrial automation
+    region: CA
+    country: CA
+    summary: A Canadian industry-led nonprofit that funds and connects advanced-manufacturing technology projects and collaborations.
+    source_url: https://www.ngen.ca/
+    source_type: official_website
+    supporting_excerpt: The official site describes NGen as Canada's advanced-manufacturing cluster, bringing manufacturing and technology organizations together for digital transformation.
+    retrieved_at: "2026-08-12T16:05:00+00:00"
+    contact_role: Advanced-manufacturing project collaboration inquiry
+    contact_channel_type: email
+    contact_channel_value: project@ngen.ca
+    contact_source_url: https://www.ngen.ca/collaboration-corner
+    contact_supporting_excerpt: The official collaboration page publishes this project-team inbox for organizations wishing to discuss project ideas.
+    contact_timezone: America/Toronto
+    outreach_basis: conspicuous_publication
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: Vector Institute
+    canonical_domain: vectorinstitute.ai
+    organization_type: research_laboratory
+    prospect_category: research_partner
+    target_domain: Autonomous AI safety
+    region: CA
+    country: CA
+    summary: A Canadian nonprofit AI institute connecting machine-learning research, responsible AI work, and industry adoption.
+    source_url: https://vectorinstitute.ai/about/
+    source_type: official_website
+    supporting_excerpt: The official page describes AI research, industry partnerships, engineering support, and work translating research into practical applications.
+    retrieved_at: "2026-08-12T16:05:00+00:00"
+    contact_role: AI research and industry collaboration inquiry
+    contact_channel_type: email
+    contact_channel_value: industry@vectorinstitute.ai
+    contact_source_url: https://vectorinstitute.ai/about/contact/
+    contact_supporting_excerpt: The official contact page conspicuously publishes this address for industry inquiries.
+    contact_timezone: America/Toronto
+    outreach_basis: conspicuous_publication
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: Scale AI Canada
+    canonical_domain: scaleai.ca
+    organization_type: industry_association
+    prospect_category: integration_partner
+    target_domain: Supply-chain anomaly detection
+    region: CA
+    country: CA
+    summary: Canada's AI innovation cluster funding industry-led artificial-intelligence projects for value chains and supply chains.
+    source_url: https://www.scaleai.ca/
+    source_type: official_website
+    supporting_excerpt: The official site describes funding for industry-led AI adoption and commercialization projects, including forecasting and logistics applications.
+    retrieved_at: "2026-08-12T16:05:00+00:00"
+    contact_role: Industry AI project collaboration inquiry
+    contact_channel_type: email
+    contact_channel_value: info@scaleai.ca
+    contact_source_url: https://www.scaleai.ca/about-us/contact-us/
+    contact_supporting_excerpt: The official contact page conspicuously publishes this address for general organizational enquiries.
+    contact_timezone: America/Toronto
+    outreach_basis: conspicuous_publication
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: Advanced Manufacturing Research Centre
+    canonical_domain: amrc.co.uk
+    organization_type: research_laboratory
+    prospect_category: research_partner
+    target_domain: Industrial digital twins
+    region: GB
+    country: GB
+    summary: A University of Sheffield research centre working with industry on automation, digital manufacturing, resilient supply chains, and collaborative projects.
+    source_url: https://www.amrc.co.uk/
+    source_type: official_website
+    supporting_excerpt: The official site presents industrial digitalisation, automation, digital manufacturing, supply-chain resilience, and collaborative research among its activities.
+    retrieved_at: "2026-08-12T16:05:00+00:00"
+    contact_role: Digital-manufacturing research collaboration inquiry
+    contact_channel_type: email
+    contact_channel_value: enquiries@amrc.co.uk
+    contact_source_url: https://www.amrc.co.uk/pages/finding-us
+    contact_supporting_excerpt: The official locations and contact page publishes this general organizational inbox.
+    contact_timezone: Europe/London
+    outreach_basis: corporate_subscriber
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: Manufacturing Technology Centre
+    canonical_domain: the-mtc.org
+    organization_type: research_laboratory
+    prospect_category: integration_partner
+    target_domain: Industrial automation
+    region: GB
+    country: GB
+    summary: A UK research and technology organization supporting manufacturing innovation, automation, robotics, AI, and proof-of-concept work.
+    source_url: https://www.the-mtc.org/about
+    source_type: official_website
+    supporting_excerpt: The official site describes manufacturing-innovation facilities and collaboration with industry and academia, including AI and automation capabilities.
+    retrieved_at: "2026-08-12T16:05:00+00:00"
+    contact_role: Manufacturing technology collaboration inquiry
+    contact_channel_type: email
+    contact_channel_value: enquiries@the-mtc.org
+    contact_source_url: https://www.the-mtc.org/about/locations-and-contact-us
+    contact_supporting_excerpt: The official contact page publishes this general corporate enquiries inbox.
+    contact_timezone: Europe/London
+    outreach_basis: corporate_subscriber
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: IoT Alliance Australia
+    canonical_domain: iot.org.au
+    organization_type: industry_association
+    prospect_category: integration_partner
+    target_domain: Telecom and edge-network orchestration
+    region: AU
+    country: AU
+    summary: An Australian industry alliance convening corporate, government, research, and technology stakeholders around IoT adoption and interoperability.
+    source_url: https://iot.org.au/page/ExecutiveCouncil
+    source_type: official_website
+    supporting_excerpt: The official page describes an executive council spanning companies, government, regulators, industry, and research organizations and supporting IoT programs.
+    retrieved_at: "2026-08-12T16:05:00+00:00"
+    contact_role: IoT architecture and interoperability inquiry
+    contact_channel_type: email
+    contact_channel_value: hello@iot.org.au
+    contact_source_url: https://iot.org.au/
+    contact_supporting_excerpt: The official organization site conspicuously publishes this general contact inbox.
+    contact_timezone: Australia/Sydney
+    outreach_basis: inferred_consent_publication
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: Australian Information Security Association
+    canonical_domain: aisa.org.au
+    organization_type: industry_association
+    prospect_category: research_partner
+    target_domain: Cybersecurity triage
+    region: AU
+    country: AU
+    summary: An Australian nonprofit association supporting cybersecurity professionals, knowledge sharing, training, and national cyber resilience.
+    source_url: https://www.aisa.org.au/Public/Public/AboutAISA/About-us.aspx
+    source_type: official_website
+    supporting_excerpt: The official page describes a national cybersecurity body supporting specialist knowledge sharing, workforce development, and digital security.
+    retrieved_at: "2026-08-12T16:05:00+00:00"
+    contact_role: Cybersecurity research collaboration inquiry
+    contact_channel_type: email
+    contact_channel_value: info@aisa.org.au
+    contact_source_url: https://aisa.org.au/public/Public/AboutAISA/ContactUs.aspx
+    contact_supporting_excerpt: The official contact page publishes this general association inbox for questions and enquiries.
+    contact_timezone: Australia/Sydney
+    outreach_basis: inferred_consent_publication
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: Ukrainian Cluster Alliance
+    canonical_domain: clusters.org.ua
+    organization_type: industry_association
+    prospect_category: community_partner
+    target_domain: Industrial automation
+    region: UA
+    country: UA
+    summary: A Ukrainian association connecting industrial and technology clusters for innovation, digitalization, matchmaking, and international partnerships.
+    source_url: https://www.clusters.org.ua/en/
+    source_type: official_website
+    supporting_excerpt: The official site describes cluster-development, economic-growth, stakeholder matchmaking, and international partnership activities.
+    retrieved_at: "2026-08-12T16:05:00+00:00"
+    contact_role: Industrial innovation partnership inquiry
+    contact_channel_type: email
+    contact_channel_value: info@clusters.org.ua
+    contact_source_url: https://www.clusters.org.ua/en/
+    contact_supporting_excerpt: The official site publishes this organizational inbox specifically for partnership enquiries.
+    contact_timezone: Europe/Kyiv
+    contact_locale: uk
+    outreach_basis: ukraine_opt_out
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: Robot Revolution and Industrial IoT Initiative
+    canonical_domain: jmfrri.gr.jp
+    organization_type: industry_association
+    prospect_category: integration_partner
+    target_domain: Industrial automation
+    region: JP
+    country: JP
+    summary: A Japanese industry initiative coordinating robot adoption, industrial IoT, manufacturing data interoperability, and international collaboration.
+    source_url: https://www.jmfrri.gr.jp/english-top/
+    source_type: official_website
+    supporting_excerpt: The official English page documents work on industrial IoT, robot innovation, manufacturing data spaces, and international interoperability.
+    retrieved_at: "2026-08-12T16:05:00+00:00"
+    contact_role: Industrial IoT collaboration inquiry
+    contact_channel_type: email
+    contact_channel_value: office@jmfrri.gr.jp
+    contact_source_url: https://www.jmfrri.gr.jp/english/event_seminar_eng/2490.html
+    contact_supporting_excerpt: The official international-symposium page conspicuously publishes this initiative office address for contact.
+    contact_timezone: Asia/Tokyo
+    outreach_basis: public_business_address
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: New Industry Research Organization
+    canonical_domain: niro.or.jp
+    organization_type: research_laboratory
+    prospect_category: integration_partner
+    target_domain: Mobile and industrial robotics
+    region: JP
+    country: JP
+    summary: A Japanese research and industry-support foundation operating technical consultation services for robotics, IoT, and manufacturing innovation.
+    source_url: https://www.niro.or.jp/technology-base/assist/iot-ai-robot-katsuyo/soudan/
+    source_type: official_website
+    supporting_excerpt: The official technical-support page describes dedicated consultation desks for IoT, AI, and robotics adoption.
+    retrieved_at: "2026-08-12T16:05:00+00:00"
+    contact_role: Robotics implementation research inquiry
+    contact_channel_type: email
+    contact_channel_value: robot@niro.or.jp
+    contact_source_url: https://www.niro.or.jp/technology-base/assist/iot-ai-robot-katsuyo/soudan/
+    contact_supporting_excerpt: The official technical-support page conspicuously publishes this address for robotics implementation consultations.
+    contact_timezone: Asia/Tokyo
+    outreach_basis: public_business_address
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: FIWARE Foundation
+    canonical_domain: fiware.org
+    organization_type: open_source_foundation
+    prospect_category: technology_partner
+    target_domain: Distributed event-processing supervision
+    region: EU
+    country: DE
+    summary: A European nonprofit foundation developing open standards and open-source components for interoperable smart applications and context-data systems.
+    source_url: https://www.fiware.org/foundation/
+    source_type: official_website
+    supporting_excerpt: The official foundation page describes open standards and open-source technology for interoperable smart applications across industry, energy, cities, and agrifood.
+    retrieved_at: "2026-08-12T16:05:00+00:00"
+    contact_role: Open-source interoperability collaboration inquiry
+    contact_channel_type: email
+    contact_channel_value: info@fiware.org
+    contact_source_url: https://www.fiware.org/imprint/
+    contact_supporting_excerpt: The official legal imprint publishes this general foundation inbox.
+    contact_timezone: Europe/Berlin
+    outreach_basis: public_business_address
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: European Factories of the Future Research Association
+    canonical_domain: effra.eu
+    organization_type: industry_association
+    prospect_category: research_partner
+    target_domain: Industrial automation
+    region: EU
+    country: BE
+    summary: A European manufacturing research association coordinating industry and research stakeholders around sustainable and digital manufacturing priorities.
+    source_url: https://www.effra.eu/about/
+    source_type: official_website
+    supporting_excerpt: The official page describes an association connecting industry and research, shaping manufacturing R&D roadmaps, and supporting the Made in Europe partnership.
+    retrieved_at: "2026-08-12T16:05:00+00:00"
+    contact_role: Manufacturing research collaboration inquiry
+    contact_channel_type: email
+    contact_channel_value: info@effra.eu
+    contact_source_url: https://www.effra.eu/about/
+    contact_supporting_excerpt: The official association page publishes this general organizational contact address.
+    contact_timezone: Europe/Brussels
+    outreach_basis: public_business_address
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: Big Data Value Association
+    canonical_domain: bdva.eu
+    organization_type: industry_association
+    prospect_category: research_partner
+    target_domain: LLM advisory and orchestration
+    region: EU
+    country: BE
+    summary: A European nonprofit association advancing data, artificial intelligence, industrial AI, data platforms, and collaborative experimentation.
+    source_url: https://bdva.eu/about/
+    source_type: official_website
+    supporting_excerpt: The official page describes an industry-driven association focused on data and AI innovation, industrial AI, data spaces, research, and experimentation.
+    retrieved_at: "2026-08-12T16:05:00+00:00"
+    contact_role: Data and AI research collaboration inquiry
+    contact_channel_type: email
+    contact_channel_value: info@bdva.eu
+    contact_source_url: https://bdva.eu/publishing-notes/
+    contact_supporting_excerpt: The official publishing notice lists this general association inbox and Brussels office.
+    contact_timezone: Europe/Brussels
+    outreach_basis: public_business_address
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: Gaia-X European Association for Data and Cloud
+    canonical_domain: gaia-x.eu
+    organization_type: standards_organization
+    prospect_category: integration_partner
+    target_domain: Distributed event-processing supervision
+    region: EU
+    country: BE
+    summary: A European association developing specifications and a trust framework for federated data and infrastructure ecosystems.
+    source_url: https://gaia-x.eu/about/
+    source_type: official_website
+    supporting_excerpt: The official page describes specifications, rules, policies, and verification for trusted decentralized data and infrastructure ecosystems.
+    retrieved_at: "2026-08-12T16:05:00+00:00"
+    contact_role: Federated data architecture collaboration inquiry
+    contact_channel_type: email
+    contact_channel_value: info@gaia-x.eu
+    contact_source_url: https://gaia-x.eu/imprint/
+    contact_supporting_excerpt: The official association imprint publishes this general organizational inbox.
+    contact_timezone: Europe/Brussels
+    outreach_basis: public_business_address
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: Alliance for IoT and Edge Computing Innovation
+    canonical_domain: aioti.eu
+    organization_type: industry_association
+    prospect_category: integration_partner
+    target_domain: Telecom and edge-network orchestration
+    region: EU
+    country: BE
+    summary: A European nonprofit alliance supporting innovation, standardization, and collaboration across IoT, edge computing, and connected systems.
+    source_url: https://aioti.eu/privacy/
+    source_type: official_website
+    supporting_excerpt: The official site identifies AIOTI as a Belgium-registered international nonprofit alliance for IoT and edge-computing innovation.
+    retrieved_at: "2026-08-12T16:05:00+00:00"
+    contact_role: IoT and edge interoperability inquiry
+    contact_channel_type: email
+    contact_channel_value: info@aioti.eu
+    contact_source_url: https://aioti.eu/privacy/
+    contact_supporting_excerpt: The official organization page publishes this general association address for comments, questions, and suggestions.
+    contact_timezone: Europe/Brussels
+    outreach_basis: public_business_address
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: European Cyber Security Organisation
+    canonical_domain: ecs-org.eu
+    organization_type: industry_association
+    prospect_category: research_partner
+    target_domain: Cybersecurity triage
+    region: EU
+    country: BE
+    summary: A European public-private nonprofit federation supporting cybersecurity research, innovation, market development, and threat-management communities.
+    source_url: https://ecs-org.eu/who-we-are/
+    source_type: official_website
+    supporting_excerpt: The official page describes a pan-European cybersecurity federation connecting companies, research centres, universities, public bodies, and essential-service operators.
+    retrieved_at: "2026-08-12T16:05:00+00:00"
+    contact_role: Cybersecurity research collaboration inquiry
+    contact_channel_type: email
+    contact_channel_value: secretariat@ecs-org.eu
+    contact_source_url: https://ecs-org.eu/who-we-are/
+    contact_supporting_excerpt: The official association page publishes this secretariat inbox as its general organizational contact.
+    contact_timezone: Europe/Brussels
+    outreach_basis: public_business_address
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: AI Data and Robotics Association
+    canonical_domain: adr-association.eu
+    organization_type: industry_association
+    prospect_category: research_partner
+    target_domain: Cognitive-agent research
+    region: EU
+    country: BE
+    summary: A European nonprofit association coordinating research and innovation priorities across artificial intelligence, data, and robotics.
+    source_url: https://adr-association.eu/legal-notes
+    source_type: official_website
+    supporting_excerpt: The official legal page identifies Adra as the nonprofit AI, Data and Robotics Association headquartered in Belgium.
+    retrieved_at: "2026-08-12T16:05:00+00:00"
+    contact_role: AI and robotics research collaboration inquiry
+    contact_channel_type: email
+    contact_channel_value: info@adr-association.eu
+    contact_source_url: https://adr-association.eu/legal-notes
+    contact_supporting_excerpt: The official legal page publishes this general association inbox.
+    contact_timezone: Europe/Brussels
+    outreach_basis: public_business_address
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: Korea Robotics Society
+    canonical_domain: kros.org
+    organization_type: industry_association
+    prospect_category: research_partner
+    target_domain: Mobile and industrial robotics
+    region: KR
+    country: KR
+    summary: A South Korean robotics society supporting academic exchange, industry collaboration, conferences, and research across manufacturing and autonomous systems.
+    source_url: https://kros.org/eng/sub/sub02_1.asp
+    source_type: official_website
+    supporting_excerpt: The official page describes a robotics conference community connecting researchers, engineers, academics, and industry professionals across manufacturing and autonomous systems.
+    retrieved_at: "2026-08-12T16:05:00+00:00"
+    contact_role: Robotics research collaboration inquiry
+    contact_channel_type: email
+    contact_channel_value: kros@kros.org
+    contact_source_url: https://kros.org/eng/
+    contact_supporting_excerpt: The official English site conspicuously publishes this society office inbox.
+    contact_timezone: Asia/Seoul
+    outreach_basis: public_business_address
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: Korea Association of Robot Industry
+    canonical_domain: korearobot.or.kr
+    organization_type: industry_association
+    prospect_category: integration_partner
+    target_domain: Mobile and industrial robotics
+    region: KR
+    country: KR
+    summary: A South Korean robot-industry association supporting automation adoption, standards, testing, industry collaboration, and international market development.
+    source_url: https://korearobot.or.kr/%ED%95%9C%EA%B5%AD%EB%A1%9C%EB%B4%87%EC%82%B0%EC%97%85%ED%98%91%ED%9A%8C_%EC%86%8C%EA%B0%9C%20%EB%A6%AC%ED%94%8C%EB%A0%9B%28%EB%82%B1%EC%9E%A5%29_250624.pdf
+    source_type: official_website
+    supporting_excerpt: The official association brochure describes robot automation adoption, standards, testing, member collaboration, and international support activities.
+    retrieved_at: "2026-08-12T16:05:00+00:00"
+    contact_role: Robot-industry integration inquiry
+    contact_channel_type: email
+    contact_channel_value: info@korearobot.or.kr
+    contact_source_url: https://korearobot.or.kr/%ED%95%9C%EA%B5%AD%EB%A1%9C%EB%B4%87%EC%82%B0%EC%97%85%ED%98%91%ED%9A%8C_%EC%86%8C%EA%B0%9C%20%EB%A6%AC%ED%94%8C%EB%A0%9B%28%EB%82%B1%EC%9E%A5%29_250624.pdf
+    contact_supporting_excerpt: The official association brochure conspicuously publishes this general organizational inbox for enquiries.
+    contact_timezone: Asia/Seoul
+    outreach_basis: public_business_address
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: Israel Innovation Authority
+    canonical_domain: innovationisrael.org.il
+    organization_type: grant_program
+    prospect_category: grant_program
+    target_domain: Industrial automation
+    region: IL
+    country: IL
+    summary: Israel's public innovation agency supporting research, advanced manufacturing, international R&D collaboration, and technology pilot programs.
+    source_url: https://innovationisrael.org.il/en/calls_for_proposal/manufacturing-rnd-accelerators/
+    source_type: official_website
+    supporting_excerpt: The official program page describes advanced-manufacturing R&D accelerators and collaboration between industrial companies, startups, and technology partners.
+    retrieved_at: "2026-08-12T16:05:00+00:00"
+    contact_role: International R&D and manufacturing program inquiry
+    contact_channel_type: email
+    contact_channel_value: contactus@innovationisrael.org.il
+    contact_source_url: https://innovationisrael.org.il/en/calls_for_proposal/international-rd-and-pilot-collaborations-2026/
+    contact_supporting_excerpt: The official international R&D program page publishes this general customer-support inbox for enquiries.
+    contact_timezone: Asia/Jerusalem
+    outreach_basis: public_business_address
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
+  - organization_name: Israeli Smart Energy Association
+    canonical_domain: isea.org.il
+    organization_type: industry_association
+    prospect_category: integration_partner
+    target_domain: Smart-grid supervision and energy systems
+    region: IL
+    country: IL
+    summary: An Israeli nonprofit association connecting energy stakeholders to advance smart-grid adoption, innovation, knowledge sharing, and partnerships.
+    source_url: https://www.isea.org.il/about
+    source_type: official_website
+    supporting_excerpt: The official page describes an association accelerating smart-energy adoption and supporting collaboration among customers, government, manufacturers, and technology stakeholders.
+    retrieved_at: "2026-08-12T16:05:00+00:00"
+    contact_role: Smart-energy technical collaboration inquiry
+    contact_channel_type: email
+    contact_channel_value: info@isea.org.il
+    contact_source_url: https://www.isea.org.il/about
+    contact_supporting_excerpt: The official association page conspicuously publishes this general organizational inbox.
+    contact_timezone: Asia/Jerusalem
+    outreach_basis: public_business_address
+    recipient_entity_type: corporate
+    public_address: true
+    no_solicitation_notice: false
+    relevant_to_role: true
