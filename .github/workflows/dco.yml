@@ -1,0 +1,77 @@
+name: dco
+
+# Enforces the Developer Certificate of Origin sign-off required by CONTRIBUTING.md.
+#
+# This is a stopgap. Once the Linux Foundation's DCO GitHub App is installed on the
+# repository, that app becomes the authoritative check and this workflow should be
+# deleted so pull requests do not carry two checks that say the same thing.
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+
+jobs:
+  check-signoff:
+    name: Check DCO sign-off
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify every commit is signed off by its author
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set -euo pipefail
+
+          commits=$(git rev-list --no-merges "$BASE_SHA..$HEAD_SHA")
+          if [ -z "$commits" ]; then
+            echo "No non-merge commits to check."
+            exit 0
+          fi
+
+          failed=0
+          for sha in $commits; do
+            author_name=$(git show -s --format='%an' "$sha")
+            author_email=$(git show -s --format='%ae' "$sha")
+            subject=$(git show -s --format='%s' "$sha")
+            expected="Signed-off-by: ${author_name} <${author_email}>"
+
+            if git show -s --format='%B' "$sha" | grep -Fqx "$expected"; then
+              echo "ok   ${sha:0:8}  $subject"
+            else
+              echo "FAIL ${sha:0:8}  $subject"
+              echo "     expected trailer: $expected"
+              echo "     found:"
+              git show -s --format='%B' "$sha" | grep -i '^Signed-off-by:' || echo "       (no Signed-off-by trailer)"
+              failed=1
+            fi
+          done
+
+          if [ "$failed" -ne 0 ]; then
+            cat <<'EOF'
+
+          One or more commits are missing a Developer Certificate of Origin sign-off,
+          or the sign-off does not match the commit author.
+
+          Sign off new commits with:
+
+              git commit -s -m "Your message"
+
+          Fix the commits already on this branch with:
+
+              git rebase --signoff <base-branch>
+              git push --force-with-lease
+
+          The DCO text is at https://developercertificate.org/ and the project's
+          requirement is documented in CONTRIBUTING.md.
+          EOF
+            exit 1
+          fi
+
+          echo "All commits carry a valid sign-off."
