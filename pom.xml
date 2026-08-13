@@ -73,7 +73,7 @@
         <milo.version>1.1.1</milo.version>
         <spring-boot.version>3.3.5</spring-boot.version>
         <jackson.version>2.17.2</jackson.version>
-        <log4j.version>2.25.4</log4j.version>
+        <log4j.version>2.25.5</log4j.version>
         <gson.version>2.11.0</gson.version>
         <jedis.version>5.2.0</jedis.version>
         <kafka.version>3.9.2</kafka.version>
