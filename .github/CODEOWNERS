@@ -1,0 +1,57 @@
+# Jneopallium code owners
+#
+# Code owners are requested for review automatically on pull requests touching their paths.
+# Roles and how to become an owner: MAINTAINERS.md and GOVERNANCE.md.
+#
+# The last matching pattern wins, so the more specific rules must come after the general ones.
+
+# Default owner for everything in the repository.
+*                               @rakovpublic
+
+# ---------------------------------------------------------------------------
+# Engine and shared contracts — the public API surface covered by the
+# compatibility promise in RELEASES.md.
+# ---------------------------------------------------------------------------
+/worker-core/                   @rakovpublic
+/agi-base/                      @rakovpublic
+/master/                        @rakovpublic
+
+# ---------------------------------------------------------------------------
+# Safety-critical. Changes here are held to the higher bar described in
+# GOVERNANCE.md §6: weakening a safety ceiling, removing an audit point, or
+# letting a write bypass the universal algorithm needs explicit Maintainer
+# approval and a written rationale in the pull request.
+# ---------------------------------------------------------------------------
+/bridge-api/                    @rakovpublic
+/bridges/                       @rakovpublic
+/domains/domain-agi/            @rakovpublic
+/domains/domain-clinical/       @rakovpublic
+/domains/domain-industrial/     @rakovpublic
+
+# ---------------------------------------------------------------------------
+# Domains and demos.
+# ---------------------------------------------------------------------------
+/domains/                       @rakovpublic
+/demos/                         @rakovpublic
+/scripts/                       @rakovpublic
+/integration-tests/             @rakovpublic
+
+# ---------------------------------------------------------------------------
+# Build, CI and release. Changes here affect what gets published and signed.
+# ---------------------------------------------------------------------------
+/pom.xml                        @rakovpublic
+**/pom.xml                      @rakovpublic
+/.github/                       @rakovpublic
+
+# ---------------------------------------------------------------------------
+# Governance, security and community documents.
+# ---------------------------------------------------------------------------
+/GOVERNANCE.md                  @rakovpublic
+/MAINTAINERS.md                 @rakovpublic
+/RELEASES.md                    @rakovpublic
+/SECURITY.md                    @rakovpublic
+/SUPPORT.md                     @rakovpublic
+/CONTRIBUTING.md                @rakovpublic
+/CODE_OF_CONDUCT.md             @rakovpublic
+/LICENSE.MD                     @rakovpublic
+/.github/CODEOWNERS             @rakovpublic

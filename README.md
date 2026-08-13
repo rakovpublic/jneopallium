@@ -414,9 +414,15 @@ Tool architecture is complete; implementation is ~95% done and has passed pre-al
 
 Contributors are welcome — the project is actively looking for them. Start with:
 
-- [`CONTRIBUTING.md`](CONTRIBUTING.md) — how to set up, where to file issues, branch conventions.
+- [`CONTRIBUTING.md`](CONTRIBUTING.md) — how to set up, branch conventions, DCO sign-off, coding and dependency rules.
+- [`GOVERNANCE.md`](GOVERNANCE.md) — how decisions are made, and how contributors become committers and maintainers.
+- [`MAINTAINERS.md`](MAINTAINERS.md) — who holds which role, and where help is most needed.
+- [`SUPPORT.md`](SUPPORT.md) — where to ask questions and what response times to expect.
+- [`RELEASES.md`](RELEASES.md) — versioning, the compatibility promise, support window, and how a release is cut.
 - [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md) — community standards.
-- [`SECURITY.md`](SECURITY.md) — responsible-disclosure policy.
+- [`SECURITY.md`](SECURITY.md) — responsible-disclosure policy and the operator responsibilities that come with driving real equipment.
+
+Every commit needs a Developer Certificate of Origin sign-off (`git commit -s`).
 
 For bridge work in particular, every new bridge must comply with the §2.2 universal write algorithm and ship with audit + override hooks.
 
